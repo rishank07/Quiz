@@ -60,6 +60,7 @@
         <a
           href="./Ghatnachakra Purvalokan/SubjectName.html"
           onclick="openPage(event)"
+          data-original="GhatnaChakra Purvalokan"
         >
           GhatnaChakra Purvalokan
         </a>
@@ -69,13 +70,21 @@
     <script>
       function openPage(event) {
         event.preventDefault();
-        const link = event.currentTarget.href;
+        const linkEl = event.currentTarget;
+        const link = linkEl.href;
 
-        event.currentTarget.innerText = "Loading...";
+        linkEl.innerText = "Loading...";
         setTimeout(() => {
           window.location.href = link;
         }, 500);
       }
+
+      // 🔑 Fix for browser back button (bfcache)
+      window.addEventListener("pageshow", function () {
+        document.querySelectorAll("a[data-original]").forEach((a) => {
+          a.innerText = a.dataset.original;
+        });
+      });
     </script>
   </body>
 </html>

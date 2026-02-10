@@ -57,7 +57,11 @@
 
     <ul class="menu">
       <li>
-        <a href="./History/HistoryParts.html" onclick="openPage(event)">
+        <a
+          href="./History/HistoryParts.html"
+          onclick="openPage(event)"
+          data-original="History"
+        >
           History
         </a>
       </li>
@@ -66,13 +70,21 @@
     <script>
       function openPage(event) {
         event.preventDefault();
-        const link = event.currentTarget.href;
+        const linkEl = event.currentTarget;
+        const link = linkEl.href;
 
-        event.currentTarget.innerText = "Loading...";
+        linkEl.innerText = "Loading...";
         setTimeout(() => {
           window.location.href = link;
         }, 500);
       }
+
+      // 🔑 Fix for browser back button (bfcache)
+      window.addEventListener("pageshow", function () {
+        document.querySelectorAll("a[data-original]").forEach((a) => {
+          a.innerText = a.dataset.original;
+        });
+      });
     </script>
   </body>
 </html>

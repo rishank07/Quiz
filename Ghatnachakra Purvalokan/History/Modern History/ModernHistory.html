@@ -44,22 +44,19 @@
         color: white;
         transform: scale(1.05);
       }
-
-      .menu a:active {
-        transform: scale(0.98);
-      }
     </style>
   </head>
 
   <body>
     <h1>📘 Quiz</h1>
-    <p>Click a Chapter to start learning:</p>
+    <p>Click a chapter to start learning:</p>
 
     <ul class="menu">
       <li>
         <a
           href="./The Advent of EUropean Companies/index.html"
           onclick="openPage(event)"
+          data-original="The Advent of European Companies"
         >
           The Advent of European Companies
         </a>
@@ -69,13 +66,21 @@
     <script>
       function openPage(event) {
         event.preventDefault();
-        const link = event.currentTarget.href;
+        const linkEl = event.currentTarget;
+        const link = linkEl.href;
 
-        event.currentTarget.innerText = "Loading...";
+        linkEl.innerText = "Loading...";
         setTimeout(() => {
           window.location.href = link;
         }, 500);
       }
+
+      // 🔑 FIX for browser back button
+      window.addEventListener("pageshow", function () {
+        document.querySelectorAll("a[data-original]").forEach((a) => {
+          a.innerText = a.dataset.original;
+        });
+      });
     </script>
   </body>
 </html>
