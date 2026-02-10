@@ -3,18 +3,79 @@
   <head>
     <meta charset="UTF-8" />
     <title>My Website</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        text-align: center;
+        padding: 40px;
+      }
+
+      h1 {
+        color: #2c3e50;
+      }
+
+      .menu {
+        list-style: none;
+        padding: 0;
+        max-width: 400px;
+        margin: 30px auto;
+      }
+
+      .menu li {
+        margin: 15px 0;
+      }
+
+      .menu a {
+        display: block;
+        text-decoration: none;
+        padding: 15px;
+        background: white;
+        border-radius: 10px;
+        color: #34495e;
+        font-size: 18px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .menu a:hover {
+        background: #3498db;
+        color: white;
+        transform: scale(1.05);
+      }
+
+      .menu a:active {
+        transform: scale(0.98);
+      }
+    </style>
   </head>
+
   <body>
-    <h1>Quiz</h1>
+    <h1>📘 Quiz</h1>
+    <p>Click a chapter to start learning:</p>
 
-    <p>Click a page below:</p>
-
-    <ul>
+    <ul class="menu">
       <li>
-        <a href="./Modern History/The Advent of EUropean Companies/index.html"
-          >The Advent of European Comapnies</a
+        <a
+          href="./Modern History/The Advent of EUropean Companies/index.html"
+          onclick="openPage(event)"
         >
+          The Advent of European Companies
+        </a>
       </li>
     </ul>
+
+    <script>
+      function openPage(event) {
+        event.preventDefault();
+        const link = event.currentTarget.href;
+
+        event.currentTarget.innerText = "Loading...";
+        setTimeout(() => {
+          window.location.href = link;
+        }, 500);
+      }
+    </script>
   </body>
 </html>
