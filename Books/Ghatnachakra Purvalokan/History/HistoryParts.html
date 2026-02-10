@@ -44,21 +44,25 @@
         color: white;
         transform: scale(1.05);
       }
+
+      .menu a:active {
+        transform: scale(0.98);
+      }
     </style>
   </head>
 
   <body>
     <h1>📘 Quiz</h1>
-    <p>Click a chapter to start learning:</p>
+    <p>Click a Part to start learning:</p>
 
     <ul class="menu">
       <li>
         <a
-          href="./The Advent of EUropean Companies/index.html"
+          href="./Modern History/ChapterName.html"
           onclick="openPage(event)"
-          data-original="The Advent of European Companies"
+          data-original="Modern History"
         >
-          The Advent of European Companies
+          Modern History
         </a>
       </li>
     </ul>
@@ -75,7 +79,7 @@
         }, 500);
       }
 
-      // 🔑 FIX for browser back button
+      // 🔑 Fix for browser back button (bfcache)
       window.addEventListener("pageshow", function () {
         document.querySelectorAll("a[data-original]").forEach((a) => {
           a.innerText = a.dataset.original;
