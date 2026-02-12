@@ -1,811 +1,2022 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Development of Education • Quiz 1-25</title>
     <style>
-        body { font-family: 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #333; margin: 0; padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; margin-bottom: 10px; font-size: 2rem; }
-        h2 { text-align: center; color: #7f8c8d; font-size: 1.2rem; margin-bottom: 40px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .question-box { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px; margin-bottom: 30px; transition: all 0.3s ease; }
-        .question-box:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-color: #bdc3c7; }
-        .q-text-en { font-weight: 700; color: #2980b9; font-size: 1.15rem; margin-bottom: 5px; }
-        .q-text-hi { font-weight: 600; color: #27ae60; font-size: 1.1rem; margin-bottom: 15px; }
-        .option-label { display: block; margin: 8px 0; padding: 10px 15px; background-color: #fdfdfd; border: 1px solid #eee; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; }
-        .option-label:hover { background-color: #f0f4f8; }
-        input[type="radio"] { margin-right: 10px; transform: scale(1.2); }
-        .check-btn { background-color: #3498db; color: white; border: none; padding: 10px 25px; border-radius: 6px; font-size: 1rem; cursor: pointer; margin-top: 15px; transition: background-color 0.3s; }
-        .check-btn:hover { background-color: #2980b9; }
-        .explanation { display: none; margin-top: 20px; padding: 15px; background-color: #e8f6f3; border-left: 5px solid #2ecc71; border-radius: 6px; }
-        .correct-opt { background-color: #d4edda !important; border-color: #c3e6cb !important; color: #155724; }
-        .incorrect-opt { background-color: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24; }
-        .statement-box { background-color: #f9f9f9; border-left: 4px solid #f39c12; padding: 10px 15px; margin: 10px 0; font-size: 0.95rem; color: #555; }
+      body {
+        font-family: "Segoe UI", "Roboto", Helvetica, Arial, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-size: 2rem;
+      }
+      h2 {
+        text-align: center;
+        color: #7f8c8d;
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      }
+      .question-box {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+        transition: all 0.3s ease;
+      }
+      .question-box:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border-color: #bdc3c7;
+      }
+      .q-text-en {
+        font-weight: 700;
+        color: #2980b9;
+        font-size: 1.15rem;
+        margin-bottom: 5px;
+      }
+      .q-text-hi {
+        font-weight: 600;
+        color: #27ae60;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+      }
+      .option-label {
+        display: block;
+        margin: 8px 0;
+        padding: 10px 15px;
+        background-color: #fdfdfd;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .option-label:hover {
+        background-color: #f0f4f8;
+      }
+      input[type="radio"] {
+        margin-right: 10px;
+        transform: scale(1.2);
+      }
+      .check-btn {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: background-color 0.3s;
+      }
+      .check-btn:hover {
+        background-color: #2980b9;
+      }
+      .explanation {
+        display: none;
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #e8f6f3;
+        border-left: 5px solid #2ecc71;
+        border-radius: 6px;
+      }
+      .correct-opt {
+        background-color: #d4edda !important;
+        border-color: #c3e6cb !important;
+        color: #155724;
+      }
+      .incorrect-opt {
+        background-color: #f8d7da !important;
+        border-color: #f5c6cb !important;
+        color: #721c24;
+      }
+      .statement-box {
+        background-color: #f9f9f9;
+        border-left: 4px solid #f39c12;
+        padding: 10px 15px;
+        margin: 10px 0;
+        font-size: 0.95rem;
+        color: #555;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Development of Education in Modern India</h1>
+      <h2>Questions 1 - 42</h2>
 
-<div class="container">
-    <h1>Development of Education in Modern India</h1>
-    <h2>Questions 1 - 25</h2>
-
-    <div class="question-box" id="q1">
-        <div class="q-text-en">1. Where was the first Madarsa set up by British in India?</div>
-        <div class="q-text-hi">1. भारत में अंग्रेजों द्वारा प्रथम मदरसा कहाँ स्थापित किया गया था?</div>
+      <div class="question-box" id="q1">
+        <div class="q-text-en">
+          1. Where was the first Madarsa set up by British in India?
+        </div>
+        <div class="q-text-hi">
+          1. भारत में अंग्रेजों द्वारा प्रथम मदरसा कहाँ स्थापित किया गया था?
+        </div>
         <div class="options" data-correct="D">
-            <label class="option-label"><input type="radio" name="q1" value="A"> (A) Madras / मद्रास</label>
-            <label class="option-label"><input type="radio" name="q1" value="B"> (B) Bombay / बॉम्बे</label>
-            <label class="option-label"><input type="radio" name="q1" value="C"> (C) Aligarh / अलीगढ़</label>
-            <label class="option-label"><input type="radio" name="q1" value="D"> (D) Calcutta / कलकत्ता</label>
-            <button class="check-btn" onclick="checkAnswer('q1')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q1" value="A" /> (A) Madras /
+            मद्रास</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q1" value="B" /> (B) Bombay /
+            बॉम्बे</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q1" value="C" /> (C) Aligarh /
+            अलीगढ़</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q1" value="D" /> (D) Calcutta /
+            कलकत्ता</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q1')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Warren Hastings founded the Calcutta Madarsa in 1780 A.D. for the study of Muslim law and related subjects.</p>
-            <p><strong>हिंदी:</strong> वारेन हेस्टिंग्स ने 1780 ई. में मुस्लिम कानून और संबंधित विषयों के अध्ययन के लिए कलकत्ता मदरसा की स्थापना की थी।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Warren Hastings founded the Calcutta
+            Madarsa in 1780 A.D. for the study of Muslim law and related
+            subjects.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> वारेन हेस्टिंग्स ने 1780 ई. में मुस्लिम
+            कानून और संबंधित विषयों के अध्ययन के लिए कलकत्ता मदरसा की स्थापना की
+            थी।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q2">
-        <div class="q-text-en">2. The Asiatic Society of Bengal was founded by:</div>
-        <div class="q-text-hi">2. एशियाटिक सोसाइटी ऑफ बंगाल की स्थापना किसके द्वारा की गई थी?</div>
+      <div class="question-box" id="q2">
+        <div class="q-text-en">
+          2. The Asiatic Society of Bengal was founded by:
+        </div>
+        <div class="q-text-hi">
+          2. एशियाटिक सोसाइटी ऑफ बंगाल की स्थापना किसके द्वारा की गई थी?
+        </div>
         <div class="options" data-correct="A">
-            <label class="option-label"><input type="radio" name="q2" value="A"> (A) Sir William Jones / सर विलियम जोन्स</label>
-            <label class="option-label"><input type="radio" name="q2" value="B"> (B) Wilkins / विल्किंस</label>
-            <label class="option-label"><input type="radio" name="q2" value="C"> (C) Max Muller / मैक्स मूलर</label>
-            <label class="option-label"><input type="radio" name="q2" value="D"> (D) James Prinsep / जेम्स प्रिंसेप</label>
-            <button class="check-btn" onclick="checkAnswer('q2')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q2" value="A" /> (A) Sir William Jones /
+            सर विलियम जोन्स</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q2" value="B" /> (B) Wilkins /
+            विल्किंस</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q2" value="C" /> (C) Max Muller / मैक्स
+            मूलर</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q2" value="D" /> (D) James Prinsep /
+            जेम्स प्रिंसेप</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q2')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Sir William Jones (Judge of Supreme Court, Calcutta) founded the Asiatic Society in 1784 with the support of Warren Hastings.</p>
-            <p><strong>हिंदी:</strong> सर विलियम जोन्स (सुप्रीम कोर्ट कलकत्ता के न्यायाधीश) ने वारेन हेस्टिंग्स के समर्थन से 1784 में एशियाटिक सोसाइटी की स्थापना की।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Sir William Jones (Judge of Supreme Court,
+            Calcutta) founded the Asiatic Society in 1784 with the support of
+            Warren Hastings.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> सर विलियम जोन्स (सुप्रीम कोर्ट कलकत्ता के
+            न्यायाधीश) ने वारेन हेस्टिंग्स के समर्थन से 1784 में एशियाटिक
+            सोसाइटी की स्थापना की।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q3">
-        <div class="q-text-en">3. Who founded First Sanskrit Mahavidyalaya at Varanasi?</div>
-        <div class="q-text-hi">3. वाराणसी में प्रथम संस्कृत महाविद्यालय की स्थापना किसने की?</div>
+      <div class="question-box" id="q3">
+        <div class="q-text-en">
+          3. Who founded First Sanskrit Mahavidyalaya at Varanasi?
+        </div>
+        <div class="q-text-hi">
+          3. वाराणसी में प्रथम संस्कृत महाविद्यालय की स्थापना किसने की?
+        </div>
         <div class="options" data-correct="A">
-            <label class="option-label"><input type="radio" name="q3" value="A"> (A) Jonathan Duncan / जोनाथन डंकन</label>
-            <label class="option-label"><input type="radio" name="q3" value="B"> (B) Warren Hastings / वारेन हेस्टिंग्स</label>
-            <label class="option-label"><input type="radio" name="q3" value="C"> (C) Lorel Macaulay / लॉर्ड मैकाले</label>
-            <label class="option-label"><input type="radio" name="q3" value="D"> (D) Bankim Chandra / बंकिम चंद्र</label>
-            <button class="check-btn" onclick="checkAnswer('q3')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q3" value="A" /> (A) Jonathan Duncan /
+            जोनाथन डंकन</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q3" value="B" /> (B) Warren Hastings /
+            वारेन हेस्टिंग्स</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q3" value="C" /> (C) Lorel Macaulay /
+            लॉर्ड मैकाले</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q3" value="D" /> (D) Bankim Chandra /
+            बंकिम चंद्र</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q3')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Jonathan Duncan (Resident of Benaras) established the Sanskrit College in 1791 for the study of Hindu law, philosophy, and literature.</p>
-            <p><strong>हिंदी:</strong> जोनाथन डंकन (बनारस के रेजिडेंट) ने 1791 में हिंदू कानून, दर्शन और साहित्य के अध्ययन के लिए संस्कृत कॉलेज की स्थापना की।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Jonathan Duncan (Resident of Benaras)
+            established the Sanskrit College in 1791 for the study of Hindu law,
+            philosophy, and literature.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> जोनाथन डंकन (बनारस के रेजिडेंट) ने 1791 में
+            हिंदू कानून, दर्शन और साहित्य के अध्ययन के लिए संस्कृत कॉलेज की
+            स्थापना की।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q4">
-    <div class="q-text-en">4. Given below are two statements, one is labelled as Assertion (A) and the other as Reason (R).</div>
-    <div class="q-text-hi">4. नीचे दो कथन दिए गए हैं, जिनमें से एक को अभिकथन (A) और दूसरे को कारण (R) कहा गया है।</div>
-    <div class="statement-box">
-        <strong>Assertion (A):</strong> The Asiatic Society of Bengal was established in the period of Warren Hastings and he modestly declined the offer of Presidentship of the learned body in favour of Sir William Jones.<br>
-        <strong>(अभिकथन A):</strong> एशियाटिक सोसाइटी ऑफ बंगाल की स्थापना वारेन हेस्टिंग्स के काल में हुई थी और उन्होंने सर विलियम जोन्स के पक्ष में इस विद्वान संस्था की अध्यक्षता का प्रस्ताव विनम्रतापूर्वक अस्वीकार कर दिया था।<br><br>
-        <strong>Reason (R):</strong> Warren Hastings was himself a great scholar and an ardent Orientalist who used to encourage the study of Sanskrit, Persian and Arabic.<br>
-        <strong>(कारण R):</strong> वारेन हेस्टिंग्स स्वयं एक महान विद्वान और एक उत्साही प्राच्यवादी थे जो संस्कृत, फारसी और अरबी के अध्ययन को प्रोत्साहित करते थे।
-    </div>
-    <div class="options" data-correct="A">
-        <label class="option-label"><input type="radio" name="q4" value="A"> (A) Both (A) and (R) are true and (R) is the correct explanation of (A) / (A) और (R) दोनों सत्य हैं और (R), (A) की सही व्याख्या है</label>
-        <label class="option-label"><input type="radio" name="q4" value="B"> (B) Both (A) and (R) are true, but (R) is not a correct explanation of (A) / (A) और (R) दोनों सत्य हैं, लेकिन (R), (A) की सही व्याख्या नहीं है</label>
-        <label class="option-label"><input type="radio" name="q4" value="C"> (C) (A) is true, but (R) is false / (A) सत्य है, लेकिन (R) असत्य है</label>
-        <label class="option-label"><input type="radio" name="q4" value="D"> (D) (A) is false, but (R) is true / (A) असत्य है, लेकिन (R) सत्य है</label>
-        <button class="check-btn" onclick="checkAnswer('q4')">Check Answer / उत्तर जाँचें</button>
-    </div>
-    <div class="explanation">
-        <strong>Explanation / व्याख्या:</strong>
-        <p><strong>English:</strong> Warren Hastings encouraged oriental studies but declined the presidency of the Asiatic Society in favor of Sir William Jones.</p>
-        <p><strong>हिंदी:</strong> वारेन हेस्टिंग्स ने प्राच्य अध्ययन को प्रोत्साहित किया लेकिन सर विलियम जोन्स के पक्ष में एशियाटिक सोसाइटी की अध्यक्षता को अस्वीकार कर दिया।</p>
-    </div>
-</div>
+      <div class="question-box" id="q4">
+        <div class="q-text-en">
+          4. Given below are two statements, one is labelled as Assertion (A)
+          and the other as Reason (R).
+        </div>
+        <div class="q-text-hi">
+          4. नीचे दो कथन दिए गए हैं, जिनमें से एक को अभिकथन (A) और दूसरे को कारण
+          (R) कहा गया है।
+        </div>
+        <div class="statement-box">
+          <strong>Assertion (A):</strong> The Asiatic Society of Bengal was
+          established in the period of Warren Hastings and he modestly declined
+          the offer of Presidentship of the learned body in favour of Sir
+          William Jones.<br />
+          <strong>(अभिकथन A):</strong> एशियाटिक सोसाइटी ऑफ बंगाल की स्थापना
+          वारेन हेस्टिंग्स के काल में हुई थी और उन्होंने सर विलियम जोन्स के पक्ष
+          में इस विद्वान संस्था की अध्यक्षता का प्रस्ताव विनम्रतापूर्वक अस्वीकार
+          कर दिया था।<br /><br />
+          <strong>Reason (R):</strong> Warren Hastings was himself a great
+          scholar and an ardent Orientalist who used to encourage the study of
+          Sanskrit, Persian and Arabic.<br />
+          <strong>(कारण R):</strong> वारेन हेस्टिंग्स स्वयं एक महान विद्वान और
+          एक उत्साही प्राच्यवादी थे जो संस्कृत, फारसी और अरबी के अध्ययन को
+          प्रोत्साहित करते थे।
+        </div>
+        <div class="options" data-correct="A">
+          <label class="option-label"
+            ><input type="radio" name="q4" value="A" /> (A) Both (A) and (R) are
+            true and (R) is the correct explanation of (A) / (A) और (R) दोनों
+            सत्य हैं और (R), (A) की सही व्याख्या है</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q4" value="B" /> (B) Both (A) and (R) are
+            true, but (R) is not a correct explanation of (A) / (A) और (R) दोनों
+            सत्य हैं, लेकिन (R), (A) की सही व्याख्या नहीं है</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q4" value="C" /> (C) (A) is true, but (R)
+            is false / (A) सत्य है, लेकिन (R) असत्य है</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q4" value="D" /> (D) (A) is false, but
+            (R) is true / (A) असत्य है, लेकिन (R) सत्य है</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q4')">
+            Check Answer / उत्तर जाँचें
+          </button>
+        </div>
+        <div class="explanation">
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Warren Hastings encouraged oriental
+            studies but declined the presidency of the Asiatic Society in favor
+            of Sir William Jones.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> वारेन हेस्टिंग्स ने प्राच्य अध्ययन को
+            प्रोत्साहित किया लेकिन सर विलियम जोन्स के पक्ष में एशियाटिक सोसाइटी
+            की अध्यक्षता को अस्वीकार कर दिया।
+          </p>
+        </div>
+      </div>
 
-    <div class="question-box" id="q5">
-        <div class="q-text-en">5. Who among the following was offered membership of the Royal Asiatic Society of Paris?</div>
-        <div class="q-text-hi">5. निम्नलिखित में से किसे पेरिस की रॉयल एशियाटिक सोसाइटी की सदस्यता की पेशकश की गई थी?</div>
+      <div class="question-box" id="q5">
+        <div class="q-text-en">
+          5. Who among the following was offered membership of the Royal Asiatic
+          Society of Paris?
+        </div>
+        <div class="q-text-hi">
+          5. निम्नलिखित में से किसे पेरिस की रॉयल एशियाटिक सोसाइटी की सदस्यता की
+          पेशकश की गई थी?
+        </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q5" value="A"> (A) Dadabhai Naoroji / दादाभाई नौरोजी</label>
-            <label class="option-label"><input type="radio" name="q5" value="B"> (B) Michael Madhusudan Dutta / माइकल मधुसूदन दत्ता</label>
-            <label class="option-label"><input type="radio" name="q5" value="C"> (C) Raja Rammohan Roy / राजा राममोहन राय</label>
-            <label class="option-label"><input type="radio" name="q5" value="D"> (D) Vivekanand / विवेकानंद</label>
-            <button class="check-btn" onclick="checkAnswer('q5')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q5" value="A" /> (A) Dadabhai Naoroji /
+            दादाभाई नौरोजी</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q5" value="B" /> (B) Michael Madhusudan
+            Dutta / माइकल मधुसूदन दत्ता</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q5" value="C" /> (C) Raja Rammohan Roy /
+            राजा राममोहन राय</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q5" value="D" /> (D) Vivekanand /
+            विवेकानंद</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q5')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Michael Madhusudan Dutta was offered membership of La Societe Asiatique (Royal Asiatic Society) of Paris in 1822.</p>
-            <p><strong>हिंदी:</strong> माइकल मधुसूदन दत्ता को 1822 में ला सोसिएट एशियाटिक (रॉयल एशियाटिक सोसाइटी), पेरिस की सदस्यता की पेशकश की गई थी।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Michael Madhusudan Dutta was offered
+            membership of La Societe Asiatique (Royal Asiatic Society) of Paris
+            in 1822.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> माइकल मधुसूदन दत्ता को 1822 में ला सोसिएट
+            एशियाटिक (रॉयल एशियाटिक सोसाइटी), पेरिस की सदस्यता की पेशकश की गई
+            थी।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q6">
-        <div class="q-text-en">6. Who among the following Englishmen, first translated Bhagavad Gita into English?</div>
-        <div class="q-text-hi">6. निम्नलिखित अंग्रेजों में से किसने सर्वप्रथम भगवद गीता का अंग्रेजी में अनुवाद किया था?</div>
+      <div class="question-box" id="q6">
+        <div class="q-text-en">
+          6. Who among the following Englishmen, first translated Bhagavad Gita
+          into English?
+        </div>
+        <div class="q-text-hi">
+          6. निम्नलिखित अंग्रेजों में से किसने सर्वप्रथम भगवद गीता का अंग्रेजी
+          में अनुवाद किया था?
+        </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q6" value="A"> (A) William Jones / विलियम जोन्स</label>
-            <label class="option-label"><input type="radio" name="q6" value="B"> (B) Charles Wilkins / चार्ल्स विल्किंस</label>
-            <label class="option-label"><input type="radio" name="q6" value="C"> (C) Alexander Cunningham / अलेक्जेंडर कनिंघम</label>
-            <label class="option-label"><input type="radio" name="q6" value="D"> (D) John Marshall / जॉन मार्शल</label>
-            <button class="check-btn" onclick="checkAnswer('q6')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q6" value="A" /> (A) William Jones /
+            विलियम जोन्स</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q6" value="B" /> (B) Charles Wilkins /
+            चार्ल्स विल्किंस</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q6" value="C" /> (C) Alexander Cunningham
+            / अलेक्जेंडर कनिंघम</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q6" value="D" /> (D) John Marshall / जॉन
+            मार्शल</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q6')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Charles Wilkins was the first to translate the Bhagavad Gita into English. Warren Hastings wrote the preface to this translation.</p>
-            <p><strong>हिंदी:</strong> चार्ल्स विल्किंस ने सबसे पहले भगवद गीता का अंग्रेजी में अनुवाद किया था। वारेन हेस्टिंग्स ने इस अनुवाद की प्रस्तावना लिखी थी।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Charles Wilkins was the first to translate
+            the Bhagavad Gita into English. Warren Hastings wrote the preface to
+            this translation.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> चार्ल्स विल्किंस ने सबसे पहले भगवद गीता का
+            अंग्रेजी में अनुवाद किया था। वारेन हेस्टिंग्स ने इस अनुवाद की
+            प्रस्तावना लिखी थी।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q7">
-        <div class="q-text-en">7. Who among the following was the first to translate Kalidasa's famous work 'Shakuntala' into English?</div>
-        <div class="q-text-hi">7. कालिदास की प्रसिद्ध रचना 'शकुंतला' का अंग्रेजी में अनुवाद करने वाला पहला व्यक्ति कौन था?</div>
+      <div class="question-box" id="q7">
+        <div class="q-text-en">
+          7. Who among the following was the first to translate Kalidasa's
+          famous work 'Shakuntala' into English?
+        </div>
+        <div class="q-text-hi">
+          7. कालिदास की प्रसिद्ध रचना 'शकुंतला' का अंग्रेजी में अनुवाद करने वाला
+          पहला व्यक्ति कौन था?
+        </div>
         <div class="options" data-correct="D">
-            <label class="option-label"><input type="radio" name="q7" value="A"> (A) Charles Wilkins / चार्ल्स विल्किंस</label>
-            <label class="option-label"><input type="radio" name="q7" value="B"> (B) Henry Colebrooke / हेनरी कोलब्रुक</label>
-            <label class="option-label"><input type="radio" name="q7" value="C"> (C) Johanna Wolfgang von Goethe / जोहान वोल्फगैंग वॉन गोएथे</label>
-            <label class="option-label"><input type="radio" name="q7" value="D"> (D) Sir William Jones / सर विलियम जोन्स</label>
-            <button class="check-btn" onclick="checkAnswer('q7')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q7" value="A" /> (A) Charles Wilkins /
+            चार्ल्स विल्किंस</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q7" value="B" /> (B) Henry Colebrooke /
+            हेनरी कोलब्रुक</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q7" value="C" /> (C) Johanna Wolfgang von
+            Goethe / जोहान वोल्फगैंग वॉन गोएथे</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q7" value="D" /> (D) Sir William Jones /
+            सर विलियम जोन्स</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q7')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Sir William Jones translated 'Abhigyan Shakuntalam' into English in 1789.</p>
-            <p><strong>हिंदी:</strong> सर विलियम जोन्स ने 1789 में 'अभिज्ञान शाकुंतलम' का अंग्रेजी में अनुवाद किया था।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Sir William Jones translated 'Abhigyan
+            Shakuntalam' into English in 1789.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> सर विलियम जोन्स ने 1789 में 'अभिज्ञान
+            शाकुंतलम' का अंग्रेजी में अनुवाद किया था।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q8">
-        <div class="q-text-en">8. The main reason for the British Government to spread modern education in India during the pre-independence period was:</div>
-        <div class="q-text-hi">8. स्वतंत्रता पूर्व अवधि के दौरान भारत में आधुनिक शिक्षा फैलाने का ब्रिटिश सरकार का मुख्य कारण था:</div>
+      <div class="question-box" id="q8">
+        <div class="q-text-en">
+          8. The main reason for the British Government to spread modern
+          education in India during the pre-independence period was:
+        </div>
+        <div class="q-text-hi">
+          8. स्वतंत्रता पूर्व अवधि के दौरान भारत में आधुनिक शिक्षा फैलाने का
+          ब्रिटिश सरकार का मुख्य कारण था:
+        </div>
         <div class="options" data-correct="A">
-            <label class="option-label"><input type="radio" name="q8" value="A"> (A) The need for educated Indians in minor administrative posts / छोटे प्रशासनिक पदों पर शिक्षित भारतीयों की आवश्यकता</label>
-            <label class="option-label"><input type="radio" name="q8" value="B"> (B) To promote Indian culture / भारतीय संस्कृति को बढ़ावा देना</label>
-            <label class="option-label"><input type="radio" name="q8" value="C"> (C) To modernize the Indian people so that they could share their political responsibilities / भारतीय लोगों को आधुनिक बनाना ताकि वे अपनी राजनीतिक जिम्मेदारियों को साझा कर सकें</label>
-            <label class="option-label"><input type="radio" name="q8" value="D"> (D) None of the above / उपरोक्त में से कोई नहीं</label>
-            <button class="check-btn" onclick="checkAnswer('q8')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q8" value="A" /> (A) The need for
+            educated Indians in minor administrative posts / छोटे प्रशासनिक पदों
+            पर शिक्षित भारतीयों की आवश्यकता</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q8" value="B" /> (B) To promote Indian
+            culture / भारतीय संस्कृति को बढ़ावा देना</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q8" value="C" /> (C) To modernize the
+            Indian people so that they could share their political
+            responsibilities / भारतीय लोगों को आधुनिक बनाना ताकि वे अपनी
+            राजनीतिक जिम्मेदारियों को साझा कर सकें</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q8" value="D" /> (D) None of the above /
+            उपरोक्त में से कोई नहीं</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q8')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> The British needed educated Indians for minor administrative posts to reduce administration costs.</p>
-            <p><strong>हिंदी:</strong> अंग्रेजों को प्रशासन की लागत कम करने के लिए छोटे प्रशासनिक पदों के लिए शिक्षित भारतीयों की आवश्यकता थी।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> The British needed educated Indians for
+            minor administrative posts to reduce administration costs.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> अंग्रेजों को प्रशासन की लागत कम करने के लिए
+            छोटे प्रशासनिक पदों के लिए शिक्षित भारतीयों की आवश्यकता थी।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q9">
-        <div class="q-text-en">9. Which Act of British Government granted Rs. One lakh for education in India for the first time?</div>
-        <div class="q-text-hi">9. ब्रिटिश सरकार के किस अधिनियम ने पहली बार भारत में शिक्षा के लिए एक लाख रुपये दिए?</div>
+      <div class="question-box" id="q9">
+        <div class="q-text-en">
+          9. Which Act of British Government granted Rs. One lakh for education
+          in India for the first time?
+        </div>
+        <div class="q-text-hi">
+          9. ब्रिटिश सरकार के किस अधिनियम ने पहली बार भारत में शिक्षा के लिए एक
+          लाख रुपये दिए?
+        </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q9" value="A"> (A) Wood's Dispatch, 1854 / वुड्स डिस्पैच, 1854</label>
-            <label class="option-label"><input type="radio" name="q9" value="B"> (B) Charter Act, 1813 / चार्टर एक्ट, 1813</label>
-            <label class="option-label"><input type="radio" name="q9" value="C"> (C) Charter Act, 1853 / चार्टर एक्ट, 1853</label>
-            <label class="option-label"><input type="radio" name="q9" value="D"> (D) Indian Council Act, 1892 / इंडियन काउंसिल एक्ट, 1892</label>
-            <button class="check-btn" onclick="checkAnswer('q9')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q9" value="A" /> (A) Wood's Dispatch,
+            1854 / वुड्स डिस्पैच, 1854</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q9" value="B" /> (B) Charter Act, 1813 /
+            चार्टर एक्ट, 1813</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q9" value="C" /> (C) Charter Act, 1853 /
+            चार्टर एक्ट, 1853</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q9" value="D" /> (D) Indian Council Act,
+            1892 / इंडियन काउंसिल एक्ट, 1892</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q9')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> The Charter Act of 1813 allotted Rs. 1 lakh annually to promote education in India.</p>
-            <p><strong>हिंदी:</strong> 1813 के चार्टर एक्ट ने भारत में शिक्षा को बढ़ावा देने के लिए सालाना 1 लाख रुपये आवंटित किए।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> The Charter Act of 1813 allotted Rs. 1
+            lakh annually to promote education in India.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> 1813 के चार्टर एक्ट ने भारत में शिक्षा को
+            बढ़ावा देने के लिए सालाना 1 लाख रुपये आवंटित किए।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q10">
-        <div class="q-text-en">10. Regarding Wood's Despatch, which of the following statements are true?</div>
-        <div class="q-text-hi">10. वुड्स डिस्पैच (Wood's Despatch) के संबंध में, निम्नलिखित में से कौन से कथन सत्य हैं?</div>
+      <div class="question-box" id="q10">
+        <div class="q-text-en">
+          10. Regarding Wood's Despatch, which of the following statements are
+          true?
+        </div>
+        <div class="q-text-hi">
+          10. वुड्स डिस्पैच (Wood's Despatch) के संबंध में, निम्नलिखित में से
+          कौन से कथन सत्य हैं?
+        </div>
         <div class="statement-box">
-            1. Grants-in-Aid system was introduced. (सहायता अनुदान प्रणाली शुरू की गई थी।)<br>
-            2. Establishment of universities was recommended. (विश्वविद्यालयों की स्थापना की सिफारिश की गई थी।)<br>
-            3. English as a medium of instruction at all levels of education was recommended. (शिक्षा के सभी स्तरों पर शिक्षा के माध्यम के रूप में अंग्रेजी की सिफारिश की गई थी।)
+          1. Grants-in-Aid system was introduced. (सहायता अनुदान प्रणाली शुरू की
+          गई थी।)<br />
+          2. Establishment of universities was recommended. (विश्वविद्यालयों की
+          स्थापना की सिफारिश की गई थी।)<br />
+          3. English as a medium of instruction at all levels of education was
+          recommended. (शिक्षा के सभी स्तरों पर शिक्षा के माध्यम के रूप में
+          अंग्रेजी की सिफारिश की गई थी।)
         </div>
         <div class="options" data-correct="A">
-            <label class="option-label"><input type="radio" name="q10" value="A"> (A) 1 and 2 only / केवल 1 और 2</label>
-            <label class="option-label"><input type="radio" name="q10" value="B"> (B) 2 and 3 only / केवल 2 और 3</label>
-            <label class="option-label"><input type="radio" name="q10" value="C"> (C) 1 and 3 only / केवल 1 और 3</label>
-            <label class="option-label"><input type="radio" name="q10" value="D"> (D) 1, 2 and 3 / 1, 2 और 3</label>
-            <button class="check-btn" onclick="checkAnswer('q10')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q10" value="A" /> (A) 1 and 2 only / केवल
+            1 और 2</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q10" value="B" /> (B) 2 and 3 only / केवल
+            2 और 3</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q10" value="C" /> (C) 1 and 3 only / केवल
+            1 और 3</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q10" value="D" /> (D) 1, 2 and 3 / 1, 2
+            और 3</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q10')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Wood's Despatch (1854) introduced Grants-in-Aid and recommended universities. However, it did NOT recommend English at all levels; it suggested vernaculars for primary and English for higher education.</p>
-            <p><strong>हिंदी:</strong> वुड्स डिस्पैच (1854) ने सहायता अनुदान (Grants-in-Aid) की शुरुआत की और विश्वविद्यालयों की सिफारिश की। हालाँकि, इसने सभी स्तरों पर अंग्रेजी की सिफारिश नहीं की; इसने प्राथमिक के लिए स्थानीय भाषाओं और उच्च शिक्षा के लिए अंग्रेजी का सुझाव दिया।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Wood's Despatch (1854) introduced
+            Grants-in-Aid and recommended universities. However, it did NOT
+            recommend English at all levels; it suggested vernaculars for
+            primary and English for higher education.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> वुड्स डिस्पैच (1854) ने सहायता अनुदान
+            (Grants-in-Aid) की शुरुआत की और विश्वविद्यालयों की सिफारिश की।
+            हालाँकि, इसने सभी स्तरों पर अंग्रेजी की सिफारिश नहीं की; इसने
+            प्राथमिक के लिए स्थानीय भाषाओं और उच्च शिक्षा के लिए अंग्रेजी का
+            सुझाव दिया।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q11">
-        <div class="q-text-en">11. Consider the following statements regarding Wood's Despatch of 1854:</div>
-        <div class="q-text-hi">11. 1854 के वुड्स डिस्पैच के संबंध में निम्नलिखित कथनों पर विचार करें:</div>
+      <div class="question-box" id="q11">
+        <div class="q-text-en">
+          11. Consider the following statements regarding Wood's Despatch of
+          1854:
+        </div>
+        <div class="q-text-hi">
+          11. 1854 के वुड्स डिस्पैच के संबंध में निम्नलिखित कथनों पर विचार करें:
+        </div>
         <div class="statement-box">
-            1. It recommended English as the medium of instruction for higher studies. (इसने उच्च अध्ययन के लिए शिक्षा के माध्यम के रूप में अंग्रेजी की सिफारिश की।)<br>
-            2. It laid stress on female education and vocational training. (इसने महिला शिक्षा और व्यावसायिक प्रशिक्षण पर जोर दिया।)
+          1. It recommended English as the medium of instruction for higher
+          studies. (इसने उच्च अध्ययन के लिए शिक्षा के माध्यम के रूप में अंग्रेजी
+          की सिफारिश की।)<br />
+          2. It laid stress on female education and vocational training. (इसने
+          महिला शिक्षा और व्यावसायिक प्रशिक्षण पर जोर दिया।)
         </div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q11" value="A"> (A) Only 1 / केवल 1</label>
-            <label class="option-label"><input type="radio" name="q11" value="B"> (B) Only 2 / केवल 2</label>
-            <label class="option-label"><input type="radio" name="q11" value="C"> (C) Both 1 and 2 / 1 और 2 दोनों</label>
-            <label class="option-label"><input type="radio" name="q11" value="D"> (D) Neither 1 nor 2 / न तो 1 और न ही 2</label>
-            <button class="check-btn" onclick="checkAnswer('q11')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q11" value="A" /> (A) Only 1 / केवल
+            1</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q11" value="B" /> (B) Only 2 / केवल
+            2</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q11" value="C" /> (C) Both 1 and 2 / 1 और
+            2 दोनों</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q11" value="D" /> (D) Neither 1 nor 2 / न
+            तो 1 और न ही 2</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q11')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Both statements are correct. It promoted English for higher education and also supported female education and vocational training.</p>
-            <p><strong>हिंदी:</strong> दोनों कथन सही हैं। इसने उच्च शिक्षा के लिए अंग्रेजी को बढ़ावा दिया और महिला शिक्षा और व्यावसायिक प्रशिक्षण का भी समर्थन किया।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Both statements are correct. It promoted
+            English for higher education and also supported female education and
+            vocational training.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> दोनों कथन सही हैं। इसने उच्च शिक्षा के लिए
+            अंग्रेजी को बढ़ावा दिया और महिला शिक्षा और व्यावसायिक प्रशिक्षण का
+            भी समर्थन किया।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q12">
-        <div class="q-text-en">12. Charles Wood's Despatch was related to which of the following?</div>
-        <div class="q-text-hi">12. चार्ल्स वुड का डिस्पैच निम्नलिखित में से किससे संबंधित था?</div>
+      <div class="question-box" id="q12">
+        <div class="q-text-en">
+          12. Charles Wood's Despatch was related to which of the following?
+        </div>
+        <div class="q-text-hi">
+          12. चार्ल्स वुड का डिस्पैच निम्नलिखित में से किससे संबंधित था?
+        </div>
         <div class="options" data-correct="A">
-            <label class="option-label"><input type="radio" name="q12" value="A"> (A) Education / शिक्षा</label>
-            <label class="option-label"><input type="radio" name="q12" value="B"> (B) Trade / व्यापार</label>
-            <label class="option-label"><input type="radio" name="q12" value="C"> (C) Administrative Reforms / प्रशासनिक सुधार</label>
-            <label class="option-label"><input type="radio" name="q12" value="D"> (D) Military Reforms / सैन्य सुधार</label>
-            <button class="check-btn" onclick="checkAnswer('q12')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q12" value="A" /> (A) Education /
+            शिक्षा</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q12" value="B" /> (B) Trade /
+            व्यापार</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q12" value="C" /> (C) Administrative
+            Reforms / प्रशासनिक सुधार</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q12" value="D" /> (D) Military Reforms /
+            सैन्य सुधार</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q12')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> It was related to Education and is known as the Magna Carta of English Education in India.</p>
-            <p><strong>हिंदी:</strong> यह शिक्षा से संबंधित था और इसे भारत में अंग्रेजी शिक्षा का मैग्ना कार्टा कहा जाता है।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> It was related to Education and is known
+            as the Magna Carta of English Education in India.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> यह शिक्षा से संबंधित था और इसे भारत में
+            अंग्रेजी शिक्षा का मैग्ना कार्टा कहा जाता है।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q13">
-        <div class="q-text-en">13. Which is referred to as the 'Magna Carta' of the British education system in India?</div>
-        <div class="q-text-hi">13. भारत में ब्रिटिश शिक्षा प्रणाली का 'मैग्ना कार्टा' किसे कहा जाता है?</div>
+      <div class="question-box" id="q13">
+        <div class="q-text-en">
+          13. Which is referred to as the 'Magna Carta' of the British education
+          system in India?
+        </div>
+        <div class="q-text-hi">
+          13. भारत में ब्रिटिश शिक्षा प्रणाली का 'मैग्ना कार्टा' किसे कहा जाता
+          है?
+        </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q13" value="A"> (A) Macaulay's Minute, 1835 / मैकाले का मिनट, 1835</label>
-            <label class="option-label"><input type="radio" name="q13" value="B"> (B) Wood's Despatch on Education, 1854 / शिक्षा पर वुड्स डिस्पैच, 1854</label>
-            <label class="option-label"><input type="radio" name="q13" value="C"> (C) Hunter Commission, 1882-83 / हंटर कमीशन, 1882-83</label>
-            <label class="option-label"><input type="radio" name="q13" value="D"> (D) Hartog Committee, 1929 / हार्टोग समिति, 1929</label>
-            <button class="check-btn" onclick="checkAnswer('q13')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q13" value="A" /> (A) Macaulay's Minute,
+            1835 / मैकाले का मिनट, 1835</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q13" value="B" /> (B) Wood's Despatch on
+            Education, 1854 / शिक्षा पर वुड्स डिस्पैच, 1854</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q13" value="C" /> (C) Hunter Commission,
+            1882-83 / हंटर कमीशन, 1882-83</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q13" value="D" /> (D) Hartog Committee,
+            1929 / हार्टोग समिति, 1929</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q13')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Wood's Despatch of 1854 is called the Magna Carta of Indian education as it was the first comprehensive plan.</p>
-            <p><strong>हिंदी:</strong> 1854 के वुड्स डिस्पैच को भारतीय शिक्षा का मैग्ना कार्टा कहा जाता है क्योंकि यह पहली व्यापक योजना थी।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Wood's Despatch of 1854 is called the
+            Magna Carta of Indian education as it was the first comprehensive
+            plan.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> 1854 के वुड्स डिस्पैच को भारतीय शिक्षा का
+            मैग्ना कार्टा कहा जाता है क्योंकि यह पहली व्यापक योजना थी।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q14">
-        <div class="q-text-en">14. In the Hunter Commission report, special emphasis was laid on the development of:</div>
-        <div class="q-text-hi">14. हंटर कमीशन की रिपोर्ट में किसके विकास पर विशेष जोर दिया गया था?</div>
+      <div class="question-box" id="q14">
+        <div class="q-text-en">
+          14. In the Hunter Commission report, special emphasis was laid on the
+          development of:
+        </div>
+        <div class="q-text-hi">
+          14. हंटर कमीशन की रिपोर्ट में किसके विकास पर विशेष जोर दिया गया था?
+        </div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q14" value="A"> (A) Girls education / बालिका शिक्षा</label>
-            <label class="option-label"><input type="radio" name="q14" value="B"> (B) Higher education / उच्च शिक्षा</label>
-            <label class="option-label"><input type="radio" name="q14" value="C"> (C) Primary education / प्राथमिक शिक्षा</label>
-            <label class="option-label"><input type="radio" name="q14" value="D"> (D) Technical education / तकनीकी शिक्षा</label>
-            <button class="check-btn" onclick="checkAnswer('q14')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q14" value="A" /> (A) Girls education /
+            बालिका शिक्षा</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q14" value="B" /> (B) Higher education /
+            उच्च शिक्षा</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q14" value="C" /> (C) Primary education /
+            प्राथमिक शिक्षा</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q14" value="D" /> (D) Technical education
+            / तकनीकी शिक्षा</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q14')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> The Hunter Commission (1882) specially emphasized the development and improvement of Primary Education.</p>
-            <p><strong>हिंदी:</strong> हंटर कमीशन (1882) ने प्राथमिक शिक्षा के विकास और सुधार पर विशेष जोर दिया।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> The Hunter Commission (1882) specially
+            emphasized the development and improvement of Primary Education.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> हंटर कमीशन (1882) ने प्राथमिक शिक्षा के
+            विकास और सुधार पर विशेष जोर दिया।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q15">
-        <div class="q-text-en">15. Who have appointed First Indian Education Commission and in which year?</div>
-        <div class="q-text-hi">15. प्रथम भारतीय शिक्षा आयोग की नियुक्ति किसने और किस वर्ष की?</div>
+      <div class="question-box" id="q15">
+        <div class="q-text-en">
+          15. Who have appointed First Indian Education Commission and in which
+          year?
+        </div>
+        <div class="q-text-hi">
+          15. प्रथम भारतीय शिक्षा आयोग की नियुक्ति किसने और किस वर्ष की?
+        </div>
         <div class="options" data-correct="A">
-            <label class="option-label"><input type="radio" name="q15" value="A"> (A) Lord Ripon in 1882 / लॉर्ड रिपन ने 1882 में</label>
-            <label class="option-label"><input type="radio" name="q15" value="B"> (B) Lord William Wedderburn in 1885 / लॉर्ड विलियम वेडरबर्न ने 1885 में</label>
-            <label class="option-label"><input type="radio" name="q15" value="C"> (C) Lord Curzon in 1905 / लॉर्ड कर्जन ने 1905 में</label>
-            <label class="option-label"><input type="radio" name="q15" value="D"> (D) Lord Lytton in 1880 / लॉर्ड लिटन ने 1880 में</label>
-            <button class="check-btn" onclick="checkAnswer('q15')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q15" value="A" /> (A) Lord Ripon in 1882
+            / लॉर्ड रिपन ने 1882 में</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q15" value="B" /> (B) Lord William
+            Wedderburn in 1885 / लॉर्ड विलियम वेडरबर्न ने 1885 में</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q15" value="C" /> (C) Lord Curzon in 1905
+            / लॉर्ड कर्जन ने 1905 में</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q15" value="D" /> (D) Lord Lytton in 1880
+            / लॉर्ड लिटन ने 1880 में</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q15')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Lord Ripon appointed the first Indian Education Commission (Hunter Commission) in 1882.</p>
-            <p><strong>हिंदी:</strong> लॉर्ड रिपन ने 1882 में प्रथम भारतीय शिक्षा आयोग (हंटर कमीशन) की नियुक्ति की।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Lord Ripon appointed the first Indian
+            Education Commission (Hunter Commission) in 1882.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> लॉर्ड रिपन ने 1882 में प्रथम भारतीय शिक्षा
+            आयोग (हंटर कमीशन) की नियुक्ति की।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q16">
-        <div class="q-text-en">16. When was the National Council of Education established?</div>
-        <div class="q-text-hi">16. राष्ट्रीय शिक्षा परिषद की स्थापना कब हुई थी?</div>
+      <div class="question-box" id="q16">
+        <div class="q-text-en">
+          16. When was the National Council of Education established?
+        </div>
+        <div class="q-text-hi">
+          16. राष्ट्रीय शिक्षा परिषद की स्थापना कब हुई थी?
+        </div>
         <div class="options" data-correct="D">
-            <label class="option-label"><input type="radio" name="q16" value="A"> (A) 15th August, 1903</label>
-            <label class="option-label"><input type="radio" name="q16" value="B"> (B) 15th August, 1904</label>
-            <label class="option-label"><input type="radio" name="q16" value="C"> (C) 15th August, 1905</label>
-            <label class="option-label"><input type="radio" name="q16" value="D"> (D) 15th August, 1906</label>
-            <button class="check-btn" onclick="checkAnswer('q16')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q16" value="A" /> (A) 15th August,
+            1903</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q16" value="B" /> (B) 15th August,
+            1904</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q16" value="C" /> (C) 15th August,
+            1905</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q16" value="D" /> (D) 15th August,
+            1906</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q16')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> The National Council of Education was established on 15 August 1906.</p>
-            <p><strong>हिंदी:</strong> राष्ट्रीय शिक्षा परिषद की स्थापना 15 अगस्त 1906 को हुई थी।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> The National Council of Education was
+            established on 15 August 1906.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> राष्ट्रीय शिक्षा परिषद की स्थापना 15 अगस्त
+            1906 को हुई थी।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q17">
+      <div class="question-box" id="q17">
         <div class="q-text-en">17. Sadler Commission was related to:</div>
         <div class="q-text-hi">17. सैडलर आयोग किससे संबंधित था?</div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q17" value="A"> (A) Judiciary / न्यायपालिका</label>
-            <label class="option-label"><input type="radio" name="q17" value="B"> (B) Revenue Administration / राजस्व प्रशासन</label>
-            <label class="option-label"><input type="radio" name="q17" value="C"> (C) Education / शिक्षा</label>
-            <label class="option-label"><input type="radio" name="q17" value="D"> (D) Police Administration / पुलिस प्रशासन</label>
-            <button class="check-btn" onclick="checkAnswer('q17')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q17" value="A" /> (A) Judiciary /
+            न्यायपालिका</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q17" value="B" /> (B) Revenue
+            Administration / राजस्व प्रशासन</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q17" value="C" /> (C) Education /
+            शिक्षा</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q17" value="D" /> (D) Police
+            Administration / पुलिस प्रशासन</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q17')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> The Sadler Commission (1917) was related to Education, specifically to study the problems of Calcutta University.</p>
-            <p><strong>हिंदी:</strong> सैडलर आयोग (1917) शिक्षा से संबंधित था, विशेष रूप से कलकत्ता विश्वविद्यालय की समस्याओं का अध्ययन करने के लिए।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> The Sadler Commission (1917) was related
+            to Education, specifically to study the problems of Calcutta
+            University.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> सैडलर आयोग (1917) शिक्षा से संबंधित था,
+            विशेष रूप से कलकत्ता विश्वविद्यालय की समस्याओं का अध्ययन करने के
+            लिए।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q18">
-        <div class="q-text-en">18. When did the British Government appoint Sadler University Commission for reforms in education?</div>
-        <div class="q-text-hi">18. ब्रिटिश सरकार ने शिक्षा में सुधार के लिए सैडलर विश्वविद्यालय आयोग कब नियुक्त किया?</div>
+      <div class="question-box" id="q18">
+        <div class="q-text-en">
+          18. When did the British Government appoint Sadler University
+          Commission for reforms in education?
+        </div>
+        <div class="q-text-hi">
+          18. ब्रिटिश सरकार ने शिक्षा में सुधार के लिए सैडलर विश्वविद्यालय आयोग
+          कब नियुक्त किया?
+        </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q18" value="A"> (A) 1919</label>
-            <label class="option-label"><input type="radio" name="q18" value="B"> (B) 1917</label>
-            <label class="option-label"><input type="radio" name="q18" value="C"> (C) 1921</label>
-            <label class="option-label"><input type="radio" name="q18" value="D"> (D) 1896</label>
-            <button class="check-btn" onclick="checkAnswer('q18')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q18" value="A" /> (A) 1919</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q18" value="B" /> (B) 1917</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q18" value="C" /> (C) 1921</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q18" value="D" /> (D) 1896</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q18')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> It was appointed in 1917.</p>
-            <p><strong>हिंदी:</strong> इसे 1917 में नियुक्त किया गया था।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p><strong>English:</strong> It was appointed in 1917.</p>
+          <p><strong>हिंदी:</strong> इसे 1917 में नियुक्त किया गया था।</p>
         </div>
-    </div>
+      </div>
 
- <div class="question-box" id="q19">
-    <div class="q-text-en">19. In 1902, Lord Curzon appointed the University Commission including two Indian members. Who were they?</div>
-    <div class="q-text-hi">19. 1902 में, लॉर्ड कर्जन ने विश्वविद्यालय आयोग नियुक्त किया जिसमें दो भारतीय सदस्य शामिल थे। वे कौन थे?</div>
-    <div class="options" data-correct="D">
-        <label class="option-label"><input type="radio" name="q19" value="A"> (A) Bal Gangadhar Tilak and Surendranath Banerjee / बाल गंगाधर तिलक और सुरेंद्रनाथ बनर्जी</label>
-        <label class="option-label"><input type="radio" name="q19" value="B"> (B) Gopal Krishna Gokhale and Rashbehari Bose / गोपाल कृष्ण गोखले और रासबिहारी बोस</label>
-        <label class="option-label"><input type="radio" name="q19" value="C"> (C) Syed Hussain Bilgrami and Surendranath Banerjee / सैयद हुसैन बिलग्रामी और सुरेंद्रनाथ बनर्जी</label>
-        <label class="option-label"><input type="radio" name="q19" value="D"> (D) Syed Hussain Bilgrami and Justice Gurudas Banerjee / सैयद हुसैन बिलग्रामी और जस्टिस गुरुदास बनर्जी</label>
-        <button class="check-btn" onclick="checkAnswer('q19')">Check Answer / उत्तर जाँचें</button>
-    </div>
-    <div class="explanation">
-        <strong>Explanation / व्याख्या:</strong>
-        <p><strong>English:</strong> The two Indian members were Syed Hussain Bilgrami and Justice Gurudas Banerjee.</p>
-        <p><strong>हिंदी:</strong> दो भारतीय सदस्य सैयद हुसैन बिलग्रामी और जस्टिस गुरुदास बनर्जी थे।</p>
-    </div>
-</div>
+      <div class="question-box" id="q19">
+        <div class="q-text-en">
+          19. In 1902, Lord Curzon appointed the University Commission including
+          two Indian members. Who were they?
+        </div>
+        <div class="q-text-hi">
+          19. 1902 में, लॉर्ड कर्जन ने विश्वविद्यालय आयोग नियुक्त किया जिसमें दो
+          भारतीय सदस्य शामिल थे। वे कौन थे?
+        </div>
+        <div class="options" data-correct="D">
+          <label class="option-label"
+            ><input type="radio" name="q19" value="A" /> (A) Bal Gangadhar Tilak
+            and Surendranath Banerjee / बाल गंगाधर तिलक और सुरेंद्रनाथ
+            बनर्जी</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q19" value="B" /> (B) Gopal Krishna
+            Gokhale and Rashbehari Bose / गोपाल कृष्ण गोखले और रासबिहारी
+            बोस</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q19" value="C" /> (C) Syed Hussain
+            Bilgrami and Surendranath Banerjee / सैयद हुसैन बिलग्रामी और
+            सुरेंद्रनाथ बनर्जी</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q19" value="D" /> (D) Syed Hussain
+            Bilgrami and Justice Gurudas Banerjee / सैयद हुसैन बिलग्रामी और
+            जस्टिस गुरुदास बनर्जी</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q19')">
+            Check Answer / उत्तर जाँचें
+          </button>
+        </div>
+        <div class="explanation">
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> The two Indian members were Syed Hussain
+            Bilgrami and Justice Gurudas Banerjee.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> दो भारतीय सदस्य सैयद हुसैन बिलग्रामी और
+            जस्टिस गुरुदास बनर्जी थे।
+          </p>
+        </div>
+      </div>
 
-    <div class="question-box" id="q20">
+      <div class="question-box" id="q20">
         <div class="q-text-en">20. Lord Macaulay was related to:</div>
         <div class="q-text-hi">20. लॉर्ड मैकाले किससे संबंधित थे?</div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q20" value="A"> (A) Military reforms / सैन्य सुधार</label>
-            <label class="option-label"><input type="radio" name="q20" value="B"> (B) Abolishment of Sati / सती प्रथा का उन्मूलन</label>
-            <label class="option-label"><input type="radio" name="q20" value="C"> (C) English education / अंग्रेजी शिक्षा</label>
-            <label class="option-label"><input type="radio" name="q20" value="D"> (D) Permanent settlement / स्थायी बंदोबस्त</label>
-            <button class="check-btn" onclick="checkAnswer('q20')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q20" value="A" /> (A) Military reforms /
+            सैन्य सुधार</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q20" value="B" /> (B) Abolishment of Sati
+            / सती प्रथा का उन्मूलन</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q20" value="C" /> (C) English education /
+            अंग्रेजी शिक्षा</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q20" value="D" /> (D) Permanent
+            settlement / स्थायी बंदोबस्त</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q20')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Lord Macaulay is associated with the introduction of English education in India (Macaulay's Minute, 1835).</p>
-            <p><strong>हिंदी:</strong> लॉर्ड मैकाले भारत में अंग्रेजी शिक्षा की शुरुआत (मैकाले का मिनट, 1835) से जुड़े हैं।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Lord Macaulay is associated with the
+            introduction of English education in India (Macaulay's Minute,
+            1835).
+          </p>
+          <p>
+            <strong>हिंदी:</strong> लॉर्ड मैकाले भारत में अंग्रेजी शिक्षा की
+            शुरुआत (मैकाले का मिनट, 1835) से जुड़े हैं।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q21">
-        <div class="q-text-en">21. During India's colonial period, the theory of downward filtration was related to:</div>
-        <div class="q-text-hi">21. भारत के औपनिवेशिक काल के दौरान, 'अधोमुखी निस्यंदन सिद्धांत' (Downward Filtration Theory) किससे संबंधित था?</div>
+      <div class="question-box" id="q21">
+        <div class="q-text-en">
+          21. During India's colonial period, the theory of downward filtration
+          was related to:
+        </div>
+        <div class="q-text-hi">
+          21. भारत के औपनिवेशिक काल के दौरान, 'अधोमुखी निस्यंदन सिद्धांत'
+          (Downward Filtration Theory) किससे संबंधित था?
+        </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q21" value="A"> (A) Railways / रेलवे</label>
-            <label class="option-label"><input type="radio" name="q21" value="B"> (B) Education / शिक्षा</label>
-            <label class="option-label"><input type="radio" name="q21" value="C"> (C) Irrigation / सिंचाई</label>
-            <label class="option-label"><input type="radio" name="q21" value="D"> (D) Poverty alleviation / गरीबी उन्मूलन</label>
-            <button class="check-btn" onclick="checkAnswer('q21')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q21" value="A" /> (A) Railways /
+            रेलवे</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q21" value="B" /> (B) Education /
+            शिक्षा</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q21" value="C" /> (C) Irrigation /
+            सिंचाई</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q21" value="D" /> (D) Poverty alleviation
+            / गरीबी उन्मूलन</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q21')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> It was related to Education. The idea was to educate the higher classes, and the knowledge would filter down to the masses.</p>
-            <p><strong>हिंदी:</strong> यह शिक्षा से संबंधित था। विचार यह था कि उच्च वर्गों को शिक्षित किया जाए, और ज्ञान छनकर आम जनता तक पहुंचेगा।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> It was related to Education. The idea was
+            to educate the higher classes, and the knowledge would filter down
+            to the masses.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> यह शिक्षा से संबंधित था। विचार यह था कि उच्च
+            वर्गों को शिक्षित किया जाए, और ज्ञान छनकर आम जनता तक पहुंचेगा।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q22">
-        <div class="q-text-en">22. The propounder of "Filtration Theory" in India's education policy was:</div>
-        <div class="q-text-hi">22. भारत की शिक्षा नीति में "फिल्ट्रेशन थ्योरी" के प्रतिपादक थे:</div>
+      <div class="question-box" id="q22">
+        <div class="q-text-en">
+          22. The propounder of "Filtration Theory" in India's education policy
+          was:
+        </div>
+        <div class="q-text-hi">
+          22. भारत की शिक्षा नीति में "फिल्ट्रेशन थ्योरी" के प्रतिपादक थे:
+        </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q22" value="A"> (A) Charles Wood / चार्ल्स वुड</label>
-            <label class="option-label"><input type="radio" name="q22" value="B"> (B) Macaulay / मैकाले</label>
-            <label class="option-label"><input type="radio" name="q22" value="C"> (C) J.S. Mill / जे.एस. मिल</label>
-            <label class="option-label"><input type="radio" name="q22" value="D"> (D) Cornwallis / कॉर्नवालिस</label>
-            <button class="check-btn" onclick="checkAnswer('q22')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q22" value="A" /> (A) Charles Wood /
+            चार्ल्स वुड</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q22" value="B" /> (B) Macaulay /
+            मैकाले</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q22" value="C" /> (C) J.S. Mill / जे.एस.
+            मिल</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q22" value="D" /> (D) Cornwallis /
+            कॉर्नवालिस</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q22')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Macaulay propounded the Filtration Theory.</p>
-            <p><strong>हिंदी:</strong> मैकाले ने फिल्ट्रेशन थ्योरी का प्रतिपादन किया था।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Macaulay propounded the Filtration Theory.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> मैकाले ने फिल्ट्रेशन थ्योरी का प्रतिपादन
+            किया था।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q23">
-        <div class="q-text-en">23. The foundation of the modern educational system in India was laid by:</div>
-        <div class="q-text-hi">23. भारत में आधुनिक शिक्षा प्रणाली की नींव किसके द्वारा रखी गई थी?</div>
+      <div class="question-box" id="q23">
+        <div class="q-text-en">
+          23. The foundation of the modern educational system in India was laid
+          by:
+        </div>
+        <div class="q-text-hi">
+          23. भारत में आधुनिक शिक्षा प्रणाली की नींव किसके द्वारा रखी गई थी?
+        </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q23" value="A"> (A) The Charter Act of 1813 / 1813 का चार्टर अधिनियम</label>
-            <label class="option-label"><input type="radio" name="q23" value="B"> (B) Macaulay's Minutes of 1835 / 1835 का मैकाले मिनट</label>
-            <label class="option-label"><input type="radio" name="q23" value="C"> (C) The Hunter Commission of 1882 / 1882 का हंटर कमीशन</label>
-            <label class="option-label"><input type="radio" name="q23" value="D"> (D) Woods Despatch of 1854 / 1854 का वुड्स डिस्पैच</label>
-            <button class="check-btn" onclick="checkAnswer('q23')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q23" value="A" /> (A) The Charter Act of
+            1813 / 1813 का चार्टर अधिनियम</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q23" value="B" /> (B) Macaulay's Minutes
+            of 1835 / 1835 का मैकाले मिनट</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q23" value="C" /> (C) The Hunter
+            Commission of 1882 / 1882 का हंटर कमीशन</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q23" value="D" /> (D) Woods Despatch of
+            1854 / 1854 का वुड्स डिस्पैच</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q23')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> The foundation was laid by Macaulay's Minutes of 1835, which promoted Western sciences and literature through the English medium.</p>
-            <p><strong>हिंदी:</strong> नींव 1835 के मैकाले मिनट्स द्वारा रखी गई थी, जिसने अंग्रेजी माध्यम से पश्चिमी विज्ञान और साहित्य को बढ़ावा दिया।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> The foundation was laid by Macaulay's
+            Minutes of 1835, which promoted Western sciences and literature
+            through the English medium.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> नींव 1835 के मैकाले मिनट्स द्वारा रखी गई थी,
+            जिसने अंग्रेजी माध्यम से पश्चिमी विज्ञान और साहित्य को बढ़ावा दिया।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q24">
-        <div class="q-text-en">24. When did Macaulay issue his famous minute on Indian Education?</div>
-        <div class="q-text-hi">24. मैकाले ने भारतीय शिक्षा पर अपना प्रसिद्ध मिनट कब जारी किया?</div>
+      <div class="question-box" id="q24">
+        <div class="q-text-en">
+          24. When did Macaulay issue his famous minute on Indian Education?
+        </div>
+        <div class="q-text-hi">
+          24. मैकाले ने भारतीय शिक्षा पर अपना प्रसिद्ध मिनट कब जारी किया?
+        </div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q24" value="A"> (A) 12 February 1835</label>
-            <label class="option-label"><input type="radio" name="q24" value="B"> (B) 12 February 1836</label>
-            <label class="option-label"><input type="radio" name="q24" value="C"> (C) 02 February 1835</label>
-            <label class="option-label"><input type="radio" name="q24" value="D"> (D) 01 February 1835</label>
-            <button class="check-btn" onclick="checkAnswer('q24')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q24" value="A" /> (A) 12 February
+            1835</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q24" value="B" /> (B) 12 February
+            1836</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q24" value="C" /> (C) 02 February
+            1835</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q24" value="D" /> (D) 01 February
+            1835</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q24')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Macaulay issued his minute on 02 February 1835.</p>
-            <p><strong>हिंदी:</strong> मैकाले ने अपना मिनट 02 फरवरी 1835 को जारी किया था।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Macaulay issued his minute on 02 February
+            1835.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> मैकाले ने अपना मिनट 02 फरवरी 1835 को जारी
+            किया था।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q25">
-        <div class="q-text-en">25. Which of the following led to the introduction of English Education in India?</div>
-        <div class="q-text-hi">25. निम्नलिखित में से किसके कारण भारत में अंग्रेजी शिक्षा की शुरूआत हुई?</div>
+      <div class="question-box" id="q25">
+        <div class="q-text-en">
+          25. Which of the following led to the introduction of English
+          Education in India?
+        </div>
+        <div class="q-text-hi">
+          25. निम्नलिखित में से किसके कारण भारत में अंग्रेजी शिक्षा की शुरूआत
+          हुई?
+        </div>
         <div class="statement-box">
-            1. Charter Act of 1813 (1813 का चार्टर अधिनियम)<br>
-            2. General Committee of Public Instruction, 1823 (सार्वजनिक निर्देश की सामान्य समिति, 1823)<br>
-            3. Orientalist and Anglicist Controversy (प्राच्यवादी और आंग्लवादी विवाद)
+          1. Charter Act of 1813 (1813 का चार्टर अधिनियम)<br />
+          2. General Committee of Public Instruction, 1823 (सार्वजनिक निर्देश की
+          सामान्य समिति, 1823)<br />
+          3. Orientalist and Anglicist Controversy (प्राच्यवादी और आंग्लवादी
+          विवाद)
         </div>
         <div class="options" data-correct="D">
-            <label class="option-label"><input type="radio" name="q25" value="A"> (A) 1 and 2 only / केवल 1 और 2</label>
-            <label class="option-label"><input type="radio" name="q25" value="B"> (B) 2 only / केवल 2</label>
-            <label class="option-label"><input type="radio" name="q25" value="C"> (C) 1 and 3 only / केवल 1 और 3</label>
-            <label class="option-label"><input type="radio" name="q25" value="D"> (D) 1, 2 and 3 / 1, 2 और 3</label>
-            <button class="check-btn" onclick="checkAnswer('q25')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q25" value="A" /> (A) 1 and 2 only / केवल
+            1 और 2</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q25" value="B" /> (B) 2 only / केवल
+            2</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q25" value="C" /> (C) 1 and 3 only / केवल
+            1 और 3</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q25" value="D" /> (D) 1, 2 and 3 / 1, 2
+            और 3</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q25')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> All three factors contributed. The Charter Act provided funds, the Committee debated the medium, and the Controversy (resolved by Macaulay) led to the adoption of English.</p>
-            <p><strong>हिंदी:</strong> तीनों कारकों ने योगदान दिया। चार्टर एक्ट ने धन प्रदान किया, समिति ने माध्यम पर बहस की, और विवाद (मैकाले द्वारा हल) ने अंग्रेजी को अपनाने का मार्ग प्रशस्त किया।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> All three factors contributed. The Charter
+            Act provided funds, the Committee debated the medium, and the
+            Controversy (resolved by Macaulay) led to the adoption of English.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> तीनों कारकों ने योगदान दिया। चार्टर एक्ट ने
+            धन प्रदान किया, समिति ने माध्यम पर बहस की, और विवाद (मैकाले द्वारा
+            हल) ने अंग्रेजी को अपनाने का मार्ग प्रशस्त किया।
+          </p>
         </div>
-    </div>
-    
-    <div class="question-box" id="q26">
-        <div class="q-text-en">26. In whose reign was English Education introduced in India?</div>
-        <div class="q-text-hi">26. भारत में अंग्रेजी शिक्षा किसके शासनकाल में शुरू की गई थी?</div>
-        <div class="options" data-correct="A">
-            <label class="option-label"><input type="radio" name="q26" value="A"> (A) Lord William Cavendish Bentinck / लॉर्ड विलियम कैवेंडिश बेंटिक</label>
-            <label class="option-label"><input type="radio" name="q26" value="B"> (B) Lord Hardinge / लॉर्ड हार्डिंग</label>
-            <label class="option-label"><input type="radio" name="q26" value="C"> (C) Lord Minto / लॉर्ड मिंटो</label>
-            <label class="option-label"><input type="radio" name="q26" value="D"> (D) Lord Dalhousie / लॉर्ड डलहौजी</label>
-            <button class="check-btn" onclick="checkAnswer('q26')">Check Answer / उत्तर जाँचें</button>
-        </div>
-        <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> William Bentinck accepted Macaulay's Minute on March 7, 1835, making English the official medium of instruction.</p>
-            <p><strong>हिंदी:</strong> विलियम बेंटिक ने 7 मार्च 1835 को मैकाले के मिनट को स्वीकार कर लिया, जिससे अंग्रेजी शिक्षा का आधिकारिक माध्यम बन गई।</p>
-        </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q27">
-        <div class="q-text-en">27. The first three universities in India (Calcutta, Madras, and Bombay) were established in which year?</div>
-        <div class="q-text-hi">27. भारत में पहले तीन विश्वविद्यालय (कलकत्ता, मद्रास और बॉम्बे) किस वर्ष स्थापित किए गए थे?</div>
+      <div class="question-box" id="q26">
+        <div class="q-text-en">
+          26. In whose reign was English Education introduced in India?
+        </div>
+        <div class="q-text-hi">
+          26. भारत में अंग्रेजी शिक्षा किसके शासनकाल में शुरू की गई थी?
+        </div>
         <div class="options" data-correct="A">
-            <label class="option-label"><input type="radio" name="q27" value="A"> (A) 1857</label>
-            <label class="option-label"><input type="radio" name="q27" value="B"> (B) 1881</label>
-            <label class="option-label"><input type="radio" name="q27" value="C"> (C) 1885</label>
-            <label class="option-label"><input type="radio" name="q27" value="D"> (D) 1905</label>
-            <button class="check-btn" onclick="checkAnswer('q27')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q26" value="A" /> (A) Lord William
+            Cavendish Bentinck / लॉर्ड विलियम कैवेंडिश बेंटिक</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q26" value="B" /> (B) Lord Hardinge /
+            लॉर्ड हार्डिंग</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q26" value="C" /> (C) Lord Minto / लॉर्ड
+            मिंटो</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q26" value="D" /> (D) Lord Dalhousie /
+            लॉर्ड डलहौजी</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q26')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Following the recommendations of Wood's Despatch, the universities of Calcutta, Madras, and Bombay were established in 1857 on the model of London University.</p>
-            <p><strong>हिंदी:</strong> वुड्स डिस्पैच की सिफारिशों के बाद, लंदन विश्वविद्यालय की तर्ज पर 1857 में कलकत्ता, मद्रास और बॉम्बे विश्वविद्यालयों की स्थापना की गई।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> William Bentinck accepted Macaulay's
+            Minute on March 7, 1835, making English the official medium of
+            instruction.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> विलियम बेंटिक ने 7 मार्च 1835 को मैकाले के
+            मिनट को स्वीकार कर लिया, जिससे अंग्रेजी शिक्षा का आधिकारिक माध्यम बन
+            गई।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q28">
-        <div class="q-text-en">28. The establishment of the first Women's University in Mumbai was the result of the effort of:</div>
-        <div class="q-text-hi">28. मुंबई में प्रथम महिला विश्वविद्यालय की स्थापना किसके प्रयासों का परिणाम थी?</div>
+      <div class="question-box" id="q27">
+        <div class="q-text-en">
+          27. The first three universities in India (Calcutta, Madras, and
+          Bombay) were established in which year?
+        </div>
+        <div class="q-text-hi">
+          27. भारत में पहले तीन विश्वविद्यालय (कलकत्ता, मद्रास और बॉम्बे) किस
+          वर्ष स्थापित किए गए थे?
+        </div>
+        <div class="options" data-correct="A">
+          <label class="option-label"
+            ><input type="radio" name="q27" value="A" /> (A) 1857</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q27" value="B" /> (B) 1881</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q27" value="C" /> (C) 1885</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q27" value="D" /> (D) 1905</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q27')">
+            Check Answer / उत्तर जाँचें
+          </button>
+        </div>
+        <div class="explanation">
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Following the recommendations of Wood's
+            Despatch, the universities of Calcutta, Madras, and Bombay were
+            established in 1857 on the model of London University.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> वुड्स डिस्पैच की सिफारिशों के बाद, लंदन
+            विश्वविद्यालय की तर्ज पर 1857 में कलकत्ता, मद्रास और बॉम्बे
+            विश्वविद्यालयों की स्थापना की गई।
+          </p>
+        </div>
+      </div>
+
+      <div class="question-box" id="q28">
+        <div class="q-text-en">
+          28. The establishment of the first Women's University in Mumbai was
+          the result of the effort of:
+        </div>
+        <div class="q-text-hi">
+          28. मुंबई में प्रथम महिला विश्वविद्यालय की स्थापना किसके प्रयासों का
+          परिणाम थी?
+        </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q28" value="A"> (A) Dayaram Gindumal / दयाराम गिदुमल</label>
-            <label class="option-label"><input type="radio" name="q28" value="B"> (B) D.K. Karve / डी.के. कर्वे</label>
-            <label class="option-label"><input type="radio" name="q28" value="C"> (C) M.G. Ranade / एम.जी. रानाडे</label>
-            <label class="option-label"><input type="radio" name="q28" value="D"> (D) Ramabai / रमाबाई</label>
-            <button class="check-btn" onclick="checkAnswer('q28')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q28" value="A" /> (A) Dayaram Gindumal /
+            दयाराम गिदुमल</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q28" value="B" /> (B) D.K. Karve / डी.के.
+            कर्वे</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q28" value="C" /> (C) M.G. Ranade /
+            एम.जी. रानाडे</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q28" value="D" /> (D) Ramabai /
+            रमाबाई</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q28')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> D.K. Karve established the first Indian Women's University in Bombay in 1916. He was a prominent social reformer.</p>
-            <p><strong>हिंदी:</strong> डी.के. कर्वे ने 1916 में बॉम्बे में प्रथम भारतीय महिला विश्वविद्यालय की स्थापना की। वे एक प्रमुख समाज सुधारक थे।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> D.K. Karve established the first Indian
+            Women's University in Bombay in 1916. He was a prominent social
+            reformer.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> डी.के. कर्वे ने 1916 में बॉम्बे में प्रथम
+            भारतीय महिला विश्वविद्यालय की स्थापना की। वे एक प्रमुख समाज सुधारक
+            थे।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q29">
-        <div class="q-text-en">29. Who was associated with the formation of the Deccan Educational Society?</div>
-        <div class="q-text-hi">29. डेक्कन एजुकेशनल सोसाइटी के गठन से कौन जुड़ा था?</div>
+      <div class="question-box" id="q29">
+        <div class="q-text-en">
+          29. Who was associated with the formation of the Deccan Educational
+          Society?
+        </div>
+        <div class="q-text-hi">
+          29. डेक्कन एजुकेशनल सोसाइटी के गठन से कौन जुड़ा था?
+        </div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q29" value="A"> (A) Justice Ranade / जस्टिस रानाडे</label>
-            <label class="option-label"><input type="radio" name="q29" value="B"> (B) Firoz Shah Mehta / फिरोज शाह मेहता</label>
-            <label class="option-label"><input type="radio" name="q29" value="C"> (C) B.G. Tilak / बी.जी. तिलक</label>
-            <label class="option-label"><input type="radio" name="q29" value="D"> (D) Dayananda Saraswati / दयानंद सरस्वती</label>
-            <button class="check-btn" onclick="checkAnswer('q29')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q29" value="A" /> (A) Justice Ranade /
+            जस्टिस रानाडे</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q29" value="B" /> (B) Firoz Shah Mehta /
+            फिरोज शाह मेहता</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q29" value="C" /> (C) B.G. Tilak / बी.जी.
+            तिलक</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q29" value="D" /> (D) Dayananda Saraswati
+            / दयानंद सरस्वती</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q29')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> B.G. Tilak, along with Agarkar and Chiplunkar, founded the Deccan Education Society.</p>
-            <p><strong>हिंदी:</strong> बी.जी. तिलक ने आगरकर और चिपलूणकर के साथ मिलकर डेक्कन एजुकेशन सोसाइटी की स्थापना की थी।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> B.G. Tilak, along with Agarkar and
+            Chiplunkar, founded the Deccan Education Society.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> बी.जी. तिलक ने आगरकर और चिपलूणकर के साथ
+            मिलकर डेक्कन एजुकेशन सोसाइटी की स्थापना की थी।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q30">
-        <div class="q-text-en">30. Muhammadan Anglo-Oriental College, Aligarh was founded in which of the following years?</div>
-        <div class="q-text-hi">30. मुहम्मडन एंग्लो-ओरिएंटल कॉलेज, अलीगढ़ की स्थापना किस वर्ष की गई थी?</div>
+      <div class="question-box" id="q30">
+        <div class="q-text-en">
+          30. Muhammadan Anglo-Oriental College, Aligarh was founded in which of
+          the following years?
+        </div>
+        <div class="q-text-hi">
+          30. मुहम्मडन एंग्लो-ओरिएंटल कॉलेज, अलीगढ़ की स्थापना किस वर्ष की गई
+          थी?
+        </div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q30" value="A"> (A) 1876</label>
-            <label class="option-label"><input type="radio" name="q30" value="B"> (B) 1891</label>
-            <label class="option-label"><input type="radio" name="q30" value="C"> (C) 1875</label>
-            <label class="option-label"><input type="radio" name="q30" value="D"> (D) 1874</label>
-            <button class="check-btn" onclick="checkAnswer('q30')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q30" value="A" /> (A) 1876</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q30" value="B" /> (B) 1891</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q30" value="C" /> (C) 1875</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q30" value="D" /> (D) 1874</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q30')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Sir Syed Ahmad Khan established it in 1875. It later became Aligarh Muslim University in 1920.</p>
-            <p><strong>हिंदी:</strong> सर सैयद अहमद खान ने 1875 में इसकी स्थापना की। बाद में 1920 में यह अलीगढ़ मुस्लिम विश्वविद्यालय बन गया।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Sir Syed Ahmad Khan established it in
+            1875. It later became Aligarh Muslim University in 1920.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> सर सैयद अहमद खान ने 1875 में इसकी स्थापना
+            की। बाद में 1920 में यह अलीगढ़ मुस्लिम विश्वविद्यालय बन गया।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q31">
-        <div class="q-text-en">31. Which of the following was established first?</div>
-        <div class="q-text-hi">31. निम्नलिखित में से किसकी स्थापना सबसे पहले हुई थी?</div>
+      <div class="question-box" id="q31">
+        <div class="q-text-en">
+          31. Which of the following was established first?
+        </div>
+        <div class="q-text-hi">
+          31. निम्नलिखित में से किसकी स्थापना सबसे पहले हुई थी?
+        </div>
         <div class="options" data-correct="A">
-            <label class="option-label"><input type="radio" name="q31" value="A"> (A) Hindu College, Calcutta / हिंदू कॉलेज, कलकत्ता</label>
-            <label class="option-label"><input type="radio" name="q31" value="B"> (B) Delhi College / दिल्ली कॉलेज</label>
-            <label class="option-label"><input type="radio" name="q31" value="C"> (C) Mayo College / मेयो कॉलेज</label>
-            <label class="option-label"><input type="radio" name="q31" value="D"> (D) Muslim-Anglo Oriental College / मुस्लिम-एंग्लो ओरिएंटल कॉलेज</label>
-            <button class="check-btn" onclick="checkAnswer('q31')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q31" value="A" /> (A) Hindu College,
+            Calcutta / हिंदू कॉलेज, कलकत्ता</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q31" value="B" /> (B) Delhi College /
+            दिल्ली कॉलेज</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q31" value="C" /> (C) Mayo College / मेयो
+            कॉलेज</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q31" value="D" /> (D) Muslim-Anglo
+            Oriental College / मुस्लिम-एंग्लो ओरिएंटल कॉलेज</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q31')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Hindu College, Calcutta was established first in 1817. (Delhi College - 1824, Mayo College - 1875, MAO College - 1875).</p>
-            <p><strong>हिंदी:</strong> हिंदू कॉलेज, कलकत्ता की स्थापना सबसे पहले 1817 में हुई थी। (दिल्ली कॉलेज - 1824, मेयो कॉलेज - 1875, MAO कॉलेज - 1875)।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Hindu College, Calcutta was established
+            first in 1817. (Delhi College - 1824, Mayo College - 1875, MAO
+            College - 1875).
+          </p>
+          <p>
+            <strong>हिंदी:</strong> हिंदू कॉलेज, कलकत्ता की स्थापना सबसे पहले
+            1817 में हुई थी। (दिल्ली कॉलेज - 1824, मेयो कॉलेज - 1875, MAO कॉलेज
+            - 1875)।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q32">
-        <div class="q-text-en">32. In collaboration with David Hare and Alexander Duff, who of the following established Hindu College at Calcutta?</div>
-        <div class="q-text-hi">32. डेविड हेयर और अलेक्जेंडर डफ के सहयोग से, निम्नलिखित में से किसने कलकत्ता में हिंदू कॉलेज की स्थापना की?</div>
+      <div class="question-box" id="q32">
+        <div class="q-text-en">
+          32. In collaboration with David Hare and Alexander Duff, who of the
+          following established Hindu College at Calcutta?
+        </div>
+        <div class="q-text-hi">
+          32. डेविड हेयर और अलेक्जेंडर डफ के सहयोग से, निम्नलिखित में से किसने
+          कलकत्ता में हिंदू कॉलेज की स्थापना की?
+        </div>
         <div class="options" data-correct="D">
-            <label class="option-label"><input type="radio" name="q32" value="A"> (A) Henry Louis Vivian Derozio / हेनरी लुई विवियन डेरोजियो</label>
-            <label class="option-label"><input type="radio" name="q32" value="B"> (B) Ishwar Chandra Vidyasagar / ईश्वर चंद्र विद्यासागर</label>
-            <label class="option-label"><input type="radio" name="q32" value="C"> (C) Keshab Chandra Sen / केशव चंद्र सेन</label>
-            <label class="option-label"><input type="radio" name="q32" value="D"> (D) Raja Ram Mohan Roy / राजा राम मोहन राय</label>
-            <button class="check-btn" onclick="checkAnswer('q32')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q32" value="A" /> (A) Henry Louis Vivian
+            Derozio / हेनरी लुई विवियन डेरोजियो</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q32" value="B" /> (B) Ishwar Chandra
+            Vidyasagar / ईश्वर चंद्र विद्यासागर</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q32" value="C" /> (C) Keshab Chandra Sen
+            / केशव चंद्र सेन</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q32" value="D" /> (D) Raja Ram Mohan Roy
+            / राजा राम मोहन राय</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q32')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Raja Ram Mohan Roy, along with David Hare and Alexander Duff, established Hindu College in 1817.</p>
-            <p><strong>हिंदी:</strong> राजा राम मोहन राय ने डेविड हेयर और अलेक्जेंडर डफ के साथ मिलकर 1817 में हिंदू कॉलेज की स्थापना की।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Raja Ram Mohan Roy, along with David Hare
+            and Alexander Duff, established Hindu College in 1817.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> राजा राम मोहन राय ने डेविड हेयर और
+            अलेक्जेंडर डफ के साथ मिलकर 1817 में हिंदू कॉलेज की स्थापना की।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q33">
-        <div class="q-text-en">33. Famous Hindu College was established by David Hare in 1817 at:</div>
-        <div class="q-text-hi">33. प्रसिद्ध हिंदू कॉलेज की स्थापना डेविड हेयर ने 1817 में कहाँ की थी?</div>
+      <div class="question-box" id="q33">
+        <div class="q-text-en">
+          33. Famous Hindu College was established by David Hare in 1817 at:
+        </div>
+        <div class="q-text-hi">
+          33. प्रसिद्ध हिंदू कॉलेज की स्थापना डेविड हेयर ने 1817 में कहाँ की थी?
+        </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q33" value="A"> (A) Agra / आगरा</label>
-            <label class="option-label"><input type="radio" name="q33" value="B"> (B) Calcutta / कलकत्ता</label>
-            <label class="option-label"><input type="radio" name="q33" value="C"> (C) Patna / पटना</label>
-            <label class="option-label"><input type="radio" name="q33" value="D"> (D) Varanasi / वाराणसी</label>
-            <button class="check-btn" onclick="checkAnswer('q33')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q33" value="A" /> (A) Agra / आगरा</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q33" value="B" /> (B) Calcutta /
+            कलकत्ता</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q33" value="C" /> (C) Patna / पटना</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q33" value="D" /> (D) Varanasi /
+            वाराणसी</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q33')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> It was established in Calcutta.</p>
-            <p><strong>हिंदी:</strong> इसकी स्थापना कलकत्ता में की गई थी।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p><strong>English:</strong> It was established in Calcutta.</p>
+          <p><strong>हिंदी:</strong> इसकी स्थापना कलकत्ता में की गई थी।</p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q34">
-        <div class="q-text-en">34. What was the initial objective of the 'Aligarh Movement'?</div>
-        <div class="q-text-hi">34. 'अलीगढ़ आंदोलन' का प्रारंभिक उद्देश्य क्या था?</div>
+      <div class="question-box" id="q34">
+        <div class="q-text-en">
+          34. What was the initial objective of the 'Aligarh Movement'?
+        </div>
+        <div class="q-text-hi">
+          34. 'अलीगढ़ आंदोलन' का प्रारंभिक उद्देश्य क्या था?
+        </div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q34" value="A"> (A) Emphasizing reforms in traditional Muslim education / पारंपरिक मुस्लिम शिक्षा में सुधारों पर जोर देना</label>
-            <label class="option-label"><input type="radio" name="q34" value="B"> (B) Establishing a Muslim state in India based on religion / धर्म के आधार पर भारत में एक मुस्लिम राज्य की स्थापना</label>
-            <label class="option-label"><input type="radio" name="q34" value="C"> (C) Promoting Western scientific education among Indian Muslims / भारतीय मुसलमानों के बीच पश्चिमी वैज्ञानिक शिक्षा को बढ़ावा देना</label>
-            <label class="option-label"><input type="radio" name="q34" value="D"> (D) Strengthening Hindu-Muslim unity against the British / अंग्रेजों के खिलाफ हिंदू-मुस्लिम एकता को मजबूत करना</label>
-            <button class="check-btn" onclick="checkAnswer('q34')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q34" value="A" /> (A) Emphasizing reforms
+            in traditional Muslim education / पारंपरिक मुस्लिम शिक्षा में
+            सुधारों पर जोर देना</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q34" value="B" /> (B) Establishing a
+            Muslim state in India based on religion / धर्म के आधार पर भारत में
+            एक मुस्लिम राज्य की स्थापना</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q34" value="C" /> (C) Promoting Western
+            scientific education among Indian Muslims / भारतीय मुसलमानों के बीच
+            पश्चिमी वैज्ञानिक शिक्षा को बढ़ावा देना</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q34" value="D" /> (D) Strengthening
+            Hindu-Muslim unity against the British / अंग्रेजों के खिलाफ
+            हिंदू-मुस्लिम एकता को मजबूत करना</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q34')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> The objective was to promote modern Western scientific education among Muslims while preserving Islamic values.</p>
-            <p><strong>हिंदी:</strong> इसका उद्देश्य इस्लामी मूल्यों को संरक्षित करते हुए मुसलमानों के बीच आधुनिक पश्चिमी वैज्ञानिक शिक्षा को बढ़ावा देना था।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> The objective was to promote modern
+            Western scientific education among Muslims while preserving Islamic
+            values.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> इसका उद्देश्य इस्लामी मूल्यों को संरक्षित
+            करते हुए मुसलमानों के बीच आधुनिक पश्चिमी वैज्ञानिक शिक्षा को बढ़ावा
+            देना था।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q35">
-        <div class="q-text-en">35. With reference to educational institutions during colonial rule in India, consider the following pairs (Institutions - Founder):</div>
-        <div class="q-text-hi">35. भारत में औपनिवेशिक शासन के दौरान शैक्षणिक संस्थानों के संदर्भ में, निम्नलिखित युग्मों (संस्थान - संस्थापक) पर विचार करें:</div>
+      <div class="question-box" id="q35">
+        <div class="q-text-en">
+          35. With reference to educational institutions during colonial rule in
+          India, consider the following pairs (Institutions - Founder):
+        </div>
+        <div class="q-text-hi">
+          35. भारत में औपनिवेशिक शासन के दौरान शैक्षणिक संस्थानों के संदर्भ में,
+          निम्नलिखित युग्मों (संस्थान - संस्थापक) पर विचार करें:
+        </div>
         <div class="statement-box">
-            1. Sanskrit College at Benaras - William Jones (बनारस में संस्कृत कॉलेज - विलियम जोन्स)<br>
-            2. Calcutta Madarsa - Warren Hastings (कलकत्ता मदरसा - वारेन हेस्टिंग्स)<br>
-            3. Fort William College - Arthur Wellesley (फोर्ट विलियम कॉलेज - आर्थर वेलेस्ली)
+          1. Sanskrit College at Benaras - William Jones (बनारस में संस्कृत
+          कॉलेज - विलियम जोन्स)<br />
+          2. Calcutta Madarsa - Warren Hastings (कलकत्ता मदरसा - वारेन
+          हेस्टिंग्स)<br />
+          3. Fort William College - Arthur Wellesley (फोर्ट विलियम कॉलेज - आर्थर
+          वेलेस्ली)
         </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q35" value="A"> (A) 1 and 2 / 1 और 2</label>
-            <label class="option-label"><input type="radio" name="q35" value="B"> (B) 2 only / केवल 2</label>
-            <label class="option-label"><input type="radio" name="q35" value="C"> (C) 1 and 3 / 1 और 3</label>
-            <label class="option-label"><input type="radio" name="q35" value="D"> (D) 3 only / केवल 3</label>
-            <button class="check-btn" onclick="checkAnswer('q35')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q35" value="A" /> (A) 1 and 2 / 1 और
+            2</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q35" value="B" /> (B) 2 only / केवल
+            2</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q35" value="C" /> (C) 1 and 3 / 1 और
+            3</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q35" value="D" /> (D) 3 only / केवल
+            3</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q35')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Only pair 2 is correct. Sanskrit College was founded by Jonathan Duncan, and Fort William College by Richard Wellesley (Lord Wellesley), not Arthur.</p>
-            <p><strong>हिंदी:</strong> केवल युग्म 2 सही है। संस्कृत कॉलेज की स्थापना जोनाथन डंकन ने की थी, और फोर्ट विलियम कॉलेज की स्थापना रिचर्ड वेलेस्ली (लॉर्ड वेलेस्ली) ने की थी, आर्थर ने नहीं।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Only pair 2 is correct. Sanskrit College
+            was founded by Jonathan Duncan, and Fort William College by Richard
+            Wellesley (Lord Wellesley), not Arthur.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> केवल युग्म 2 सही है। संस्कृत कॉलेज की
+            स्थापना जोनाथन डंकन ने की थी, और फोर्ट विलियम कॉलेज की स्थापना
+            रिचर्ड वेलेस्ली (लॉर्ड वेलेस्ली) ने की थी, आर्थर ने नहीं।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q36">
-        <div class="q-text-en">36. Wellesley established the Fort William College at Calcutta because:</div>
-        <div class="q-text-hi">36. वेलेस्ली ने कलकत्ता में फोर्ट विलियम कॉलेज की स्थापना की क्योंकि:</div>
+      <div class="question-box" id="q36">
+        <div class="q-text-en">
+          36. Wellesley established the Fort William College at Calcutta
+          because:
+        </div>
+        <div class="q-text-hi">
+          36. वेलेस्ली ने कलकत्ता में फोर्ट विलियम कॉलेज की स्थापना की क्योंकि:
+        </div>
         <div class="options" data-correct="D">
-            <label class="option-label"><input type="radio" name="q36" value="A"> (A) he was asked by the Board of Directors at London to do so / उन्हें लंदन में निदेशक मंडल द्वारा ऐसा करने के लिए कहा गया था</label>
-            <label class="option-label"><input type="radio" name="q36" value="B"> (B) he wanted to revive interest in oriental learning in India / वह भारत में प्राच्य विद्या में रुचि पुनर्जीवित करना चाहते थे</label>
-            <label class="option-label"><input type="radio" name="q36" value="C"> (C) he wanted to provide William Carey and his associates with employment / वह विलियम कैरी और उनके सहयोगियों को रोजगार प्रदान करना चाहते थे</label>
-            <label class="option-label"><input type="radio" name="q36" value="D"> (D) he wanted to train and teach British civilians for administrative purpose in India / वह भारत में प्रशासनिक उद्देश्यों के लिए ब्रिटिश नागरिकों को प्रशिक्षित करना और पढ़ाना चाहते थे</label>
-            <button class="check-btn" onclick="checkAnswer('q36')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q36" value="A" /> (A) he was asked by the
+            Board of Directors at London to do so / उन्हें लंदन में निदेशक मंडल
+            द्वारा ऐसा करने के लिए कहा गया था</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q36" value="B" /> (B) he wanted to revive
+            interest in oriental learning in India / वह भारत में प्राच्य विद्या
+            में रुचि पुनर्जीवित करना चाहते थे</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q36" value="C" /> (C) he wanted to
+            provide William Carey and his associates with employment / वह विलियम
+            कैरी और उनके सहयोगियों को रोजगार प्रदान करना चाहते थे</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q36" value="D" /> (D) he wanted to train
+            and teach British civilians for administrative purpose in India / वह
+            भारत में प्रशासनिक उद्देश्यों के लिए ब्रिटिश नागरिकों को प्रशिक्षित
+            करना और पढ़ाना चाहते थे</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q36')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> The main purpose was to train British civil servants in Indian languages and customs for better administration.</p>
-            <p><strong>हिंदी:</strong> मुख्य उद्देश्य बेहतर प्रशासन के लिए ब्रिटिश सिविल सेवकों को भारतीय भाषाओं और रीति-रिवाजों में प्रशिक्षित करना था।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> The main purpose was to train British
+            civil servants in Indian languages and customs for better
+            administration.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> मुख्य उद्देश्य बेहतर प्रशासन के लिए ब्रिटिश
+            सिविल सेवकों को भारतीय भाषाओं और रीति-रिवाजों में प्रशिक्षित करना
+            था।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q37">
-        <div class="q-text-en">37. Fort William College at Calcutta was established in:</div>
-        <div class="q-text-hi">37. कलकत्ता में फोर्ट विलियम कॉलेज की स्थापना कब और क्यों की गई थी?</div>
+      <div class="question-box" id="q37">
+        <div class="q-text-en">
+          37. Fort William College at Calcutta was established in:
+        </div>
+        <div class="q-text-hi">
+          37. कलकत्ता में फोर्ट विलियम कॉलेज की स्थापना कब और क्यों की गई थी?
+        </div>
         <div class="options" data-correct="D">
-            <label class="option-label"><input type="radio" name="q37" value="A"> (A) 1802 CE for historical research / 1802 ई. में ऐतिहासिक शोध के लिए</label>
-            <label class="option-label"><input type="radio" name="q37" value="B"> (B) 1802 CE to understand Indian culture / 1802 ई. में भारतीय संस्कृति को समझने के लिए</label>
-            <label class="option-label"><input type="radio" name="q37" value="C"> (C) 1800 CE to train Indian civil servants / 1800 ई. में भारतीय सिविल सेवकों को प्रशिक्षित करने के लिए</label>
-            <label class="option-label"><input type="radio" name="q37" value="D"> (D) 1800 CE to train civil servants in Indian languages / 1800 ई. में सिविल सेवकों को भारतीय भाषाओं में प्रशिक्षित करने के लिए</label>
-            <button class="check-btn" onclick="checkAnswer('q37')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q37" value="A" /> (A) 1802 CE for
+            historical research / 1802 ई. में ऐतिहासिक शोध के लिए</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q37" value="B" /> (B) 1802 CE to
+            understand Indian culture / 1802 ई. में भारतीय संस्कृति को समझने के
+            लिए</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q37" value="C" /> (C) 1800 CE to train
+            Indian civil servants / 1800 ई. में भारतीय सिविल सेवकों को
+            प्रशिक्षित करने के लिए</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q37" value="D" /> (D) 1800 CE to train
+            civil servants in Indian languages / 1800 ई. में सिविल सेवकों को
+            भारतीय भाषाओं में प्रशिक्षित करने के लिए</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q37')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Established in 1800 CE by Wellesley to train British civil servants in Indian languages.</p>
-            <p><strong>हिंदी:</strong> इसकी स्थापना 1800 ई. में वेलेस्ली द्वारा ब्रिटिश सिविल सेवकों को भारतीय भाषाओं में प्रशिक्षित करने के लिए की गई थी।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Established in 1800 CE by Wellesley to
+            train British civil servants in Indian languages.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> इसकी स्थापना 1800 ई. में वेलेस्ली द्वारा
+            ब्रिटिश सिविल सेवकों को भारतीय भाषाओं में प्रशिक्षित करने के लिए की
+            गई थी।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q38">
-        <div class="q-text-en">38. With reference to the Fort William College Calcutta, which of the statement/s is/are correct?</div>
-        <div class="q-text-hi">38. फोर्ट विलियम कॉलेज कलकत्ता के संदर्भ में, कौन सा/से कथन सही है/हैं?</div>
+      <div class="question-box" id="q38">
+        <div class="q-text-en">
+          38. With reference to the Fort William College Calcutta, which of the
+          statement/s is/are correct?
+        </div>
+        <div class="q-text-hi">
+          38. फोर्ट विलियम कॉलेज कलकत्ता के संदर्भ में, कौन सा/से कथन सही
+          है/हैं?
+        </div>
         <div class="statement-box">
-            1. It was founded on 10th June, 1800 A.D. within the Fort William Complex in Calcutta. (इसकी स्थापना 10 जून, 1800 ई. को कलकत्ता में फोर्ट विलियम कॉम्प्लेक्स के भीतर की गई थी।)<br>
-            2. The main purpose of establishing this college, was to teach Indian languages to British officers. (इस कॉलेज की स्थापना का मुख्य उद्देश्य ब्रिटिश अधिकारियों को भारतीय भाषाएँ सिखाना था।)
+          1. It was founded on 10th June, 1800 A.D. within the Fort William
+          Complex in Calcutta. (इसकी स्थापना 10 जून, 1800 ई. को कलकत्ता में
+          फोर्ट विलियम कॉम्प्लेक्स के भीतर की गई थी।)<br />
+          2. The main purpose of establishing this college, was to teach Indian
+          languages to British officers. (इस कॉलेज की स्थापना का मुख्य उद्देश्य
+          ब्रिटिश अधिकारियों को भारतीय भाषाएँ सिखाना था।)
         </div>
         <div class="options" data-correct="B">
-            <label class="option-label"><input type="radio" name="q38" value="A"> (A) Only 1 / केवल 1</label>
-            <label class="option-label"><input type="radio" name="q38" value="B"> (B) Only 2 / केवल 2</label>
-            <label class="option-label"><input type="radio" name="q38" value="C"> (C) Both 1 and 2 / 1 और 2 दोनों</label>
-            <label class="option-label"><input type="radio" name="q38" value="D"> (D) Neither 1 nor 2 / न तो 1 और न ही 2</label>
-            <button class="check-btn" onclick="checkAnswer('q38')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q38" value="A" /> (A) Only 1 / केवल
+            1</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q38" value="B" /> (B) Only 2 / केवल
+            2</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q38" value="C" /> (C) Both 1 and 2 / 1 और
+            2 दोनों</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q38" value="D" /> (D) Neither 1 nor 2 / न
+            तो 1 और न ही 2</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q38')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> It was founded on 10th July 1800, not June. Hence statement 1 is incorrect. Statement 2 is correct.</p>
-            <p><strong>हिंदी:</strong> इसकी स्थापना 10 जुलाई 1800 को हुई थी, जून में नहीं। इसलिए कथन 1 गलत है। कथन 2 सही है।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> It was founded on 10th July 1800, not
+            June. Hence statement 1 is incorrect. Statement 2 is correct.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> इसकी स्थापना 10 जुलाई 1800 को हुई थी, जून
+            में नहीं। इसलिए कथन 1 गलत है। कथन 2 सही है।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q39">
-        <div class="q-text-en">39. Who one of the following had vigorously advocated for religious education in the Indian universities?</div>
-        <div class="q-text-hi">39. निम्नलिखित में से किसने भारतीय विश्वविद्यालयों में धार्मिक शिक्षा की जोरदार वकालत की थी?</div>
+      <div class="question-box" id="q39">
+        <div class="q-text-en">
+          39. Who one of the following had vigorously advocated for religious
+          education in the Indian universities?
+        </div>
+        <div class="q-text-hi">
+          39. निम्नलिखित में से किसने भारतीय विश्वविद्यालयों में धार्मिक शिक्षा
+          की जोरदार वकालत की थी?
+        </div>
         <div class="options" data-correct="D">
-            <label class="option-label"><input type="radio" name="q39" value="A"> (A) Bal Gangadhar Tilak / बाल गंगाधर तिलक</label>
-            <label class="option-label"><input type="radio" name="q39" value="B"> (B) Swami Vivekanand / स्वामी विवेकानंद</label>
-            <label class="option-label"><input type="radio" name="q39" value="C"> (C) Mahatma Gandhi / महात्मा गांधी</label>
-            <label class="option-label"><input type="radio" name="q39" value="D"> (D) Madan Mohan Malviya / मदन मोहन मालवीय</label>
-            <button class="check-btn" onclick="checkAnswer('q39')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q39" value="A" /> (A) Bal Gangadhar Tilak
+            / बाल गंगाधर तिलक</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q39" value="B" /> (B) Swami Vivekanand /
+            स्वामी विवेकानंद</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q39" value="C" /> (C) Mahatma Gandhi /
+            महात्मा गांधी</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q39" value="D" /> (D) Madan Mohan Malviya
+            / मदन मोहन मालवीय</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q39')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Madan Mohan Malviya vigorously advocated for religious education. He founded BHU in 1916.</p>
-            <p><strong>हिंदी:</strong> मदन मोहन मालवीय ने धार्मिक शिक्षा की जोरदार वकालत की थी। उन्होंने 1916 में BHU की स्थापना की।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Madan Mohan Malviya vigorously advocated
+            for religious education. He founded BHU in 1916.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> मदन मोहन मालवीय ने धार्मिक शिक्षा की जोरदार
+            वकालत की थी। उन्होंने 1916 में BHU की स्थापना की।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q40">
-        <div class="q-text-en">40. Who founded the Central Hindu School of Banaras, which later developed into Banaras Hindu University?</div>
-        <div class="q-text-hi">40. बनारस के सेंट्रल हिंदू स्कूल की स्थापना किसने की, जो बाद में बनारस हिंदू विश्वविद्यालय में विकसित हुआ?</div>
+      <div class="question-box" id="q40">
+        <div class="q-text-en">
+          40. Who founded the Central Hindu School of Banaras, which later
+          developed into Banaras Hindu University?
+        </div>
+        <div class="q-text-hi">
+          40. बनारस के सेंट्रल हिंदू स्कूल की स्थापना किसने की, जो बाद में बनारस
+          हिंदू विश्वविद्यालय में विकसित हुआ?
+        </div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q40" value="A"> (A) Madam Cama / मैडम कामा</label>
-            <label class="option-label"><input type="radio" name="q40" value="B"> (B) Sarojini Naidu / सरोजिनी नायडू</label>
-            <label class="option-label"><input type="radio" name="q40" value="C"> (C) Annie Besant / एनी बेसेंट</label>
-            <label class="option-label"><input type="radio" name="q40" value="D"> (D) Sucheta Kripalani / सुचेता कृपलानी</label>
-            <button class="check-btn" onclick="checkAnswer('q40')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q40" value="A" /> (A) Madam Cama / मैडम
+            कामा</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q40" value="B" /> (B) Sarojini Naidu /
+            सरोजिनी नायडू</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q40" value="C" /> (C) Annie Besant / एनी
+            बेसेंट</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q40" value="D" /> (D) Sucheta Kripalani /
+            सुचेता कृपलानी</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q40')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Annie Besant founded the Central Hindu School in 1898, which later became BHU.</p>
-            <p><strong>हिंदी:</strong> एनी बेसेंट ने 1898 में सेंट्रल हिंदू स्कूल की स्थापना की, जो बाद में BHU बन गया।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Annie Besant founded the Central Hindu
+            School in 1898, which later became BHU.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> एनी बेसेंट ने 1898 में सेंट्रल हिंदू स्कूल
+            की स्थापना की, जो बाद में BHU बन गया।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q41">
-        <div class="q-text-en">41. Who among the following laid the foundation stone of Banaras Hindu University?</div>
-        <div class="q-text-hi">41. निम्नलिखित में से किसने बनारस हिंदू विश्वविद्यालय की आधारशिला रखी थी?</div>
+      <div class="question-box" id="q41">
+        <div class="q-text-en">
+          41. Who among the following laid the foundation stone of Banaras Hindu
+          University?
+        </div>
+        <div class="q-text-hi">
+          41. निम्नलिखित में से किसने बनारस हिंदू विश्वविद्यालय की आधारशिला रखी
+          थी?
+        </div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q41" value="A"> (A) Madan Mohan Malviya / मदन मोहन मालवीय</label>
-            <label class="option-label"><input type="radio" name="q41" value="B"> (B) Maharaja Vibhuti Narain Singh / महाराजा विभूति नारायण सिंह</label>
-            <label class="option-label"><input type="radio" name="q41" value="C"> (C) Lord Hardinge / लॉर्ड हार्डिंग</label>
-            <label class="option-label"><input type="radio" name="q41" value="D"> (D) Annie Besant / एनी बेसेंट</label>
-            <button class="check-btn" onclick="checkAnswer('q41')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q41" value="A" /> (A) Madan Mohan Malviya
+            / मदन मोहन मालवीय</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q41" value="B" /> (B) Maharaja Vibhuti
+            Narain Singh / महाराजा विभूति नारायण सिंह</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q41" value="C" /> (C) Lord Hardinge /
+            लॉर्ड हार्डिंग</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q41" value="D" /> (D) Annie Besant / एनी
+            बेसेंट</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q41')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Lord Hardinge II (Viceroy) laid the foundation stone on 4 February 1916.</p>
-            <p><strong>हिंदी:</strong> लॉर्ड हार्डिंग द्वितीय (वायसराय) ने 4 फरवरी 1916 को आधारशिला रखी थी।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Lord Hardinge II (Viceroy) laid the
+            foundation stone on 4 February 1916.
+          </p>
+          <p>
+            <strong>हिंदी:</strong> लॉर्ड हार्डिंग द्वितीय (वायसराय) ने 4 फरवरी
+            1916 को आधारशिला रखी थी।
+          </p>
         </div>
-    </div>
+      </div>
 
-    <div class="question-box" id="q42">
-        <div class="q-text-en">42. Which one of the following was the first to be declared as Central University?</div>
-        <div class="q-text-hi">42. निम्नलिखित में से किसे सबसे पहले केंद्रीय विश्वविद्यालय घोषित किया गया था?</div>
+      <div class="question-box" id="q42">
+        <div class="q-text-en">
+          42. Which one of the following was the first to be declared as Central
+          University?
+        </div>
+        <div class="q-text-hi">
+          42. निम्नलिखित में से किसे सबसे पहले केंद्रीय विश्वविद्यालय घोषित किया
+          गया था?
+        </div>
         <div class="options" data-correct="C">
-            <label class="option-label"><input type="radio" name="q42" value="A"> (A) Aligarh Muslim University, Aligarh / अलीगढ़ मुस्लिम विश्वविद्यालय, अलीगढ़</label>
-            <label class="option-label"><input type="radio" name="q42" value="B"> (B) Dr. Bhimrao Ambedkar University, Lucknow / डॉ. भीमराव अंबेडकर विश्वविद्यालय, लखनऊ</label>
-            <label class="option-label"><input type="radio" name="q42" value="C"> (C) Banaras Hindu University of Varanasi / वाराणसी का बनारस हिंदू विश्वविद्यालय</label>
-            <label class="option-label"><input type="radio" name="q42" value="D"> (D) University of Allahabad / इलाहाबाद विश्वविद्यालय</label>
-            <button class="check-btn" onclick="checkAnswer('q42')">Check Answer / उत्तर जाँचें</button>
+          <label class="option-label"
+            ><input type="radio" name="q42" value="A" /> (A) Aligarh Muslim
+            University, Aligarh / अलीगढ़ मुस्लिम विश्वविद्यालय, अलीगढ़</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q42" value="B" /> (B) Dr. Bhimrao
+            Ambedkar University, Lucknow / डॉ. भीमराव अंबेडकर विश्वविद्यालय,
+            लखनऊ</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q42" value="C" /> (C) Banaras Hindu
+            University of Varanasi / वाराणसी का बनारस हिंदू विश्वविद्यालय</label
+          >
+          <label class="option-label"
+            ><input type="radio" name="q42" value="D" /> (D) University of
+            Allahabad / इलाहाबाद विश्वविद्यालय</label
+          >
+          <button class="check-btn" onclick="checkAnswer('q42')">
+            Check Answer / उत्तर जाँचें
+          </button>
         </div>
         <div class="explanation">
-            <strong>Explanation / व्याख्या:</strong>
-            <p><strong>English:</strong> Banaras Hindu University (BHU) was the first to be declared a Central University (1916).</p>
-            <p><strong>हिंदी:</strong> बनारस हिंदू विश्वविद्यालय (BHU) सबसे पहले केंद्रीय विश्वविद्यालय (1916) घोषित किया गया था।</p>
+          <strong>Explanation / व्याख्या:</strong>
+          <p>
+            <strong>English:</strong> Banaras Hindu University (BHU) was the
+            first to be declared a Central University (1916).
+          </p>
+          <p>
+            <strong>हिंदी:</strong> बनारस हिंदू विश्वविद्यालय (BHU) सबसे पहले
+            केंद्रीय विश्वविद्यालय (1916) घोषित किया गया था।
+          </p>
         </div>
+      </div>
     </div>
 
-</div>
-
-<script>
-    function checkAnswer(questionId) {
+    <script>
+      function checkAnswer(questionId) {
         const questionBox = document.getElementById(questionId);
-        const selectedOption = questionBox.querySelector('input[type="radio"]:checked');
-        const correctOptionValue = questionBox.querySelector('.options').getAttribute('data-correct');
-        const explanation = questionBox.querySelector('.explanation');
-        
+        const selectedOption = questionBox.querySelector(
+          'input[type="radio"]:checked',
+        );
+        const correctOptionValue = questionBox
+          .querySelector(".options")
+          .getAttribute("data-correct");
+        const explanation = questionBox.querySelector(".explanation");
+
         // Reset previous styles
-        questionBox.querySelectorAll('.option-label').forEach(label => {
-            label.classList.remove('correct-opt', 'incorrect-opt');
+        questionBox.querySelectorAll(".option-label").forEach((label) => {
+          label.classList.remove("correct-opt", "incorrect-opt");
         });
 
         if (!selectedOption) {
-            alert('Please select an option first! / कृपया पहले एक विकल्प चुनें!');
-            return;
+          alert("Please select an option first! / कृपया पहले एक विकल्प चुनें!");
+          return;
         }
 
         const selectedValue = selectedOption.value;
         const selectedLabel = selectedOption.parentElement;
-        const correctLabel = questionBox.querySelector(`input[value="${correctOptionValue}"]`)?.parentElement;
+        const correctLabel = questionBox.querySelector(
+          `input[value="${correctOptionValue}"]`,
+        )?.parentElement;
 
         if (selectedValue === correctOptionValue) {
-            selectedLabel.classList.add('correct-opt');
+          selectedLabel.classList.add("correct-opt");
         } else {
-            selectedLabel.classList.add('incorrect-opt');
-            if(correctLabel) correctLabel.classList.add('correct-opt');
+          selectedLabel.classList.add("incorrect-opt");
+          if (correctLabel) correctLabel.classList.add("correct-opt");
         }
 
-        explanation.style.display = 'block';
-    }
-</script>
-
-</body>
+        explanation.style.display = "block";
+      }
+    </script>
+  </body>
 </html>
