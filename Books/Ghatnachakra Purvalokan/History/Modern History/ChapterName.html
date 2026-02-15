@@ -2,348 +2,309 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Chapter Names</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern History Chapters</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        font-family:
-          "Segoe UI", Arial, sans-serif; /* Updated font for better Hindi support */
-        background: #f4f6f8;
-        text-align: center;
+        font-family: "Poppins", "Noto Sans Devanagari", sans-serif;
+        background: linear-gradient(135deg, #141e30, #243b55);
+        color: white;
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+
+      .container {
+        max-width: 850px;
+        margin: auto;
         padding: 40px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
+        animation: fadeIn 0.8s ease;
       }
 
       h1 {
-        color: #2c3e50;
+        text-align: center;
+        font-size: 32px;
+        margin-bottom: 10px;
+      }
+
+      p {
+        text-align: center;
+        opacity: 0.8;
+        margin-bottom: 35px;
       }
 
       .menu {
         list-style: none;
-        padding: 0;
-        max-width: 500px; /* Slightly wider to fit bilingual text */
-        margin: 30px auto;
-      }
-
-      .menu li {
-        margin: 15px 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
       }
 
       .menu a {
         display: block;
+        padding: 18px 22px;
         text-decoration: none;
-        padding: 15px;
-        background: white;
-        border-radius: 10px;
-        color: #34495e;
-        font-size: 16px; /* Slightly smaller to fit long titles */
+        border-radius: 14px;
+        font-size: 15px;
         line-height: 1.5;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        color: white;
+        background: linear-gradient(135deg, #ff512f, #dd2476);
         transition: all 0.3s ease;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.35);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Shine effect */
+      .menu a::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: 0.6s;
+      }
+
+      .menu a:hover::before {
+        left: 100%;
       }
 
       .menu a:hover {
-        background: #3498db;
-        color: white;
-        transform: scale(1.05);
+        transform: translateY(-4px);
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.5);
+      }
+
+      .menu a:active {
+        transform: scale(0.97);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(25px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 35px;
+        font-size: 13px;
+        opacity: 0.6;
       }
     </style>
   </head>
 
   <body>
-    <h1>📘 Quiz</h1>
-    <p>Click a chapter to start learning:</p>
+    <div class="container">
+      <h1>📜 Modern History Chapters</h1>
+      <p>Select a chapter to start learning</p>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/The Advent of European Companies.html"
-          onclick="openPage(event)"
-          data-original="Chapter 1: The Advent of European Companies / यूरोपीय कंपनियों का आगमन"
-        >
-          Chapter 1: The Advent of European Companies / यूरोपीय कंपनियों का आगमन
-        </a>
-      </li>
-    </ul>
+      <ul class="menu">
+        <li>
+          <a
+            href="./ChapterNames/The Advent of European Companies.html"
+            onclick="openPage(event)"
+            data-original="Chapter 1: The Advent of European Companies / यूरोपीय कंपनियों का आगमन"
+            >Chapter 1: The Advent of European Companies / यूरोपीय कंपनियों का
+            आगमन</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/East India Company and Nawab of Bengal.html"
-          onclick="openPage(event)"
-          data-original="Chapter 2: East India Company and Nawabs of Bengal / ईस्ट इंडिया कंपनी और बंगाल के नवाब"
-        >
-          Chapter 2: East India Company and Nawabs of Bengal / ईस्ट इंडिया कंपनी
-          और बंगाल के नवाब
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/East India Company and Nawab of Bengal.html"
+            onclick="openPage(event)"
+            data-original="Chapter 2: East India Company and Nawabs of Bengal / ईस्ट इंडिया कंपनी और बंगाल के नवाब"
+            >Chapter 2: East India Company and Nawabs of Bengal / ईस्ट इंडिया
+            कंपनी और बंगाल के नवाब</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Regiional States - Punjab and Mysore.html"
-          onclick="openPage(event)"
-          data-original="Chapter 3: Regional States : Punjab and Mysore / क्षेत्रीय राज्य: पंजाब और मैसूर"
-        >
-          Chapter 3: Regional States : Punjab and Mysore / क्षेत्रीय राज्य:
-          पंजाब और मैसूर
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Regiional States - Punjab and Mysore.html"
+            onclick="openPage(event)"
+            data-original="Chapter 3: Regional States: Punjab and Mysore / क्षेत्रीय राज्य: पंजाब और मैसूर"
+            >Chapter 3: Regional States: Punjab and Mysore / क्षेत्रीय राज्य:
+            पंजाब और मैसूर</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Governor, Governor General, Viceroy.html"
-          onclick="openPage(event)"
-          data-original="Chapter 4: Governor/Governor General/Viceroy / गवर्नर/गवर्नर जनरल/वायसराय"
-        >
-          Chapter 4: Governor/Governor General/Viceroy / गवर्नर/गवर्नर
-          जनरल/वायसराय
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Governor, Governor General, Viceroy.html"
+            onclick="openPage(event)"
+            data-original="Chapter 4: Governor/Governor General/Viceroy / गवर्नर/गवर्नर जनरल/वायसराय"
+            >Chapter 4: Governor/Governor General/Viceroy / गवर्नर/गवर्नर
+            जनरल/वायसराय</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Economic Impact of British Rule on India.html"
-          onclick="openPage(event)"
-          data-original="Chapter 5: Economic Impact of British Rule on India / भारत पर ब्रिटिश शासन का आर्थिक प्रभाव"
-        >
-          Chapter 5: Economic Impact of British Rule on India / भारत पर ब्रिटिश
-          शासन का आर्थिक प्रभाव
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Economic Impact of British Rule on India.html"
+            onclick="openPage(event)"
+            data-original="Chapter 5: Economic Impact of British Rule on India / भारत पर ब्रिटिश शासन का आर्थिक प्रभाव"
+            >Chapter 5: Economic Impact of British Rule on India / भारत पर
+            ब्रिटिश शासन का आर्थिक प्रभाव</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Revolt of 1857.html"
-          onclick="openPage(event)"
-          data-original="Chapter 6: Revolt of 1857 / 1857 का विद्रोह"
-        >
-          Chapter 6: Revolt of 1857 / 1857 का विद्रोह
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Revolt of 1857.html"
+            onclick="openPage(event)"
+            data-original="Chapter 6: Revolt of 1857 / 1857 का विद्रोह"
+            >Chapter 6: Revolt of 1857 / 1857 का विद्रोह</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Other Civil Uprisings.html"
-          onclick="openPage(event)"
-          data-original="Chapter 7: Other Civil Uprisings / अन्य नागरिक विद्रोह"
-        >
-          Chapter 7: Other Civil Uprisings / अन्य नागरिक विद्रोह
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Other Civil Uprisings.html"
+            onclick="openPage(event)"
+            data-original="Chapter 7: Other Civil Uprisings / अन्य नागरिक विद्रोह"
+            >Chapter 7: Other Civil Uprisings / अन्य नागरिक विद्रोह</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Development of Education in Modern India.html"
-          onclick="openPage(event)"
-          data-original="Chapter 8: Development of Education in Modern India / आधुनिक भारत में शिक्षा का विकास"
-        >
-          Chapter 8: Development of Education in Modern India / आधुनिक भारत में
-          शिक्षा का विकास
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Development of Education in Modern India.html"
+            onclick="openPage(event)"
+            data-original="Chapter 8: Development of Education in Modern India / आधुनिक भारत में शिक्षा का विकास"
+            >Chapter 8: Development of Education in Modern India / आधुनिक भारत
+            में शिक्षा का विकास</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Development of Press in Modern India.html"
-          onclick="openPage(event)"
-          data-original="Chapter 9: Development of Press in Modern India / आधुनिक भारत में प्रेस का विकास"
-        >
-          Chapter 9: Development of Press in Modern India / आधुनिक भारत में
-          प्रेस का विकास
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Development of Press in Modern India.html"
+            onclick="openPage(event)"
+            data-original="Chapter 9: Development of Press in Modern India / आधुनिक भारत में प्रेस का विकास"
+            >Chapter 9: Development of Press in Modern India / आधुनिक भारत में
+            प्रेस का विकास</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Socio-Religious Movements.html"
-          onclick="openPage(event)"
-          data-original="Chapter 10: Socio-Religious Movements / सामाजिक-धार्मिक आंदोलन"
-        >
-          Chapter 10: Socio-Religious Movements / सामाजिक-धार्मिक आंदोलन
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Socio-Religious Movements.html"
+            onclick="openPage(event)"
+            data-original="Chapter 10: Socio-Religious Movements / सामाजिक-धार्मिक आंदोलन"
+            >Chapter 10: Socio-Religious Movements / सामाजिक-धार्मिक आंदोलन</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Political_Organization_Before_Congress.html"
-          onclick="openPage(event)"
-          data-original="Chapter 11: Political Organization Before Congress / कांग्रेस से पूर्व राजनीतिक संगठन"
-        >
-          Chapter 11: Political Organization Before Congress / कांग्रेस से पूर्व
-          राजनीतिक संगठन
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Political_Organization_Before_Congress.html"
+            onclick="openPage(event)"
+            data-original="Chapter 11: Political Organization Before Congress / कांग्रेस से पूर्व राजनीतिक संगठन"
+            >Chapter 11: Political Organization Before Congress / कांग्रेस से
+            पूर्व राजनीतिक संगठन</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Indian_National_Congress.html"
-          onclick="openPage(event)"
-          data-original="Chapter 12: Indian National Congress / भारतीय राष्ट्रीय कांग्रेस"
-        >
-          Chapter 12: Indian National Congress / भारतीय राष्ट्रीय कांग्रेस
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Indian_National_Congress.html"
+            onclick="openPage(event)"
+            data-original="Chapter 12: Indian National Congress / भारतीय राष्ट्रीय कांग्रेस"
+            >Chapter 12: Indian National Congress / भारतीय राष्ट्रीय कांग्रेस</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Moderates_and_Extremists_in_Congress.html"
-          onclick="openPage(event)"
-          data-original="Chapter 13: Moderates and Extremists in Congress / कांग्रेस में नरम दल और गरम दल"
-        >
-          Chapter 13: Moderates and Extremists in Congress / कांग्रेस में नरम दल
-          और गरम दल
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Moderates_and_Extremists_in_Congress.html"
+            onclick="openPage(event)"
+            data-original="Chapter 13: Moderates and Extremists in Congress / कांग्रेस में नरम दल और गरम दल"
+            >Chapter 13: Moderates and Extremists in Congress / कांग्रेस में नरम
+            दल और गरम दल</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Revolutionary_Movements_in_India.html"
-          onclick="openPage(event)"
-          data-original="Chapter 14: Revolutionary Movements in India / भारत में क्रांतिकारी आंदोलन"
-        >
-          Chapter 14: Revolutionary Movements in India / भारत में क्रांतिकारी
-          आंदोलन
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Revolutionary_Movements_in_India.html"
+            onclick="openPage(event)"
+            data-original="Chapter 14: Revolutionary Movements in India / भारत में क्रांतिकारी आंदोलन"
+            >Chapter 14: Revolutionary Movements in India / भारत में क्रांतिकारी
+            आंदोलन</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Revolutionary_Activities_Outside_India.html"
-          onclick="openPage(event)"
-          data-original="Chapter 15: Revolutionary Activities Outside India / भारत के बाहर क्रांतिकारी गतिविधियां"
-        >
-          Chapter 15: Revolutionary Activities Outside India / भारत के बाहर
-          क्रांतिकारी गतिविधियां
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Revolutionary_Activities_Outside_India.html"
+            onclick="openPage(event)"
+            data-original="Chapter 15: Revolutionary Activities Outside India / भारत के बाहर क्रांतिकारी गतिविधियां"
+            >Chapter 15: Revolutionary Activities Outside India / भारत के बाहर
+            क्रांतिकारी गतिविधियां</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Partition_of_Bengal_and_Swadeshi_Movement.html"
-          onclick="openPage(event)"
-          data-original="Chapter 16: Partition of Bengal and Swadeshi Movement / बंगाल विभाजन और स्वदेशी आंदोलन"
-        >
-          Chapter 16: Partition of Bengal and Swadeshi Movement / बंगाल विभाजन
-          और स्वदेशी आंदोलन
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Partition_of_Bengal_and_Swadeshi_Movement.html"
+            onclick="openPage(event)"
+            data-original="Chapter 16: Partition of Bengal and Swadeshi Movement / बंगाल विभाजन और स्वदेशी आंदोलन"
+            >Chapter 16: Partition of Bengal and Swadeshi Movement / बंगाल
+            विभाजन और स्वदेशी आंदोलन</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Congress_Benaras_Calcutta_Surat_Session.html"
-          onclick="openPage(event)"
-          data-original="Chapter 17: Congress: Benaras, Calcutta, and Surat Session / कांग्रेस: बनारस, कलकत्ता और सूरत अधिवेशन"
-        >
-          Chapter 17: Congress: Benaras, Calcutta, and Surat Session / कांग्रेस:
-          बनारस, कलकत्ता और सूरत अधिवेशन
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Home Rule League Movement.html"
+            onclick="openPage(event)"
+            data-original="Chapter 22: Home Rule League Movement / होम रूल लीग आंदोलन"
+            >Chapter 22: Home Rule League Movement / होम रूल लीग आंदोलन</a
+          >
+        </li>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Formation_of_Muslim_League_1906.html"
-          onclick="openPage(event)"
-          data-original="Chapter 18: Formation of Muslim League (1906) / मुस्लिम लीग का गठन (1906)"
-        >
-          Chapter 18: Formation of Muslim League (1906) / मुस्लिम लीग का गठन
-          (1906)
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="./ChapterNames/Gandhi_and_His_Early_Movements.html"
+            onclick="openPage(event)"
+            data-original="Chapter 23: Gandhi and His Early Movements / गांधी और उनके प्रारंभिक आंदोलन"
+            >Chapter 23: Gandhi and His Early Movements / गांधी और उनके
+            प्रारंभिक आंदोलन</a
+          >
+        </li>
+      </ul>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Morley_Minto_Reforms.html"
-          onclick="openPage(event)"
-          data-original="Chapter 19: Morley-Minto Reforms / मॉर्ले-मिंटो सुधार"
-        >
-          Chapter 19: Morley-Minto Reforms / मॉर्ले-मिंटो सुधार
-        </a>
-      </li>
-    </ul>
-
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Delhi_Durbar_and_Change_of_Capital.html"
-          onclick="openPage(event)"
-          data-original="Chapter 20: Delhi Durbar and Change of Capital / दिल्ली दरबार और राजधानी परिवर्तन"
-        >
-          Chapter 20: Delhi Durbar and Change of Capital / दिल्ली दरबार और
-          राजधानी परिवर्तन
-        </a>
-      </li>
-    </ul>
-
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Lucknow Session of Congress (The Lucknow Pact).html"
-          onclick="openPage(event)"
-          data-original="Chapter 21: Lucknow Session of Congress (The Lucknow Pact) / कांग्रेस का लखनऊ अधिवेशन (लखनऊ समझौता)"
-        >
-          Chapter 21: Lucknow Session of Congress (The Lucknow Pact) / कांग्रेस
-          का लखनऊ अधिवेशन (लखनऊ समझौता)
-        </a>
-      </li>
-    </ul>
-
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Home Rule League Movement.html"
-          onclick="openPage(event)"
-          data-original="Chapter 22: Home Rule League Movement / होम रूल लीग आंदोलन"
-        >
-          Chapter 22: Home Rule League Movement / होम रूल लीग आंदोलन
-        </a>
-      </li>
-    </ul>
-
-    <ul class="menu">
-      <li>
-        <a
-          href="./ChapterNames/Gandhi_and_His_Early_Movements.html"
-          onclick="openPage(event)"
-          data-original="Chapter 23: Gandhi and His Early Movements / गांधी और उनके प्रारंभिक आंदोलन"
-        >
-          Chapter 23: Gandhi and His Early Movements / गांधी और उनके प्रारंभिक
-          आंदोलन
-        </a>
-      </li>
-    </ul>
+      <div class="footer">© 2026 Premium History Platform</div>
+    </div>
 
     <script>
       function openPage(event) {
@@ -351,16 +312,18 @@
         const linkEl = event.currentTarget;
         const link = linkEl.href;
 
-        linkEl.innerText = "Loading...";
+        linkEl.innerText = "✨ Loading...";
+        linkEl.style.opacity = "0.7";
+
         setTimeout(() => {
           window.location.href = link;
-        }, 500);
+        }, 600);
       }
 
-      // 🔑 FIX for browser back button
       window.addEventListener("pageshow", function () {
         document.querySelectorAll("a[data-original]").forEach((a) => {
           a.innerText = a.dataset.original;
+          a.style.opacity = "1";
         });
       });
     </script>

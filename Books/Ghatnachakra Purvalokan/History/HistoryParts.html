@@ -2,71 +2,147 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>history parts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Premium History Parts</title>
+
+    <!-- Google Fonts (English + Hindi Support) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        font-family:
-          "Segoe UI", Arial, sans-serif; /* Updated for better Hindi support */
-        background: #f4f6f8;
+        font-family: "Poppins", "Noto Sans Devanagari", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        padding: 45px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
         text-align: center;
-        padding: 40px;
+        animation: fadeIn 0.9s ease;
       }
 
       h1 {
-        color: #2c3e50;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+      }
+
+      p {
+        opacity: 0.8;
+        margin-bottom: 35px;
       }
 
       .menu {
         list-style: none;
-        padding: 0;
-        max-width: 500px; /* Slightly wider to fit bilingual text */
-        margin: 30px auto;
       }
 
       .menu li {
-        margin: 15px 0;
+        margin: 22px 0;
       }
 
       .menu a {
         display: block;
         text-decoration: none;
-        padding: 15px;
-        background: white;
-        border-radius: 10px;
-        color: #34495e;
+        padding: 20px;
+        border-radius: 16px;
         font-size: 18px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        font-weight: 500;
+        color: white;
+        background: linear-gradient(135deg, #ff512f, #dd2476);
         transition: all 0.3s ease;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Shine hover effect */
+      .menu a::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: -100%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: 0.6s;
+      }
+
+      .menu a:hover::before {
+        left: 100%;
       }
 
       .menu a:hover {
-        background: #3498db;
-        color: white;
-        transform: scale(1.05);
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
       }
 
       .menu a:active {
-        transform: scale(0.98);
+        transform: scale(0.96);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(25px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .footer {
+        margin-top: 35px;
+        font-size: 13px;
+        opacity: 0.6;
       }
     </style>
   </head>
 
   <body>
-    <h1>📘 Quiz</h1>
-    <p>Click a Part to start learning:</p>
+    <div class="container">
+      <h1>📜 History Parts</h1>
+      <p>Select a part to begin your preparation</p>
 
-    <ul class="menu">
-      <li>
-        <a
-          href="./Modern History/ChapterName.html"
-          onclick="openPage(event)"
-          data-original="Part 1: Modern History / आधुनिक इतिहास"
-        >
-          Part 1: Modern History / आधुनिक इतिहास
-        </a>
-      </li>
-    </ul>
+      <ul class="menu">
+        <li>
+          <a
+            href="./Modern History/ChapterName.html"
+            onclick="openPage(event)"
+            data-original="Part 1: Modern History / आधुनिक इतिहास"
+          >
+            Part 1: Modern History / आधुनिक इतिहास
+          </a>
+        </li>
+      </ul>
+
+      <div class="footer">© 2026 Premium Quiz Platform</div>
+    </div>
 
     <script>
       function openPage(event) {
@@ -74,16 +150,18 @@
         const linkEl = event.currentTarget;
         const link = linkEl.href;
 
-        linkEl.innerText = "Loading...";
+        linkEl.innerText = "✨ Loading...";
+        linkEl.style.opacity = "0.7";
+
         setTimeout(() => {
           window.location.href = link;
-        }, 500);
+        }, 600);
       }
 
-      // 🔑 Fix for browser back button (bfcache)
       window.addEventListener("pageshow", function () {
         document.querySelectorAll("a[data-original]").forEach((a) => {
           a.innerText = a.dataset.original;
+          a.style.opacity = "1";
         });
       });
     </script>
