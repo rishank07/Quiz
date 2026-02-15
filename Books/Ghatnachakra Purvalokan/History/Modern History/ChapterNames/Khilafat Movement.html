@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khilafat Movement - Interactive Quiz</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Segoe+UI:wght@400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Noto Sans Devanagari', sans-serif;
+    background: linear-gradient(135deg, #667eea11 0%, #764ba211 100%);
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    padding: 20px 10px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    padding: 30px 20px;
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    border-radius: 16px;
+    color: white;
+    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.3);
+}
+
+.header h1 {
+    font-size: 1.7em;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.header h2 {
+    font-size: 1.1em;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+.header .subtitle-hi {
+    font-size: 1em;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+.score-bar {
+    background: white;
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    position: sticky;
+    top: 10px;
+    z-index: 100;
+}
+
+.score-bar .score-item {
+    font-size: 0.95em;
+    font-weight: 600;
+}
+
+.score-bar .correct-count { color: #27ae60; }
+.score-bar .wrong-count { color: #e74c3c; }
+.score-bar .total-count { color: #2c3e50; }
+
+.question-box {
+    background: white;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    border-left: 5px solid #3498db;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.question-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+}
+
+.question-box.answered {
+    opacity: 0.95;
+}
+
+.q-number {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    font-weight: 700;
+    font-size: 0.85em;
+    margin-bottom: 12px;
+}
+
+.q-text-en {
+    color: #2980b9;
+    font-weight: 700;
+    font-size: 1.05em;
+    line-height: 1.6;
+    margin-bottom: 6px;
+    white-space: pre-line;
+}
+
+.q-text-hi {
+    color: #27ae60;
+    font-weight: 600;
+    font-size: 1em;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    white-space: pre-line;
+}
+
+.statement-box {
+    background: #fef9e7;
+    border: 2px solid #f39c12;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+}
+
+.statement-box p {
+    margin-bottom: 6px;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.statement-box .stmt-en { color: #2c3e50; font-weight: 600; }
+.statement-box .stmt-hi { color: #27ae60; font-size: 0.92em; }
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.option-label:hover {
+    border-color: #3498db;
+    background: #ebf5fb;
+}
+
+.option-label input[type="radio"] {
+    margin-top: 3px;
+    accent-color: #3498db;
+    min-width: 16px;
+}
+
+.option-label .opt-text {
+    flex: 1;
+}
+
+.option-label .opt-en { font-weight: 600; color: #2c3e50; }
+.option-label .opt-hi { color: #666; font-size: 0.92em; }
+
+.option-label.correct {
+    background: #d4edda !important;
+    border-color: #28a745 !important;
+}
+
+.option-label.wrong {
+    background: #f8d7da !important;
+    border-color: #dc3545 !important;
+}
+
+.check-btn {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+}
+
+.check-btn:hover {
+    background: linear-gradient(135deg, #2980b9, #2471a3);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+.check-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.explanation {
+    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    background: #e8f6f3;
+    border-left: 4px solid #2ecc71;
+    border-radius: 0 10px 10px 0;
+    animation: slideDown 0.3s ease;
+}
+
+.explanation ul {
+    padding-left: 20px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.explanation li {
+    margin-bottom: 5px;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.explanation .exp-label {
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+.explanation .exp-en {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    line-height: 1.6;
+    font-size: 0.93em;
+}
+
+.explanation .exp-hi {
+    color: #27ae60;
+    line-height: 1.6;
+    font-size: 0.93em;
+}
+
+.explanation .exam-tag {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 0.85em;
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    .header h1 { font-size: 1.3em; }
+    .question-box { padding: 16px; }
+    .option-label { padding: 10px 12px; font-size: 0.9em; }
+    .score-bar { font-size: 0.85em; padding: 10px 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Khilafat Movement</h1>
+        <h2>Questions 1 – 17</h2>
+        <div class="subtitle-hi">खिलाफत आंदोलन — प्रश्न 1 – 17</div>
+    </div>
+
+    <div class="score-bar" id="scoreBar">
+        <span class="score-item total-count">Total / कुल: <span id="totalAttempted">0</span>/17</span>
+        <span class="score-item correct-count">Correct / सही: <span id="correctCount">0</span></span>
+        <span class="score-item wrong-count">Wrong / गलत: <span id="wrongCount">0</span></span>
+    </div>
+
+    <div class="question-box" id="q1">
+  <span class="q-number">1</span>
+  <div class="q-text-en">Who of the following had started the Khilafat Movement? Choose the answer from the codes given below:</div>
+  <div class="q-text-hi">निम्नलिखित में से किसने खिलाफत आंदोलन शुरू किया था? नीचे दिए गए कूट से उत्तर चुनिए:</div>
+  <div class="statement-box">
+    <p class="stmt-en">1. Shaukat Ali</p>
+    <p class="stmt-hi">1. शौकत अली</p>
+    <p class="stmt-en">2. Mohammad Ali</p>
+    <p class="stmt-hi">2. मोहम्मद अली</p>
+    <p class="stmt-en">3. Shariatullah</p>
+    <p class="stmt-hi">3. शरियतुल्लाह</p>
+    <p class="stmt-en">4. Abul Kalam Azad</p>
+    <p class="stmt-hi">4. अबुल कलाम आज़ाद</p>
+  </div>
+  <div class="options" data-correct="B">
+    <label class="option-label">
+      <input type="radio" name="q1" value="A">
+      <span class="opt-text"><span class="opt-en">(A) 1 and 2</span><br><span class="opt-hi">(A) 1 और 2</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q1" value="B">
+      <span class="opt-text"><span class="opt-en">(B) 1, 2 and 4</span><br><span class="opt-hi">(B) 1, 2 और 4</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q1" value="C">
+      <span class="opt-text"><span class="opt-en">(C) 1, 2 and 3</span><br><span class="opt-hi">(C) 1, 2 और 3</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q1" value="D">
+      <span class="opt-text"><span class="opt-en">(D) 1, 2, 3, 4</span><br><span class="opt-hi">(D) 1, 2, 3, 4</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(1)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li>The Khilafat Movement was mainly started by <strong>Maulana Muhammad Ali</strong> and <strong>Shaukat Ali</strong> (Ali Brothers).</li>
+        <li>Other Muslim leaders such as Hasrat Mohani, <strong>Maulana Abul Kalam Azad</strong>, and Dr. Hakim Ajmal Khan joined hands and created an All India Khilafat Committee at Lucknow.</li>
+        <li>Haji Shariatullah was an eminent Islamic reformer known for founding the Faraizi Movement, not the Khilafat Movement.</li>
+      </ul>
+      
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li>खिलाफत आंदोलन मुख्य रूप से <strong>मौलाना मुहम्मद अली</strong> और <strong>शौकत अली</strong> (अली बंधुओं) द्वारा शुरू किया गया था।</li>
+        <li>हसरत मोहानी, <strong>मौलाना अबुल कलाम आज़ाद</strong> और डॉ. हाकिम अजमल खान जैसे अन्य मुस्लिम नेताओं ने हाथ मिलाया और लखनऊ में एक अखिल भारतीय खिलाफत समिति बनाई।</li>
+        <li>हाजी शरियतुल्लाह फराइजी आंदोलन की स्थापना के लिए जाने जाने वाले एक प्रख्यात इस्लामी सुधारक थे, न कि खिलाफत आंदोलन के लिए।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q2">
+  <span class="q-number">2</span>
+  <div class="q-text-en">Who among the following, were prominent leaders of the 'Khilafat Movement'?</div>
+  <div class="q-text-hi">निम्नलिखित में से कौन 'खिलाफत आंदोलन' के प्रमुख नेता थे?</div>
+  <div class="options" data-correct="A">
+    <label class="option-label">
+      <input type="radio" name="q2" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Maulana Mohammad Ali and Shaukat Ali</span><br><span class="opt-hi">(A) मौलाना मोहम्मद अली और शौकत अली</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q2" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Mohammad Ali Jinnah and Shaukat Ali</span><br><span class="opt-hi">(B) मोहम्मद अली जिन्ना और शौकत अली</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q2" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Maulana Abul Kalam Azad and Rafi Ahmed Kidwai</span><br><span class="opt-hi">(C) मौलाना अबुल कलाम आज़ाद और रफी अहमद किदवई</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q2" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Rafi Ahmed Kidwai and Shaukat Ali</span><br><span class="opt-hi">(D) रफी अहमद किदवई और शौकत अली</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(2)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li><strong>Maulana Mohammad Ali</strong> and <strong>Shaukat Ali</strong> (the Ali Brothers) were the most prominent leaders of the Khilafat Movement.</li>
+        <li>Refer to the explanation of Question 1 for more details.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li><strong>मौलाना मोहम्मद अली</strong> और <strong>शौकत अली</strong> (अली बंधु) खिलाफत आंदोलन के सबसे प्रमुख नेता थे।</li>
+        <li>अधिक विवरण के लिए प्रश्न 1 की व्याख्या देखें।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q3">
+  <span class="q-number">3</span>
+  <div class="q-text-en">Which of the following were the main objectives of the Khilafat Movement?</div>
+  <div class="q-text-hi">निम्नलिखित में से खिलाफत आंदोलन के मुख्य उद्देश्य क्या थे?</div>
+  <div class="statement-box">
+    <p class="stmt-en">1. To rouse anti-British feelings among the Muslims of India.</p>
+    <p class="stmt-hi">1. भारत के मुसलमानों के बीच ब्रिटिश विरोधी भावनाओं को जगाना।</p>
+    <p class="stmt-en">2. To reform the Muslim society.</p>
+    <p class="stmt-hi">2. मुस्लिम समाज में सुधार करना।</p>
+    <p class="stmt-en">3. To demand separate electorates and preserve the Khilafat.</p>
+    <p class="stmt-hi">3. पृथक निर्वाचक मंडल की मांग करना और खिलाफत को संरक्षित करना।</p>
+    <p class="stmt-en">4. To save the Ottoman empire and preserve the Khilafat.</p>
+    <p class="stmt-hi">4. ओटोमन साम्राज्य को बचाना और खिलाफत को संरक्षित करना।</p>
+  </div>
+  <div class="options" data-correct="D">
+    <label class="option-label">
+      <input type="radio" name="q3" value="A">
+      <span class="opt-text"><span class="opt-en">(A) 1 and 2</span><br><span class="opt-hi">(A) 1 और 2</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q3" value="B">
+      <span class="opt-text"><span class="opt-en">(B) 2 and 3</span><br><span class="opt-hi">(B) 2 और 3</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q3" value="C">
+      <span class="opt-text"><span class="opt-en">(C) 3 and 4</span><br><span class="opt-hi">(C) 3 और 4</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q3" value="D">
+      <span class="opt-text"><span class="opt-en">(D) 1 and 4</span><br><span class="opt-hi">(D) 1 और 4</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(3)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li>The main objective was to <strong>defend the Ottoman Empire of Turkey and to retain the Khalifa in his post</strong> (Statement 4).</li>
+        <li>The dismantling of the Ottoman Empire angered Indian Muslims, rousing <strong>anti-British feelings</strong> (Statement 1).</li>
+        <li>Reforming Muslim society or demanding separate electorates were not the primary objectives of this specific movement.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li>मुख्य उद्देश्य <strong>तुर्की के ओटोमन साम्राज्य की रक्षा करना और खलीफा को उनके पद पर बनाए रखना</strong> था (कथन 4)।</li>
+        <li>ओटोमन साम्राज्य के विघटन ने भारतीय मुसलमानों को नाराज कर दिया, जिससे <strong>ब्रिटिश विरोधी भावनाएं</strong> जागृत हुईं (कथन 1)।</li>
+        <li>मुस्लिम समाज में सुधार करना या पृथक निर्वाचक मंडल की मांग करना इस विशिष्ट आंदोलन के प्राथमिक उद्देश्य नहीं थे।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q4">
+  <span class="q-number">4</span>
+  <div class="q-text-en">Who was elected as President of the All India Khilafat Conference in 1919?</div>
+  <div class="q-text-hi">1919 में अखिल भारतीय खिलाफत सम्मेलन का अध्यक्ष किसे चुना गया था?</div>
+  <div class="options" data-correct="A">
+    <label class="option-label">
+      <input type="radio" name="q4" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Mahatma Gandhi</span><br><span class="opt-hi">(A) महात्मा गांधी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q4" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Muhammad Ali Jinnah</span><br><span class="opt-hi">(B) मुहम्मद अली जिन्ना</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q4" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Maulana Shaukat Ali</span><br><span class="opt-hi">(C) मौलाना शौकत अली</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q4" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Motilal Nehru</span><br><span class="opt-hi">(D) मोतीलाल नेहरू</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(4)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li><strong>Mahatma Gandhi</strong> was elected President of the All-India Khilafat Conference held at Delhi on <strong>November 23-24, 1919</strong>.</li>
+        <li>Gandhi saw this as an opportunity to unite Hindus and Muslims.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li><strong>महात्मा गांधी</strong> को <strong>23-24 नवंबर, 1919</strong> को दिल्ली में आयोजित अखिल भारतीय खिलाफत सम्मेलन का अध्यक्ष चुना गया था।</li>
+        <li>गांधी ने इसे हिंदुओं और मुसलमानों को एकजुट करने के अवसर के रूप में देखा।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q5">
+  <span class="q-number">5</span>
+  <div class="q-text-en">Why did Mahatma Gandhi support the Khilafat Movement?</div>
+  <div class="q-text-hi">महात्मा गांधी ने खिलाफत आंदोलन का समर्थन क्यों किया?</div>
+  <div class="options" data-correct="B">
+    <label class="option-label">
+      <input type="radio" name="q5" value="A">
+      <span class="opt-text"><span class="opt-en">(A) The Khalifa had given shelter to Indian revolutionaries</span><br><span class="opt-hi">(A) खलीफा ने भारतीय क्रांतिकारियों को शरण दी थी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q5" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Gandhiji wanted to win the support of the Indian Muslims against the British</span><br><span class="opt-hi">(B) गांधीजी अंग्रेजों के खिलाफ भारतीय मुसलमानों का समर्थन जीतना चाहते थे</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q5" value="C">
+      <span class="opt-text"><span class="opt-en">(C) The Khalifa supported Indian struggle for freedom</span><br><span class="opt-hi">(C) खलीफा ने भारतीय स्वतंत्रता संग्राम का समर्थन किया</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q5" value="D">
+      <span class="opt-text"><span class="opt-en">(D) The Khalifa was a friend of Gandhiji</span><br><span class="opt-hi">(D) खलीफा गांधीजी के मित्र थे</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(5)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li>Gandhiji supported the Khilafat Movement because he looked at it as a <strong>golden opportunity for Hindu-Muslim unity</strong>.</li>
+        <li>He wanted to win the support of the <strong>Indian Muslims in the struggle against the British</strong>.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li>गांधीजी ने खिलाफत आंदोलन का समर्थन किया क्योंकि उन्होंने इसे <strong>हिंदू-मुस्लिम एकता के लिए एक सुनहरा अवसर</strong> माना।</li>
+        <li>वे <strong>अंग्रेजों के खिलाफ संघर्ष में भारतीय मुसलमानों का समर्थन</strong> जीतना चाहते थे।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q6">
+  <span class="q-number">6</span>
+  <div class="q-text-en">Khilafat Movement was supported by:</div>
+  <div class="q-text-hi">खिलाफत आंदोलन का समर्थन किसने किया था:</div>
+  <div class="options" data-correct="D">
+    <label class="option-label">
+      <input type="radio" name="q6" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Hume</span><br><span class="opt-hi">(A) ह्यूम</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q6" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Sir Sayyed</span><br><span class="opt-hi">(B) सर सैयद</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q6" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Curzon</span><br><span class="opt-hi">(C) कर्जन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q6" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Gandhiji</span><br><span class="opt-hi">(D) गांधीजी</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(6)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li>The Khilafat Movement was supported by <strong>Gandhiji</strong> to foster Hindu-Muslim unity against the British rule.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li>ब्रिटिश शासन के खिलाफ हिंदू-मुस्लिम एकता को बढ़ावा देने के लिए <strong>गांधीजी</strong> ने खिलाफत आंदोलन का समर्थन किया था।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q7">
+  <span class="q-number">7</span>
+  <div class="q-text-en">Who viewed the Khilafat Movement as an opportunity for integrating Hindus and Muslims which would not appear again within coming hundred years?</div>
+  <div class="q-text-hi">किसने खिलाफत आंदोलन को हिंदुओं और मुसलमानों को एकीकृत करने के एक ऐसे अवसर के रूप में देखा जो आने वाले सौ वर्षों में फिर से नहीं आएगा?</div>
+  <div class="options" data-correct="C">
+    <label class="option-label">
+      <input type="radio" name="q7" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Ali Brothers</span><br><span class="opt-hi">(A) अली बंधु</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q7" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Abul Kalam Azad</span><br><span class="opt-hi">(B) अबुल कलाम आज़ाद</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q7" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Mahatma Gandhi</span><br><span class="opt-hi">(C) महात्मा गांधी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q7" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Khan Abdul Gaffar Khan</span><br><span class="opt-hi">(D) खान अब्दुल गफ्फार खान</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(7)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li><strong>Mahatma Gandhi</strong> viewed the Khilafat Movement as a unique opportunity to unite Hindus and Muslims that might not occur again in a hundred years.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li><strong>महात्मा गांधी</strong> ने खिलाफत आंदोलन को हिंदुओं और मुसलमानों को एकजुट करने के एक अनूठे अवसर के रूप में देखा जो शायद सौ वर्षों में फिर से नहीं आएगा।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q8">
+  <span class="q-number">8</span>
+  <div class="q-text-en">Who one of the following had renounced the title of Haziq-ul-Mulk during Khilafat agitation?</div>
+  <div class="q-text-hi">निम्नलिखित में से किसने खिलाफत आंदोलन के दौरान हाजिक-उल-मुल्क की उपाधि त्याग दी थी?</div>
+  <div class="options" data-correct="D">
+    <label class="option-label">
+      <input type="radio" name="q8" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Maulana Abul Kalam Azad</span><br><span class="opt-hi">(A) मौलाना अबुल कलाम आज़ाद</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q8" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Mohammad Ali</span><br><span class="opt-hi">(B) मोहम्मद अली</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q8" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Shaukat Ali</span><br><span class="opt-hi">(C) शौकत अली</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q8" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Hakim Ajmal Khan</span><br><span class="opt-hi">(D) हकीम अजमल खान</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(8)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li><strong>Hakim Ajmal Khan</strong> renounced the title of <strong>Haziq-ul-Mulk</strong> during the Khilafat agitation.</li>
+        <li>This title was given to him by the British Government in 1908.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li><strong>हकीम अजमल खान</strong> ने खिलाफत आंदोलन के दौरान <strong>हाजिक-उल-मुल्क</strong> की उपाधि त्याग दी थी।</li>
+        <li>यह उपाधि उन्हें 1908 में ब्रिटिश सरकार द्वारा दी गई थी।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q9">
+  <span class="q-number">9</span>
+  <div class="q-text-en">Who warned Gandhiji not to encourage fanaticism of Muslim religious leaders and their followers :</div>
+  <div class="q-text-hi">किसने गांधीजी को मुस्लिम धार्मिक नेताओं और उनके अनुयायियों की कट्टरता को प्रोत्साहित न करने की चेतावनी दी थी:</div>
+  <div class="options" data-correct="D">
+    <label class="option-label">
+      <input type="radio" name="q9" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Agha Khan</span><br><span class="opt-hi">(A) आगा खान</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q9" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Ajmal Khan</span><br><span class="opt-hi">(B) अजमल खान</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q9" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Hasan Imam</span><br><span class="opt-hi">(C) हसन इमाम</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q9" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Mohammad Ali Jinnah</span><br><span class="opt-hi">(D) मोहम्मद अली जिन्ना</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(9)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li><strong>Mohammad Ali Jinnah</strong> opposed the linking of the Khilafat issue with India's freedom struggle.</li>
+        <li>He warned Gandhiji not to encourage the fanaticism of Muslim religious leaders.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li><strong>मोहम्मद अली जिन्ना</strong> ने खिलाफत के मुद्दे को भारत के स्वतंत्रता संग्राम से जोड़ने का विरोध किया।</li>
+        <li>उन्होंने गांधीजी को चेतावनी दी कि वे मुस्लिम धार्मिक नेताओं की कट्टरता को प्रोत्साहित न करें।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q10">
+  <span class="q-number">10</span>
+  <div class="q-text-en">Who among the following had denounced the participation of Mahatma Gandhi in the Khilafat Movement?</div>
+  <div class="q-text-hi">निम्नलिखित में से किसने खिलाफत आंदोलन में महात्मा गांधी की भागीदारी की निंदा की थी?</div>
+  <div class="options" data-correct="D">
+    <label class="option-label">
+      <input type="radio" name="q10" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Mohammad Ali</span><br><span class="opt-hi">(A) मोहम्मद अली</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q10" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Shaukat Ali</span><br><span class="opt-hi">(B) शौकत अली</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q10" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Abul Kalam Azad</span><br><span class="opt-hi">(C) अबुल कलाम आज़ाद</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q10" value="D">
+      <span class="opt-text"><span class="opt-en">(D) M.A. Jinnah</span><br><span class="opt-hi">(D) एम.ए. जिन्ना</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(10)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li><strong>M.A. Jinnah</strong> denounced Mahatma Gandhi's participation in the Khilafat Movement, viewing it as bringing religion into politics.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li><strong>एम.ए. जिन्ना</strong> ने खिलाफत आंदोलन में महात्मा गांधी की भागीदारी की निंदा की और इसे राजनीति में धर्म को लाने के रूप में देखा।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q11">
+  <span class="q-number">11</span>
+  <div class="q-text-en">Which one of the following was the result of Khilafat movement?</div>
+  <div class="q-text-hi">निम्नलिखित में से कौन सा खिलाफत आंदोलन का परिणाम था?</div>
+  <div class="options" data-correct="A">
+    <label class="option-label">
+      <input type="radio" name="q11" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Hindu-Muslim differences were narrowed down</span><br><span class="opt-hi">(A) हिंदू-मुस्लिम मतभेद कम हो गए</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q11" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Language problem became acute</span><br><span class="opt-hi">(B) भाषा की समस्या गंभीर हो गई</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q11" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Hindu-Muslim riots increased</span><br><span class="opt-hi">(C) हिंदू-मुस्लिम दंगे बढ़ गए</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q11" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Hindus were suppressed</span><br><span class="opt-hi">(D) हिंदुओं का दमन किया गया</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(11)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li>The Khilafat Movement brought unprecedented unity between Hindus and Muslims, thus <strong>narrowing down their differences</strong> for a period.</li>
+        <li>Gandhi described it as a golden opportunity for unity.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li>खिलाफत आंदोलन ने हिंदुओं और मुसलमानों के बीच अभूतपूर्व एकता लाई, जिससे कुछ समय के लिए <strong>उनके मतभेद कम हो गए</strong>।</li>
+        <li>गांधी ने इसे एकता के लिए एक सुनहरा अवसर बताया।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q12">
+  <span class="q-number">12</span>
+  <div class="q-text-en">The person who on April 4, 1919, delivered a speech on Hindu-Muslim unity from the pulpit of Jama Masjid in Delhi was</div>
+  <div class="q-text-hi">वह व्यक्ति कौन था जिसने 4 अप्रैल, 1919 को दिल्ली में जामा मस्जिद के मंच से हिंदू-मुस्लिम एकता पर भाषण दिया था?</div>
+  <div class="options" data-correct="D">
+    <label class="option-label">
+      <input type="radio" name="q12" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Mahatma Gandhi</span><br><span class="opt-hi">(A) महात्मा गांधी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q12" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Mahamana Malviya</span><br><span class="opt-hi">(B) महामना मालवीय</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q12" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Lala Lajpat Rai</span><br><span class="opt-hi">(C) लाला लाजपत राय</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q12" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Swami Shraddhanand</span><br><span class="opt-hi">(D) स्वामी श्रद्धानंद</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(12)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li>On April 4, 1919, <strong>Swami Shraddhanand</strong> delivered a speech on Hindu-Muslim Unity from the pulpit of Jama Masjid in Delhi in front of 30,000 Muslims.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li>4 अप्रैल, 1919 को, <strong>स्वामी श्रद्धानंद</strong> ने दिल्ली में जामा मस्जिद के मंच से 30,000 मुसलमानों के सामने हिंदू-मुस्लिम एकता पर भाषण दिया था।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q13">
+  <span class="q-number">13</span>
+  <div class="q-text-en">The Congress supported the Khilafat Movement mainly for:</div>
+  <div class="q-text-hi">कांग्रेस ने मुख्य रूप से किस लिए खिलाफत आंदोलन का समर्थन किया:</div>
+  <div class="statement-box">
+    <p class="stmt-en">1. Reinstatement of Caliph</p>
+    <p class="stmt-hi">1. खलीफा की बहाली</p>
+    <p class="stmt-en">2. Removal of Caliph</p>
+    <p class="stmt-hi">2. खलीफा को हटाना</p>
+    <p class="stmt-en">3. Getting the sympathy of the Muslims</p>
+    <p class="stmt-hi">3. मुसलमानों की सहानुभूति प्राप्त करना</p>
+    <p class="stmt-en">4. Marginalising Jinnah in the Congress</p>
+    <p class="stmt-hi">4. कांग्रेस में जिन्ना को दरकिनार करना</p>
+  </div>
+  <div class="options" data-correct="A">
+    <label class="option-label">
+      <input type="radio" name="q13" value="A">
+      <span class="opt-text"><span class="opt-en">(A) 1 and 3</span><br><span class="opt-hi">(A) 1 और 3</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q13" value="B">
+      <span class="opt-text"><span class="opt-en">(B) 2 and 4</span><br><span class="opt-hi">(B) 2 और 4</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q13" value="C">
+      <span class="opt-text"><span class="opt-en">(C) 3 and 4</span><br><span class="opt-hi">(C) 3 और 4</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q13" value="D">
+      <span class="opt-text"><span class="opt-en">(D) 1 and 4</span><br><span class="opt-hi">(D) 1 और 4</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(13)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li>Congress supported the movement mainly for the <strong>reinstatement of the Caliph</strong> and for <strong>getting the sympathy of the Muslims</strong> for the national cause.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li>कांग्रेस ने मुख्य रूप से <strong>खलीफा की बहाली</strong> और राष्ट्रीय उद्देश्य के लिए <strong>मुसलमानों की सहानुभूति प्राप्त करने</strong> के लिए आंदोलन का समर्थन किया।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q14">
+  <span class="q-number">14</span>
+  <div class="q-text-en">Which of the following Indian leaders did not support the Khilafat Movement?</div>
+  <div class="q-text-hi">निम्नलिखित में से किस भारतीय नेता ने खिलाफत आंदोलन का समर्थन नहीं किया था?</div>
+  <div class="options" data-correct="B">
+    <label class="option-label">
+      <input type="radio" name="q14" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Jawahar Lal Nehru</span><br><span class="opt-hi">(A) जवाहर लाल नेहरू</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q14" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Madan Mohan Malviya</span><br><span class="opt-hi">(B) मदन मोहन मालवीय</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q14" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Mohammad Ali</span><br><span class="opt-hi">(C) मोहम्मद अली</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q14" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Swami Shraddhanand</span><br><span class="opt-hi">(D) स्वामी श्रद्धानंद</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(14)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li><strong>Pandit Madan Mohan Malviya</strong> opposed Mahatma Gandhi's endorsement of the Khilafat Movement.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li><strong>पंडित मदन मोहन मालवीय</strong> ने महात्मा गांधी द्वारा खिलाफत आंदोलन के समर्थन का विरोध किया था।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q15">
+  <span class="q-number">15</span>
+  <div class="q-text-en">In which city was the conference of Khilafat Committee in 1920 held that requested Gandhiji to assume the leadership of Non-cooperation Movement?</div>
+  <div class="q-text-hi">1920 में खिलाफत समिति का सम्मेलन किस शहर में आयोजित किया गया था जिसमें गांधीजी से असहयोग आंदोलन का नेतृत्व संभालने का अनुरोध किया गया था?</div>
+  <div class="options" data-correct="C">
+    <label class="option-label">
+      <input type="radio" name="q15" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Lucknow</span><br><span class="opt-hi">(A) लखनऊ</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q15" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Lahore</span><br><span class="opt-hi">(B) लाहौर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q15" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Allahabad</span><br><span class="opt-hi">(C) इलाहाबाद</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q15" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Karachi</span><br><span class="opt-hi">(D) कराची</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(15)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li>The Khilafat Committee held its conference in <strong>Allahabad</strong> (now Prayagraj) in June 1920.</li>
+        <li>It unanimously accepted Gandhi's suggestion of non-cooperation and asked him to lead the Movement.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li>खिलाफत समिति ने जून 1920 में <strong>इलाहाबाद</strong> (अब प्रयागराज) में अपना सम्मेलन आयोजित किया।</li>
+        <li>इसने सर्वसम्मति से गांधी के असहयोग के सुझाव को स्वीकार कर लिया और उनसे आंदोलन का नेतृत्व करने के लिए कहा।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q16">
+  <span class="q-number">16</span>
+  <div class="q-text-en">"In this instance, we could not play off the Mohammedans against the Hindus." To which one of the following events did this remark of Aitchison relate?</div>
+  <div class="q-text-hi">"इस उदाहरण में, हम हिंदुओं के खिलाफ मुसलमानों को नहीं भड़का सके।" एचिसन की यह टिप्पणी निम्नलिखित में से किस घटना से संबंधित थी?</div>
+  <div class="options" data-correct="C">
+    <label class="option-label">
+      <input type="radio" name="q16" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Revolt of 1857</span><br><span class="opt-hi">(A) 1857 का विद्रोह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q16" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Champaran Satyagraha (1917)</span><br><span class="opt-hi">(B) चंपारण सत्याग्रह (1917)</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q16" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Khilafat and Non-Cooperation Movement (1919-22)</span><br><span class="opt-hi">(C) खिलाफत और असहयोग आंदोलन (1919-22)</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q16" value="D">
+      <span class="opt-text"><span class="opt-en">(D) August Movement of 1942</span><br><span class="opt-hi">(D) 1942 का अगस्त आंदोलन</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(16)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li>This remark by Aitchison related to the <strong>Khilafat and Non-Cooperation Movement (1919-22)</strong>.</li>
+        <li>It reflects the British inability to divide Hindus and Muslims during this period of unprecedented unity.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li>एचिसन की यह टिप्पणी <strong>खिलाफत और असहयोग आंदोलन (1919-22)</strong> से संबंधित थी।</li>
+        <li>यह अभूतपूर्व एकता की इस अवधि के दौरान हिंदुओं और मुसलमानों को विभाजित करने में ब्रिटिश अक्षमता को दर्शाता है।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="question-box" id="q17">
+  <span class="q-number">17</span>
+  <div class="q-text-en">Moplah Rebellion in 1921 was an offshoot of :</div>
+  <div class="q-text-hi">1921 में मोपला विद्रोह किसकी एक शाखा (offshoot) थी:</div>
+  <div class="options" data-correct="A">
+    <label class="option-label">
+      <input type="radio" name="q17" value="A">
+      <span class="opt-text"><span class="opt-en">(A) Khilafat Movement</span><br><span class="opt-hi">(A) खिलाफत आंदोलन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q17" value="B">
+      <span class="opt-text"><span class="opt-en">(B) Mutiny of 1857</span><br><span class="opt-hi">(B) 1857 का विद्रोह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q17" value="C">
+      <span class="opt-text"><span class="opt-en">(C) Swadeshi Movement</span><br><span class="opt-hi">(C) स्वदेशी आंदोलन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q17" value="D">
+      <span class="opt-text"><span class="opt-en">(D) Non-Cooperation Movement</span><br><span class="opt-hi">(D) असहयोग आंदोलन</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(17)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+      <ul>
+        <li>The <strong>Moplah Rebellion (1921)</strong> in Kerala was an offshoot of the <strong>Khilafat Movement</strong>.</li>
+        <li>The meetings of the Khilafat Movement and Moplah peasants merged, leading to a revolt against Hindu landlords and the British.</li>
+      </ul>
+    </div>
+    <div class="exp-hi">
+      <ul>
+        <li>केरल में <strong>मोपला विद्रोह (1921)</strong> <strong>खिलाफत आंदोलन</strong> की एक शाखा थी।</li>
+        <li>खिलाफत आंदोलन और मोपला किसानों की बैठकें आपस में मिल गईं, जिससे हिंदू जमींदारों और अंग्रेजों के खिलाफ विद्रोह हुआ।</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+    <div class="footer">
+        Khilafat Movement — Interactive Bilingual Quiz<br>
+        For SSC, Railway, UPSC, State PCS Exam Preparation
+    </div>
+</div>
+
+<script>
+let correctTotal = 0;
+let wrongTotal = 0;
+let attempted = 0;
+
+function checkAnswer(qid) {
+    const qBox = document.getElementById('q' + qid);
+    if (qBox.classList.contains('answered')) return;
+
+    const optionsDiv = qBox.querySelector('.options');
+    const correct = optionsDiv.getAttribute('data-correct');
+    const selected = qBox.querySelector('input[name="q' + qid + '"]:checked');
+
+    if (!selected) {
+        alert('Please select an option / कृपया एक विकल्प चुनें');
+        return;
+    }
+
+    qBox.classList.add('answered');
+    const selectedVal = selected.value;
+    const labels = qBox.querySelectorAll('.option-label');
+
+    labels.forEach(label => {
+        const radio = label.querySelector('input');
+        if (radio.value === correct) {
+            label.classList.add('correct');
+        }
+        if (radio.value === selectedVal && selectedVal !== correct) {
+            label.classList.add('wrong');
+        }
+        radio.disabled = true;
+    });
+
+    attempted++;
+    if (selectedVal === correct) {
+        correctTotal++;
+    } else {
+        wrongTotal++;
+    }
+
+    document.getElementById('totalAttempted').textContent = attempted;
+    document.getElementById('correctCount').textContent = correctTotal;
+    document.getElementById('wrongCount').textContent = wrongTotal;
+
+    qBox.querySelector('.explanation').style.display = 'block';
+    qBox.querySelector('.check-btn').disabled = true;
+}
+</script>
+
+</body>
+</html>

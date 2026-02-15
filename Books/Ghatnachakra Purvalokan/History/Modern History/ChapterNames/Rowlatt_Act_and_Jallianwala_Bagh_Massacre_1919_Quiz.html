@@ -1,0 +1,2081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rowlatt Act and Jallianwala Bagh Massacre (1919) - Interactive Quiz</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Segoe+UI:wght@400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Noto Sans Devanagari', sans-serif;
+    background: linear-gradient(135deg, #667eea11 0%, #764ba211 100%);
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    padding: 20px 10px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    padding: 30px 20px;
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    border-radius: 16px;
+    color: white;
+    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.3);
+}
+
+.header h1 {
+    font-size: 1.7em;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.header h2 {
+    font-size: 1.1em;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+.header .subtitle-hi {
+    font-size: 1em;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+.score-bar {
+    background: white;
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    position: sticky;
+    top: 10px;
+    z-index: 100;
+}
+
+.score-bar .score-item {
+    font-size: 0.95em;
+    font-weight: 600;
+}
+
+.score-bar .correct-count { color: #27ae60; }
+.score-bar .wrong-count { color: #e74c3c; }
+.score-bar .total-count { color: #2c3e50; }
+
+.question-box {
+    background: white;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    border-left: 5px solid #3498db;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.question-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+}
+
+.question-box.answered {
+    opacity: 0.95;
+}
+
+.q-number {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    font-weight: 700;
+    font-size: 0.85em;
+    margin-bottom: 12px;
+}
+
+.q-text-en {
+    color: #2980b9;
+    font-weight: 700;
+    font-size: 1.05em;
+    line-height: 1.6;
+    margin-bottom: 6px;
+    white-space: pre-line;
+}
+
+.q-text-hi {
+    color: #27ae60;
+    font-weight: 600;
+    font-size: 1em;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    white-space: pre-line;
+}
+
+.statement-box {
+    background: #fef9e7;
+    border: 2px solid #f39c12;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+}
+
+.statement-box p {
+    margin-bottom: 6px;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.statement-box .stmt-en { color: #2c3e50; font-weight: 600; }
+.statement-box .stmt-hi { color: #27ae60; font-size: 0.92em; }
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.option-label:hover {
+    border-color: #3498db;
+    background: #ebf5fb;
+}
+
+.option-label input[type="radio"] {
+    margin-top: 3px;
+    accent-color: #3498db;
+    min-width: 16px;
+}
+
+.option-label .opt-text {
+    flex: 1;
+}
+
+.option-label .opt-en { font-weight: 600; color: #2c3e50; }
+.option-label .opt-hi { color: #666; font-size: 0.92em; }
+
+.option-label.correct {
+    background: #d4edda !important;
+    border-color: #28a745 !important;
+}
+
+.option-label.wrong {
+    background: #f8d7da !important;
+    border-color: #dc3545 !important;
+}
+
+.check-btn {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+}
+
+.check-btn:hover {
+    background: linear-gradient(135deg, #2980b9, #2471a3);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+.check-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.explanation {
+    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    background: #e8f6f3;
+    border-left: 4px solid #2ecc71;
+    border-radius: 0 10px 10px 0;
+    animation: slideDown 0.3s ease;
+}
+
+.explanation ul {
+    padding-left: 20px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.explanation li {
+    margin-bottom: 5px;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.explanation .exp-label {
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+.explanation .exp-en {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    line-height: 1.6;
+    font-size: 0.93em;
+}
+
+.explanation .exp-hi {
+    color: #27ae60;
+    line-height: 1.6;
+    font-size: 0.93em;
+}
+
+.explanation .exam-tag {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 0.85em;
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    .header h1 { font-size: 1.3em; }
+    .question-box { padding: 16px; }
+    .option-label { padding: 10px 12px; font-size: 0.9em; }
+    .score-bar { font-size: 0.85em; padding: 10px 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Rowlatt Act and Jallianwala Bagh Massacre (1919)</h1>
+        <h2>Questions 1 – 39</h2>
+        <div class="subtitle-hi">रॉलेट एक्ट और जलियाँवाला बाग नरसंहार (1919) — प्रश्न 1 – 39</div>
+    </div>
+
+    <div class="score-bar" id="scoreBar">
+        <span class="score-item total-count">Total / कुल: <span id="totalAttempted">0</span>/39</span>
+        <span class="score-item correct-count">Correct / सही: <span id="correctCount">0</span></span>
+        <span class="score-item wrong-count">Wrong / गलत: <span id="wrongCount">0</span></span>
+    </div>
+
+    <div class="question-box" id="q1">
+  <span class="q-number">1</span>
+  <div class="q-text-en">During the Indian Freedom Struggle, why did the Rowlatt Act arouse popular indignation?</div>
+  <div class="q-text-hi">भारतीय स्वतंत्रता संग्राम के दौरान, रॉलेट एक्ट ने जनता में आक्रोश क्यों पैदा किया?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q1" value="a">
+      <span class="opt-text"><span class="opt-en">(A) It curtailed the freedom of religion</span><br><span class="opt-hi">(A) इसने धर्म की स्वतंत्रता को कम किया</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q1" value="b">
+      <span class="opt-text"><span class="opt-en">(B) It suppressed the traditional Indian education.</span><br><span class="opt-hi">(B) इसने पारंपरिक भारतीय शिक्षा को दबा दिया</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q1" value="c">
+      <span class="opt-text"><span class="opt-en">(C) It authorized the Government to imprison people without trial</span><br><span class="opt-hi">(C) इसने सरकार को बिना मुकदमे के लोगों को कैद करने का अधिकार दिया</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q1" value="d">
+      <span class="opt-text"><span class="opt-en">(D) It curbed the trade union activities.</span><br><span class="opt-hi">(D) इसने ट्रेड यूनियन गतिविधियों पर अंकुश लगाया</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(1)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>During the viceroyalty of <strong>Lord Chelmsford</strong>, a sedition committee was appointed by the Government in <strong>1917 A.D.</strong> with <strong>Justice Rowlatt</strong>.</li>
+            <li>The committee made certain recommendations to curb sedition activity in India.</li>
+            <li>The <strong>Rowlatt Act, 1919 A.D.</strong>, gave unbridled powers to the Government to arrest and imprison suspects <strong>without trial</strong>.</li>
+            <li>The Act caused a wave of anger among all sections of the society.</li>
+            <li>A well-known description of the bill at that time was: <strong>No Vakil, No Appeal, No Daleel</strong> which means No lawyer, No appeal, No Plea.</li>
+        </ul>
+        
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>लॉर्ड चेम्सफोर्ड</strong> के वायसरॉय काल में, सरकार ने <strong>1917 ई.</strong> में <strong>जस्टिस रॉलेट</strong> के साथ एक राजद्रोह समिति नियुक्त की।</li>
+            <li>इसने भारत में राजद्रोह गतिविधि को रोकने के लिए कुछ सिफारिशें कीं।</li>
+            <li><strong>रॉलेट एक्ट, 1919 ई.</strong> ने सरकार को <strong>बिना मुकदमे</strong> के संदिग्धों को गिरफ्तार करने और कैद करने की असीमित शक्तियाँ दीं।</li>
+            <li>इस एक्ट ने समाज के सभी वर्गों में क्रोध की लहर पैदा की।</li>
+            <li>उस समय इस बिल का प्रसिद्ध वर्णन था: <strong>ना वकील, ना अपील, ना दलील</strong>।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">I.A.S. (Pre) 2009</span>
+  </div>
+</div>
+
+<div class="question-box" id="q2">
+  <span class="q-number">2</span>
+  <div class="q-text-en">The Rowlatt Act was passed to:</div>
+  <div class="q-text-hi">रॉलेट एक्ट किसलिए पारित किया गया था?</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q2" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Bring about Agrarian Reforms</span><br><span class="opt-hi">(A) कृषि सुधार लाने के लिए</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q2" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Curtail the National and Revolutionary Activities</span><br><span class="opt-hi">(B) राष्ट्रीय और क्रांतिकारी गतिविधियों पर अंकुश लगाने के लिए</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q2" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Have a favourable 'Balance of Trade.'</span><br><span class="opt-hi">(C) अनुकूल 'व्यापार संतुलन' रखने के लिए</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q2" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Put Second World War criminals on trial</span><br><span class="opt-hi">(D) द्वितीय विश्व युद्ध के अपराधियों पर मुकदमा चलाने के लिए</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(2)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>See the explanation of question 1.</li>
+            <li>The <strong>Rowlatt Act</strong> was specifically passed to curtail the <strong>National and Revolutionary Activities</strong> in India.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>प्रश्न 1 की व्याख्या देखें।</li>
+            <li><strong>रॉलेट एक्ट</strong> विशेष रूप से भारत में <strong>राष्ट्रीय और क्रांतिकारी गतिविधियों</strong> पर अंकुश लगाने के लिए पारित किया गया था।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">Jharkhand P.C.S. (Pre) 2013</span>
+  </div>
+</div>
+
+<div class="question-box" id="q3">
+  <span class="q-number">3</span>
+  <div class="q-text-en">When was the Rowlatt Act passed?</div>
+  <div class="q-text-hi">रॉलेट एक्ट कब पारित किया गया था?</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q3" value="a">
+      <span class="opt-text"><span class="opt-en">(A) 1909</span><br><span class="opt-hi">(A) 1909</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q3" value="b">
+      <span class="opt-text"><span class="opt-en">(B) 1919</span><br><span class="opt-hi">(B) 1919</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q3" value="c">
+      <span class="opt-text"><span class="opt-en">(C) 1930</span><br><span class="opt-hi">(C) 1930</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q3" value="d">
+      <span class="opt-text"><span class="opt-en">(D) 1942</span><br><span class="opt-hi">(D) 1942</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(3)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The <strong>Rowlatt Act</strong> was passed in <strong>March 1919 A.D.</strong></li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रॉलेट एक्ट</strong> <strong>मार्च 1919 ई.</strong> में पारित किया गया था।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P. P.C.S. (Pre) 1993 / 48th to 52nd B.P.S.C. (Pre) 2008</span>
+  </div>
+</div>
+
+<div class="question-box" id="q4">
+  <span class="q-number">4</span>
+  <div class="q-text-en">The Rowlatt Act aimed at:</div>
+  <div class="q-text-hi">रॉलेट एक्ट का उद्देश्य था:</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q4" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Compulsory economic support to war efforts</span><br><span class="opt-hi">(A) युद्ध प्रयासों के लिए अनिवार्य आर्थिक सहायता</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q4" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Imprisonment without trial and summary procedures for trial</span><br><span class="opt-hi">(B) बिना मुकदमे के कारावास और मुकदमे के लिए संक्षिप्त प्रक्रियाएँ</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q4" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Suppression of the Khilafat Movement</span><br><span class="opt-hi">(C) खिलाफत आंदोलन का दमन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q4" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Imposition of restrictions on freedom of the press</span><br><span class="opt-hi">(D) प्रेस की स्वतंत्रता पर प्रतिबंध लगाना</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(4)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The <strong>Rowlatt Act</strong> aimed at <strong>imprisonment without trial</strong> and summary procedures for trial.</li>
+            <li>See explanation of question 1.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रॉलेट एक्ट</strong> का उद्देश्य <strong>बिना मुकदमे के कारावास</strong> और मुकदमे के लिए संक्षिप्त प्रक्रियाएँ थीं।</li>
+            <li>प्रश्न 1 की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">I.A.S. (Pre) 2012</span>
+  </div>
+</div>
+
+<div class="question-box" id="q5">
+  <span class="q-number">5</span>
+  <div class="q-text-en">With reference to Rowlatt Satyagraha, which of the following statements is/are correct?</div>
+  <div class="q-text-hi">रॉलेट सत्याग्रह के संदर्भ में, निम्नलिखित में से कौन सा/से कथन सही है/हैं?</div>
+  <div class="statement-box">
+    <p class="stmt-en">(1) The Rowlatt Act was based on the recommendations of the 'Sedition Committee.'</p>
+    <p class="stmt-hi">(1) रॉलेट एक्ट 'राजद्रोह समिति' की सिफारिशों पर आधारित था।</p>
+    <p class="stmt-en">(2) In Rowlatt Satyagraha, Gandhiji tried to utilize the Home Rule League.</p>
+    <p class="stmt-hi">(2) रॉलेट सत्याग्रह में, गांधीजी ने होम रूल लीग का उपयोग करने का प्रयास किया।</p>
+    <p class="stmt-en">(3) Demonstrations against the arrival of Simon Commission coincided with Rowlatt Satyagraha.</p>
+    <p class="stmt-hi">(3) साइमन कमीशन के आगमन के विरुद्ध प्रदर्शन रॉलेट सत्याग्रह के साथ हुए।</p>
+  </div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q5" value="a">
+      <span class="opt-text"><span class="opt-en">(A) 1 only</span><br><span class="opt-hi">(A) केवल 1</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q5" value="b">
+      <span class="opt-text"><span class="opt-en">(B) 1 and 2 only</span><br><span class="opt-hi">(B) केवल 1 और 2</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q5" value="c">
+      <span class="opt-text"><span class="opt-en">(C) 2 and 3 only</span><br><span class="opt-hi">(C) केवल 2 और 3</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q5" value="d">
+      <span class="opt-text"><span class="opt-en">(D) 1, 2 and 3</span><br><span class="opt-hi">(D) 1, 2 और 3</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(5)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Rowlatt Act</strong> also known as <strong>Black Act</strong> (termed by Gandhiji) was a legislative Act passed by the <strong>Imperial Legislative Council in 1919 A.D.</strong></li>
+            <li>The Act allowed the British Government to arrest any Indian without any trial or warrant. The Act was based on the <strong>Sedition Committee</strong>.</li>
+            <li>In <strong>Rowlatt Satyagraha</strong>, Gandhiji tried to utilize the <strong>Home Rule League</strong>.</li>
+            <li><strong>Simon Commission</strong> reached India on <strong>February 03, 1928 A.D.</strong>, which is much later than Rowlatt Satyagraha (1919), so they did not coincide.</li>
+            <li>Simon Commission was welcomed with the popular slogan '<strong>Simon! Go Back</strong>'.</li>
+        </ul>
+        
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रॉलेट एक्ट</strong> जिसे <strong>ब्लैक एक्ट</strong> भी कहा जाता है (गांधीजी द्वारा नामित), <strong>1919 ई.</strong> में <strong>इम्पीरियल लेजिस्लेटिव काउंसिल</strong> द्वारा पारित एक विधायी अधिनियम था।</li>
+            <li>इस एक्ट ने ब्रिटिश सरकार को बिना किसी मुकदमे या वारंट के किसी भी भारतीय को गिरफ्तार करने की अनुमति दी। यह एक्ट <strong>राजद्रोह समिति</strong> पर आधारित था।</li>
+            <li><strong>रॉलेट सत्याग्रह</strong> में गांधीजी ने <strong>होम रूल लीग</strong> का उपयोग करने का प्रयास किया।</li>
+            <li><strong>साइमन कमीशन</strong> <strong>3 फरवरी 1928 ई.</strong> को भारत पहुँचा, जो रॉलेट सत्याग्रह (1919) के काफी बाद है, इसलिए वे एक साथ नहीं हुए।</li>
+            <li>साइमन कमीशन का स्वागत '<strong>साइमन! गो बैक</strong>' के नारे से किया गया।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">I.A.S. (Pre) 2015</span>
+  </div>
+</div>
+
+<div class="question-box" id="q6">
+  <span class="q-number">6</span>
+  <div class="q-text-en">Who was the Viceroy of India when the Rowlatt Act was passed?</div>
+  <div class="q-text-hi">जब रॉलेट एक्ट पारित किया गया तब भारत का वायसराय कौन था?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q6" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Lord Irwin</span><br><span class="opt-hi">(A) लॉर्ड इरविन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q6" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Lord Reading</span><br><span class="opt-hi">(B) लॉर्ड रीडिंग</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q6" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Lord Chelmsford</span><br><span class="opt-hi">(C) लॉर्ड चेम्सफोर्ड</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q6" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Lord Wavell</span><br><span class="opt-hi">(D) लॉर्ड वेवेल</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(6)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Lord Chelmsford (1916-1921 A.D.)</strong> was the Viceroy of India when the <strong>Rowlatt Act</strong> was passed.</li>
+        </ul>
+        
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>लॉर्ड चेम्सफोर्ड (1916-1921 ई.)</strong> रॉलेट एक्ट पारित होने के समय भारत के वायसराय थे।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">I.A.S. (Pre) 2008</span>
+  </div>
+</div>
+
+<div class="question-box" id="q7">
+  <span class="q-number">7</span>
+  <div class="q-text-en">In whose Viceroyalty the 'Rowlatt Act' was passed?</div>
+  <div class="q-text-hi">किसके वायसरॉय काल में 'रॉलेट एक्ट' पारित किया गया था?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q7" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Lord Harding II</span><br><span class="opt-hi">(A) लॉर्ड हार्डिंग II</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q7" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Lord Reading</span><br><span class="opt-hi">(B) लॉर्ड रीडिंग</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q7" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Lord Chelmsford</span><br><span class="opt-hi">(C) लॉर्ड चेम्सफोर्ड</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q7" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Lord Minto II</span><br><span class="opt-hi">(D) लॉर्ड मिंटो II</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(7)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>See the explanation of question 6.</li>
+            <li><strong>Lord Chelmsford</strong> was the Viceroy when the <strong>Rowlatt Act</strong> was passed.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>प्रश्न 6 की व्याख्या देखें।</li>
+            <li>रॉलेट एक्ट पारित होने के समय <strong>लॉर्ड चेम्सफोर्ड</strong> वायसराय थे।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.R.O./A.R.O. (Pre) 2014</span>
+  </div>
+</div>
+
+<div class="question-box" id="q8">
+  <span class="q-number">8</span>
+  <div class="q-text-en">Indian National Congress opposed the Rowlatt Act because it aimed-</div>
+  <div class="q-text-hi">भारतीय राष्ट्रीय कांग्रेस ने रॉलेट एक्ट का विरोध किया क्योंकि इसका उद्देश्य था-</div>
+  <div class="options" data-correct="a">
+    <label class="option-label">
+      <input type="radio" name="q8" value="a">
+      <span class="opt-text"><span class="opt-en">(A) To limit the individual liberty</span><br><span class="opt-hi">(A) व्यक्तिगत स्वतंत्रता को सीमित करना</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q8" value="b">
+      <span class="opt-text"><span class="opt-en">(B) To ban on Indian National Congress</span><br><span class="opt-hi">(B) भारतीय राष्ट्रीय कांग्रेस पर प्रतिबंध लगाना</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q8" value="c">
+      <span class="opt-text"><span class="opt-en">(C) To enlarge the communal delegations</span><br><span class="opt-hi">(C) सांप्रदायिक प्रतिनिधिमंडलों का विस्तार करना</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q8" value="d">
+      <span class="opt-text"><span class="opt-en">(D) To imprison national leaders charging the traitors to the nation</span><br><span class="opt-hi">(D) राष्ट्र के गद्दारों पर आरोप लगाकर राष्ट्रीय नेताओं को कैद करना</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(8)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>In <strong>March, 1919 A.D.</strong>, the <strong>Imperial Legislative Council</strong> of British India passed the Rowlatt Act.</li>
+            <li>The Council passed this law so they could try certain cases <strong>without a jury decision</strong> and detain people <strong>without fair and proper trial</strong>.</li>
+            <li>Mostly the Indian public disliked this Act because it aimed to <strong>limit individual liberty</strong>.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>मार्च 1919 ई.</strong> में, ब्रिटिश भारत की <strong>इम्पीरियल लेजिस्लेटिव काउंसिल</strong> ने रॉलेट एक्ट पारित किया।</li>
+            <li>इस कानून को इसलिए पारित किया गया ताकि वे <strong>बिना जूरी के फैसले</strong> के कुछ मामलों की सुनवाई कर सकें और <strong>बिना उचित मुकदमे</strong> के लोगों को हिरासत में ले सकें।</li>
+            <li>अधिकांश भारतीय जनता ने इस एक्ट का विरोध किया क्योंकि इसका उद्देश्य <strong>व्यक्तिगत स्वतंत्रता को सीमित करना</strong> था।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">41st B.P.S.C. (Pre) 1996</span>
+  </div>
+</div>
+
+<div class="question-box" id="q9">
+  <span class="q-number">9</span>
+  <div class="q-text-en">Consider the following statements about The Rowlatt Satyagraha.</div>
+  <div class="q-text-hi">रॉलेट सत्याग्रह के बारे में निम्नलिखित कथनों पर विचार करें।</div>
+  <div class="statement-box">
+    <p class="stmt-en">(1) The Rowlatt Satyagraha turned out to be the first all-India struggle against the British government although it was largely restricted to cities.</p>
+    <p class="stmt-hi">(1) रॉलेट सत्याग्रह ब्रिटिश सरकार के खिलाफ पहला अखिल भारतीय संघर्ष बना, हालाँकि यह काफी हद तक शहरों तक सीमित था।</p>
+    <p class="stmt-en">(2) The Rowlatt Act curbed fundamental rights such as the freedom of expression and strengthened police powers.</p>
+    <p class="stmt-hi">(2) रॉलेट एक्ट ने अभिव्यक्ति की स्वतंत्रता जैसे मौलिक अधिकारों पर अंकुश लगाया और पुलिस शक्तियों को मजबूत किया।</p>
+  </div>
+  <div class="options" data-correct="a">
+    <label class="option-label">
+      <input type="radio" name="q9" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Both the statements (1) and (2) are correct</span><br><span class="opt-hi">(A) दोनों कथन (1) और (2) सही हैं</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q9" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Only the statement (1) is correct</span><br><span class="opt-hi">(B) केवल कथन (1) सही है</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q9" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Only the statement (2) is correct</span><br><span class="opt-hi">(C) केवल कथन (2) सही है</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q9" value="d">
+      <span class="opt-text"><span class="opt-en">(D) None of the above</span><br><span class="opt-hi">(D) उपरोक्त में से कोई नहीं</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(9)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Rowlatt Act</strong> was passed by the <strong>Imperial legislative council in 1919 A.D.</strong></li>
+            <li>The act was an effective plan to suppress the increasing <strong>revolutionary activities</strong> in the country.</li>
+            <li>It curbed fundamental rights such as the <strong>freedom of expression</strong> and put severe restrictions on the press.</li>
+            <li>The act strengthened police powers so much that anybody could be arrested <strong>without any trial</strong>.</li>
+            <li>In response, Gandhiji started <strong>Rowlatt Satyagrah (1919 A.D.)</strong> which was although restricted to cities but turned to be the <strong>first all-India struggle</strong> against the British government.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रॉलेट एक्ट</strong> <strong>1919 ई.</strong> में <strong>इम्पीरियल लेजिस्लेटिव काउंसिल</strong> द्वारा पारित किया गया था।</li>
+            <li>यह एक्ट देश में बढ़ती <strong>क्रांतिकारी गतिविधियों</strong> को दबाने की एक प्रभावी योजना थी।</li>
+            <li>इसने <strong>अभिव्यक्ति की स्वतंत्रता</strong> जैसे मौलिक अधिकारों पर अंकुश लगाया और प्रेस पर कड़े प्रतिबंध लगाए।</li>
+            <li>इस एक्ट ने पुलिस शक्तियों को इतना मजबूत किया कि किसी को भी <strong>बिना मुकदमे</strong> के गिरफ्तार किया जा सकता था।</li>
+            <li>इसके जवाब में गांधीजी ने <strong>रॉलेट सत्याग्रह (1919 ई.)</strong> शुरू किया जो शहरों तक सीमित था लेकिन ब्रिटिश सरकार के खिलाफ <strong>पहला अखिल भारतीय संघर्ष</strong> बना।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">Chhattisgarh P.C.S. (Pre) 2023</span>
+  </div>
+</div>
+
+<div class="question-box" id="q10">
+  <span class="q-number">10</span>
+  <div class="q-text-en">The first venture of Gandhi in all-India politics was the:</div>
+  <div class="q-text-hi">अखिल भारतीय राजनीति में गांधी का पहला कदम था:</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q10" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Non-Cooperation Movement</span><br><span class="opt-hi">(A) असहयोग आंदोलन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q10" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Rowlatt Satyagraha</span><br><span class="opt-hi">(B) रॉलेट सत्याग्रह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q10" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Champaran Movement</span><br><span class="opt-hi">(C) चंपारण आंदोलन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q10" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Dandi March</span><br><span class="opt-hi">(D) दांडी मार्च</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(10)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The Movements conceived by Gandhiji like <strong>Champaran Peasant Movement (1917 A.D.)</strong>, <strong>Ahmedabad Mill Workers Movement (1918 A.D.)</strong>, and <strong>Kheda Peasant Movement (1918 A.D.)</strong> were limited to specific issues and limited areas.</li>
+            <li>But <strong>Rowlatt Satyagraha (1919 A.D.)</strong> against the censure of freedom of press and detention without trial was proactively joined by all the sections of the society.</li>
+            <li>This was the <strong>first all India level Movement</strong> launched by Mahatma Gandhi.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>गांधीजी द्वारा कल्पित <strong>चंपारण किसान आंदोलन (1917 ई.)</strong>, <strong>अहमदाबाद मिल मजदूर आंदोलन (1918 ई.)</strong>, और <strong>खेड़ा किसान आंदोलन (1918 ई.)</strong> विशेष मुद्दों और सीमित क्षेत्रों तक ही सीमित थे।</li>
+            <li>लेकिन प्रेस की स्वतंत्रता और बिना मुकदमे के हिरासत के खिलाफ <strong>रॉलेट सत्याग्रह (1919 ई.)</strong> में समाज के सभी वर्गों ने सक्रिय रूप से भाग लिया।</li>
+            <li>यह महात्मा गांधी द्वारा शुरू किया गया <strong>पहला अखिल भारतीय स्तर का आंदोलन</strong> था।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">I.A.S. (Pre) 1999</span>
+  </div>
+</div>
+
+<div class="question-box" id="q11">
+  <span class="q-number">11</span>
+  <div class="q-text-en">Who suggested launching of no tax campaign as a protest against Rowlatt Act?</div>
+  <div class="q-text-hi">रॉलेट एक्ट के विरोध में कर-न-दो अभियान शुरू करने का सुझाव किसने दिया?</div>
+  <div class="options" data-correct="d">
+    <label class="option-label">
+      <input type="radio" name="q11" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Abul Kalam Azad</span><br><span class="opt-hi">(A) अबुल कलाम आज़ाद</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q11" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Gandhiji</span><br><span class="opt-hi">(B) गांधीजी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q11" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Rabindranath Tagore</span><br><span class="opt-hi">(C) रवीन्द्रनाथ टैगोर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q11" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Swami Shraddhanand</span><br><span class="opt-hi">(D) स्वामी श्रद्धानंद</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(11)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The <strong>Rowlatt Act</strong> was also called as an Act without a lawyer, without appeal, without a plea or <strong>Black Law</strong>.</li>
+            <li>According to this Act, the British Government was free to arrest and imprison suspects <strong>without trial</strong>.</li>
+            <li>In protest to this Act, <strong>Swami Shraddhanand</strong> suggested starting the Movement with the non-payment of <strong>Lagaan (Rent)</strong>.</li>
+        </ul>
+        
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रॉलेट एक्ट</strong> को बिना वकील, बिना अपील, बिना दलील या <strong>काला कानून</strong> भी कहा जाता था।</li>
+            <li>इस एक्ट के अनुसार, ब्रिटिश सरकार संदिग्धों को <strong>बिना मुकदमे</strong> के गिरफ्तार और कैद करने के लिए स्वतंत्र थी।</li>
+            <li>इस एक्ट के विरोध में, <strong>स्वामी श्रद्धानंद</strong> ने <strong>लगान (किराया)</strong> न देने के साथ आंदोलन शुरू करने का सुझाव दिया।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.P.C.S. (Mains) 2008</span>
+  </div>
+</div>
+
+<div class="question-box" id="q12">
+  <span class="q-number">12</span>
+  <div class="q-text-en">The Anarchical and Revolutionary Crime Act (1919) was popularly known as the:</div>
+  <div class="q-text-hi">अराजक और क्रांतिकारी अपराध अधिनियम (1919) को लोकप्रिय रूप से किस नाम से जाना जाता था?</div>
+  <div class="options" data-correct="a">
+    <label class="option-label">
+      <input type="radio" name="q12" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Rowlatt Act</span><br><span class="opt-hi">(A) रॉलेट एक्ट</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q12" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Pitt's India Act</span><br><span class="opt-hi">(B) पिट्स इंडिया एक्ट</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q12" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Indian Arms Act</span><br><span class="opt-hi">(C) भारतीय शस्त्र अधिनियम</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q12" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Ilbert Bill</span><br><span class="opt-hi">(D) इल्बर्ट बिल</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(12)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The <strong>Anarchical and Revolutionary Crime Act</strong> was popularly known as the <strong>Rowlatt Act</strong>.</li>
+            <li>The Act was passed on the recommendations of a Committee under the chairmanship of <strong>Justice Sidney Rowlatt</strong>.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>अराजक और क्रांतिकारी अपराध अधिनियम</strong> को लोकप्रिय रूप से <strong>रॉलेट एक्ट</strong> के नाम से जाना जाता था।</li>
+            <li>यह अधिनियम <strong>जस्टिस सिडनी रॉलेट</strong> की अध्यक्षता में एक समिति की सिफारिशों पर पारित किया गया था।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">I.A.S. (Pre) 1996</span>
+  </div>
+</div>
+
+<div class="question-box" id="q13">
+  <span class="q-number">13</span>
+  <div class="q-text-en">Which important event immediately preceded Jallianwala Bagh massacre?</div>
+  <div class="q-text-hi">जलियाँवाला बाग नरसंहार से ठीक पहले कौन सी महत्वपूर्ण घटना हुई?</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q13" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Non-Cooperation Movement</span><br><span class="opt-hi">(A) असहयोग आंदोलन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q13" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Enactment of Rowlatt Act</span><br><span class="opt-hi">(B) रॉलेट एक्ट का अधिनियमन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q13" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Communal Award</span><br><span class="opt-hi">(C) सांप्रदायिक पुरस्कार</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q13" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Arrival of Simon Commission</span><br><span class="opt-hi">(D) साइमन कमीशन का आगमन</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(13)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Rowlatt Act</strong> was enacted in <strong>March, 1919 A.D.</strong></li>
+            <li>In protest to this Act Gandhi had organized a country-wide strike on <strong>April 06, 1919 A.D.</strong></li>
+            <li><strong>Brigadier General Dyer</strong> orchestrated the brutal killing on <strong>April 13, 1919 A.D.</strong> at Jallianwala Bagh.</li>
+            <li>Non-Cooperation Movement took place in 1920 A.D., Communal Award in 1932 AD and Simon Commission came to India in 1928 A.D.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रॉलेट एक्ट</strong> <strong>मार्च 1919 ई.</strong> में अधिनियमित किया गया।</li>
+            <li>इस एक्ट के विरोध में गांधी ने <strong>6 अप्रैल 1919 ई.</strong> को देशव्यापी हड़ताल का आयोजन किया।</li>
+            <li><strong>ब्रिगेडियर जनरल डायर</strong> ने <strong>13 अप्रैल 1919 ई.</strong> को जलियाँवाला बाग में क्रूर हत्याकांड को अंजाम दिया।</li>
+            <li>असहयोग आंदोलन 1920 ई. में, सांप्रदायिक पुरस्कार 1932 ई. में और साइमन कमीशन 1928 ई. में भारत आया।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.C.S. (Mains) 2012</span>
+  </div>
+</div>
+
+<div class="question-box" id="q14">
+  <span class="q-number">14</span>
+  <div class="q-text-en">The massacre of the crowd at Jallianwala Bagh at Amritsar took place on:</div>
+  <div class="q-text-hi">अमृतसर में जलियाँवाला बाग में भीड़ का नरसंहार कब हुआ?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q14" value="a">
+      <span class="opt-text"><span class="opt-en">(A) May 5, 1918</span><br><span class="opt-hi">(A) 5 मई, 1918</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q14" value="b">
+      <span class="opt-text"><span class="opt-en">(B) April 1, 1919</span><br><span class="opt-hi">(B) 1 अप्रैल, 1919</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q14" value="c">
+      <span class="opt-text"><span class="opt-en">(C) April 13, 1919</span><br><span class="opt-hi">(C) 13 अप्रैल, 1919</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q14" value="d">
+      <span class="opt-text"><span class="opt-en">(D) July 29, 1919</span><br><span class="opt-hi">(D) 29 जुलाई, 1919</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(14)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The <strong>Jallianwala Bagh massacre</strong> or Amritsar massacre took place on <strong>April 13, 1919</strong>.</li>
+            <li>A large crowd gathered to protest against the arrest of two famous leaders of Punjab: <strong>Dr. Saifuddin Kitchlew</strong> and <strong>Dr. Satyapal</strong>.</li>
+            <li>Others had come to attend the annual <strong>Baisakhi fair</strong>.</li>
+            <li>Many villagers were unaware of the <strong>martial law</strong> that had been imposed.</li>
+            <li><strong>Dyer</strong> entered the area, blocked the exit points, and opened fire on the crowd, killing thousands of people.</li>
+        </ul>
+        
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>जलियाँवाला बाग नरसंहार</strong> या अमृतसर नरसंहार <strong>13 अप्रैल 1919</strong> को हुआ।</li>
+            <li>पंजाब के दो प्रसिद्ध नेताओं <strong>डॉ. सैफुद्दीन किचलू</strong> और <strong>डॉ. सत्यपाल</strong> की गिरफ्तारी के विरोध में एक बड़ी भीड़ एकत्र हुई।</li>
+            <li>अन्य लोग वार्षिक <strong>बैसाखी मेले</strong> में भाग लेने आए थे।</li>
+            <li>कई ग्रामीण <strong>मार्शल लॉ</strong> से अनजान थे।</li>
+            <li><strong>डायर</strong> ने क्षेत्र में प्रवेश किया, निकास बिंदुओं को अवरुद्ध किया और भीड़ पर गोलियां चला दीं, जिससे हजारों लोग मारे गए।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">46th B.P.S.C. (Pre) 2003</span>
+  </div>
+</div>
+
+<div class="question-box" id="q15">
+  <span class="q-number">15</span>
+  <div class="q-text-en">The Jallianwala Bagh Massacre happened in the context of which Gandhian Satyagraha?</div>
+  <div class="q-text-hi">जलियाँवाला बाग नरसंहार किस गांधीवादी सत्याग्रह के संदर्भ में हुआ?</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q15" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Swadeshi Satyagraha</span><br><span class="opt-hi">(A) स्वदेशी सत्याग्रह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q15" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Rowlatt Satyagraha</span><br><span class="opt-hi">(B) रॉलेट सत्याग्रह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q15" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Bardoli Satyagraha</span><br><span class="opt-hi">(C) बारदोली सत्याग्रह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q15" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Individual Satyagraha</span><br><span class="opt-hi">(D) व्यक्तिगत सत्याग्रह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q15" value="e">
+      <span class="opt-text"><span class="opt-en">(E) None of the above/More than one of the above</span><br><span class="opt-hi">(E) उपरोक्त में से कोई नहीं/एक से अधिक</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(15)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The Jallianwala Bagh Massacre happened in the context of <strong>Rowlatt Satyagraha</strong>.</li>
+            <li>See the explanation of above question.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>जलियाँवाला बाग नरसंहार <strong>रॉलेट सत्याग्रह</strong> के संदर्भ में हुआ।</li>
+            <li>ऊपर के प्रश्न की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">B.P.S.C. (Pre) 2018</span>
+  </div>
+</div>
+
+<div class="question-box" id="q16">
+  <span class="q-number">16</span>
+  <div class="q-text-en">The year 1919 in Indian history is related to:</div>
+  <div class="q-text-hi">भारतीय इतिहास में वर्ष 1919 किससे संबंधित है?</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q16" value="a">
+      <span class="opt-text"><span class="opt-en">(A) for the transfer of capital from Calcutta to Delhi</span><br><span class="opt-hi">(A) कलकत्ता से दिल्ली राजधानी के स्थानांतरण के लिए</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q16" value="b">
+      <span class="opt-text"><span class="opt-en">(B) for the tragedy of Jallianwala Bagh Massacre</span><br><span class="opt-hi">(B) जलियाँवाला बाग नरसंहार की त्रासदी के लिए</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q16" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Partition of Bengal</span><br><span class="opt-hi">(C) बंगाल का विभाजन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q16" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Khilafat Movement</span><br><span class="opt-hi">(D) खिलाफत आंदोलन</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(16)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The year <strong>1919</strong> in Indian history is related to the tragedy of <strong>Jallianwala Bagh Massacre</strong>.</li>
+            <li>See the explanation of above question.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>भारतीय इतिहास में वर्ष <strong>1919</strong> <strong>जलियाँवाला बाग नरसंहार</strong> की त्रासदी से संबंधित है।</li>
+            <li>ऊपर के प्रश्न की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">38th B.P.S.C. (Pre) 1992</span>
+  </div>
+</div>
+
+<div class="question-box" id="q17">
+  <span class="q-number">17</span>
+  <div class="q-text-en">Jallianwala Bagh Massacre took place in the city:</div>
+  <div class="q-text-hi">जलियाँवाला बाग नरसंहार किस शहर में हुआ?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q17" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Meerut</span><br><span class="opt-hi">(A) मेरठ</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q17" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Agra</span><br><span class="opt-hi">(B) आगरा</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q17" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Amritsar</span><br><span class="opt-hi">(C) अमृतसर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q17" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Lahore</span><br><span class="opt-hi">(D) लाहौर</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(17)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>Jallianwala Bagh Massacre took place in the city of <strong>Amritsar</strong>.</li>
+            <li>See the explanation of above question.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>जलियाँवाला बाग नरसंहार <strong>अमृतसर</strong> शहर में हुआ।</li>
+            <li>ऊपर के प्रश्न की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">Uttarakhand P.C.S. (Pre) 2010</span>
+  </div>
+</div>
+
+<div class="question-box" id="q18">
+  <span class="q-number">18</span>
+  <div class="q-text-en">General Dwyer name is associated with which of the following events?</div>
+  <div class="q-text-hi">जनरल डायर का नाम निम्नलिखित में से किस घटना से जुड़ा है?</div>
+  <div class="options" data-correct="d">
+    <label class="option-label">
+      <input type="radio" name="q18" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Black Hole of Calcutta</span><br><span class="opt-hi">(A) कलकत्ता का ब्लैक होल</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q18" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Battle of Rani Durgavati</span><br><span class="opt-hi">(B) रानी दुर्गावती का युद्ध</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q18" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Battle of 1857</span><br><span class="opt-hi">(C) 1857 का युद्ध</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q18" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Jallianwala Bagh</span><br><span class="opt-hi">(D) जलियाँवाला बाग</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(18)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>General Dwyer's (Dyer)</strong> name is associated with the <strong>Jallianwala Bagh Massacre</strong>.</li>
+            <li>See the explanation of above question.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>जनरल डायर</strong> का नाम <strong>जलियाँवाला बाग नरसंहार</strong> से जुड़ा है।</li>
+            <li>ऊपर के प्रश्न की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">M.P P.C.S. (Pre) 1993</span>
+  </div>
+</div>
+
+<div class="question-box" id="q19">
+  <span class="q-number">19</span>
+  <div class="q-text-en">During the Indian freedom struggle, a large unarmed crowd gathered in the Jallianwala Bagh at Amritsar on April 13, 1919 to protest against the arrest of:</div>
+  <div class="q-text-hi">भारतीय स्वतंत्रता संग्राम के दौरान, 13 अप्रैल 1919 को अमृतसर में जलियाँवाला बाग में एक बड़ी निहत्थी भीड़ किसकी गिरफ्तारी के विरोध में एकत्र हुई?</div>
+  <div class="options" data-correct="d">
+    <label class="option-label">
+      <input type="radio" name="q19" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Swami Shraddhanand and Mazharul Haq</span><br><span class="opt-hi">(A) स्वामी श्रद्धानंद और मज़हरुल हक</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q19" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Madan Mohan Malviya and Mohammad Ali Jinnah</span><br><span class="opt-hi">(B) मदन मोहन मालवीय और मोहम्मद अली जिन्ना</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q19" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Mahatma Gandhi and Abul Kalam Azad</span><br><span class="opt-hi">(C) महात्मा गांधी और अबुल कलाम आज़ाद</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q19" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Dr. Saifuddin Kitchlu and Dr. Satyapal</span><br><span class="opt-hi">(D) डॉ. सैफुद्दीन किचलू और डॉ. सत्यपाल</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(19)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The crowd gathered to protest against the arrest of <strong>Dr. Saifuddin Kitchlu</strong> and <strong>Dr. Satyapal</strong>.</li>
+            <li>See the explanation of question 14.</li>
+        </ul>
+        
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>भीड़ <strong>डॉ. सैफुद्दीन किचलू</strong> और <strong>डॉ. सत्यपाल</strong> की गिरफ्तारी के विरोध में एकत्र हुई थी।</li>
+            <li>प्रश्न 14 की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.C.S. (Pre) 2002</span>
+  </div>
+</div>
+
+<div class="question-box" id="q20">
+  <span class="q-number">20</span>
+  <div class="q-text-en">Why did people gather to demonstrate at Jallianwala Bagh?</div>
+  <div class="q-text-hi">लोग जलियाँवाला बाग में प्रदर्शन के लिए क्यों एकत्र हुए?</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q20" value="a">
+      <span class="opt-text"><span class="opt-en">(A) To protest against the arrest of Gandhi and Lajpat Rai</span><br><span class="opt-hi">(A) गांधी और लाजपत राय की गिरफ्तारी के विरोध में</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q20" value="b">
+      <span class="opt-text"><span class="opt-en">(B) To protest against the arrest of Kitchlu and Satyapal</span><br><span class="opt-hi">(B) किचलू और सत्यपाल की गिरफ्तारी के विरोध में</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q20" value="c">
+      <span class="opt-text"><span class="opt-en">(C) To offer prayers on the Baisakhi Day</span><br><span class="opt-hi">(C) बैसाखी के दिन प्रार्थना करने के लिए</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q20" value="d">
+      <span class="opt-text"><span class="opt-en">(D) To protest against the arbitrarily of inhuman acts of the Punjab Government.</span><br><span class="opt-hi">(D) पंजाब सरकार के अमानवीय कृत्यों के विरुद्ध विरोध करने के लिए</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(20)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>People gathered at Jallianwala Bagh to protest against the arrest of <strong>Kitchlu and Satyapal</strong>.</li>
+            <li>See the explanation of question 14.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>लोग <strong>किचलू और सत्यपाल</strong> की गिरफ्तारी के विरोध में जलियाँवाला बाग में एकत्र हुए।</li>
+            <li>प्रश्न 14 की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">48th to 52nd B.P.S.C. (Pre) 2008</span>
+  </div>
+</div>
+
+<div class="question-box" id="q21">
+  <span class="q-number">21</span>
+  <div class="q-text-en">The person who returned his honour to the Indian Government on May 30, 1919 was –</div>
+  <div class="q-text-hi">30 मई, 1919 को भारत सरकार को अपना सम्मान लौटाने वाले व्यक्ति थे –</div>
+  <div class="options" data-correct="d">
+    <label class="option-label">
+      <input type="radio" name="q21" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Jamnalal Bajaj</span><br><span class="opt-hi">(A) जमनालाल बजाज</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q21" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Tej Bahadur Sapru</span><br><span class="opt-hi">(B) तेज बहादुर सप्रू</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q21" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Mahatma Gandhi</span><br><span class="opt-hi">(C) महात्मा गांधी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q21" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Rabindranath Tagore</span><br><span class="opt-hi">(D) रवीन्द्रनाथ टैगोर</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(21)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>After the incident of <strong>Jallianwala Bagh (April 13, 1919 A.D.)</strong>, <strong>Rabindranath Tagore</strong> returned his honour of '<strong>Knighthood</strong>' to Indian Government on <strong>May 31, 1919 A.D.</strong></li>
+            <li>In a letter to the Governor-General, he wrote: "…The time has come when badges of honour make our shame glaring in their incongruous context of humiliation..."</li>
+        </ul>
+        
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>जलियाँवाला बाग की घटना (13 अप्रैल 1919 ई.)</strong> के बाद, <strong>रवीन्द्रनाथ टैगोर</strong> ने <strong>31 मई 1919 ई.</strong> को भारत सरकार को अपनी '<strong>नाइटहुड</strong>' की उपाधि लौटा दी।</li>
+            <li>गवर्नर-जनरल को लिखे पत्र में उन्होंने लिखा कि सम्मान के बैज अब अपमान के संदर्भ में शर्मनाक लगते हैं।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P. Lower Sub. (Pre) 2004 / U.P. P.C.S. (Pre) 2001</span>
+  </div>
+</div>
+
+<div class="question-box" id="q22">
+  <span class="q-number">22</span>
+  <div class="q-text-en">The name of the famous person of India who returned the Knighthood conferred on him by the British Government as a token of protest against the atrocities in Punjab in 1919 was:</div>
+  <div class="q-text-hi">भारत के उस प्रसिद्ध व्यक्ति का नाम जिसने 1919 में पंजाब में अत्याचारों के विरोध में ब्रिटिश सरकार द्वारा प्रदत्त नाइटहुड लौटा दी:</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q22" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Tej Bahadur Sapru</span><br><span class="opt-hi">(A) तेज बहादुर सप्रू</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q22" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Ashutosh Mukherjee</span><br><span class="opt-hi">(B) आशुतोष मुखर्जी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q22" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Rabindra Nath Tagore</span><br><span class="opt-hi">(C) रवीन्द्र नाथ टैगोर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q22" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Syed Ahmed Khan</span><br><span class="opt-hi">(D) सैयद अहमद खान</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(22)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Rabindra Nath Tagore</strong> returned his <strong>Knighthood</strong> to the British Government as a token of protest against the <strong>Jallianwala Bagh massacre in 1919</strong>.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रवीन्द्र नाथ टैगोर</strong> ने 1919 में <strong>जलियाँवाला बाग नरसंहार</strong> के विरोध में ब्रिटिश सरकार को अपनी <strong>नाइटहुड</strong> लौटा दी।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">I.A.S. (Pre) 2004</span>
+  </div>
+</div>
+
+<div class="question-box" id="q23">
+  <span class="q-number">23</span>
+  <div class="q-text-en">As a means of protest against which of the following incident, Rabindranath Tagore gave up his honor of knighthood?</div>
+  <div class="q-text-hi">निम्नलिखित में से किस घटना के विरोध में रवीन्द्रनाथ टैगोर ने अपनी नाइटहुड की उपाधि त्याग दी?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q23" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Partition of Bengal</span><br><span class="opt-hi">(A) बंगाल का विभाजन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q23" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Press Act of 1910</span><br><span class="opt-hi">(B) 1910 का प्रेस एक्ट</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q23" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Jallianwala Bagh Massacre</span><br><span class="opt-hi">(C) जलियाँवाला बाग नरसंहार</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q23" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Salt Law</span><br><span class="opt-hi">(D) नमक कानून</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(23)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Rabindranath Tagore</strong> gave up his honor of knighthood in protest against the <strong>Jallianwala Bagh Massacre</strong>.</li>
+            <li>See explanation of question 21.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रवीन्द्रनाथ टैगोर</strong> ने <strong>जलियाँवाला बाग नरसंहार</strong> के विरोध में अपनी नाइटहुड की उपाधि त्याग दी।</li>
+            <li>प्रश्न 21 की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P. U.D.A./L.D.A. (Pre) 2006</span>
+  </div>
+</div>
+
+<div class="question-box" id="q24">
+  <span class="q-number">24</span>
+  <div class="q-text-en">Rabindra Nath Tagore gave up his 'Knighthood' in protest to which one of the following?</div>
+  <div class="q-text-hi">रवीन्द्र नाथ टैगोर ने निम्नलिखित में से किसके विरोध में अपनी 'नाइटहुड' त्याग दी?</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q24" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Rowlatt Act</span><br><span class="opt-hi">(A) रॉलेट एक्ट</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q24" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Massacre at Jallianwala Bagh</span><br><span class="opt-hi">(B) जलियाँवाला बाग में नरसंहार</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q24" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Simon Commission</span><br><span class="opt-hi">(C) साइमन कमीशन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q24" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Cripps Mission</span><br><span class="opt-hi">(D) क्रिप्स मिशन</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(24)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Rabindra Nath Tagore</strong> gave up his 'Knighthood' in protest against the <strong>Massacre at Jallianwala Bagh</strong>.</li>
+            <li>See explanation of question 21.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रवीन्द्र नाथ टैगोर</strong> ने <strong>जलियाँवाला बाग में नरसंहार</strong> के विरोध में अपनी 'नाइटहुड' त्याग दी।</li>
+            <li>प्रश्न 21 की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.P.C.S. (Pre) 2016</span>
+  </div>
+</div>
+
+<div class="question-box" id="q25">
+  <span class="q-number">25</span>
+  <div class="q-text-en">Who returned the 'Knighthood' title to the British Government in reaction against Jallianwala Bagh Massacre?</div>
+  <div class="q-text-hi">जलियाँवाला बाग नरसंहार के विरोध में किसने ब्रिटिश सरकार को 'नाइटहुड' की उपाधि लौटाई?</div>
+  <div class="options" data-correct="a">
+    <label class="option-label">
+      <input type="radio" name="q25" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Rabindranath Tagore</span><br><span class="opt-hi">(A) रवीन्द्रनाथ टैगोर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q25" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Shankaran Nair</span><br><span class="opt-hi">(B) शंकरन नायर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q25" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Md. Ali Jinnah</span><br><span class="opt-hi">(C) मो. अली जिन्ना</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q25" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Rameshwar Singh</span><br><span class="opt-hi">(D) रामेश्वर सिंह</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(25)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Rabindranath Tagore</strong> returned the 'Knighthood' title to the British Government in reaction against <strong>Jallianwala Bagh Massacre</strong>.</li>
+            <li>See explanation of question 21.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रवीन्द्रनाथ टैगोर</strong> ने <strong>जलियाँवाला बाग नरसंहार</strong> के विरोध में ब्रिटिश सरकार को 'नाइटहुड' की उपाधि लौटाई।</li>
+            <li>प्रश्न 21 की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.P.C.S. (Pre) 2022</span>
+  </div>
+</div>
+
+<div class="question-box" id="q26">
+  <span class="q-number">26</span>
+  <div class="q-text-en">Rabindranath Tagore gave up his 'Knighthood' because of</div>
+  <div class="q-text-hi">रवीन्द्रनाथ टैगोर ने अपनी 'नाइटहुड' किस कारण त्याग दी?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q26" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Brutal suppression of Civil Disobedience Movement</span><br><span class="opt-hi">(A) सविनय अवज्ञा आंदोलन का क्रूर दमन</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q26" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Execution of Bhagat Singh</span><br><span class="opt-hi">(B) भगत सिंह का फाँसी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q26" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Jallianwala Bagh Tragedy</span><br><span class="opt-hi">(C) जलियाँवाला बाग त्रासदी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q26" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Chauri Chaura Incident</span><br><span class="opt-hi">(D) चौरी चौरा घटना</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q26" value="e">
+      <span class="opt-text"><span class="opt-en">(E) None of the above/More than one of the above</span><br><span class="opt-hi">(E) उपरोक्त में से कोई नहीं/एक से अधिक</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(26)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Rabindranath Tagore</strong> gave up his 'Knighthood' because of <strong>Jallianwala Bagh Tragedy</strong>.</li>
+            <li>See explanation of question 21.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रवीन्द्रनाथ टैगोर</strong> ने <strong>जलियाँवाला बाग त्रासदी</strong> के कारण अपनी 'नाइटहुड' त्याग दी।</li>
+            <li>प्रश्न 21 की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">65th B.P.S.C. (Pre) 2019</span>
+  </div>
+</div>
+
+<div class="question-box" id="q27">
+  <span class="q-number">27</span>
+  <div class="q-text-en">Given below are two statements, one labelled as Assertion (A) and the other as Reason (R). Select the correct answer from the codes given below:</div>
+  <div class="q-text-hi">नीचे दो कथन दिए गए हैं, जिनमें से एक को अभिकथन (A) और दूसरे को कारण (R) कहा गया है। नीचे दिए गए कूट से सही उत्तर चुनिए:</div>
+  <div class="statement-box">
+    <p class="stmt-en"><strong>Assertion (A):</strong> Rabindranath Tagore renounced Knighthood.</p>
+    <p class="stmt-hi"><strong>अभिकथन (A):</strong> रवीन्द्रनाथ टैगोर ने नाइटहुड त्याग दी।</p>
+    <p class="stmt-en"><strong>Reason (R):</strong> He wanted to participate in the Non-cooperation Movement.</p>
+    <p class="stmt-hi"><strong>कारण (R):</strong> वे असहयोग आंदोलन में भाग लेना चाहते थे।</p>
+  </div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q27" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Both (A) and (R) are true and (R) is the correct explanation of (A)</span><br><span class="opt-hi">(A) दोनों (A) और (R) सत्य हैं और (R), (A) की सही व्याख्या है</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q27" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Both (A) and (R) are true and (R) is not the correct explanation of (A)</span><br><span class="opt-hi">(B) (A) और (R) दोनों सत्य हैं और (R), (A) की सही व्याख्या नहीं है</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q27" value="c">
+      <span class="opt-text"><span class="opt-en">(C) (A) is true but (R) is false</span><br><span class="opt-hi">(C) (A) सत्य है लेकिन (R) असत्य है</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q27" value="d">
+      <span class="opt-text"><span class="opt-en">(D) (A) is false but (R) is true</span><br><span class="opt-hi">(D) (A) असत्य है लेकिन (R) सत्य है</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(27)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Rabindranath Tagore</strong> renounced his <strong>Knighthood</strong> or 'Sir' in protest against <strong>Jallianwala Bagh Massacre</strong>.</li>
+            <li>He did <strong>not</strong> do it in support of non-cooperation movement.</li>
+            <li>So <strong>(A) is true but (R) is false</strong>. </li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रवीन्द्रनाथ टैगोर</strong> ने <strong>जलियाँवाला बाग नरसंहार</strong> के विरोध में अपनी <strong>नाइटहुड</strong> या 'सर' की उपाधि त्यागी।</li>
+            <li>उन्होंने ऐसा असहयोग आंदोलन के समर्थन में <strong>नहीं</strong> किया।</li>
+            <li>इसलिए <strong>(A) सत्य है लेकिन (R) असत्य है</strong>।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.R.O./A.R.O. (Pre.) 2021</span>
+  </div>
+</div>
+
+<div class="question-box" id="q28">
+  <span class="q-number">28</span>
+  <div class="q-text-en">Who resigned from the membership of Viceroy's Executive Council as a protest against Jallianwala Bagh Massacre?</div>
+  <div class="q-text-hi">जलियाँवाला बाग नरसंहार के विरोध में किसने वायसराय की कार्यकारी परिषद की सदस्यता से इस्तीफा दिया?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q28" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Mahatma Gandhi</span><br><span class="opt-hi">(A) महात्मा गांधी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q28" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Rabindranath Tagore</span><br><span class="opt-hi">(B) रवीन्द्रनाथ टैगोर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q28" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Shankaran Nair</span><br><span class="opt-hi">(C) शंकरन नायर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q28" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Jamnalal Bajaj</span><br><span class="opt-hi">(D) जमनालाल बजाज</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(28)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Shankaran Nair</strong> resigned from the <strong>Viceroy's Executive Council</strong> as a protest against the <strong>Jallianwala Bagh massacre</strong>.</li>
+        </ul>
+        
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>शंकरन नायर</strong> ने <strong>जलियाँवाला बाग नरसंहार</strong> के विरोध में <strong>वायसराय की कार्यकारी परिषद</strong> से इस्तीफा दिया।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.P.C.S. (Mains) 2007</span>
+  </div>
+</div>
+
+<div class="question-box" id="q29">
+  <span class="q-number">29</span>
+  <div class="q-text-en">Who among the following had resigned from the Viceroy's Executive Council protesting Jallianwala Bagh Massacre?</div>
+  <div class="q-text-hi">निम्नलिखित में से किसने जलियाँवाला बाग नरसंहार का विरोध करते हुए वायसराय की कार्यकारी परिषद से इस्तीफा दिया?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q29" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Rabindranath Tagore</span><br><span class="opt-hi">(A) रवीन्द्रनाथ टैगोर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q29" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Madan Mohan Malviya</span><br><span class="opt-hi">(B) मदन मोहन मालवीय</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q29" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Sir Shankar Nair</span><br><span class="opt-hi">(C) सर शंकर नायर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q29" value="d">
+      <span class="opt-text"><span class="opt-en">(D) All three above</span><br><span class="opt-hi">(D) उपरोक्त तीनों</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(29)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>See the explanation of question 28.</li>
+            <li><strong>Sir Shankar Nair</strong> resigned from the Viceroy's Executive Council protesting <strong>Jallianwala Bagh Massacre</strong>.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>प्रश्न 28 की व्याख्या देखें।</li>
+            <li><strong>सर शंकर नायर</strong> ने <strong>जलियाँवाला बाग नरसंहार</strong> का विरोध करते हुए वायसराय की कार्यकारी परिषद से इस्तीफा दिया।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P. P.C.S. (Pre) 2013 / U.P. Lower Sub. (Pre) 2013</span>
+  </div>
+</div>
+
+<div class="question-box" id="q30">
+  <span class="q-number">30</span>
+  <div class="q-text-en">Who among the following gave up the title of 'Sir' in protest against the Jallianwala Bagh incident?</div>
+  <div class="q-text-hi">निम्नलिखित में से किसने जलियाँवाला बाग की घटना के विरोध में 'सर' की उपाधि त्याग दी?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q30" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Mahatma Gandhi</span><br><span class="opt-hi">(A) महात्मा गांधी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q30" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Jawaharlal Nehru</span><br><span class="opt-hi">(B) जवाहरलाल नेहरू</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q30" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Rabindranath Tagore</span><br><span class="opt-hi">(C) रवीन्द्रनाथ टैगोर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q30" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Tej Bahadur Sapru</span><br><span class="opt-hi">(D) तेज बहादुर सप्रू</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(30)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Rabindranath Tagore</strong> gave up the title of '<strong>Sir</strong>' in protest against <strong>Jallianwala Bagh incident</strong>.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>रवीन्द्रनाथ टैगोर</strong> ने <strong>जलियाँवाला बाग की घटना</strong> के विरोध में '<strong>सर</strong>' की उपाधि त्याग दी।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.P.C.S. (Mains) 2012 / Uttarakhand P.C.S. (Mains) 2006</span>
+  </div>
+</div>
+
+<div class="question-box" id="q31">
+  <span class="q-number">31</span>
+  <div class="q-text-en">Select the correct sequence of the following events by using the codes given below:
+</div>
+  <div class="q-text-hi">नीचे दिए गए कूट का उपयोग करके निम्नलिखित घटनाओं का सही क्रम चुनें:
+</div>
+  <div class="statement-box">
+    <p class="stmt-en">(1) Jallianwala Bagh Massacre</p>
+    <p class="stmt-hi">(1) जलियाँवाला बाग नरसंहार</p>
+    <p class="stmt-en">(2) Dr. Satyapal's incarceration</p>
+    <p class="stmt-hi">(2) डॉ. सत्यपाल का कारावास</p>
+    <p class="stmt-en">(3) Amritsar Congress Session, 1919</p>
+    <p class="stmt-hi">(3) अमृतसर कांग्रेस अधिवेशन, 1919</p>
+  </div>
+  <div class="options" data-correct="a">
+    <label class="option-label">
+      <input type="radio" name="q31" value="a">
+      <span class="opt-text"><span class="opt-en">(A) 2, 1, 3</span><br><span class="opt-hi">(A) 2, 1, 3</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q31" value="b">
+      <span class="opt-text"><span class="opt-en">(B) 1, 2, 3</span><br><span class="opt-hi">(B) 1, 2, 3</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q31" value="c">
+      <span class="opt-text"><span class="opt-en">(C) 2, 3, 1</span><br><span class="opt-hi">(C) 2, 3, 1</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q31" value="d">
+      <span class="opt-text"><span class="opt-en">(D) 3, 2, 1</span><br><span class="opt-hi">(D) 3, 2, 1</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(31)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Saifuddin Kitchlu</strong> and <strong>Dr. Satyapal</strong> were arrested by Deputy Commissioner of Amritsar on <strong>April 9, 1919 A.D.</strong> (Event 2).</li>
+            <li><strong>Jallianwala Bagh massacre</strong> took place on <strong>13 April, 1919 A.D.</strong> (Event 1).</li>
+            <li>The <strong>Amritsar Session of the Congress</strong> was held in <strong>December, 1919 A.D.</strong> (Event 3).</li>
+            <li>So the correct sequence is <strong>2, 1, 3</strong>.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>सैफुद्दीन किचलू</strong> और <strong>डॉ. सत्यपाल</strong> को <strong>9 अप्रैल 1919 ई.</strong> को अमृतसर के डिप्टी कमिश्नर द्वारा गिरफ्तार किया गया (घटना 2)।</li>
+            <li><strong>जलियाँवाला बाग नरसंहार</strong> <strong>13 अप्रैल 1919 ई.</strong> को हुआ (घटना 1)।</li>
+            <li>कांग्रेस का <strong>अमृतसर अधिवेशन</strong> <strong>दिसंबर 1919 ई.</strong> में आयोजित किया गया (घटना 3)।</li>
+            <li>इसलिए सही क्रम <strong>2, 1, 3</strong> है।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P. Lower Sub. (Pre) 2003 / U.P. Lower Sub.(Spl.) (Pre) 2002</span>
+  </div>
+</div>
+
+<div class="question-box" id="q32">
+  <span class="q-number">32</span>
+  <div class="q-text-en">The Hunter Committee was appointed after the:</div>
+  <div class="q-text-hi">हंटर समिति किसके बाद नियुक्त की गई?</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q32" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Blackhole incident</span><br><span class="opt-hi">(A) ब्लैकहोल घटना</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q32" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Jallianwalla Bagh massacre</span><br><span class="opt-hi">(B) जलियाँवाला बाग नरसंहार</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q32" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Uprising of 1857</span><br><span class="opt-hi">(C) 1857 का विद्रोह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q32" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Partition of Bengal</span><br><span class="opt-hi">(D) बंगाल का विभाजन</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(32)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The Government established a <strong>Disorders Inquiry Committee</strong> headed by <strong>Lord William Hunter</strong>.</li>
+            <li>The Committee had 7 members - 4 British and 3 Indians. It was set up to investigate the <strong>Jallianwala Bagh Tragedy</strong>.</li>
+            <li>Congress criticized Dyer's act as inhuman.</li>
+            <li>The Hunter Report condemned most of the decisions taken by Brigadier General Dyer but agreed with the imposition of <strong>martial law</strong> in Punjab.</li>
+            <li>As a result, <strong>Dyer</strong> was sent to England and relieved of his command.</li>
+            <li>The British Government called Brigadier General Dyer '<strong>Lion of British Empire</strong>' and gave 'Sword of Honour'.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>सरकार ने <strong>लॉर्ड विलियम हंटर</strong> की अध्यक्षता में एक <strong>अव्यवस्था जांच समिति</strong> की स्थापना की।</li>
+            <li>समिति में 7 सदस्य थे - 4 ब्रिटिश और 3 भारतीय। इसे <strong>जलियाँवाला बाग त्रासदी</strong> की जांच के लिए गठित किया गया था।</li>
+            <li>कांग्रेस ने डायर के कृत्य को अमानवीय बताया।</li>
+            <li>हंटर रिपोर्ट ने डायर के अधिकांश फैसलों की निंदा की, लेकिन पंजाब में <strong>मार्शल लॉ</strong> लगाने से सहमत था।</li>
+            <li>परिणामस्वरूप, <strong>डायर</strong> को इंग्लैंड भेज दिया गया और उन्हें उनके पद से हटा दिया गया।</li>
+            <li>ब्रिटिश सरकार ने डायर को '<strong>ब्रिटिश साम्राज्य का शेर</strong>' कहा और 'स्वॉर्ड ऑफ ऑनर' दिया।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">I.A.S. (Pre) 2001</span>
+  </div>
+</div>
+
+<div class="question-box" id="q33">
+  <span class="q-number">33</span>
+  <div class="q-text-en">Who from the following killed Michael O' Dwyer responsible for Jallianwala Bagh massacre?</div>
+  <div class="q-text-hi">जलियाँवाला बाग नरसंहार के लिए जिम्मेदार माइकल ओ'डायर को निम्नलिखित में से किसने मारा?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q33" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Prithvi Singh Azad</span><br><span class="opt-hi">(A) पृथ्वी सिंह आज़ाद</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q33" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Sardar Kishan Singh</span><br><span class="opt-hi">(B) सरदार किशन सिंह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q33" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Udham Singh</span><br><span class="opt-hi">(C) ऊधम सिंह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q33" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Sohan Singh Josh</span><br><span class="opt-hi">(D) सोहन सिंह जोश</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(33)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>On <strong>13 March, 1940 A.D.</strong>, at Caxton Hall in London, <strong>Udham Singh</strong> shot and killed <strong>Michael O'Dwyer</strong>.</li>
+            <li>Udham Singh was an Indian Independence activist who had witnessed the events in Amritsar.</li>
+            <li>Michael O'Dwyer was the <strong>British Lieutenant-Governor of Punjab</strong> at the time of the massacre, who had approved Dwyer's action.</li>
+        </ul>
+        
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>13 मार्च 1940 ई.</strong> को लंदन के कैक्स्टन हॉल में, <strong>ऊधम सिंह</strong> ने <strong>माइकल ओ'डायर</strong> को गोली मारकर हत्या कर दी।</li>
+            <li>ऊधम सिंह एक भारतीय स्वतंत्रता कार्यकर्ता थे जो अमृतसर की घटनाओं के गवाह थे।</li>
+            <li>माइकल ओ'डायर नरसंहार के समय <strong>पंजाब के ब्रिटिश लेफ्टिनेंट-गवर्नर</strong> थे, जिन्होंने डायर की कार्रवाई को मंजूरी दी थी।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.P.C.S. (Pre) 1994 / 45th B.P.S.C. (Pre) 2001</span>
+  </div>
+</div>
+
+<div class="question-box" id="q34">
+  <span class="q-number">34</span>
+  <div class="q-text-en">Sir Michael O'Dwyer was shot dead on 13th March, 1940 in London by:</div>
+  <div class="q-text-hi">सर माइकल ओ'डायर को 13 मार्च 1940 को लंदन में किसने गोली मारकर हत्या की?</div>
+  <div class="options" data-correct="d">
+    <label class="option-label">
+      <input type="radio" name="q34" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Madan Lal Dhingra</span><br><span class="opt-hi">(A) मदन लाल ढींगरा</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q34" value="b">
+      <span class="opt-text"><span class="opt-en">(B) M.P.T. Acharya</span><br><span class="opt-hi">(B) एम.पी.टी. आचार्य</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q34" value="c">
+      <span class="opt-text"><span class="opt-en">(C) V.D. Savarkar</span><br><span class="opt-hi">(C) वी.डी. सावरकर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q34" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Udham Singh</span><br><span class="opt-hi">(D) ऊधम सिंह</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q34" value="e">
+      <span class="opt-text"><span class="opt-en">(E) None of the above/More than one of the above</span><br><span class="opt-hi">(E) उपरोक्त में से कोई नहीं/एक से अधिक</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(34)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Sir Michael O'Dwyer</strong> was shot dead on <strong>13th March, 1940</strong> in London by <strong>Udham Singh</strong>.</li>
+            <li>See the explanation of question 33.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>सर माइकल ओ'डायर</strong> को <strong>13 मार्च 1940</strong> को लंदन में <strong>ऊधम सिंह</strong> ने गोली मारकर हत्या की।</li>
+            <li>प्रश्न 33 की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">60th to 62nd B.P.S.C. (Pre) 2016</span>
+  </div>
+</div>
+
+<div class="question-box" id="q35">
+  <span class="q-number">35</span>
+  <div class="q-text-en">Udham Singh killed in London:</div>
+  <div class="q-text-hi">ऊधम सिंह ने लंदन में किसकी हत्या की?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q35" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Lord Hoarding</span><br><span class="opt-hi">(A) लॉर्ड होर्डिंग</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q35" value="b">
+      <span class="opt-text"><span class="opt-en">(B) General Dyer</span><br><span class="opt-hi">(B) जनरल डायर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q35" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Sir Michael O'Dwyer</span><br><span class="opt-hi">(C) सर माइकल ओ'डायर</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q35" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Lord Willingdon</span><br><span class="opt-hi">(D) लॉर्ड विलिंगडन</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(35)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Udham Singh</strong> killed <strong>Sir Michael O'Dwyer</strong> in London.</li>
+            <li>See the explanation of question 33.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>ऊधम सिंह</strong> ने लंदन में <strong>सर माइकल ओ'डायर</strong> की हत्या की।</li>
+            <li>प्रश्न 33 की व्याख्या देखें।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">Uttarakhand P.C.S. (Mains) 2006</span>
+  </div>
+</div>
+
+<div class="question-box" id="q36">
+  <span class="q-number">36</span>
+  <div class="q-text-en">The task of drafting Congress Inquiry Committee report on Jallianwala Bagh Massacre was entrusted to:</div>
+  <div class="q-text-hi">जलियाँवाला बाग नरसंहार पर कांग्रेस जांच समिति की रिपोर्ट का मसौदा तैयार करने का कार्य किसे सौंपा गया?</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q36" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Jawaharlal Nehru</span><br><span class="opt-hi">(A) जवाहरलाल नेहरू</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q36" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Mahatma Gandhi</span><br><span class="opt-hi">(B) महात्मा गांधी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q36" value="c">
+      <span class="opt-text"><span class="opt-en">(C) C.R. Das</span><br><span class="opt-hi">(C) सी.आर. दास</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q36" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Fazlul Haq</span><br><span class="opt-hi">(D) फज़लुल हक</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(36)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The task of drafting <strong>Congress Inquiry Committee</strong> report on Jallianwala Bagh Massacre was entrusted to <strong>Mahatma Gandhi</strong>.</li>
+            <li>In the initial answer sheet of Uttar Pradesh Public Service Commission, option (b) was considered as a correct answer key, but in its revised answer key, the commission has removed the question.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>जलियाँवाला बाग नरसंहार पर <strong>कांग्रेस जांच समिति</strong> की रिपोर्ट का मसौदा तैयार करने का कार्य <strong>महात्मा गांधी</strong> को सौंपा गया था।</li>
+            <li>उत्तर प्रदेश लोक सेवा आयोग की प्रारंभिक उत्तर कुंजी में विकल्प (b) को सही उत्तर माना गया था, लेकिन संशोधित उत्तर कुंजी में आयोग ने इस प्रश्न को हटा दिया है।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.P.C.S. (Pre) 2014</span>
+  </div>
+</div>
+
+<div class="question-box" id="q37">
+  <span class="q-number">37</span>
+  <div class="q-text-en">Who was the Viceroy of India at the time of Jallianwala Bagh Massacre in 1919?</div>
+  <div class="q-text-hi">1919 में जलियाँवाला बाग नरसंहार के समय भारत का वायसराय कौन था?</div>
+  <div class="options" data-correct="a">
+    <label class="option-label">
+      <input type="radio" name="q37" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Lord Chelmsford</span><br><span class="opt-hi">(A) लॉर्ड चेम्सफोर्ड</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q37" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Lord Minto</span><br><span class="opt-hi">(B) लॉर्ड मिंटो</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q37" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Lord Dalhousie</span><br><span class="opt-hi">(C) लॉर्ड डलहौज़ी</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q37" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Lord Canning</span><br><span class="opt-hi">(D) लॉर्ड कैनिंग</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(37)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li><strong>Lord Chelmsford</strong> was the <strong>Viceroy of India</strong> at the time of <strong>Jallianwala Bagh Massacre in 1919 A.D.</strong></li>
+            <li>Other important events during his tenure:
+                <ul>
+                    <li>Enactment of the <strong>Government of India Act, 1919 A.D.</strong> (Montague-Chelmsford Reforms) which introduced <strong>dyarchy</strong> in the Provinces.</li>
+                    <li>Enactment of <strong>Rowlatt Act (1919 A.D.)</strong>.</li>
+                    <li>Beginning of the <strong>Non-cooperation Movement</strong>.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>1919 ई.</strong> में <strong>जलियाँवाला बाग नरसंहार</strong> के समय <strong>लॉर्ड चेम्सफोर्ड</strong> भारत के <strong>वायसराय</strong> थे।</li>
+            <li>उनके कार्यकाल की अन्य महत्वपूर्ण घटनाएँ:
+                <ul>
+                    <li><strong>भारत सरकार अधिनियम 1919 ई.</strong> (मांटेग्यू-चेम्सफोर्ड सुधार) जिसने प्रांतों में <strong>द्वैध शासन</strong> की शुरुआत की।</li>
+                    <li><strong>रॉलेट एक्ट (1919 ई.)</strong> का अधिनियमन।</li>
+                    <li><strong>असहयोग आंदोलन</strong> की शुरुआत।</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P. P.C.S. (Pre) 1990</span>
+  </div>
+</div>
+
+<div class="question-box" id="q38">
+  <span class="q-number">38</span>
+  <div class="q-text-en">Which one of the following events, was characterized by Montague as 'Preventive Murder'?</div>
+  <div class="q-text-hi">निम्नलिखित में से किस घटना को मोंटेग्यू ने 'निवारक हत्या' कहा?</div>
+  <div class="options" data-correct="b">
+    <label class="option-label">
+      <input type="radio" name="q38" value="a">
+      <span class="opt-text"><span class="opt-en">(A) Killing of INA activists</span><br><span class="opt-hi">(A) आई.एन.ए. कार्यकर्ताओं की हत्या</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q38" value="b">
+      <span class="opt-text"><span class="opt-en">(B) Massacre of Jallianwala Bagh</span><br><span class="opt-hi">(B) जलियाँवाला बाग नरसंहार</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q38" value="c">
+      <span class="opt-text"><span class="opt-en">(C) Shooting of the Mahatma</span><br><span class="opt-hi">(C) महात्मा की गोली मारकर हत्या</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q38" value="d">
+      <span class="opt-text"><span class="opt-en">(D) Shooting of Curzon-Wythe</span><br><span class="opt-hi">(D) कर्ज़न-वाइथ की गोली मारकर हत्या</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(38)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The <strong>massacre of Jallianwala Bagh</strong> in <strong>1919 A.D.</strong> in which thousands of people were killed in the firing of <strong>Brigadier General Dyer</strong> was called '<strong>Preventive Murder</strong>' by <strong>Montague</strong>.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li><strong>1919 ई.</strong> में <strong>जलियाँवाला बाग नरसंहार</strong> जिसमें <strong>ब्रिगेडियर जनरल डायर</strong> की गोलीबारी में हजारों लोग मारे गए, को <strong>मोंटेग्यू</strong> ने '<strong>निवारक हत्या</strong>' कहा।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">U.P.P.C.S. (Pre) 1998</span>
+  </div>
+</div>
+
+<div class="question-box" id="q39">
+  <span class="q-number">39</span>
+  <div class="q-text-en">Which one of the following aroused a wave of popular indignation that led to the massacre by the British a Jallianwala Bagh?</div>
+  <div class="q-text-hi">निम्नलिखित में से किसने जनता में आक्रोश की लहर पैदा की जिसके कारण अंग्रेजों द्वारा जलियाँवाला बाग में नरसंहार हुआ?</div>
+  <div class="options" data-correct="c">
+    <label class="option-label">
+      <input type="radio" name="q39" value="a">
+      <span class="opt-text"><span class="opt-en">(A) The Arms Act</span><br><span class="opt-hi">(A) शस्त्र अधिनियम</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q39" value="b">
+      <span class="opt-text"><span class="opt-en">(B) The Public Safety Act</span><br><span class="opt-hi">(B) सार्वजनिक सुरक्षा अधिनियम</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q39" value="c">
+      <span class="opt-text"><span class="opt-en">(C) The Rowlatt Act</span><br><span class="opt-hi">(C) रॉलेट एक्ट</span></span>
+    </label>
+    <label class="option-label">
+      <input type="radio" name="q39" value="d">
+      <span class="opt-text"><span class="opt-en">(D) The Vernacular Press Act</span><br><span class="opt-hi">(D) वर्नाक्यूलर प्रेस एक्ट</span></span>
+    </label>
+    <button class="check-btn" onclick="checkAnswer(39)">Check Answer / उत्तर जाँचें</button>
+  </div>
+  <div class="explanation">
+    <div class="exp-label">Explanation / व्याख्या:</div>
+    <div class="exp-en">
+        <ul>
+            <li>The Government appointed a commission headed by <strong>Justice Sydney Rowlatt</strong> to investigate the nature of discontent and the cause of revolutionary activities.</li>
+            <li>On the recommendation of the commission, <strong>Rowlatt Act</strong> was passed in <strong>March, 1919</strong>.</li>
+            <li>The Act empowered the Government to <strong>arrest any person without assigning any reason</strong>, search any place <strong>without a warrant</strong> and imprison any person <strong>without a trial</strong>.</li>
+            <li>The Rowlatt Act raised a storm of protests and a wave of popular indignation throughout the country. The Press and the Congress called it the '<strong>Black Act</strong>.'</li>
+            <li>At Amritsar, the arrest of <strong>Gandhiji</strong> and two prominent local leaders <strong>Dr. Saifuddin Kitchlew</strong> and <strong>Dr. Satyapal</strong> aroused a wave of protests.</li>
+            <li>On <strong>April 13, 1919</strong> a peaceful and unarmed protest rally was held at <strong>Jallianwala Bagh</strong>.</li>
+            <li><strong>Brigadier General Dyer</strong> along with his troops entered the park and started firing without warning.</li>
+            <li>In just ten minutes, about a thousand persons were killed, and many thousands wounded.</li>
+        </ul>
+    </div>
+    <div class="exp-hi">
+        <ul>
+            <li>सरकार ने असंतोष और क्रांतिकारी गतिविधियों के कारणों की जांच के लिए <strong>जस्टिस सिडनी रॉलेट</strong> की अध्यक्षता में एक आयोग नियुक्त किया।</li>
+            <li>आयोग की सिफारिश पर, <strong>मार्च 1919</strong> में <strong>रॉलेट एक्ट</strong> पारित किया गया।</li>
+            <li>इस एक्ट ने सरकार को <strong>बिना कोई कारण बताए किसी भी व्यक्ति को गिरफ्तार करने</strong>, <strong>बिना वारंट के तलाशी लेने</strong> और <strong>बिना मुकदमे के कैद करने</strong> का अधिकार दिया।</li>
+            <li>रॉलेट एक्ट ने पूरे देश में विरोध का तूफान और जनाक्रोश की लहर पैदा की। प्रेस और कांग्रेस ने इसे '<strong>ब्लैक एक्ट</strong>' कहा।</li>
+            <li>अमृतसर में <strong>गांधीजी</strong> और दो प्रमुख स्थानीय नेताओं <strong>डॉ. सैफुद्दीन किचलू</strong> और <strong>डॉ. सत्यपाल</strong> की गिरफ्तारी ने विरोध की लहर पैदा की।</li>
+            <li><strong>13 अप्रैल 1919</strong> को <strong>जलियाँवाला बाग</strong> में शांतिपूर्ण और निहत्थी रैली हो रही थी।</li>
+            <li><strong>ब्रिगेडियर जनरल डायर</strong> ने अपनी टुकड़ियों के साथ पार्क में प्रवेश किया और बिना चेतावनी दिए गोलीबारी शुरू कर दी।</li>
+            <li>लगभग एक हजार लोग मारे गए और हजारों घायल हुए।</li>
+        </ul>
+    </div>
+    <span class="exam-tag">I.A.S. (Pre) 2007</span>
+  </div>
+</div>
+
+
+    <div class="footer">
+        Rowlatt Act and Jallianwala Bagh Massacre (1919) — Interactive Bilingual Quiz<br>
+        For SSC, Railway, UPSC, State PCS Exam Preparation
+    </div>
+</div>
+
+<script>
+let correctTotal = 0;
+let wrongTotal = 0;
+let attempted = 0;
+
+function checkAnswer(qid) {
+    const qBox = document.getElementById('q' + qid);
+    if (qBox.classList.contains('answered')) return;
+
+    const optionsDiv = qBox.querySelector('.options');
+    const correct = optionsDiv.getAttribute('data-correct');
+    const selected = qBox.querySelector('input[name="q' + qid + '"]:checked');
+
+    if (!selected) {
+        alert('Please select an option / कृपया एक विकल्प चुनें');
+        return;
+    }
+
+    qBox.classList.add('answered');
+    const selectedVal = selected.value;
+    const labels = qBox.querySelectorAll('.option-label');
+
+    labels.forEach(label => {
+        const radio = label.querySelector('input');
+        if (radio.value === correct) {
+            label.classList.add('correct');
+        }
+        if (radio.value === selectedVal && selectedVal !== correct) {
+            label.classList.add('wrong');
+        }
+        radio.disabled = true;
+    });
+
+    attempted++;
+    if (selectedVal === correct) {
+        correctTotal++;
+    } else {
+        wrongTotal++;
+    }
+
+    document.getElementById('totalAttempted').textContent = attempted;
+    document.getElementById('correctCount').textContent = correctTotal;
+    document.getElementById('wrongCount').textContent = wrongTotal;
+
+    qBox.querySelector('.explanation').style.display = 'block';
+    qBox.querySelector('.check-btn').disabled = true;
+}
+</script>
+
+</body>
+</html>
