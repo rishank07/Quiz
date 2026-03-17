@@ -225,6 +225,16 @@
         window.location.href = link;
       }, 600);
     }
+
+    /* ✅ BACK BUTTON FIX */
+    window.addEventListener("pageshow", function () {
+      document.querySelectorAll("a").forEach(function (a) {
+        if (a.innerText.includes("Loading")) {
+          a.innerText = a.dataset.original || a.innerText.replace("✨ Loading...", "").trim();
+          a.style.opacity = "1";
+        }
+      });
+    });
   </script>
 
 </body>
