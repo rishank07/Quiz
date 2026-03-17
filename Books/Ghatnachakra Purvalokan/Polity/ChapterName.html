@@ -15,6 +15,7 @@
     gtag("config", "G-Q1WNRY8ECV");
   </script>
 
+  <!-- Fonts -->
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap"
     rel="stylesheet" />
@@ -95,13 +96,12 @@
       box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
     }
 
-    /* Disable main button */
     .disabled {
       opacity: 0.6;
       pointer-events: none;
     }
 
-    /* Sub Menu */
+    /* Sub menu */
     .sub-menu {
       margin-left: 25px;
       margin-top: 16px;
@@ -112,7 +112,6 @@
       padding-left: 15px;
     }
 
-    /* Sub Buttons */
     .sub-menu a {
       background: linear-gradient(135deg, #667eea, #764ba2);
       font-size: 14px;
@@ -150,13 +149,11 @@
 
         <!-- Chapter 1 -->
         <li>
-
           <a href="javascript:void(0)" class="disabled">
             1. The Constitutional Development of India / भारत का संवैधानिक विकास
           </a>
 
           <div class="sub-menu">
-
             <a href="./ChapterNames/Act passed for British East India Company Rule.html" onclick="openPage(event)">
               (i) Act passed for British East India Company Rule / ईस्ट इंडिया कंपनी के अधिनियम
             </a>
@@ -164,9 +161,7 @@
             <a href="./ChapterNames/Act passed under the British Crown.html" onclick="openPage(event)">
               (ii) Act passed under the British Crown / ब्रिटिश क्राउन के अधिनियम
             </a>
-
           </div>
-
         </li>
 
         <li>
@@ -212,11 +207,18 @@
     </div>
   </div>
 
+  <!-- ✅ FINAL FIXED SCRIPT -->
   <script>
     function openPage(event) {
       event.preventDefault();
+
       const linkEl = event.currentTarget;
       const link = linkEl.href;
+
+      // store original text
+      if (!linkEl.dataset.original) {
+        linkEl.dataset.original = linkEl.innerText;
+      }
 
       linkEl.innerText = "✨ Loading...";
       linkEl.style.opacity = "0.7";
@@ -226,11 +228,11 @@
       }, 600);
     }
 
-    /* ✅ BACK BUTTON FIX */
+    // Fix back button issue
     window.addEventListener("pageshow", function () {
       document.querySelectorAll("a").forEach(function (a) {
-        if (a.innerText.includes("Loading")) {
-          a.innerText = a.dataset.original || a.innerText.replace("✨ Loading...", "").trim();
+        if (a.dataset.original) {
+          a.innerText = a.dataset.original;
           a.style.opacity = "1";
         }
       });
