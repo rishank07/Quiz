@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium Subjects</title>
+
+  <!-- ✅ Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", "Noto Sans Devanagari", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: white;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 550px;
+      padding: 40px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    h1 {
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    p {
+      opacity: 0.8;
+      margin-bottom: 30px;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu li {
+      margin: 20px 0;
+    }
+
+    .menu a {
+      display: block;
+      text-decoration: none;
+      padding: 18px;
+      border-radius: 15px;
+      font-size: 18px;
+      color: white;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      transition: 0.3s;
+    }
+
+    .menu a:hover {
+      transform: translateY(-5px);
+    }
+
+    /* ✅ YouTube button style */
+    .youtube-btn {
+      display: block;
+      text-decoration: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      color: white;
+      background: linear-gradient(135deg, #ff0000, #cc0000);
+      margin-bottom: 20px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .youtube-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .footer {
+      margin-top: 30px;
+      font-size: 13px;
+      opacity: 0.6;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- ✅ YouTube Channel Button Added at Top -->
+    <a href="https://youtube.com/@examfusionprep?si=Kahv2KpUaT31Wv37" target="_blank" class="youtube-btn">
+      ▶ Visit Our YouTube Channel
+    </a>
+
+    <h1>📘 Premium Quiz</h1>
+    <p>Select a subject to begin your preparation</p>
+
+    <ul class="menu">
+
+      <li>
+
+        <a href="./Geography/GeographyParts.html" onclick="openPage(event)" data-original="Geography / भूगोल">
+          Geography / भूगोल
+        </a>
+
+      </li>
+
+      <li>
+
+        <a href="./Economics/ChapterName.html" onclick="openPage(event)" data-original="Economics / अर्थशास्त्र">
+          Economics / अर्थशास्त्र
+        </a>
+
+      </li>
+
+
+
+
+    </ul>
+
+    <div class="footer">© 2026 Exam Learning Platform</div>
+  </div>
+
+  <!-- ✅ Your JS Function -->
+  <script>
+    function openPage(event) {
+      event.preventDefault();
+
+      const linkEl = event.currentTarget;
+      const link = linkEl.href;
+
+      linkEl.innerText = "✨ Loading...";
+      linkEl.style.opacity = "0.7";
+
+      setTimeout(function () {
+        window.location.href = link;
+      }, 600);
+    }
+
+    window.addEventListener("pageshow", function () {
+      document.querySelectorAll("a[data-original]").forEach(function (a) {
+        a.innerText = a.dataset.original;
+        a.style.opacity = "1";
+      });
+    });
+  </script>
+</body>
+
+</html>
