@@ -41,115 +41,469 @@
   </script>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Mukta:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
 
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
+    :root {
+      --bg-deep: #070a13;
+      --bg-mid: #0e1426;
+      --gold-soft: #f6d98a;
+      --gold: #d9b75f;
+      --gold-deep: #b8860b;
+      --gold-bright: #ffeec0;
+      --ink: #f5f1e6;
+      --muted: rgba(245, 241, 230, 0.60);
+      --glass: rgba(255, 255, 255, 0.045);
+      --glass-strong: rgba(255, 255, 255, 0.07);
+      --line: rgba(246, 217, 138, 0.16);
+      --line-strong: rgba(246, 217, 138, 0.40);
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: "Poppins", sans-serif;
+      font-family: "Plus Jakarta Sans", "Mukta", sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: white;
+      color: var(--ink);
+      position: relative;
+      overflow-x: hidden;
+      background:
+        radial-gradient(1100px 560px at 50% -8%, rgba(246, 217, 138, 0.11), transparent 60%),
+        radial-gradient(900px 520px at 110% 110%, rgba(58, 92, 168, 0.16), transparent 55%),
+        radial-gradient(700px 500px at -10% 30%, rgba(110, 80, 30, 0.12), transparent 60%),
+        linear-gradient(165deg, var(--bg-deep) 0%, var(--bg-mid) 48%, #090d1a 100%);
+      background-attachment: fixed;
     }
 
-    /* YouTube Banner */
+    /* fine grain overlay */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
 
+    /* ===== YouTube Banner ===== */
     .youtube-banner {
       width: 100%;
       text-align: center;
-      padding: 14px;
-      background: linear-gradient(135deg, #ff0000, #cc0000);
-      font-size: 16px;
+      padding: 13px 14px;
+      background: linear-gradient(135deg, #c5101f, #8a0b14);
+      font-size: 14.5px;
       font-weight: 600;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-      color: white;
+      letter-spacing: 0.4px;
+      color: #fff;
       text-decoration: none;
       display: block;
-      transition: 0.3s;
+      position: relative;
+      z-index: 5;
+      box-shadow: 0 10px 30px rgba(160, 10, 20, 0.35);
+      border-bottom: 1px solid rgba(255, 220, 150, 0.35);
+      transition: 0.35s ease;
+      animation: dropIn 0.7s cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    .youtube-banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.18) 50%, transparent 70%);
+      transform: translateX(-120%);
+      transition: 0.6s ease;
     }
 
     .youtube-banner:hover {
-      background: linear-gradient(135deg, #ff1a1a, #e60000);
+      background: linear-gradient(135deg, #e21422, #a30d18);
+      letter-spacing: 0.8px;
+    }
+
+    .youtube-banner:hover::after {
+      transform: translateX(120%);
     }
 
     .youtube-banner i {
       margin-right: 8px;
+      font-size: 16px;
     }
 
-    /* Container */
-
+    /* ===== Container ===== */
     .container {
-      margin-top: 40px;
-      width: 100%;
-      max-width: 500px;
-      padding: 40px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      margin: 54px auto 40px;
+      width: calc(100% - 36px);
+      max-width: 520px;
+      padding: 46px 38px 40px;
+      border-radius: 26px;
+      position: relative;
+      z-index: 2;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+        var(--glass);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid var(--line);
       text-align: center;
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.55),
+        0 2px 0 rgba(255, 255, 255, 0.06) inset,
+        0 0 0 1px rgba(0, 0, 0, 0.25);
+      animation: rise 0.8s cubic-bezier(.2, .8, .2, 1) both;
+      animation-delay: 0.08s;
+    }
+
+    /* gold hairline at top edge */
+    .container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 14%;
+      right: 14%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.7;
+    }
+
+    .logo {
+      width: 112px;
+      height: 112px;
+      object-fit: contain;
+      border-radius: 50%;
+      display: block;
+      margin: 0 auto 18px;
+      padding: 4px;
+      background: var(--bg-mid);
+      border: 1px solid var(--line-strong);
+      box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.45),
+        0 0 26px rgba(246, 217, 138, 0.18);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .kicker {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-soft);
+      opacity: 0.85;
+      margin-bottom: 8px;
     }
 
     h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
+      font-family: "Fraunces", serif;
+      font-weight: 600;
+      font-size: 36px;
+      line-height: 1.05;
+      letter-spacing: 0.2px;
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, #fff7e4 0%, #f3d488 55%, #c79a31 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
-    p {
-      opacity: 0.8;
-      margin-bottom: 30px;
+    p.subtitle {
+      color: var(--muted);
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: 0.6px;
+      margin-bottom: 34px;
     }
 
-    /* Menu */
-
+    /* ===== Menu ===== */
     .menu {
       list-style: none;
     }
 
     .menu li {
-      margin: 20px 0;
+      margin: 13px 0;
+      opacity: 0;
+      animation: rise 0.65s cubic-bezier(.2, .8, .2, 1) forwards;
     }
 
-    .menu a {
+    .menu li:nth-child(1) {
+      animation-delay: 0.18s;
+    }
+
+    .menu li:nth-child(2) {
+      animation-delay: 0.26s;
+    }
+
+    .menu li:nth-child(3) {
+      animation-delay: 0.34s;
+    }
+
+    .menu li:nth-child(4) {
+      animation-delay: 0.42s;
+    }
+
+    .menu li:nth-child(5) {
+      animation-delay: 0.50s;
+    }
+
+    .menu li:nth-child(6) {
+      animation-delay: 0.58s;
+    }
+
+    .menu li:nth-child(7) {
+      animation-delay: 0.66s;
+    }
+
+    .menu>li>a {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-align: left;
+      text-decoration: none;
+      padding: 16px 18px;
+      border-radius: 16px;
+      font-size: 15.5px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--ink);
+      background: var(--glass-strong);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(.2, .8, .2, 1), border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    }
+
+    /* left icon chip */
+    .menu>li>a::before {
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      flex: 0 0 auto;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      border-radius: 12px;
+      color: var(--gold-bright);
+      background: linear-gradient(160deg, rgba(246, 217, 138, 0.16), rgba(246, 217, 138, 0.05));
+      border: 1px solid var(--line);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      transition: 0.3s ease;
+    }
+
+    /* right chevron */
+    .menu>li>a:not(.disabled)::after {
+      content: "\f054";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--gold);
+      opacity: 0.55;
+      transition: 0.3s ease;
+    }
+
+    .menu>li>a:not(.disabled):hover {
+      transform: translateY(-4px);
+      background: linear-gradient(160deg, rgba(246, 217, 138, 0.10), rgba(255, 255, 255, 0.05));
+      border-color: var(--line-strong);
+      box-shadow:
+        0 16px 34px rgba(0, 0, 0, 0.45),
+        0 0 22px rgba(246, 217, 138, 0.10);
+    }
+
+    .menu>li>a:not(.disabled):hover::before {
+      transform: scale(1.06);
+      color: #fff6df;
+      box-shadow: 0 6px 18px rgba(246, 217, 138, 0.22);
+    }
+
+    .menu>li>a:not(.disabled):hover::after {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+
+    /* menu icons */
+    .menu>li:nth-child(1)>a::before {
+      content: "\f1da";
+    }
+
+    /* clock-rotate-left */
+    .menu>li:nth-child(2)>a::before {
+      content: "\f518";
+    }
+
+    /* book-open */
+    .menu>li:nth-child(3)>a::before {
+      content: "\f6fc";
+    }
+
+    /* mountain */
+    .menu>li:nth-child(4)>a::before {
+      content: "\f891";
+    }
+
+    /* spell-check */
+    .menu>li:nth-child(5)>a::before {
+      content: "\f3c5";
+    }
+
+    /* location-dot */
+    .menu>li:nth-child(6)>a::before {
+      content: "\f1ea";
+    }
+
+    /* newspaper */
+    .menu>li:nth-child(7)>a::before {
+      content: "\f0c0";
+    }
+
+    /* users */
+
+    /* Telegram parent (disabled label) */
+    .menu>li>a.disabled {
+      cursor: default;
+      background: transparent;
+      border: none;
+      border-top: 1px solid var(--line);
+      border-radius: 0;
+      padding: 22px 4px 12px;
+      margin-top: 12px;
+      font-size: 12.5px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--gold-soft);
+      font-weight: 600;
+    }
+
+    .menu>li>a.disabled::before {
+      width: 34px;
+      height: 34px;
+      font-size: 13px;
+    }
+
+    /* Telegram sub-menu */
+    .sub-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .sub-menu a {
       display: block;
       text-decoration: none;
-      padding: 18px;
-      border-radius: 15px;
-      font-size: 18px;
-      color: white;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      transition: 0.3s;
+      padding: 13px 16px;
+      border-radius: 13px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      background: rgba(45, 130, 200, 0.10);
+      border: 1px solid rgba(90, 170, 240, 0.22);
+      transition: 0.3s ease;
     }
 
-    .menu a:hover {
-      transform: translateY(-5px);
+    .sub-menu a:hover {
+      transform: translateY(-3px);
+      background: rgba(45, 130, 200, 0.18);
+      border-color: rgba(120, 190, 250, 0.45);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.4);
     }
 
+    /* ===== Footer ===== */
     .footer {
-      margin-top: 30px;
-      font-size: 13px;
-      opacity: 0.6;
+      margin: 8px 0 36px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      z-index: 2;
+      animation: rise 0.7s ease 0.8s both;
     }
 
-    .logo {
-      width: 120px;
-      height: 120px;
-      object-fit: contain;
-      border-radius: 50%;
-      display: block;
-      margin: 0 auto 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, .35);
+    /* ===== Animations ===== */
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes dropIn {
+      from {
+        opacity: 0;
+        transform: translateY(-100%);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 38px 22px 32px;
+        margin-top: 42px;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+
+      .menu>li>a {
+        font-size: 14.5px;
+        padding: 14px 14px;
+        gap: 13px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .menu li,
+      .container,
+      .footer {
+        opacity: 1 !important;
+      }
     }
   </style>
 </head>
@@ -164,8 +518,9 @@
   <div class="container">
     <img src="./logo.png" alt="Exam Fusion Prep" class="logo">
 
+    <span class="kicker">Competitive Exam Hub</span>
     <h1>Exam Fusion Prep</h1>
-    <p>Select a Book/Topic to Begin</p>
+    <p class="subtitle">Select a Book/Topic to Begin</p>
 
     <ul class="menu">
       <li>
@@ -216,6 +571,34 @@
           Current Affairs / करेंट अफेयर्स
         </a>
       </li>
+
+      <li>
+
+        <a href="javascript:void(0)" class="disabled">
+          📢 Telegram Community / टेलीग्राम समुदाय
+        </a>
+
+        <div class="sub-menu">
+
+          <a href="https://t.me/examfusionprep" target="_blank" rel="noopener noreferrer" onclick="openPage(event)"
+            data-original="📚 Notes Channel / नोट्स चैनल">
+
+            📚 Notes Channel / नोट्स चैनल
+
+          </a>
+
+          <a href="https://t.me/ExamFusion_prep" target="_blank" rel="noopener noreferrer" onclick="openPage(event)"
+            data-original="👥 Discussion Group / चर्चा समूह">
+
+            👥 Discussion Group / चर्चा समूह
+
+          </a>
+
+        </div>
+
+      </li>
+
+
 
 
 
