@@ -453,17 +453,25 @@
       border-color: var(--teal-border);
     }
 
-    /* Table */
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
     .tw {
       border: 1px solid var(--border);
       border-radius: 10px;
-      overflow: hidden;
+      overflow-x: auto;
+      /* Fix: allow horizontal scrolling */
+      -webkit-overflow-scrolling: touch;
+      /* Smooth scroll on iOS */
       margin-bottom: 12px;
       box-shadow: var(--shadow-sm);
+      display: block;
+      /* Ensures wrapper behaves correctly for scrolling */
+      width: 100%;
     }
 
     table {
-      width: 100%;
+      width: max-content;
+      /* Fix: prevents squishing */
+      min-width: 100%;
       border-collapse: collapse;
       font-size: 12.5px;
     }
@@ -477,6 +485,7 @@
       border-bottom: 1px solid var(--border);
       background: var(--bg2);
       white-space: nowrap;
+      /* Fix: keeps headers on one line */
     }
 
     td {
@@ -485,6 +494,11 @@
       color: var(--text);
       vertical-align: top;
       line-height: 1.5;
+      min-width: 120px;
+      /* Fix: minimum readable width */
+      max-width: 400px;
+      /* Fix: wrap very long text */
+      white-space: normal;
     }
 
     tr:last-child td {
@@ -1170,7 +1184,8 @@
         <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #7 — Moplah Rebellion ke 3 causes
         </div>
         <div class="trap-body">Moplah Rebellion (1921–22, Kerala) ke teen causes the: <b>Khilafat movement</b> +
-          <b>anti-landlord</b> + <b>anti-British</b>. Sirf ek mat batana.</div>
+          <b>anti-landlord</b> + <b>anti-British</b>. Sirf ek mat batana.
+        </div>
       </div>
 
       <div class="trap">
