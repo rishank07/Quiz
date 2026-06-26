@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 
 <head>
@@ -7,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Exam Fusion Prep</title>
-
   <link rel="icon" type="image/png" href="./favicon.png">
-
   <meta name="description"
     content="Free SSC, Railway, Bihar GK, Lucent, Blackbook, Current Affairs and PYQ Quiz Platform for Competitive Exams.">
 
@@ -28,14 +25,11 @@
   }
   </script>
 
-
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+    function gtag() { dataLayer.push(arguments); }
     gtag("js", new Date());
     gtag("config", "G-Q1WNRY8ECV");
   </script>
@@ -93,7 +87,7 @@
       background-attachment: fixed;
     }
 
-    /* fine grain overlay */
+    /* Fine grain overlay */
     body::after {
       content: "";
       position: fixed;
@@ -148,9 +142,7 @@
       font-size: 16px;
     }
 
-    /* =====================================================
-       CONTAINER  (mobile-first: narrow single column)
-    ===================================================== */
+    /* ===== CONTAINER ===== */
     .container {
       margin: 48px auto 36px;
       width: calc(100% - 32px);
@@ -174,7 +166,6 @@
       animation-delay: 0.08s;
     }
 
-    /* gold hairline at top edge */
     .container::before {
       content: "";
       position: absolute;
@@ -186,7 +177,6 @@
       opacity: 0.7;
     }
 
-    /* grid-area names (only take effect when container becomes grid on desktop) */
     .logo {
       grid-area: logo;
     }
@@ -203,7 +193,7 @@
       grid-area: subtitle;
     }
 
-    .menu {
+    nav.menu-container {
       grid-area: menu;
     }
 
@@ -221,9 +211,7 @@
       padding: 4px;
       background: var(--bg-mid);
       border: 1px solid var(--line-strong);
-      box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.45),
-        0 0 26px rgba(246, 217, 138, 0.18);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), 0 0 26px rgba(246, 217, 138, 0.18);
       animation: float 6s ease-in-out infinite;
     }
 
@@ -269,6 +257,7 @@
       animation: rise 0.65s cubic-bezier(.2, .8, .2, 1) forwards;
     }
 
+    /* Animation Delays */
     .menu li:nth-child(1) {
       animation-delay: 0.18s;
     }
@@ -297,13 +286,17 @@
       animation-delay: 0.66s;
     }
 
+    .menu li:nth-child(8) {
+      animation-delay: 0.74s;
+    }
+
     .menu>li>a {
       display: flex;
       align-items: center;
       gap: 14px;
       text-align: left;
       text-decoration: none;
-      padding: 15px 16px;
+      padding: 12px 16px;
       border-radius: 16px;
       font-size: 15px;
       font-weight: 500;
@@ -313,14 +306,12 @@
       border: 1px solid rgba(255, 255, 255, 0.06);
       position: relative;
       overflow: hidden;
-      height: 100%;
+      min-height: 64px;
       transition: transform 0.3s cubic-bezier(.2, .8, .2, 1), border-color 0.3s, background 0.3s, box-shadow 0.3s;
     }
 
-    /* left icon chip */
-    .menu>li>a::before {
-      font-family: "Font Awesome 6 Free";
-      font-weight: 900;
+    /* Item Left Icon (Using FontAwesome directly in HTML now) */
+    .menu-icon {
       flex: 0 0 auto;
       width: 40px;
       height: 40px;
@@ -335,96 +326,55 @@
       transition: 0.3s ease;
     }
 
-    /* right chevron */
-    .menu>li>a:not(.disabled)::after {
-      content: "\f054";
-      font-family: "Font Awesome 6 Free";
-      font-weight: 900;
-      margin-left: auto;
+    .link-text {
+      flex: 1;
+    }
+
+    /* Chevron Right */
+    .chevron-icon {
       font-size: 12px;
       color: var(--gold);
       opacity: 0.55;
       transition: 0.3s ease;
     }
 
-    .menu>li>a:not(.disabled):hover {
+    .menu>li>a:hover {
       transform: translateY(-4px);
       background: linear-gradient(160deg, rgba(246, 217, 138, 0.10), rgba(255, 255, 255, 0.05));
       border-color: var(--line-strong);
-      box-shadow:
-        0 16px 34px rgba(0, 0, 0, 0.45),
-        0 0 22px rgba(246, 217, 138, 0.10);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45), 0 0 22px rgba(246, 217, 138, 0.10);
     }
 
-    .menu>li>a:not(.disabled):hover::before {
+    .menu>li>a:hover .menu-icon {
       transform: scale(1.06);
       color: #fff6df;
       box-shadow: 0 6px 18px rgba(246, 217, 138, 0.22);
     }
 
-    .menu>li>a:not(.disabled):hover::after {
+    .menu>li>a:hover .chevron-icon {
       opacity: 1;
       transform: translateX(4px);
     }
 
-    /* menu icons */
-    .menu>li:nth-child(1)>a::before {
-      content: "\f1da";
-    }
-
-    /* clock-rotate-left */
-    .menu>li:nth-child(2)>a::before {
-      content: "\f518";
-    }
-
-    /* book-open */
-    .menu>li:nth-child(3)>a::before {
-      content: "\f6fc";
-    }
-
-    /* mountain */
-    .menu>li:nth-child(4)>a::before {
-      content: "\f891";
-    }
-
-    /* spell-check */
-    .menu>li:nth-child(5)>a::before {
-      content: "\f3c5";
-    }
-
-    /* location-dot */
-    .menu>li:nth-child(6)>a::before {
-      content: "\f1ea";
-    }
-
-    /* newspaper */
-    .menu>li:nth-child(7)>a::before {
-      content: "\f0c0";
-    }
-
-    /* users */
-
-    /* Telegram parent (disabled label) */
-    .menu>li>a.disabled {
-      cursor: default;
-      background: transparent;
-      border: none;
-      border-top: 1px solid var(--line);
-      border-radius: 0;
-      padding: 20px 4px 10px;
+    /* Telegram Title (Replaces disabled a tag) */
+    .group-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 24px 4px 12px;
       margin-top: 10px;
       font-size: 12px;
       letter-spacing: 1.2px;
       text-transform: uppercase;
       color: var(--gold-soft);
       font-weight: 600;
-      height: auto;
+      border-top: 1px solid var(--line);
     }
 
-    .menu>li>a.disabled::before {
-      width: 34px;
-      height: 34px;
-      font-size: 13px;
+    .group-title i {
+      font-size: 16px;
+      color: #3b82f6;
+      /* Telegram Blue tone */
     }
 
     /* Telegram sub-menu */
@@ -432,11 +382,13 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 4px;
     }
 
     .sub-menu a {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       text-decoration: none;
       padding: 13px 16px;
       border-radius: 13px;
@@ -465,10 +417,7 @@
       animation: rise 0.7s ease 0.8s both;
     }
 
-    /* =====================================================
-       TABLET / iPad   (601px – 1024px)
-       wider card + 2-column menu grid, header on top
-    ===================================================== */
+    /* ===== Media Queries ===== */
     @media (min-width: 601px) and (max-width: 1024px) {
       .container {
         max-width: 780px;
@@ -505,30 +454,21 @@
         margin: 0;
       }
 
-      .menu>li:nth-child(7) {
+      .menu>li:nth-child(8) {
         grid-column: 1 / -1;
       }
 
-      .menu>li>a {
-        font-size: 15px;
-        padding: 17px 18px;
-      }
+      /* Sub-menu spans full width */
 
-      /* telegram links side-by-side */
       .sub-menu {
         flex-direction: row;
       }
 
       .sub-menu a {
         flex: 1;
-        text-align: center;
       }
     }
 
-    /* =====================================================
-       DESKTOP   (1025px and up)
-       wide split layout: header panel (left) + menu grid (right)
-    ===================================================== */
     @media (min-width: 1025px) {
       .container {
         display: grid;
@@ -540,12 +480,12 @@
         grid-template-columns: 340px 1fr;
         grid-template-rows: auto auto auto auto 1fr auto;
         grid-template-areas:
-          "logo     menu"
-          "kicker   menu"
-          "title    menu"
+          "logo    menu"
+          "kicker  menu"
+          "title   menu"
           "subtitle menu"
-          ".        menu"
-          "footer   menu";
+          ".       menu"
+          "footer  menu";
       }
 
       .logo {
@@ -586,31 +526,19 @@
         margin: 0;
       }
 
-      .menu>li:nth-child(7) {
+      .menu>li:nth-child(8) {
         grid-column: 1 / -1;
       }
 
-      .menu>li>a {
-        font-size: 15px;
-        padding: 18px 18px;
-      }
-
-      .menu>li>a:hover {
-        transform: translateY(-5px);
-      }
-
-      /* telegram links side-by-side */
       .sub-menu {
         flex-direction: row;
       }
 
       .sub-menu a {
         flex: 1;
-        text-align: center;
       }
     }
 
-    /* Extra-large desktop: a touch more breathing room */
     @media (min-width: 1400px) {
       .container {
         max-width: 1180px;
@@ -622,7 +550,7 @@
       }
     }
 
-    /* ===== Animations ===== */
+    /* ===== Keyframes ===== */
     @keyframes rise {
       from {
         opacity: 0;
@@ -679,124 +607,133 @@
 
 <body>
   <!-- YouTube Banner -->
-  <a href="https://youtube.com/@examfusionprep?si=Kahv2KpUaT31Wv37" target="_blank" class="youtube-banner">
+  <a href="https://youtube.com/@examfusionprep?si=Kahv2KpUaT31Wv37" target="_blank" class="youtube-banner"
+    rel="noopener noreferrer">
     <i class="fab fa-youtube"></i>
     Visit our YouTube Channel @ExamFusionPrep
   </a>
 
   <div class="container">
-    <img src="./logo.png" alt="Exam Fusion Prep" class="logo">
+    <img src="./logo.png" alt="Exam Fusion Prep Logo" class="logo">
 
     <span class="kicker">Competitive Exam Hub</span>
     <h1>Exam Fusion Prep</h1>
     <p class="subtitle">Select a Book/Topic to Begin</p>
 
-    <ul class="menu">
-      <li>
-        <a href="./Books/Ghatnachakra Purvalokan/SubjectName.html" onclick="openPage(event)"
-          data-original="GhatnaChakra Purvalokan / घटनाचक्र पूर्वावलोकन">
-          GhatnaChakra Purvalokan / घटनाचक्र पूर्वावलोकन
-        </a>
-      </li>
-
-      <li>
-
-        <a href="./Books/Lucent's Objective/SubjectName.html" onclick="openPage(event)"
-          data-original="Lucent's Objective / ल्यूसेंट्स ऑब्जेक्टिव">
-          Lucent's Objective / ल्यूसेंट्स ऑब्जेक्टिव
-        </a>
-
-      </li>
-
-      <li>
-
-        <a href="./Books/Pinnacle GS/PinnacleParts.html" onclick="openPage(event)"
-          data-original="Pinnacle SSC/Railway GS / पिनेकल एसएससी/रेलवे सामान्य अध्ययन">
-          Pinnacle SSC/Railway GS / पिनेकल एसएससी/रेलवे सामान्य अध्ययन
-        </a>
-
-      </li>
-
-      <li>
-
-        <a href="./Books/BlackBook/BlackBook.html" onclick="openPage(event)" data-original="Blackbook / ब्लैकबुक ">
-
-          Blackbook / ब्लैकबुक
-
-        </a>
-
-      </li>
-
-      <li>
-        <a href="./Bihar Special/Bihar Special.html" onclick="openPage(event)"
-          data-original="Bihar Special / बिहार विशेष">
-          Bihar Special / बिहार विशेष
-        </a>
-      </li>
-
-      <li>
-        <a href="./Current Affairs/Topic Names.html" onclick="openPage(event)"
-          data-original="Current Affairs / करेंट अफेयर्स">
-          Current Affairs / करेंट अफेयर्स
-        </a>
-      </li>
-
-      <li>
-
-        <a href="javascript:void(0)" class="disabled">
-          📢 Telegram Community / टेलीग्राम समुदाय
-        </a>
-
-        <div class="sub-menu">
-
-          <a href="https://t.me/examfusionprep" target="_blank" rel="noopener noreferrer" onclick="openPage(event)"
-            data-original="📚 Notes Channel / नोट्स चैनल">
-
-            📚 Notes Channel / नोट्स चैनल
-
+    <nav class="menu-container">
+      <ul class="menu">
+        <li>
+          <a href="./Books/Ghatnachakra Purvalokan/SubjectName.html" onclick="openPage(event)">
+            <i class="fa-solid fa-clock-rotate-left menu-icon"></i>
+            <span class="link-text">GhatnaChakra Purvalokan / घटनाचक्र पूर्वावलोकन</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
           </a>
+        </li>
 
-          <a href="https://t.me/ExamFusion_prep" target="_blank" rel="noopener noreferrer" onclick="openPage(event)"
-            data-original="👥 Discussion Group / चर्चा समूह">
-
-            👥 Discussion Group / चर्चा समूह
-
+        <li>
+          <a href="./Books/Lucent's Objective/SubjectName.html" onclick="openPage(event)">
+            <i class="fa-solid fa-book-open menu-icon"></i>
+            <span class="link-text">Lucent's Objective / ल्यूसेंट्स ऑब्जेक्टिव</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
           </a>
+        </li>
 
-        </div>
+        <li>
+          <a href="./Books/Pinnacle GS/PinnacleParts.html" onclick="openPage(event)">
+            <i class="fa-solid fa-mountain menu-icon"></i>
+            <span class="link-text">Pinnacle SSC/Railway GS / पिनेकल सामान्य अध्ययन</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
+          </a>
+        </li>
 
-      </li>
+        <li>
+          <a href="./Books/BlackBook/BlackBook.html" onclick="openPage(event)">
+            <i class="fa-solid fa-spell-check menu-icon"></i>
+            <span class="link-text">Blackbook / ब्लैकबुक</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
+          </a>
+        </li>
 
+        <li>
+          <a href="./Bihar Special/Bihar Special.html" onclick="openPage(event)">
+            <i class="fa-solid fa-location-dot menu-icon"></i>
+            <span class="link-text">Bihar Special / बिहार विशेष</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
+          </a>
+        </li>
 
+        <li>
+          <a href="./Current Affairs/Topic Names.html" onclick="openPage(event)">
+            <i class="fa-solid fa-newspaper menu-icon"></i>
+            <span class="link-text">Current Affairs / करेंट अफेयर्स</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
+          </a>
+        </li>
 
+        <li>
+          <a href="./Mind Maps/SubjectName.html" onclick="openPage(event)">
+            <i class="fa-solid fa-sitemap menu-icon"></i>
+            <span class="link-text">Mind Maps / माइंड मैप्स</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
+          </a>
+        </li>
 
+        <!-- Telegram Section -->
+        <li>
+          <div class="group-title">
+            <i class="fa-brands fa-telegram"></i> Telegram Community
+          </div>
+          <div class="sub-menu">
+            <a href="https://t.me/examfusionprep" target="_blank" rel="noopener noreferrer">
+              📚 <span>Notes Channel</span>
+            </a>
+            <a href="https://t.me/ExamFusion_prep" target="_blank" rel="noopener noreferrer">
+              👥 <span>Discussion Group</span>
+            </a>
+          </div>
+        </li>
+      </ul>
+    </nav>
 
-
-    </ul>
-
-    <div class="footer">© 2026 ExamFusion Prep. All Rights Reserved.</div>
+    <footer class="footer">© 2026 ExamFusion Prep. All Rights Reserved.</footer>
   </div>
 
-  <!-- ✨ Loading Script -->
+  <!-- ✨ Optimized Loading Script -->
   <script>
     function openPage(event) {
-      event.preventDefault();
-
       const linkEl = event.currentTarget;
-      const link = linkEl.href;
 
-      linkEl.innerText = "✨ Loading...";
+      // Ignore if opening in a new tab (Ctrl/Cmd + Click)
+      if (event.ctrlKey || event.metaKey || linkEl.target === "_blank") {
+        return;
+      }
+
+      event.preventDefault();
+      const link = linkEl.href;
+      const textSpan = linkEl.querySelector('.link-text');
+
+      // Add loading state
+      if (textSpan) {
+        textSpan.dataset.original = textSpan.innerText;
+        textSpan.innerText = "✨ Loading...";
+      }
+
       linkEl.style.opacity = "0.7";
+      linkEl.style.pointerEvents = "none"; // Prevent multiple clicks
 
       setTimeout(function () {
         window.location.href = link;
-      }, 600);
+      }, 500);
     }
 
-    window.addEventListener("pageshow", function () {
-      document.querySelectorAll("a[data-original]").forEach(function (a) {
-        a.innerText = a.dataset.original;
+    // Reset state when user navigates back to this page
+    window.addEventListener("pageshow", function (event) {
+      document.querySelectorAll(".link-text[data-original]").forEach(function (span) {
+        span.innerText = span.dataset.original;
+      });
+      document.querySelectorAll(".menu a").forEach(function (a) {
         a.style.opacity = "1";
+        a.style.pointerEvents = "auto";
       });
     });
   </script>

@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Towards Independence — Mind Map</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #fff;
+      --bg2: #f5f4f0;
+      --bg3: #eeecea;
+      --text: #1a1a18;
+      --text2: #5c5b56;
+      --text3: #8a8980;
+      --border: rgba(0, 0, 0, .10);
+      --border2: rgba(0, 0, 0, .18);
+      --blue-bg: #e6f1fb;
+      --blue-text: #0c447c;
+      --blue-border: #b5d4f4;
+      --green-bg: #eaf3de;
+      --green-text: #27500a;
+      --green-border: #c0dd97;
+      --amber-bg: #faeeda;
+      --amber-text: #633806;
+      --amber-border: #fac775;
+      --red-bg: #fcebeb;
+      --red-text: #791f1f;
+      --red-border: #f7c1c1;
+      --purple-bg: #eeedfe;
+      --purple-text: #3c3489;
+      --purple-border: #afa9ec;
+      --teal-bg: #e1f5ee;
+      --teal-text: #085041;
+      --teal-border: #5dcaa5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    }
+
+    @media(prefers-color-scheme:dark) {
+      :root {
+        --bg: #1e1e1c;
+        --bg2: #28281f;
+        --bg3: #2e2e25;
+        --text: #e8e6df;
+        --text2: #a09e96;
+        --text3: #6a6860;
+        --border: rgba(255, 255, 255, .10);
+        --border2: rgba(255, 255, 255, .18);
+        --blue-bg: #042c53;
+        --blue-text: #b5d4f4;
+        --blue-border: #185fa5;
+        --green-bg: #173404;
+        --green-text: #c0dd97;
+        --green-border: #3b6d11;
+        --amber-bg: #412402;
+        --amber-text: #fac775;
+        --amber-border: #854f0b;
+        --red-bg: #501313;
+        --red-text: #f7c1c1;
+        --red-border: #a32d2d;
+        --purple-bg: #26215c;
+        --purple-text: #cecbf6;
+        --purple-border: #534ab7;
+        --teal-bg: #04342c;
+        --teal-text: #9fe1cb;
+        --teal-border: #0f6e56;
+      }
+    }
+
+    body {
+      background: var(--bg3);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 22px 14px 48px;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+
+    .meta {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 9px;
+    }
+
+    .meta-tag {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 0.5px solid var(--border2);
+      color: var(--text2);
+      background: var(--bg);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      border: 0.5px solid var(--border2);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      background: var(--bg);
+      color: var(--text2);
+      font-family: inherit;
+      transition: all .15s;
+    }
+
+    .tab:hover {
+      background: var(--bg2);
+    }
+
+    .tab.active {
+      background: var(--blue-bg);
+      border-color: var(--blue-border);
+      color: var(--blue-text);
+      font-weight: 500;
+    }
+
+    .tab.all.active {
+      background: var(--bg2);
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .panel {
+      display: none;
+      animation: fadeIn .2s ease;
+    }
+
+    .panel.show {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card {
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      overflow: hidden;
+      margin-bottom: 13px;
+    }
+
+    .card-header {
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 0.5px solid var(--border);
+      background: var(--bg2);
+    }
+
+    .ch-icon {
+      font-size: 20px;
+    }
+
+    .ch-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .ch-sub {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 2px;
+    }
+
+    .card-body {
+      padding: 12px 15px;
+    }
+
+    .sec {
+      font-size: 10px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 7px;
+      margin-top: 12px;
+    }
+
+    .sec:first-child {
+      margin-top: 0;
+    }
+
+    .fact {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      margin-bottom: 5px;
+    }
+
+    .fi {
+      font-size: 13px;
+      color: var(--text3);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .ft {
+      font-size: 12.5px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .ft b {
+      font-weight: 600;
+    }
+
+    .ft i {
+      color: var(--text2);
+      font-style: italic;
+    }
+
+    hr.dv {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin: 10px 0;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 12px;
+      border: 0.5px solid;
+    }
+
+    .b-blue {
+      background: var(--blue-bg);
+      color: var(--blue-text);
+      border-color: var(--blue-border);
+    }
+
+    .b-green {
+      background: var(--green-bg);
+      color: var(--green-text);
+      border-color: var(--green-border);
+    }
+
+    .b-amber {
+      background: var(--amber-bg);
+      color: var(--amber-text);
+      border-color: var(--amber-border);
+    }
+
+    .b-red {
+      background: var(--red-bg);
+      color: var(--red-text);
+      border-color: var(--red-border);
+    }
+
+    .b-purple {
+      background: var(--purple-bg);
+      color: var(--purple-text);
+      border-color: var(--purple-border);
+    }
+
+    .b-teal {
+      background: var(--teal-bg);
+      color: var(--teal-text);
+      border-color: var(--teal-border);
+    }
+
+    .tw {
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+    }
+
+    th {
+      font-size: 10.5px;
+      color: var(--text2);
+      font-weight: 500;
+      padding: 6px 8px;
+      text-align: left;
+      border-bottom: 0.5px solid var(--border);
+      background: var(--bg2);
+    }
+
+    td {
+      padding: 5.5px 8px;
+      border-bottom: 0.5px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .yw {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .nc {
+      font-size: 11px;
+      color: var(--text2);
+      font-style: italic;
+    }
+
+    .tl {
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .tlrow {
+      display: flex;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .tlrow:last-child {
+      border-bottom: none;
+    }
+
+    .tlyr {
+      min-width: 118px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--bg2);
+      border-right: 0.5px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .tlbody {
+      padding: 8px 11px;
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .tlbody b {
+      font-weight: 600;
+    }
+
+    .pgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 10px;
+    }
+
+    .pcol {
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 13px;
+      background: var(--bg);
+    }
+
+    .ptitle {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .prow {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.55;
+      margin-bottom: 3px;
+    }
+
+    .prow b {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .highlight-box {
+      background: var(--red-bg);
+      border: 0.5px solid var(--red-border);
+      border-radius: 8px;
+      padding: 10px 13px;
+      margin-bottom: 10px;
+    }
+
+    .hb-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--red-text);
+      margin-bottom: 4px;
+    }
+
+    .hb-body {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .trap {
+      background: var(--amber-bg);
+      border: 0.5px solid var(--amber-border);
+      border-radius: 8px;
+      padding: 11px 13px;
+      margin-bottom: 9px;
+    }
+
+    .trap-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--amber-text);
+      margin-bottom: 5px;
+    }
+
+    .trap-body {
+      font-size: 12.5px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .trap-body b {
+      font-weight: 600;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 11px;
+      color: var(--text3);
+    }
+
+    @media(max-width:540px) {
+      body {
+        padding: 14px 10px 36px;
+      }
+
+      .header h1 {
+        font-size: 17px;
+      }
+
+      .pgrid {
+        grid-template-columns: 1fr;
+      }
+
+      th,
+      td {
+        font-size: 10.5px;
+        padding: 5px 6px;
+      }
+
+      .tlyr {
+        min-width: 88px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="header">
+      <h1>Towards Independence</h1>
+      <p>Chapter 34 — Complete Notes | 1940–1947</p>
+      <div class="meta">
+        <span class="meta-tag">BPSC</span><span class="meta-tag">BSSC CGL</span>
+        <span class="meta-tag">Modern History</span><span class="meta-tag">Exam Fusion Prep</span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab all active" onclick="show('all',this)">Overview</button>
+      <button class="tab" onclick="show('offers',this)">📋 Offers &amp; Plans</button>
+      <button class="tab" onclick="show('qim',this)">🇮🇳 Quit India</button>
+      <button class="tab" onclick="show('ina',this)">⚔️ INA &amp; Bose</button>
+      <button class="tab" onclick="show('cabinet',this)">🏛️ Cabinet Mission</button>
+      <button class="tab" onclick="show('partition',this)">✂️ Partition &amp; Act</button>
+      <button class="tab" onclick="show('portfolio',this)">📂 Portfolios 1946</button>
+      <button class="tab" onclick="show('trap',this)">⚠️ Exam Traps</button>
+    </div>
+
+    <!-- ══ OVERVIEW ══ -->
+    <div class="panel show" id="panel-all">
+      <div class="card">
+        <div class="card-header"><span class="ch-icon">📊</span>
+          <div>
+            <div class="ch-title">Final Countdown — Timeline 1940–1947</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="tl">
+            <div class="tlrow">
+              <div class="tlyr">8 Aug 1940</div>
+              <div class="tlbody"><b>August Offer</b> — Lord Linlithgow. Dominion Status after war. Rejected by Congress
+                + ML.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">23 Mar 1940</div>
+              <div class="tlbody"><b>Pakistan Demand</b> officially — Lahore Session, Jinnah. (Iqbal 1930 idea, Rahmat
+                Ali 1933 name).</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">17 Oct 1940</div>
+              <div class="tlbody"><b>Individual Satyagraha starts</b> — Paunar Ashram. 1st: Vinoba Bhave, 2nd: Nehru,
+                3rd: Brahma Dutt.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">22 Mar 1942</div>
+              <div class="tlbody"><b>Cripps Mission</b> arrives India. Rejected by Congress + ML. "Post-dated cheque."
+              </div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">8 Aug 1942</div>
+              <div class="tlbody"><b>Quit India Movement</b> launched — Gowalia Tank, Mumbai. "Do or Die."</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">9 Aug 1942</div>
+              <div class="tlbody">All leaders arrested. <b>Aruna Asaf Ali</b> ne Tiranga fehraya. Usha Mehta — Congress
+                Radio.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">21 Oct 1943</div>
+              <div class="tlbody"><b>Azad Hind (Provisional Govt)</b> — Singapore. Bose Supreme Commander (July 1943
+                se).</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">25 Jun–14 Jul 1945</div>
+              <div class="tlbody"><b>Shimla Conference</b> — Wavell Plan. Failed (ML vetoed).</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">18 Feb 1946</div>
+              <div class="tlbody"><b>RIN Revolt</b> — HMIS Talwar, Bombay.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">24 Mar 1946</div>
+              <div class="tlbody"><b>Cabinet Mission</b> arrives. Members: Pethick Lawrence, Cripps, A.V. Alexander.
+              </div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">16 Aug 1946</div>
+              <div class="tlbody"><b>Direct Action Day</b> — Muslim League. Massive riots.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">2 Sep 1946</div>
+              <div class="tlbody"><b>Interim Government formed</b> — Nehru's leadership. 14 members total.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">3 Jun 1947</div>
+              <div class="tlbody"><b>Mountbatten Plan</b> — Partition + Transfer of Power.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">18 Jul 1947</div>
+              <div class="tlbody"><b>Indian Independence Act 1947</b> passed. Royal Assent.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">15 Aug 1947</div>
+              <div class="tlbody"><b>INDEPENDENCE.</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ OFFERS & PLANS ══ -->
+    <div class="panel" id="panel-offers">
+      <div class="card">
+        <div class="card-header"><span class="ch-icon">📋</span>
+          <div>
+            <div class="ch-title">British Offers &amp; Plans — 1940–1945</div>
+          </div>
+        </div>
+        <div class="card-body">
+
+          <div class="sec">August Offer — 8 August 1940</div>
+          <div class="fact"><span class="fi">👤</span>
+            <div class="ft"><b>Viceroy:</b> Lord Linlithgow.</div>
+          </div>
+          <div class="fact"><span class="fi">📋</span>
+            <div class="ft"><b>Offer:</b> War Advisory Council banayenge + after war Dominion Status.</div>
+          </div>
+          <div class="fact"><span class="fi">🎯</span>
+            <div class="ft"><b>Congress ki maang:</b> Interim National Government (Poori Sarkar) — rejected by British.
+            </div>
+          </div>
+          <div class="fact"><span class="fi">❌</span>
+            <div class="ft"><b>Result:</b> Congress + Muslim League dono ne reject kiya.</div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Pakistan Demand — Timeline</div>
+          <div class="tl">
+            <div class="tlrow">
+              <div class="tlyr">1930</div>
+              <div class="tlbody"><b>Idea:</b> Muhammad Iqbal ne Allahabad Session mein suggest kiya — Muslims ke liye
+                alag nation.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">1933</div>
+              <div class="tlbody"><b>Naam "Pakistan":</b> Choudhary Rahmat Ali ne rakha.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">23 Mar 1940</div>
+              <div class="tlbody"><b>Official Demand:</b> Muslim League — Lahore Session. Leader: <b>Muhammad Ali
+                  Jinnah.</b></div>
+            </div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Individual Satyagraha — 1940</div>
+          <div class="fact"><span class="fi">💡</span>
+            <div class="ft"><b>Concept:</b> Ek-ek karke (individually) jao, speech do, arrest ho jao — WWI support ke
+              khilaf symbolic protest.</div>
+          </div>
+          <div class="fact"><span class="fi">📅</span>
+            <div class="ft"><b>Start:</b> 17 October 1940. <b>Place:</b> Paunar Ashram, Maharashtra.</div>
+          </div>
+          <div class="fact"><span class="fi">🔢</span>
+            <div class="ft"><b>Sequence (Zaroor yaad rakho):</b><br>1st: <b>Vinoba Bhave</b> (17 Oct)<br>2nd:
+              <b>Jawaharlal Nehru</b><br>3rd: <b>Brahma Dutt</b> <i>(State exams mein poochha jaata hai)</i></div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Cripps Mission — March 1942</div>
+          <div class="fact"><span class="fi">📅</span>
+            <div class="ft"><b>Announced:</b> Early March 1942. <b>Sent by:</b> PM Winston Churchill. <b>Head:</b>
+              Stafford Cripps. <b>Arrived:</b> 22 March 1942.</div>
+          </div>
+          <div class="fact"><span class="fi">🤝</span>
+            <div class="ft"><b>Negotiators:</b> Congress — Jawaharlal Nehru + Maulana Azad. ML — Jinnah.</div>
+          </div>
+          <div class="fact"><span class="fi">📋</span>
+            <div class="ft"><b>Offer:</b> After war Dominion Status + Constituent Assembly.</div>
+          </div>
+          <div class="fact"><span class="fi">⚠️</span>
+            <div class="ft"><b>Sabse Bada Trap — Opt-out Clause:</b> "Agar koi state India ke saath nahi rehna chahti,
+              toh alag ho sakti hai" → India ke tukde karne ki permission.</div>
+          </div>
+          <div class="fact"><span class="fi">❌</span>
+            <div class="ft"><b>Result:</b> Congress + ML dono ne reject kiya. Gandhi ji ne kaha — <i>"Post-dated cheque
+                on a failing bank."</i></div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Wavell Plan &amp; Shimla Conference — 1945</div>
+          <div class="fact"><span class="fi">👤</span>
+            <div class="ft"><b>Viceroy:</b> Lord Wavell (1943–1947). <b>Conference:</b> 25 June – 14 July 1945, Shimla.
+            </div>
+          </div>
+          <div class="fact"><span class="fi">📋</span>
+            <div class="ft"><b>Proposal:</b> Executive Council mein Viceroy + C-in-C ke alawa <b>saare Indians
+                honge.</b></div>
+          </div>
+          <div class="fact"><span class="fi">❌</span>
+            <div class="ft"><b>Failed:</b> ML ne veto kiya — chahte the saare Muslim members sirf League se hon.</div>
+          </div>
+
+          <div class="badges">
+            <span class="badge b-red">Aug Offer 1940 = rejected by both</span>
+            <span class="badge b-amber">Pakistan demand 23 Mar 1940 = Jinnah, Lahore</span>
+            <span class="badge b-blue">Ind. Satyagraha: Vinoba → Nehru → Brahma Dutt</span>
+            <span class="badge b-green">Cripps = "Post-dated cheque on failing bank"</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ QUIT INDIA ══ -->
+    <div class="panel" id="panel-qim">
+      <div class="card">
+        <div class="card-header"><span class="ch-icon">🇮🇳</span>
+          <div>
+            <div class="ch-title">Quit India Movement — 1942</div>
+            <div class="ch-sub">"Do or Die" — Karo ya Maro</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="sec">Build-up &amp; Launch</div>
+          <div class="fact"><span class="fi">📅</span>
+            <div class="ft"><b>Wardha Resolution:</b> 14 July 1942 — Congress ne "Quit India Resolution" pass karne ka
+              decide kiya.</div>
+          </div>
+          <div class="fact"><span class="fi">📍</span>
+            <div class="ft"><b>Launch:</b> 8 August 1942 — <b>Gowalia Tank Maidan</b> (aaj = <b>August Kranti
+                Maidan</b>), Mumbai.</div>
+          </div>
+          <div class="fact"><span class="fi">⚡</span>
+            <div class="ft"><b>Mass Phase:</b> 9 August — sab bade neta arrested → Operation Zero Hour.</div>
+          </div>
+          <div class="fact"><span class="fi">📢</span>
+            <div class="ft"><b>Slogan:</b> Gandhi ji — <b>"Do or Die" (Karo ya Maro).</b></div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Government Action</div>
+          <div class="fact"><span class="fi">🏛️</span>
+            <div class="ft"><b>Gandhi ji ki Jail:</b> <b>Agha Khan Palace, Pune</b> (Yerwada nahi!).</div>
+          </div>
+          <div class="fact"><span class="fi">👩</span>
+            <div class="ft"><b>Aruna Asaf Ali</b> ne Gowalia Tank mein <b>Tiranga fehraya</b> jab saare mard neta andar
+              the.</div>
+          </div>
+          <div class="fact"><span class="fi">📻</span>
+            <div class="ft"><b>Congress Radio (14 Aug 1942):</b> <b>Usha Mehta</b> ne Bombay mein chhup kar radio
+              station chalaya.</div>
+          </div>
+          <div class="fact"><span class="fi">🏃</span>
+            <div class="ft"><b>JP Narayan:</b> Hazaribagh Central Jail se Diwali ki raat diwar faand kar bhage → jungle
+              mein <b>Azad Dasta</b> banaya.</div>
+          </div>
+          <div class="fact"><span class="fi">❌</span>
+            <div class="ft"><b>Muslim League</b> — Neutral rahi (support nahi kiya). Hindu Mahasabha — support nahi
+              kiya.</div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Parallel Governments (Samanantar Sarkarein)</div>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Place</th>
+                  <th>Leader</th>
+                  <th>Key Fact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Balia (UP)</b></td>
+                  <td>Chittu Pandey</td>
+                  <td><b>Sabse Pehli sarkar.</b> Jail se qaidiyon ko chhudwaya.</td>
+                </tr>
+                <tr>
+                  <td><b>Tamluk (Bengal)</b></td>
+                  <td>Jatiya Sarkar</td>
+                  <td><b>Vidyut Vahini</b> (Armed Electric Force) banayi. Cyclone victims ki madad ki.</td>
+                </tr>
+                <tr>
+                  <td><b>Satara (Maharashtra)</b></td>
+                  <td>Nana Patil, Y.B. Chavan</td>
+                  <td><b>Sabse Lambi sarkar (1946 tak).</b> "Nyaya-daan Mandals" (People's Court) banaye.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="highlight-box">
+            <div class="hb-title">⭐ Special Fact — Kushal Konwar</div>
+            <div class="hb-body">Kushal Konwar akele aise swatantrata senani the jinhe Quit India Movement ke dauran
+              <b>phaansi (hanged)</b> di gayi thi.</div>
+          </div>
+
+          <div class="badges">
+            <span class="badge b-red">8 Aug 1942 = Launch, Gowalia Tank</span>
+            <span class="badge b-amber">Gandhi = Agha Khan Palace (NOT Yerwada)</span>
+            <span class="badge b-blue">Aruna Asaf Ali = Tiranga fehraya</span>
+            <span class="badge b-green">Usha Mehta = Congress Radio 14 Aug 1942</span>
+            <span class="badge b-purple">Balia = 1st parallel govt (Chittu Pandey)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ INA & BOSE ══ -->
+    <div class="panel" id="panel-ina">
+      <div class="card">
+        <div class="card-header"><span class="ch-icon">⚔️</span>
+          <div>
+            <div class="ch-title">Azad Hind Fauj (INA) &amp; Netaji Bose</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="sec">Formation</div>
+          <div class="fact"><span class="fi">👤</span>
+            <div class="ft"><b>Founder:</b> Captain Mohan Singh. (Idea: Rash Bihari Bose + Mohan Singh ka tha.)</div>
+          </div>
+          <div class="fact"><span class="fi">📅</span>
+            <div class="ft"><b>1st Division:</b> 1 September 1942. <b>Strength:</b> 40,000+ soldiers (mostly POWs).
+            </div>
+          </div>
+          <div class="fact"><span class="fi">👑</span>
+            <div class="ft"><b>Supreme Commander:</b> Netaji Subhash Chandra Bose — leadership li <b>July 1943</b> mein.
+            </div>
+          </div>
+          <div class="fact"><span class="fi">🏛️</span>
+            <div class="ft"><b>Arzi Hukumat (Provisional Govt):</b> 21 October 1943, <b>Singapore.</b></div>
+          </div>
+          <div class="fact"><span class="fi">🎭</span>
+            <div class="ft"><b>Hitler se mulaqat:</b> Bose ne fake European identity use ki — British intelligence se
+              bachne ke liye.</div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">INA Regiments — Match the Following</div>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Regiment / Brigade</th>
+                  <th>Commander</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Rani Jhansi Regiment</b> (Mahila)</td>
+                  <td><b>Lakshmi Sehgal</b></td>
+                </tr>
+                <tr>
+                  <td><b>Subhas Brigade</b></td>
+                  <td><b>Shah Nawaz Khan</b></td>
+                </tr>
+                <tr>
+                  <td><b>Nehru Brigade</b></td>
+                  <td><b>Gurubaksh Singh Dhillon</b></td>
+                </tr>
+                <tr>
+                  <td><b>Gandhi Brigade</b></td>
+                  <td><b>Inayat Kiani</b></td>
+                </tr>
+                <tr>
+                  <td><b>Azad Brigade</b></td>
+                  <td><b>Gulzara Singh</b></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Red Fort Trial — 1945</div>
+          <div class="fact"><span class="fi">⚖️</span>
+            <div class="ft"><b>3 Main Accused (Teen alag dharm — unity symbol):</b><br>1. <b>Gurubaksh Singh Dhillon</b>
+              (Sikh)<br>2. <b>Prem Sehgal</b> (Hindu)<br>3. <b>Shahnawaz Khan</b> (Muslim)</div>
+          </div>
+          <div class="fact"><span class="fi">👔</span>
+            <div class="ft"><b>Defence Lawyers:</b> <b>Bhulabhai Desai</b> (Main Lawyer) + Tej Bahadur Sapru +
+              Jawaharlal Nehru.</div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">CR Formula (1944) &amp; Desai-Liaqat Pact (1945)</div>
+          <div class="fact"><span class="fi">📋</span>
+            <div class="ft"><b>CR Formula:</b> C. Rajagopalachari — Congress + ML ke beech samjhauta koshish. ML League
+              ka support maanga + after war plebiscite (vote) in Muslim majority areas.</div>
+          </div>
+          <div class="fact"><span class="fi">📋</span>
+            <div class="ft"><b>Desai-Liaqat Pact:</b> Bhulabhai Desai (Congress) + Liaqat Ali (ML). Result: <b>Fail.</b>
+            </div>
+          </div>
+
+          <div class="badges">
+            <span class="badge b-blue">INA Founder = Captain Mohan Singh</span>
+            <span class="badge b-amber">Bose = Supreme Commander July 1943</span>
+            <span class="badge b-red">Provisional Govt = 21 Oct 1943, Singapore</span>
+            <span class="badge b-green">Rani Jhansi Regiment = Lakshmi Sehgal</span>
+            <span class="badge b-purple">Red Fort Trial = Bhulabhai Desai (main lawyer)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CABINET MISSION ══ -->
+    <div class="panel" id="panel-cabinet">
+      <div class="card">
+        <div class="card-header"><span class="ch-icon">🏛️</span>
+          <div>
+            <div class="ch-title">Cabinet Mission Plan — 1946</div>
+            <div class="ch-sub">Jiske tehat humara Samvidhan bana</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="fact"><span class="fi">📅</span>
+            <div class="ft"><b>Announced:</b> February 1946. <b>Arrived India:</b> 24 March 1946.</div>
+          </div>
+          <div class="sec">3 Members — "LCA" Code</div>
+          <div class="fact"><span class="fi">1️⃣</span>
+            <div class="ft"><b>Pethick Lawrence</b> — Secretary of State for India (<b>Chairman</b>)</div>
+          </div>
+          <div class="fact"><span class="fi">2️⃣</span>
+            <div class="ft"><b>Sir Stafford Cripps</b> — President of Board of Trade</div>
+          </div>
+          <div class="fact"><span class="fi">3️⃣</span>
+            <div class="ft"><b>A.V. Alexander</b> — Naval Minister</div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Objectives</div>
+          <div class="fact"><span class="fi">📋</span>
+            <div class="ft"><b>Interim Government</b> establish karna.</div>
+          </div>
+          <div class="fact"><span class="fi">📋</span>
+            <div class="ft"><b>Constituent Assembly</b> — Constitution frame karne ke liye.</div>
+          </div>
+          <div class="fact"><span class="fi">❌</span>
+            <div class="ft"><b>Pakistan:</b> Alag Pakistan ki maang <b>accept nahi ki</b> — Loose Federation propose ki
+              (provinces ke paas zyada power).</div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Reactions</div>
+          <div class="fact"><span class="fi">✅</span>
+            <div class="ft"><b>Congress:</b> Accepted the plan.</div>
+          </div>
+          <div class="fact"><span class="fi">⚠️</span>
+            <div class="ft"><b>Muslim League:</b> Initially accepted, later withdrew support.</div>
+          </div>
+
+          <hr class="dv">
+          <div class="highlight-box">
+            <div class="hb-title">🚨 Direct Action Day — 16 August 1946</div>
+            <div class="hb-body">Support wapas lene ke baad ML ne <b>16 August 1946</b> ko "Direct Action Day"
+              (Pratyaksha Karyavahi Diwas) announce kiya — <b>massive riots.</b></div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">RIN Revolt — 18 February 1946</div>
+          <div class="fact"><span class="fi">🚢</span>
+            <div class="ft"><b>Date:</b> 18 February 1946. <b>Place:</b> Bombay — naval training ship <b>HMIS
+                Talwar.</b></div>
+          </div>
+          <div class="fact"><span class="fi">📋</span>
+            <div class="ft"><b>Causes:</b> Racial discrimination + poor food + low pay.</div>
+          </div>
+          <div class="fact"><span class="fi">⚡</span>
+            <div class="ft"><b>Support:</b> Complete strike in Bombay on 22 February 1946.</div>
+          </div>
+
+          <div class="badges">
+            <span class="badge b-blue">Cabinet Mission: Pethick Lawrence + Cripps + A.V. Alexander</span>
+            <span class="badge b-red">Direct Action Day = 16 Aug 1946</span>
+            <span class="badge b-amber">RIN Revolt = 18 Feb 1946, HMIS Talwar</span>
+            <span class="badge b-green">Pakistan demand NOT accepted by Cabinet Mission</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PARTITION & ACT ══ -->
+    <div class="panel" id="panel-partition">
+      <div class="card">
+        <div class="card-header"><span class="ch-icon">✂️</span>
+          <div>
+            <div class="ch-title">Interim Govt + Mountbatten Plan + Independence Act</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="sec">Interim Government (1946)</div>
+          <div class="tl">
+            <div class="tlrow">
+              <div class="tlyr">6 Aug 1946</div>
+              <div class="tlbody">Viceroy ne Congress ko govt form karne ka <b>invitation</b> diya.</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">24 Aug 1946</div>
+              <div class="tlbody">Nehru's leadership mein <b>declared.</b></div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">2 Sep 1946</div>
+              <div class="tlbody"><b>Cabinet formed</b> (Shapath Grahan).</div>
+            </div>
+            <div class="tlrow">
+              <div class="tlyr">26 Oct 1946</div>
+              <div class="tlbody">Muslim League <b>joined</b> (Wavell ke kehne par — andar rehkar obstruction ke liye).
+              </div>
+            </div>
+          </div>
+          <div class="fact"><span class="fi">🔢</span>
+            <div class="ft"><b>Total Members:</b> 14 — Congress: 9, Muslim League: 5.</div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Mountbatten Plan (3 June Plan) — 1947</div>
+          <div class="fact"><span class="fi">📅</span>
+            <div class="ft"><b>Attlee's Declaration:</b> 20 February 1947 — June 1948 tak Britishers chale jayenge.
+            </div>
+          </div>
+          <div class="fact"><span class="fi">📅</span>
+            <div class="ft"><b>Mountbatten arrives:</b> 22 March 1947 (as Viceroy). <b>Plan Presented:</b> 3 June 1947.
+            </div>
+          </div>
+          <div class="fact"><span class="fi">📋</span>
+            <div class="ft"><b>Proposals:</b> Partition + 2 countries (India + Pakistan). Bengal, Punjab, Sindh
+              assemblies decide karengi. Existing CA sirf India ke liye.</div>
+          </div>
+          <div class="fact"><span class="fi">📅</span>
+            <div class="ft"><b>Transfer of Power Date:</b> 15 August 1947. <b>Radcliffe Commission:</b> Punjab + Bengal
+              ka border drawing.</div>
+          </div>
+
+          <hr class="dv">
+          <div class="sec">Indian Independence Act 1947</div>
+          <div class="fact"><span class="fi">📅</span>
+            <div class="ft"><b>Bill Introduced:</b> 4 July 1947 (British Parliament). <b>Passed:</b> 18 July 1947 (Royal
+              Assent).</div>
+          </div>
+          <div class="fact"><span class="fi">📋</span>
+            <div class="ft"><b>Provisions:</b> 2 Dominions (India + Pakistan). Governor-General har dominion ke liye.
+              British Crown ki authority Princely States par khatam → freedom to join India/Pakistan.</div>
+          </div>
+
+          <div class="badges">
+            <span class="badge b-blue">Interim Govt formed 2 Sep 1946</span>
+            <span class="badge b-amber">Mountbatten Plan = 3 June 1947</span>
+            <span class="badge b-red">Independence Act passed = 18 July 1947</span>
+            <span class="badge b-green">ML joined Interim Govt = 26 Oct 1946</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PORTFOLIOS ══ -->
+    <div class="panel" id="panel-portfolio">
+      <div class="card">
+        <div class="card-header"><span class="ch-icon">📂</span>
+          <div>
+            <div class="ch-title">Interim Government 1946 — Portfolios</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="pgrid">
+            <div class="pcol">
+              <div class="ptitle" style="color:var(--blue-text);">Congress / General Members</div>
+              <div class="tw">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Member</th>
+                      <th>Portfolio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><b>Jawaharlal Nehru</b></td>
+                      <td>External Affairs &amp; Commonwealth Relations</td>
+                    </tr>
+                    <tr>
+                      <td><b>Sardar Vallabhbhai Patel</b></td>
+                      <td>Home, Information &amp; Broadcasting</td>
+                    </tr>
+                    <tr>
+                      <td><b>Baldev Singh</b></td>
+                      <td>Defence</td>
+                    </tr>
+                    <tr>
+                      <td><b>Dr. Rajendra Prasad</b></td>
+                      <td>Food and Agriculture</td>
+                    </tr>
+                    <tr>
+                      <td><b>Asaf Ali</b></td>
+                      <td>Railways and Transport</td>
+                    </tr>
+                    <tr>
+                      <td><b>John Mathai</b></td>
+                      <td>Industries &amp; Supplies</td>
+                    </tr>
+                    <tr>
+                      <td><b>Jagjivan Ram</b></td>
+                      <td>Labour</td>
+                    </tr>
+                    <tr>
+                      <td><b>C.H. Bhabha</b></td>
+                      <td>Works, Mines and Power</td>
+                    </tr>
+                    <tr>
+                      <td><b>C. Rajagopalachari</b></td>
+                      <td>Education</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="pcol">
+              <div class="ptitle" style="color:var(--red-text);">Muslim League Members (Joined Later)</div>
+              <div class="tw">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Member</th>
+                      <th>Portfolio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><b>Liaqat Ali Khan</b></td>
+                      <td><b>Finance</b> ⚠️ Exam Trap!</td>
+                    </tr>
+                    <tr>
+                      <td><b>Ghazanfar Ali Khan</b></td>
+                      <td>Health</td>
+                    </tr>
+                    <tr>
+                      <td><b>Jogendra Nath Mandal</b></td>
+                      <td>Law</td>
+                    </tr>
+                    <tr>
+                      <td><b>Abdur Rab Nishtar</b></td>
+                      <td>Communications</td>
+                    </tr>
+                    <tr>
+                      <td><b>I.I. Chundrigar</b></td>
+                      <td>Commerce</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="highlight-box" style="margin-top:10px;">
+                <div class="hb-title">⚠️ Trap: Liaqat Ali Khan = Finance</div>
+                <div class="hb-body">Liaqat Ali Khan (ML) ko <b>Finance</b> portfolio mila — ek Muslim League member ko
+                  itna powerful ministry milna unusual tha aur exams mein aksar poochha jaata hai.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TRAPS ══ -->
+    <div class="panel" id="panel-trap">
+      <div class="trap">
+        <div class="trap-title">⚠️ Trap #1 — Gandhi ki jail = Agha Khan Palace (Yerwada nahi)</div>
+        <div class="trap-body">Quit India Movement (1942) mein Gandhi ji ko <b>Agha Khan Palace, Pune</b> mein rakha
+          gaya. <b>Yerwada Jail</b> = 1930 CDM mein tha. Dono alag hain!</div>
+      </div>
+      <div class="trap">
+        <div class="trap-title">⚠️ Trap #2 — Individual Satyagraha sequence</div>
+        <div class="trap-body">1st = <b>Vinoba Bhave</b>, 2nd = <b>Jawaharlal Nehru</b>, 3rd = <b>Brahma Dutt</b>. State
+          exams mein 3rd kaun tha poochha jaata hai — Brahma Dutt.</div>
+      </div>
+      <div class="trap">
+        <div class="trap-title">⚠️ Trap #3 — INA Founder vs Supreme Commander</div>
+        <div class="trap-body"><b>Founder:</b> Captain Mohan Singh (1942). <b>Supreme Commander:</b> Netaji Subhash
+          Chandra Bose (July 1943 se). Dono alag hain!</div>
+      </div>
+      <div class="trap">
+        <div class="trap-title">⚠️ Trap #4 — Pakistan naam vs idea</div>
+        <div class="trap-body"><b>Idea (1930):</b> Muhammad Iqbal — Allahabad Session. <b>Naam "Pakistan" (1933):</b>
+          Choudhary Rahmat Ali. <b>Official demand (1940):</b> Jinnah — Lahore Session. Teeno alag log hain!</div>
+      </div>
+      <div class="trap">
+        <div class="trap-title">⚠️ Trap #5 — Liaqat Ali Khan = Finance (ML ka member)</div>
+        <div class="trap-body">Interim Govt mein <b>Finance portfolio</b> = <b>Liaqat Ali Khan</b> — jo Muslim League ka
+          member tha. Congress ka member nahi.</div>
+      </div>
+      <div class="trap">
+        <div class="trap-title">⚠️ Trap #6 — Gowalia Tank = August Kranti Maidan</div>
+        <div class="trap-body">Quit India Movement launch jagah = <b>Gowalia Tank Maidan, Mumbai</b> = aaj <b>August
+            Kranti Maidan</b> kehte hain. Dono same jagah ke alag naam hain.</div>
+      </div>
+      <div class="trap">
+        <div class="trap-title">⚠️ Trap #7 — Cabinet Mission members: "LCA"</div>
+        <div class="trap-body">Cabinet Mission = <b>Pethick Lawrence + Cripps + A.V. Alexander</b>. Cripps dono missions
+          mein — 1942 Cripps Mission aur 1946 Cabinet Mission mein tha. Confuse mat karo.</div>
+      </div>
+      <div class="trap">
+        <div class="trap-title">⚠️ Trap #8 — Independence Act dates</div>
+        <div class="trap-body">Bill introduced: <b>4 July 1947</b>. Passed (Royal Assent): <b>18 July 1947</b>.
+          Independence: <b>15 August 1947</b>. Teeno dates alag hain.</div>
+      </div>
+      <div class="trap">
+        <div class="trap-title">⚠️ Trap #9 — Red Fort Trial main lawyer</div>
+        <div class="trap-body">Red Fort Trial (1945) main lawyer = <b>Bhulabhai Desai</b>. Nehru bhi tha, lekin
+          Bhulabhai Desai ne lead kiya. Teeno accused: Dhillon (Sikh) + Prem Sehgal (Hindu) + Shahnawaz (Muslim).</div>
+      </div>
+      <div class="trap">
+        <div class="trap-title">⚠️ Trap #10 — Satara = sabse lambi parallel govt</div>
+        <div class="trap-body">Parallel Govts: Balia = <b>sabse pehli</b>. Satara = <b>sabse lambi (1946 tak)</b>.
+          Tamluk = Vidyut Vahini + cyclone help. Teeno alag facts.</div>
+      </div>
+    </div>
+
+    <div class="footer">Exam Fusion Prep &nbsp;|&nbsp; Towards Independence &nbsp;|&nbsp; BPSC / BSSC CGL</div>
+  </div>
+  <script>
+    function show(id, btn) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel-' + id).classList.add('show');
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>
