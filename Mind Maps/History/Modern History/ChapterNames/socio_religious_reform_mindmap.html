@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -16,6 +16,9 @@
     gtag("js", new Date());
     gtag("config", "G-Q1WNRY8ECV");
   </script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
     *,
@@ -35,24 +38,33 @@
       --text3: #8a8980;
       --border: rgba(0, 0, 0, 0.10);
       --border2: rgba(0, 0, 0, 0.18);
+
       --blue-bg: #e6f1fb;
       --blue-text: #0c447c;
       --blue-border: #b5d4f4;
+
       --green-bg: #eaf3de;
       --green-text: #27500a;
       --green-border: #c0dd97;
+
       --amber-bg: #faeeda;
       --amber-text: #633806;
       --amber-border: #fac775;
+
       --red-bg: #fcebeb;
       --red-text: #791f1f;
       --red-border: #f7c1c1;
+
       --purple-bg: #eeedfe;
       --purple-text: #3c3489;
       --purple-border: #afa9ec;
+
       --teal-bg: #e1f5ee;
       --teal-text: #085041;
       --teal-border: #5dcaa5;
+
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     }
 
@@ -66,24 +78,33 @@
         --text3: #6a6860;
         --border: rgba(255, 255, 255, 0.10);
         --border2: rgba(255, 255, 255, 0.18);
+
         --blue-bg: #042c53;
         --blue-text: #b5d4f4;
         --blue-border: #185fa5;
+
         --green-bg: #173404;
         --green-text: #c0dd97;
         --green-border: #3b6d11;
+
         --amber-bg: #412402;
         --amber-text: #fac775;
         --amber-border: #854f0b;
+
         --red-bg: #501313;
         --red-text: #f7c1c1;
         --red-border: #a32d2d;
+
         --purple-bg: #26215c;
         --purple-text: #cecbf6;
         --purple-border: #534ab7;
+
         --teal-bg: #04342c;
         --teal-text: #9fe1cb;
         --teal-border: #0f6e56;
+
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
       }
     }
 
@@ -91,7 +112,7 @@
       background: var(--bg3);
       color: var(--text);
       min-height: 100vh;
-      padding: 22px 14px 48px;
+      padding: 32px 16px 48px;
     }
 
     .page {
@@ -101,19 +122,21 @@
 
     .header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 28px;
     }
 
     .header h1 {
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 24px;
+      font-weight: 700;
       color: var(--text);
+      letter-spacing: -0.5px;
     }
 
     .header p {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text2);
-      margin-top: 4px;
+      margin-top: 6px;
+      font-weight: 500;
     }
 
     .meta {
@@ -121,68 +144,82 @@
       gap: 8px;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 9px;
+      margin-top: 14px;
     }
 
     .meta-tag {
       font-size: 11px;
-      padding: 3px 10px;
+      font-weight: 500;
+      padding: 4px 12px;
       border-radius: 20px;
-      border: 0.5px solid var(--border2);
+      border: 1px solid var(--border2);
       color: var(--text2);
       background: var(--bg);
+      box-shadow: var(--shadow-sm);
     }
 
     .tabs {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
     }
 
     .tab {
-      border: 0.5px solid var(--border2);
+      border: 1px solid var(--border2);
       border-radius: 20px;
-      padding: 5px 12px;
-      font-size: 12px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
       background: var(--bg);
       color: var(--text2);
       font-family: inherit;
-      transition: all .15s;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab i {
+      font-size: 14px;
     }
 
     .tab:hover {
       background: var(--bg2);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
     }
 
     .tab.active {
       background: var(--blue-bg);
       border-color: var(--blue-border);
       color: var(--blue-text);
-      font-weight: 500;
+      box-shadow: inset 0 0 0 1px var(--blue-border);
     }
 
     .tab.all.active {
       background: var(--bg2);
       border-color: var(--border2);
       color: var(--text);
+      box-shadow: inset 0 0 0 1px var(--border2);
     }
 
     .panel {
       display: none;
-      animation: fadeIn .2s ease;
+      animation: slideFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .panel.show {
       display: block;
     }
 
-    @keyframes fadeIn {
+    @keyframes slideFadeIn {
       from {
         opacity: 0;
-        transform: translateY(5px);
+        transform: translateY(10px);
       }
 
       to {
@@ -191,51 +228,66 @@
       }
     }
 
-    /* Card */
+    /* Standard Card */
     .card {
-      border: 0.5px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
       background: var(--bg);
       overflow: hidden;
-      margin-bottom: 13px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
     }
 
     .card-header {
-      padding: 12px 15px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      border-bottom: 0.5px solid var(--border);
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
       background: var(--bg2);
     }
 
     .ch-icon {
-      font-size: 20px;
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
     }
 
     .ch-title {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
       color: var(--text);
     }
 
     .ch-sub {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text2);
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     .card-body {
-      padding: 12px 15px;
+      padding: 16px 18px;
     }
 
     .sec {
-      font-size: 10px;
+      font-size: 11px;
       color: var(--text3);
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: 7px;
-      margin-top: 12px;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      margin-top: 16px;
     }
 
     .sec:first-child {
@@ -244,26 +296,33 @@
 
     .fact {
       display: flex;
-      gap: 9px;
+      gap: 12px;
       align-items: flex-start;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+    }
+
+    .fact:last-child {
+      margin-bottom: 0;
     }
 
     .fi {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text3);
       flex-shrink: 0;
-      margin-top: 2px;
+      margin-top: 3px;
+      width: 20px;
+      text-align: center;
     }
 
     .ft {
-      font-size: 12.5px;
+      font-size: 13.5px;
       color: var(--text);
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     .ft b {
       font-weight: 600;
+      color: var(--text);
     }
 
     .ft i {
@@ -273,22 +332,23 @@
 
     hr.dv {
       border: none;
-      border-top: 0.5px solid var(--border);
-      margin: 10px 0;
+      border-top: 1px dashed var(--border2);
+      margin: 16px 0;
     }
 
     .badges {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 5px;
+      gap: 8px;
+      margin-top: 12px;
     }
 
     .badge {
-      font-size: 11px;
-      padding: 3px 9px;
+      font-size: 11.5px;
+      padding: 4px 12px;
       border-radius: 12px;
-      border: 0.5px solid;
+      border: 1px solid;
+      font-weight: 500;
     }
 
     .b-blue {
@@ -327,35 +387,38 @@
       border-color: var(--teal-border);
     }
 
-    /* Table */
+    /* Tables */
     .tw {
-      border: 0.5px solid var(--border);
-      border-radius: 8px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
       overflow: hidden;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 11.5px;
+      font-size: 12.5px;
     }
 
     th {
-      font-size: 10.5px;
+      font-size: 11.5px;
       color: var(--text2);
-      font-weight: 500;
-      padding: 6px 8px;
+      font-weight: 600;
+      padding: 10px 12px;
       text-align: left;
-      border-bottom: 0.5px solid var(--border);
+      border-bottom: 1px solid var(--border);
       background: var(--bg2);
+      white-space: nowrap;
     }
 
     td {
-      padding: 5.5px 8px;
-      border-bottom: 0.5px solid var(--border);
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
       color: var(--text);
       vertical-align: top;
+      line-height: 1.5;
     }
 
     tr:last-child td {
@@ -367,22 +430,29 @@
       white-space: nowrap;
     }
 
-    /* Org grid */
+    /* Org grid (for Muslim Reform etc.) */
     .org-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 9px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
     }
 
     .org-card {
       background: var(--bg);
-      border: 0.5px solid var(--border);
-      border-radius: 10px;
-      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .org-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
 
     .oc-name {
-      font-size: 13.5px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--text);
     }
@@ -390,53 +460,53 @@
     .oc-year {
       display: inline-block;
       font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 10px;
-      margin: 4px 0;
+      padding: 3px 10px;
+      border-radius: 12px;
+      margin: 6px 0;
       font-weight: 600;
     }
 
     .oc-yr-b {
       background: var(--blue-bg);
       color: var(--blue-text);
-      border: 0.5px solid var(--blue-border);
+      border: 1px solid var(--blue-border);
     }
 
     .oc-yr-g {
       background: var(--green-bg);
       color: var(--green-text);
-      border: 0.5px solid var(--green-border);
+      border: 1px solid var(--green-border);
     }
 
     .oc-yr-a {
       background: var(--amber-bg);
       color: var(--amber-text);
-      border: 0.5px solid var(--amber-border);
+      border: 1px solid var(--amber-border);
     }
 
     .oc-yr-r {
       background: var(--red-bg);
       color: var(--red-text);
-      border: 0.5px solid var(--red-border);
+      border: 1px solid var(--red-border);
     }
 
     .oc-yr-p {
       background: var(--purple-bg);
       color: var(--purple-text);
-      border: 0.5px solid var(--purple-border);
+      border: 1px solid var(--purple-border);
     }
 
     .oc-yr-t {
       background: var(--teal-bg);
       color: var(--teal-text);
-      border: 0.5px solid var(--teal-border);
+      border: 1px solid var(--teal-border);
     }
 
     .oc-row {
-      font-size: 12px;
+      font-size: 12.5px;
       color: var(--text2);
-      line-height: 1.5;
-      margin-top: 2px;
+      line-height: 1.6;
+      margin-top: 4px;
     }
 
     .oc-row b {
@@ -445,25 +515,31 @@
     }
 
     .oc-note {
-      font-size: 11.5px;
+      font-size: 12.5px;
       color: var(--text);
-      margin-top: 5px;
-      padding-top: 5px;
-      border-top: 0.5px solid var(--border);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
       line-height: 1.5;
     }
 
-    /* Brahmo timeline */
+    /* Brahmo Timeline */
     .brahmo-tl {
-      border: 0.5px solid var(--border);
-      border-radius: 8px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
       overflow: hidden;
+      box-shadow: var(--shadow-sm);
     }
 
     .btl-row {
       display: flex;
-      gap: 0;
-      border-bottom: 0.5px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      transition: background 0.2s;
+    }
+
+    .btl-row:hover {
+      background: var(--bg2);
     }
 
     .btl-row:last-child {
@@ -471,53 +547,54 @@
     }
 
     .btl-yr {
-      min-width: 54px;
-      padding: 8px 10px;
-      font-size: 12px;
-      font-weight: 600;
+      min-width: 64px;
+      padding: 10px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
       color: var(--text);
       background: var(--bg2);
-      border-right: 0.5px solid var(--border);
+      border-right: 1px solid var(--border);
       flex-shrink: 0;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
 
     .btl-content {
-      padding: 8px 11px;
-      font-size: 12px;
+      padding: 10px 14px;
+      font-size: 13px;
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .btl-content b {
       font-weight: 600;
     }
 
-    .btl-content i {
-      color: var(--text2);
-      font-size: 11.5px;
-    }
-
+    /* Traps */
     .trap {
       background: var(--amber-bg);
-      border: 0.5px solid var(--amber-border);
-      border-radius: 8px;
-      padding: 11px 13px;
-      margin-bottom: 9px;
+      border: 1px solid var(--amber-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
     }
 
     .trap-title {
-      font-size: 12.5px;
+      font-size: 13.5px;
       font-weight: 600;
       color: var(--amber-text);
-      margin-bottom: 5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .trap-body {
-      font-size: 12.5px;
+      font-size: 13px;
       color: var(--text);
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     .trap-body b {
@@ -526,28 +603,38 @@
 
     .footer {
       text-align: center;
-      margin-top: 28px;
-      font-size: 11px;
+      margin-top: 40px;
+      font-size: 12px;
+      font-weight: 500;
       color: var(--text3);
     }
 
-    @media(max-width:520px) {
+    @media(max-width: 560px) {
       body {
-        padding: 14px 10px 36px;
+        padding: 20px 12px 36px;
       }
 
       .header h1 {
-        font-size: 17px;
+        font-size: 20px;
       }
 
       .org-grid {
         grid-template-columns: 1fr;
       }
 
+      .tabs {
+        gap: 6px;
+      }
+
+      .tab {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
       th,
       td {
-        font-size: 10.5px;
-        padding: 5px 6px;
+        font-size: 11.5px;
+        padding: 8px 10px;
       }
     }
   </style>
@@ -560,36 +647,43 @@
       <h1>Socio-Religious Reform Movements</h1>
       <p>Chapter 27 — Complete Notes</p>
       <div class="meta">
-        <span class="meta-tag">BPSC</span><span class="meta-tag">BSSC CGL</span>
-        <span class="meta-tag">Modern History</span><span class="meta-tag">Exam Fusion Prep</span>
+        <span class="meta-tag">BPSC</span>
+        <span class="meta-tag">BSSC CGL</span>
+        <span class="meta-tag">Modern History</span>
+        <span class="meta-tag">Exam Fusion Prep</span>
       </div>
     </div>
 
     <div class="tabs">
-      <button class="tab all active" onclick="show('all',this)">Overview</button>
-      <button class="tab" onclick="show('rmmr',this)">🌟 Ram Mohan Roy</button>
-      <button class="tab" onclick="show('brahmo',this)">🕉️ Brahmo Samaj</button>
-      <button class="tab" onclick="show('arya',this)">📖 Arya Samaj</button>
-      <button class="tab" onclick="show('others',this)">🏛️ Other Orgs</button>
-      <button class="tab" onclick="show('muslim',this)">☪️ Muslim Reform</button>
-      <button class="tab" onclick="show('untouch',this)">✊ Anti-Untouchability</button>
-      <button class="tab" onclick="show('reformers',this)">👤 Reformers</button>
-      <button class="tab" onclick="show('trap',this)">⚠️ Exam Traps</button>
+      <button class="tab all active" onclick="show('all',this)"><i class="fa-solid fa-layer-group"></i>
+        Overview</button>
+      <button class="tab" onclick="show('rmmr',this)"><i class="fa-solid fa-star"></i> Ram Mohan Roy</button>
+      <button class="tab" onclick="show('brahmo',this)"><i class="fa-solid fa-om"></i> Brahmo Samaj</button>
+      <button class="tab" onclick="show('arya',this)"><i class="fa-solid fa-book-open"></i> Arya Samaj</button>
+      <button class="tab" onclick="show('others',this)"><i class="fa-solid fa-building-columns"></i> Other Orgs</button>
+      <button class="tab" onclick="show('muslim',this)"><i class="fa-solid fa-star-and-crescent"></i> Muslim
+        Reform</button>
+      <button class="tab" onclick="show('untouch',this)"><i class="fa-solid fa-hand-fist"></i>
+        Anti-Untouchability</button>
+      <button class="tab" onclick="show('reformers',this)"><i class="fa-solid fa-users"></i> Reformers</button>
+      <button class="tab" onclick="show('trap',this)"><i class="fa-solid fa-triangle-exclamation"></i> Exam
+        Traps</button>
     </div>
 
     <!-- ══ OVERVIEW ══ -->
     <div class="panel show" id="panel-all">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🗂️</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-folder-open"
+              style="color: #0c447c;"></i></span>
           <div>
             <div class="ch-title">Two Types of Social Reform Ideologies</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">🔄</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-rotate-right"></i></span>
             <div class="ft"><b>Revivalist:</b> Paramparaon ko wapas lana — traditions ko revive karna.</div>
           </div>
-          <div class="fact"><span class="fi">✂️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-scissors"></i></span>
             <div class="ft"><b>Reformist:</b> Andh-vishwas hatana — superstitions aur evil practices remove karna.</div>
           </div>
           <hr class="dv">
@@ -656,7 +750,7 @@
     <!-- ══ RAJA RAM MOHAN ROY ══ -->
     <div class="panel" id="panel-rmmr">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🌟</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-star" style="color: #b8860b;"></i></span>
           <div>
             <div class="ch-title">Raja Ram Mohan Roy — The Pioneer</div>
             <div class="ch-sub">Father of Indian Renaissance | Father of Modern India</div>
@@ -664,62 +758,62 @@
         </div>
         <div class="card-body">
           <div class="sec">Profile</div>
-          <div class="fact"><span class="fi">🎂</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-cake-candles"></i></span>
             <div class="ft"><b>Birth:</b> 22 May 1772, Radhanagar, Hooghly, Bengal.</div>
           </div>
-          <div class="fact"><span class="fi">📛</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-id-badge"></i></span>
             <div class="ft"><b>Original Name:</b> Ram Mohan (no "Raja" initially).</div>
           </div>
-          <div class="fact"><span class="fi">💀</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-skull"></i></span>
             <div class="ft"><b>Death:</b> 27 September 1833, Bristol, England.</div>
           </div>
 
           <hr class="dv">
           <div class="sec">Titles Given</div>
-          <div class="fact"><span class="fi">👑</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-crown"></i></span>
             <div class="ft"><b>"Raja"</b> — Given by Mughal Emperor <b>Akbar II</b>.</div>
           </div>
-          <div class="fact"><span class="fi">⭐</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-star"></i></span>
             <div class="ft"><b>"Yugdoot"</b> — Called by <b>Subhash Chandra Bose</b> (in his book "The Indian
               Struggle").</div>
           </div>
-          <div class="fact"><span class="fi">🏆</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-trophy"></i></span>
             <div class="ft"><b>"Father of Indian Renaissance"</b> and <b>"Father of Modern India"</b>.</div>
           </div>
 
           <hr class="dv">
           <div class="sec">Books &amp; Journals</div>
-          <div class="fact"><span class="fi">📚</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-book"></i></span>
             <div class="ft"><b>Mirat-ul-Akbar</b> — Persian journal (mirror of news).</div>
           </div>
-          <div class="fact"><span class="fi">📚</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-book"></i></span>
             <div class="ft"><b>Tuhfat-ul-Muwahhiddin</b> — First book; rational critique of idol worship.</div>
           </div>
-          <div class="fact"><span class="fi">📚</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-book"></i></span>
             <div class="ft"><b>Precepts of Jesus</b> — About Christianity.</div>
           </div>
-          <div class="fact"><span class="fi">📰</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-newspaper"></i></span>
             <div class="ft"><b>Samvad Kaumudi</b> — Bengali magazine.</div>
           </div>
 
           <hr class="dv">
           <div class="sec">Institutions Founded</div>
-          <div class="fact"><span class="fi">🏛️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft"><b>Atmiya Sabha (1814)</b> — Oppose idol worship, caste system, rituals.</div>
           </div>
-          <div class="fact"><span class="fi">🏛️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft"><b>Hindu College (1817)</b> — With David Hare.</div>
           </div>
-          <div class="fact"><span class="fi">🏛️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft"><b>Vedanta College (1825)</b> — Monotheism + Western curriculum.</div>
           </div>
-          <div class="fact"><span class="fi">🏛️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft"><b>Brahmo Samaj (1828)</b> — First major reform organization.</div>
           </div>
 
           <hr class="dv">
           <div class="sec">Major Achievement — Anti-Sati Bill</div>
-          <div class="fact"><span class="fi">⚖️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-scale-balanced"></i></span>
             <div class="ft"><b>Anti-Sati Bill (1829)</b> — Passed as <b>Regulation XVII</b>. Signed by Governor-General
               <b>William Bentinck</b>.</div>
           </div>
@@ -737,7 +831,7 @@
     <!-- ══ BRAHMO SAMAJ ══ -->
     <div class="panel" id="panel-brahmo">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🕉️</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-om" style="color: #633806;"></i></span>
           <div>
             <div class="ch-title">Brahmo Samaj — Timeline &amp; Splits</div>
           </div>
@@ -779,10 +873,10 @@
           </div>
           <hr class="dv">
           <div class="sec">Keshab Chandra Sen — Profile</div>
-          <div class="fact"><span class="fi">🎂</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-cake-candles"></i></span>
             <div class="ft"><b>Birth:</b> 1838, Calcutta.</div>
           </div>
-          <div class="fact"><span class="fi">📌</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-thumbtack"></i></span>
             <div class="ft">Contribution: Expansion of Brahmo Samaj + social &amp; educational development.</div>
           </div>
           <hr class="dv">
@@ -800,7 +894,8 @@
     <!-- ══ ARYA SAMAJ ══ -->
     <div class="panel" id="panel-arya">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">📖</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-book-open"
+              style="color: #791f1f;"></i></span>
           <div>
             <div class="ch-title">Arya Samaj</div>
             <div class="ch-sub">1875 | Swami Dayanand Saraswati</div>
@@ -846,19 +941,19 @@
 
           <hr class="dv">
           <div class="sec">Swami Dayanand Saraswati — Profile</div>
-          <div class="fact"><span class="fi">🎂</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-cake-candles"></i></span>
             <div class="ft"><b>Birth:</b> 1824, Gujarat. Childhood name: <b>Mulshankar</b>.</div>
           </div>
-          <div class="fact"><span class="fi">📢</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-bullhorn"></i></span>
             <div class="ft"><b>Slogan:</b> "Go back to the Vedas for Indians."</div>
           </div>
-          <div class="fact"><span class="fi">📚</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-book"></i></span>
             <div class="ft"><b>Books:</b> Satyarth Prakash (1874), Rigvedadibhashya Bhumika.</div>
           </div>
-          <div class="fact"><span class="fi">🐄</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-cow"></i></span>
             <div class="ft"><b>1882</b> — Cow Protection Committee (strengthening of cow protection movement).</div>
           </div>
-          <div class="fact"><span class="fi">💀</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-skull"></i></span>
             <div class="ft"><b>Death:</b> 30th October 1883, Ajmer.</div>
           </div>
 
@@ -906,21 +1001,22 @@
     <div class="panel" id="panel-others">
 
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🕍</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-place-of-worship"
+              style="color: #b8860b;"></i></span>
           <div>
             <div class="ch-title">Prarthana Samaj</div>
             <div class="ch-sub">1867 | Bombay</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">📅</span>
+          <div class="fact"><span class="fi"><i class="fa-regular fa-calendar-days"></i></span>
             <div class="ft"><b>Established:</b> 1867 CE, Bombay.</div>
           </div>
-          <div class="fact"><span class="fi">👤</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-user"></i></span>
             <div class="ft"><b>Founders:</b> Atmaram Pandurang + M.G. Ranade (joined 1869). Ranade = <b>"Socrates of
                 India"</b>.</div>
           </div>
-          <div class="fact"><span class="fi">📌</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-thumbtack"></i></span>
             <div class="ft"><b>Objectives:</b> Monotheism, oppose caste system, oppose child marriage, promote widow
               remarriage + women's education.</div>
           </div>
@@ -928,69 +1024,70 @@
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🔥</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-fire" style="color: #e21422;"></i></span>
           <div>
             <div class="ch-title">Ramakrishna Mission + Swami Vivekananda</div>
             <div class="ch-sub">1897 | Belur Math, Kolkata</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">📅</span>
+          <div class="fact"><span class="fi"><i class="fa-regular fa-calendar-days"></i></span>
             <div class="ft"><b>Established:</b> 1897 CE. <b>Founder:</b> Swami Vivekananda.</div>
           </div>
-          <div class="fact"><span class="fi">🏛️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft"><b>HQ:</b> 1. Belur Math (Kolkata). 2. Almora (Uttarakhand).</div>
           </div>
-          <div class="fact"><span class="fi">👤</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-user"></i></span>
             <div class="ft"><b>Guru:</b> Ramakrishna Paramhansa — priest of Dakshineshwar Kali Temple.</div>
           </div>
-          <div class="fact"><span class="fi">🌍</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-globe"></i></span>
             <div class="ft"><b>1893</b> — World Religion Conference, Chicago (famous speech).</div>
           </div>
-          <div class="fact"><span class="fi">🏛️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft"><b>1896</b> — Vedanta Society formed.</div>
           </div>
-          <div class="fact"><span class="fi">🗿</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-monument"></i></span>
             <div class="ft"><b>Memorial:</b> Swami Vivekananda Rock Memorial, Kanyakumari, Tamil Nadu.</div>
           </div>
           <hr class="dv">
           <div class="sec">Vivekananda Profile</div>
-          <div class="fact"><span class="fi">🎂</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-cake-candles"></i></span>
             <div class="ft"><b>Born:</b> 12 January 1863, Calcutta. Real name: <b>Narendranath Dutta</b>.</div>
           </div>
-          <div class="fact"><span class="fi">📅</span>
+          <div class="fact"><span class="fi"><i class="fa-regular fa-calendar-days"></i></span>
             <div class="ft"><b>12 Jan = National Youth Day</b> (celebrated since 1984).</div>
           </div>
-          <div class="fact"><span class="fi">📚</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-book"></i></span>
             <div class="ft"><b>Famous Books:</b> Rajyoga, Karmayoga.</div>
           </div>
-          <div class="fact"><span class="fi">💀</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-skull"></i></span>
             <div class="ft"><b>Death:</b> 4th July 1902.</div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="ch-icon">✊</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-hand-fist"
+              style="color: #3c3489;"></i></span>
           <div>
             <div class="ch-title">Satyashodhak Samaj</div>
             <div class="ch-sub">1873 | Jyotirao Phule | Maharashtra</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">📅</span>
+          <div class="fact"><span class="fi"><i class="fa-regular fa-calendar-days"></i></span>
             <div class="ft"><b>Established:</b> 1873 CE, Maharashtra.</div>
           </div>
-          <div class="fact"><span class="fi">👤</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-user"></i></span>
             <div class="ft"><b>Founder:</b> Jyotirao Govind Rao Phule (Jyotiba Phule).</div>
           </div>
-          <div class="fact"><span class="fi">🎯</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-bullseye"></i></span>
             <div class="ft"><b>Objective:</b> Attaining social rights for Dalit/lower castes.</div>
           </div>
-          <div class="fact"><span class="fi">📚</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-book"></i></span>
             <div class="ft"><b>Books:</b> Gulamgiri (1872), Sarvajanik Satyadharma.</div>
           </div>
-          <div class="fact"><span class="fi">👩</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-user-graduate"></i></span>
             <div class="ft"><b>Savitribai Phule</b> — Key associate. Title: <b>First Woman Teacher of India</b>. Built
               school for lower castes 1848.</div>
           </div>
@@ -998,48 +1095,49 @@
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🌐</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-globe" style="color: #085041;"></i></span>
           <div>
             <div class="ch-title">Theosophical Society</div>
             <div class="ch-sub">1875 | New York → Adyar, Madras</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">📅</span>
+          <div class="fact"><span class="fi"><i class="fa-regular fa-calendar-days"></i></span>
             <div class="ft"><b>Established:</b> 1875 CE, New York.</div>
           </div>
-          <div class="fact"><span class="fi">👤</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-users"></i></span>
             <div class="ft"><b>Founders:</b> Madam Blavatsky &amp; Colonel Olcott.</div>
           </div>
-          <div class="fact"><span class="fi">🏛️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft"><b>HQ (India):</b> Adyar, Madras.</div>
           </div>
-          <div class="fact"><span class="fi">👩</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-user"></i></span>
             <div class="ft"><b>Key Leader in India:</b> Annie Besant.</div>
           </div>
-          <div class="fact"><span class="fi">🏫</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft"><b>1898</b> — Annie Besant founded <b>Central Hindu College</b>.</div>
           </div>
-          <div class="fact"><span class="fi">🏃</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-person-running"></i></span>
             <div class="ft"><b>1916</b> — Led <b>Home Rule Movement</b>.</div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🧑‍🏫</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-chalkboard-user"
+              style="color: #0c447c;"></i></span>
           <div>
             <div class="ch-title">Henry Vivian Derozio — Young Bengal Movement</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">📅</span>
+          <div class="fact"><span class="fi"><i class="fa-regular fa-calendar-days"></i></span>
             <div class="ft"><b>Life:</b> 1809–1831 (Died at 22, Cholera).</div>
           </div>
-          <div class="fact"><span class="fi">🏫</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft"><b>Role:</b> Teacher at Hindu College (1826–31).</div>
           </div>
-          <div class="fact"><span class="fi">🚀</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-rocket"></i></span>
             <div class="ft"><b>Movement:</b> Initiated <b>Young Bengal Movement</b> — radical reform, free thought,
               rationalism.</div>
           </div>
@@ -1047,7 +1145,8 @@
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="ch-icon">📋</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-clipboard-list"
+              style="color: #5c5b56;"></i></span>
           <div>
             <div class="ch-title">Other Social Reform Organizations</div>
           </div>
@@ -1175,7 +1274,7 @@
         </div>
 
       </div>
-      <div class="badges" style="margin-top:8px;">
+      <div class="badges" style="margin-top: 12px;">
         <span class="badge b-blue">AMU = 1875 college → 1920 university</span>
         <span class="badge b-amber">Deoband 1866 — Azad associated</span>
         <span class="badge b-green">Ahmadiyya 1889 = Mirza Ghulam Ahmad</span>
@@ -1186,7 +1285,8 @@
     <!-- ══ ANTI-UNTOUCHABILITY ══ -->
     <div class="panel" id="panel-untouch">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">✊</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-hand-fist"
+              style="color: #791f1f;"></i></span>
           <div>
             <div class="ch-title">Movements Against Untouchability</div>
           </div>
@@ -1263,39 +1363,39 @@
     <!-- ══ REFORMERS ══ -->
     <div class="panel" id="panel-reformers">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">👤</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-users" style="color: #0c447c;"></i></span>
           <div>
             <div class="ch-title">Major Reformers — Quick Reference</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">✍️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-pen-nib"></i></span>
             <div class="ft"><b>Balshashtri Jambhekar</b> — Major social reformer of Mumbai. <b>Pioneer of Marathi
                 Journalism</b>. Magazines: <b>Darpan, Digdarshan</b>.</div>
           </div>
-          <div class="fact"><span class="fi">✍️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-pen-nib"></i></span>
             <div class="ft"><b>Gopal Hari Deshmukh</b> — Nickname: <b>"Lokhitwadi"</b> (well-wisher of the people).
             </div>
           </div>
-          <div class="fact"><span class="fi">🏛️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft"><b>Sir William Jones</b> — Founder of <b>Asiatic Society of Bengal (1784 CE)</b>.</div>
           </div>
-          <div class="fact"><span class="fi">📰</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-newspaper"></i></span>
             <div class="ft"><b>Vishnushastri Chiplunkar</b> — Magazine: <b>Nibandhmala</b> (started 1874).</div>
           </div>
-          <div class="fact"><span class="fi">🙏</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-hands-praying"></i></span>
             <div class="ft"><b>Satnami Movement</b> — Objective: Improve social condition of <b>Leather workers</b>.
             </div>
           </div>
           <hr class="dv">
           <div class="sec">Mahadev Govind Ranade</div>
-          <div class="fact"><span class="fi">⭐</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-star"></i></span>
             <div class="ft"><b>"Socrates of India"</b> — Joined Prarthana Samaj 1869. Founded Indian National Social
               Conference 1887 (with Raghunath Rao). Called INC's "Social Wing".</div>
           </div>
           <hr class="dv">
           <div class="sec">Gopal Krishna Gokhale</div>
-          <div class="fact"><span class="fi">⭐</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-star"></i></span>
             <div class="ft">Founded <b>Servants of India Society (1905)</b> — training youth for public service, famine
               relief, tribal upliftment.</div>
           </div>
@@ -1307,19 +1407,22 @@
     <div class="panel" id="panel-trap">
 
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #1 — Ram Mohan Roy ke 2 titles confuse karo mat</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #1 — Ram Mohan Roy ke 2 titles
+          confuse karo mat</div>
         <div class="trap-body"><b>"Raja"</b> = Mughal Emperor Akbar II ne diya. <b>"Yugdoot"</b> = Subhash Chandra Bose
           ne kaha. Dono alag sources hain.</div>
       </div>
 
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #2 — Brahmo Samaj 1828 vs Brahmo Sabha</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #2 — Brahmo Samaj 1828 vs Brahmo
+          Sabha</div>
         <div class="trap-body">Pehle <b>Brahmo Sabha</b> tha (1828 original name) → phir <b>Brahmo Samaj</b> ban gaya.
           Atmiya Sabha (1814) → Brahmo Samaj (1828) → Great Split (1866). Sequence yaad rakho.</div>
       </div>
 
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #3 — Adi Brahmo vs Indian Brahmo</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #3 — Adi Brahmo vs Indian Brahmo
+        </div>
         <div class="trap-body">
           <b>Adi Brahmo Samaj</b> = Debendranath Tagore (1866 split).<br>
           <b>Indian Brahmo Samaj</b> = Keshab Chandra Sen (1866 split).<br>
@@ -1328,43 +1431,48 @@
       </div>
 
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #4 — Arya Samaj ki HQ shift</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #4 — Arya Samaj ki HQ shift</div>
         <div class="trap-body">Arya Samaj founded: <b>1875 Bombay</b>. HQ shift to <b>Lahore 1877</b>. DAV College bhi
           Lahore mein 1886. Dono Lahore se link hain.</div>
       </div>
 
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #5 — Theosophical Society ka founding place</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #5 — Theosophical Society ka
+          founding place</div>
         <div class="trap-body">Theosophical Society <b>1875 New York</b> mein establish hua — India mein nahi! India
           mein HQ = <b>Adyar, Madras</b>. Annie Besant = Indian leader, founder nahi.</div>
       </div>
 
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #6 — Dharma Sabha RMMR ke against tha</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #6 — Dharma Sabha RMMR ke against
+          tha</div>
         <div class="trap-body">Dharma Sabha (1830, Radhakanta Dev) <b>Orthodox</b> organization tha — Sati ko support
           kiya aur RMMR ke reforms ke <b>against</b> tha. Confuse mat karna.</div>
       </div>
 
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #7 — AMU formation</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #7 — AMU formation</div>
         <div class="trap-body">Sir Syed Ahmed Khan ne pehle <b>Muhammadan Anglo-Oriental College 1875</b> banaya → baad
           mein yahi <b>Aligarh Muslim University (AMU) 1920</b> bana. Dono dates yaad rakho.</div>
       </div>
 
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #8 — Vivekananda birth date = National Youth Day</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #8 — Vivekananda birth date =
+          National Youth Day</div>
         <div class="trap-body">Swami Vivekananda born <b>12 January 1863</b>. 12 January = <b>National Youth Day</b>
           (since 1984). Real name = <b>Narendranath Dutta</b>. Died 4 July 1902.</div>
       </div>
 
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #9 — Savitribai Phule ka title</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #9 — Savitribai Phule ka title
+        </div>
         <div class="trap-body">Savitribai Phule = <b>First Woman Teacher of India</b>. School for lower castes:
           <b>1848</b>. Jyotiba Phule ka book <b>Gulamgiri = 1872</b> tha (Satyashodhak Samaj 1873 se pehle likhi).</div>
       </div>
 
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #10 — Socrates of India = Ranade</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #10 — Socrates of India = Ranade
+        </div>
         <div class="trap-body">M.G. Ranade ko <b>"Socrates of India"</b> kaha jata hai. Woh Prarthana Samaj (1867) mein
           1869 mein joined aur Indian National Social Conference (1887) ke founder bhi the.</div>
       </div>
@@ -1374,6 +1482,7 @@
     <div class="footer">Exam Fusion Prep &nbsp;|&nbsp; Socio-Religious Reform Movements &nbsp;|&nbsp; BPSC / BSSC CGL
     </div>
   </div>
+
   <script>
     function show(id, btn) {
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));

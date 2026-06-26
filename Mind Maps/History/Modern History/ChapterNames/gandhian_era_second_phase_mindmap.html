@@ -325,15 +325,21 @@
       border-color: var(--teal-border);
     }
 
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
     .tw {
       border: 0.5px solid var(--border);
       border-radius: 8px;
-      overflow: hidden;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       margin-bottom: 10px;
+      width: 100%;
+      display: block;
     }
 
     table {
-      width: 100%;
+      width: max-content;
+      /* This is the magic line that stops text from squishing */
+      min-width: 100%;
       border-collapse: collapse;
       font-size: 11.5px;
     }
@@ -342,17 +348,24 @@
       font-size: 10.5px;
       color: var(--text2);
       font-weight: 500;
-      padding: 6px 8px;
+      padding: 8px 12px;
       text-align: left;
       border-bottom: 0.5px solid var(--border);
       background: var(--bg2);
+      white-space: nowrap;
     }
 
     td {
-      padding: 5.5px 8px;
+      padding: 8px 12px;
       border-bottom: 0.5px solid var(--border);
       color: var(--text);
       vertical-align: top;
+      min-width: 120px;
+      /* Prevents columns from becoming too thin */
+      max-width: 400px;
+      /* Forces extremely long lines to break */
+      white-space: normal;
+      line-height: 1.5;
     }
 
     tr:last-child td {
@@ -506,18 +519,39 @@
         font-size: 17px;
       }
 
+      /* Make tabs stretch and adjust padding */
+      .tabs {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 6px 8px;
+        font-size: 11.5px;
+      }
+
       .rtc-grid {
         grid-template-columns: 1fr;
       }
 
       th,
       td {
-        font-size: 10.5px;
-        padding: 5px 6px;
+        font-size: 11.5px;
+        /* Keep font readable on mobile */
+        padding: 8px 10px;
+      }
+
+      /* Stack timeline vertically for better mobile reading */
+      .tlrow {
+        flex-direction: column;
       }
 
       .tlyr {
-        min-width: 88px;
+        width: 100%;
+        border-right: none;
+        border-bottom: 0.5px solid var(--border);
+        padding: 6px 11px;
       }
     }
   </style>
@@ -696,7 +730,8 @@
           </div>
           <div class="fact"><span class="fi">❌</span>
             <div class="ft"><b>Rejection:</b> Muslim League (Jinnah, Shafi, Aga Khan) ne reject kiya → Jinnah ne apni
-              <b>"14 Points"</b> rakhi.</div>
+              <b>"14 Points"</b> rakhi.
+            </div>
           </div>
           <div class="badges">
             <span class="badge b-red">7 all-British members = undemocratic</span>
@@ -1039,7 +1074,8 @@
           </div>
           <div class="fact"><span class="fi">🏛️</span>
             <div class="ft"><b>Governments formed:</b> July 1937. Head called <b>"Chief Minister" (Premier).</b> Tenure:
-              <b>28 Months.</b></div>
+              <b>28 Months.</b>
+            </div>
           </div>
           <hr class="dv">
           <div class="sec">Province-wise Results</div>
@@ -1209,54 +1245,63 @@
     <div class="panel" id="panel-trap">
       <div class="trap">
         <div class="trap-title">⚠️ Trap #1 — Madras Session 1927 ka President</div>
-        <div class="trap-body">Simon Commission boycott ki decision Madras Session (27 Dec 1927) mein hui. President =
-          <b>M.A. Ansari</b> — Jawaharlal Nehru ne active role play kiya tha, lekin president nahi the.</div>
+        <div class="trap-body">Simon Commission boycott ki decision Madras Session (27 Dec 1927) mein hui[cite: 5].
+          President =
+          <b>M.A. Ansari</b> — Jawaharlal Nehru ne active role play kiya tha, lekin president nahi the[cite: 5].
+        </div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #2 — Nehru Report = Motilal Nehru (Jawaharlal nahi)</div>
-        <div class="trap-body">Nehru Report (1928) = <b>Motilal Nehru</b> committee chairman the. Jawaharlal Nehru ka
+        <div class="trap-body">Nehru Report (1928) = <b>Motilal Nehru</b> committee chairman the[cite: 5]. Jawaharlal
+          Nehru ka
           nahi. Father-son dono famous hain — alag karo.</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #3 — Dandi March dates</div>
-        <div class="trap-body">Start = <b>12 March 1930</b> (Sabarmati). Arrival Dandi = <b>5 April</b>. <b>CDM start =
-            6 April</b> (namak uthakar). Teeno alag dates hain.</div>
+        <div class="trap-body">Start = <b>12 March 1930</b> (Sabarmati)[cite: 5]. Arrival Dandi = <b>5 April</b>[cite:
+          5]. <b>CDM start =
+            6 April</b> (namak uthakar)[cite: 5]. Teeno alag dates hain.</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #4 — 3 RTCs mein Congress ki attendance</div>
-        <div class="trap-body">1st RTC = <b>Absent</b>. 2nd RTC = <b>Gandhi ji (sole rep)</b>. 3rd RTC =
-          <b>Boycotted</b>. <b>Ambedkar</b> = teeno mein shaamil — only person.</div>
+        <div class="trap-body">1st RTC = <b>Absent</b>[cite: 5]. 2nd RTC = <b>Gandhi ji (sole rep)</b>[cite: 5]. 3rd RTC
+          =
+          <b>Boycotted</b>[cite: 5]. <b>Ambedkar</b> = teeno mein shaamil — only person[cite: 5].
+        </div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #5 — Poona Pact signatories</div>
         <div class="trap-body">Poona Pact <b>Gandhi ji ne sign nahi kiya</b>. Signatory = <b>Dr. B.R. Ambedkar</b>
-          (Depressed Classes ke liye) + <b>Madan Mohan Malaviya</b> (Gandhi + Upper Caste ke liye).</div>
+          (Depressed Classes ke liye) + <b>Madan Mohan Malaviya</b> (Gandhi + Upper Caste ke liye)[cite: 5].</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #6 — Communal Award mein Harijan bhi shaamil</div>
         <div class="trap-body">Communal Award = Muslims, Sikhs, Christians, Europeans, Anglo-Indians + <b>Harijans
-            (Depressed Classes) bhi.</b> Yeh "crucial addition" tha jis pe Gandhi ne fast kiya.</div>
+            (Depressed Classes) bhi.</b>[cite: 5] Yeh "crucial addition" tha jis pe Gandhi ne fast kiya.</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #7 — Tripuri ka president aur successor</div>
-        <div class="trap-body">Tripuri (1939) mein <b>Bose</b> ne Pattabhi Sitaramayya ko beat kiya — President bane.
-          Deadlock ke baad resign kiya. Successor = <b>Dr. Rajendra Prasad</b>. Gandhi ki statement: "Sitaramayya's
-          defeat is mine."</div>
+        <div class="trap-body">Tripuri (1939) mein <b>Bose</b> ne Pattabhi Sitaramayya ko beat kiya — President
+          bane[cite: 5].
+          Deadlock ke baad resign kiya[cite: 5]. Successor = <b>Dr. Rajendra Prasad</b>[cite: 5]. Gandhi ki statement:
+          "Sitaramayya's
+          defeat is mine."[cite: 5]</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #8 — National Planning Committee = Nehru (president Bose tha)</div>
-        <div class="trap-body">National Planning Committee (1938) Chairman = <b>Jawaharlal Nehru.</b> Congress President
-          at that time = Subhash Chandra Bose — lekin committee head Nehru the.</div>
+        <div class="trap-body">National Planning Committee (1938) Chairman = <b>Jawaharlal Nehru.</b>[cite: 5] Congress
+          President
+          at that time = Subhash Chandra Bose — lekin committee head Nehru the[cite: 5].</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #9 — CSP founders: President vs Secretary</div>
         <div class="trap-body">Congress Socialist Party (1934): <b>President = Acharya Narendra Dev.</b> <b>General
-            Secretary = Jayprakash Narayan.</b> Founders: JP + Acharya + Ram Manohar Lohia.</div>
+            Secretary = Jayprakash Narayan.</b>[cite: 5] Founders: JP + Acharya + Ram Manohar Lohia[cite: 5].</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #10 — Churchill quote aur context</div>
         <div class="trap-body">Churchill ne Gandhi ko <b>"half-naked Fakir"</b> kaha — <b>2nd Round Table Conference</b>
-          ke context mein. 1st ya 3rd mein nahi.</div>
+          ke context mein[cite: 5]. 1st ya 3rd mein nahi.</div>
       </div>
     </div>
 

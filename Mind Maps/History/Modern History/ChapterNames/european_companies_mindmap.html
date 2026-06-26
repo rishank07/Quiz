@@ -17,6 +17,16 @@
     gtag("config", "G-Q1WNRY8ECV");
   </script>
 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
   <style>
     *,
     *::before,
@@ -118,6 +128,8 @@
       display: inline-flex;
       gap: 10px;
       margin-top: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .meta-tag {
@@ -201,9 +213,19 @@
       display: flex;
       align-items: flex-start;
       overflow-x: auto;
-      padding-bottom: 4px;
+      padding-bottom: 10px;
       margin-bottom: 16px;
       gap: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .timeline::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .timeline::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 4px;
     }
 
     .titem {
@@ -213,6 +235,8 @@
       min-width: 90px;
       padding: 0 6px;
       position: relative;
+      flex-shrink: 0;
+      /* Important for responsiveness */
     }
 
     .titem:not(:last-child)::after {
@@ -277,21 +301,33 @@
     }
 
     /* Comparison table */
+    .table-wrap {
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      /* Forces horizontal scroll on mobile */
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 8px;
+      width: 100%;
+    }
+
     .comp-table {
       width: 100%;
+      min-width: 550px;
+      /* Prevents columns from squishing on mobile */
       border-collapse: collapse;
       font-size: 12.5px;
-      margin-bottom: 8px;
     }
 
     .comp-table th {
       font-size: 11px;
       color: var(--text2);
       font-weight: 500;
-      padding: 6px 8px;
+      padding: 8px 10px;
       text-align: left;
       border-bottom: 0.5px solid var(--border);
       background: var(--bg2);
+      white-space: nowrap;
     }
 
     .comp-table th:first-child {
@@ -303,7 +339,7 @@
     }
 
     .comp-table td {
-      padding: 7px 8px;
+      padding: 9px 10px;
       border-bottom: 0.5px solid var(--border);
       color: var(--text);
       vertical-align: top;
@@ -327,12 +363,6 @@
       white-space: nowrap;
     }
 
-    .table-wrap {
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
     /* Country card */
     .card {
       border: 0.5px solid var(--border);
@@ -353,6 +383,7 @@
 
     .c-flag {
       font-size: 24px;
+      flex-shrink: 0;
     }
 
     .c-name {
@@ -498,7 +529,7 @@
       line-height: 1.55;
     }
 
-    /* Icons (Unicode fallback since no CDN) */
+    /* Icons */
     .ico {
       display: inline-block;
       width: 16px;
@@ -514,22 +545,36 @@
       color: var(--text3);
     }
 
+    /* Media Queries for Mobile Responsiveness */
     @media (max-width: 500px) {
       body {
-        padding: 16px 10px 40px;
+        padding: 16px 12px 40px;
       }
 
       .header h1 {
-        font-size: 18px;
+        font-size: 20px;
       }
 
-      .comp-table {
-        font-size: 11px;
+      .tabs {
+        gap: 5px;
       }
 
-      .comp-table th,
-      .comp-table td {
-        padding: 5px 6px;
+      .tab {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .card-header {
+        padding: 12px;
+      }
+
+      .card-body {
+        padding: 12px;
+      }
+
+      /* Smooth scrolling hint */
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.1);
       }
     }
   </style>
@@ -560,7 +605,6 @@
       <button class="tab" onclick="show('trap',this)">⚠ Exam Traps</button>
     </div>
 
-    <!-- ══════════════ ALL ══════════════ -->
     <div class="panel show" id="panel-all">
 
       <div class="tl-label">Company Established in Europe →</div>
@@ -685,7 +729,6 @@
       </div>
     </div>
 
-    <!-- ══════════════ PORTUGUESE ══════════════ -->
     <div class="panel" id="panel-port">
       <div class="card">
         <div class="card-header">
@@ -700,7 +743,8 @@
           <div class="sec-title">Vasco da Gama — Teen Arrivals</div>
           <div class="fact"><span class="fact-icon">⛵</span>
             <div class="fact-text"><b>May 1498</b> — 1st arrival: <b>Calicut (Kozhikode)</b>. Local king =
-              <b>Zamorin</b>.</div>
+              <b>Zamorin</b>.
+            </div>
           </div>
           <div class="fact"><span class="fact-icon">⛵</span>
             <div class="fact-text"><b>1502</b> — 2nd arrival (re-arrival).</div>
@@ -740,7 +784,8 @@
           </div>
           <div class="fact"><span class="fact-icon">👤</span>
             <div class="fact-text"><b>Nino da Cunha (1529–1538)</b> — Bassein (1534) + Diu (1535). HQ Cochin →
-              <b>Goa</b> shift kiya.</div>
+              <b>Goa</b> shift kiya.
+            </div>
           </div>
 
           <hr class="div">
@@ -757,7 +802,6 @@
       </div>
     </div>
 
-    <!-- ══════════════ ENGLISH ══════════════ -->
     <div class="panel" id="panel-eng">
       <div class="card">
         <div class="card-header">
@@ -779,7 +823,8 @@
           </div>
           <div class="fact"><span class="fact-icon">👤</span>
             <div class="fact-text"><b>William Hawkins (1609)</b> — Jahangir ke court mein gaya. Jahangir ne diya title:
-              <b>"English Khan"</b>. Surat factory delay hui — Portuguese pressure ki wajah se.</div>
+              <b>"English Khan"</b>. Surat factory delay hui — Portuguese pressure ki wajah se.
+            </div>
           </div>
           <div class="fact"><span class="fact-icon">🏛️</span>
             <div class="fact-text"><b>1611</b> — <b>Masulipatnam</b>: Pehli <i>temporary</i> factory (South India).
@@ -806,7 +851,6 @@
       </div>
     </div>
 
-    <!-- ══════════════ DUTCH ══════════════ -->
     <div class="panel" id="panel-dutch">
       <div class="card">
         <div class="card-header">
@@ -824,7 +868,8 @@
           </div>
           <div class="fact"><span class="fact-icon">🏛️</span>
             <div class="fact-text"><b>1605</b> — 1st factory: <b>Masulipatnam</b> → English ki Surat factory se
-              <i>pehle</i>!</div>
+              <i>pehle</i>!
+            </div>
           </div>
           <div class="fact"><span class="fact-icon">🏛️</span>
             <div class="fact-text"><b>1610</b> — <b>Pulicat</b> factory → Dutch HQ. Yahan <b>Pagoda (gold coins)</b>
@@ -845,7 +890,6 @@
       </div>
     </div>
 
-    <!-- ══════════════ DANISH ══════════════ -->
     <div class="panel" id="panel-danish">
       <div class="card">
         <div class="card-header">
@@ -882,7 +926,6 @@
       </div>
     </div>
 
-    <!-- ══════════════ FRENCH ══════════════ -->
     <div class="panel" id="panel-french">
       <div class="card">
         <div class="card-header">
@@ -921,7 +964,6 @@
       </div>
     </div>
 
-    <!-- ══════════════ BONUS: SWEDISH ══════════════ -->
     <div class="panel" id="panel-bonus">
       <div class="card">
         <div class="card-header">
@@ -952,7 +994,6 @@
       </div>
     </div>
 
-    <!-- ══════════════ TRAPS ══════════════ -->
     <div class="panel" id="panel-trap">
 
       <div class="trap">

@@ -325,15 +325,21 @@
       border-color: var(--teal-border);
     }
 
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
     .tw {
       border: 0.5px solid var(--border);
       border-radius: 8px;
-      overflow: hidden;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       margin-bottom: 10px;
+      width: 100%;
+      display: block;
     }
 
     table {
-      width: 100%;
+      width: max-content;
+      /* This prevents the columns from squishing */
+      min-width: 100%;
       border-collapse: collapse;
       font-size: 11.5px;
     }
@@ -342,17 +348,24 @@
       font-size: 10.5px;
       color: var(--text2);
       font-weight: 500;
-      padding: 6px 8px;
+      padding: 8px 12px;
       text-align: left;
       border-bottom: 0.5px solid var(--border);
       background: var(--bg2);
+      white-space: nowrap;
     }
 
     td {
-      padding: 5.5px 8px;
+      padding: 8px 12px;
       border-bottom: 0.5px solid var(--border);
       color: var(--text);
       vertical-align: top;
+      min-width: 120px;
+      /* Ensures minimum readable width */
+      max-width: 400px;
+      /* Wraps very long text lines */
+      white-space: normal;
+      line-height: 1.5;
     }
 
     tr:last-child td {
@@ -370,6 +383,7 @@
       font-style: italic;
     }
 
+    /* Timeline styling */
     .tl {
       border: 0.5px solid var(--border);
       border-radius: 8px;
@@ -561,13 +575,26 @@
       color: var(--text3);
     }
 
-    @media(max-width:520px) {
+    /* ==== RESPONSIVE DESIGN ==== */
+    @media(max-width:560px) {
       body {
         padding: 14px 10px 36px;
       }
 
       .header h1 {
-        font-size: 17px;
+        font-size: 18px;
+      }
+
+      /* Responsive Tabs */
+      .tabs {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 6px 8px;
+        font-size: 11.5px;
       }
 
       .ogrid,
@@ -577,12 +604,20 @@
 
       th,
       td {
-        font-size: 10.5px;
-        padding: 5px 6px;
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+
+      /* Stack timeline vertically for better mobile reading */
+      .tlrow {
+        flex-direction: column;
       }
 
       .tlyr {
-        min-width: 90px;
+        width: 100%;
+        border-right: none;
+        border-bottom: 0.5px solid var(--border);
+        padding: 6px 11px;
       }
     }
   </style>
@@ -941,7 +976,8 @@
           </div>
           <div class="fact"><span class="fi">💀</span>
             <div class="ft"><b>Martyrdom:</b> 27th February 1931. <b>Alfred Park, Prayagraj.</b> Police se ladte hue
-              <b>khud ko goli mari.</b></div>
+              <b>khud ko goli mari.</b>
+            </div>
           </div>
 
           <div class="badges">
@@ -967,7 +1003,8 @@
           <div class="sec">Saunders Assassination — 17 Dec 1928 (Lahore)</div>
           <div class="fact"><span class="fi">📋</span>
             <div class="ft"><b>Background:</b> Simon Commission virodh mein Lala Lajpat Rai par lathi charge hua by
-              <b>James Scott</b> (Superintendent of Police).</div>
+              <b>James Scott</b> (Superintendent of Police).
+            </div>
           </div>
           <div class="fact"><span class="fi">💀</span>
             <div class="ft"><b>Lalaji ki death:</b> 17th November 1928.</div>
@@ -1004,7 +1041,8 @@
           </div>
           <div class="fact"><span class="fi">🍽️</span>
             <div class="ft"><b>Jatin Das:</b> Jail mein <b>64-day hunger strike</b> (political prisoner status ke liye).
-              <b>Death: 13th September 1929.</b></div>
+              <b>Death: 13th September 1929.</b>
+            </div>
           </div>
           <div class="fact"><span class="fi">💀</span>
             <div class="ft"><b>Execution (Shaheed Diwas): 23rd March 1931.</b> Martyrs: <b>Bhagat Singh, Sukhdev,
@@ -1172,7 +1210,8 @@
       <div class="trap">
         <div class="trap-title">⚠️ Trap #9 — AITUC ki 1st presidency</div>
         <div class="trap-body"><b>AITUC 1920</b> First President = <b>Lala Lajpat Rai.</b> INTUC 1947 First President =
-          <b>Vallabhbhai Patel.</b> Dono alag unions hain.</div>
+          <b>Vallabhbhai Patel.</b> Dono alag unions hain.
+        </div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #10 — Bandi Jivan = "Bible of Revolutionaries"</div>

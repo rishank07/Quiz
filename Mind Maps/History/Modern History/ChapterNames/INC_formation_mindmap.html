@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formation of Indian National Congress — Mind Map</title>
 
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -209,6 +208,7 @@
 
     .ch-icon {
       font-size: 20px;
+      flex-shrink: 0;
     }
 
     .ch-title {
@@ -325,34 +325,47 @@
       border-color: var(--teal-border);
     }
 
-    .tw {
+    /* ====== NAYA TABLE CSS ====== */
+    .tw,
+    .table-wrap {
       border: 0.5px solid var(--border);
       border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 13px;
+      width: 100%;
+      display: block;
+      /* Magic property to force horizontal scroll correctly */
     }
 
-    table {
+    table,
+    .comp-table {
       width: 100%;
+      min-width: max-content;
+      /* MAGIC FIX: Table utni badi ho jayegi jitna text ko jagah chahiye, pichkega nahi */
       border-collapse: collapse;
-      font-size: 11.5px;
+      font-size: 12px;
     }
 
     th {
-      font-size: 10.5px;
+      font-size: 11px;
       color: var(--text2);
       font-weight: 500;
-      padding: 6px 8px;
+      padding: 8px 12px;
       text-align: left;
       border-bottom: 0.5px solid var(--border);
       background: var(--bg2);
+      white-space: nowrap;
+      /* Header hamesha ek line me rahega */
     }
 
     td {
-      padding: 5.5px 8px;
+      padding: 8px 12px;
       border-bottom: 0.5px solid var(--border);
       color: var(--text);
       vertical-align: top;
+      min-width: 140px;
+      /* Har column ko kam se kam itni jagah milegi */
     }
 
     tr:last-child td {
@@ -369,6 +382,8 @@
       color: var(--text2);
       font-style: italic;
     }
+
+    /* =========================== */
 
     /* Org grid for pre-Congress orgs */
     .ogrid {
@@ -599,13 +614,31 @@
       color: var(--text3);
     }
 
+    /* Media Queries for Mobile Screens */
     @media(max-width:520px) {
       body {
         padding: 14px 10px 36px;
       }
 
       .header h1 {
-        font-size: 17px;
+        font-size: 19px;
+      }
+
+      .tabs {
+        gap: 5px;
+      }
+
+      .tab {
+        padding: 6px 12px;
+        font-size: 11.5px;
+      }
+
+      .card-header {
+        padding: 12px;
+      }
+
+      .card-body {
+        padding: 12px;
       }
 
       .ogrid {
@@ -614,8 +647,12 @@
 
       th,
       td {
-        font-size: 10.5px;
-        padding: 5px 6px;
+        font-size: 11.5px;
+        padding: 7px 8px;
+      }
+
+      .tw {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.1);
       }
     }
   </style>
@@ -643,7 +680,6 @@
       <button class="tab" onclick="show('trap',this)">⚠️ Exam Traps</button>
     </div>
 
-    <!-- ══ OVERVIEW ══ -->
     <div class="panel show" id="panel-all">
       <div class="card">
         <div class="card-header"><span class="ch-icon">🇮🇳</span>
@@ -706,7 +742,6 @@
       </div>
     </div>
 
-    <!-- ══ PRE-CONGRESS ORGS ══ -->
     <div class="panel" id="panel-pre">
 
       <div class="card">
@@ -856,7 +891,6 @@
       </div>
     </div>
 
-    <!-- ══ INC FORMATION ══ -->
     <div class="panel" id="panel-inc">
       <div class="card">
         <div class="card-header"><span class="ch-icon">🇮🇳</span>
@@ -919,7 +953,6 @@
       </div>
     </div>
 
-    <!-- ══ KEY SESSIONS ══ -->
     <div class="panel" id="panel-sessions">
 
       <div class="scard">
@@ -1022,7 +1055,8 @@
         </div>
         <div class="sc-pres"><b>President:</b> Pandit Bishan Narayan Dhar</div>
         <div class="sc-event">🎵 <b>Pehli baar "Jana Gana Mana" (National Anthem) gaya gaya!</b><br>Composer:
-          <b>Rabindranath Tagore.</b></div>
+          <b>Rabindranath Tagore.</b>
+        </div>
       </div>
 
       <div class="scard">
@@ -1090,7 +1124,6 @@
 
     </div>
 
-    <!-- ══ DADABHAI NAOROJI ══ -->
     <div class="panel" id="panel-naoroji">
       <div class="card">
         <div class="card-header"><span class="ch-icon">👤</span>
@@ -1154,7 +1187,6 @@
       </div>
     </div>
 
-    <!-- ══ LEADER REACTIONS ══ -->
     <div class="panel" id="panel-quotes">
       <div class="card">
         <div class="card-header"><span class="ch-icon">💬</span>
@@ -1188,7 +1220,6 @@
       </div>
     </div>
 
-    <!-- ══ SPECIAL FACTS ══ -->
     <div class="panel" id="panel-misc">
       <div class="card">
         <div class="card-header"><span class="ch-icon">⭐</span>
@@ -1297,7 +1328,6 @@
       </div>
     </div>
 
-    <!-- ══ TRAPS ══ -->
     <div class="panel" id="panel-trap">
       <div class="trap">
         <div class="trap-title">⚠️ Trap #1 — 1st Female vs 1st Indian Female President</div>

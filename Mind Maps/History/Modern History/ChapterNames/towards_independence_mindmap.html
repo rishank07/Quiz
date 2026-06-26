@@ -325,15 +325,21 @@
       border-color: var(--teal-border);
     }
 
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
     .tw {
       border: 0.5px solid var(--border);
       border-radius: 8px;
-      overflow: hidden;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       margin-bottom: 10px;
+      width: 100%;
+      display: block;
     }
 
     table {
-      width: 100%;
+      width: max-content;
+      /* Stops text from squishing */
+      min-width: 100%;
       border-collapse: collapse;
       font-size: 11.5px;
     }
@@ -342,17 +348,24 @@
       font-size: 10.5px;
       color: var(--text2);
       font-weight: 500;
-      padding: 6px 8px;
+      padding: 8px 12px;
       text-align: left;
       border-bottom: 0.5px solid var(--border);
       background: var(--bg2);
+      white-space: nowrap;
     }
 
     td {
-      padding: 5.5px 8px;
+      padding: 8px 12px;
       border-bottom: 0.5px solid var(--border);
       color: var(--text);
       vertical-align: top;
+      min-width: 120px;
+      /* Prevents columns from becoming too thin */
+      max-width: 400px;
+      /* Forces extremely long lines to break */
+      white-space: normal;
+      line-height: 1.5;
     }
 
     tr:last-child td {
@@ -370,6 +383,7 @@
       font-style: italic;
     }
 
+    /* Timeline styling */
     .tl {
       border: 0.5px solid var(--border);
       border-radius: 8px;
@@ -410,11 +424,13 @@
       font-weight: 600;
     }
 
+    /* Portfolios Grid CSS - FIXED FOR MOBILE */
     .pgrid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 9px;
       margin-bottom: 10px;
+      width: 100%;
     }
 
     .pcol {
@@ -422,6 +438,9 @@
       border-radius: 10px;
       padding: 11px 13px;
       background: var(--bg);
+      min-width: 0;
+      /* MAGIC FIX FOR GRID BLOWOUT: Allows tables inside to scroll instead of pushing the grid out */
+      overflow: hidden;
     }
 
     .ptitle {
@@ -680,7 +699,8 @@
           </div>
           <div class="fact"><span class="fi">🔢</span>
             <div class="ft"><b>Sequence (Zaroor yaad rakho):</b><br>1st: <b>Vinoba Bhave</b> (17 Oct)<br>2nd:
-              <b>Jawaharlal Nehru</b><br>3rd: <b>Brahma Dutt</b> <i>(State exams mein poochha jaata hai)</i></div>
+              <b>Jawaharlal Nehru</b><br>3rd: <b>Brahma Dutt</b> <i>(State exams mein poochha jaata hai)</i>
+            </div>
           </div>
 
           <hr class="dv">
@@ -810,7 +830,8 @@
           <div class="highlight-box">
             <div class="hb-title">⭐ Special Fact — Kushal Konwar</div>
             <div class="hb-body">Kushal Konwar akele aise swatantrata senani the jinhe Quit India Movement ke dauran
-              <b>phaansi (hanged)</b> di gayi thi.</div>
+              <b>phaansi (hanged)</b> di gayi thi.
+            </div>
           </div>
 
           <div class="badges">
@@ -1181,52 +1202,60 @@
       <div class="trap">
         <div class="trap-title">⚠️ Trap #1 — Gandhi ki jail = Agha Khan Palace (Yerwada nahi)</div>
         <div class="trap-body">Quit India Movement (1942) mein Gandhi ji ko <b>Agha Khan Palace, Pune</b> mein rakha
-          gaya. <b>Yerwada Jail</b> = 1930 CDM mein tha. Dono alag hain!</div>
+          gaya[cite: 6]. <b>Yerwada Jail</b> = 1930 CDM mein tha[cite: 6]. Dono alag hain!</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #2 — Individual Satyagraha sequence</div>
-        <div class="trap-body">1st = <b>Vinoba Bhave</b>, 2nd = <b>Jawaharlal Nehru</b>, 3rd = <b>Brahma Dutt</b>. State
+        <div class="trap-body">1st = <b>Vinoba Bhave</b>, 2nd = <b>Jawaharlal Nehru</b>, 3rd = <b>Brahma Dutt</b>[cite:
+          6]. State
           exams mein 3rd kaun tha poochha jaata hai — Brahma Dutt.</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #3 — INA Founder vs Supreme Commander</div>
-        <div class="trap-body"><b>Founder:</b> Captain Mohan Singh (1942). <b>Supreme Commander:</b> Netaji Subhash
-          Chandra Bose (July 1943 se). Dono alag hain!</div>
+        <div class="trap-body"><b>Founder:</b> Captain Mohan Singh (1942)[cite: 6]. <b>Supreme Commander:</b> Netaji
+          Subhash
+          Chandra Bose (July 1943 se)[cite: 6]. Dono alag hain!</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #4 — Pakistan naam vs idea</div>
-        <div class="trap-body"><b>Idea (1930):</b> Muhammad Iqbal — Allahabad Session. <b>Naam "Pakistan" (1933):</b>
-          Choudhary Rahmat Ali. <b>Official demand (1940):</b> Jinnah — Lahore Session. Teeno alag log hain!</div>
+        <div class="trap-body"><b>Idea (1930):</b> Muhammad Iqbal — Allahabad Session[cite: 6]. <b>Naam "Pakistan"
+            (1933):</b>
+          Choudhary Rahmat Ali[cite: 6]. <b>Official demand (1940):</b> Jinnah — Lahore Session[cite: 6]. Teeno alag log
+          hain!</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #5 — Liaqat Ali Khan = Finance (ML ka member)</div>
         <div class="trap-body">Interim Govt mein <b>Finance portfolio</b> = <b>Liaqat Ali Khan</b> — jo Muslim League ka
-          member tha. Congress ka member nahi.</div>
+          member tha[cite: 6]. Congress ka member nahi.</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #6 — Gowalia Tank = August Kranti Maidan</div>
         <div class="trap-body">Quit India Movement launch jagah = <b>Gowalia Tank Maidan, Mumbai</b> = aaj <b>August
-            Kranti Maidan</b> kehte hain. Dono same jagah ke alag naam hain.</div>
+            Kranti Maidan</b> kehte hain[cite: 6]. Dono same jagah ke alag naam hain.</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #7 — Cabinet Mission members: "LCA"</div>
-        <div class="trap-body">Cabinet Mission = <b>Pethick Lawrence + Cripps + A.V. Alexander</b>. Cripps dono missions
+        <div class="trap-body">Cabinet Mission = <b>Pethick Lawrence + Cripps + A.V. Alexander</b>[cite: 6]. Cripps dono
+          missions
           mein — 1942 Cripps Mission aur 1946 Cabinet Mission mein tha. Confuse mat karo.</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #8 — Independence Act dates</div>
-        <div class="trap-body">Bill introduced: <b>4 July 1947</b>. Passed (Royal Assent): <b>18 July 1947</b>.
-          Independence: <b>15 August 1947</b>. Teeno dates alag hain.</div>
+        <div class="trap-body">Bill introduced: <b>4 July 1947</b>[cite: 6]. Passed (Royal Assent): <b>18 July
+            1947</b>[cite: 6].
+          Independence: <b>15 August 1947</b>[cite: 6]. Teeno dates alag hain.</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #9 — Red Fort Trial main lawyer</div>
-        <div class="trap-body">Red Fort Trial (1945) main lawyer = <b>Bhulabhai Desai</b>. Nehru bhi tha, lekin
-          Bhulabhai Desai ne lead kiya. Teeno accused: Dhillon (Sikh) + Prem Sehgal (Hindu) + Shahnawaz (Muslim).</div>
+        <div class="trap-body">Red Fort Trial (1945) main lawyer = <b>Bhulabhai Desai</b>[cite: 6]. Nehru bhi tha, lekin
+          Bhulabhai Desai ne lead kiya[cite: 6]. Teeno accused: Dhillon (Sikh) + Prem Sehgal (Hindu) + Shahnawaz
+          (Muslim)[cite: 6].</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #10 — Satara = sabse lambi parallel govt</div>
-        <div class="trap-body">Parallel Govts: Balia = <b>sabse pehli</b>. Satara = <b>sabse lambi (1946 tak)</b>.
-          Tamluk = Vidyut Vahini + cyclone help. Teeno alag facts.</div>
+        <div class="trap-body">Parallel Govts: Balia = <b>sabse pehli</b>[cite: 6]. Satara = <b>sabse lambi (1946
+            tak)</b>[cite: 6].
+          Tamluk = Vidyut Vahini + cyclone help[cite: 6]. Teeno alag facts.</div>
       </div>
     </div>
 

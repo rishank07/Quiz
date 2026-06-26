@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -16,6 +16,9 @@
     gtag("js", new Date());
     gtag("config", "G-Q1WNRY8ECV");
   </script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
     *,
@@ -35,24 +38,33 @@
       --text3: #8a8980;
       --border: rgba(0, 0, 0, 0.10);
       --border2: rgba(0, 0, 0, 0.18);
+
       --blue-bg: #e6f1fb;
       --blue-text: #0c447c;
       --blue-border: #b5d4f4;
+
       --green-bg: #eaf3de;
       --green-text: #27500a;
       --green-border: #c0dd97;
+
       --amber-bg: #faeeda;
       --amber-text: #633806;
       --amber-border: #fac775;
+
       --red-bg: #fcebeb;
       --red-text: #791f1f;
       --red-border: #f7c1c1;
+
       --purple-bg: #eeedfe;
       --purple-text: #3c3489;
       --purple-border: #afa9ec;
+
       --teal-bg: #e1f5ee;
       --teal-text: #085041;
       --teal-border: #5dcaa5;
+
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     }
 
@@ -66,24 +78,33 @@
         --text3: #6a6860;
         --border: rgba(255, 255, 255, 0.10);
         --border2: rgba(255, 255, 255, 0.18);
+
         --blue-bg: #042c53;
         --blue-text: #b5d4f4;
         --blue-border: #185fa5;
+
         --green-bg: #173404;
         --green-text: #c0dd97;
         --green-border: #3b6d11;
+
         --amber-bg: #412402;
         --amber-text: #fac775;
         --amber-border: #854f0b;
+
         --red-bg: #501313;
         --red-text: #f7c1c1;
         --red-border: #a32d2d;
+
         --purple-bg: #26215c;
         --purple-text: #cecbf6;
         --purple-border: #534ab7;
+
         --teal-bg: #04342c;
         --teal-text: #9fe1cb;
         --teal-border: #0f6e56;
+
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
       }
     }
 
@@ -91,7 +112,7 @@
       background: var(--bg3);
       color: var(--text);
       min-height: 100vh;
-      padding: 24px 16px 48px;
+      padding: 32px 16px 48px;
     }
 
     .page {
@@ -101,19 +122,21 @@
 
     .header {
       text-align: center;
-      margin-bottom: 22px;
+      margin-bottom: 28px;
     }
 
     .header h1 {
-      font-size: 21px;
-      font-weight: 600;
+      font-size: 24px;
+      font-weight: 700;
       color: var(--text);
+      letter-spacing: -0.5px;
     }
 
     .header p {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text2);
-      margin-top: 4px;
+      margin-top: 6px;
+      font-weight: 500;
     }
 
     .meta {
@@ -121,68 +144,82 @@
       gap: 8px;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 10px;
+      margin-top: 14px;
     }
 
     .meta-tag {
       font-size: 11px;
-      padding: 3px 10px;
+      font-weight: 500;
+      padding: 4px 12px;
       border-radius: 20px;
       border: 0.5px solid var(--border2);
       color: var(--text2);
       background: var(--bg);
+      box-shadow: var(--shadow-sm);
     }
 
     .tabs {
       display: flex;
-      gap: 7px;
+      gap: 8px;
       flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 18px;
+      margin-bottom: 24px;
     }
 
     .tab {
-      border: 0.5px solid var(--border2);
+      border: 1px solid var(--border2);
       border-radius: 20px;
-      padding: 6px 13px;
-      font-size: 12px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
       background: var(--bg);
       color: var(--text2);
       font-family: inherit;
-      transition: all .15s;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab i {
+      font-size: 14px;
     }
 
     .tab:hover {
       background: var(--bg2);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
     }
 
     .tab.active {
       background: var(--blue-bg);
       border-color: var(--blue-border);
       color: var(--blue-text);
-      font-weight: 500;
+      box-shadow: inset 0 0 0 1px var(--blue-border);
     }
 
     .tab.all.active {
       background: var(--bg2);
       border-color: var(--border2);
       color: var(--text);
+      box-shadow: inset 0 0 0 1px var(--border2);
     }
 
     .panel {
       display: none;
-      animation: fadeIn .2s ease;
+      animation: slideFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .panel.show {
       display: block;
     }
 
-    @keyframes fadeIn {
+    @keyframes slideFadeIn {
       from {
         opacity: 0;
-        transform: translateY(5px);
+        transform: translateY(10px);
       }
 
       to {
@@ -192,122 +229,172 @@
     }
 
     .card {
-      border: 0.5px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
       background: var(--bg);
       overflow: hidden;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
     }
 
     .card-header {
-      padding: 12px 15px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      border-bottom: 0.5px solid var(--border);
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
       background: var(--bg2);
     }
 
     .ch-icon {
-      font-size: 20px;
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
     }
 
     .ch-title {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
       color: var(--text);
     }
 
     .ch-sub {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text2);
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     .card-body {
-      padding: 13px 15px;
-    }
-
-    .sec {
-      font-size: 10px;
-      color: var(--text3);
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: 8px;
-      margin-top: 13px;
-    }
-
-    .sec:first-child {
-      margin-top: 0;
+      padding: 16px 18px;
     }
 
     .fact {
       display: flex;
-      gap: 9px;
+      gap: 12px;
       align-items: flex-start;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
+    }
+
+    .fact:last-child {
+      margin-bottom: 0;
     }
 
     .fi {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text3);
       flex-shrink: 0;
-      margin-top: 2px;
+      margin-top: 3px;
+      width: 20px;
+      text-align: center;
     }
 
     .ft {
-      font-size: 12.5px;
+      font-size: 13.5px;
       color: var(--text);
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     .ft b {
       font-weight: 600;
-    }
-
-    .ft i {
-      color: var(--text2);
+      color: var(--text);
     }
 
     hr.dv {
       border: none;
-      border-top: 0.5px solid var(--border);
-      margin: 11px 0;
+      border-top: 1px dashed var(--border2);
+      margin: 16px 0;
     }
 
     .badges {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 5px;
+      gap: 8px;
+      margin-top: 12px;
     }
 
     .badge {
-      font-size: 11px;
-      padding: 3px 9px;
+      font-size: 11.5px;
+      padding: 4px 12px;
       border-radius: 12px;
-      border: 0.5px solid;
+      border: 1px solid;
+      font-weight: 500;
     }
 
-    .b-blue {
+    /* Cause cards */
+    .cause-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .cause-card {
+      border-radius: 12px;
+      border: 1px solid;
+      padding: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cause-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .cause-card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cause-card ul {
+      padding-left: 20px;
+    }
+
+    .cause-card li {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    /* Colors */
+    .b-blue,
+    .cc-pol {
       background: var(--blue-bg);
       color: var(--blue-text);
       border-color: var(--blue-border);
     }
 
-    .b-green {
-      background: var(--green-bg);
-      color: var(--green-text);
-      border-color: var(--green-border);
-    }
-
-    .b-amber {
+    .b-amber,
+    .cc-eco {
       background: var(--amber-bg);
       color: var(--amber-text);
       border-color: var(--amber-border);
     }
 
-    .b-red {
+    .b-green,
+    .cc-soc {
+      background: var(--green-bg);
+      color: var(--green-text);
+      border-color: var(--green-border);
+    }
+
+    .b-red,
+    .cc-imm {
       background: var(--red-bg);
       color: var(--red-text);
       border-color: var(--red-border);
@@ -325,132 +412,31 @@
       border-color: var(--teal-border);
     }
 
-    .tw {
-      border: 0.5px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 10px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-
-    th {
-      font-size: 10.5px;
-      color: var(--text2);
-      font-weight: 500;
-      padding: 6px 8px;
-      text-align: left;
-      border-bottom: 0.5px solid var(--border);
-      background: var(--bg2);
-    }
-
-    td {
-      padding: 6px 8px;
-      border-bottom: 0.5px solid var(--border);
-      color: var(--text);
-      vertical-align: top;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .yw {
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    /* Cause cards — 4 colors */
-    .cause-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .cause-card {
-      border-radius: 10px;
-      border: 0.5px solid;
-      padding: 12px 13px;
-    }
-
-    .cause-card h3 {
-      font-size: 12.5px;
-      font-weight: 600;
-      margin-bottom: 7px;
-    }
-
-    .cause-card ul {
-      padding-left: 14px;
-    }
-
-    .cause-card li {
-      font-size: 12px;
-      color: var(--text);
-      line-height: 1.6;
-      margin-bottom: 2px;
-    }
-
-    .cc-pol {
-      background: var(--blue-bg);
-      border-color: var(--blue-border);
-    }
-
-    .cc-pol h3 {
-      color: var(--blue-text);
-    }
-
-    .cc-eco {
-      background: var(--amber-bg);
-      border-color: var(--amber-border);
-    }
-
-    .cc-eco h3 {
-      color: var(--amber-text);
-    }
-
-    .cc-soc {
-      background: var(--green-bg);
-      border-color: var(--green-border);
-    }
-
-    .cc-soc h3 {
-      color: var(--green-text);
-    }
-
-    .cc-imm {
-      background: var(--red-bg);
-      border-color: var(--red-border);
-    }
-
-    .cc-imm h3 {
-      color: var(--red-text);
-    }
-
-    /* Timeline dots */
+    /* Timeline */
     .tl-label {
-      font-size: 11px;
+      font-size: 12px;
+      font-weight: 600;
       color: var(--text3);
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .timeline {
       display: flex;
       overflow-x: auto;
-      padding-bottom: 4px;
-      margin-bottom: 14px;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent;
     }
 
     .ti {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 86px;
-      padding: 0 5px;
+      min-width: 100px;
+      padding: 0 8px;
       position: relative;
     }
 
@@ -458,151 +444,160 @@
       content: '';
       position: absolute;
       right: 0;
-      top: 13px;
+      top: 16px;
       width: 1px;
-      height: 14px;
-      background: var(--border);
+      height: 20px;
+      background: var(--border2);
     }
 
     .tdot {
-      width: 26px;
-      height: 26px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
-      border: 0.5px solid;
-      margin-bottom: 3px;
+      font-size: 14px;
+      border: 1px solid;
+      margin-bottom: 6px;
+      box-shadow: var(--shadow-sm);
     }
 
     .t-r {
       background: var(--red-bg);
       border-color: var(--red-border);
+      color: var(--red-text);
     }
 
     .t-b {
       background: var(--blue-bg);
       border-color: var(--blue-border);
+      color: var(--blue-text);
     }
 
     .t-a {
       background: var(--amber-bg);
       border-color: var(--amber-border);
+      color: var(--amber-text);
     }
 
     .t-p {
       background: var(--purple-bg);
       border-color: var(--purple-border);
+      color: var(--purple-text);
     }
 
     .tyear {
-      font-size: 10.5px;
-      font-weight: 600;
+      font-size: 11.5px;
+      font-weight: 700;
       color: var(--text);
     }
 
     .tname {
-      font-size: 9.5px;
+      font-size: 11px;
       color: var(--text2);
       text-align: center;
-      line-height: 1.3;
-      margin-top: 1px;
+      line-height: 1.4;
+      margin-top: 2px;
     }
 
     /* Leader cards grid */
     .leaders-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
     }
 
-    .leader-card {
+    .leader-card,
+    .hist-card {
       background: var(--bg2);
-      border: 0.5px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .leader-card:hover,
+    .hist-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
 
     .lc-centre {
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text2);
       text-transform: uppercase;
-      letter-spacing: .05em;
-      margin-bottom: 3px;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
     }
 
     .lc-leader {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--text);
     }
 
     .lc-brit {
-      font-size: 11.5px;
+      font-size: 12.5px;
       color: var(--text2);
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
     .lc-note {
-      font-size: 11px;
+      font-size: 11.5px;
       color: var(--text3);
-      margin-top: 4px;
+      margin-top: 8px;
       font-style: italic;
-      border-top: 0.5px solid var(--border);
-      padding-top: 4px;
+      border-top: 1px dashed var(--border);
+      padding-top: 8px;
     }
 
     /* Historian cards */
-    .hist-card {
-      background: var(--bg2);
-      border: 0.5px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-    }
-
     .hist-name {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--text);
     }
 
     .hist-book {
-      font-size: 11.5px;
+      font-size: 12.5px;
       color: var(--blue-text);
       margin-top: 2px;
       font-style: italic;
     }
 
     .hist-view {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text2);
-      margin-top: 4px;
+      margin-top: 6px;
       line-height: 1.5;
     }
 
     /* Trap box */
     .trap {
       background: var(--amber-bg);
-      border: 0.5px solid var(--amber-border);
-      border-radius: 8px;
-      padding: 11px 13px;
-      margin-bottom: 10px;
+      border: 1px solid var(--amber-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
     }
 
     .trap-title {
-      font-size: 12.5px;
+      font-size: 13.5px;
       font-weight: 600;
       color: var(--amber-text);
-      margin-bottom: 5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .trap-body {
-      font-size: 12.5px;
+      font-size: 13px;
       color: var(--text);
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     .trap-body b {
@@ -611,27 +606,31 @@
 
     .correction-note {
       background: var(--red-bg);
-      border: 0.5px solid var(--red-border);
-      border-radius: 8px;
-      padding: 10px 13px;
-      margin-bottom: 12px;
-      font-size: 12px;
+      border: 1px solid var(--red-border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
       color: var(--red-text);
-      line-height: 1.55;
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
     }
 
-    .correction-note b {
-      font-weight: 600;
+    .correction-note i {
+      margin-top: 3px;
     }
 
     .footer {
       text-align: center;
-      margin-top: 28px;
-      font-size: 11px;
+      margin-top: 40px;
+      font-size: 12px;
+      font-weight: 500;
       color: var(--text3);
     }
 
-    @media(max-width:520px) {
+    @media(max-width: 560px) {
       .cause-grid {
         grid-template-columns: 1fr;
       }
@@ -641,17 +640,20 @@
       }
 
       body {
-        padding: 14px 10px 36px;
+        padding: 20px 12px 36px;
       }
 
       .header h1 {
-        font-size: 17px;
+        font-size: 20px;
       }
 
-      th,
-      td {
-        font-size: 11px;
-        padding: 5px 6px;
+      .tabs {
+        gap: 6px;
+      }
+
+      .tab {
+        padding: 6px 12px;
+        font-size: 12px;
       }
     }
   </style>
@@ -672,92 +674,95 @@
     </div>
 
     <div class="tabs">
-      <button class="tab all active" onclick="show('all',this)">Overview</button>
-      <button class="tab" onclick="show('causes',this)">⚡ Causes</button>
-      <button class="tab" onclick="show('start',this)">🔥 Shuruat</button>
-      <button class="tab" onclick="show('centres',this)">🗺️ Centres</button>
-      <button class="tab" onclick="show('failure',this)">❌ Failure</button>
-      <button class="tab" onclick="show('hist',this)">📚 Historians</button>
-      <button class="tab" onclick="show('after',this)">🏛️ After 1857</button>
-      <button class="tab" onclick="show('trap',this)">⚠️ Exam Traps</button>
+      <button class="tab all active" onclick="show('all',this)"><i class="fa-solid fa-layer-group"></i>
+        Overview</button>
+      <button class="tab" onclick="show('causes',this)"><i class="fa-solid fa-bolt"></i> Causes</button>
+      <button class="tab" onclick="show('start',this)"><i class="fa-solid fa-fire"></i> Shuruat</button>
+      <button class="tab" onclick="show('centres',this)"><i class="fa-solid fa-map-location-dot"></i> Centres</button>
+      <button class="tab" onclick="show('failure',this)"><i class="fa-solid fa-circle-xmark"></i> Failure</button>
+      <button class="tab" onclick="show('hist',this)"><i class="fa-solid fa-book"></i> Historians</button>
+      <button class="tab" onclick="show('after',this)"><i class="fa-solid fa-building-columns"></i> After 1857</button>
+      <button class="tab" onclick="show('trap',this)"><i class="fa-solid fa-triangle-exclamation"></i> Exam
+        Traps</button>
     </div>
 
     <!-- ══ OVERVIEW ══ -->
     <div class="panel show" id="panel-all">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🔥</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-fire" style="color: #e21422;"></i></span>
           <div>
             <div class="ch-title">Revolt of 1857 — Ek Nazar Mein</div>
             <div class="ch-sub">First War of Independence | 100 saal baad Plassey ke</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">📅</span>
+          <div class="fact"><span class="fi"><i class="fa-regular fa-calendar-days"></i></span>
             <div class="ft"><b>1757</b> → Battle of Plassey → British mazboot hue. <b>Theek 100 saal baad, 1857</b> mein
               sabse badi bagawat.</div>
           </div>
-          <div class="fact"><span class="fi">👑</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-crown"></i></span>
             <div class="ft"><b>Governor-General:</b> Lord Canning (baad mein pehla Viceroy bana).</div>
           </div>
-          <div class="fact"><span class="fi">🇬🇧</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-flag"></i></span>
             <div class="ft"><b>British PM:</b> Lord Palmerston (Liberal Party).</div>
           </div>
         </div>
       </div>
 
-      <div class="tl-label">Revolt ki Timeline →</div>
+      <div class="tl-label">Revolt ki Timeline <i class="fa-solid fa-arrow-right-long" style="margin-left: 4px;"></i>
+      </div>
       <div class="timeline">
         <div class="ti">
-          <div class="tdot t-r">🔫</div>
+          <div class="tdot t-r"><i class="fa-solid fa-gun"></i></div>
           <div class="tyear">29 Mar</div>
           <div class="tname">Mangal Pandey<br>Barrackpore</div>
         </div>
         <div class="ti">
-          <div class="tdot t-r">⚔️</div>
+          <div class="tdot t-r"><i class="fa-solid fa-skull"></i></div>
           <div class="tyear">8 Apr</div>
           <div class="tname">Mangal Pandey<br>hanged</div>
         </div>
         <div class="ti">
-          <div class="tdot t-b">🏙️</div>
+          <div class="tdot t-b"><i class="fa-solid fa-city"></i></div>
           <div class="tyear">10 May</div>
           <div class="tname">Meerut<br>Shuruaat</div>
         </div>
         <div class="ti">
-          <div class="tdot t-b">👑</div>
+          <div class="tdot t-b"><i class="fa-solid fa-crown"></i></div>
           <div class="tyear">11 May</div>
           <div class="tname">Delhi<br>Zafar Emperor</div>
         </div>
         <div class="ti">
-          <div class="tdot t-a">⚔️</div>
+          <div class="tdot t-a"><i class="fa-solid fa-khanda"></i></div>
           <div class="tyear">5 Jun</div>
           <div class="tname">Kanpur<br>Nana Saheb</div>
         </div>
         <div class="ti">
-          <div class="tdot t-a">👸</div>
+          <div class="tdot t-a"><i class="fa-solid fa-chess-queen"></i></div>
           <div class="tyear">Jun 1857</div>
           <div class="tname">Jhansi<br>Laxmibai</div>
         </div>
         <div class="ti">
-          <div class="tdot t-p">🏳️</div>
-          <div class="tyear">20 Jun<br>1858</div>
+          <div class="tdot t-p"><i class="fa-solid fa-flag-checkered"></i></div>
+          <div class="tyear">20 Jun 1858</div>
           <div class="tname">Gwalior<br>Revolt ends</div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="ch-icon">📜</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-scroll" style="color: #0c447c;"></i></span>
           <div>
             <div class="ch-title">Government of India Act, 1858 — Result</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">❌</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-xmark"></i></span>
             <div class="ft"><b>East India Company ka rule khatam hua.</b></div>
           </div>
-          <div class="fact"><span class="fi">👑</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-crown"></i></span>
             <div class="ft"><b>British Crown (Queen Victoria)</b> supreme authority bani.</div>
           </div>
-          <div class="fact"><span class="fi">🏛️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft">Governor-General → <b>Viceroy</b> ban gaya. <b>Lord Canning = 1st Viceroy of India.</b>
             </div>
           </div>
@@ -769,7 +774,7 @@
     <div class="panel" id="panel-causes">
       <div class="cause-grid">
         <div class="cause-card cc-pol">
-          <h3>🏛️ Political Causes</h3>
+          <h3><i class="fa-solid fa-building-columns"></i> Political Causes</h3>
           <ul>
             <li><b>Doctrine of Lapse</b> (Lord Dalhousie): Beta nahi → state British le lete. Satara (1848), Sambalpur
               (1849), Jhansi (1853).</li>
@@ -778,7 +783,7 @@
           </ul>
         </div>
         <div class="cause-card cc-eco">
-          <h3>💸 Economic Causes</h3>
+          <h3><i class="fa-solid fa-money-bill-wave"></i> Economic Causes</h3>
           <ul>
             <li><b>Permanent Settlement:</b> Zameen ka tax zyada → kisaan barbaad.</li>
             <li><b>Ryotwari System:</b> Seedhe kisaan se tax → bojh zyada.</li>
@@ -786,7 +791,7 @@
           </ul>
         </div>
         <div class="cause-card cc-soc">
-          <h3>🤝 Social Causes</h3>
+          <h3><i class="fa-solid fa-handshake"></i> Social Causes</h3>
           <ul>
             <li>Christian missionaries bahut active — logon ko lagta tha sabko Christian bana denge.</li>
             <li>Racial discrimination — British Indians se bura bartav karte the.</li>
@@ -795,7 +800,7 @@
           </ul>
         </div>
         <div class="cause-card cc-imm">
-          <h3>🔥 Immediate Cause</h3>
+          <h3><i class="fa-solid fa-fire"></i> Immediate Cause</h3>
           <ul>
             <li><b>Enfield Rifle</b> aaya — cartridge muh se kaatni padti thi.</li>
             <li>Rumour: Cartridge mein <b>Cow fat</b> (Hindu ke liye paap) + <b>Pig fat</b> (Muslim ke liye haram).</li>
@@ -814,35 +819,38 @@
     <!-- ══ SHURUAT ══ -->
     <div class="panel" id="panel-start">
       <div class="correction-note">
-        ⚠️ <b>Data Correction:</b> PDF mein "Lt. Baugh aur Major Hudson" likha tha — verified source ke according sahi
-        naam hain <b>Lt. Baugh aur Sergeant-Major Hewson</b>. "Hudson" galat tha, "Hewson" sahi hai.
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <div>
+          <b>Data Correction:</b> PDF mein "Lt. Baugh aur Major Hudson" likha tha — verified source ke according sahi
+          naam hain <b>Lt. Baugh aur Sergeant-Major Hewson</b>. "Hudson" galat tha, "Hewson" sahi hai.
+        </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🔫</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-gun" style="color: #791f1f;"></i></span>
           <div>
             <div class="ch-title">Mangal Pandey — Pehla Hero</div>
             <div class="ch-sub">29 March 1857 | Barrackpore</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">🪖</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-helmet-un"></i></span>
             <div class="ft"><b>Regiment:</b> 34th Native Infantry (Bengal)</div>
           </div>
-          <div class="fact"><span class="fi">📍</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-location-dot"></i></span>
             <div class="ft"><b>Location:</b> Barrackpore</div>
           </div>
-          <div class="fact"><span class="fi">📅</span>
+          <div class="fact"><span class="fi"><i class="fa-regular fa-calendar-days"></i></span>
             <div class="ft"><b>Date:</b> 29 March 1857</div>
           </div>
-          <div class="fact"><span class="fi">⚔️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-khanda"></i></span>
             <div class="ft"><b>Action:</b> Greased cartridge use karne se mana kiya. British officers <b>Lt. Baugh</b>
               aur <b>Sergeant-Major Hewson</b> pe attack kiya.</div>
           </div>
-          <div class="fact"><span class="fi">📢</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-bullhorn"></i></span>
             <div class="ft"><b>Slogan:</b> "Maro Firangi Ko"</div>
           </div>
-          <div class="fact"><span class="fi">💀</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-skull"></i></span>
             <div class="ft"><b>Phaansi (Hanged):</b> 8 April 1857</div>
           </div>
           <hr class="dv">
@@ -856,48 +864,48 @@
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🏙️</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-city" style="color: #0c447c;"></i></span>
           <div>
             <div class="ch-title">Asli Shuruaat — Meerut Se</div>
             <div class="ch-sub">10 May 1857</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">📅</span>
+          <div class="fact"><span class="fi"><i class="fa-regular fa-calendar-days"></i></span>
             <div class="ft"><b>Date:</b> 10 May 1857</div>
           </div>
-          <div class="fact"><span class="fi">🪖</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-users"></i></span>
             <div class="ft"><b>20th Native Infantry + 3rd Cavalry</b> ke sipahiyon ne greased cartridge use karne se
               mana kiya.</div>
           </div>
-          <div class="fact"><span class="fi">⚔️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-khanda"></i></span>
             <div class="ft">Jail todi, British officers pe attack kiya.</div>
           </div>
-          <div class="fact"><span class="fi">📢</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-bullhorn"></i></span>
             <div class="ft">Naara: <b>"Chalo Delhi"</b></div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="ch-icon">👑</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-crown" style="color: #b8860b;"></i></span>
           <div>
             <div class="ch-title">Delhi — 11 May 1857</div>
             <div class="ch-sub">Bahadur Shah Zafar — Emperor of India ghoshit</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">📅</span>
+          <div class="fact"><span class="fi"><i class="fa-regular fa-calendar-days"></i></span>
             <div class="ft"><b>11 May 1857</b> — Rebels Delhi pahunche.</div>
           </div>
-          <div class="fact"><span class="fi">👑</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-crown"></i></span>
             <div class="ft"><b>Bahadur Shah Zafar</b> ko <b>Emperor of India (Shahenshah-e-Hindustan)</b> ghoshit kiya.
             </div>
           </div>
-          <div class="fact"><span class="fi">🧑‍✈️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-user-tie"></i></span>
             <div class="ft"><b>Real Command:</b> General <b>Bakht Khan</b> ne sambhali.</div>
           </div>
-          <div class="fact"><span class="fi">✈️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-plane-departure"></i></span>
             <div class="ft">Revolt daba dene ke baad Bahadur Shah Zafar ko <b>Rangoon (Burma) exile</b> kiya.</div>
           </div>
         </div>
@@ -907,28 +915,26 @@
     <!-- ══ CENTRES ══ -->
     <div class="panel" id="panel-centres">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🗺️</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-map-location-dot"
+              style="color: #27500a;"></i></span>
           <div>
             <div class="ch-title">All Centres of the Revolt — Complete List</div>
           </div>
         </div>
         <div class="card-body">
           <div class="leaders-grid">
-
             <div class="leader-card">
               <div class="lc-centre">Delhi</div>
               <div class="lc-leader">Bahadur Shah Zafar + Bakht Khan</div>
               <div class="lc-brit">British: John Nicholson (died), Hudson</div>
               <div class="lc-note">Zafar = Emperor. Later exiled to Rangoon. Started: 11 May 1857.</div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Lucknow</div>
               <div class="lc-leader">Begum Hazrat Mahal + Birjis Qadr</div>
               <div class="lc-brit">British: Colin Campbell, Henry Lawrence</div>
               <div class="lc-note">Begum Hazrat Mahal Nepal bhaag gayi. Started: 4 June 1857.</div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Kanpur</div>
               <div class="lc-leader">Nana Saheb + Tantia Tope</div>
@@ -936,70 +942,60 @@
               <div class="lc-note">Nana Saheb main leader. Tantia Tope guerrilla war ladte rahe. Started: 5 June 1857.
               </div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Jhansi</div>
               <div class="lc-leader">Rani Laxmibai</div>
               <div class="lc-brit">British: Hugh Rose</div>
               <div class="lc-note">Hugh Rose ne kaha: "The only man among rebels." Started: June 1857.</div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Bareilly</div>
               <div class="lc-leader">Khan Bahadur Khan</div>
               <div class="lc-brit">British: Vincent Eyre / Campbell</div>
               <div class="lc-note">Rohilkhand region ka leader.</div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Arrah (Jagdishpur)</div>
               <div class="lc-leader">Kunwar Singh</div>
               <div class="lc-brit">British: William Taylor + Vincent Eyre</div>
               <div class="lc-note">Bihar ka hero. Oldest leader (~80 years) but bravest! Started: August 1857.</div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Allahabad (Prayagraj)</div>
               <div class="lc-leader">Liaquat Ali</div>
               <div class="lc-brit">British: Colonel Neill</div>
               <div class="lc-note">Started: June 1857.</div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Fatehpur</div>
               <div class="lc-leader">Azimullah Khan</div>
               <div class="lc-brit">British: General Renard</div>
-              <div class="lc-note">1857.</div>
+              <div class="lc-note">Started in 1857.</div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Faizabad (Ayodhya)</div>
               <div class="lc-leader">Maulvi Ahmadullah</div>
               <div class="lc-brit">British: Campbell</div>
               <div class="lc-note">Inhone Jihad declare kiya tha.</div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Gwalior</div>
               <div class="lc-leader">Tantia Tope</div>
               <div class="lc-brit">—</div>
               <div class="lc-note">Revolt ended here — 20 June 1858.</div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Sambalpur (Odisha)</div>
               <div class="lc-leader">Surendra Shahi + Ujjwal Shahi</div>
               <div class="lc-brit">—</div>
               <div class="lc-note">Odisha mein revolt.</div>
             </div>
-
             <div class="leader-card">
               <div class="lc-centre">Assam</div>
               <div class="lc-leader">Diwan Maniram Dutta</div>
               <div class="lc-brit">—</div>
               <div class="lc-note">Northeast mein revolt.</div>
             </div>
-
           </div>
         </div>
       </div>
@@ -1008,26 +1004,27 @@
     <!-- ══ FAILURE ══ -->
     <div class="panel" id="panel-failure">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">❌</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-circle-xmark"
+              style="color: #791f1f;"></i></span>
           <div>
             <div class="ch-title">Revolt Fail Kyun Hua?</div>
             <div class="ch-sub">4 Major Reasons</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">🗺️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-map-location-dot"></i></span>
             <div class="ft"><b>1. Limited Geographical Spread:</b> South India aur Punjab shaant rahe — revolt sirf
               North India mein zyada tha.</div>
           </div>
-          <div class="fact"><span class="fi">👥</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-users"></i></span>
             <div class="ft"><b>2. Limited Social Base:</b> Educated middle class, rich merchants, aur zamindars ne saath
               nahi diya.</div>
           </div>
-          <div class="fact"><span class="fi">👑</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-crown"></i></span>
             <div class="ft"><b>3. Lack of Central Leadership:</b> Koi ek strong leader nahi tha — Bahadur Shah Zafar
               weak the, sirf symbolic figure the.</div>
           </div>
-          <div class="fact"><span class="fi">🔫</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-gun"></i></span>
             <div class="ft"><b>4. Poor Resources:</b> British ke paas better guns, telegraph aur railways the →
               communication + logistics advantage.</div>
           </div>
@@ -1045,55 +1042,47 @@
     <!-- ══ HISTORIANS ══ -->
     <div class="panel" id="panel-hist">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">📚</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-book" style="color: #633806;"></i></span>
           <div>
             <div class="ch-title">Historians & Their Opinions — Zaroor Yaad Rakho</div>
           </div>
         </div>
         <div class="card-body">
-
           <div class="hist-card">
             <div class="hist-name">V.D. Savarkar</div>
             <div class="hist-book">"The Indian War of Independence, 1857"</div>
             <div class="hist-view">Pehle vyakti jinhone ise <b>War of Independence</b> kaha.</div>
           </div>
-
           <div class="hist-card">
             <div class="hist-name">S.N. Sen</div>
             <div class="hist-book">"Eighteen Fifty-Seven"</div>
             <div class="hist-view"><b>Official Government Historian</b> tha.</div>
           </div>
-
           <div class="hist-card">
             <div class="hist-name">R.C. Majumdar</div>
             <div class="hist-book">"The Sepoy Mutiny and the Revolt of 1857"</div>
             <div class="hist-view">Bola: <b>"Neither first, nor national, nor war of independence."</b></div>
           </div>
-
           <div class="hist-card">
             <div class="hist-name">Ashok Mehta</div>
             <div class="hist-book">"The Great Rebellion"</div>
             <div class="hist-view">Ise "Great Rebellion" kaha.</div>
           </div>
-
           <div class="hist-card">
             <div class="hist-name">Disraeli</div>
             <div class="hist-book">(British MP)</div>
             <div class="hist-view">Kaha: <b>"A National Revolt."</b></div>
           </div>
-
           <div class="hist-card">
             <div class="hist-name">T.R. Holmes</div>
             <div class="hist-book">—</div>
             <div class="hist-view">Kaha: <b>"A Conflict between Civilisation and Barbarism."</b></div>
           </div>
-
           <div class="hist-card">
             <div class="hist-name">John Lawrence & Seeley</div>
             <div class="hist-book">"Sepoy Mutiny"</div>
             <div class="hist-view">Kaha: <b>"A complete Sepoy Mutiny."</b></div>
           </div>
-
           <hr class="dv">
           <div class="badges">
             <span class="badge b-blue">Savarkar = 1st to say War of Independence</span>
@@ -1108,25 +1097,26 @@
     <!-- ══ AFTER 1857 ══ -->
     <div class="panel" id="panel-after">
       <div class="card">
-        <div class="card-header"><span class="ch-icon">🏛️</span>
+        <div class="card-header"><span class="ch-icon"><i class="fa-solid fa-building-columns"
+              style="color: #3c3489;"></i></span>
           <div>
             <div class="ch-title">Governance After the Revolt — 1858 Changes</div>
           </div>
         </div>
         <div class="card-body">
-          <div class="fact"><span class="fi">📜</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-scroll"></i></span>
             <div class="ft"><b>Government of India Act, 1858</b> pass hua.</div>
           </div>
-          <div class="fact"><span class="fi">❌</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-xmark"></i></span>
             <div class="ft"><b>East India Company ka rule khatam</b> hua — 1600 se chali aa rahi thi.</div>
           </div>
-          <div class="fact"><span class="fi">👑</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-crown"></i></span>
             <div class="ft"><b>British Crown (Queen Victoria)</b> supreme authority ban gayi.</div>
           </div>
-          <div class="fact"><span class="fi">🏛️</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-building-columns"></i></span>
             <div class="ft">Governor-General ka designation badal kar <b>Viceroy</b> kar diya gaya.</div>
           </div>
-          <div class="fact"><span class="fi">🥇</span>
+          <div class="fact"><span class="fi"><i class="fa-solid fa-medal"></i></span>
             <div class="ft"><b>Lord Canning = First Viceroy of India.</b></div>
           </div>
           <hr class="dv">
@@ -1142,30 +1132,29 @@
 
     <!-- ══ TRAPS ══ -->
     <div class="panel" id="panel-trap">
-
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #1 — Mangal Pandey ne kisko maara?</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #1 — Mangal Pandey ne kisko maara?
+        </div>
         <div class="trap-body">Sahi naam: <b>Lt. Baugh aur Sergeant-Major Hewson</b>. PDF mein "Major Hudson" tha — yeh
           <b>galat</b> hai. Hewson sahi hai. Verified sources se confirm hai.</div>
       </div>
-
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #2 — Revolt kab shuru hua?</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #2 — Revolt kab shuru hua?</div>
         <div class="trap-body">
           Mangal Pandey incident: <b>29 March 1857</b> (Barrackpore).<br>
           Asli / official revolt start: <b>10 May 1857</b> (Meerut).<br>
           Delhi rebels pahunche: <b>11 May 1857</b>. Teeno dates alag hain.
         </div>
       </div>
-
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #3 — Real command Delhi mein kaun tha?</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #3 — Real command Delhi mein kaun
+          tha?</div>
         <div class="trap-body">Bahadur Shah Zafar sirf symbolic leader tha. <b>Real military command = General Bakht
             Khan</b>. Dono alag hain.</div>
       </div>
-
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #4 — Historians ke views confuse mat karo</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #4 — Historians ke views confuse
+          mat karo</div>
         <div class="trap-body">
           <b>Savarkar</b> = "War of Independence" (pehle)<br>
           <b>R.C. Majumdar</b> = "Neither first, nor national, nor war of independence"<br>
@@ -1173,31 +1162,27 @@
           <b>T.R. Holmes</b> = "Civilisation vs Barbarism"
         </div>
       </div>
-
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #5 — Jhansi waali quote</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #5 — Jhansi waali quote</div>
         <div class="trap-body">Hugh Rose ne Rani Laxmibai ke baare mein kaha: <b>"The only man among rebels."</b> Yeh
           Hugh Rose ka quote hai — British commander ka. Exam mein exactly yahi poochha jaata hai.</div>
       </div>
-
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #6 — Kunwar Singh ki umar</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #6 — Kunwar Singh ki umar</div>
         <div class="trap-body">Kunwar Singh (Arrah/Jagdishpur) — Bihar ka hero — <b>~80 saal ke the</b> jab revolt mein
           ladi. Oldest rebel leader. Yeh fact bahut poochha jaata hai.</div>
       </div>
-
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #7 — Revolt kab khatam hua?</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #7 — Revolt kab khatam hua?</div>
         <div class="trap-body">Revolt start: <b>10 May 1857</b> (Meerut). Revolt khatam: <b>20 June 1858</b> (Gwalior).
           Government of India Act: <b>1858</b>. Lord Canning = Governor-General during revolt + 1st Viceroy after.</div>
       </div>
-
       <div class="trap">
-        <div class="trap-title">⚠️ Trap #8 — Doctrine of Lapse states</div>
+        <div class="trap-title"><i class="fa-solid fa-triangle-exclamation"></i> Trap #8 — Doctrine of Lapse states
+        </div>
         <div class="trap-body">Exam mein examples poochhe jaate hain: <b>Satara (1848), Sambalpur (1849), Jhansi
             (1853)</b>. Jhansi sabse famous hai — Rani Laxmibai ka connection isliye tha.</div>
       </div>
-
     </div>
 
     <div class="footer">Exam Fusion Prep &nbsp;|&nbsp; The Revolt of 1857 &nbsp;|&nbsp; BPSC / BSSC CGL</div>

@@ -215,6 +215,7 @@
 
     .ch-icon {
       font-size: 20px;
+      flex-shrink: 0;
     }
 
     .ch-title {
@@ -337,12 +338,16 @@
     .tw {
       border: 0.5px solid var(--border);
       border-radius: 8px;
-      overflow: hidden;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       margin-bottom: 13px;
+      width: 100%;
     }
 
     table {
       width: 100%;
+      min-width: 550px;
+      /* Crucial for preventing mobile squish */
       border-collapse: collapse;
       font-size: 12px;
     }
@@ -351,7 +356,7 @@
       font-size: 10.5px;
       color: var(--text2);
       font-weight: 500;
-      padding: 6px 8px;
+      padding: 8px 10px;
       text-align: left;
       border-bottom: 0.5px solid var(--border);
       background: var(--bg2);
@@ -359,7 +364,7 @@
     }
 
     td {
-      padding: 6px 8px;
+      padding: 8px 10px;
       border-bottom: 0.5px solid var(--border);
       color: var(--text);
       vertical-align: top;
@@ -449,8 +454,18 @@
     .timeline {
       display: flex;
       overflow-x: auto;
-      padding-bottom: 4px;
+      padding-bottom: 10px;
       margin-bottom: 14px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .timeline::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .timeline::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 4px;
     }
 
     .ti {
@@ -460,6 +475,8 @@
       min-width: 80px;
       padding: 0 5px;
       position: relative;
+      flex-shrink: 0;
+      /* Prevents dots from squishing */
     }
 
     .ti:not(:last-child)::after {
@@ -530,23 +547,45 @@
       color: var(--text3);
     }
 
+    /* Media Queries for Mobile Screens */
     @media(max-width:500px) {
       body {
         padding: 14px 10px 36px;
       }
 
       .header h1 {
-        font-size: 17px;
+        font-size: 19px;
+      }
+
+      .tabs {
+        gap: 5px;
+      }
+
+      .tab {
+        padding: 6px 12px;
+        font-size: 11.5px;
+      }
+
+      .card-header {
+        padding: 12px;
+      }
+
+      .card-body {
+        padding: 12px;
       }
 
       th,
       td {
-        padding: 5px 6px;
-        font-size: 11px;
+        padding: 7px 8px;
+        font-size: 11.5px;
       }
 
       .nawabs-grid {
         grid-template-columns: 1fr 1fr;
+      }
+
+      .tw {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.1);
       }
     }
   </style>
@@ -816,13 +855,13 @@
           <div class="fact"><span class="fi">⚔️</span>
             <div class="ft"><b>Opponents:</b></div>
           </div>
-          <div class="fact"><span class="fi">　</span>
+          <div class="fact"><span class="fi"> </span>
             <div class="ft">→ Bengal Nawab: <b>Mir Qasim</b></div>
           </div>
-          <div class="fact"><span class="fi">　</span>
+          <div class="fact"><span class="fi"> </span>
             <div class="ft">→ Awadh Nawab: <b>Shuja-ud-Daulah</b></div>
           </div>
-          <div class="fact"><span class="fi">　</span>
+          <div class="fact"><span class="fi"> </span>
             <div class="ft">→ Mughal Emperor: <b>Shah Alam II</b></div>
           </div>
           <div class="fact"><span class="fi">📜</span>
@@ -907,7 +946,8 @@
         <div class="card-body">
           <div class="fact"><span class="fi">📅</span>
             <div class="ft"><b>1639</b> — <b>Francis Day</b> ne Madras ka lease liya <b>King of Chandragiri</b> se.
-              <b>Fort St. George</b> banaya → Madras ka base.</div>
+              <b>Fort St. George</b> banaya → Madras ka base.
+            </div>
           </div>
           <div class="fact"><span class="fi">📅</span>
             <div class="ft"><b>1651</b> — Trade privileges mile <b>Shah Shuja</b> (Subahdar of Bengal) se.</div>
@@ -1200,7 +1240,8 @@
           </div>
           <div class="fact"><span class="fi">🌊</span>
             <div class="ft"><b>Sutlej River</b> ke along boundary set. Ranjit Singh ko Sutlej ke east cross karne se
-              <b>restricted</b> kiya.</div>
+              <b>restricted</b> kiya.
+            </div>
           </div>
 
           <hr class="dv">

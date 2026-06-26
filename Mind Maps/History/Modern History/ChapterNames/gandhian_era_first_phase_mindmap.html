@@ -325,15 +325,21 @@
       border-color: var(--teal-border);
     }
 
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
     .tw {
       border: 0.5px solid var(--border);
       border-radius: 8px;
-      overflow: hidden;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       margin-bottom: 10px;
+      width: 100%;
+      display: block;
     }
 
     table {
-      width: 100%;
+      width: max-content;
+      /* This is the magic line that stops text from squishing */
+      min-width: 100%;
       border-collapse: collapse;
       font-size: 11.5px;
     }
@@ -342,17 +348,24 @@
       font-size: 10.5px;
       color: var(--text2);
       font-weight: 500;
-      padding: 6px 8px;
+      padding: 8px 12px;
       text-align: left;
       border-bottom: 0.5px solid var(--border);
       background: var(--bg2);
+      white-space: nowrap;
     }
 
     td {
-      padding: 5.5px 8px;
+      padding: 8px 12px;
       border-bottom: 0.5px solid var(--border);
       color: var(--text);
       vertical-align: top;
+      min-width: 120px;
+      /* Prevents columns from becoming too thin */
+      max-width: 400px;
+      /* Forces extremely long lines to break */
+      white-space: normal;
+      line-height: 1.5;
     }
 
     tr:last-child td {
@@ -579,13 +592,26 @@
       color: var(--text3);
     }
 
-    @media(max-width:520px) {
+    /* ==== RESPONSIVE DESIGN ==== */
+    @media(max-width:560px) {
       body {
         padding: 14px 10px 36px;
       }
 
       .header h1 {
-        font-size: 17px;
+        font-size: 18px;
+      }
+
+      /* Make tabs stretch and adjust padding */
+      .tabs {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 6px 8px;
+        font-size: 11.5px;
       }
 
       .sgrid,
@@ -595,12 +621,21 @@
 
       th,
       td {
-        font-size: 10.5px;
-        padding: 5px 6px;
+        font-size: 11.5px;
+        /* Keep font readable on mobile */
+        padding: 8px 10px;
+      }
+
+      /* Timeline vertical stack for mobile readability */
+      .tlrow {
+        flex-direction: column;
       }
 
       .tlyr {
-        min-width: 82px;
+        width: 100%;
+        border-right: none;
+        border-bottom: 0.5px solid var(--border);
+        padding: 6px 11px;
       }
     }
   </style>
@@ -822,7 +857,7 @@
               <span class="sc-yr yr-a">1918 | Gujarat</span>
               <div class="sc-row"><b>Significance:</b> Gandhi ji ka <b>Pehla Asahyog Prayog</b> (precursor to NCM)</div>
               <div class="sc-row"><b>Issue:</b> Govt ne fasal failure pe revenue maaf karne se mana kiya. Rule: crop
-                yield &lt;25% ho toh revenue maaf hona chahiye.</div>
+                yield &lt;25% ho toh revenue maaf chahiye.</div>
               <div class="sc-row"><b>Associates:</b> Sardar Vallabhbhai Patel (invited Gandhi), Narahari Parikh,
                 Mohanlal Pandya, Ravi Shankar Vyas</div>
               <div class="sc-note"><b>Significance:</b> Revenue non-payment ka pehla experiment.</div>
@@ -1193,13 +1228,14 @@
     <div class="panel" id="panel-trap">
       <div class="trap">
         <div class="trap-title">⚠️ Trap #1 — Pravasi Bharatiya Divas = 9 January</div>
-        <div class="trap-body">Gandhi ji India wapas aaye <b>9 January 1915</b> ko. Isi din <b>Pravasi Bharatiya
-            Divas</b> manate hain. South Africa se wapsi thi — pehli baar nahi aaye the.</div>
+        <div class="trap-body">Gandhi ji India wapas aaye <b>9 January 1915</b> ko[cite: 3]. Isi din <b>Pravasi
+            Bharatiya
+            Divas</b> manate hain[cite: 3]. South Africa se wapsi thi — pehli baar nahi aaye the[cite: 3].</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #2 — "Mahatma" title kisne diya?</div>
         <div class="trap-body"><b>Rabindranath Tagore</b> ne Champaran Satyagraha ki safalta ke baad "Mahatma" title
-          diya. Gokhale ne nahi — woh Gandhi ke political guru the.</div>
+          diya[cite: 3]. Gokhale ne nahi — woh Gandhi ke political guru the[cite: 3].</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #3 — Indian Women's Association = Annie Besant, Gandhi nahi</div>
@@ -1209,39 +1245,45 @@
       <div class="trap">
         <div class="trap-title">⚠️ Trap #4 — Shankaran Nair — most important MCQ</div>
         <div class="trap-body">Jallianwala Bagh ke baad <b>Shankaran Nair</b> ne <b>Viceroy's Executive Council</b> se
-          resign kiya. Tagore ne Knighthood lautayi, Gandhi ne Kaiser-i-Hind lautaya — alag-alag reactions yaad rakho.
+          resign kiya[cite: 3]. Tagore ne Knighthood lautayi, Gandhi ne Kaiser-i-Hind lautaya — alag-alag reactions yaad
+          rakho[cite: 3].
         </div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #5 — C.R. Das pehle oppose, phir support</div>
-        <div class="trap-body">C.R. Das ne <b>Calcutta Session 1920</b> mein NCM proposal ka <b>virodh</b> kiya. Lekin
-          <b>Nagpur Session 1920</b> mein resolution khud <b>move</b> kiya (support). Dono sessions mein alag role tha!
+        <div class="trap-body">C.R. Das ne <b>Calcutta Session 1920</b> mein NCM proposal ka <b>virodh</b> kiya[cite:
+          3]. Lekin
+          <b>Nagpur Session 1920</b> mein resolution khud <b>move</b> kiya (support)[cite: 3]. Dono sessions mein alag
+          role tha!
         </div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #6 — "Himalayan Blunder" context</div>
         <div class="trap-body"><b>"Himalayan Blunder"</b> = Gandhi ji ne Chauri-Chaura ki ghatna ke context mein NCM
-          wapas lete waqt kaha. <b>"National Calamity"</b> = Subhash Chandra Bose ne NCM waapis lene ko kaha.</div>
+          wapas lete waqt kaha[cite: 3]. <b>"National Calamity"</b> = Subhash Chandra Bose ne NCM waapis lene ko
+          kaha[cite: 3].</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #7 — NCM start date = Tilak death date</div>
         <div class="trap-body">NCM <b>1 August 1920</b> se shuru hua — aur isi din subah <b>Bal Gangadhar Tilak ki
-            death</b> ho gayi. Yeh coincidence bahut poochha jata hai.</div>
+            death</b> ho gayi[cite: 3]. Yeh coincidence bahut poochha jata hai.</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #8 — Rowlatt Act resignations</div>
         <div class="trap-body">Rowlatt Act ke virodh mein resign kiya: <b>Madan Mohan Malaviya + Mazharul Haq + Mohammad
-            Ali Jinnah</b>. Teeno Central Legislature se resign kiye — Viceroy Council se nahi.</div>
+            Ali Jinnah</b>[cite: 3]. Teeno Central Legislature se resign kiye — Viceroy Council se nahi.</div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #9 — Khilafat end = Mustafa Kemal Pasha 1924</div>
         <div class="trap-body">Khilafat Movement 1919 mein shuru hua — <b>1924</b> mein khatam hua jab <b>Mustafa Kemal
-            Pasha</b> ne Turkey mein reforms laaye (Caliphate abolish ki). Turkish reforms = Khilafat ka end.</div>
+            Pasha</b> ne Turkey mein reforms laaye (Caliphate abolish ki)[cite: 3]. Turkish reforms = Khilafat ka end.
+        </div>
       </div>
       <div class="trap">
         <div class="trap-title">⚠️ Trap #10 — Champaran ka "Bulaya kisne"</div>
         <div class="trap-body">Gandhi ji ko Champaran bulaya <b>Rajkumar Shukla</b> ne — Lucknow Session 1916 mein mile
-          the. Team mein Rajendra Prasad, J.B. Kripalani, Mahadev Desai the. Rajkumar Shukla leader nahi — bas bulane
+          the[cite: 3]. Team mein Rajendra Prasad, J.B. Kripalani, Mahadev Desai the[cite: 3]. Rajkumar Shukla leader
+          nahi — bas bulane
           wala tha.</div>
       </div>
     </div>
