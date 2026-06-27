@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 01 – Sources of Ancient History | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --card: #21253a;
+      --border: #2e3350;
+      --accent: #f5a623;
+      --accent2: #7c6af5;
+      --accent3: #3ecf8e;
+      --accent4: #e05c7e;
+      --text: #e8eaf6;
+      --muted: #8a90b0;
+      --tab-active: #f5a623;
+      --badge-bg: #2a2f4a;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --card: #eef1f9;
+      --border: #d0d5ee;
+      --accent: #c97a00;
+      --accent2: #5849d6;
+      --accent3: #1e9e68;
+      --accent4: #c0284d;
+      --text: #1a1d2e;
+      --muted: #5a6080;
+      --tab-active: #c97a00;
+      --badge-bg: #dde2f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #1a1d27 0%, #12152a 100%);
+      border-bottom: 2px solid var(--accent);
+      padding: 18px 24px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    [data-theme="light"] header {
+      background: linear-gradient(135deg, #ffffff 0%, #eef1f9 100%);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand {
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .chapter-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .chapter-title span {
+      color: var(--accent);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .theme-btn {
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .badge-exam {
+      background: var(--accent);
+      color: #111;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+    }
+
+    /* ── TABS ── */
+    .tabs-wrapper {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .tab:hover {
+      color: var(--text);
+    }
+
+    .tab.active {
+      color: var(--tab-active);
+      border-bottom-color: var(--tab-active);
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      padding: 22px 20px 60px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* ── SECTION CARDS ── */
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 13px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .section-header:hover {
+      background: rgba(245, 166, 35, 0.05);
+    }
+
+    .sec-icon {
+      font-size: 18px;
+    }
+
+    .sec-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .sec-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .chevron {
+      color: var(--muted);
+      font-size: 12px;
+      transition: transform 0.25s;
+    }
+
+    .section-card.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .section-body {
+      padding: 16px 18px;
+      display: none;
+    }
+
+    .section-card.open .section-body {
+      display: block;
+    }
+
+    /* ── TABLE RESPONSIVE WRAPPER & STYLES ── */
+    .tw {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      display: block;
+      margin-top: 6px;
+      border-radius: 6px;
+    }
+
+    table {
+      width: max-content;
+      /* Prevents text squishing */
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      background: var(--surface);
+      color: var(--accent);
+      padding: 9px 12px;
+      text-align: left;
+      font-size: 11px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+      /* Keeps table headers single-line */
+    }
+
+    td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      /* Minimum space for mobile */
+      max-width: 400px;
+      /* Text wrap limits */
+      white-space: normal;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .key-term {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .hl2 {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl3 {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl4 {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    /* ── BULLETS ── */
+    ul.points {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.points li {
+      padding: 7px 0 7px 22px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    ul.points li:last-child {
+      border-bottom: none;
+    }
+
+    ul.points li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      top: 9px;
+    }
+
+    ul.points.sub li::before {
+      content: '→';
+      color: var(--accent3);
+    }
+
+    /* ── FLOW BOXES ── */
+    .flow-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .flow-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      flex: 1 1 200px;
+      position: relative;
+    }
+
+    .flow-box .fb-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+
+    .flow-box .fb-val {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .flow-box .fb-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .flow-box.accent-a {
+      border-left: 3px solid var(--accent);
+    }
+
+    .flow-box.accent-b {
+      border-left: 3px solid var(--accent2);
+    }
+
+    .flow-box.accent-c {
+      border-left: 3px solid var(--accent3);
+    }
+
+    .flow-box.accent-d {
+      border-left: 3px solid var(--accent4);
+    }
+
+    /* ── EXAM TRAP ── */
+    .trap-card {
+      background: rgba(224, 92, 126, 0.08);
+      border: 1px solid rgba(224, 92, 126, 0.35);
+      border-radius: 10px;
+      padding: 13px 16px;
+      margin-bottom: 12px;
+    }
+
+    .trap-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--accent4);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .trap-text {
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .trap-text strong {
+      color: var(--accent4);
+    }
+
+    /* ── QUICK FACTS ── */
+    .qf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .qf-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+    }
+
+    .qf-q {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .qf-a {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .qf-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── TRAVELER CARD ── */
+    .traveler-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .traveler-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .tc-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .tc-origin {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .tc-facts {
+      list-style: none;
+      padding: 0;
+    }
+
+    .tc-facts li {
+      font-size: 12px;
+      line-height: 1.5;
+      padding: 3px 0 3px 16px;
+      position: relative;
+    }
+
+    .tc-facts li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .tc-book {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 20px;
+    }
+
+    .tb-greek {
+      background: rgba(245, 166, 35, 0.15);
+      color: var(--accent);
+    }
+
+    .tb-chinese {
+      background: rgba(62, 207, 142, 0.15);
+      color: var(--accent3);
+    }
+
+    .tb-arabic {
+      background: rgba(224, 92, 126, 0.15);
+      color: var(--accent4);
+    }
+
+    .tb-other {
+      background: rgba(124, 106, 245, 0.15);
+      color: var(--accent2);
+    }
+
+    /* ── OVERVIEW BADGES ── */
+    .overview-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .ov-badge {
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .ov-badge span {
+      color: var(--accent);
+    }
+
+    /* ── SECTION DIVIDER ── */
+    .sdivider {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin: 18px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      header {
+        padding: 12px 14px;
+      }
+
+      .chapter-title {
+        font-size: 14px;
+      }
+
+      main {
+        padding: 14px 12px 50px;
+      }
+
+      .tab {
+        padding: 10px 12px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="dark">
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="header-left">
+      <div>
+        <div class="brand">Exam Fusion Prep · Ancient History</div>
+        <div class="chapter-title"><span>Ch 01</span> — Sources of Ancient History</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="badge-exam">BPSC · BSSC</span>
+      <button class="theme-btn" onclick="toggleTheme()">☀ Light</button>
+    </div>
+  </header>
+
+  <!-- ── TABS ── -->
+  <div class="tabs-wrapper">
+    <button class="tab active" onclick="switchTab('overview',this)">🗺 Overview</button>
+    <button class="tab" onclick="switchTab('arch',this)">🏛 Archaeological</button>
+    <button class="tab" onclick="switchTab('literary',this)">📖 Literary</button>
+    <button class="tab" onclick="switchTab('travelers',this)">✈ Foreign Travelers</button>
+    <button class="tab" onclick="switchTab('traps',this)">⚠ Exam Traps</button>
+    <button class="tab" onclick="switchTab('quick',this)">⚡ Quick Recall</button>
+  </div>
+
+  <main>
+
+    <!-- ══════════════════════════════════════
+     TAB 1 — OVERVIEW
+══════════════════════════════════════ -->
+    <div class="tab-panel active" id="tab-overview">
+      <div class="overview-badges">
+        <div class="ov-badge">Sources: <span>3 Types</span></div>
+        <div class="ov-badge">Inscriptions: <span>5 Key</span></div>
+        <div class="ov-badge">Vedas: <span>4</span></div>
+        <div class="ov-badge">Travelers: <span>12+</span></div>
+        <div class="ov-badge">Father of Indian Archaeology: <span>A. Cunningham</span></div>
+      </div>
+
+      <!-- 3 Sources -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🔎</span>
+          <span class="sec-title">3 Sources of Knowing Ancient History</span>
+          <span class="sec-sub">Itihas Janne ke Strot</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row">
+            <div class="flow-box accent-a">
+              <div class="fb-label">Source 1</div>
+              <div class="fb-val">⛏ Archaeological Sources</div>
+              <div class="fb-note">Puratatvik Strot — Physical evidence</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">Source 2</div>
+              <div class="fb-val">📚 Literary Sources</div>
+              <div class="fb-note">Sahityik Strot — Texts & Books</div>
+            </div>
+            <div class="flow-box accent-c">
+              <div class="fb-label">Source 3</div>
+              <div class="fb-val">🌍 Foreign Travelers</div>
+              <div class="fb-note">Videshi Yatriyon ka Vivaran</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Definitions -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">📌</span>
+          <span class="sec-title">Key Definitions (Paribhashayein)</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Term</th>
+                  <th>Meaning</th>
+                  <th>Key Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Archaeology</td>
+                  <td>Study of ancient objects/buildings — Purani vastuon ka adhyayan</td>
+                  <td class="hl2">Father: Alexander Cunningham</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Epigraphy</td>
+                  <td>Study of Inscriptions — Abhilekhon ka adhyayan</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Numismatics</td>
+                  <td>Study of Coins — Sikkon ka adhyayan → Mudrashastra</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+     TAB 2 — ARCHAEOLOGICAL
+══════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-arch">
+
+      <!-- Inscriptions -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🪨</span>
+          <span class="sec-title">Important Inscriptions (Abhilekh)</span>
+          <span class="sec-sub">5 Must-Know for Exam</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Inscription</th>
+                  <th>Details</th>
+                  <th>Significance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Boghazkoi<br><span style="font-size:11px;color:var(--muted)">1400 BCE</span></td>
+                  <td>Stone inscriptions — Pathar ke abhilekh<br>Mentions: <span class="hl2">Indra, Mitra, Varuna,
+                      Nasatya</span></td>
+                  <td>Evidence of <strong>Aryan migration</strong> from Iran to East</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Maski & Gurjara</td>
+                  <td>—</td>
+                  <td>Clear inscription in the <span class="hl3">name of Ashoka</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Prayag Prashasti</td>
+                  <td>Engraved by royal poet <span class="hl2">Harisena</span></td>
+                  <td>Inscription of <span class="hl3">Samudragupta</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Eran Inscription</td>
+                  <td>King: <span class="hl2">Bhanugupta</span></td>
+                  <td><span class="hl3">First written evidence of Sati practice</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Bhitari Pillar</td>
+                  <td>King: <span class="hl2">Skandagupta</span></td>
+                  <td><span class="hl3">First record of Huna invasion on India</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coins -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🪙</span>
+          <span class="sec-title">Coins (Sikke) — Flow</span>
+          <span class="sec-sub">Numismatics / Mudrashastra</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row">
+            <div class="flow-box accent-a">
+              <div class="fb-label">Earliest Coins</div>
+              <div class="fb-val">Aahat (Punch-marked)</div>
+              <div class="fb-note">Only symbols — koi likhawat nahi</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">1st Gold Coins</div>
+              <div class="fb-val">Indo-Greek Coins</div>
+              <div class="fb-note">Pehle gold coins</div>
+            </div>
+            <div class="flow-box accent-c">
+              <div class="fb-label">Most Gold Coins Issued</div>
+              <div class="fb-val">Gupta Period</div>
+              <div class="fb-note">Samudragupta — Veena playing on coins</div>
+            </div>
+            <div class="flow-box accent-d">
+              <div class="fb-label">Purest Gold Coins</div>
+              <div class="fb-val">Kushan Period</div>
+              <div class="fb-note">Sabse pure sone ke sikke</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monuments / Caves -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🏔</span>
+          <span class="sec-title">Monuments, Caves & Sculptures</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="sdivider">Monuments</div>
+          <ul class="points">
+            <li><span class="key-term">Mauryan Palace:</span> Remains of Chandragupta Maurya's palace at <strong>Kumhrar
+                (Patna)</strong></li>
+          </ul>
+
+          <div class="sdivider">Caves — Gifted to Ajivikas</div>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Builder</th>
+                  <th>Location</th>
+                  <th>Caves</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Ashoka</td>
+                  <td>Barabar Hills</td>
+                  <td>4 caves: <span class="hl2">Sudama, Karna Chaupad, Vishva Jhopdi, Lomas Rishi</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Dasharatha</td>
+                  <td>Nagarjuni Hills</td>
+                  <td><span class="hl3">Gopi, Vedika, Cave of Vapiya</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="sdivider">Sculptures & Paintings</div>
+          <ul class="points">
+            <li><span class="key-term">Buddhist Sculptures:</span> Flourished during <span class="hl2">Kushan
+                Period</span></li>
+            <li><span class="key-term">Earliest Buddha Images:</span> <span class="hl3">Gandhara Style</span></li>
+            <li><span class="key-term">Ajanta Paintings:</span> Dated from <span class="hl2">1st Century CE to 7th
+                Century CE</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+     TAB 3 — LITERARY
+══════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-literary">
+
+      <!-- Religious Literature -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🕉</span>
+          <span class="sec-title">Religious Literature (Dharmik Sahitya)</span>
+          <span class="sec-sub">Buddhist, Jain & Vedic texts</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row" style="margin-bottom:14px;">
+            <div class="flow-box accent-b">
+              <div class="fb-label">Buddhist Texts</div>
+              <div class="fb-val">Tripitakas, Jataka, Dipavamsa, Mahavamsa</div>
+              <div class="fb-note"><strong>Source of Mauryan history</strong><br>Milinda Panho → Info about Indo-Greek
+                ruler <span style="color:var(--accent3)">Menander</span></div>
+            </div>
+            <div class="flow-box accent-c">
+              <div class="fb-label">Jain Texts</div>
+              <div class="fb-val">Parishishtaparvan, Bhadrabahu Charita, Bhagavati Sutra</div>
+              <div class="fb-note"><strong>Bhagavati Sutra</strong> → 16 Mahajanapadas ki list milti hai</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Vedas -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">📜</span>
+          <span class="sec-title">The 4 Vedas</span>
+          <span class="sec-sub">Exam me seedha question aata hai</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Veda</th>
+                  <th>Description / Key Fact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Rigveda</td>
+                  <td>Collection of hymns — Mantron ka sangrah</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Samaveda</td>
+                  <td>Hymns in musical form — <span class="hl3">First reference of music (Sangeet ka pehla
+                      ullekh)</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Yajurveda</td>
+                  <td>Rules for rituals and sacrifices — Ritual-focused</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Atharvaveda</td>
+                  <td>Collection of charms, mantras and spells — <span class="hl4">Jaadu-Tona</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historical Texts -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">📗</span>
+          <span class="sec-title">Important Historical Texts — Kisne kya likha?</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Work (Kitaab)</th>
+                  <th>Author (Lekhak)</th>
+                  <th>Subject / Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Ashtadhyayi</td>
+                  <td class="hl2">Panini</td>
+                  <td>First Sanskrit grammar book · Info on <strong>Pre-Mauryan society</strong></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Arthashastra</td>
+                  <td class="hl2">Kautilya (Chanakya)</td>
+                  <td>Mauryan administration · <strong>First book about political system</strong></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Rajatarangini</td>
+                  <td class="hl2">Kalhana</td>
+                  <td>History of <strong>Kashmir</strong></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Mahabhashya</td>
+                  <td class="hl2">Patanjali</td>
+                  <td>Info about <strong>Post-Mauryan system</strong> (Shunga dynasty wagera)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+     TAB 4 — FOREIGN TRAVELERS
+══════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-travelers">
+
+      <div class="sdivider" style="margin-top:0">🏺 Greek Writers (Unani)</div>
+      <div class="traveler-grid">
+
+        <div class="traveler-card">
+          <div class="tc-name">Herodotus</div>
+          <div class="tc-origin">🇬🇷 Greek</div>
+          <ul class="tc-facts">
+            <li><strong>Father of History</strong></li>
+            <li>Included fictional tales in writings</li>
+          </ul>
+        </div>
+
+        <div class="traveler-card">
+          <div class="tc-name">Ctesias</div>
+          <div class="tc-origin">🇬🇷 Greek</div>
+          <ul class="tc-facts">
+            <li>Royal Physician of Iran</li>
+          </ul>
+        </div>
+
+        <div class="traveler-card">
+          <div class="tc-name">Megasthenes</div>
+          <div class="tc-origin">🇬🇷 Greek · Ambassador of Seleucus</div>
+          <ul class="tc-facts">
+            <li>Ambassador at <strong>Chandragupta Maurya's</strong> court</li>
+            <li>Described Mauryan society & administration</li>
+          </ul>
+          <span class="tc-book tb-greek">📖 Indica</span>
+        </div>
+
+        <div class="traveler-card">
+          <div class="tc-name">Ptolemy</div>
+          <div class="tc-origin">🇬🇷 Greek</div>
+          <ul class="tc-facts">
+            <li>—</li>
+          </ul>
+          <span class="tc-book tb-greek">📖 Geography</span>
+        </div>
+
+        <div class="traveler-card">
+          <div class="tc-name">Pliny</div>
+          <div class="tc-origin">🇬🇷 Greek · 1st Century CE</div>
+          <ul class="tc-facts">
+            <li>—</li>
+          </ul>
+          <span class="tc-book tb-greek">📖 Natural History</span>
+        </div>
+
+        <div class="traveler-card">
+          <div class="tc-name">Periplus of Erythraean Sea</div>
+          <div class="tc-origin">Anonymous writer (Naam nahi pata)</div>
+          <ul class="tc-facts">
+            <li>Info on Indian ports & trade goods</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sdivider">🇨🇳 Chinese Travelers (Cheeni Yatri)</div>
+      <div class="traveler-grid">
+
+        <div class="traveler-card">
+          <div class="tc-name">Faxian</div>
+          <div class="tc-origin">🇨🇳 Chinese · Came 402 CE</div>
+          <ul class="tc-facts">
+            <li>Visited during <strong>Chandragupta II's reign</strong> (Gupta Period)</li>
+            <li>Stayed in India for <strong>14 years</strong></li>
+          </ul>
+        </div>
+
+        <div class="traveler-card">
+          <div class="tc-name">Sung Yun</div>
+          <div class="tc-origin">🇨🇳 Chinese · Came 518 CE</div>
+          <ul class="tc-facts">
+            <li>Collected copies of Buddhist texts</li>
+            <li>Stayed <strong>3 years</strong></li>
+          </ul>
+        </div>
+
+        <div class="traveler-card">
+          <div class="tc-name">Xuanzang (Hiuen Tsang)</div>
+          <div class="tc-origin">🇨🇳 Chinese · Came 630 CE</div>
+          <ul class="tc-facts">
+            <li>Came during <strong>Harshavardhana's reign</strong></li>
+            <li>Stayed <strong>15 years</strong></li>
+            <li>Described society, religion & politics of Harsha's time</li>
+          </ul>
+          <span class="tc-book tb-chinese">📖 Si-Yu-Ki</span>
+        </div>
+
+        <div class="traveler-card">
+          <div class="tc-name">I-Tsing</div>
+          <div class="tc-origin">🇨🇳 Chinese · Late 7th century</div>
+          <ul class="tc-facts">
+            <li>Studied at <strong>Nalanda & Vikramshila</strong> universities</li>
+            <li>Wrote about Indian society</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sdivider">📿 Arabic Writers (Arabi)</div>
+      <div class="traveler-grid">
+
+        <div class="traveler-card">
+          <div class="tc-name">Al-Biruni</div>
+          <div class="tc-origin">🕌 Arabic · Came 1017 CE with Mahmud Ghazni</div>
+          <ul class="tc-facts">
+            <li>Resident of modern <strong>Turkmenistan</strong></li>
+          </ul>
+          <span class="tc-book tb-arabic">📖 Kitab-ul-Hind / Tahqiq-e-Hind</span>
+        </div>
+
+        <div class="traveler-card">
+          <div class="tc-name">Ibn Battuta</div>
+          <div class="tc-origin">🕌 Arabic · Came 1333 CE (14th Century)</div>
+          <ul class="tc-facts">
+            <li>Appointed <strong>Qazi (Judge) of Delhi</strong> by Muhammad bin Tughlaq</li>
+          </ul>
+          <span class="tc-book tb-arabic">📖 Rihla (Travelogue)</span>
+        </div>
+      </div>
+
+      <div class="sdivider">🌏 Other Writers</div>
+      <div class="traveler-grid">
+
+        <div class="traveler-card">
+          <div class="tc-name">Taranatha</div>
+          <div class="tc-origin">🏔 Tibetan · 1575–1634 CE</div>
+          <ul class="tc-facts">
+            <li>—</li>
+          </ul>
+          <span class="tc-book tb-other">📖 Kangyur & Tangyur</span>
+        </div>
+
+        <div class="traveler-card">
+          <div class="tc-name">Marco Polo</div>
+          <div class="tc-origin">🇮🇹 Italian · 1288–1292 CE</div>
+          <ul class="tc-facts">
+            <li>Visited <strong>Pandya region</strong> at end of 13th century</li>
+            <li>Descriptions useful for studying Pandya's history</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+     TAB 5 — EXAM TRAPS
+══════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-traps">
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 01 — Coins</div>
+        <div class="trap-text">
+          <strong>Indo-Greek = First Gold Coins</strong> (Pehle gold coins)<br>
+          <strong>Kushans = Purest Gold Coins</strong> (Sabse pure sone ke sikke)<br>
+          <strong>Guptas = Most Gold Coins issued</strong> (Sabse zyada gold coins)<br>
+          Exam me teeno alag-alag puchhe jaate hain — confuse mat ho!
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 02 — Caves</div>
+        <div class="trap-text">
+          <strong>Ashoka → Barabar Hills</strong> (4 caves — Sudama, Karna Chaupad, Vishva Jhopdi, Lomas Rishi)<br>
+          <strong>Dasharatha → Nagarjuni Hills</strong> (Gopi, Vedika, Vapiya)<br>
+          Dono ne Ajivikas ko caves gift ki thi — ye important hai!
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 03 — Firsts</div>
+        <div class="trap-text">
+          <strong>First Sati evidence:</strong> Eran Inscription (King Bhanugupta)<br>
+          <strong>First Huna invasion record:</strong> Bhitari Pillar (Skandagupta)<br>
+          <strong>First Sanskrit grammar book:</strong> Ashtadhyayi (Panini)<br>
+          <strong>First political book:</strong> Arthashastra (Chanakya)
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 04 — Stay Duration (Chinese Travelers)</div>
+        <div class="trap-text">
+          <strong>Faxian = 14 years</strong> (Chandragupta II ka time, 402 CE)<br>
+          <strong>Xuanzang = 15 years</strong> (Harsha ka time, 630 CE)<br>
+          <strong>Sung Yun = 3 years</strong> (518 CE)<br>
+          "14 ya 15" — exam me yahi confuse karta hai!
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 05 — Arabic Travelers</div>
+        <div class="trap-text">
+          <strong>Al-Biruni:</strong> Came with <strong>Mahmud Ghazni (1017 CE)</strong>, wrote Kitab-ul-Hind<br>
+          <strong>Ibn Battuta:</strong> Came <strong>1333 CE</strong>, wrote <strong>Rihla</strong>, appointed Qazi by
+          <strong>Muhammad bin Tughlaq</strong><br>
+          Dono Arabic hain but alag-alag rulers ke time aaye!
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 06 — Boghazkoi Inscription</div>
+        <div class="trap-text">
+          Boghazkoi (1400 BCE) mentions <strong>Indra, Mitra, Varuna, Nasatya</strong> — ye Vedic gods hain.<br>
+          This is evidence of <strong>Aryan migration from Iran eastward</strong> — aur ye Iran mein mila tha, India
+          mein nahi!
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 07 — Vedas</div>
+        <div class="trap-text">
+          <strong>Rigveda = Hymns collection</strong> (Mantron ka sangrah)<br>
+          <strong>Samaveda = Musical hymns + First music reference</strong> — ye confuse karta hai<br>
+          <strong>Atharvaveda = Charms & Spells (Jaadu-Tona)</strong> — alag hai baaki se<br>
+          Yajurveda = Rituals & Sacrifices
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+     TAB 6 — QUICK RECALL
+══════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-quick">
+
+      <div class="qf-grid">
+        <div class="qf-item">
+          <div class="qf-q">Father of Indian Archaeology?</div>
+          <div class="qf-a">Alexander Cunningham</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Study of inscriptions?</div>
+          <div class="qf-a">Epigraphy</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Study of coins?</div>
+          <div class="qf-a">Numismatics / Mudrashastra</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Earliest coins?</div>
+          <div class="qf-a">Aahat (Punch-marked)</div>
+          <div class="qf-sub">Only symbols — no writing</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">First gold coins?</div>
+          <div class="qf-a">Indo-Greek Coins</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Purest gold coins?</div>
+          <div class="qf-a">Kushan Period</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Most gold coins issued?</div>
+          <div class="qf-a">Gupta Period</div>
+          <div class="qf-sub">Samudragupta — Veena on coins</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">First Sati evidence?</div>
+          <div class="qf-a">Eran Inscription</div>
+          <div class="qf-sub">King Bhanugupta</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">First Huna invasion record?</div>
+          <div class="qf-a">Bhitari Pillar</div>
+          <div class="qf-sub">King Skandagupta</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Indica — who wrote it?</div>
+          <div class="qf-a">Megasthenes</div>
+          <div class="qf-sub">Ambassador of Seleucus</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Si-Yu-Ki — who wrote it?</div>
+          <div class="qf-a">Xuanzang (Hiuen Tsang)</div>
+          <div class="qf-sub">During Harsha's reign, 630 CE</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Rihla — who wrote it?</div>
+          <div class="qf-a">Ibn Battuta</div>
+          <div class="qf-sub">1333 CE, Qazi of Delhi</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Kitab-ul-Hind — who wrote?</div>
+          <div class="qf-a">Al-Biruni</div>
+          <div class="qf-sub">Came with Mahmud Ghazni, 1017 CE</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Father of History?</div>
+          <div class="qf-a">Herodotus</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Arthashastra — who wrote?</div>
+          <div class="qf-a">Kautilya / Chanakya</div>
+          <div class="qf-sub">First book on political system</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Rajatarangini — subject?</div>
+          <div class="qf-a">History of Kashmir</div>
+          <div class="qf-sub">Written by Kalhana</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Prayag Prashasti — whose inscription?</div>
+          <div class="qf-a">Samudragupta</div>
+          <div class="qf-sub">Engraved by poet Harisena</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Faxian — visited which ruler?</div>
+          <div class="qf-a">Chandragupta II</div>
+          <div class="qf-sub">402 CE, stayed 14 years</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Earliest Buddha images?</div>
+          <div class="qf-a">Gandhara Style</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">16 Mahajanapadas — source?</div>
+          <div class="qf-a">Bhagavati Sutra</div>
+          <div class="qf-sub">Jain text</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Milinda Panho — info about?</div>
+          <div class="qf-a">Menander</div>
+          <div class="qf-sub">Indo-Greek ruler</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Ashoka's caves — which hills?</div>
+          <div class="qf-a">Barabar Hills</div>
+          <div class="qf-sub">4 caves</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Veda with first music reference?</div>
+          <div class="qf-a">Samaveda</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Aryan migration evidence?</div>
+          <div class="qf-a">Boghazkoi Inscription</div>
+          <div class="qf-sub">1400 BCE — Iran to East</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function toggleCard(header) {
+      const card = header.closest('.section-card');
+      card.classList.toggle('open');
+    }
+
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.querySelector('.theme-btn');
+      if (body.dataset.theme === 'dark') {
+        body.dataset.theme = 'light';
+        btn.textContent = '🌙 Dark';
+      } else {
+        body.dataset.theme = 'dark';
+        btn.textContent = '☀ Light';
+      }
+    }
+
+    // Open all cards by default
+    document.querySelectorAll('.section-card').forEach(c => c.classList.add('open'));
+  </script>
+</body>
+
+</html>

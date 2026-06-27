@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 02 – Pre-Historic Age | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --card: #21253a;
+      --border: #2e3350;
+      --accent: #f5a623;
+      --accent2: #7c6af5;
+      --accent3: #3ecf8e;
+      --accent4: #e05c7e;
+      --text: #e8eaf6;
+      --muted: #8a90b0;
+      --tab-active: #f5a623;
+      --badge-bg: #2a2f4a;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --card: #eef1f9;
+      --border: #d0d5ee;
+      --accent: #c97a00;
+      --accent2: #5849d6;
+      --accent3: #1e9e68;
+      --accent4: #c0284d;
+      --text: #1a1d2e;
+      --muted: #5a6080;
+      --tab-active: #c97a00;
+      --badge-bg: #dde2f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1d27 0%, #12152a 100%);
+      border-bottom: 2px solid var(--accent);
+      padding: 18px 24px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    [data-theme="light"] header {
+      background: linear-gradient(135deg, #ffffff 0%, #eef1f9 100%);
+    }
+
+    .brand {
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .chapter-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .chapter-title span {
+      color: var(--accent);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .theme-btn {
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .badge-exam {
+      background: var(--accent);
+      color: #111;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+    }
+
+    .tabs-wrapper {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .tab:hover {
+      color: var(--text);
+    }
+
+    .tab.active {
+      color: var(--tab-active);
+      border-bottom-color: var(--tab-active);
+    }
+
+    main {
+      padding: 22px 20px 60px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 13px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .section-header:hover {
+      background: rgba(245, 166, 35, 0.05);
+    }
+
+    .sec-icon {
+      font-size: 18px;
+    }
+
+    .sec-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .sec-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .chevron {
+      color: var(--muted);
+      font-size: 12px;
+      transition: transform 0.25s;
+    }
+
+    .section-card.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .section-body {
+      padding: 16px 18px;
+      display: none;
+    }
+
+    .section-card.open .section-body {
+      display: block;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      background: var(--surface);
+      color: var(--accent);
+      padding: 9px 12px;
+      text-align: left;
+      font-size: 11px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .key-term {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .hl2 {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl3 {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl4 {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    ul.points {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.points li {
+      padding: 7px 0 7px 22px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    ul.points li:last-child {
+      border-bottom: none;
+    }
+
+    ul.points li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      top: 9px;
+    }
+
+    .flow-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .flow-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      flex: 1 1 180px;
+    }
+
+    .fb-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+
+    .fb-val {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .fb-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .flow-box.accent-a {
+      border-left: 3px solid var(--accent);
+    }
+
+    .flow-box.accent-b {
+      border-left: 3px solid var(--accent2);
+    }
+
+    .flow-box.accent-c {
+      border-left: 3px solid var(--accent3);
+    }
+
+    .flow-box.accent-d {
+      border-left: 3px solid var(--accent4);
+    }
+
+    .trap-card {
+      background: rgba(224, 92, 126, 0.08);
+      border: 1px solid rgba(224, 92, 126, 0.35);
+      border-radius: 10px;
+      padding: 13px 16px;
+      margin-bottom: 12px;
+    }
+
+    .trap-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--accent4);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .trap-text {
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .trap-text strong {
+      color: var(--accent4);
+    }
+
+    .qf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .qf-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+    }
+
+    .qf-q {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .qf-a {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .qf-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .overview-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .ov-badge {
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .ov-badge span {
+      color: var(--accent);
+    }
+
+    .sdivider {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin: 18px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding: 10px 0 10px 24px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .tl-item {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+    }
+
+    .tl-item.c2::before {
+      background: var(--accent2);
+    }
+
+    .tl-item.c3::before {
+      background: var(--accent3);
+    }
+
+    .tl-item.c4::before {
+      background: var(--accent4);
+    }
+
+    .tl-date {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .tl-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .tl-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    /* Culture cards */
+    .culture-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .culture-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .cc-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .cc-region {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .cc-fact {
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .cc-tag {
+      display: inline-block;
+      margin-top: 7px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 20px;
+      background: rgba(245, 166, 35, 0.15);
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 12px 14px;
+      }
+
+      .chapter-title {
+        font-size: 14px;
+      }
+
+      main {
+        padding: 14px 12px 50px;
+      }
+
+      .tab {
+        padding: 10px 12px;
+        font-size: 12px;
+      }
+
+      /* Make tabs stretch and scroll properly */
+      .tabs-wrapper {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="dark">
+
+  <header>
+    <div>
+      <div class="brand">Exam Fusion Prep · Ancient History</div>
+      <div class="chapter-title"><span>Ch 02</span> — Pre-Historic Age</div>
+    </div>
+    <div class="header-right">
+      <span class="badge-exam">BPSC · BSSC</span>
+      <button class="theme-btn" onclick="toggleTheme()">☀ Light</button>
+    </div>
+  </header>
+
+  <div class="tabs-wrapper">
+    <button class="tab active" onclick="switchTab('overview',this)">🗺 Overview</button>
+    <button class="tab" onclick="switchTab('paleo',this)">🪨 Paleolithic</button>
+    <button class="tab" onclick="switchTab('meso',this)">🏹 Mesolithic</button>
+    <button class="tab" onclick="switchTab('neo',this)">🌾 Neolithic</button>
+    <button class="tab" onclick="switchTab('chalco',this)">🥉 Chalcolithic</button>
+    <button class="tab" onclick="switchTab('traps',this)">⚠ Exam Traps</button>
+    <button class="tab" onclick="switchTab('quick',this)">⚡ Quick Recall</button>
+  </div>
+
+  <main>
+
+    <!-- ══ TAB 1 — OVERVIEW ══ -->
+    <div class="tab-panel active" id="tab-overview">
+      <div class="overview-badges">
+        <div class="ov-badge">Stone Ages: <span>3 (Paleo, Meso, Neo)</span></div>
+        <div class="ov-badge">Paleolithic Sub-phases: <span>3</span></div>
+        <div class="ov-badge">First Metal: <span>Copper</span></div>
+        <div class="ov-badge">Earliest Agri Site: <span>Mehrgarh</span></div>
+        <div class="ov-badge">First Domesticated Animal: <span>Dog</span></div>
+      </div>
+
+      <!-- Periodization -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">📅</span>
+          <span class="sec-title">Periodization of Indian History</span>
+          <span class="sec-sub">3 Periods</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row">
+            <div class="flow-box accent-a">
+              <div class="fb-label">Period 1</div>
+              <div class="fb-val">Prehistoric Period</div>
+              <div class="fb-note">No written records · Human life not fully civilized</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">Period 2</div>
+              <div class="fb-val">Protohistoric Period</div>
+              <div class="fb-note">Archaeological evidence exists · Script exists but <strong>undeciphered</strong> ·
+                Also called <strong>Bronze Age</strong></div>
+            </div>
+            <div class="flow-box accent-c">
+              <div class="fb-label">Period 3</div>
+              <div class="fb-val">Historic Period</div>
+              <div class="fb-note">Written evidence successfully read · After ~600 BC</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stone Age Timeline -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🪨</span>
+          <span class="sec-title">Stone Age — Master Timeline</span>
+          <span class="sec-sub">Paleolithic → Mesolithic → Neolithic → Chalcolithic</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-date">5,00,000 BCE – 10,000 BCE</div>
+              <div class="tl-name">🪨 Paleolithic Age (Old Stone Age)</div>
+              <div class="tl-desc">3 sub-phases · Hand axes → Flakes → Blades</div>
+            </div>
+            <div class="tl-item c2">
+              <div class="tl-date">10,000 BCE – 6,000 BCE</div>
+              <div class="tl-name">🏹 Mesolithic Age (Middle Stone Age)</div>
+              <div class="tl-desc">Microliths · First domesticated animal: Dog · Largest site: Bagor</div>
+            </div>
+            <div class="tl-item c3">
+              <div class="tl-date">6,000 BCE – 1,000 BCE</div>
+              <div class="tl-name">🌾 Neolithic Age (New Stone Age)</div>
+              <div class="tl-desc">Agriculture · Pottery & Wheel · Mehrgarh earliest agri site</div>
+            </div>
+            <div class="tl-item c4">
+              <div class="tl-date">Overlapping ~3000–1000 BCE</div>
+              <div class="tl-name">🥉 Chalcolithic Age</div>
+              <div class="tl-desc">Copper + Stone tools · Rural village culture</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 2 — PALEOLITHIC ══ -->
+    <div class="tab-panel" id="tab-paleo">
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">⚒</span>
+          <span class="sec-title">Paleolithic — 3 Sub-phases (Tools & Dates)</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Phase</th>
+                  <th>Date</th>
+                  <th>Tools Used</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Lower Paleolithic</td>
+                  <td>5 Lakh – 1,00,000 BCE</td>
+                  <td><span class="hl2">Hand axes, Cleavers, Choppers</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Middle Paleolithic</td>
+                  <td>1,00,000 – 40,000 BCE</td>
+                  <td><span class="hl3">Flakes, Borers, Perforators, Scrapers</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Upper Paleolithic</td>
+                  <td>40,000 – 10,000 BCE</td>
+                  <td><span class="hl4">Blades, Flakes, Burins, Scrapers</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🗺</span>
+          <span class="sec-title">Regional Distribution (Phase-wise Sites)</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Phase</th>
+                  <th>Culture Type</th>
+                  <th>Key Regions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Lower Paleolithic</td>
+                  <td>Stone Culture</td>
+                  <td><span class="hl2">Son Valley, Belan Valley</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Middle Paleolithic</td>
+                  <td>Flake Culture</td>
+                  <td><span class="hl3">Narmada Valley, Tungabhadra Valley, Son Valley, Belan Valley</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Upper Paleolithic</td>
+                  <td>Stone-Flake Culture</td>
+                  <td><span class="hl4">Belan Valley, Mid India, Chota Nagpur Plateau, Karnataka, AP</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">📍</span>
+          <span class="sec-title">Important Paleolithic Sites</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Site</th>
+                  <th>Region / State</th>
+                  <th>Special Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Soan Valley</td>
+                  <td>Punjab (Now Pakistan)</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Belan Valley</td>
+                  <td>Mirzapur, Uttar Pradesh</td>
+                  <td>Present across all 3 phases</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Didwana</td>
+                  <td>Rajasthan</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Bhimbetka</td>
+                  <td>Bhopal, Madhya Pradesh</td>
+                  <td>Rock paintings — hunting/dancing</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Hunsgi</td>
+                  <td>Karnataka</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Nevasa</td>
+                  <td>Maharashtra</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Patne</td>
+                  <td>Maharashtra</td>
+                  <td><span class="hl3">Ostrich egg evidence</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Pahalgam</td>
+                  <td>Kashmir</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top:12px;padding:10px 14px;background:var(--surface);border-radius:8px;font-size:12px;">
+            <strong style="color:var(--accent)">Climate Note:</strong> During Early Paleolithic Period — climate became
+            <span class="hl3">less humid</span>.<br>
+            Middle Paleolithic: Simple Flake industry · tools from Narmada & Tungabhadra river banks.<br>
+            Upper Paleolithic: <span class="hl4">Low humidity, warm climate</span> · Flint industry established.
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 3 — MESOLITHIC ══ -->
+    <div class="tab-panel" id="tab-meso">
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🏹</span>
+          <span class="sec-title">Mesolithic Age (10,000 – 6,000 BCE)</span>
+          <span class="sec-sub">Transitional Period — Paleo se Neo ke beech</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row" style="margin-bottom:16px;">
+            <div class="flow-box accent-a">
+              <div class="fb-label">Lifestyle</div>
+              <div class="fb-val">Hunters & Pastoralists</div>
+              <div class="fb-note">Predominantly — food gathering</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">Climate</div>
+              <div class="fb-val">Warmer (Holocene)</div>
+              <div class="fb-note">Increased flora & fauna</div>
+            </div>
+            <div class="flow-box accent-c">
+              <div class="fb-label">Tools</div>
+              <div class="fb-val">Microliths</div>
+              <div class="fb-note">Small, geometric stone tools</div>
+            </div>
+            <div class="flow-box accent-d">
+              <div class="fb-label">First Domesticated Animal</div>
+              <div class="fb-val">🐕 Dog</div>
+              <div class="fb-note">Crucial shift in human history</div>
+            </div>
+          </div>
+
+          <div class="sdivider">Important Points</div>
+          <ul class="points">
+            <li><span class="key-term">Control of Fire:</span> Widespread <em>use</em> during Mesolithic — NOT invention
+              (that was Paleolithic)</li>
+            <li><span class="key-term">Adamgarh</span> (Madhya Pradesh) — Important Mesolithic site</li>
+            <li><span class="key-term">Bagor</span> (Rajasthan) — <span class="hl3">Largest Mesolithic site in
+                India</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 4 — NEOLITHIC ══ -->
+    <div class="tab-panel" id="tab-neo">
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🌾</span>
+          <span class="sec-title">Neolithic Age (6,000 – 1,000 BCE)</span>
+          <span class="sec-sub">Food Producers · Settled Life · Agriculture</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row" style="margin-bottom:14px;">
+            <div class="flow-box accent-a">
+              <div class="fb-label">Earliest Agricultural Site</div>
+              <div class="fb-val">Mehrgarh (Balochistan)</div>
+              <div class="fb-note">c. 7000 BCE · Wheat & Barley earliest · Cotton earliest traces here</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">Inventions</div>
+              <div class="fb-val">Pottery & Wheel</div>
+              <div class="fb-note">Later stages of Neolithic</div>
+            </div>
+            <div class="flow-box accent-c">
+              <div class="fb-label">Housing</div>
+              <div class="fb-val">Pit Dwellings</div>
+              <div class="fb-note">Kashmir — evidence of pit-dwelling</div>
+            </div>
+          </div>
+
+          <div class="sdivider">Kashmir Valley Special Sites</div>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Site</th>
+                  <th>Location</th>
+                  <th>Unique Feature</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Burzahom</td>
+                  <td>16 km west of Srinagar</td>
+                  <td><span class="hl3">Humans buried with dogs</span> — unique evidence</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Gufkral</td>
+                  <td>41 km SW of Srinagar</td>
+                  <td>'The Potters Caves' · Evidence of Agriculture + Domestication</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="sdivider">Important Neolithic Sites — All India</div>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Site</th>
+                  <th>State</th>
+                  <th>Key Evidence</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Koldihwa</td>
+                  <td>Belan Valley, UP</td>
+                  <td><span class="hl3">Earliest evidence of Rice cultivation (c. 6,000 BCE)</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Mahagara / Prayagraj</td>
+                  <td>UP</td>
+                  <td>Rice cultivation + cattle pen evidence</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Bhimbetka</td>
+                  <td>MP</td>
+                  <td>Rock paintings — hunting/dancing scenes</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Chirand</td>
+                  <td>Bihar</td>
+                  <td><span class="hl2">Abundant Bone tools</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Sanganakallu, Piklihal, Hallur</td>
+                  <td>Karnataka</td>
+                  <td>Millet cultivation · Ash mounds found</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Utnur, Nagarjunakonda</td>
+                  <td>Telangana / AP</td>
+                  <td>Early Neolithic South India · Cattle herding</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 5 — CHALCOLITHIC ══ -->
+    <div class="tab-panel" id="tab-chalco">
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🥉</span>
+          <span class="sec-title">Chalcolithic Age — Key Facts</span>
+          <span class="sec-sub">First Metal Age · Copper + Stone</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row" style="margin-bottom:14px;">
+            <div class="flow-box accent-a">
+              <div class="fb-label">First Metal Used by Humans</div>
+              <div class="fb-val">Copper</div>
+              <div class="fb-note">Technology: Copper + Stone (Lithic)</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">Copper Sources</div>
+              <div class="fb-val">Malanjkhand (MP)</div>
+              <div class="fb-note">Also: Khetri Mines (Rajasthan)</div>
+            </div>
+            <div class="flow-box accent-c">
+              <div class="fb-label">Nature of Culture</div>
+              <div class="fb-val">Rural / Village-based</div>
+              <div class="fb-note">Not urban — important distinction</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🏺</span>
+          <span class="sec-title">Main Chalcolithic Cultures</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="culture-grid">
+            <div class="culture-card">
+              <div class="cc-name">Ahar (Banas) Culture</div>
+              <div class="cc-region">📍 Udaipur region, Rajasthan</div>
+              <div class="cc-fact">Known for <strong>Smelting and Metallurgy</strong></div>
+              <span class="cc-tag">Ancient name: Tambavati (place of copper)</span>
+            </div>
+            <div class="culture-card">
+              <div class="cc-name">Kayatha Culture</div>
+              <div class="cc-region">📍 Chambal river valley</div>
+              <div class="cc-fact">Distinct <strong>sturdy pottery</strong></div>
+            </div>
+            <div class="culture-card">
+              <div class="cc-name">Rangpur Culture</div>
+              <div class="cc-region">📍 Coastal region of Gujarat</div>
+              <div class="cc-fact">Characterized by <strong>lustrous Red Ware</strong></div>
+            </div>
+            <div class="culture-card">
+              <div class="cc-name">Malwa Culture</div>
+              <div class="cc-region">📍 Narmada river valley</div>
+              <div class="cc-fact"><strong>Finest Chalcolithic pottery</strong></div>
+            </div>
+            <div class="culture-card">
+              <div class="cc-name">Jorwe Culture</div>
+              <div class="cc-region">📍 Maharashtra (Deccan)</div>
+              <div class="cc-fact">Proto-urban tendencies · <strong>Daimabad</strong> is the largest site</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">📍</span>
+          <span class="sec-title">Chalcolithic Sites — Region-wise</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Region</th>
+                  <th>Important Sites</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Eastern India</td>
+                  <td>Chirand (Ganga), Pandu Rajar Dhibi (Bengal), Midnapore</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Central India</td>
+                  <td>Malwa, Kayatha, <span class="hl3">Eran (Fortified settlement)</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Maharashtra</td>
+                  <td>Jorwe, Nevasa, <span class="hl2">Daimabad</span>, <span class="hl4">Inamgaon</span> (Large
+                    settlement with burial customs)</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Rajasthan</td>
+                  <td>Gilund and <span class="hl3">Ahar</span> (Ancient name Tambavati — place of copper)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 6 — EXAM TRAPS ══ -->
+    <div class="tab-panel" id="tab-traps">
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 01 — Protohistoric Period</div>
+        <div class="trap-text">
+          Protohistoric mein <strong>written script exist karti hai</strong> — lekin wo <strong>undeciphered</strong>
+          hai (padh nahi sakte).<br>
+          Historic Period = Script exists AND successfully deciphered.<br>
+          Ye distinction exam mein directly puchha jaata hai!
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 02 — Fire Discovery vs Use</div>
+        <div class="trap-text">
+          <strong>Invention of fire = Paleolithic Age</strong><br>
+          <strong>Widespread USE of fire = Mesolithic Age</strong><br>
+          "Control of fire" puchha jaaye to — Mesolithic. "Discovery/Invention" puchha jaaye to — Paleolithic!
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 03 — First Domesticated Animal</div>
+        <div class="trap-text">
+          <strong>First domesticated animal = Dog</strong> (Mesolithic Age)<br>
+          Burzahom (Kashmir) mein humans ko dogs ke saath bury kiya gaya — iska matlab animal-human bond tha.<br>
+          "First domesticated" = Dog, NOT cow/horse/sheep.
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 04 — Mehrgarh vs Koldihwa</div>
+        <div class="trap-text">
+          <strong>Mehrgarh (Balochistan) = Earliest Agricultural site</strong> overall (c. 7000 BCE) — Wheat &
+          Barley<br>
+          <strong>Koldihwa (Belan Valley, UP) = Earliest Rice cultivation evidence</strong> (c. 6,000 BCE)<br>
+          Dono alag hain — "agriculture" puchha jaaye to Mehrgarh, "rice" puchha jaaye to Koldihwa!
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 05 — Largest Sites</div>
+        <div class="trap-text">
+          <strong>Largest Mesolithic site = Bagor (Rajasthan)</strong><br>
+          <strong>Largest Chalcolithic site (Jorwe culture) = Daimabad (Maharashtra)</strong><br>
+          <strong>Largest Neolithic site confusion</strong> — Inamgaon is largest Chalcolithic settlement with burial
+          customs, not Neolithic.
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 06 — Pottery Timeline</div>
+        <div class="trap-text">
+          <strong>Pottery & Wheel = Later stages of Neolithic</strong> — NOT Paleolithic, NOT Mesolithic.<br>
+          <strong>Finest Chalcolithic pottery = Malwa Culture</strong> (Narmada valley)<br>
+          <strong>Lustrous Red Ware = Rangpur Culture</strong> (Gujarat coast)
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 07 — Chalcolithic Culture Regions</div>
+        <div class="trap-text">
+          <strong>Ahar = Rajasthan</strong> (metallurgy, copper — ancient name Tambavati)<br>
+          <strong>Jorwe = Maharashtra</strong> (proto-urban, Daimabad)<br>
+          <strong>Rangpur = Gujarat</strong> (Red Ware)<br>
+          <strong>Malwa = Narmada valley</strong> (finest pottery)<br>
+          Exam mein culture ↔ region match karna hota hai!
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 7 — QUICK RECALL ══ -->
+    <div class="tab-panel" id="tab-quick">
+      <div class="qf-grid">
+        <div class="qf-item">
+          <div class="qf-q">Protohistoric period also called?</div>
+          <div class="qf-a">Bronze Age in India</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Paleolithic Age period?</div>
+          <div class="qf-a">5 Lakh – 10,000 BCE</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mesolithic Age period?</div>
+          <div class="qf-a">10,000 – 6,000 BCE</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Neolithic Age period?</div>
+          <div class="qf-a">6,000 – 1,000 BCE</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Lower Paleolithic tools?</div>
+          <div class="qf-a">Hand axes, Cleavers, Choppers</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Middle Paleolithic tools?</div>
+          <div class="qf-a">Flakes, Borers, Perforators, Scrapers</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Upper Paleolithic tools?</div>
+          <div class="qf-a">Blades, Flakes, Burins, Scrapers</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mesolithic tools?</div>
+          <div class="qf-a">Microliths</div>
+          <div class="qf-sub">Small geometric stone tools</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">First domesticated animal?</div>
+          <div class="qf-a">Dog</div>
+          <div class="qf-sub">Mesolithic Age</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Largest Mesolithic site in India?</div>
+          <div class="qf-a">Bagor, Rajasthan</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Earliest agricultural site?</div>
+          <div class="qf-a">Mehrgarh, Balochistan</div>
+          <div class="qf-sub">c. 7000 BCE</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Earliest Rice cultivation site?</div>
+          <div class="qf-a">Koldihwa (Belan Valley, UP)</div>
+          <div class="qf-sub">c. 6,000 BCE</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Earliest crops at Mehrgarh?</div>
+          <div class="qf-a">Wheat & Barley</div>
+          <div class="qf-sub">Cotton — earliest traces also here</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Humans buried with dogs — site?</div>
+          <div class="qf-a">Burzahom, Kashmir</div>
+          <div class="qf-sub">16 km west of Srinagar</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Gufkral caves known as?</div>
+          <div class="qf-a">The Potters Caves</div>
+          <div class="qf-sub">41 km SW of Srinagar</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Bone tools site in Bihar?</div>
+          <div class="qf-a">Chirand</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">First metal used by humans?</div>
+          <div class="qf-a">Copper</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Copper mine in MP?</div>
+          <div class="qf-a">Malanjkhand</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Copper mine in Rajasthan?</div>
+          <div class="qf-a">Khetri Mines</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Finest Chalcolithic pottery?</div>
+          <div class="qf-a">Malwa Culture</div>
+          <div class="qf-sub">Narmada river valley</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Lustrous Red Ware — culture?</div>
+          <div class="qf-a">Rangpur Culture</div>
+          <div class="qf-sub">Coastal Gujarat</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Daimabad — which culture?</div>
+          <div class="qf-a">Jorwe Culture</div>
+          <div class="qf-sub">Largest Jorwe site, Maharashtra</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Ahar culture — ancient name?</div>
+          <div class="qf-a">Tambavati</div>
+          <div class="qf-sub">Place of copper</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Bhimbetka location?</div>
+          <div class="qf-a">Bhopal, Madhya Pradesh</div>
+          <div class="qf-sub">Rock paintings</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Ostrich egg evidence — which site?</div>
+          <div class="qf-a">Patne, Maharashtra</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Ash mounds — which region?</div>
+          <div class="qf-a">Karnataka (Sanganakallu etc.)</div>
+          <div class="qf-sub">Millet cultivation</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+    function toggleCard(header) {
+      header.closest('.section-card').classList.toggle('open');
+    }
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.querySelector('.theme-btn');
+      if (body.dataset.theme === 'dark') {
+        body.dataset.theme = 'light'; btn.textContent = '🌙 Dark';
+      } else {
+        body.dataset.theme = 'dark'; btn.textContent = '☀ Light';
+      }
+    }
+    document.querySelectorAll('.section-card').forEach(c => c.classList.add('open'));
+  </script>
+</body>
+
+</html>

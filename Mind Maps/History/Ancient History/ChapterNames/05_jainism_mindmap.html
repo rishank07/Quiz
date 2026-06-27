@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 05 – Jainism | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --card: #21253a;
+      --border: #2e3350;
+      --accent: #f5a623;
+      --accent2: #7c6af5;
+      --accent3: #3ecf8e;
+      --accent4: #e05c7e;
+      --text: #e8eaf6;
+      --muted: #8a90b0;
+      --tab-active: #f5a623;
+      --badge-bg: #2a2f4a;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --card: #eef1f9;
+      --border: #d0d5ee;
+      --accent: #c97a00;
+      --accent2: #5849d6;
+      --accent3: #1e9e68;
+      --accent4: #c0284d;
+      --text: #1a1d2e;
+      --muted: #5a6080;
+      --tab-active: #c97a00;
+      --badge-bg: #dde2f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1d27 0%, #12152a 100%);
+      border-bottom: 2px solid var(--accent);
+      padding: 18px 24px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    [data-theme="light"] header {
+      background: linear-gradient(135deg, #ffffff 0%, #eef1f9 100%);
+    }
+
+    .brand {
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .chapter-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .chapter-title span {
+      color: var(--accent);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .theme-btn {
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .badge-exam {
+      background: var(--accent);
+      color: #111;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+    }
+
+    .tabs-wrapper {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 12px 15px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .tab:hover {
+      color: var(--text);
+    }
+
+    .tab.active {
+      color: var(--tab-active);
+      border-bottom-color: var(--tab-active);
+    }
+
+    main {
+      padding: 22px 20px 60px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 13px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .section-header:hover {
+      background: rgba(245, 166, 35, 0.05);
+    }
+
+    .sec-icon {
+      font-size: 18px;
+    }
+
+    .sec-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .sec-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .chevron {
+      color: var(--muted);
+      font-size: 12px;
+      transition: transform 0.25s;
+    }
+
+    .section-card.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .section-body {
+      padding: 16px 18px;
+      display: none;
+    }
+
+    .section-card.open .section-body {
+      display: block;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      background: var(--surface);
+      color: var(--accent);
+      padding: 9px 12px;
+      text-align: left;
+      font-size: 11px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .key-term {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .hl2 {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl3 {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl4 {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    ul.points {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.points li {
+      padding: 7px 0 7px 22px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    ul.points li:last-child {
+      border-bottom: none;
+    }
+
+    ul.points li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      top: 9px;
+    }
+
+    .flow-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .flow-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      flex: 1 1 170px;
+    }
+
+    .fb-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+
+    .fb-val {
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .fb-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .flow-box.accent-a {
+      border-left: 3px solid var(--accent);
+    }
+
+    .flow-box.accent-b {
+      border-left: 3px solid var(--accent2);
+    }
+
+    .flow-box.accent-c {
+      border-left: 3px solid var(--accent3);
+    }
+
+    .flow-box.accent-d {
+      border-left: 3px solid var(--accent4);
+    }
+
+    .trap-card {
+      background: rgba(224, 92, 126, 0.08);
+      border: 1px solid rgba(224, 92, 126, 0.35);
+      border-radius: 10px;
+      padding: 13px 16px;
+      margin-bottom: 12px;
+    }
+
+    .trap-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--accent4);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .trap-text {
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .trap-text strong {
+      color: var(--accent4);
+    }
+
+    .qf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 10px;
+    }
+
+    .qf-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+    }
+
+    .qf-q {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .qf-a {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.3;
+    }
+
+    .qf-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .overview-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .ov-badge {
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .ov-badge span {
+      color: var(--accent);
+    }
+
+    .sdivider {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin: 18px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Tirthankara highlight cards */
+    .t-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .t-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .t-head {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .t-num {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .t-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .t-symbol {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .t-body {
+      padding: 8px 14px 12px;
+    }
+
+    .t-fact {
+      font-size: 12px;
+      line-height: 1.5;
+      padding: 3px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .t-fact:last-child {
+      border-bottom: none;
+    }
+
+    .num-1 {
+      background: rgba(245, 166, 35, 0.2);
+      color: var(--accent);
+    }
+
+    .num-22 {
+      background: rgba(124, 106, 245, 0.2);
+      color: var(--accent2);
+    }
+
+    .num-23 {
+      background: rgba(62, 207, 142, 0.2);
+      color: var(--accent3);
+    }
+
+    .num-24 {
+      background: rgba(224, 92, 126, 0.2);
+      color: var(--accent4);
+    }
+
+    /* Split comparison */
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media(max-width:540px) {
+      .split-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .split-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .sb-title {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sb-white {
+      color: #e0e0e0;
+    }
+
+    .sb-sky {
+      color: var(--accent2);
+    }
+
+    .sb-item {
+      font-size: 12px;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.4;
+    }
+
+    .sb-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Vow table badges */
+    .vow-added {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 10px;
+      margin-left: 5px;
+    }
+
+    .by-p {
+      background: rgba(62, 207, 142, 0.15);
+      color: var(--accent3);
+    }
+
+    .by-m {
+      background: rgba(224, 92, 126, 0.15);
+      color: var(--accent4);
+    }
+
+    /* Council cards */
+    .council-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media(max-width:540px) {
+      .council-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .council-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .cc-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .cc-row {
+      font-size: 12px;
+      padding: 3px 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.5;
+    }
+
+    .cc-row:last-child {
+      border-bottom: none;
+    }
+
+    /* Symbol table */
+    .sym-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 8px;
+    }
+
+    .sym-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .sym-no {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .sym-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .sym-sym {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 12px 14px;
+      }
+
+      .chapter-title {
+        font-size: 14px;
+      }
+
+      main {
+        padding: 14px 12px 50px;
+      }
+
+      /* Make tabs stretch and scroll properly */
+      .tabs-wrapper {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 10px;
+        font-size: 11.5px;
+      }
+
+      th,
+      td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="dark">
+
+  <header>
+    <div>
+      <div class="brand">Exam Fusion Prep · Ancient History</div>
+      <div class="chapter-title"><span>Ch 05</span> — Jainism</div>
+    </div>
+    <div class="header-right">
+      <span class="badge-exam">BPSC · BSSC</span>
+      <button class="theme-btn" onclick="toggleTheme()">☀ Light</button>
+    </div>
+  </header>
+
+  <div class="tabs-wrapper">
+    <button class="tab active" onclick="switchTab('overview',this)">🗺 Overview</button>
+    <button class="tab" onclick="switchTab('mahavira',this)">🧘 Mahavira</button>
+    <button class="tab" onclick="switchTab('philosophy',this)">☯ Philosophy</button>
+    <button class="tab" onclick="switchTab('councils',this)">🏛 Councils & Split</button>
+    <button class="tab" onclick="switchTab('literature',this)">📚 Literature</button>
+    <button class="tab" onclick="switchTab('architecture',this)">🕌 Architecture</button>
+    <button class="tab" onclick="switchTab('traps',this)">⚠ Exam Traps</button>
+    <button class="tab" onclick="switchTab('quick',this)">⚡ Quick Recall</button>
+  </div>
+
+  <main>
+
+    <!-- ══ TAB 1 — OVERVIEW ══ -->
+    <div class="tab-panel active" id="tab-overview">
+      <div class="overview-badges">
+        <div class="ov-badge">Tirthankaras: <span>24</span></div>
+        <div class="ov-badge">Tri-Ratna: <span>3 Jewels</span></div>
+        <div class="ov-badge">Panch Mahavrata: <span>5 Vows</span></div>
+        <div class="ov-badge">Mahavira: <span>599–527 BCE</span></div>
+        <div class="ov-badge">Language: <span>Prakrit (Ardha-Magadhi)</span></div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">📌</span>
+          <span class="sec-title">General Introduction</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row">
+            <div class="flow-box accent-a">
+              <div class="fb-label">Word Origin</div>
+              <div class="fb-val">Jain → Jin (Root)</div>
+              <div class="fb-note">Means: Victor (Jitendriya) — one who conquered senses</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">Saints Called</div>
+              <div class="fb-val">Nirgrantha</div>
+              <div class="fb-note">Free from bonds / ties</div>
+            </div>
+            <div class="flow-box accent-c">
+              <div class="fb-label">Presiding Deity</div>
+              <div class="fb-val">Tirthankara</div>
+              <div class="fb-note">Ford-maker / Path-finder · Total: 24</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Key Tirthankaras -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🙏</span>
+          <span class="sec-title">4 Key Tirthankaras — Exam Important</span>
+          <span class="sec-sub">1st, 22nd, 23rd, 24th</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="t-grid">
+            <div class="t-card">
+              <div class="t-head">
+                <span class="t-num num-1">1st</span>
+                <div>
+                  <div class="t-name">Rishabhdev (Adinath)</div>
+                  <div class="t-symbol">Symbol: 🐂 Bull</div>
+                </div>
+              </div>
+              <div class="t-body">
+                <div class="t-fact">Born in <strong>Ayodhya</strong></div>
+                <div class="t-fact">First Tirthankara</div>
+              </div>
+            </div>
+            <div class="t-card">
+              <div class="t-head">
+                <span class="t-num num-22">22nd</span>
+                <div>
+                  <div class="t-name">Arishtanemi</div>
+                  <div class="t-symbol">Symbol: 🐚 Conch</div>
+                </div>
+              </div>
+              <div class="t-body">
+                <div class="t-fact">Mentioned in <strong>Rig Veda</strong></div>
+                <div class="t-fact">Cousin of <strong>Vasudev Krishna</strong></div>
+              </div>
+            </div>
+            <div class="t-card">
+              <div class="t-head">
+                <span class="t-num num-23">23rd</span>
+                <div>
+                  <div class="t-name">Parshvanath</div>
+                  <div class="t-symbol">Symbol: 🐍 Snake Hood</div>
+                </div>
+              </div>
+              <div class="t-body">
+                <div class="t-fact">Born in <strong>Varanasi</strong></div>
+                <div class="t-fact">Nirvana at <strong>Sammed Shikhar</strong></div>
+                <div class="t-fact">Propounded <strong>4 Great Vows</strong> (Ahimsa, Satya, Asteya, Aparigraha)</div>
+              </div>
+            </div>
+            <div class="t-card">
+              <div class="t-head">
+                <span class="t-num num-24">24th</span>
+                <div>
+                  <div class="t-name">Mahavira Swami</div>
+                  <div class="t-symbol">Symbol: 🦁 Lion</div>
+                </div>
+              </div>
+              <div class="t-body">
+                <div class="t-fact"><strong>Actual Founder of Jainism</strong></div>
+                <div class="t-fact">Added <strong>5th vow — Brahmacharya</strong></div>
+                <div class="t-fact">599–527 BCE</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contemporary Sects -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🔀</span>
+          <span class="sec-title">Contemporary Religious Sects (Mahavira's Time)</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Sect</th>
+                  <th>Founder</th>
+                  <th>Philosophy</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Ajivika</td>
+                  <td class="hl2">Makkhali Gosala</td>
+                  <td>Fatalism (Niyati) — Everything is pre-destined</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Materialist</td>
+                  <td class="hl3">Ajita Kesakambalin</td>
+                  <td>Ucchedavada (Annihilationism)</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Agnostic</td>
+                  <td class="hl4">Sanjaya Belatthiputta</td>
+                  <td>Suspension of judgment</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 2 — MAHAVIRA ══ -->
+    <div class="tab-panel" id="tab-mahavira">
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🧘</span>
+          <span class="sec-title">Mahavira Swami — Life Details</span>
+          <span class="sec-sub">24th Tirthankara · Actual Founder of Jainism</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row" style="margin-bottom:16px;">
+            <div class="flow-box accent-a">
+              <div class="fb-label">Timeline</div>
+              <div class="fb-val">599 BCE – 527 BCE</div>
+              <div class="fb-note">Lived 72 years</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">Birthplace</div>
+              <div class="fb-val">Kundagram, Vaishali</div>
+              <div class="fb-note">Bihar</div>
+            </div>
+            <div class="flow-box accent-c">
+              <div class="fb-label">Clan</div>
+              <div class="fb-val">Jnatrika Clan</div>
+              <div class="fb-note">Kshatriya</div>
+            </div>
+          </div>
+          <div class="sdivider">Family Details</div>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Relation</th>
+                  <th>Name / Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Father</td>
+                  <td>Siddhartha — Head of Jnatrika clan</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Mother</td>
+                  <td>Trishala — Sister of Lichchhavi ruler <span class="hl2">Chetak</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Wife</td>
+                  <td>Yashoda</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Daughter</td>
+                  <td>Priyadarshana (Anojja)</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Son-in-law</td>
+                  <td>Jamali — <span class="hl3">First disciple</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sdivider">Life Events</div>
+          <ul class="points">
+            <li><span class="key-term">Renunciation:</span> Left household at age <span class="hl3">30</span></li>
+            <li><span class="key-term">Enlightenment (Kaivalya):</span> After <span class="hl2">12 years</span> of
+              penance at <strong>Jrimbhikagrama</strong> (banks of Rijupalika river)</li>
+            <li><span class="key-term">Nirvana (Death):</span> At <span class="hl3">Pavapuri (near Rajgir), Bihar</span>
+              at age 72 — 527 BCE</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Royal Patrons -->
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">👑</span>
+          <span class="sec-title">Royal Patrons / Followers</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>King / Ruler</th>
+                  <th>Connection</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Chandragupta Maurya</td>
+                  <td>Most prominent Jain Emperor · Accompanied Bhadrabahu to Shravanabelagola · Performed <span
+                      class="hl3">Sallekhana</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Bimbisara</td>
+                  <td>Contemporary of Mahavira · Called <span class="hl2">Shrenika</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Kharavela</td>
+                  <td>King of <strong>Kalinga</strong></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Amoghavarsha</td>
+                  <td>Rashtrakuta Ruler</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            style="margin-top:10px;padding:9px 13px;background:rgba(224,92,126,0.08);border:1px solid rgba(224,92,126,0.3);border-radius:8px;font-size:12px;">
+            <strong style="color:var(--accent4)">⚠ Note:</strong> <strong>Bindusara</strong> is associated with the
+            <strong>Ajivika sect</strong> — NOT Jainism!
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 3 — PHILOSOPHY ══ -->
+    <div class="tab-panel" id="tab-philosophy">
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">💎</span>
+          <span class="sec-title">Tri-Ratna — Three Jewels</span>
+          <span class="sec-sub">Path to Moksha</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row">
+            <div class="flow-box accent-a">
+              <div class="fb-label">Jewel 1</div>
+              <div class="fb-val">Samyak Gyan</div>
+              <div class="fb-note">Right Knowledge</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">Jewel 2</div>
+              <div class="fb-val">Samyak Darshan</div>
+              <div class="fb-note">Right Faith</div>
+            </div>
+            <div class="flow-box accent-c">
+              <div class="fb-label">Jewel 3</div>
+              <div class="fb-val">Samyak Charitra</div>
+              <div class="fb-note">Right Conduct</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🤲</span>
+          <span class="sec-title">Panch Mahavrata — 5 Great Vows</span>
+          <span class="sec-sub">4 by Parshvanath + 1 by Mahavira</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Vow</th>
+                  <th>Meaning</th>
+                  <th>Introduced By</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Ahimsa</td>
+                  <td>Non-violence</td>
+                  <td><span class="hl2">Parshvanath</span><span class="vow-added by-p">23rd</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Satya</td>
+                  <td>Truthfulness</td>
+                  <td><span class="hl2">Parshvanath</span><span class="vow-added by-p">23rd</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Asteya</td>
+                  <td>Non-stealing</td>
+                  <td><span class="hl2">Parshvanath</span><span class="vow-added by-p">23rd</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Aparigraha</td>
+                  <td>Non-possession</td>
+                  <td><span class="hl2">Parshvanath</span><span class="vow-added by-p">23rd</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Brahmacharya</td>
+                  <td>Celibacy</td>
+                  <td><span class="hl3">Mahavira</span><span class="vow-added by-m">5th — Added</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">☯</span>
+          <span class="sec-title">Core Beliefs</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <ul class="points">
+            <li>Strong belief in <span class="key-term">Rebirth and Karma</span></li>
+            <li><span class="key-term">No acceptance</span> of God or Vedas</li>
+            <li>Strict <span class="key-term">Ahimsa</span> — Agriculture & War <strong>forbidden</strong> for monks
+            </li>
+            <li><span class="key-term">Syadvada / Anekantavada</span> — Theory of Relativity ("Maybe" philosophy)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 4 — COUNCILS & SPLIT ══ -->
+    <div class="tab-panel" id="tab-councils">
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🏛</span>
+          <span class="sec-title">Major Jain Councils (Sangeeti)</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="council-grid">
+            <div class="council-card">
+              <div class="cc-title">First Council</div>
+              <div class="cc-row"><strong>Place:</strong> Pataliputra, Bihar</div>
+              <div class="cc-row"><strong>President:</strong> Sthulabhadra</div>
+              <div class="cc-row"><strong>Year:</strong> 300 BCE</div>
+              <div class="cc-row"><strong>Result:</strong> Compilation of 12 Angas · <span
+                  style="color:var(--accent4)">Great Split → Digambara & Shwetambara</span></div>
+            </div>
+            <div class="council-card">
+              <div class="cc-title">Second Council</div>
+              <div class="cc-row"><strong>Place:</strong> Vallabhi, Gujarat</div>
+              <div class="cc-row"><strong>President:</strong> Devardhi Kshamashraman</div>
+              <div class="cc-row"><strong>Year:</strong> 512 CE</div>
+              <div class="cc-row"><strong>Result:</strong> Final compilation & sequencing of 12 Angas + 12 Upangas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🔀</span>
+          <span class="sec-title">The Great Split — Digambara vs Shwetambara</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="split-grid">
+            <div class="split-box">
+              <div class="sb-title sb-white">⬜ Shwetambara (White-Clad)</div>
+              <div class="sb-item"><strong>Leader:</strong> Sthulabhadra</div>
+              <div class="sb-item"><strong>Region:</strong> Stayed in North India (Magadha)</div>
+              <div class="sb-item"><strong>Practice:</strong> Wore White Clothes</div>
+              <div class="sb-item"><strong>Belief:</strong> <span style="color:var(--accent3)">Women CAN attain
+                  Moksha</span></div>
+            </div>
+            <div class="split-box">
+              <div class="sb-title sb-sky">🌌 Digambara (Sky-Clad)</div>
+              <div class="sb-item"><strong>Leader:</strong> Bhadrabahu</div>
+              <div class="sb-item"><strong>Region:</strong> Migrated to South India (Karnataka)</div>
+              <div class="sb-item"><strong>Practice:</strong> Did NOT wear clothes (Naked)</div>
+              <div class="sb-item"><strong>Key Event:</strong> Chandragupta Maurya accompanied Bhadrabahu to <span
+                  style="color:var(--accent)">Shravanabelagola</span> → performed <strong>Sallekhana</strong> (death by
+                fasting)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 5 — LITERATURE ══ -->
+    <div class="tab-panel" id="tab-literature">
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">📚</span>
+          <span class="sec-title">Jain Literature (Agama)</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row" style="margin-bottom:14px;">
+            <div class="flow-box accent-a">
+              <div class="fb-label">Language</div>
+              <div class="fb-val">Prakrit</div>
+              <div class="fb-note">Primarily Ardha-Magadhi</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">Structure</div>
+              <div class="fb-val">12 Angas + 12 Upangas + 10 Prakirnakas + 6 Cheda Sutras + 4 Moola Sutras</div>
+            </div>
+          </div>
+          <div class="sdivider">Important Texts</div>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Text</th>
+                  <th>Author / Details</th>
+                  <th>Content</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Kalpa Sutra</td>
+                  <td class="hl2">Bhadrabahu</td>
+                  <td>Biographies of Tirthankaras (in Sanskrit)</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Bhagavati Sutra</td>
+                  <td>—</td>
+                  <td>Life of Mahavira + <span class="hl3">List of 16 Mahajanapadas</span></td>
+                </tr>
+                <tr>
+                  <td class="key-term">Acharanga Sutra</td>
+                  <td>—</td>
+                  <td>Rules of conduct for Jain monks</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Parishishtaparvan</td>
+                  <td class="hl2">Hemchandra Suri</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 6 — ARCHITECTURE ══ -->
+    <div class="tab-panel" id="tab-architecture">
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🏔</span>
+          <span class="sec-title">Jain Caves</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cave</th>
+                  <th>Location</th>
+                  <th>Built By</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Hathigumpha Caves</td>
+                  <td>Odisha</td>
+                  <td class="hl3">King Kharavela</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Udayagiri & Khandagiri Caves</td>
+                  <td>Odisha</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🕌</span>
+          <span class="sec-title">Jain Temples</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Temple</th>
+                  <th>Location</th>
+                  <th>Built By</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key-term">Dilwara Jain Temple</td>
+                  <td>Mount Abu, Rajasthan</td>
+                  <td class="hl2">Vimal Shah</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Luna Vasahi Temple</td>
+                  <td>—</td>
+                  <td class="hl3">Vastupal & Tejpal</td>
+                </tr>
+                <tr>
+                  <td class="key-term">Pattadakal Jain Temple</td>
+                  <td>—</td>
+                  <td class="hl4">Rashtrakuta ruler (Amoghavarsha I)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🗿</span>
+          <span class="sec-title">Gommateshwara (Bahubali) Statue</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="flow-row">
+            <div class="flow-box accent-a">
+              <div class="fb-label">Location</div>
+              <div class="fb-val">Shravanabelagola, Karnataka</div>
+            </div>
+            <div class="flow-box accent-b">
+              <div class="fb-label">Builder</div>
+              <div class="fb-val">Chamundaraya</div>
+              <div class="fb-note">Minister of Ganga Dynasty</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card open">
+        <div class="section-header" onclick="toggleCard(this)">
+          <span class="sec-icon">🔣</span>
+          <span class="sec-title">Tirthankaras & Their Symbols</span>
+          <span class="sec-sub">Exam direct match questions</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="sym-grid">
+            <div class="sym-item"><span class="sym-no">1st</span><span class="sym-name">Rishabhdev</span><span
+                class="sym-sym">🐂 Bull</span></div>
+            <div class="sym-item"><span class="sym-no">2nd</span><span class="sym-name">Ajitnath</span><span
+                class="sym-sym">🐘 Elephant</span></div>
+            <div class="sym-item"><span class="sym-no">3rd</span><span class="sym-name">Sambhavnath</span><span
+                class="sym-sym">🐴 Horse</span></div>
+            <div class="sym-item"><span class="sym-no">7th</span><span class="sym-name">Suparshvanath</span><span
+                class="sym-sym">卐 Swastika</span></div>
+            <div class="sym-item"><span class="sym-no">19th</span><span class="sym-name">Mallinath</span><span
+                class="sym-sym">🏺 Pitcher</span></div>
+            <div class="sym-item"><span class="sym-no">21st</span><span class="sym-name">Naminatha</span><span
+                class="sym-sym">🪷 Blue Lotus</span></div>
+            <div class="sym-item"><span class="sym-no">22nd</span><span class="sym-name">Arishtanemi</span><span
+                class="sym-sym">🐚 Conch</span></div>
+            <div class="sym-item"><span class="sym-no">23rd</span><span class="sym-name">Parshvanath</span><span
+                class="sym-sym">🐍 Snake Hood</span></div>
+            <div class="sym-item"><span class="sym-no">24th</span><span class="sym-name">Mahavira</span><span
+                class="sym-sym">🦁 Lion</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 7 — EXAM TRAPS ══ -->
+    <div class="tab-panel" id="tab-traps">
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 01 — Founder vs Propagator</div>
+        <div class="trap-text">
+          <strong>Mahavira = Actual Founder / Propagator of Jainism</strong> (24th Tirthankara)<br>
+          <strong>Parshvanath = 23rd Tirthankara</strong> — gave 4 vows but did NOT found Jainism<br>
+          "Jainism ke Sansthapak" puchha jaaye → Mahavira
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 02 — 4 Vows vs 5 Vows</div>
+        <div class="trap-text">
+          <strong>Parshvanath gave 4 vows:</strong> Ahimsa, Satya, Asteya, Aparigraha<br>
+          <strong>Mahavira ADDED the 5th:</strong> Brahmacharya (Celibacy)<br>
+          Exam mein "5th vow kiska addition tha?" → Mahavira
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 03 — Digambara vs Shwetambara</div>
+        <div class="trap-text">
+          <strong>Shwetambara = White clothes · Women CAN attain Moksha · North India</strong><br>
+          <strong>Digambara = No clothes (Sky-clad) · South India (Karnataka)</strong><br>
+          Chandragupta Maurya → Digambara (went with Bhadrabahu to South)<br>
+          Sthulabhadra → Shwetambara (stayed in North)
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 04 — Bindusara vs Chandragupta</div>
+        <div class="trap-text">
+          <strong>Chandragupta Maurya = Jain</strong> (most prominent Jain emperor, Sallekhana)<br>
+          <strong>Bindusara = Ajivika sect</strong> (NOT Jain!)<br>
+          Ye ek common confusion hai — dono Maurya rulers hain!
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 05 — Council Locations</div>
+        <div class="trap-text">
+          <strong>1st Jain Council = Pataliputra (Bihar)</strong> · 300 BCE · Sthulabhadra<br>
+          <strong>2nd Jain Council = Vallabhi (Gujarat)</strong> · 512 CE · Devardhi Kshamashraman<br>
+          Buddhist vs Jain council locations confuse karte hain — Vallabhi = JAIN (Gujarat)
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 06 — Mahavira's Key Places</div>
+        <div class="trap-text">
+          <strong>Born:</strong> Kundagram, Vaishali (Bihar)<br>
+          <strong>Enlightenment:</strong> Jrimbhikagrama (Rijupalika river bank)<br>
+          <strong>Nirvana:</strong> Pavapuri, near Rajgir (Bihar)<br>
+          Teen alag jagah hain — teen alag questions aate hain!
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 07 — Bimbisara's Jain Name</div>
+        <div class="trap-text">
+          <strong>Bimbisara = Called "Shrenika" in Jain texts</strong><br>
+          He was contemporary of Mahavira.<br>
+          "Shrenika" puchha jaaye to answer = Bimbisara
+        </div>
+      </div>
+
+      <div class="trap-card">
+        <div class="trap-label">⚠ TRAP 08 — Tirthankara Symbols</div>
+        <div class="trap-text">
+          <strong>Mahavira = Lion</strong> (NOT bull — that's Rishabhdev)<br>
+          <strong>Parshvanath = Snake Hood</strong><br>
+          <strong>Arishtanemi = Conch</strong> (22nd — cousin of Krishna)<br>
+          <strong>Suparshvanath (7th) = Swastika</strong>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ TAB 8 — QUICK RECALL ══ -->
+    <div class="tab-panel" id="tab-quick">
+      <div class="qf-grid">
+        <div class="qf-item">
+          <div class="qf-q">Jin meaning?</div>
+          <div class="qf-a">Victor (one who conquered senses)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Jain saints called?</div>
+          <div class="qf-a">Nirgrantha</div>
+          <div class="qf-sub">Free from bonds</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Total Tirthankaras?</div>
+          <div class="qf-a">24</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">1st Tirthankara?</div>
+          <div class="qf-a">Rishabhdev (Adinath)</div>
+          <div class="qf-sub">Symbol: Bull · Born: Ayodhya</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">22nd Tirthankara?</div>
+          <div class="qf-a">Arishtanemi</div>
+          <div class="qf-sub">Symbol: Conch · Cousin of Krishna</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">23rd Tirthankara?</div>
+          <div class="qf-a">Parshvanath</div>
+          <div class="qf-sub">Symbol: Snake · Born: Varanasi</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">24th Tirthankara?</div>
+          <div class="qf-a">Mahavira Swami</div>
+          <div class="qf-sub">Symbol: Lion · Actual Founder</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mahavira's lifespan?</div>
+          <div class="qf-a">599–527 BCE (72 years)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mahavira born at?</div>
+          <div class="qf-a">Kundagram, Vaishali (Bihar)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mahavira's clan?</div>
+          <div class="qf-a">Jnatrika Clan (Kshatriya)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mahavira's father?</div>
+          <div class="qf-a">Siddhartha</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mahavira's mother?</div>
+          <div class="qf-a">Trishala</div>
+          <div class="qf-sub">Sister of Chetak (Lichchhavi)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mahavira's first disciple?</div>
+          <div class="qf-a">Jamali (son-in-law)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mahavira left home at age?</div>
+          <div class="qf-a">30</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mahavira's enlightenment place?</div>
+          <div class="qf-a">Jrimbhikagrama</div>
+          <div class="qf-sub">Rijupalika river · After 12 years penance</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Mahavira's Nirvana place?</div>
+          <div class="qf-a">Pavapuri (near Rajgir, Bihar)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Tri-Ratna (3 Jewels)?</div>
+          <div class="qf-a">Right Knowledge, Faith, Conduct</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">5th vow added by?</div>
+          <div class="qf-a">Mahavira</div>
+          <div class="qf-sub">Brahmacharya (Celibacy)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">4 vows by Parshvanath?</div>
+          <div class="qf-a">Ahimsa, Satya, Asteya, Aparigraha</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Jain philosophy of "Maybe"?</div>
+          <div class="qf-a">Syadvada / Anekantavada</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Ajivika sect founder?</div>
+          <div class="qf-a">Makkhali Gosala</div>
+          <div class="qf-sub">Fatalism / Niyati</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">1st Jain Council — place?</div>
+          <div class="qf-a">Pataliputra, Bihar</div>
+          <div class="qf-sub">300 BCE · Sthulabhadra</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">2nd Jain Council — place?</div>
+          <div class="qf-a">Vallabhi, Gujarat</div>
+          <div class="qf-sub">512 CE · Devardhi Kshamashraman</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Shwetambara leader?</div>
+          <div class="qf-a">Sthulabhadra (North India)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Digambara leader?</div>
+          <div class="qf-a">Bhadrabahu (South India)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Women can attain Moksha — which sect?</div>
+          <div class="qf-a">Shwetambara</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Sallekhana performed by?</div>
+          <div class="qf-a">Chandragupta Maurya</div>
+          <div class="qf-sub">At Shravanabelagola</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Bimbisara's Jain name?</div>
+          <div class="qf-a">Shrenika</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Kalpa Sutra — author?</div>
+          <div class="qf-a">Bhadrabahu</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">16 Mahajanapadas — Jain text?</div>
+          <div class="qf-a">Bhagavati Sutra</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Dilwara Temple — built by?</div>
+          <div class="qf-a">Vimal Shah</div>
+          <div class="qf-sub">Mount Abu, Rajasthan</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Gommateshwara statue — built by?</div>
+          <div class="qf-a">Chamundaraya</div>
+          <div class="qf-sub">Shravanabelagola, Karnataka</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Hathigumpha Caves — built by?</div>
+          <div class="qf-a">King Kharavela (Odisha)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Bindusara associated with?</div>
+          <div class="qf-a">Ajivika sect (NOT Jainism)</div>
+        </div>
+        <div class="qf-item">
+          <div class="qf-q">Jain literature language?</div>
+          <div class="qf-a">Prakrit (Ardha-Magadhi)</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+    function toggleCard(header) {
+      header.closest('.section-card').classList.toggle('open');
+    }
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.querySelector('.theme-btn');
+      if (body.dataset.theme === 'dark') {
+        body.dataset.theme = 'light'; btn.textContent = '🌙 Dark';
+      } else {
+        body.dataset.theme = 'dark'; btn.textContent = '☀ Light';
+      }
+    }
+    document.querySelectorAll('.section-card').forEach(c => c.classList.add('open'));
+  </script>
+</body>
+
+</html>
