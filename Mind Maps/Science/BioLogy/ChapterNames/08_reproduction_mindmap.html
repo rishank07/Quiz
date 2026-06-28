@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 08: Reproduction | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: #d0d6f0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12141f 0%, #1a1d30 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 18px 24px 14px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      color: var(--gold);
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .page-header .subtitle {
+      color: #8892b0;
+      font-size: .82rem;
+      margin-top: 4px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      padding: 0 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #8892b0;
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .4px;
+      padding: 11px 14px 8px;
+      text-transform: uppercase;
+      transition: color .2s, border-color .2s;
+    }
+
+    .tab-nav button:hover {
+      color: #c8d0e8;
+    }
+
+    .tab-nav button.active {
+      border-bottom-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 22px 20px 30px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .6px;
+      padding: 10px 16px;
+      text-transform: uppercase;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1d27);
+      color: var(--gold);
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2218, #1a1d27);
+      color: var(--accent3);
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #091524, #1a1d27);
+      color: var(--accent2);
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #160d24, #1a1d27);
+      color: var(--accent4);
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #211100, #1a1d27);
+      color: var(--accent5);
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #1a0909, #1a1d27);
+      color: var(--accent1);
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #041a17, #1a1d27);
+      color: var(--accent6);
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .arrow-list {
+      list-style: none;
+    }
+
+    .arrow-list li {
+      padding: 4px 0 4px 22px;
+      position: relative;
+    }
+
+    .arrow-list li::before {
+      color: var(--gold);
+      content: '▸';
+      left: 0;
+      position: absolute;
+    }
+
+    .arrow-list li.sub {
+      padding-left: 42px;
+    }
+
+    .arrow-list li.sub::before {
+      color: var(--accent2);
+      content: '▸';
+      left: 20px;
+    }
+
+    .arrow-list li.sub2 {
+      padding-left: 62px;
+    }
+
+    .arrow-list li.sub2::before {
+      color: var(--accent6);
+      content: '▸';
+      left: 40px;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .exam-trap .trap-label {
+      color: var(--accent1);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .quick-recall .recall-label {
+      color: var(--accent2);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: .82rem;
+      width: 100%;
+      min-width: 550px;
+    }
+
+    /* Added min-width */
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 8px 10px;
+      text-align: left;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    /* No text wrap in header */
+    .data-table td {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 7px 10px;
+      vertical-align: top;
+    }
+
+    .data-table tr:hover td {
+      background: #252840;
+    }
+
+    .art-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--gold);
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      padding: 2px 10px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      flex: 1 1 140px;
+      padding: 10px 14px;
+    }
+
+    .stat-box .s-val {
+      color: var(--gold);
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .stat-box .s-lbl {
+      color: #8892b0;
+      font-size: .73rem;
+      margin-top: 2px;
+    }
+
+    .info-row {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .info-row span {
+      font-size: .82rem;
+    }
+
+    .info-row .ik {
+      color: #8892b0;
+      margin-right: 4px;
+    }
+
+    .info-row .iv {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .two-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .three-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    }
+
+    .mini-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .mini-card .mc-title {
+      font-weight: 700;
+      font-size: .85rem;
+      margin-bottom: 7px;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 600;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 600;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 600;
+    }
+
+    .eq-box {
+      background: #0d1a0d;
+      border: 1px solid #1a3a1a;
+      border-radius: 8px;
+      color: var(--accent3);
+      font-family: monospace;
+      font-size: .85rem;
+      margin: 10px 0;
+      padding: 10px 16px;
+      text-align: center;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      color: #555e7a;
+      font-size: .75rem;
+      margin-top: 30px;
+      padding: 12px 20px;
+      text-align: center;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <h1>🌱 Chapter 08 — Reproduction</h1>
+    <div class="subtitle">General Science · Biology · BPSC / BSSC Exam Preparation</div>
+  </div>
+
+  <nav class="tab-nav">
+    <button class="active" onclick="switchTab('tab1',this)">🔀 Sexual vs Asexual</button>
+    <button onclick="switchTab('tab2',this)">🦠 Asexual Types</button>
+    <button onclick="switchTab('tab3',this)">🌿 Veg. Reproduction</button>
+    <button onclick="switchTab('tab4',this)">🌸 Plant Sexual</button>
+    <button onclick="switchTab('tab5',this)">🌼 Pollination</button>
+    <button onclick="switchTab('tab6',this)">👤 Human Repro.</button>
+  </nav>
+
+  <div id="tab1" class="tab-panel active">
+
+    <div class="card">
+      <div class="card-header gold">🔀 Asexual vs Sexual Reproduction</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th style="color:var(--accent2)">Asexual Reproduction</th>
+                <th style="color:var(--accent3)">Sexual Reproduction</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Parents needed</td>
+                <td>Single parent (or bisexual)</td>
+                <td>Two parents of different sex</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Organisms</td>
+                <td>Simple organisms</td>
+                <td>Complex and developed organisms</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Gametes</td>
+                <td><span class="hl-red">Absent</span> (no gamete formation or fusion)</td>
+                <td><span class="hl-green">Present</span> (gamete formation + fertilisation)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Offspring</td>
+                <td><span class="hl-gold">Clone of parent</span> (No variations)</td>
+                <td>Different from parents (Variations present)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="stat-row" style="margin-top:12px;">
+          <div class="stat-box">
+            <div class="s-val">Fission</div>
+            <div class="s-lbl">Unicellular organisms</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Fragmentation</div>
+            <div class="s-lbl">Simple multicellular</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Regeneration</div>
+            <div class="s-lbl">Broken part → new organism</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Budding</div>
+            <div class="s-lbl">Bud on body</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Spore Formation</div>
+            <div class="s-lbl">Thick-walled spores</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Vegetative Repro.</div>
+            <div class="s-lbl">Root/Stem/Leaf</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab2" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header blue">🦠 Types of Asexual Reproduction</div>
+      <div class="card-body">
+        <div class="two-col">
+
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">1. Fission</div>
+            <ul class="arrow-list">
+              <li>Reproduction in <span class="hl-gold">unicellular</span> organisms by amitotic cell division</li>
+              <li><span class="hl-gold">Binary fission</span>: 2 progenies formed</li>
+              <li class="sub">e.g. Amoeba, Bacteria, Leishmania, Paramecium</li>
+              <li><span class="hl-gold">Multiple fission</span>: Many progenies formed</li>
+              <li class="sub">e.g. <span class="hl-red">Plasmodium</span> (Malarial parasite)</li>
+            </ul>
+          </div>
+
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">2. Fragmentation</div>
+            <ul class="arrow-list">
+              <li>Simple multicellular organism breaks into 2+ segments</li>
+              <li>Each segment grows into complete organism</li>
+              <li>e.g. <span class="hl-gold">Spirogyra, Rhizopus, Ulothrix, Red algae</span></li>
+            </ul>
+          </div>
+
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent6)">3. Regeneration</div>
+            <ul class="arrow-list">
+              <li>New offspring from any <span class="hl-gold">broken part</span> of parent animal</li>
+              <li>e.g. <span class="hl-gold">Hydra, Planaria</span></li>
+            </ul>
+          </div>
+
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent5)">4. Budding</div>
+            <ul class="arrow-list">
+              <li>Bud forms on body → develops into new organism</li>
+              <li>e.g. <span class="hl-gold">Hydra, Yeast</span></li>
+            </ul>
+          </div>
+
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent4)">5. Spore Formation</div>
+            <ul class="arrow-list">
+              <li>Unicellular, thick-walled spores under <span class="hl-red">unfavorable</span> conditions</li>
+              <li>Germinate under <span class="hl-green">favorable</span> conditions</li>
+              <li>e.g. <span class="hl-gold">Chlamydomonas, Rhizopus, Mucor, Puccinia</span></li>
+            </ul>
+          </div>
+
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">Tissue Culture</div>
+            <ul class="arrow-list">
+              <li>Disease-free plants from plant tissue/parts in suitable culture medium in lab</li>
+              <li>Also called: <span class="hl-gold">In-vitro propagation / Micropropagation</span></li>
+              <li>Used for decorative and disease-free plants in less time</li>
+            </ul>
+          </div>
+
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          <span class="hl-gold">Plasmodium</span> = Multiple fission (malarial parasite). <span
+            class="hl-gold">Hydra</span> = Both budding AND regeneration. <span class="hl-gold">Yeast</span> = Budding
+          only. Leishmania = Binary fission (causes Kala-azar).
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Tissue culture = <span class="hl-gold">Micropropagation / In-vitro propagation</span>. Disease-free plants
+          banate hain laboratory mein.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab3" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header green">🌿 Vegetative Reproduction</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>New offspring from vegetative parts: <span class="hl-gold">Roots, Stems and Leaves</span></li>
+        </ul>
+        <div class="two-col" style="margin-top:12px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Natural Vegetative Propagation</div>
+            <div class="table-wrap" style="margin-top:6px;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Part used</th>
+                    <th>Examples</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="hl-gold">Stem</td>
+                    <td>Potato, Sugarcane</td>
+                  </tr>
+                  <tr>
+                    <td class="hl-gold">Roots</td>
+                    <td>Rosewood, Sweet potato</td>
+                  </tr>
+                  <tr>
+                    <td class="hl-gold">Leaf</td>
+                    <td>Begonia, Bryophyllum</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Artificial Vegetative Propagation</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Cutting</span>:
+                <ul class="arrow-list" style="margin-top:4px;">
+                  <li class="sub">Shoot cutting: Rose, Sugarcane, Banana</li>
+                  <li class="sub">Root cutting: Lemon, Orange</li>
+                </ul>
+              </li>
+              <li><span class="hl-gold">Layering</span>: Apple, Pear, Lemon, Strawberry</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Potato = vegetative reproduction by <span class="hl-gold">Stem</span> (not root!). Sweet potato = by <span
+            class="hl-gold">Root</span>. Bryophyllum = by <span class="hl-gold">Leaf</span>. Ye three confuse karne wale
+          examples hain!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab4" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header purple">🌸 Flower Structure</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Flower = <span class="hl-gold">Condensed shoot</span>, sexual organ of plant</li>
+          <li>Parts of flower:
+            <ul class="arrow-list" style="margin-top:4px;">
+              <li class="sub"><span class="hl-gold">Calyx</span> (green)</li>
+              <li class="sub"><span class="hl-gold">Corolla</span> (coloured)</li>
+              <li class="sub"><span class="hl-gold">Androecium</span>: Stamens = Male reproductive organ</li>
+              <li class="sub"><span class="hl-gold">Gynoecium</span>: Pistil/Carpel = Female reproductive organ</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="two-col" style="margin-top:12px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Bisexual / Monoecious Plants</div>
+            <ul class="arrow-list">
+              <li>Both male &amp; female organs in same flower</li>
+              <li>e.g. <span class="hl-gold">Hibiscus, Pea, Rose, Sunflower, Tomato, Mango, Lily</span></li>
+              <li>Note: <span class="hl-orange">Maize has unisexual flowers</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">Dioecious Plants</div>
+            <ul class="arrow-list">
+              <li>Male and female flowers on separate plants</li>
+              <li>e.g. <span class="hl-gold">Papaya, Cucumber, Watermelon, Muskmelon</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Maize = Monoecious plant lekin <span class="hl-gold">unisexual flowers</span> hote hain (male aur female alag
+          alag flowers, same plant pe). Papaya = <span class="hl-gold">Dioecious</span> (alag plants pe). Ye important
+          distinction hai!
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">🔬 Double Fertilisation</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><span class="hl-gold">Gametogenesis</span>: Haploid pollen grains in anther (microsporogenesis) + Haploid
+            embryo sac in ovule (megasporogenesis)</li>
+        </ul>
+        <div class="eq-box">Male gamete (n) + Female gamete (n) = Zygote (2n) → Embryo</div>
+        <div class="eq-box">Male gamete (n) + Polar/Secondary nuclei (2n) = Endosperm (3n)</div>
+        <div class="info-row">
+          <span><span class="ik">Ovule becomes:</span><span class="iv">Seed</span></span>
+          <span><span class="ik">Ovary becomes:</span><span class="iv">Fruit</span></span>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Double fertilisation = <span class="hl-gold">unique to Angiosperms</span>. Ek fertilisation → Embryo (2n).
+          Doosra → Endosperm (3n = triploid). Endosperm food store karta hai seed mein.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab5" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header orange">🌼 Pollination</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Transfer of pollen grain from <span class="hl-gold">anther to stigma</span> of pistil</li>
+        </ul>
+        <div class="two-col" style="margin-top:12px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Self-Pollination</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Autogamy</span>: Within same bisexual flower</li>
+              <li><span class="hl-gold">Geitonogamy</span>: Between different flowers of same plant</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Cross-Pollination</div>
+            <ul class="arrow-list">
+              <li>Between two different plants</li>
+              <li><span class="hl-gold">Anemophily</span>: By wind<br /><span style="color:#8892b0;font-size:.8em">e.g.
+                  Maize, Bamboo, Sugarcane</span></li>
+              <li><span class="hl-gold">Hydrophily</span>: By water<br /><span style="color:#8892b0;font-size:.8em">e.g.
+                  Vallisneria, Hydrilla</span></li>
+              <li><span class="hl-gold">Entomophily</span>: By insects<br /><span
+                  style="color:#8892b0;font-size:.8em">e.g. Salvia, Fig, Rose</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          <span class="hl-gold">Anemophily</span> = Wind pollination (Maize, Bamboo). <span
+            class="hl-gold">Entomophily</span> = Insect pollination (Rose, Fig). <span class="hl-gold">Hydrophily</span>
+          = Water pollination (Vallisneria). Teen -phily words yaad rakho!
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Autogamy = same flower | Geitonogamy = same plant different flower | Cross pollination = different plant.
+          Geitonogamy genetically = self-pollination jaisi hai!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab6" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header blue">👨 Male Reproductive System</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><span class="hl-gold">Testes</span>: A pair of primary reproductive organs located in <span
+              class="hl-gold">scrotum</span> (outside abdominal cavity)</li>
+          <li class="sub">Produce male sex hormone <span class="hl-gold">Testosterone</span> by <span
+              class="hl-gold">Leydig cells</span></li>
+          <li class="sub">Produce haploid sperms through <span class="hl-gold">Spermatogenesis</span></li>
+          <li class="sub">Nutrition of sperms by <span class="hl-gold">Sertoli cells</span></li>
+          <li><span class="hl-gold">Epididymis</span>: Maturation of sperms</li>
+          <li><span class="hl-gold">Vas deferens</span>: A pair — transport sperm to seminal vesicles</li>
+          <li><span class="hl-gold">Seminal vesicle</span> → <span class="hl-gold">Urethra</span> → <span
+              class="hl-gold">Penis</span></li>
+          <li><span class="hl-gold">Accessory glands</span>: Prostate, Cowper's and perineal glands</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Testes = <span class="hl-gold">Scrotum</span> mein hote hain (outside abdomen — temperature regulation ke
+          liye). <span class="hl-gold">Leydig cells</span> = Testosterone produce karte hain. <span
+            class="hl-gold">Sertoli cells</span> = Sperms ko nutrition dete hain. Dono different cells hain!
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">👩 Female Reproductive System</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><span class="hl-gold">Ovaries</span>: A pair of primary reproductive organs located in <span
+              class="hl-gold">abdominal cavity</span></li>
+          <li class="sub">Secrete female sex hormones <span class="hl-gold">Oestrogen</span> and <span
+              class="hl-gold">Progesterone</span> (by corpus luteum)</li>
+          <li class="sub">Produce haploid eggs through <span class="hl-gold">Oogenesis</span></li>
+          <li><span class="hl-gold">Oviducts</span>: A pair — connect ovaries to uterus</li>
+          <li><span class="hl-gold">Uterus</span>: Site of embryo development</li>
+          <li><span class="hl-gold">Accessory glands</span>: Bartholin's and perineal glands</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">⚖️ Male vs Female — Quick Compare</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th style="color:var(--accent2)">Male</th>
+                <th style="color:var(--accent4)">Female</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Primary organ</td>
+                <td>Testes (in scrotum)</td>
+                <td>Ovaries (in abdomen)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Hormone-producing cells</td>
+                <td>Leydig cells → Testosterone</td>
+                <td>Corpus luteum → Oestrogen, Progesterone</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Gamete production</td>
+                <td>Spermatogenesis (haploid sperms)</td>
+                <td>Oogenesis (haploid eggs)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Nutrition support cells</td>
+                <td>Sertoli cells (for sperms)</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Sperm/Egg maturation</td>
+                <td>Epididymis</td>
+                <td>Oviduct (carries egg)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Accessory glands</td>
+                <td>Prostate, Cowper's, Perineal</td>
+                <td>Bartholin's, Perineal</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Spermatogenesis = Male gamete formation | Oogenesis = Female gamete formation | Both produce <span
+            class="hl-gold">haploid</span> gametes via Meiosis. Fertilisation = Zygote (2n) formation.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Reproduction · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

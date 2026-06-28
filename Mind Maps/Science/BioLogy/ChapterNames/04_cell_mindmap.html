@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 04: Cell | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: #d0d6f0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12141f 0%, #1a1d30 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 18px 24px 14px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      color: var(--gold);
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .page-header .subtitle {
+      color: #8892b0;
+      font-size: .82rem;
+      margin-top: 4px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      padding: 0 16px;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #8892b0;
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .4px;
+      padding: 11px 14px 8px;
+      text-transform: uppercase;
+      transition: color .2s, border-color .2s;
+    }
+
+    .tab-nav button:hover {
+      color: #c8d0e8;
+    }
+
+    .tab-nav button.active {
+      border-bottom-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 22px 20px 30px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .6px;
+      padding: 10px 16px;
+      text-transform: uppercase;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1d27);
+      color: var(--gold);
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2218, #1a1d27);
+      color: var(--accent3);
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #091524, #1a1d27);
+      color: var(--accent2);
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #160d24, #1a1d27);
+      color: var(--accent4);
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #211100, #1a1d27);
+      color: var(--accent5);
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #1a0909, #1a1d27);
+      color: var(--accent1);
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #041a17, #1a1d27);
+      color: var(--accent6);
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .arrow-list {
+      list-style: none;
+    }
+
+    .arrow-list li {
+      padding: 4px 0 4px 22px;
+      position: relative;
+    }
+
+    .arrow-list li::before {
+      color: var(--gold);
+      content: '▸';
+      left: 0;
+      position: absolute;
+    }
+
+    .arrow-list li.sub {
+      padding-left: 42px;
+    }
+
+    .arrow-list li.sub::before {
+      color: var(--accent2);
+      content: '▸';
+      left: 20px;
+    }
+
+    .arrow-list li.sub2 {
+      padding-left: 62px;
+    }
+
+    .arrow-list li.sub2::before {
+      color: var(--accent6);
+      content: '▸';
+      left: 40px;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .exam-trap .trap-label {
+      color: var(--accent1);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .quick-recall .recall-label {
+      color: var(--accent2);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: .82rem;
+      width: 100%;
+      min-width: 550px;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 8px 10px;
+      text-align: left;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 7px 10px;
+      vertical-align: top;
+    }
+
+    .data-table tr:hover td {
+      background: #252840;
+    }
+
+    .art-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--gold);
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      padding: 2px 10px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      flex: 1 1 140px;
+      padding: 10px 14px;
+    }
+
+    .stat-box .s-val {
+      color: var(--gold);
+      font-size: .95rem;
+      font-weight: 700;
+    }
+
+    .stat-box .s-lbl {
+      color: #8892b0;
+      font-size: .75rem;
+      margin-top: 2px;
+    }
+
+    .info-row {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .info-row span {
+      font-size: .82rem;
+    }
+
+    .info-row .ik {
+      color: #8892b0;
+      margin-right: 4px;
+    }
+
+    .info-row .iv {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .two-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .three-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    }
+
+    .mini-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .mini-card .mc-title {
+      font-weight: 700;
+      font-size: .85rem;
+      margin-bottom: 7px;
+    }
+
+    .organelle-badge {
+      display: inline-block;
+      border-radius: 4px;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      margin: 2px;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 600;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 600;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 600;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      color: #555e7a;
+      font-size: .75rem;
+      margin-top: 30px;
+      padding: 12px 20px;
+      text-align: center;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <h1>🔬 Chapter 04 — Cell</h1>
+    <div class="subtitle">General Science · Biology · BPSC / BSSC Exam Preparation</div>
+  </div>
+
+  <nav class="tab-nav">
+    <button class="active" onclick="switchTab('tab1',this)">🔬 Intro &amp; Theory</button>
+    <button onclick="switchTab('tab2',this)">🧬 Cell Types</button>
+    <button onclick="switchTab('tab3',this)">🌿🐾 Plant vs Animal</button>
+    <button onclick="switchTab('tab4',this)">🏗️ Cell Structure</button>
+    <button onclick="switchTab('tab5',this)">⚙️ Organelles I</button>
+    <button onclick="switchTab('tab6',this)">⚙️ Organelles II</button>
+    <button onclick="switchTab('tab7',this)">🔄 Cell Division</button>
+  </nav>
+
+  <!-- ══ TAB 1 — Intro & Cell Theory ══ -->
+  <div id="tab1" class="tab-panel active">
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="s-val">Robert Hooke</div>
+        <div class="s-lbl">Discovered Cell (1665)</div>
+      </div>
+      <div class="stat-box">
+        <div class="s-val">Leeuwenhoek</div>
+        <div class="s-lbl">First living cell (1674)</div>
+      </div>
+      <div class="stat-box">
+        <div class="s-val">Schleiden &amp; Schwann</div>
+        <div class="s-lbl">Cell Theory (1838-39)</div>
+      </div>
+      <div class="stat-box">
+        <div class="s-val">Rudolf Virchow</div>
+        <div class="s-lbl">Modified Cell Theory (1855)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">🔬 Discovery of Cell</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Cell is the <span class="hl-gold">fundamental unit of life</span> and building block of living organisms
+          </li>
+          <li>Discovered by <span class="hl-gold">Robert Hooke (1665)</span></li>
+          <li class="sub">Observed <span class="hl-gold">dead cells</span> in thin slice of cork (plant bark)</li>
+          <li class="sub">Cells resembled a <span class="hl-gold">honeycomb</span></li>
+          <li class="sub">Coined term <span class="hl-gold">'Cellula'</span> → Small compartment</li>
+          <li class="sub">Cytology → Study of cells</li>
+          <li>First <span class="hl-green">living cells</span> discovered by <span class="hl-gold">Antonie van
+              Leeuwenhoek (1674)</span></li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Hooke ne <span class="hl-gold">dead cells</span> dekhe (cork mein). Leeuwenhoek ne <span
+            class="hl-gold">living cells</span> dekhe. Dono alag-alag discoveries hain — confuse mat karna!
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📖 Cell Theory (1838–1839)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Given by <span class="hl-gold">Matthias Schleiden</span> (Botanist) and <span class="hl-gold">Theodor
+              Schwann</span> (Zoologist)</li>
+          <li>All living organisms are made of <span class="hl-gold">cells</span></li>
+          <li>Cell is the <span class="hl-gold">structural and functional unit</span> of life</li>
+          <li>Modified by <span class="hl-gold">Rudolf Virchow (1855)</span></li>
+          <li class="sub">New cells arise from <span class="hl-gold">pre-existing cells</span> (through cell division)
+          </li>
+          <li class="sub">Latin: <span class="hl-gold">Omnis cellula-e-cellula</span></li>
+        </ul>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Schleiden = Plants | Schwann = Animals — dono ne milke Cell Theory di. Virchow ne add kiya: "new cells only
+          from old cells."
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">📐 Size &amp; Shape of Cells</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Shape / Type</th>
+                <th>Example</th>
+                <th>Special Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Irregular / Amoeboid</td>
+                <td>WBC, Amoeba</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Cylindrical</td>
+                <td>Muscle cell, Vessel, Sieve tubes</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Oval (Largest cell)</td>
+                <td>Ostrich egg</td>
+                <td class="hl-gold">15×13 cm, 1.4 kg</td>
+              </tr>
+              <tr>
+                <td>Tree-like</td>
+                <td>Nerve cells / Neuron</td>
+                <td>90–100 cm long</td>
+              </tr>
+              <tr>
+                <td>Biconcave</td>
+                <td>Red Blood Cells (RBC)</td>
+                <td>7.2 µm</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Smallest cell</td>
+                <td>Mycoplasma PPLO</td>
+                <td class="hl-gold">0.1 µm (Pleuropneumonia Like Organism)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          <span class="hl-gold">Largest cell</span> = Ostrich egg (15×13 cm). <span class="hl-gold">Smallest cell</span>
+          = Mycoplasma PPLO (0.1 µm). <span class="hl-gold">Longest cell</span> = Neuron (90–100 cm). Teen alag records
+          hain!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ TAB 2 — Prokaryotic vs Eukaryotic ══ -->
+  <div id="tab2" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">🧬 Prokaryotic vs Eukaryotic Cell</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th style="color:var(--accent1)">Prokaryotic</th>
+                <th style="color:var(--accent3)">Eukaryotic</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Size</td>
+                <td>0.1 – 5.0 µm</td>
+                <td>10 – 100 µm</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Nucleus</td>
+                <td><span class="hl-red">Nuclear membrane absent</span><br />Nucleolus absent<br />→ Nucleoid /
+                  Genophore</td>
+                <td><span class="hl-green">Nuclear membrane present</span><br />Nucleolus present</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Membrane-bound organelles<br />(Mito, Plastid, ER, Golgi, Vacuole)</td>
+                <td><span class="hl-red">Absent</span></td>
+                <td><span class="hl-green">Present</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Ribosome</td>
+                <td><span class="hl-gold">70S</span></td>
+                <td><span class="hl-gold">80S</span> (70S in Mitochondria &amp; Plastids)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Chromosome / DNA</td>
+                <td>One naked <span class="hl-gold">circular DNA</span><br />Without Histone protein</td>
+                <td>Multiple, <span class="hl-gold">linear DNA</span><br />With Histone protein</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Cellular Respiration</td>
+                <td>In <span class="hl-gold">Mesosome</span> (infoldings of plasma membrane)</td>
+                <td>In <span class="hl-gold">Mitochondria</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Examples</td>
+                <td>Bacteria, Blue-green algae, Mycoplasma</td>
+                <td>Plants, Fungi, Animals</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Eukaryotic mein Mitochondria aur Plastids ke ribosomes <span class="hl-gold">70S</span> hote hain —
+          prokaryotic ki tarah! Cytoplasm mein <span class="hl-gold">80S</span>. Ye MCQ trap hai.<br /><br />
+          Prokaryotic mein cellular respiration <span class="hl-gold">Mesosome</span> mein hoti hai. Mesosome DNA
+          replication mein bhi help karta hai.
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Motile bacteria mein <span class="hl-gold">Flagella</span> hote hain — thin filamentous extensions from cell
+          wall.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ TAB 3 — Plant vs Animal Cell ══ -->
+  <div id="tab3" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header green">🌿🐾 Plant Cell vs Animal Cell</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Structure / Organelle</th>
+                <th style="color:var(--accent3)">Plant Cell</th>
+                <th style="color:var(--accent5)">Animal Cell</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Cell Membrane</td>
+                <td>Present (<span class="hl-green">Sterol</span> containing)</td>
+                <td>Present (<span class="hl-orange">Cholesterol</span> containing)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Cell Wall</td>
+                <td><span class="hl-green">Present</span> (Cellulose)</td>
+                <td><span class="hl-red">Absent</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Plastid</td>
+                <td><span class="hl-green">Present</span></td>
+                <td><span class="hl-red">Absent</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Mitochondria</td>
+                <td>Present (<span class="hl-orange">Less in number</span>)</td>
+                <td>Present (<span class="hl-green">More in number</span>)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Golgi Complex</td>
+                <td>Present (<span class="hl-orange">Small in size</span>)</td>
+                <td>Present (<span class="hl-green">Large in size</span>)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Vacuoles</td>
+                <td><span class="hl-green">Large central vacuole</span></td>
+                <td><span class="hl-red">Very small or Absent</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Ribosome</td>
+                <td>Present</td>
+                <td>Present</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Centrosome</td>
+                <td><span class="hl-red">Absent</span></td>
+                <td><span class="hl-green">Present</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          <span class="hl-gold">Centrosome</span> → only in Animal cells (cell division mein poles banata hai). <span
+            class="hl-gold">Plastid</span> → only in Plant cells. <span class="hl-gold">Cell wall</span> → only in
+          Plants. Ye teen biggest differences hain!
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Plant cell ka Golgi = <span class="hl-gold">Dictyosomes</span> kehte hain. Animal cell vacuoles bahut chhhoti
+          hoti hain ya absent. Plant cell vacuole = 60–90% cell volume!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ TAB 4 — Cell Structure (Wall, Membrane, Transport) ══ -->
+  <div id="tab4" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header green">🧱 1. Cell Wall</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Only present in <span class="hl-gold">plant cells</span></li>
+          <li>Made up of <span class="hl-gold">Cellulose</span></li>
+          <li>Thick and flexible or rigid</li>
+          <li>Permeable, helps in protection</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🟦 2. Cell Membrane / Plasma Membrane</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Found in <span class="hl-gold">all cells</span></li>
+          <li>Composition: <span class="hl-gold">Protein (50%) + Lipid (40%) + Carbohydrates (10%)</span></li>
+          <li>Very thin and flexible</li>
+          <li><span class="hl-gold">Selectively permeable</span> membrane</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🔀 Transport Across Cell Membrane</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Passive Transport (No energy needed)</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Diffusion</span>: High → Low concentration</li>
+              <li class="sub">Rate: Gas &gt; Liquid &gt; Solid</li>
+              <li class="sub">CO₂, O₂ transport</li>
+              <li><span class="hl-gold">Osmosis</span>: Water movement across semipermeable membrane</li>
+              <li class="sub">Absorption of water in roots</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent5)">Active Transport (Energy needed)</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Endocytosis</span>: Engulfing material INTO cell</li>
+              <li class="sub"><span class="hl-gold">Phagocytosis</span> — solid food intake</li>
+              <li class="sub"><span class="hl-gold">Pinocytosis</span> — liquid food intake</li>
+              <li><span class="hl-gold">Exocytosis</span>: Removing waste OUT of cell ("cell vomiting")</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="margin-top:12px; border-color:var(--border);">
+          <div class="card-header purple">💧 Osmosis — Solution Types</div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Solution Type</th>
+                    <th>Condition</th>
+                    <th>Effect on Cell</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="hl-blue">Hypotonic</td>
+                    <td>Conc. of solution &lt; cell</td>
+                    <td><span class="hl-green">Cell swells</span></td>
+                  </tr>
+                  <tr>
+                    <td class="hl-green">Isotonic</td>
+                    <td>Conc. of solution = cell</td>
+                    <td>No change</td>
+                  </tr>
+                  <tr>
+                    <td class="hl-orange">Hypertonic</td>
+                    <td>Conc. of solution &gt; cell</td>
+                    <td><span class="hl-red">Cell shrinks</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          <span class="hl-gold">Aquaporins</span> = specialised channel proteins that facilitate water transport across
+          cell membrane in response to osmotic gradient.
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Phagocytosis = <span class="hl-gold">Solid</span> food | Pinocytosis = <span class="hl-gold">Liquid</span>
+          food. Dono Endocytosis ke types hain. Amoeba mein endocytosis hoti hai.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🧫 3. Protoplasm</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Term coined by <span class="hl-gold">J.E. Purkinje (1839)</span>, Discovered by <span
+              class="hl-gold">Felix Dujardin</span></li>
+          <li><span class="hl-gold">"Physical basis of life"</span> — Huxley</li>
+          <li>Semi-solid jelly-like matrix / Living material</li>
+          <li>Site of many metabolic activities</li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Cytoplasm:</span><span class="iv">Protoplasm inside cell membrane (excluding
+              nucleus)</span></span>
+          <span><span class="ik">Nucleoplasm:</span><span class="iv">Protoplasm present inside nucleus</span></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ TAB 5 — Organelles I (Nucleus, ER, Ribosome, Golgi) ══ -->
+  <div id="tab5" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">🧠 A. Nucleus</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Discovered by <span class="hl-gold">Robert Brown (1831)</span></li>
+          <li><span class="hl-gold">Largest cell organelle</span> (except vacuoles in plant cell)</li>
+          <li><span class="hl-gold">Control centre / Brain of cell</span></li>
+          <li>Controls all vital functions; regulates cell division &amp; inheritance</li>
+        </ul>
+        <div class="two-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--gold)">Parts of Nucleus</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Nuclear membrane</span>: Double membrane with nuclear pores</li>
+              <li><span class="hl-gold">Nucleoplasm</span>: Basal matrix</li>
+              <li><span class="hl-gold">Nucleolus</span>: Discovered by Fontana; synthesises <span
+                  class="hl-green">r-RNA</span></li>
+              <li><span class="hl-gold">Chromatin</span>: Thread-like; condenses into chromosomes during cell division
+              </li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent4)">Chromosome Facts</div>
+            <ul class="arrow-list">
+              <li>Made of <span class="hl-gold">DNA + Histone Protein</span></li>
+              <li>Functional segment of DNA = <span class="hl-gold">Gene</span></li>
+              <li>Human chromosomes: <span class="hl-gold">23 pairs</span></li>
+              <li class="sub">22 pairs = <span class="hl-gold">Autosomes</span> (physical traits)</li>
+              <li class="sub">1 pair = <span class="hl-gold">Allosome / Sex chromosome</span></li>
+              <li class="sub">XY = Male | XX = Female</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Nucleus stain karne ke liye <span class="hl-gold">Safranin</span> use hota hai. Nucleus = Largest organelle
+          (plant cell mein vacuole isse bada ho sakta hai — exception yaad rakho!).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🕸️ B. Endoplasmic Reticulum (ER)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Discovered by <span class="hl-gold">Keith R. Porter, Albert Claude &amp; Ernest Fullam (1945)</span></li>
+          <li>Network of single membrane-bound tubules and flattened sheets</li>
+          <li>Contains <span class="hl-gold">Cisternae and Vesicles</span></li>
+          <li>Provides <span class="hl-gold">cytoskeleton</span> (structural framework)</li>
+          <li>Forms network of channels for <span class="hl-gold">material transport</span></li>
+          <li>Helps form <span class="hl-gold">cell membrane and nuclear membrane</span></li>
+        </ul>
+        <div class="two-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent5)">Rough ER (RER)</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Ribosomes present</span> on surface</li>
+              <li>Synthesis of <span class="hl-gold">Protein / Enzymes</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent6)">Smooth ER (SER)</div>
+            <ul class="arrow-list">
+              <li><span class="hl-red">Ribosomes absent</span></li>
+              <li>Synthesis of <span class="hl-gold">Lipid / Steroids</span></li>
+              <li><span class="hl-gold">Detoxification</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">⚪ C. Ribosome</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Discovered by <span class="hl-gold">G.E. Palade (1953)</span></li>
+          <li><span class="hl-red">Membrane less</span> organelle</li>
+          <li><span class="hl-gold">Site of protein synthesis</span></li>
+        </ul>
+        <div class="two-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">70S Ribosome</div>
+            <ul class="arrow-list">
+              <li>= 50S + 30S subunits</li>
+              <li>In <span class="hl-gold">Bacteria, Plastids, Mitochondria</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">80S Ribosome</div>
+            <ul class="arrow-list">
+              <li>= 60S + 40S subunits</li>
+              <li>In <span class="hl-gold">Nucleus, Cytoplasm, Rough ER</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          A chain of ribosomes attached to m-RNA = <span class="hl-gold">Polysome</span> → helps in protein synthesis.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">📦 D. Golgi Body</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Discovered by <span class="hl-gold">Camillo Golgi (1898)</span></li>
+          <li>In plant cells called <span class="hl-gold">Dictyosomes</span></li>
+          <li>Single membrane-bound parallel flattened vesicles, tubules and cisternae</li>
+          <li><span class="hl-gold">Cis face</span> (convex) → towards nucleus</li>
+          <li><span class="hl-gold">Trans face</span> (concave) → towards cell membrane</li>
+          <li>Secretion, storage, packaging &amp; processing of ER products</li>
+          <li>Modification: Simple sugar → Complex sugar</li>
+          <li>Formation of <span class="hl-gold">Lysosome</span> and <span class="hl-gold">Acrosome</span> of sperm</li>
+          <li><span class="hl-gold">"Traffic police" / "Post office" of cell</span></li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Golgi body = <span class="hl-gold">"Post office / Traffic police" of cell</span>. Lysosome aur sperm ka
+          Acrosome dono Golgi se bante hain! Cytoplasmic area around Golgi = <span class="hl-gold">Zone of
+            exclusion</span> (no organelles).
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ TAB 6 — Organelles II (Lysosome, Mitochondria, Plastids, Vacuole) ══ -->
+  <div id="tab6" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header red">💣 E. Lysosome</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Discovered by <span class="hl-gold">Christian de Duve (1955)</span></li>
+          <li>Single membrane-bound organelle</li>
+          <li><span class="hl-gold">Waste disposal system</span> of cells</li>
+          <li>Contains <span class="hl-gold">digestive (hydrolytic) acidic enzymes</span></li>
+          <li>Digests: complex food → simple components</li>
+          <li>Also digests: foreign particles, dead/damaged organelles, bacteria, viruses, waste</li>
+          <li><span class="hl-gold">"Suicidal bag"</span> — rupture causes self-digestion of cell</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Lysosome = <span class="hl-gold">"Suicidal bag"</span> — ye nickname MCQ mein directly poochha jaata hai.
+          Christian de Duve ne discover kiya (1955).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">⚡ F. Mitochondria</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Discovered by <span class="hl-gold">Albert von Kolliker (1857)</span></li>
+          <li><span class="hl-gold">Double membrane</span> bound</li>
+          <li class="sub">Outer membrane = <span class="hl-gold">Porous</span></li>
+          <li class="sub">Inner membrane = Folded into finger-like projections = <span class="hl-gold">Cristae</span>
+          </li>
+          <li><span class="hl-gold">"Powerhouse of cell"</span></li>
+          <li>Forms <span class="hl-gold">ATP</span> (Adenosine Triphosphate) — energy currency</li>
+          <li class="sub">Via: Cellular respiration, Kreb's cycle, ETS</li>
+          <li><span class="hl-gold">Semi-autonomous organelle</span>: Has its own circular naked DNA, RNA and 70S
+            ribosomes</li>
+          <li>Also participates in <span class="hl-gold">cell death (Apoptosis)</span></li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Mitochondria = <span class="hl-gold">"Powerhouse of cell"</span>. Semi-autonomous hai — apna DNA, RNA, 70S
+          ribosome rakhti hai. Apoptosis (cell death) mein bhi role hai. Inner membrane = <span
+            class="hl-gold">Cristae</span>.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🌿 G. Plastids</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Discovered by <span class="hl-gold">Ernst Haeckel and Schimper</span></li>
+          <li>Present <span class="hl-red">only in Plant cells</span></li>
+          <li>Semi-autonomous, double membrane-bound</li>
+        </ul>
+        <div class="three-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">🟢 Chloroplast</div>
+            <ul class="arrow-list">
+              <li>Green colour</li>
+              <li>Pigment: <span class="hl-gold">Chlorophyll</span></li>
+              <li>Performs <span class="hl-gold">Photosynthesis</span></li>
+              <li><span class="hl-gold">"Kitchen of cell"</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent5)">🟠 Chromoplast</div>
+            <ul class="arrow-list">
+              <li>Colourful (except green)</li>
+              <li>Cause of different colours in fruits &amp; flowers</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:#8892b0)">⚪ Leucoplast</div>
+            <ul class="arrow-list">
+              <li>White / Colourless</li>
+              <li><span class="hl-gold">Amyloplast</span> → Starch</li>
+              <li><span class="hl-gold">Elaioplast</span> → Oil</li>
+              <li><span class="hl-gold">Aleuroplast</span> → Protein</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Chloroplast = <span class="hl-gold">"Kitchen of cell"</span> | Mitochondria = <span
+            class="hl-gold">"Powerhouse of cell"</span> | Lysosome = <span class="hl-gold">"Suicidal bag"</span> | Golgi
+          = <span class="hl-gold">"Post office"</span> — ye nicknames exam mein zaroor aate hain!
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">💧 H. Vacuole</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Single membrane (<span class="hl-gold">Tonoplast</span>) bound sacs</li>
+          <li>Storage house OR dustbin of cell</li>
+          <li>Stores: water, food, pigment (<span class="hl-gold">anthocyanin</span>), excretory/waste materials</li>
+          <li><span class="hl-red">Absent or very small</span> in animal cells</li>
+          <li><span class="hl-green">Large in plant cells</span> — covers <span class="hl-gold">60–90%</span> of cell
+            volume</li>
+          <li>Regulates cell <span class="hl-gold">turgidity</span> (by storing water and cell sap)</li>
+        </ul>
+        <div class="card" style="margin-top:12px;border-color:var(--border);">
+          <div class="card-header blue">📌 Important Additional Facts</div>
+          <div class="card-body">
+            <ul class="arrow-list">
+              <li>Centrosome forms <span class="hl-gold">poles during cell division</span> (animal cells)</li>
+              <li>Centrioles: <span class="hl-gold">9 + 0</span> structure of triplet microtubules</li>
+              <li><span class="hl-gold">Peroxisomes</span> in liver: Convert harmful H₂O₂ → H₂O + O₂ (detoxification)
+              </li>
+              <li>Zone of exclusion: Cytoplasmic area around Golgi — <span class="hl-red">no organelles</span> here</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ TAB 7 — Cell Division ══ -->
+  <div id="tab7" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header blue">🔄 Cell Cycle — Phases</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Interphase (Metabolically active)</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">G₁ phase</span>: Comparatively longest; cell increases in size after division
+              </li>
+              <li><span class="hl-gold">G₀ phase</span>: Quiescent phase (cells exit active division — non-dividing
+                state)</li>
+              <li><span class="hl-gold">S phase</span>: Replication of DNA &amp; centrosome; synthesis of Histone
+                protein</li>
+              <li><span class="hl-gold">G₂ phase</span>: Cell prepares for mitosis; protein/organelle synthesis; DNA
+                damage check</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent5)">M-Phase (Division)</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Karyokinesis</span>: Nuclear division</li>
+              <li><span class="hl-gold">Cytokinesis</span>: Cytoplasmic division</li>
+              <li>In plant cells: <span class="hl-gold">Phragmoplast</span> formed during cytokinesis (cell wall
+                construction)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">⚖️ Mitosis vs Meiosis</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th style="color:var(--accent3)">Mitosis</th>
+                <th style="color:var(--accent4)">Meiosis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Occurs in</td>
+                <td>Somatic cells</td>
+                <td>Germ cells</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Phases</td>
+                <td>Single phase</td>
+                <td>Two phases (Meiosis I &amp; II)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Chromosome number</td>
+                <td>Same as parent (2n → 2n)</td>
+                <td><span class="hl-gold">Half of parent (2n → n)</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Progeny cells</td>
+                <td>2 identical cells</td>
+                <td>4 haploid different cells</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Purpose</td>
+                <td>Growth &amp; repair of cells</td>
+                <td>New genetic variations in species</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Phases (Karyokinesis)</td>
+                <td>Prophase → Metaphase → Anaphase → Telophase</td>
+                <td>Same stages ×2</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Disorder / Disease</td>
+                <td><span class="hl-red">Uncontrolled Mitosis = Cancer</span></td>
+                <td>Turner's syndrome, Klinefelter's syndrome (chromosome segregation errors)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Uncontrolled <span class="hl-gold">Mitosis</span> = <span class="hl-red">Cancer</span>. Turner's syndrome
+          &amp; Klinefelter's syndrome = <span class="hl-gold">Meiosis</span> errors. Mitosis discoverer = <span
+            class="hl-gold">Walther Flemming</span>.
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Meiosis-I Prophase-I ka leptotene stage mein <span class="hl-gold">chromosomes condense</span> hote hain.
+          Walther Flemming ne mitosis discover kiya chromosomes study karke.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Cell · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

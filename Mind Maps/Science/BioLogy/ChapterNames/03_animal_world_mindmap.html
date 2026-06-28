@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 03: Animal World | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: #d0d6f0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      background: linear-gradient(135deg, #12141f 0%, #1a1d30 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 18px 24px 14px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      color: var(--gold);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .page-header .subtitle {
+      color: #8892b0;
+      font-size: 13px;
+    }
+
+    /* ── Tab Nav (Foolproof Mobile Swipe) ── */
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 0 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #8892b0;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .4px;
+      padding: 12px 16px 8px;
+      text-transform: uppercase;
+      transition: color .2s, border-color .2s;
+      white-space: nowrap;
+    }
+
+    .tab-nav button:hover {
+      color: #c8d0e8;
+    }
+
+    .tab-nav button.active {
+      border-bottom-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ── Panels ── */
+    .tab-panel {
+      display: none;
+      padding: 22px 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .6px;
+      padding: 10px 16px;
+      text-transform: uppercase;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1d27);
+      color: var(--gold);
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2218, #1a1d27);
+      color: var(--accent3);
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #091524, #1a1d27);
+      color: var(--accent2);
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #160d24, #1a1d27);
+      color: var(--accent4);
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #211100, #1a1d27);
+      color: var(--accent5);
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #1a0909, #1a1d27);
+      color: var(--accent1);
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #041a17, #1a1d27);
+      color: var(--accent6);
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    /* ── Arrow list ── */
+    .arrow-list {
+      list-style: none;
+    }
+
+    .arrow-list li {
+      padding: 4px 0 4px 22px;
+      position: relative;
+    }
+
+    .arrow-list li::before {
+      color: var(--gold);
+      content: '▸';
+      left: 0;
+      position: absolute;
+    }
+
+    .arrow-list li.sub {
+      padding-left: 42px;
+    }
+
+    .arrow-list li.sub::before {
+      color: var(--accent2);
+      content: '▸';
+      left: 20px;
+    }
+
+    .arrow-list li.sub2 {
+      padding-left: 62px;
+    }
+
+    .arrow-list li.sub2::before {
+      color: var(--accent6);
+      content: '▸';
+      left: 40px;
+    }
+
+    /* ── Alert Boxes ── */
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .exam-trap .trap-label {
+      color: var(--accent1);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .quick-recall .recall-label {
+      color: var(--accent2);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    .data-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 9px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 12px;
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td {
+      background: #252840;
+    }
+
+    .art-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--gold);
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      padding: 2px 10px;
+      margin-right: 6px;
+    }
+
+    /* ── Stat / Info boxes ── */
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      flex: 1 1 140px;
+      padding: 10px 14px;
+    }
+
+    .stat-box .s-val {
+      color: var(--gold);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .stat-box .s-lbl {
+      color: #8892b0;
+      font-size: 11.5px;
+      margin-top: 2px;
+    }
+
+    .info-row {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .info-row span {
+      font-size: 13px;
+    }
+
+    .info-row .ik {
+      color: #8892b0;
+      margin-right: 4px;
+    }
+
+    .info-row .iv {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .two-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .three-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .mini-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .mini-card .mc-title {
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 600;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 600;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 600;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      color: #555e7a;
+      font-size: 11.5px;
+      margin-top: 30px;
+      padding: 14px 20px;
+      text-align: center;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ==== RESPONSIVE DESIGN FOR MOBILE ==== */
+    @media (max-width: 600px) {
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab-nav button {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      .data-table th,
+      .data-table td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <h1>🐾 Chapter 03 — Animal World</h1>
+    <div class="subtitle">General Science · Biology · BPSC / BSSC Exam Preparation</div>
+  </div>
+
+  <nav class="tab-nav">
+    <button class="active" onclick="switchTab('tab1',this)">🐾 Intro</button>
+    <button onclick="switchTab('tab2',this)">🦠 Non-Chordata I</button>
+    <button onclick="switchTab('tab3',this)">🦑 Non-Chordata II</button>
+    <button onclick="switchTab('tab4',this)">🐟 Chordata &amp; Fish</button>
+    <button onclick="switchTab('tab5',this)">🐸 Amphibia &amp; Reptilia</button>
+    <button onclick="switchTab('tab6',this)">🐦 Aves &amp; Mammalia</button>
+    <button onclick="switchTab('tab7',this)">📊 Master Table</button>
+  </nav>
+
+  <div id="tab1" class="tab-panel active">
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="s-val">Eukaryotic</div>
+        <div class="s-lbl">Cell Type</div>
+      </div>
+      <div class="stat-box">
+        <div class="s-val">Multicellular</div>
+        <div class="s-lbl">Organisation</div>
+      </div>
+      <div class="stat-box">
+        <div class="s-val">Heterotrophic</div>
+        <div class="s-lbl">Nutrition</div>
+      </div>
+      <div class="stat-box">
+        <div class="s-val">Mostly Motile</div>
+        <div class="s-lbl">Movement</div>
+      </div>
+      <div class="stat-box">
+        <div class="s-val">Absent</div>
+        <div class="s-lbl">Cell Wall</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">🐾 Animal Kingdom — Key Features</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Eukaryotic organisms</li>
+          <li>Multicellular, <span class="hl-gold">Heterotrophic</span></li>
+          <li>Mostly <span class="hl-green">Motile</span></li>
+          <li>Cell wall <span class="hl-red">Absent</span></li>
+        </ul>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Animals vs Plants: Animals mein <span class="hl-red">Cell wall absent</span>, <span class="hl-red">Plastids
+            absent</span>, <span class="hl-gold">Heterotrophic</span> hain. Plants mein cell wall + plastids present,
+          Autotrophic hain.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🔀 Animal Classification — Big Picture</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">A. Non-Chordata</div>
+            <ul class="arrow-list">
+              <li><span class="hl-red">Notochord absent</span></li>
+              <li>I. Porifera</li>
+              <li>II. Cnidaria</li>
+              <li>III. Ctenophora</li>
+              <li>IV. Platyhelminthes</li>
+              <li>V. Aschelminthes</li>
+              <li>VI. Annelida</li>
+              <li>VII. Arthropoda</li>
+              <li>VIII. Mollusca</li>
+              <li>IX. Echinodermata</li>
+              <li>X. Hemichordata</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">B. Chordata</div>
+            <ul class="arrow-list">
+              <li><span class="hl-green">Notochord present</span> (at some point in life)</li>
+              <li>Dorsal hollow nerve cord</li>
+              <li>Pharyngeal gill slits</li>
+              <li class="sub">Urochordata (e.g. Herdmania)</li>
+              <li class="sub">Cephalochordata (e.g. Amphioxus)</li>
+              <li class="sub">Vertebrata / Craniata</li>
+            </ul>
+            <div style="margin-top:8px;font-size:13px;color:#8892b0;">Urochordata + Cephalochordata = <span
+                class="hl-gold">Protochordate</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab2" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header orange">I. Porifera (Sponges)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Asymmetrical, <span class="hl-gold">acoelomate</span>, porous aquatic — <span
+              class="hl-gold">"Sponge"</span></li>
+          <li>Canal system + Cellular aggregate level organisation</li>
+          <li>High capability of <span class="hl-gold">Regeneration</span></li>
+          <li><span class="hl-gold">Collar cells (Choanocytes)</span> present</li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Freshwater:</span><span class="iv">Spongilla</span></span>
+          <span><span class="ik">Bath sponge:</span><span class="iv">Euspongia</span></span>
+          <span><span class="ik">Other:</span><span class="iv">Sycon (Scypha)</span></span>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Porifera mein <span class="hl-gold">Choanocytes (Collar cells)</span> unique hain — sirf inhi mein milti hain.
+          Regeneration bhi high hai.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">II. Cnidaria</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><span class="hl-gold">Stinging cells (Cnidocytes / Cnidoblasts)</span> present</li>
+          <li>Radial symmetry, gastrovascular cavity present</li>
+          <li>Aquatic, <span class="hl-gold">Diploblastic</span>, acoelomate, tissue-level organisation</li>
+          <li>Polymorphic: <span class="hl-gold">Polyp</span> (sessile) and <span class="hl-gold">Medusa</span>
+            (free-floating)</li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Physalia:</span><span class="iv">Portuguese man-of-war</span></span>
+          <span><span class="ik">Adamsia:</span><span class="iv">Sea anemone</span></span>
+          <span><span class="ik">Pennatula:</span><span class="iv">Sea pen</span></span>
+          <span><span class="ik">Other:</span><span class="iv">Hydra</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">III. Ctenophora</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Radial symmetry, <span class="hl-gold">Sea walnuts</span>, marine</li>
+          <li><span class="hl-gold">Bioluminescence</span> ability</li>
+          <li>Diploblastic, acoelomate</li>
+          <li><span class="hl-gold">Comb jellies</span> — eight rows of ciliated comb plates</li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Example:</span><span class="iv">Ctenoplana</span></span>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Ctenophora = <span class="hl-gold">Bioluminescence</span> (light emit karna) + <span class="hl-gold">8 comb
+            rows</span>. Ye dono unique features MCQ mein aate hain.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">IV. Platyhelminthes (Flatworms)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Flatworms, usually <span class="hl-gold">endoparasitic</span></li>
+          <li>Organ level organisation, <span class="hl-gold">Triploblastic</span>, acoelomate, bilateral symmetry</li>
+          <li><span class="hl-gold">Flame cells</span> present for excretion</li>
+          <li>Incomplete digestive system</li>
+          <li>Sucker and hooks present</li>
+          <li>Regeneration in <span class="hl-gold">Planaria</span></li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Tapeworm:</span><span class="iv">Taenia solium</span></span>
+          <span><span class="ik">Liver fluke:</span><span class="iv">Fasciola</span></span>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Platyhelminthes mein excretion = <span class="hl-gold">Flame cells</span>. Annelida mein = Nephridia.
+          Arthropoda mein = Malpighian tubules. Ye teen confuse karne wale facts hain!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab3" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header purple">V. Aschelminthes (Nematodes / Roundworms)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Nematodes, usually <span class="hl-gold">endoparasitic</span></li>
+          <li><span class="hl-gold">Dioecious</span> (separate sexes), <span class="hl-gold">Pseudocoelomate</span></li>
+          <li>Cylindrical, bilateral symmetry</li>
+          <li><span class="hl-gold">Complete alimentary canal</span></li>
+          <li>Excretion through <span class="hl-gold">Renette cells</span> (gland cells)</li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Roundworm:</span><span class="iv">Ascaris</span></span>
+          <span><span class="ik">Filarial worm:</span><span class="iv">Wuchereria</span></span>
+          <span><span class="ik">Hookworm:</span><span class="iv">Ancylostoma</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">VI. Annelida (Segmented Worms)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Cylindrical, worm-like <span class="hl-gold">segmented body</span></li>
+          <li>Organ system level organisation</li>
+          <li>Excretion through <span class="hl-gold">Nephridia</span></li>
+          <li>Haemoglobin (respiratory pigment) <span class="hl-gold">dissolved in plasma</span></li>
+          <li><span class="hl-gold">Closed circulatory system</span></li>
+          <li>Respiration through <span class="hl-gold">skin</span></li>
+          <li><span class="hl-gold">Coelomate</span></li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Nereis:</span><span class="iv">Nereis</span></span>
+          <span><span class="ik">Earthworm:</span><span class="iv">Pheretima</span></span>
+          <span><span class="ik">Blood-sucking leech:</span><span class="iv">Hirudinaria (33 segments)</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">VII. Arthropoda (Jointed Appendages)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><span class="hl-gold">Largest phylum</span> — ⅔ of all species are insects</li>
+          <li><span class="hl-gold">Chitinous exoskeleton</span>, <span class="hl-gold">Open circulatory system</span>
+          </li>
+          <li>Body: Head + Thorax + Abdomen</li>
+          <li>Respiratory organs: Gills, Book gills, Book lungs or <span class="hl-gold">Trachea</span></li>
+          <li><span class="hl-gold">Statocysts</span> for maintaining body balance</li>
+          <li>Excretion through <span class="hl-gold">Malpighian tubules</span></li>
+        </ul>
+        <div class="three-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Economic/Social Insects</div>
+            <ul class="arrow-list">
+              <li>Bees — <em>Apis indica</em></li>
+              <li>Silkworm — <em>Bombyx mori</em></li>
+              <li>Lac insect — <em>Laccifera lacca</em></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">Vector Insects</div>
+            <ul class="arrow-list">
+              <li>Anopheles (Mosquito)</li>
+              <li>Culex (Mosquito)</li>
+              <li>Aedes (Mosquito)</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent6)">Special</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Living fossil:</span> Limulus (King Crab)</li>
+              <li>Shrimp, Scorpion, Grasshopper (Locusta)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Arthropoda = <span class="hl-gold">Largest phylum</span> of animals. Mollusca = <span class="hl-gold">Second
+            largest</span>. Ye order yaad rakho! Living fossil = <span class="hl-gold">Limulus (King Crab)</span>.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">VIII. Mollusca (Soft-bodied)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><span class="hl-gold">Second largest phylum</span>, soft-bodied animals</li>
+          <li>Body: Head + Muscular foot + Visceral mass</li>
+          <li>Shell composed of <span class="hl-gold">Calcium carbonate (CaCO₃)</span></li>
+          <li>Respiration through <span class="hl-gold">Ctenidia</span></li>
+          <li>Food grinding by <span class="hl-gold">Radula</span></li>
+          <li>Excretion through <span class="hl-gold">Bojanus organs</span></li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Apple snail:</span><span class="iv">Pila</span></span>
+          <span><span class="ik">Pearl oyster:</span><span class="iv">Pinctada</span></span>
+          <span><span class="ik">Cuttle fish:</span><span class="iv">Sepia</span></span>
+          <span><span class="ik">Other:</span><span class="iv">Octopus, Aplysia, Dentalium</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">IX. Echinodermata (Spiny-skinned)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Endoskeleton of <span class="hl-gold">calcareous ossicles</span> with spines</li>
+          <li>Tube feet — part of <span class="hl-gold">Water Vascular System</span></li>
+          <li>Radial symmetry (larvae: bilaterally symmetrical)</li>
+          <li>High regeneration capability</li>
+          <li><span class="hl-red">Brain absent</span></li>
+          <li><span class="hl-gold">Aristotle's lantern</span> → food grinding (in Sea urchin)</li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Starfish:</span><span class="iv">Asterias</span></span>
+          <span><span class="ik">Sea urchin:</span><span class="iv">Echinus</span></span>
+          <span><span class="ik">Sea cucumber:</span><span class="iv">Cucumaria</span></span>
+          <span><span class="ik">Brittle star:</span><span class="iv">Ophiura</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">X. Hemichordata (Half Chordates)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><span class="hl-gold">Connecting link</span> between Non-chordates and Chordates</li>
+          <li>Body: Proboscis + Collar + Trunk</li>
+          <li>Usually worm-like marine animals</li>
+          <li><span class="hl-gold">Open circulatory system</span></li>
+          <li>Excretion through <span class="hl-gold">Proboscis gland</span></li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Examples:</span><span class="iv">Balanoglossus, Saccoglossus</span></span>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Hemichordata = <span class="hl-gold">Connecting link</span> (non-chordate aur chordate ke beech).
+          Balanoglossus sabse common example hai exams mein.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab4" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">🧬 Chordata — Main Characteristics</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><span class="hl-gold">(i) Dorsal Notochord</span></li>
+          <li><span class="hl-gold">(ii) Dorsal hollow nerve cord</span></li>
+          <li><span class="hl-gold">(iii) Pharyngeal gill slits</span></li>
+          <li class="sub">Note: These three present at some point during life cycle</li>
+          <li><span class="hl-green">Closed Circulatory System</span></li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Urochordata:</span><span class="iv">Herdmania</span></span>
+          <span><span class="ik">Cephalochordata:</span><span class="iv">Amphioxus</span></span>
+          <span><span class="ik">Together called:</span><span class="iv">Protochordate</span></span>
+        </div>
+        <div class="card" style="margin:10px 0 0;border-color:var(--border);">
+          <div class="card-header blue">Vertebrata / Craniata</div>
+          <div class="card-body">
+            <ul class="arrow-list">
+              <li>Brain, Vertebral column and <span class="hl-gold">Cranium</span> present</li>
+              <li>In adults: notochord replaced by <span class="hl-gold">cartilaginous or bony vertebral column</span>
+              </li>
+              <li>Nerve cord → <span class="hl-gold">Brain + Spinal cord</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🔀 Vertebrata — Classification Tree</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">1. Agnatha (Jawless)</div>
+            <ul class="arrow-list">
+              <li>→ <span class="hl-gold">Cyclostomata</span></li>
+              <li>Jawless, cylindrical, aquatic</li>
+              <li>Sucker-like circular mouth</li>
+              <li>6–15 pairs of gill slits</li>
+              <li>Two-chambered heart, ectothermic</li>
+              <li>Skull + vertebral column = cartilaginous</li>
+              <li>Examples: <span class="hl-gold">Petromyzon (Lamprey), Myxine (Hag fish)</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">2. Gnathostomata (Bear Jaw)</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Pisces / Fishes</span> (Bear fins)
+                <ul class="arrow-list" style="margin-top:4px;">
+                  <li class="sub">Chondrichthyes (cartilage)</li>
+                  <li class="sub">Osteichthyes (bone)</li>
+                </ul>
+              </li>
+              <li><span class="hl-gold">Tetrapoda</span> (Bear limbs)
+                <ul class="arrow-list" style="margin-top:4px;">
+                  <li class="sub">Amphibia</li>
+                  <li class="sub">Reptilia</li>
+                  <li class="sub">Aves</li>
+                  <li class="sub">Mammalia</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🦈 Chondrichthyes (Cartilaginous Fish)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Skeleton made of <span class="hl-gold">Cartilage</span>, usually marine</li>
+          <li>5–7 pairs of gill slits, <span class="hl-red">without operculum</span></li>
+          <li><span class="hl-gold">Two-chambered heart</span></li>
+          <li><span class="hl-red">Air bladder absent</span> → continuously swim to avoid sinking</li>
+          <li>Cold-blooded, oviparous or <span class="hl-gold">ovoviviparous</span> (Shark)</li>
+          <li>Electric organ → <span class="hl-gold">Torpedo</span></li>
+          <li>Poison sting → <span class="hl-gold">Trygon</span></li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Dog fish:</span><span class="iv">Scoliodon</span></span>
+          <span><span class="ik">Sawfish:</span><span class="iv">Pristis</span></span>
+          <span><span class="ik">White shark:</span><span class="iv">Carcharodon</span></span>
+          <span><span class="ik">Other:</span><span class="iv">Chimera</span></span>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Chondrichthyes mein <span class="hl-red">operculum absent</span> aur <span class="hl-red">air bladder
+            absent</span>. Osteichthyes mein dono present hain!
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🐟 Osteichthyes (Bony Fish)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Skeleton made of <span class="hl-gold">Bone</span></li>
+          <li>4 pairs of gill slits covered by <span class="hl-gold">Operculum</span></li>
+          <li><span class="hl-gold">Two-chambered heart</span></li>
+          <li><span class="hl-gold">Air bladder present</span></li>
+          <li>Cold-blooded, oviparous, unisexual</li>
+        </ul>
+        <div class="three-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Marine</div>
+            <ul class="arrow-list">
+              <li>Flying fish — <em>Exocoetus</em></li>
+              <li>Sea horse — <em>Hippocampus</em></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Fresh Water</div>
+            <ul class="arrow-list">
+              <li>Rohu — <em>Labeo</em></li>
+              <li>Catla</li>
+              <li>Walking catfish — <em>Clarias</em></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent4)">Aquarium</div>
+            <ul class="arrow-list">
+              <li>Fighting fish — <em>Betta splendens</em></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab5" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header teal">ℹ️ Tetrapoda — Common Features</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Four (two pairs) limbs present</li>
+          <li>Respiration through <span class="hl-gold">Lungs</span></li>
+          <li>Endoskeleton is <span class="hl-gold">Bony</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🐸 1. Amphibia</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="s-val">3-chambered</div>
+            <div class="s-lbl">Heart</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Cold-blooded</div>
+            <div class="s-lbl">Ectothermic</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Oviparous</div>
+            <div class="s-lbl">Reproduction</div>
+          </div>
+        </div>
+        <ul class="arrow-list">
+          <li>Found on both <span class="hl-gold">water and land</span></li>
+          <li>Exoskeleton <span class="hl-red">absent</span></li>
+          <li><span class="hl-gold">Mucous glands</span> on outer surface → body flexible</li>
+          <li>Larvae: <span class="hl-gold">Tadpole</span> (frog larva)</li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Frog:</span><span class="iv">Rana tigrina</span></span>
+          <span><span class="ik">Toad:</span><span class="iv">Bufo</span></span>
+          <span><span class="ik">Tree frog:</span><span class="iv">Hyla</span></span>
+          <span><span class="ik">Blindworm:</span><span class="iv">Ichthyophis</span></span>
+          <span><span class="ik">Other:</span><span class="iv">Proteus</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🦎 2. Reptilia</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="s-val">3-chambered</div>
+            <div class="s-lbl">Heart (mostly)</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Cold-blooded</div>
+            <div class="s-lbl">Ectothermic</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">CaCO₃ eggs</div>
+            <div class="s-lbl">Egg covering</div>
+          </div>
+        </div>
+        <ul class="arrow-list">
+          <li>Usually <span class="hl-gold">terrestrial</span>, dry skin with <span class="hl-gold">Keratinous
+              scales</span></li>
+          <li>Creeping animals</li>
+          <li>Three-chambered heart; eggs covered with <span class="hl-gold">CaCO₃</span></li>
+          <li><span class="hl-red">Exception: Crocodile → Four-chambered heart</span></li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Cobra:</span><span class="iv">Naja naja</span></span>
+          <span><span class="ik">Blind snake:</span><span class="iv">Typhlops</span></span>
+          <span><span class="ik">Other:</span><span class="iv">Lizard, Chameleon, Tortoise, Dinosaur
+              (Extinct)</span></span>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Reptiles mein generally <span class="hl-gold">3-chambered heart</span> — lekin <span class="hl-red">Crocodile
+            mein 4-chambered heart</span>! Ye exception MCQ mein direct poochha jaata hai.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab6" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header green">🐦 3. Aves / Birds</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="s-val">4-chambered</div>
+            <div class="s-lbl">Heart</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Warm-blooded</div>
+            <div class="s-lbl">Endothermic</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Hollow + Pneumatic</div>
+            <div class="s-lbl">Bones</div>
+          </div>
+        </div>
+        <ul class="arrow-list">
+          <li><span class="hl-gold">Feathers</span> present on dry skin</li>
+          <li>Eggs covered with <span class="hl-gold">CaCO₃</span></li>
+          <li>Forelimbs modified into <span class="hl-gold">Wings</span></li>
+          <li>Jaws modified into <span class="hl-gold">Toothless beak</span></li>
+          <li>Hind limbs covered with scales</li>
+          <li>Bones are <span class="hl-gold">hollow and pneumatic</span> (for flight — light weight)</li>
+          <li>Often adapted for jumping, running, swimming or grasping</li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Parrot:</span><span class="iv">Psittacula</span></span>
+          <span><span class="ik">Peacock:</span><span class="iv">Pavo cristatus</span></span>
+          <span><span class="ik">Pigeon:</span><span class="iv">Columba</span></span>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          <span class="hl-gold">Flightless Birds:</span> Emu, Ostrich, Penguin, Kiwi, Cassowary — inke wings hain lekin
+          ye ud nahi sakte. Ostrich = world's largest bird.
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall — Flightless Birds</div>
+          <strong>E</strong>mu · <strong>O</strong>strich · <strong>P</strong>enguin · <strong>K</strong>iwi ·
+          <strong>C</strong>assowary → <span class="hl-gold">EOPKC</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🐘 4. Mammalia / Mammals</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="s-val">4-chambered</div>
+            <div class="s-lbl">Heart</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Warm-blooded</div>
+            <div class="s-lbl">Endothermic</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Mammary glands</div>
+            <div class="s-lbl">Unique feature</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Viviparous</div>
+            <div class="s-lbl">Mostly</div>
+          </div>
+        </div>
+        <ul class="arrow-list">
+          <li>Hair or <span class="hl-gold">Fur</span> present on skin</li>
+          <li><span class="hl-gold">Mammary glands</span> present (milk production)</li>
+          <li><span class="hl-gold">Diaphragm</span> present</li>
+          <li>Exoskeleton: Horns, Hoofs and Nails</li>
+          <li>Four-chambered heart, Warm-blooded</li>
+          <li><span class="hl-gold">Viviparous</span> — give birth to young ones</li>
+          <li><span class="hl-red">Exception: Platypus and Echidna → Oviparous</span> (egg-laying mammals)</li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Human:</span><span class="iv">Homo sapiens</span></span>
+          <span><span class="ik">Bat:</span><span class="iv">Pteropus</span></span>
+          <span><span class="ik">Kangaroo:</span><span class="iv">Macropus</span></span>
+          <span><span class="ik">Camel:</span><span class="iv">Camelus</span></span>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Mammals viviparous hote hain — lekin <span class="hl-red">Platypus &amp; Echidna oviparous</span> hain (eggs
+          dete hain). Ye dono <span class="hl-gold">Monotremes</span> hain. Ye exception MCQ mein baar baar aata hai!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab7" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">📊 Vertebrate Classes — Master Comparison</div>
+      <div class="card-body">
+        <div class="tw">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th style="color:var(--accent2)">Chondrichthyes</th>
+                <th style="color:var(--accent3)">Osteichthyes</th>
+                <th style="color:var(--accent6)">Amphibia</th>
+                <th style="color:var(--accent5)">Reptilia</th>
+                <th style="color:var(--accent3)">Aves</th>
+                <th style="color:var(--accent4)">Mammalia</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Skeleton</td>
+                <td>Cartilage</td>
+                <td>Bone</td>
+                <td>Bone</td>
+                <td>Bone</td>
+                <td>Bone (hollow)</td>
+                <td>Bone</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Heart</td>
+                <td>2-chambered</td>
+                <td>2-chambered</td>
+                <td>3-chambered</td>
+                <td>3-chambered<br /><span class="hl-red">(Croc: 4)</span></td>
+                <td>4-chambered</td>
+                <td>4-chambered</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Body Temp</td>
+                <td>Cold-blooded</td>
+                <td>Cold-blooded</td>
+                <td>Cold-blooded</td>
+                <td>Cold-blooded</td>
+                <td><span class="hl-green">Warm-blooded</span></td>
+                <td><span class="hl-green">Warm-blooded</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Operculum</td>
+                <td><span class="hl-red">Absent</span></td>
+                <td><span class="hl-green">Present</span></td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Air bladder</td>
+                <td><span class="hl-red">Absent</span></td>
+                <td><span class="hl-green">Present</span></td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Reproduction</td>
+                <td>Ovi/Ovovivi</td>
+                <td>Oviparous</td>
+                <td>Oviparous</td>
+                <td>Oviparous</td>
+                <td>Oviparous</td>
+                <td>Viviparous<br /><span class="hl-red">(Platypus: Ovi)</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Special</td>
+                <td>No operculum, always swimming</td>
+                <td>Flying fish, Sea horse</td>
+                <td>Tadpole larva, mucous glands</td>
+                <td>Keratinous scales</td>
+                <td>Hollow bones, toothless beak</td>
+                <td>Mammary glands, diaphragm</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📊 Non-Chordata Phyla — Quick Reference</div>
+      <div class="card-body">
+        <div class="tw">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Phylum</th>
+                <th>Key Feature</th>
+                <th>Excretion</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="art-pill">I</span></td>
+                <td class="hl-gold">Porifera</td>
+                <td>Collar cells (Choanocytes), Regeneration</td>
+                <td>—</td>
+                <td>Spongilla, Euspongia</td>
+              </tr>
+              <tr>
+                <td><span class="art-pill">II</span></td>
+                <td class="hl-gold">Cnidaria</td>
+                <td>Stinging cells (Cnidocytes), Polyp &amp; Medusa</td>
+                <td>—</td>
+                <td>Hydra, Physalia</td>
+              </tr>
+              <tr>
+                <td><span class="art-pill">III</span></td>
+                <td class="hl-gold">Ctenophora</td>
+                <td>Bioluminescence, 8 comb rows</td>
+                <td>—</td>
+                <td>Ctenoplana</td>
+              </tr>
+              <tr>
+                <td><span class="art-pill">IV</span></td>
+                <td class="hl-gold">Platyhelminthes</td>
+                <td>Flatworms, Triploblastic, Acoelomate</td>
+                <td>Flame cells</td>
+                <td>Taenia (Tapeworm)</td>
+              </tr>
+              <tr>
+                <td><span class="art-pill">V</span></td>
+                <td class="hl-gold">Aschelminthes</td>
+                <td>Nematodes, Pseudocoelomate</td>
+                <td>Renette cells</td>
+                <td>Ascaris, Wuchereria</td>
+              </tr>
+              <tr>
+                <td><span class="art-pill">VI</span></td>
+                <td class="hl-gold">Annelida</td>
+                <td>Segmented, Closed circulatory, Coelomate</td>
+                <td>Nephridia</td>
+                <td>Earthworm (Pheretima)</td>
+              </tr>
+              <tr>
+                <td><span class="art-pill">VII</span></td>
+                <td class="hl-gold">Arthropoda</td>
+                <td>Largest phylum, Chitinous exoskeleton, Open circulation</td>
+                <td>Malpighian tubules</td>
+                <td>Limulus, Silkworm</td>
+              </tr>
+              <tr>
+                <td><span class="art-pill">VIII</span></td>
+                <td class="hl-gold">Mollusca</td>
+                <td>2nd largest, Radula, Ctenidia</td>
+                <td>Bojanus organs</td>
+                <td>Pila, Octopus</td>
+              </tr>
+              <tr>
+                <td><span class="art-pill">IX</span></td>
+                <td class="hl-gold">Echinodermata</td>
+                <td>Water vascular system, Brain absent</td>
+                <td>—</td>
+                <td>Starfish (Asterias)</td>
+              </tr>
+              <tr>
+                <td><span class="art-pill">X</span></td>
+                <td class="hl-gold">Hemichordata</td>
+                <td>Connecting link, Proboscis+Collar+Trunk</td>
+                <td>Proboscis gland</td>
+                <td>Balanoglossus</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall — Excretion Organs</div>
+          Flame cells → <span class="hl-gold">Platyhelminthes</span> | Nephridia → <span
+            class="hl-green">Annelida</span> | Malpighian tubules → <span class="hl-orange">Arthropoda</span> | Bojanus
+          organs → <span class="hl-blue">Mollusca</span> | Renette cells → <span class="hl-purple">Aschelminthes</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Animal World · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id, btn) {
+      // 1. Remove active class from all tab panels
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      // 2. Remove active class from all tab buttons
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      // 3. Add active class to target panel
+      document.getElementById(id).classList.add('active');
+      // 4. Add active class to clicked button
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

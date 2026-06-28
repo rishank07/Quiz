@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 07: Control, Coordination &amp; Movement | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: #d0d6f0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12141f 0%, #1a1d30 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 18px 24px 14px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      color: var(--gold);
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .page-header .subtitle {
+      color: #8892b0;
+      font-size: .82rem;
+      margin-top: 4px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      padding: 0 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #8892b0;
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .4px;
+      padding: 11px 13px 8px;
+      text-transform: uppercase;
+      transition: color .2s, border-color .2s;
+    }
+
+    .tab-nav button:hover {
+      color: #c8d0e8;
+    }
+
+    .tab-nav button.active {
+      border-bottom-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 22px 20px 30px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .6px;
+      padding: 10px 16px;
+      text-transform: uppercase;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1d27);
+      color: var(--gold);
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2218, #1a1d27);
+      color: var(--accent3);
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #091524, #1a1d27);
+      color: var(--accent2);
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #160d24, #1a1d27);
+      color: var(--accent4);
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #211100, #1a1d27);
+      color: var(--accent5);
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #1a0909, #1a1d27);
+      color: var(--accent1);
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #041a17, #1a1d27);
+      color: var(--accent6);
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .arrow-list {
+      list-style: none;
+    }
+
+    .arrow-list li {
+      padding: 4px 0 4px 22px;
+      position: relative;
+    }
+
+    .arrow-list li::before {
+      color: var(--gold);
+      content: '▸';
+      left: 0;
+      position: absolute;
+    }
+
+    .arrow-list li.sub {
+      padding-left: 42px;
+    }
+
+    .arrow-list li.sub::before {
+      color: var(--accent2);
+      content: '▸';
+      left: 20px;
+    }
+
+    .arrow-list li.sub2 {
+      padding-left: 62px;
+    }
+
+    .arrow-list li.sub2::before {
+      color: var(--accent6);
+      content: '▸';
+      left: 40px;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .exam-trap .trap-label {
+      color: var(--accent1);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .quick-recall .recall-label {
+      color: var(--accent2);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: .82rem;
+      width: 100%;
+      min-width: 550px;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 8px 10px;
+      text-align: left;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 7px 10px;
+      vertical-align: top;
+    }
+
+    .data-table tr:hover td {
+      background: #252840;
+    }
+
+    .art-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--gold);
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      padding: 2px 10px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      flex: 1 1 130px;
+      padding: 10px 14px;
+    }
+
+    .stat-box .s-val {
+      color: var(--gold);
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .stat-box .s-lbl {
+      color: #8892b0;
+      font-size: .73rem;
+      margin-top: 2px;
+    }
+
+    .info-row {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .info-row span {
+      font-size: .82rem;
+    }
+
+    .info-row .ik {
+      color: #8892b0;
+      margin-right: 4px;
+    }
+
+    .info-row .iv {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .two-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .three-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+    }
+
+    .mini-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .mini-card .mc-title {
+      font-weight: 700;
+      font-size: .85rem;
+      margin-bottom: 7px;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 600;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 600;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 600;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      color: #555e7a;
+      font-size: .75rem;
+      margin-top: 30px;
+      padding: 12px 20px;
+      text-align: center;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <h1>🧠 Chapter 07 — Control, Coordination &amp; Movement</h1>
+    <div class="subtitle">General Science · Biology · BPSC / BSSC Exam Preparation</div>
+  </div>
+
+  <nav class="tab-nav">
+    <button class="active" onclick="switchTab('tab1',this)">🧠 Nervous System</button>
+    <button onclick="switchTab('tab2',this)">🧬 Brain Parts</button>
+    <button onclick="switchTab('tab3',this)">💉 Animal Hormones</button>
+    <button onclick="switchTab('tab4',this)">💪 Muscles</button>
+    <button onclick="switchTab('tab5',this)">🦴 Skeleton</button>
+    <button onclick="switchTab('tab6',this)">🔗 Joints</button>
+    <button onclick="switchTab('tab7',this)">🌿 Plant Coord.</button>
+  </nav>
+
+  <div id="tab1" class="tab-panel active">
+
+    <div class="card">
+      <div class="card-header gold">⚡ Nervous System — Overview</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Coordination = Balance between external/food reactions + maintaining normal conditions</li>
+          <li>Nervous system provides control via <span class="hl-gold">electrical impulses</span></li>
+          <li><span class="hl-gold">Neuron</span>: Structural and functional unit</li>
+          <li><span class="hl-gold">Synapse</span>: Junction between two neurons — transmits electrical impulses</li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Impulse path:</span><span class="iv">Stimulus → Receptor → Sensory neuron →
+              Brain/Spinal cord → Motor neuron → Effector organ</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📋 Human Nervous System — Divisions</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">CNS (Central)</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Brain</span> (1300–1400 gm)</li>
+              <li class="sub">Forebrain, Midbrain, Hindbrain</li>
+              <li><span class="hl-gold">Spinal cord</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">PNS (Peripheral)</div>
+            <ul class="arrow-list">
+              <li>Cranial nerves: <span class="hl-gold">12 pairs</span></li>
+              <li>Spinal nerves: <span class="hl-gold">31 pairs</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent4)">ANS (Autonomic)</div>
+            <ul class="arrow-list">
+              <li>Sympathetic NS</li>
+              <li>Parasympathetic NS</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          <span class="hl-gold">Reflex action</span> = Automatic, involuntary response to stimulus (e.g. Sneezing,
+          Coughing). Controlled by <span class="hl-gold">Spinal cord</span> (not brain!).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">👁️ Receptors</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Organ</th>
+                <th>Sensation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Ear</td>
+                <td>Hearing + Maintains body balance</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Eye</td>
+                <td>Vision</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Skin</td>
+                <td>Touch, Heat, Pain perception</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Nose</td>
+                <td>Smell receptors</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Tongue</td>
+                <td>Taste buds / receptors</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall — Eye Facts</div>
+          <span class="hl-gold">Iris</span>: Controls pupil expansion/contraction | <span class="hl-gold">Cornea</span>:
+          Transparent front part | <span class="hl-gold">Lacrimal gland</span>: Releases tears | <span
+            class="hl-gold">Superior rectus</span>: Eye muscle controlling eye movements
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Reflex action controlled by <span class="hl-gold">Spinal cord</span> — brain nahi! Eardrum = rubber sheet ki
+          tarah behave karta hai. Endocrine system = Chemical coordination (hormones). Nervous = Electrical coordination
+          (impulses).
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab2" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">🧠 Brain — Parts &amp; Functions</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="s-val">1300–1400 gm</div>
+            <div class="s-lbl">Brain weight</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Forebrain</div>
+            <div class="s-lbl">Voluntary actions</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Midbrain</div>
+            <div class="s-lbl">Vision &amp; hearing reflexes</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Hindbrain</div>
+            <div class="s-lbl">Brain ↔ Spinal cord</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">1️⃣ Forebrain</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Olfactory Lobe</div>
+            <ul class="arrow-list">
+              <li>Sense of <span class="hl-gold">smell</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Cerebrum</div>
+            <ul class="arrow-list">
+              <li>Memory, Consciousness</li>
+              <li>Reasoning, Learning</li>
+              <li><span class="hl-red">Amnesia</span>: Memory loss</li>
+              <li><span class="hl-red">Dementia / Alzheimer's</span>: Memory loss + daily activity problems</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent4)">Diencephalon</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Epithalamus</span>: Pain, sensation, heat &amp; cold perception</li>
+              <li><span class="hl-gold">Hypothalamus</span>: Appetite, thirst, affection, disgust, sleep, heat control
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">2️⃣ Midbrain</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Aids in <span class="hl-gold">vision and hearing reflexes</span></li>
+          <li>Changes in <span class="hl-gold">pupil size</span></li>
+          <li>Control of <span class="hl-gold">involuntary actions</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">3️⃣ Hindbrain</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Connects brain and spinal cord</li>
+        </ul>
+        <div class="three-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Pons</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Respiratory center</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Cerebellum</div>
+            <ul class="arrow-list">
+              <li>Maintains <span class="hl-gold">muscular balance</span></li>
+              <li>Controls <span class="hl-gold">posture</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">Medulla Oblongata</div>
+            <ul class="arrow-list">
+              <li>Breathing rhythm</li>
+              <li>Heart rate</li>
+              <li>Hiccups</li>
+              <li>Controls <span class="hl-gold">ANS</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          <span class="hl-gold">Cerebellum</span> = Balance &amp; Posture (NOT memory). <span
+            class="hl-gold">Cerebrum</span> = Memory, reasoning. <span class="hl-gold">Medulla oblongata</span> =
+          Breathing + Heart rate. <span class="hl-gold">Hypothalamus</span> = Appetite, thirst, sleep. Ye four alag-alag
+          functions hain!
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Alzheimer's / Schizophrenia → affects emotions and behaviour. Spinal cord → controls &amp; regulates reflexes.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab3" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">💉 Endocrine System — Overview</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Discoverer of animal hormones: <span class="hl-gold">Ernest H. Starling</span></li>
+          <li>Secreted by <span class="hl-gold">ductless endocrine glands</span> in small quantities</li>
+          <li>Act as <span class="hl-gold">chemical messengers</span> regulating body functions</li>
+          <li>Types: <span class="hl-gold">Peptides or Steroid</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📋 Major Hormones — Complete Table</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Gland</th>
+                <th>Hormone</th>
+                <th>Function</th>
+                <th>Hyposecretion Effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Pituitary (Anterior)</td>
+                <td>Somatotropic / <span class="hl-green">Growth Hormone (GH)</span></td>
+                <td>Control body growth</td>
+                <td><span class="hl-red">Dwarfism, Simmond's disease</span>, stunted growth in childhood</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Thyroid Gland</td>
+                <td><span class="hl-green">Thyroxine</span></td>
+                <td>Controls all basal metabolic activities (BMR)</td>
+                <td><span class="hl-red">Cretinism</span> (children), <span class="hl-red">Goitre</span> (swelling in
+                  throat)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Adrenal Gland</td>
+                <td><span class="hl-green">Adrenaline / Epinephrine</span> (do/die hormone), Nor-adrenaline</td>
+                <td>Increase BP, heartbeat; controls blood pressure</td>
+                <td><span class="hl-red">Low BP, Addison's disease</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Pancreas (β-cells)</td>
+                <td><span class="hl-green">Insulin</span></td>
+                <td>Lowers blood sugar</td>
+                <td><span class="hl-red">Diabetes</span>, excess water in urine</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Pancreas (α-cells)</td>
+                <td><span class="hl-green">Glucagon</span></td>
+                <td>Raises blood sugar</td>
+                <td><span class="hl-red">Hypoglycemia</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Testes (Men)</td>
+                <td><span class="hl-green">Testosterone (Androgen)</span></td>
+                <td>Secondary sexual characters, Spermatogenesis</td>
+                <td><span class="hl-red">Impotence</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Ovaries (Women)</td>
+                <td><span class="hl-green">Oestrogen, Progesterone</span></td>
+                <td>Secondary sexual characters, Oogenesis, Prepare uterus for pregnancy</td>
+                <td><span class="hl-red">Infertility</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Insulin = <span class="hl-gold">β-cells</span> of Islets of Langerhans (LOWERS blood sugar). Glucagon = <span
+            class="hl-gold">α-cells</span> (RAISES blood sugar). Dono pancreas se hain lekin different cells se!
+          Adrenaline = <span class="hl-gold">"Do or Die hormone"</span>.
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Goitre = Thyroid (iodine deficiency → Thyroxine deficiency). Cretinism = Thyroid in children. Dwarfism =
+          Pituitary (GH deficiency). Diabetes = Pancreas (Insulin deficiency).
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab4" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header orange">💪 Muscular System</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th style="color:var(--accent3)">Striated (Skeletal)</th>
+                <th style="color:var(--accent2)">Unstriated (Smooth)</th>
+                <th style="color:var(--accent1)">Cardiac</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Type</td>
+                <td>Voluntary, Skeletal</td>
+                <td>Involuntary, Smooth</td>
+                <td>Involuntary, Striated</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Bands</td>
+                <td>Alternating <span class="hl-gold">actin &amp; myosin bands</span></td>
+                <td>No bands</td>
+                <td>Bands present</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Location</td>
+                <td>Attached to skeleton</td>
+                <td>Uterus, Intestines, Pupil of eye, Trachea</td>
+                <td>Heart</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="info-row" style="margin-top:10px;">
+          <span><span class="ik">Strongest muscle:</span><span class="iv">Masseter (jaw)</span></span>
+          <span><span class="ik">Largest muscle:</span><span class="iv">Gluteus maximus</span></span>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Strongest muscle = <span class="hl-gold">Masseter</span> (jaw). Largest muscle = <span class="hl-gold">Gluteus
+            maximus</span>. Cardiac = striated but <span class="hl-red">involuntary</span>!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab5" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">🦴 Human Skeletal System — Total 206 Bones</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Body Part</th>
+                <th>Section</th>
+                <th>Bones (Name &amp; Count)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold" rowspan="4">Head</td>
+                <td>Skull (Cranium)</td>
+                <td>Occipital(1), Parietal(2), Frontal(1), Temporal(2), Sphenoid(1), Ethmoid(1) = <span
+                    class="hl-gold">8</span></td>
+              </tr>
+              <tr>
+                <td>Face</td>
+                <td>Nasal(2), Vomer(1), Inf. nasal conchae(2), Lacrimal(2), Palatine(2), Zygomatic(2), Maxilla(2),
+                  Mandible(1) = <span class="hl-gold">14</span></td>
+              </tr>
+              <tr>
+                <td>Ear bones</td>
+                <td>Malleus(2), Incus(2), Stapes(2) = <span class="hl-gold">6</span></td>
+              </tr>
+              <tr>
+                <td>Hyoid</td>
+                <td>Hyoid(1) = <span class="hl-gold">1</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold" rowspan="5">Vertebral Column</td>
+                <td>Neck (Cervical)</td>
+                <td><span class="hl-gold">7</span></td>
+              </tr>
+              <tr>
+                <td>Chest (Thoracic)</td>
+                <td><span class="hl-gold">12</span></td>
+              </tr>
+              <tr>
+                <td>Waist (Lumbar)</td>
+                <td><span class="hl-gold">5</span></td>
+              </tr>
+              <tr>
+                <td>Sacrum</td>
+                <td>1 (5 in infants)</td>
+              </tr>
+              <tr>
+                <td>Coccyx</td>
+                <td>1 (4 in infants)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Thorax</td>
+                <td>Sternum + Ribs</td>
+                <td>Sternum(1) + Ribs(24) = <span class="hl-gold">25</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold" rowspan="6">Upper Limbs</td>
+                <td>Pectoral girdle</td>
+                <td>Scapula(2) + Clavicle(2) = <span class="hl-gold">4</span></td>
+              </tr>
+              <tr>
+                <td>Pelvic girdle</td>
+                <td>Innominate(2) = <span class="hl-gold">2</span></td>
+              </tr>
+              <tr>
+                <td>Upper arm</td>
+                <td>Humerus(2) = <span class="hl-gold">2</span></td>
+              </tr>
+              <tr>
+                <td>Lower arm</td>
+                <td>Radius(2) + Ulna(2) = <span class="hl-gold">4</span></td>
+              </tr>
+              <tr>
+                <td>Wrist (Carpal)</td>
+                <td><span class="hl-gold">16</span></td>
+              </tr>
+              <tr>
+                <td>Palm + Fingers</td>
+                <td>Metacarpals(10) + Phalanges(28) = <span class="hl-gold">38</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold" rowspan="5">Lower Limbs</td>
+                <td>Thigh (Femur)</td>
+                <td>Femur(2) = <span class="hl-gold">2</span> <span class="hl-green">(Largest &amp; strongest
+                    bone)</span></td>
+              </tr>
+              <tr>
+                <td>Shin</td>
+                <td>Tibia(2) + Fibula(2) = <span class="hl-gold">4</span></td>
+              </tr>
+              <tr>
+                <td>Knee (Patella)</td>
+                <td><span class="hl-gold">2</span></td>
+              </tr>
+              <tr>
+                <td>Ankle + Sole</td>
+                <td>Tarsal(14) + Metatarsals(10) = <span class="hl-gold">24</span></td>
+              </tr>
+              <tr>
+                <td>Toes (Phalanges)</td>
+                <td><span class="hl-gold">28</span></td>
+              </tr>
+              <tr>
+                <td colspan="2" class="hl-gold" style="font-weight:700; text-align:center;">TOTAL</td>
+                <td style="color:var(--gold); font-weight:700; font-size:1rem;">206 Bones</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Total bones = <span class="hl-gold">206</span>. Largest &amp; strongest bone = <span
+            class="hl-gold">Femur</span> (thigh). Cervical vertebrae = <span class="hl-gold">7</span> (neck). Ear bones:
+          Malleus, Incus, <span class="hl-gold">Stapes</span> (smallest bone in body!). Ribs = 24 (12 pairs).
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall — Vertebrae Formula</div>
+          <span class="hl-gold">C</span>ervical <span class="hl-gold">7</span> · <span class="hl-gold">T</span>horacic
+          <span class="hl-gold">12</span> · <span class="hl-gold">L</span>umbar <span class="hl-gold">5</span> · Sacrum
+          <span class="hl-gold">1</span> · Coccyx <span class="hl-gold">1</span> = 26 vertebrae total
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab6" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header teal">🔗 Types of Joints</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Joint Type</th>
+                <th>Mobility</th>
+                <th>Location / Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Immovable</td>
+                <td><span class="hl-red">No movement</span></td>
+                <td>Skull bones; Teeth &amp; jaw joint</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Semi-movable</td>
+                <td>Limited movement</td>
+                <td>Pubic symphysis (pelvic girdle)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Ball &amp; Socket</td>
+                <td>All-direction movement</td>
+                <td><span class="hl-green">Shoulder, Ankles, Feet</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Hinge</td>
+                <td>One-direction (like door hinge)</td>
+                <td><span class="hl-blue">Elbow, Fingertips</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Pivotal</td>
+                <td>Rotation</td>
+                <td><span class="hl-purple">Atlas &amp; Axis (neck)</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Saddle</td>
+                <td>Two-direction movement</td>
+                <td><span class="hl-orange">Wrist &amp; Ankle</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Movable joints contain <span class="hl-gold">Synovial fluid</span> in the synovial cavity — provides
+          lubrication. Ball &amp; socket = maximum movement (shoulder). Hinge = only flex/extend (elbow).
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Skull joints = <span class="hl-gold">Immovable</span>. Neck (Atlas-Axis) = <span
+            class="hl-gold">Pivotal</span>. Elbow = <span class="hl-gold">Hinge</span>. Shoulder = <span
+            class="hl-gold">Ball &amp; Socket</span>. Ye four commonly poochhe jaate hain!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab7" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header green">🌿 Plant Movements</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Tropic Movement (Growth-related)</div>
+            <ul class="arrow-list">
+              <li>Movement in direction of stimulus or opposite</li>
+              <li><span class="hl-gold">Phototropism</span>: Response to light<br /><span
+                  style="color:#8892b0;font-size:.8em">Root = negative (away from light) | e.g. Sunflower</span></li>
+              <li><span class="hl-gold">Geotropism</span>: Response to gravity<br /><span
+                  style="color:#8892b0;font-size:.8em">Roots = positive (towards gravity) | Shoot = negative</span></li>
+              <li><span class="hl-gold">Hydrotropism</span>: Movement towards water</li>
+              <li><span class="hl-gold">Chemotropism</span>: Response to chemical<br /><span
+                  style="color:#8892b0;font-size:.8em">e.g. Pollen tube growth towards ovule in style</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Nastic Movement (Non-growth)</div>
+            <ul class="arrow-list">
+              <li>NOT growth-related</li>
+              <li><span class="hl-red">Unaffected</span> by direction of stimuli</li>
+              <li>e.g. <span class="hl-gold">Touch-me-not plant</span> (Mimosa pudica)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Tropic = <span class="hl-gold">Growth-related</span>, direction matters. Nastic = <span
+            class="hl-red">Non-growth</span>, direction does NOT matter. Touch-me-not = Nastic (thigmonasty). Sunflower
+          = Phototropism.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🌱 Plant Hormones</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Hormone</th>
+                <th>Key Functions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-green" rowspan="3">Growth Promoters</td>
+                <td><span class="hl-gold">Auxin</span></td>
+                <td>Apical dominance, Cell elongation, Parthenogenesis</td>
+              </tr>
+              <tr>
+                <td><span class="hl-gold">Gibberellin</span></td>
+                <td>Bolting, Reduces phototropism, Seed germination</td>
+              </tr>
+              <tr>
+                <td><span class="hl-gold">Cytokinin</span></td>
+                <td>Cell division, Delays senescence, Breaks dormancy</td>
+              </tr>
+              <tr>
+                <td class="hl-red" rowspan="2">Growth Inhibitors</td>
+                <td><span class="hl-gold">Abscisic Acid (ABA)</span></td>
+                <td>Closing of stomata (stress), Dormancy, Senescence</td>
+              </tr>
+              <tr>
+                <td><span class="hl-gold">Ethylene</span> (Gaseous hormone)</td>
+                <td>Ripening of fruits, Senescence</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          <span class="hl-gold">Ethylene</span> = only <span class="hl-gold">gaseous</span> plant hormone → fruit
+          ripening. <span class="hl-gold">ABA</span> = "Stress hormone" of plants → stomata close, dormancy. Auxin =
+          Apical dominance (tip suppress side branches). Gibberellin = Bolting (rapid stem elongation).
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Growth Promoters: <span class="hl-gold">A</span>uxin · <span class="hl-gold">G</span>ibberellin · <span
+            class="hl-gold">C</span>ytokinin → <span class="hl-gold">AGC</span><br />
+          Growth Inhibitors: <span class="hl-gold">ABA</span> · <span class="hl-gold">Ethylene</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Control, Coordination &amp; Movement · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>
