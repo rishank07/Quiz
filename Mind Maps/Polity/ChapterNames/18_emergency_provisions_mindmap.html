@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 18 – Emergency Provisions | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --gold2: #e0a800;
+      --text: #e8eaf6;
+      --muted: #9095b0;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --red-border: #e74c3c;
+      --blue-border: #3498db;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #1a0808, #2a1010);
+      border-bottom: 2px solid var(--accent1);
+      padding: 22px 30px 16px;
+      text-align: center;
+    }
+
+    .page-header .subject-tag {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent1);
+      margin-bottom: 6px;
+    }
+
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .page-header .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 13px;
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .tab-nav {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+      padding: 0 16px;
+      flex-shrink: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      height: 3px;
+      display: none;
+    }
+
+    .tab-nav::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .tab {
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      user-select: none;
+      margin-bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .tab.active {
+      color: var(--accent1);
+      border-bottom-color: var(--accent1);
+      background: transparent;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 24px 20px;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content-grid.single {
+      grid-template-columns: 1fr;
+      max-width: 900px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1500);
+      color: var(--gold);
+      border-bottom: 1px solid #3a3000;
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2318, #061510);
+      color: var(--accent3);
+      border-bottom: 1px solid #0d3020;
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #09192e, #060f1e);
+      color: var(--accent2);
+      border-bottom: 1px solid #0e2444;
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #1a0d28, #11071a);
+      color: var(--accent4);
+      border-bottom: 1px solid #2a1540;
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #251500, #180d00);
+      color: var(--accent5);
+      border-bottom: 1px solid #3a2000;
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #250a0a, #160404);
+      color: var(--accent1);
+      border-bottom: 1px solid #3a1010;
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #091e1a, #060f0e);
+      color: var(--accent6);
+      border-bottom: 1px solid #0e2e28;
+    }
+
+    ul.arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.arrow-list li {
+      padding: 5px 0 5px 20px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+      font-size: 13.5px;
+    }
+
+    ul.arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    ul.arrow-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 6px;
+    }
+
+    ul.arrow-list li .sub {
+      display: block;
+      margin-top: 3px;
+      font-size: 12.5px;
+      color: var(--muted);
+      padding-left: 10px;
+      border-left: 2px solid var(--border);
+    }
+
+    ul.arrow-list li .sub b {
+      color: var(--accent2);
+    }
+
+    ul.arrow-list li strong {
+      color: var(--gold);
+    }
+
+    ul.arrow-list li em {
+      color: var(--accent3);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--red-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .exam-trap .trap-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+    }
+
+    .exam-trap p {
+      color: #d0b0b0;
+      line-height: 1.6;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--blue-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .quick-recall .recall-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+    }
+
+    .quick-recall p {
+      color: #a8c8e8;
+      line-height: 1.6;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    .data-table,
+    .mega-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .data-table th,
+    .mega-table th {
+      padding: 9px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      text-align: left;
+      border-bottom: 2px solid var(--gold2);
+    }
+
+    .mega-table th.feat {
+      background: #2a2200;
+      color: var(--gold);
+      border-bottom: 2px solid var(--gold2);
+      text-align: left;
+    }
+
+    .mega-table th.nat {
+      background: #250a0a;
+      color: var(--accent1);
+      border-bottom: 2px solid var(--accent1);
+    }
+
+    .mega-table th.state {
+      background: #251500;
+      color: var(--accent5);
+      border-bottom: 2px solid var(--accent5);
+    }
+
+    .mega-table th.fin {
+      background: #09192e;
+      color: var(--accent2);
+      border-bottom: 2px solid var(--accent2);
+    }
+
+    .data-table td,
+    .mega-table td {
+      padding: 8px 11px;
+      border-bottom: 1px solid #1e2135;
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    .data-table tr:last-child td,
+    .mega-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td,
+    .mega-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    .data-table .art {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .mega-table .fv {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mega-table .nv {
+      color: var(--accent1);
+      font-weight: 600;
+      text-align: center;
+      font-size: 12.5px;
+    }
+
+    .mega-table .sv {
+      color: var(--accent5);
+      font-weight: 600;
+      text-align: center;
+      font-size: 12.5px;
+    }
+
+    .mega-table .fiv {
+      color: var(--accent2);
+      font-weight: 600;
+      text-align: center;
+      font-size: 12.5px;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: #0e1a30;
+      border: 1px solid #1e3a60;
+      color: var(--accent2);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-right: 3px;
+    }
+
+    /* 3-type emergency cards */
+    .em-type-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .em-type-card {
+      border-radius: 8px;
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .em-type-card.national {
+      background: #250a0a;
+      border: 1px solid #4a1515;
+    }
+
+    .em-type-card.state {
+      background: #251500;
+      border: 1px solid #4a2a00;
+    }
+
+    .em-type-card.financial {
+      background: #09192e;
+      border: 1px solid #153060;
+    }
+
+    .em-type-card .etc-num {
+      font-size: 28px;
+      font-weight: 800;
+      min-width: 40px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .em-type-card.national .etc-num {
+      color: var(--accent1);
+    }
+
+    .em-type-card.state .etc-num {
+      color: var(--accent5);
+    }
+
+    .em-type-card.financial .etc-num {
+      color: var(--accent2);
+    }
+
+    .em-type-card .etc-right {}
+
+    .em-type-card .etc-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    .em-type-card.national .etc-title {
+      color: var(--accent1);
+    }
+
+    .em-type-card.state .etc-title {
+      color: var(--accent5);
+    }
+
+    .em-type-card.financial .etc-title {
+      color: var(--accent2);
+    }
+
+    .em-type-card .etc-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Process step boxes */
+    .process-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .process-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 13px;
+    }
+
+    .process-box .pb-label {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .process-box .pb-val {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .process-box .pb-sub {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* Emergency declared timeline */
+    .em-timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .em-timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--accent1);
+      opacity: 0.4;
+    }
+
+    .em-titem {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .em-titem:last-child {
+      margin-bottom: 0;
+    }
+
+    .em-titem::before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent1);
+      border: 2px solid var(--bg);
+    }
+
+    .em-titem .eti-year {
+      font-size: 11px;
+      color: var(--accent1);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .em-titem .eti-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 2px 0;
+    }
+
+    .em-titem .eti-desc {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    /* FR effect compare */
+    .fr-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .fr-box {
+      border-radius: 8px;
+      padding: 13px 14px;
+    }
+
+    .fr-box.art358 {
+      background: #250a0a;
+      border: 1px solid #4a1515;
+    }
+
+    .fr-box.art359 {
+      background: #09192e;
+      border: 1px solid #153060;
+    }
+
+    .fr-box .fb-art {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .fr-box.art358 .fb-art {
+      color: var(--accent1);
+    }
+
+    .fr-box.art359 .fb-art {
+      color: var(--accent2);
+    }
+
+    .fr-box ul {
+      list-style: none;
+    }
+
+    .fr-box ul li {
+      padding: 4px 0 4px 16px;
+      position: relative;
+      font-size: 12.5px;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+    }
+
+    .fr-box ul li:last-child {
+      border-bottom: none;
+    }
+
+    .fr-box ul li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+      font-size: 11px;
+      top: 5px;
+    }
+
+    /* Critique quotes */
+    .quote-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .quote-box::before {
+      content: '"';
+      position: absolute;
+      top: -4px;
+      left: 12px;
+      font-size: 32px;
+      color: var(--accent1);
+      opacity: 0.4;
+      line-height: 1;
+    }
+
+    .quote-box:last-child {
+      margin-bottom: 0;
+    }
+
+    .quote-box .q-text {
+      font-size: 13px;
+      color: var(--text);
+      font-style: italic;
+      padding-left: 10px;
+      border-left: 3px solid var(--accent1);
+      line-height: 1.6;
+    }
+
+    .quote-box .q-author {
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-top: 7px;
+      text-align: right;
+    }
+
+    /* Effect boxes */
+    .effect-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .effect-box {
+      border-radius: 8px;
+      padding: 11px 13px;
+    }
+
+    .effect-box.bad {
+      background: #1a0909;
+      border: 1px solid #3a1010;
+    }
+
+    .effect-box.good {
+      background: #0a2318;
+      border: 1px solid #0d3020;
+    }
+
+    .effect-box .eb-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .effect-box.bad .eb-title {
+      color: var(--accent1);
+    }
+
+    .effect-box.good .eb-title {
+      color: var(--accent3);
+    }
+
+    .effect-box ul {
+      list-style: none;
+    }
+
+    .effect-box ul li {
+      padding: 3px 0 3px 14px;
+      position: relative;
+      font-size: 12.5px;
+      color: var(--text);
+    }
+
+    .effect-box ul li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+      font-size: 11px;
+      top: 4px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 100px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 10px;
+      text-align: center;
+    }
+
+    .stat-box .st-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent1);
+    }
+
+    .stat-box .st-label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: auto;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ==== RESPONSIVE DESIGN FOR MOBILE ==== */
+    @media (max-width: 600px) {
+
+      .process-row,
+      .fr-compare,
+      .effect-grid {
+        grid-template-columns: 1fr;
+      }
+
+      /* Responsive Tabs */
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      .data-table th,
+      .data-table td,
+      .mega-table th,
+      .mega-table td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div class="subject-tag">Polity · Chapter 18</div>
+    <h1>🚨 Emergency Provisions</h1>
+    <div class="meta">Part XVIII · Articles 352–360 · BPSC / BSSC Mind Map</div>
+    <div class="badge-row">
+      <span class="badge">Part XVIII</span>
+      <span class="badge">Art. 352–360</span>
+      <span class="badge">National Emergency</span>
+      <span class="badge">President's Rule</span>
+      <span class="badge">Financial Emergency</span>
+      <span class="badge">Source: Germany + GoI Act 1935</span>
+    </div>
+  </div>
+
+  <nav class="tab-nav">
+    <div class="tab active" onclick="switchTab('overview')">📌 Overview</div>
+    <div class="tab" onclick="switchTab('national')">🔴 National Emergency</div>
+    <div class="tab" onclick="switchTab('state')">🟠 President's Rule</div>
+    <div class="tab" onclick="switchTab('financial')">🔵 Financial Emergency</div>
+    <div class="tab" onclick="switchTab('frrights')">⚖️ Effect on FR</div>
+    <div class="tab" onclick="switchTab('compare')">📊 All 3 Compared</div>
+    <div class="tab" onclick="switchTab('critique')">💬 Criticism</div>
+  </nav>
+
+  <!-- ═══ TAB 1: OVERVIEW ═══ -->
+  <div id="overview" class="tab-content active">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header red">📖 Constitutional Provisions</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Part XVIII</strong> · <em>Articles 352–360</em></li>
+            <li>Source → <strong>Government of India Act, 1935</strong> + <em>Weimar Constitution (Germany)</em></li>
+            <li>Proclamation by <strong>President</strong> — on entire country or any part thereof</li>
+          </ul>
+          <div class="em-type-row" style="margin-top:14px;">
+            <div class="em-type-card national">
+              <div class="etc-num">352</div>
+              <div class="etc-right">
+                <div class="etc-title">National Emergency</div>
+                <div class="etc-sub">War / External Aggression / Armed Rebellion</div>
+              </div>
+            </div>
+            <div class="em-type-card state">
+              <div class="etc-num">356</div>
+              <div class="etc-right">
+                <div class="etc-title">State Emergency / President's Rule</div>
+                <div class="etc-sub">Failure of Constitutional Machinery in State</div>
+              </div>
+            </div>
+            <div class="em-type-card financial">
+              <div class="etc-num">360</div>
+              <div class="etc-right">
+                <div class="etc-title">Financial Emergency</div>
+                <div class="etc-sub">Threat to financial stability — Never imposed!</div>
+              </div>
+            </div>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Emergency ka source — <strong>Weimar Constitution of Germany</strong> (failure of which led to Hitler's
+              rise). GoI Act 1935 bhi source hai. Article numbers — <strong>352 · 356 · 360</strong> — ye teen yaad
+              karo!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header orange">⏱️ National Emergency — Declared 3 Times</div>
+        <div class="card-body">
+          <div class="em-timeline">
+            <div class="em-titem">
+              <div class="eti-year">1962</div>
+              <div class="eti-title">Chinese Aggression</div>
+              <div class="eti-desc">Sino-Indian War · External Aggression · President: Dr. S. Radhakrishnan</div>
+            </div>
+            <div class="em-titem">
+              <div class="eti-year">1971</div>
+              <div class="eti-title">India-Pakistan War</div>
+              <div class="eti-desc">Bangladesh Liberation War · External Aggression · President: V.V. Giri</div>
+            </div>
+            <div class="em-titem">
+              <div class="eti-year">1975</div>
+              <div class="eti-title">Internal Disturbance (Most Controversial)</div>
+              <div class="eti-desc">Allahabad HC invalidated Indira Gandhi's election. Declared on grounds of "Internal
+                Disturbance" · <strong>President: Fakhruddin Ali Ahmed</strong></div>
+            </div>
+          </div>
+          <div class="exam-trap" style="margin-top:14px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>1975 Emergency mein President = <strong>Fakhruddin Ali Ahmed</strong>. PM = Indira Gandhi. Grounds =
+              "Internal Disturbance" (baad mein 44th Amendment ne replace kiya with "Armed Rebellion"). 1975 Emergency =
+              <strong>darkest chapter</strong> of Indian democracy.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 2: NATIONAL EMERGENCY ═══ -->
+  <div id="national" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header red">🔴 National Emergency (Art. 352)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Grounds</strong>: War / External Aggression / <em>Armed Rebellion</em>
+              <span class="sub">"Internal Disturbance" replaced by <b>"Armed Rebellion"</b> — 44th Amendment
+                (1978)</span>
+            </li>
+            <li><strong>Declaration</strong>: On <em>written recommendation of the Cabinet</em>
+              <span class="sub">President alone cannot declare — Cabinet recommendation mandatory</span>
+            </li>
+            <li><strong>Approval</strong>: <em>Special Majority</em> — within <strong>1 month</strong> (both Houses)
+              <span class="sub">If LS dissolved → within 30 days of 1st sitting of new LS</span>
+            </li>
+            <li><strong>Extension</strong>: Parliament's approval required every <em>6 months</em>
+              <span class="sub">44th Amendment introduced this safeguard</span>
+            </li>
+            <li><strong>Duration</strong>: <em>Unlimited</em> — as long as Parliament keeps approving</li>
+            <li><strong>Revocation</strong>: By <em>Simple Majority of Lok Sabha</em>
+              <span class="sub">Special resolution — majority of all members present &amp; voting</span>
+            </li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap — Majority Confusion</div>
+            <p><strong>Approval</strong> of National Emergency = <em>Special Majority</em> (2/3rd + majority of total
+              membership). <strong>Revocation</strong> = <em>Simple Majority</em> of LS. Different majorities for
+              passing vs revoking — classic MCQ trap!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">🔍 Effects of National Emergency</div>
+        <div class="card-body">
+          <div class="effect-grid">
+            <div class="effect-box bad">
+              <div class="eb-title">⛔ Negative Effects</div>
+              <ul>
+                <li>Art. 19 (6 freedoms) suspended</li>
+                <li>Centre can legislate on State List</li>
+                <li>President directs State executives</li>
+                <li>LS term extended by 1 year</li>
+                <li>Revenue sharing altered</li>
+              </ul>
+            </div>
+            <div class="effect-box good">
+              <div class="eb-title">✅ What STAYS Protected</div>
+              <ul>
+                <li>Art. 20 — Protection from conviction</li>
+                <li>Art. 21 — Right to Life (NEVER suspended)</li>
+                <li>Writ of Habeas Corpus (post 44th Amend.)</li>
+                <li>Federal structure (partly)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quick-recall" style="margin-top:12px;">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>Minerva Mills Case (1980)</strong> — Emergency subject to <strong>Judicial Review</strong>. SC
+              can review whether grounds for Emergency were valid. Courts are NOT completely shut out during Emergency.
+            </p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — Art. 355</div>
+            <p><strong>Art. 355</strong> — Duty of Union to protect states from external aggression &amp; internal
+              disturbance, and to ensure governance in accordance with Constitution.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 3: PRESIDENT'S RULE ═══ -->
+  <div id="state" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header orange">🟠 President's Rule (Art. 356 &amp; 365)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><span class="art-pill">Art 356</span> Failure of <strong>Constitutional Machinery</strong></li>
+            <li><span class="art-pill">Art 365</span> State fails to comply with <strong>Union's directions</strong>
+            </li>
+            <li><strong>1st imposed</strong>: Punjab — 20th June, 1951</li>
+            <li><strong>Most times</strong>: Manipur &amp; Uttar Pradesh — <em>10 times each</em></li>
+          </ul>
+          <div class="process-row" style="margin-top:12px;">
+            <div class="process-box">
+              <div class="pb-label">Approval Majority</div>
+              <div class="pb-val">Simple</div>
+              <div class="pb-sub">Majority in both Houses</div>
+            </div>
+            <div class="process-box">
+              <div class="pb-label">Approval Deadline</div>
+              <div class="pb-val">2 months</div>
+              <div class="pb-sub">After proclamation</div>
+            </div>
+            <div class="process-box">
+              <div class="pb-label">Renewal</div>
+              <div class="pb-val">6 months</div>
+              <div class="pb-sub">Parliamentary approval each time</div>
+            </div>
+            <div class="process-box">
+              <div class="pb-label">Max Duration</div>
+              <div class="pb-val">3 years</div>
+              <div class="pb-sub">Total maximum period</div>
+            </div>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>National Emergency approval = <strong>Special Majority</strong>. President's Rule approval =
+              <strong>Simple Majority</strong>. Revocation of President's Rule = <strong>President anytime</strong> (no
+              Parliament approval needed). Teen alag-alag rules hain!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red">⚖️ Effects of President's Rule</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Division of Power</strong> — Abolished (Centre takes over)</li>
+            <li>State Council of Ministers → <em>Dissolved / Suspended</em></li>
+            <li>Legislative Assembly → <em>Suspended or Dissolved</em></li>
+            <li><strong>Fundamental Rights</strong> → <em>NO effect</em> (FRs not suspended)</li>
+            <li>Laws made during President's Rule → Remain valid for <em>6 months</em> after revocation</li>
+          </ul>
+          <div
+            style="margin-top:14px;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">
+            Key Cases</div>
+          <ul class="arrow-list">
+            <li><strong>S.R. Bommai Case (1994)</strong> — President's Rule subject to <em>Judicial Review</em>
+              <span class="sub">Most important case — SC can review validity of Art. 356 proclamation</span>
+            </li>
+            <li><strong>K.K. Babu v. Union of India</strong> — Centre's power to give directions to States</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap — S.R. Bommai Case</div>
+            <p><strong>S.R. Bommai (1994)</strong> — biggest judgment on Art. 356. SC ne kaha President's Rule arbitrary
+              tarike se nahi laga sakte. Floor test zaroori hai pehle. President's Rule ek last resort hai, pehla option
+              nahi.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 4: FINANCIAL EMERGENCY ═══ -->
+  <div id="financial" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header blue">🔵 Financial Emergency (Art. 360)</div>
+        <div class="card-body">
+          <div
+            style="background:#09192e;border:2px solid var(--accent2);border-radius:10px;padding:16px;text-align:center;margin-bottom:16px;">
+            <div
+              style="font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px;">
+              Current Status</div>
+            <div style="font-size:22px;font-weight:800;color:var(--accent3);">NEVER IMPOSED</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px;">No Financial Emergency declared in India's
+              history since 1950</div>
+          </div>
+          <div class="process-row">
+            <div class="process-box">
+              <div class="pb-label">Declaration by</div>
+              <div class="pb-val" style="font-size:16px;color:var(--accent2);">President</div>
+              <div class="pb-sub">On advice of Cabinet</div>
+            </div>
+            <div class="process-box">
+              <div class="pb-label">Revocation by</div>
+              <div class="pb-val" style="font-size:16px;color:var(--accent2);">President</div>
+              <div class="pb-sub">Any time</div>
+            </div>
+            <div class="process-box">
+              <div class="pb-label">Approval</div>
+              <div class="pb-val" style="font-size:14px;color:var(--accent2);">Simple Maj.</div>
+              <div class="pb-sub">Within 2 months</div>
+            </div>
+            <div class="process-box">
+              <div class="pb-label">Duration</div>
+              <div class="pb-val" style="font-size:14px;color:var(--accent2);">Unlimited</div>
+              <div class="pb-sub">Parliament renews</div>
+            </div>
+          </div>
+          <div
+            style="margin-top:14px;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">
+            Key Provisions During Financial Emergency</div>
+          <ul class="arrow-list">
+            <li><strong>Suspension</strong> of Union-State tax distribution</li>
+            <li>Power to <strong>reduce salaries &amp; allowances</strong> of Union &amp; State employees
+              <span class="sub">Including salaries of <b>SC &amp; HC Judges</b></span>
+            </li>
+            <li>President can direct States on <strong>financial matters</strong></li>
+            <li>Money Bills of States can be <strong>reserved for President's consideration</strong></li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Financial Emergency mein <strong>SC &amp; HC judges ki salary bhi reduce</strong> ki ja sakti hai — ye
+              normally constitutional guarantee ke against hai (Art. 125). Emergency mein ye exception hai. Financial
+              Emergency <strong>kabhi laga nahi</strong> — ye theoretical provision hai.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 5: EFFECT ON FR ═══ -->
+  <div id="frrights" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header purple">⚖️ Effect on Fundamental Rights — Art. 358 &amp; 359</div>
+        <div class="card-body">
+          <div class="fr-compare">
+            <div class="fr-box art358">
+              <div class="fb-art">Art. 358</div>
+              <ul>
+                <li>Only <strong>Art. 19 suspended</strong> (6 freedoms)</li>
+                <li>Operates ONLY during <strong>war &amp; external aggression</strong></li>
+                <li>NOT during armed rebellion</li>
+                <li>Applicable <strong>throughout the country</strong></li>
+                <li>Automatic — no separate order needed</li>
+              </ul>
+            </div>
+            <div class="fr-box art359">
+              <div class="fb-art">Art. 359</div>
+              <ul>
+                <li><strong>All FRs</strong> (except Art. 20 &amp; 21) may be suspended</li>
+                <li>Both war/external aggression <strong>AND armed rebellion</strong></li>
+                <li>May apply to <strong>entire country or part</strong></li>
+                <li>Requires <strong>Presidential Order</strong></li>
+                <li>Not automatic — needs specific order</li>
+              </ul>
+            </div>
+          </div>
+          <div
+            style="margin-top:14px;background:#0a2318;border:2px solid var(--accent3);border-radius:8px;padding:13px 16px;">
+            <div
+              style="font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--accent3);margin-bottom:8px;font-weight:700;">
+              🛡️ NEVER SUSPENDED — Even During Emergency</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <div
+                style="background:#0d3020;border:1px solid #155230;border-radius:6px;padding:8px 14px;text-align:center;">
+                <div style="font-size:16px;font-weight:800;color:var(--accent3);">Art. 20</div>
+                <div style="font-size:11px;color:var(--muted);">Protection from Conviction</div>
+              </div>
+              <div
+                style="background:#0d3020;border:1px solid #155230;border-radius:6px;padding:8px 14px;text-align:center;">
+                <div style="font-size:16px;font-weight:800;color:var(--accent3);">Art. 21</div>
+                <div style="font-size:11px;color:var(--muted);">Right to Life &amp; Liberty</div>
+              </div>
+            </div>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap — Art. 358 vs 359</div>
+            <p>Art. 358 = <strong>Automatic, only Art. 19, only war/external aggression</strong>. Art. 359 =
+              <strong>Presidential Order needed, all FR except 20 &amp; 21, both types of emergency</strong>. Dono mein
+              main difference — <strong>Armed Rebellion</strong> mein Art. 358 apply nahi hota!
+            </p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>44th Amendment (1978)</strong> — Art. 20 &amp; 21 ko explicitly emergency mein bhi protect kiya.
+              Pehle 1975 emergency mein Habeas Corpus bhi suspend ho gaya tha (ADM Jabalpur case). Isliye ye protection
+              add ki gayi.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 6: COMPARE ALL 3 ═══ -->
+  <div id="compare" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header gold">📊 All 3 Emergencies — Complete Comparison</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="mega-table">
+              <thead>
+                <tr>
+                  <th class="feat">Feature</th>
+                  <th class="nat">🔴 National (352)</th>
+                  <th class="state">🟠 President's Rule (356)</th>
+                  <th class="fin">🔵 Financial (360)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="fv">Grounds</td>
+                  <td class="nv">War / Ext. Aggression / Armed Rebellion</td>
+                  <td class="sv">Constitutional failure in State</td>
+                  <td class="fiv">Threat to financial stability</td>
+                </tr>
+                <tr>
+                  <td class="fv">Declaration by</td>
+                  <td class="nv">President (Cabinet recommendation)</td>
+                  <td class="sv">President</td>
+                  <td class="fiv">President</td>
+                </tr>
+                <tr>
+                  <td class="fv">Approval Majority</td>
+                  <td class="nv">Special Majority</td>
+                  <td class="sv">Simple Majority</td>
+                  <td class="fiv">Simple Majority</td>
+                </tr>
+                <tr>
+                  <td class="fv">Approval Deadline</td>
+                  <td class="nv">1 month</td>
+                  <td class="sv">2 months</td>
+                  <td class="fiv">2 months</td>
+                </tr>
+                <tr>
+                  <td class="fv">Max Duration</td>
+                  <td class="nv">Unlimited</td>
+                  <td class="sv">3 years max</td>
+                  <td class="fiv">Unlimited</td>
+                </tr>
+                <tr>
+                  <td class="fv">Renewal</td>
+                  <td class="nv">Every 6 months</td>
+                  <td class="sv">Every 6 months</td>
+                  <td class="fiv">Parliament approval</td>
+                </tr>
+                <tr>
+                  <td class="fv">Revocation</td>
+                  <td class="nv">Simple Majority of LS</td>
+                  <td class="sv">President (anytime)</td>
+                  <td class="fiv">President (anytime)</td>
+                </tr>
+                <tr>
+                  <td class="fv">Effect on FR</td>
+                  <td class="nv">Art. 19 auto-suspended</td>
+                  <td class="sv">No effect on FR</td>
+                  <td class="fiv">No FR suspension</td>
+                </tr>
+                <tr>
+                  <td class="fv">Art. 20 &amp; 21</td>
+                  <td class="nv">NEVER suspended ✅</td>
+                  <td class="sv">Not affected ✅</td>
+                  <td class="fiv">Not affected ✅</td>
+                </tr>
+                <tr>
+                  <td class="fv">State Legislature</td>
+                  <td class="nv">Continues (Centre takes extra power)</td>
+                  <td class="sv">Suspended/Dissolved</td>
+                  <td class="fiv">Continues</td>
+                </tr>
+                <tr>
+                  <td class="fv">Times Declared</td>
+                  <td class="nv">3 times (1962, 1971, 1975)</td>
+                  <td class="sv">Multiple (Max: UP &amp; Manipur — 10 each)</td>
+                  <td class="fiv">Never declared</td>
+                </tr>
+                <tr>
+                  <td class="fv">Key Case</td>
+                  <td class="nv">Minerva Mills 1980</td>
+                  <td class="sv">S.R. Bommai 1994</td>
+                  <td class="fiv">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="exam-trap" style="margin-top:14px;">
+            <div class="trap-title">⚠ Exam Trap — 3 Key Differences</div>
+            <p>1. <strong>Approval</strong>: National = Special Majority · Others = Simple Majority. 2.
+              <strong>Deadline</strong>: National = 1 month · Others = 2 months. 3. <strong>Revocation</strong>:
+              National = LS Simple Majority · President's Rule &amp; Financial = President anytime.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 7: CRITICISM ═══ -->
+  <div id="critique" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header teal">💬 Criticism of Emergency Provisions</div>
+        <div class="card-body">
+          <div class="quote-box">
+            <div class="q-text">"Fundamental Rights meaningless; Undermines democratic foundation"</div>
+            <div class="q-author">— T.T. Krishnamachari</div>
+          </div>
+          <div class="quote-box">
+            <div class="q-text">"Risk of misuse for political objectives"</div>
+            <div class="q-author">— Dr. B.R. Ambedkar</div>
+          </div>
+          <div class="quote-box">
+            <div class="q-text">"President's Rule is a dead letter"</div>
+            <div class="q-author">— Dr. B.R. Ambedkar</div>
+          </div>
+          <div class="quote-box">
+            <div class="q-text">"Emergency powers of the President — a betrayal of Constitution"</div>
+            <div class="q-author">— K.M. Nambiar</div>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap — Ambedkar Quotes</div>
+            <p>Ambedkar ne <strong>dono quotes</strong> diye hain — "Risk of misuse" AND "dead letter" (President's Rule
+              ke baare mein). Ye dono alag-alag context mein hain. Dono yaad karo — exam mein dono pooche ja sakte hain!
+            </p>
+          </div>
+          <div class="quick-recall" style="margin-top:8px;">
+            <div class="recall-title">💡 Quick Recall — 44th Amendment Safeguards</div>
+            <p>"Armed Rebellion" (not "Internal Disturbance") · Cabinet's written recommendation mandatory · LS can
+              revoke by Simple Majority · Art. 20 &amp; 21 explicitly protected · 6-month renewal required. Ye sab
+              <strong>44th Amendment (1978)</strong> ke safeguards hain jo 1975 Emergency ke baad aaye!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com &nbsp;·&nbsp; Polity Ch 18 — Emergency Provisions &nbsp;·&nbsp;
+    BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

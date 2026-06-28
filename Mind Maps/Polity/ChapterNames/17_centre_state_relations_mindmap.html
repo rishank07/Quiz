@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 17 – Centre-State Relations | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --gold2: #e0a800;
+      --text: #e8eaf6;
+      --muted: #9095b0;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --red-border: #e74c3c;
+      --blue-border: #3498db;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12152a, #1e2240);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 30px 16px;
+      text-align: center;
+    }
+
+    .page-header .subject-tag {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .page-header .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 13px;
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .tab-nav {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+      padding: 0 16px;
+      flex-shrink: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      height: 3px;
+      display: none;
+    }
+
+    .tab-nav::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .tab {
+      padding: 11px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      user-select: none;
+      margin-bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      background: transparent;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 24px 20px;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content-grid.single {
+      grid-template-columns: 1fr;
+      max-width: 960px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1500);
+      color: var(--gold);
+      border-bottom: 1px solid #3a3000;
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2318, #061510);
+      color: var(--accent3);
+      border-bottom: 1px solid #0d3020;
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #09192e, #060f1e);
+      color: var(--accent2);
+      border-bottom: 1px solid #0e2444;
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #1a0d28, #11071a);
+      color: var(--accent4);
+      border-bottom: 1px solid #2a1540;
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #251500, #180d00);
+      color: var(--accent5);
+      border-bottom: 1px solid #3a2000;
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #250a0a, #160404);
+      color: var(--accent1);
+      border-bottom: 1px solid #3a1010;
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #091e1a, #060f0e);
+      color: var(--accent6);
+      border-bottom: 1px solid #0e2e28;
+    }
+
+    ul.arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.arrow-list li {
+      padding: 5px 0 5px 20px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+      font-size: 13.5px;
+    }
+
+    ul.arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    ul.arrow-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 6px;
+    }
+
+    ul.arrow-list li .sub {
+      display: block;
+      margin-top: 3px;
+      font-size: 12.5px;
+      color: var(--muted);
+      padding-left: 10px;
+      border-left: 2px solid var(--border);
+    }
+
+    ul.arrow-list li .sub b {
+      color: var(--accent2);
+    }
+
+    ul.arrow-list li strong {
+      color: var(--gold);
+    }
+
+    ul.arrow-list li em {
+      color: var(--accent3);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--red-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .exam-trap .trap-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+    }
+
+    .exam-trap p {
+      color: #d0b0b0;
+      line-height: 1.6;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--blue-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .quick-recall .recall-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+    }
+
+    .quick-recall p {
+      color: #a8c8e8;
+      line-height: 1.6;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    .data-table,
+    .zone-table,
+    .river-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .data-table th,
+    .zone-table th,
+    .river-table th {
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      text-align: left;
+    }
+
+    .data-table th,
+    .zone-table th {
+      background: #2a2200;
+      color: var(--gold);
+      border-bottom: 2px solid var(--gold2);
+    }
+
+    .river-table th {
+      background: #09192e;
+      color: var(--accent2);
+      border-bottom: 2px solid var(--accent2);
+    }
+
+    .data-table td,
+    .zone-table td,
+    .river-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1e2135;
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    .data-table tr:last-child td,
+    .zone-table tr:last-child td,
+    .river-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td,
+    .zone-table tr:hover td,
+    .river-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    .data-table .art {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    /* Zonal Councils Specifics */
+    .zone-table .zname {
+      font-weight: 700;
+    }
+
+    .zone-table .zhq {
+      color: var(--accent6);
+      font-weight: 600;
+    }
+
+    .zone-table .zstates {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .zone-table .northern .zname {
+      color: #7ec8e3;
+    }
+
+    .zone-table .central .zname {
+      color: var(--accent5);
+    }
+
+    .zone-table .eastern .zname {
+      color: var(--accent3);
+    }
+
+    .zone-table .western .zname {
+      color: var(--accent4);
+    }
+
+    .zone-table .southern .zname {
+      color: var(--accent1);
+    }
+
+    /* River Disputes Specifics */
+    .river-table .rname {
+      font-weight: 700;
+      color: var(--accent2);
+    }
+
+    .river-table .ryear {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: #0e1a30;
+      border: 1px solid #1e3a60;
+      color: var(--accent2);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-right: 3px;
+    }
+
+    /* 3-list grid */
+    .list-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .list-box {
+      border-radius: 8px;
+      padding: 12px 13px;
+    }
+
+    .list-box.union {
+      background: #09192e;
+      border: 1px solid #0e2444;
+    }
+
+    .list-box.state {
+      background: #0a2318;
+      border: 1px solid #0d3020;
+    }
+
+    .list-box.conc {
+      background: #251500;
+      border: 1px solid #3a2000;
+    }
+
+    .list-box .lb-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .list-box.union .lb-title {
+      color: var(--accent2);
+    }
+
+    .list-box.state .lb-title {
+      color: var(--accent3);
+    }
+
+    .list-box.conc .lb-title {
+      color: var(--accent5);
+    }
+
+    .list-box .lb-num {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .list-box.union .lb-num {
+      color: var(--accent2);
+    }
+
+    .list-box.state .lb-num {
+      color: var(--accent3);
+    }
+
+    .list-box.conc .lb-num {
+      color: var(--accent5);
+    }
+
+    .list-box .lb-orig {
+      font-size: 10.5px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .list-box .lb-items {
+      font-size: 11.5px;
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    .list-box .lb-items span {
+      display: block;
+    }
+
+    /* Commission cards */
+    .comm-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+    }
+
+    .comm-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .comm-card .cc-year {
+      font-size: 10.5px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .comm-card .cc-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 13.5px;
+    }
+
+    .comm-card .cc-desc {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .comm-card.blue {
+      border-left-color: var(--accent2);
+    }
+
+    .comm-card.blue .cc-year {
+      color: var(--accent2);
+    }
+
+    /* Finance commission box */
+    .fc-stat-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .fc-stat {
+      flex: 1;
+      min-width: 100px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .fc-stat .fsv {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .fc-stat .fsl {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Member rows */
+    .member-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #1e2135;
+      font-size: 13px;
+    }
+
+    .member-row:last-child {
+      border-bottom: none;
+    }
+
+    .member-row .mr-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .member-row .mr-name {
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .member-row .mr-role {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: auto;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ==== RESPONSIVE TABS & TABLES FOR MOBILE ==== */
+    @media (max-width: 600px) {
+      .list-grid {
+        grid-template-columns: 1fr;
+      }
+
+      /* Responsive Tabs */
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      .data-table th,
+      .data-table td,
+      .zone-table th,
+      .zone-table td,
+      .river-table th,
+      .river-table td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div class="subject-tag">Polity · Chapter 17</div>
+    <h1>🏛️ Centre-State Relations</h1>
+    <div class="meta">Part XI · Articles 245–293 · Legislative · Administrative · Financial · BPSC / BSSC Mind Map</div>
+    <div class="badge-row">
+      <span class="badge">Part XI</span>
+      <span class="badge">Art. 245–293</span>
+      <span class="badge">3 Types of Relations</span>
+      <span class="badge">3-List System</span>
+      <span class="badge">Finance Commission</span>
+      <span class="badge">5 Zonal Councils</span>
+    </div>
+  </div>
+
+  <nav class="tab-nav">
+    <div class="tab active" onclick="switchTab('overview')">📌 Overview</div>
+    <div class="tab" onclick="switchTab('legislative')">📜 Legislative</div>
+    <div class="tab" onclick="switchTab('administrative')">🏢 Administrative</div>
+    <div class="tab" onclick="switchTab('financial')">💰 Financial</div>
+    <div class="tab" onclick="switchTab('fincomm')">📊 Finance Commission</div>
+    <div class="tab" onclick="switchTab('interstate')">🤝 Inter-State Council</div>
+    <div class="tab" onclick="switchTab('zonal')">🗺️ Zonal Councils</div>
+    <div class="tab" onclick="switchTab('river')">🌊 River Disputes</div>
+  </nav>
+
+  <!-- ═══ TAB 1: OVERVIEW ═══ -->
+  <div id="overview" class="tab-content active">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header gold">📖 Constitutional Provisions</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Part XI</strong> · <em>Articles 245–293</em></li>
+            <li>3 Types of Centre-State Relations:
+              <span class="sub">1. <b>Legislative Relations</b> — Art. 245–255</span>
+              <span class="sub">2. <b>Administrative Relations</b> — Art. 256–263</span>
+              <span class="sub">3. <b>Financial Relations</b> — Art. 268–293</span>
+            </li>
+            <li>Based on <strong>Government of India Act, 1935</strong> — 3-List System</li>
+            <li><span class="art-pill">Art 246</span> + <strong>7th Schedule</strong> → Division of subjects</li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — Commissions on Centre-State</div>
+            <p><strong>Setalvad Committee (1966)</strong> → <strong>Rajamannar Committee (1969)</strong> →
+              <strong>Sarkaria Commission (1983)</strong> → <strong>Punchhi Commission (2007)</strong>. Sarkaria most
+              important — recommended Inter-State Council!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red">⭐ Key Commissions on Centre-State Relations</div>
+        <div class="card-body">
+          <div class="comm-card">
+            <div class="cc-year">1966</div>
+            <div class="cc-name">Setalvad Committee (Administrative Reforms Commission)</div>
+            <div class="cc-desc">Administrative reform recommendations on Centre-State relations</div>
+          </div>
+          <div class="comm-card">
+            <div class="cc-year">1969</div>
+            <div class="cc-name">Rajamannar Committee</div>
+            <div class="cc-desc">Tamil Nadu government appointed · Recommended more autonomy for states</div>
+          </div>
+          <div class="comm-card blue">
+            <div class="cc-year">1983</div>
+            <div class="cc-name">Sarkaria Commission ⭐</div>
+            <div class="cc-desc">Most important · Recommended Inter-State Council · Report submitted 1987</div>
+          </div>
+          <div class="comm-card">
+            <div class="cc-year">2007</div>
+            <div class="cc-name">Punchhi Commission</div>
+            <div class="cc-desc">Reviewed Sarkaria recommendations · Submitted report 2010</div>
+          </div>
+          <div class="exam-trap" style="margin-top:10px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Inter-State Council</strong> — Sarkaria Commission (1983) ne recommend kiya, lekin established
+              <strong>1990</strong> mein hua (PM V.P. Singh ke time). Recommend karne aur establish karne ka year alag
+              hai!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 2: LEGISLATIVE RELATIONS ═══ -->
+  <div id="legislative" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header blue">📜 Legislative Relations — 3 List System</div>
+        <div class="card-body">
+          <div class="list-grid">
+            <div class="list-box union">
+              <div class="lb-title">🔵 Union List</div>
+              <div class="lb-num">98</div>
+              <div class="lb-orig">Originally 97 subjects</div>
+              <div class="lb-items">
+                <span>✦ Defence</span>
+                <span>✦ Atomic Energy</span>
+                <span>✦ Foreign Affairs</span>
+                <span>✦ Citizenship</span>
+                <span>✦ Banking</span>
+              </div>
+            </div>
+            <div class="list-box state">
+              <div class="lb-title">🟢 State List</div>
+              <div class="lb-num">59</div>
+              <div class="lb-orig">Originally 66 subjects</div>
+              <div class="lb-items">
+                <span>✦ Public Order</span>
+                <span>✦ Police</span>
+                <span>✦ Health</span>
+                <span>✦ Water</span>
+                <span>✦ Land / Agriculture</span>
+              </div>
+            </div>
+            <div class="list-box conc">
+              <div class="lb-title">🟠 Concurrent List</div>
+              <div class="lb-num">52</div>
+              <div class="lb-orig">Originally 47 subjects</div>
+              <div class="lb-items">
+                <span>✦ Criminal Law</span>
+                <span>✦ Marriage Laws</span>
+                <span>✦ Education</span>
+                <span>✦ Forests</span>
+                <span>✦ Labour</span>
+              </div>
+            </div>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap — List Numbers</div>
+            <p>Current numbers: Union = <strong>98</strong>, State = <strong>59</strong>, Concurrent =
+              <strong>52</strong>. Original: Union = 97, State = 66, Concurrent = 47. Subjects reduced from State list,
+              added to Union/Concurrent over time.
+            </p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — Conflict Rule</div>
+            <p>If Parliament + State Legislature dono Concurrent list pe law banate hain → <strong>Parliament ka law
+                prevails</strong> (Art. 254). Exception: State law got President's assent → State law prevails in that
+              state.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red">⚠️ When Parliament Can Legislate on State List</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>National Interest</strong> <span class="art-pill">Art 249</span>
+              <span class="sub"><b>2/3rd majority in Rajya Sabha</b> — resolution passed</span>
+            </li>
+            <li><strong>Agreement between States</strong>
+              <span class="sub">Two or more states request Parliament</span>
+            </li>
+            <li><strong>International Treaties &amp; Agreements</strong> <span class="art-pill">Art 253</span>
+              <span class="sub">To implement international obligations</span>
+            </li>
+            <li><strong>During National Emergency</strong> <span class="art-pill">Art 352</span>
+              <span class="sub">Parliament gets power to legislate on entire State List</span>
+            </li>
+            <li><strong>During President's Rule</strong> <span class="art-pill">Art 356</span>
+              <span class="sub">Parliament acts as State Legislature</span>
+            </li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Art. 249 — National Interest mein Parliament State List pe law bana sakti hai lekin sirf <strong>1
+                year</strong> ke liye valid, renewable hai. <strong>RS ka 2/3rd majority</strong> zaroori hai — LS ki
+              majority kaafi nahi!</p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — Territorial Jurisdiction</div>
+            <p><strong>Parliament</strong> — Entire country + extra-territorial laws (Art. 245). <strong>State
+                Legislature</strong> — Only within State boundaries.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 3: ADMINISTRATIVE RELATIONS ═══ -->
+  <div id="administrative" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header orange">🏢 Administrative Relations (Art. 256–263)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><span class="art-pill">Art 256</span> Centre can give <strong>directions to States</strong>
+              <span class="sub">To ensure compliance with central laws</span>
+            </li>
+            <li><span class="art-pill">Art 257</span> <strong>Control of Union over States</strong> in certain cases
+              <span class="sub">States cannot impede Union's executive power</span>
+            </li>
+            <li><strong>Mutual delegation of functions</strong>
+              <span class="sub">To avoid rigidity &amp; deadlock in governance</span>
+            </li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Art. 256 — Centre State ko direction de sakta hai ki central laws follow karo. Agar State nahi maani toh
+              <strong>Art. 356 (President's Rule)</strong> lag sakta hai.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">👮 All India Services (Joint Control)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Full Control (Centre)</strong>:
+              <span class="sub">✦ <b>Appointments</b></span>
+              <span class="sub">✦ <b>Disciplinary Actions</b></span>
+              <span class="sub">✦ <b>Promotion &amp; Training</b></span>
+            </li>
+            <li><strong>Immediate Control (State)</strong>:
+              <span class="sub">✦ <b>Suspension Power</b></span>
+            </li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>All India Services = IAS, IPS, IFoS (Indian Forest Service). These officers serve both Centre and State —
+              <strong>dual control</strong>. Appointment (UPSC exam) → Centre. Day-to-day posting → State.
+            </p>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>State sirf <strong>suspend</strong> kar sakta hai All India Service officer ko — dismiss, remove ya
+              compulsory retire NAHI kar sakta. Ye power sirf Centre (DoPT) ke paas hai.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 4: FINANCIAL RELATIONS ═══ -->
+  <div id="financial" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header gold">💰 Financial Relations (Art. 268–293)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><span class="art-pill">Art 268</span> Duties levied by Union, <strong>collected by States</strong>
+              <span class="sub">Example: <b>Stamp Duty</b> on Bills of Exchange &amp; Promissory Notes</span>
+            </li>
+            <li>UTs mein → Collected by <strong>Union</strong>
+              <span class="sub">But NOT deposited into CF of India</span>
+            </li>
+            <li><span class="art-pill">Art 269A</span> Tax distribution between Union &amp; States</li>
+            <li><span class="art-pill">Art 280</span> Finance Commission</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Art. 268</strong> — Stamp duty pe Union ka tax levy karta hai lekin <strong>States collect karte
+                hain</strong> aur apne paas rakhte hain. Ye centre-state financial cooperation ka example hai.</p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — GST Council</div>
+            <p><strong>GST Council</strong> — Art. 279A (101st Amendment, 2016). Centre-State financial coordination ka
+              most recent mechanism. Chairman = Union Finance Minister.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 5: FINANCE COMMISSION ═══ -->
+  <div id="fincomm" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header green">📊 Finance Commission (Art. 280)</div>
+        <div class="card-body">
+          <div class="fc-stat-row">
+            <div class="fc-stat">
+              <div class="fsv">1+4</div>
+              <div class="fsl">Chairman + Members</div>
+            </div>
+            <div class="fc-stat">
+              <div class="fsv">5 yrs</div>
+              <div class="fsl">Constituted every</div>
+            </div>
+            <div class="fc-stat">
+              <div class="fsv">16th</div>
+              <div class="fsl">Current FC</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li><strong>Quasi-judicial body</strong></li>
+            <li>Constituted by <strong>President</strong> every 5 years (or earlier)</li>
+            <li><strong>1st Chairman</strong> → K.C. Neogy</li>
+            <li><strong>Current (16th FC)</strong> → Arvind Panagariya</li>
+            <li>Appointed by <strong>President</strong></li>
+            <li>Tenure → Determined by President · Eligible for reappointment</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Finance Commission <strong>quasi-judicial</strong> body hai — it's not a judicial body and not a pure
+              executive body. Its recommendations are <strong>advisory</strong> — not binding on government (though
+              usually accepted).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue">✅ Qualifications — Finance Commission</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Qualifications → As determined by the <strong>President</strong></li>
+            <li>Other Members must include:
+              <span class="sub">✦ One with qualification equivalent to <b>High Court Judge</b></span>
+              <span class="sub">✦ Experts in <b>finance &amp; accounts</b></span>
+            </li>
+          </ul>
+          <div style="margin-top:14px;">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">
+              Functions of Finance Commission</div>
+            <ul class="arrow-list">
+              <li>Distribution of <strong>taxes</strong> between Centre &amp; States</li>
+              <li><strong>Grants-in-aid</strong> from CF of India to States</li>
+              <li>Advice on matters referred by President → <em>not binding</em></li>
+              <li>Recommend measures to augment <strong>CF of States</strong>
+                <span class="sub">To supplement resources of <b>Panchayats &amp; Municipalities</b></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 6: INTER-STATE COUNCIL ═══ -->
+  <div id="interstate" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header teal">🤝 Inter-State Council (Art. 263)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Established by <strong>President</strong> <span class="art-pill">Art 263</span></li>
+            <li>Recommended by <strong>Sarkaria Commission (1983–87)</strong></li>
+            <li>Established in <em>1990</em> under PM <strong>V.P. Singh</strong> (Janata Dal)</li>
+            <li>Reconstituted on <em>19th May, 2022</em> to promote <strong>Cooperative Federalism</strong></li>
+            <li>Meetings → At least <strong>3 times a year</strong></li>
+          </ul>
+          <div style="margin-top:12px;">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:8px;">
+              Key Functions</div>
+            <ul class="arrow-list">
+              <li>Resolves <strong>Centre-State Disputes</strong></li>
+              <li>Investigates <strong>Inter-State Disputes</strong></li>
+              <li>Coordinates <strong>policies and implementation</strong></li>
+            </ul>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Sarkaria Commission = <strong>1983</strong> (established). Inter-State Council = <strong>1990</strong>
+              (established). Recommend karna 1983 mein, establish karna 1990 mein. Ye difference poochha jaata hai!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">👥 Members of Inter-State Council</div>
+        <div class="card-body">
+          <div class="member-row">
+            <div class="mr-icon">👑</div>
+            <div>
+              <div class="mr-name">Prime Minister</div>
+              <div class="mr-role">Chairman of Inter-State Council</div>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="mr-icon">🏛️</div>
+            <div>
+              <div class="mr-name">Chief Ministers of All States</div>
+              <div class="mr-role">All state CMs are members</div>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="mr-icon">🏙️</div>
+            <div>
+              <div class="mr-name">CMs of UTs with Legislatures</div>
+              <div class="mr-role">Delhi, Puducherry, J&amp;K</div>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="mr-icon">👤</div>
+            <div>
+              <div class="mr-name">Administrators of UTs</div>
+              <div class="mr-role">Lt. Governors of other UTs</div>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="mr-icon">🗂️</div>
+            <div>
+              <div class="mr-name">6 Cabinet Ministers (nominated by PM)</div>
+              <div class="mr-role">Including Home Minister</div>
+            </div>
+          </div>
+          <div class="exam-trap" style="margin-top:10px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Inter-State Council Chairman = <strong>Prime Minister</strong>. Zonal Councils Chairman = <strong>Union
+                Home Minister</strong>. Dono alag hain — confuse mat karo!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 7: ZONAL COUNCILS ═══ -->
+  <div id="zonal" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header orange">🗺️ Zonal Councils</div>
+        <div class="card-body">
+          <div
+            style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:14px;">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px;">
+              Key Facts</div>
+            <div style="font-size:13px;color:var(--text);">Formed under <strong style="color:var(--gold);">States
+                Reorganization Act, 1956</strong> · Chairman = <strong style="color:var(--gold);">Union Home
+                Minister</strong> · 5 Zones + 1 NE Council</div>
+          </div>
+          <div
+            style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">
+            Purpose</div>
+          <ul class="arrow-list" style="margin-bottom:16px;">
+            <li>Promote dialogue among states + Resolve mutual disputes</li>
+            <li>Avoid <strong>regionalism, linguistic chauvinism &amp; particularism</strong></li>
+            <li>Support implementation of schemes</li>
+            <li>Ensure <strong>Political Unity</strong></li>
+            <li>Exchange of ideas and experiences</li>
+          </ul>
+          <div class="tw">
+            <table class="zone-table">
+              <thead>
+                <tr>
+                  <th>Zone</th>
+                  <th>HQ</th>
+                  <th>States / UTs Covered</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="northern">
+                  <td class="zname">🔵 Northern</td>
+                  <td class="zhq">New Delhi</td>
+                  <td class="zstates">J&amp;K, Ladakh, Himachal Pradesh, Haryana, Rajasthan, Delhi, Chandigarh</td>
+                </tr>
+                <tr class="central">
+                  <td class="zname">🟠 Central</td>
+                  <td class="zhq">Prayagraj</td>
+                  <td class="zstates">Uttarakhand, Madhya Pradesh, Uttar Pradesh, Chhattisgarh</td>
+                </tr>
+                <tr class="eastern">
+                  <td class="zname">🟢 Eastern</td>
+                  <td class="zhq">Kolkata</td>
+                  <td class="zstates">Bihar, Jharkhand, Odisha, West Bengal</td>
+                </tr>
+                <tr class="western">
+                  <td class="zname">🟣 Western</td>
+                  <td class="zhq">Mumbai</td>
+                  <td class="zstates">Gujarat, Maharashtra, Goa, Dadra &amp; Nagar Haveli, Daman &amp; Diu</td>
+                </tr>
+                <tr class="southern">
+                  <td class="zname">🔴 Southern</td>
+                  <td class="zhq">Chennai</td>
+                  <td class="zstates">Karnataka, Andhra Pradesh, Tamil Nadu, Kerala, Telangana, Puducherry</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="quick-recall" style="margin-top:12px;">
+            <div class="recall-title">💡 Quick Recall — For BPSC</div>
+            <p><strong>Bihar → Eastern Zonal Council</strong> — HQ Kolkata. Eastern zone mein: Bihar, Jharkhand, Odisha,
+              West Bengal. Bihar BPSC ke liye ye yaad karna zaroori hai!</p>
+          </div>
+          <div style="margin-top:14px;background:#091e1a;border:1px solid #0e2e28;border-radius:8px;padding:12px 14px;">
+            <div style="color:var(--accent6);font-weight:700;font-size:13px;margin-bottom:8px;">🌿 North-Eastern Council
+            </div>
+            <ul class="arrow-list">
+              <li>Established <strong>1972</strong> under North-Eastern Council Act, <em>1971</em></li>
+              <li>Initially <strong>7 states</strong>: Assam, Meghalaya, Tripura, Arunachal Pradesh, Nagaland, Manipur,
+                Mizoram</li>
+              <li>Currently <strong>8 states</strong> → Sikkim added in <em>2002</em></li>
+              <li>Members → 1 Chairman + 3 Other Members + 8 CMs &amp; Governors</li>
+            </ul>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Zonal Councils = <strong>5 zones</strong> (Northern, Central, Eastern, Western, Southern). North-East =
+              <strong>Separate NE Council</strong> (8 states, est. 1972). NE Council is NOT one of the 5 zonal councils!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">👥 Members of Zonal Councils</div>
+        <div class="card-body">
+          <div class="member-row">
+            <div class="mr-icon">🏠</div>
+            <div>
+              <div class="mr-name">Union Home Minister</div>
+              <div class="mr-role">Chairman of all Zonal Councils</div>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="mr-icon">🏛️</div>
+            <div>
+              <div class="mr-name">Chief Ministers of all States in the Zone</div>
+              <div class="mr-role">Voting members</div>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="mr-icon">🗂️</div>
+            <div>
+              <div class="mr-name">Two other Ministers from each State</div>
+              <div class="mr-role">Nominated by state government</div>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="mr-icon">👤</div>
+            <div>
+              <div class="mr-name">Administrators of UTs in the zone</div>
+              <div class="mr-role">Lt. Governors/Administrators</div>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="mr-icon">📊</div>
+            <div>
+              <div class="mr-name">NITI Aayog member (Nominated)</div>
+              <div class="mr-role">Advisory member</div>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="mr-icon">📋</div>
+            <div>
+              <div class="mr-name">Chief Secretaries of States</div>
+              <div class="mr-role">Advisory members</div>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="mr-icon">🚧</div>
+            <div>
+              <div class="mr-name">State Development Commissioners</div>
+              <div class="mr-role">Advisory members</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 8: RIVER DISPUTES ═══ -->
+  <div id="river" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header blue">🌊 Inter-State River Water Disputes</div>
+        <div class="card-body">
+          <div
+            style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:14px;">
+            <ul class="arrow-list">
+              <li>Constitutional Provision → <span class="art-pill">Art 262</span></li>
+              <li>Statutory Basis → <strong>Inter-State River Water Disputes Act, 1956</strong> (amended 2017)</li>
+              <li>Composition → 1 Chairperson + 1 Vice Chairperson + Max <strong>6 members</strong></li>
+              <li>Term → <strong>5 years</strong> for Chairperson · VP &amp; members till dispute resolved</li>
+            </ul>
+          </div>
+          <div class="tw">
+            <table class="river-table">
+              <thead>
+                <tr>
+                  <th>Tribunal / Dispute</th>
+                  <th>Est.</th>
+                  <th>States Involved</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="rname">Krishna Water Dispute I</td>
+                  <td class="ryear">1969</td>
+                  <td>Maharashtra, Karnataka, Andhra Pradesh</td>
+                </tr>
+                <tr>
+                  <td class="rname">Godavari Water Dispute</td>
+                  <td class="ryear">1969</td>
+                  <td>Maharashtra, Karnataka, AP, Madhya Pradesh, Odisha</td>
+                </tr>
+                <tr>
+                  <td class="rname">Narmada Water Dispute</td>
+                  <td class="ryear">1969</td>
+                  <td>Rajasthan, Gujarat, Maharashtra, Madhya Pradesh</td>
+                </tr>
+                <tr>
+                  <td class="rname">Ravi &amp; Beas Dispute</td>
+                  <td class="ryear">1986</td>
+                  <td>Punjab, Haryana, Rajasthan</td>
+                </tr>
+                <tr>
+                  <td class="rname">Cauvery Water Dispute</td>
+                  <td class="ryear">1990</td>
+                  <td>Karnataka, Kerala, Tamil Nadu, Puducherry</td>
+                </tr>
+                <tr>
+                  <td class="rname">Mahanadi Water Dispute</td>
+                  <td class="ryear">2018</td>
+                  <td>Odisha, Chhattisgarh</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="exam-trap" style="margin-top:14px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Art. 262 — Parliament can by law <strong>exclude SC's jurisdiction</strong> on inter-state river
+              disputes. Ye special provision hai — normally SC har cheez pe jurisdiction rakhta hai, lekin river
+              disputes mein Parliament SC ko bar kar sakti hai!</p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>1969</strong> mein ek saath 3 tribunals bane — Krishna, Godavari, Narmada. <strong>Cauvery
+                dispute</strong> sabse famous/controversial raha (Karnataka vs Tamil Nadu). <strong>Mahanadi
+                (2018)</strong> — sabse recent.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com &nbsp;·&nbsp; Polity Ch 17 — Centre-State Relations &nbsp;·&nbsp;
+    BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

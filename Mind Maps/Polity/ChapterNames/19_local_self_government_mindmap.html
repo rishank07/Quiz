@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 19 – Local Self-Government | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --gold2: #e0a800;
+      --text: #e8eaf6;
+      --muted: #9095b0;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --red-border: #e74c3c;
+      --blue-border: #3498db;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #0a1a10, #122a1a);
+      border-bottom: 2px solid var(--accent3);
+      padding: 22px 30px 16px;
+      text-align: center;
+    }
+
+    .page-header .subject-tag {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent3);
+      margin-bottom: 6px;
+    }
+
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .page-header .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 13px;
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .tab-nav {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+      padding: 0 16px;
+      flex-shrink: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      height: 3px;
+      display: none;
+    }
+
+    .tab-nav::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .tab {
+      padding: 11px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      user-select: none;
+      margin-bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .tab.active {
+      color: var(--accent3);
+      border-bottom-color: var(--accent3);
+      background: transparent;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 24px 20px;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content-grid.single {
+      grid-template-columns: 1fr;
+      max-width: 920px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1500);
+      color: var(--gold);
+      border-bottom: 1px solid #3a3000;
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2318, #061510);
+      color: var(--accent3);
+      border-bottom: 1px solid #0d3020;
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #09192e, #060f1e);
+      color: var(--accent2);
+      border-bottom: 1px solid #0e2444;
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #1a0d28, #11071a);
+      color: var(--accent4);
+      border-bottom: 1px solid #2a1540;
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #251500, #180d00);
+      color: var(--accent5);
+      border-bottom: 1px solid #3a2000;
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #250a0a, #160404);
+      color: var(--accent1);
+      border-bottom: 1px solid #3a1010;
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #091e1a, #060f0e);
+      color: var(--accent6);
+      border-bottom: 1px solid #0e2e28;
+    }
+
+    ul.arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.arrow-list li {
+      padding: 5px 0 5px 20px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+      font-size: 13.5px;
+    }
+
+    ul.arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    ul.arrow-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 6px;
+    }
+
+    ul.arrow-list li .sub {
+      display: block;
+      margin-top: 3px;
+      font-size: 12.5px;
+      color: var(--muted);
+      padding-left: 10px;
+      border-left: 2px solid var(--border);
+    }
+
+    ul.arrow-list li .sub b {
+      color: var(--accent2);
+    }
+
+    ul.arrow-list li strong {
+      color: var(--gold);
+    }
+
+    ul.arrow-list li em {
+      color: var(--accent3);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--red-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .exam-trap .trap-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+    }
+
+    .exam-trap p {
+      color: #d0b0b0;
+      line-height: 1.6;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--blue-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .quick-recall .recall-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+    }
+
+    .quick-recall p {
+      color: #a8c8e8;
+      line-height: 1.6;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    .data-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .data-table th {
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      text-align: left;
+      background: #2a2200;
+      color: var(--gold);
+      border-bottom: 2px solid var(--gold2);
+    }
+
+    .data-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1e2135;
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    .data-table .art {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: #0e1a30;
+      border: 1px solid #1e3a60;
+      color: var(--accent2);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-right: 3px;
+    }
+
+    /* Committee cards */
+    .comm-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent3);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+    }
+
+    .comm-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .comm-card .cc-year {
+      font-size: 10.5px;
+      color: var(--accent3);
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 3px;
+    }
+
+    .comm-card .cc-name {
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .comm-card .cc-items {
+      list-style: none;
+    }
+
+    .comm-card .cc-items li {
+      font-size: 13px;
+      color: var(--text);
+      padding: 3px 0 3px 16px;
+      position: relative;
+      border-bottom: 1px solid #1e2135;
+    }
+
+    .comm-card .cc-items li:last-child {
+      border-bottom: none;
+    }
+
+    .comm-card .cc-items li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+      font-size: 11px;
+      top: 4px;
+    }
+
+    .comm-card .cc-items li strong {
+      color: var(--accent2);
+    }
+
+    /* 3-tier structure */
+    .tier-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .tier-box {
+      border-radius: 8px;
+      padding: 13px 12px;
+      text-align: center;
+    }
+
+    .tier-box.village {
+      background: #0a2318;
+      border: 1px solid #0d3020;
+      border-top: 3px solid var(--accent3);
+    }
+
+    .tier-box.block {
+      background: #09192e;
+      border: 1px solid #0e2444;
+      border-top: 3px solid var(--accent2);
+    }
+
+    .tier-box.district {
+      background: #2a2200;
+      border: 1px solid #3a3000;
+      border-top: 3px solid var(--gold);
+    }
+
+    .tier-box .tb-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .tier-box .tb-name {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .tier-box.village .tb-name {
+      color: var(--accent3);
+    }
+
+    .tier-box.block .tb-name {
+      color: var(--accent2);
+    }
+
+    .tier-box.district .tb-name {
+      color: var(--gold);
+    }
+
+    .tier-box .tb-level {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .tier-box .tb-elect {
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+
+    .tier-box.village .tb-elect {
+      color: var(--accent3);
+    }
+
+    .tier-box.block .tb-elect {
+      color: var(--accent2);
+    }
+
+    .tier-box.district .tb-elect {
+      color: var(--gold);
+    }
+
+    /* Municipality type boxes */
+    .muni-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .muni-box {
+      border-radius: 8px;
+      padding: 13px 12px;
+      text-align: center;
+    }
+
+    .muni-box.lower {
+      background: #09192e;
+      border: 1px solid #0e2444;
+      border-top: 3px solid var(--accent2);
+    }
+
+    .muni-box.middle {
+      background: #251500;
+      border: 1px solid #3a2000;
+      border-top: 3px solid var(--accent5);
+    }
+
+    .muni-box.top {
+      background: #250a0a;
+      border: 1px solid #4a1515;
+      border-top: 3px solid var(--accent1);
+    }
+
+    .muni-box .mb-type {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .muni-box .mb-name {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .muni-box.lower .mb-name {
+      color: var(--accent2);
+    }
+
+    .muni-box.middle .mb-name {
+      color: var(--accent5);
+    }
+
+    .muni-box.top .mb-name {
+      color: var(--accent1);
+    }
+
+    .muni-box .mb-pop {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Amendment highlight boxes */
+    .amend-box {
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .amend-box.am73 {
+      background: #0a2318;
+      border: 2px solid var(--accent3);
+    }
+
+    .amend-box.am74 {
+      background: #09192e;
+      border: 2px solid var(--accent2);
+    }
+
+    .amend-box .amb-num {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .amend-box.am73 .amb-num {
+      color: var(--accent3);
+    }
+
+    .amend-box.am74 .amb-num {
+      color: var(--accent2);
+    }
+
+    .amend-box .amb-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .amend-box .amb-details {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .amend-box .amb-details b {
+      color: var(--gold);
+    }
+
+    /* Reservation visual */
+    .res-bar {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .res-bar .rb-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .res-bar .rb-track {
+      height: 28px;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      margin-bottom: 5px;
+    }
+
+    .res-bar .rb-fill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .res-bar .rb-legend {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Subjects grid */
+    .subj-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .subj-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-size: 12.5px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .subj-item::before {
+      content: "✓";
+      color: var(--accent3);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ULB list */
+    .ulb-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #1e2135;
+      font-size: 13px;
+    }
+
+    .ulb-item:last-child {
+      border-bottom: none;
+    }
+
+    .ulb-item .ui-num {
+      width: 24px;
+      height: 24px;
+      background: #2a2200;
+      border: 1px solid var(--gold2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .ulb-item .ui-name {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 100px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 10px;
+      text-align: center;
+    }
+
+    .stat-box .st-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .st-label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: auto;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ==== RESPONSIVE DESIGN FOR MOBILE ==== */
+    @media (max-width: 600px) {
+
+      .tier-grid,
+      .muni-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .subj-grid {
+        grid-template-columns: 1fr;
+      }
+
+      /* Responsive Tabs */
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      .data-table th,
+      .data-table td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div class="subject-tag">Polity · Chapter 19</div>
+    <h1>🌿 Local Self-Government</h1>
+    <div class="meta">73rd &amp; 74th Amendment · PRIs · Municipalities · BPSC / BSSC Mind Map</div>
+    <div class="badge-row">
+      <span class="badge">State List Subject</span>
+      <span class="badge">73rd Amendment (1992)</span>
+      <span class="badge">74th Amendment (1992)</span>
+      <span class="badge">11th Schedule (29)</span>
+      <span class="badge">12th Schedule (18)</span>
+      <span class="badge">Lord Ripon 1882</span>
+    </div>
+  </div>
+
+  <nav class="tab-nav">
+    <div class="tab active" onclick="switchTab('overview')">📌 Overview</div>
+    <div class="tab" onclick="switchTab('committees')">📋 Committees</div>
+    <div class="tab" onclick="switchTab('73rd')">🌿 73rd Amendment</div>
+    <div class="tab" onclick="switchTab('panchayat')">🏘️ Panchayat</div>
+    <div class="tab" onclick="switchTab('74th')">🏙️ 74th Amendment</div>
+    <div class="tab" onclick="switchTab('municipalities')">🏛️ Municipalities</div>
+    <div class="tab" onclick="switchTab('pesa')">📜 PESA & Others</div>
+    <div class="tab" onclick="switchTab('articles')">📋 Key Articles</div>
+  </nav>
+
+  <!-- ═══ TAB 1: OVERVIEW ═══ -->
+  <div id="overview" class="tab-content active">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header green">📖 General Introduction</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Subject of <strong>State List</strong></li>
+            <li>Aim → <strong>Decentralization of Power</strong> at grassroots level</li>
+            <li>Two main institutions:
+              <span class="sub">✦ <b>Panchayati Raj Institutions (PRIs)</b> — Rural</span>
+              <span class="sub">✦ <b>Municipalities</b> — Urban</span>
+            </li>
+          </ul>
+          <div
+            style="background:#2a2200;border:2px solid var(--gold);border-radius:10px;padding:14px;margin-top:14px;text-align:center;">
+            <div
+              style="font-size:10.5px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px;">
+              Father of Local Self-Government</div>
+            <div style="font-size:22px;font-weight:800;color:var(--gold);">Lord Ripon</div>
+            <div style="font-size:12px;color:var(--accent3);margin-top:4px;">Resolution of 1882 → "Magna Carta of
+              Self-Government"</div>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Lord Ripon's Resolution of 1882</strong> — called "Magna Carta of Local Self-Government."
+              Panchayati Raj actually started — <strong>2nd October 1959</strong> in Nagaur, Rajasthan by Jawaharlal
+              Nehru. Dono dates alag hain!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">📅 Key Historical Timeline</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>1882</strong> → Lord Ripon's Resolution — Magna Carta</li>
+            <li><strong>1952</strong> → Community Development Scheme started</li>
+            <li><strong>1953</strong> → National Extension Service Scheme</li>
+            <li><strong>1957</strong> → Balwant Rai Mehta Committee</li>
+            <li><strong>1959 (Oct 2)</strong> → Panchayati Raj launched — Nagaur, Rajasthan
+              <span class="sub">Launched by <b>Jawaharlal Nehru</b> · Simultaneously in AP too</span>
+            </li>
+            <li><strong>1992</strong> → 73rd &amp; 74th Constitutional Amendments passed</li>
+            <li><strong>1993 (Apr 24)</strong> → 73rd Amendment effective — <em>Panchayati Raj Diwas</em></li>
+            <li><strong>1993 (Jun 1)</strong> → 74th Amendment effective</li>
+            <li><strong>2010</strong> → Panchayati Raj Diwas celebrations began</li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — For BPSC</div>
+            <p>Bihar was the <strong>first state to implement 50% women reservation</strong> in Panchayats (2006). This
+              was later adopted by 21 other states. Bihar pioneered women's political empowerment at grassroots!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 2: COMMITTEES ═══ -->
+  <div id="committees" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header gold">📋 Committees Related to Panchayati Raj</div>
+        <div class="card-body">
+          <div class="comm-card">
+            <div class="cc-year">1957 · ⭐ MOST IMPORTANT</div>
+            <div class="cc-name">Balwant Rai Mehta Committee</div>
+            <ul class="cc-items">
+              <li><strong>Architect of Panchayati Raj System</strong></li>
+              <li>Proposed democratic decentralization</li>
+              <li>Recommended <strong>3-Tier System</strong>:
+                Village Panchayat (Village) · Kshetra Panchayat (Block) · District Panchayat (District)</li>
+            </ul>
+          </div>
+          <div class="comm-card" style="border-left-color:var(--accent2);">
+            <div class="cc-year" style="color:var(--accent2);">1977–78</div>
+            <div class="cc-name">Ashok Mehta Committee</div>
+            <ul class="cc-items">
+              <li>Recommended <strong>2-Tier Structure</strong></li>
+              <li><strong>Mandala Panchayat</strong> — for 15,000–20,000 population</li>
+              <li><strong>District Councils</strong> at district level</li>
+            </ul>
+          </div>
+          <div class="comm-card" style="border-left-color:var(--accent4);">
+            <div class="cc-year" style="color:var(--accent4);">1986</div>
+            <div class="cc-name">L.M. Singhvi Committee</div>
+            <ul class="cc-items">
+              <li>Recommended <strong>Constitutional Status</strong> to Panchayati Raj</li>
+              <li>Recommended setting up <strong>Nyaya Panchayats</strong></li>
+            </ul>
+          </div>
+          <div class="comm-card" style="border-left-color:var(--accent5);">
+            <div class="cc-year" style="color:var(--accent5);">1988–89</div>
+            <div class="cc-name">P.K. Thungan Committee</div>
+            <ul class="cc-items">
+              <li>Timely elections to Panchayats</li>
+              <li>Fixed tenure of <strong>5 years</strong></li>
+            </ul>
+          </div>
+          <div class="comm-card" style="border-left-color:var(--accent6);">
+            <div class="cc-year" style="color:var(--accent6);">1988</div>
+            <div class="cc-name">V.N. Gadgil Committee</div>
+            <ul class="cc-items">
+              <li>Recommended <strong>direct election to all three tiers</strong></li>
+            </ul>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap — Balwant Rai vs Ashok Mehta</div>
+            <p><strong>Balwant Rai Mehta (1957)</strong> = 3-tier system (implemented). <strong>Ashok Mehta
+                (1977)</strong> = 2-tier system (NOT implemented). L.M. Singhvi (1986) ne Constitutional Status
+              recommend kiya — jo 73rd Amendment se mila. Sequence yaad karo!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 3: 73RD AMENDMENT ═══ -->
+  <div id="73rd" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header green">🌿 73rd Constitutional Amendment Act, 1992</div>
+        <div class="card-body">
+          <div class="amend-box am73">
+            <div class="amb-num">73rd</div>
+            <div class="amb-title">Panchayati Raj — Constitutional Status</div>
+            <div class="amb-details">
+              PM: <b>P.V. Narasimha Rao</b> · Effective: <b>24th April, 1993</b><br>
+              Part: <b>Part IX</b> · Articles: <b>243–243O</b><br>
+              Schedule: <b>11th Schedule</b> added with <b>29 subjects</b>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li><strong>Gram Sabha</strong> → Art. 243(A) — all registered voters in village</li>
+            <li>3-tier Panchayat → Art. 243(B)</li>
+            <li>Term → <strong>5 years</strong> · Min. age → <em>21 years</em></li>
+            <li>Reservation → SC/ST proportional + <em>1/3rd for women</em></li>
+            <li>State Finance Commission → every <em>5 years</em></li>
+            <li>State Election Commission → elections conducted by <em>SEC</em></li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>73rd Amendment ki effective date = <strong>24 April 1993</strong> (Panchayati Raj Diwas). 74th Amendment
+              = <strong>1 June 1993</strong>. Dono 1992 mein pass, 1993 mein effective. Min. age for Panchayat =
+              <strong>21 years</strong> (Parliament ke liye 25/30 — alag hai!).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header orange">📋 11th Schedule — 29 Subjects</div>
+        <div class="card-body">
+          <div
+            style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">
+            Key Subjects (Panchayats)</div>
+          <div class="subj-grid">
+            <div class="subj-item">Agriculture &amp; Allied Extension</div>
+            <div class="subj-item">Animal Husbandry &amp; Dairy</div>
+            <div class="subj-item">Adult &amp; Non-Formal Education</div>
+            <div class="subj-item">Drinking Water</div>
+            <div class="subj-item">Poverty Alleviation</div>
+            <div class="subj-item">Family Welfare</div>
+            <div class="subj-item">Market &amp; Fair</div>
+            <div class="subj-item">Minor Forest Produce</div>
+            <div class="subj-item">Public Distribution System</div>
+            <div class="subj-item">Land Reform</div>
+            <div class="subj-item">Rural Roads &amp; Bridges</div>
+            <div class="subj-item">Social Forestry</div>
+          </div>
+          <div class="quick-recall" style="margin-top:12px;">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>11th Schedule</strong> = Panchayats (73rd Amendment) = 29 subjects. <strong>12th
+                Schedule</strong> = Municipalities (74th Amendment) = 18 subjects. Numbers must be remembered — 29 aur
+              18.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 4: PANCHAYAT DETAILS ═══ -->
+  <div id="panchayat" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header green">🏘️ 3-Tier Panchayat Structure</div>
+        <div class="card-body">
+          <div class="tier-grid">
+            <div class="tier-box village">
+              <div class="tb-label">Tier 1</div>
+              <div class="tb-name">Gram Panchayat</div>
+              <div class="tb-level">Village Level</div>
+              <div class="tb-elect">Direct Election</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px;">Mukhiya / Sarpanch</div>
+            </div>
+            <div class="tier-box block">
+              <div class="tb-label">Tier 2</div>
+              <div class="tb-name">Panchayat Samiti</div>
+              <div class="tb-level">Block Level</div>
+              <div class="tb-elect">Indirect Election</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px;">Chairman / Block Pramukh</div>
+            </div>
+            <div class="tier-box district">
+              <div class="tb-label">Tier 3</div>
+              <div class="tb-name">Zila Panchayat</div>
+              <div class="tb-level">District Level</div>
+              <div class="tb-elect">Indirect Election</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px;">Chairperson / Adhyaksha</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li>States &lt; <strong>20 lakh population</strong> → No need to form Kshetra Panchayat (middle tier)</li>
+            <li><strong>West Bengal</strong> → 4-tier Panchayati Raj system (special case)</li>
+            <li><strong>Meghalaya, Mizoram, Nagaland</strong> → No Panchayats → Tribal Councils exist</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Gram Panchayat = <strong>Direct Election</strong>. Block/District = <strong>Indirect Election</strong>.
+              V.N. Gadgil Committee ne direct election to all 3 tiers recommend kiya tha, but sirf Gram Panchayat ke
+              liye direct election adopted hua.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">👩 Reservation in Panchayats</div>
+        <div class="card-body">
+          <div class="res-bar">
+            <div class="rb-label">Minimum Reservation — Women</div>
+            <div class="rb-track">
+              <div class="rb-fill" style="width:33%;background:var(--accent4);">1/3rd Women</div>
+              <div class="rb-fill" style="width:67%;background:#1e2135;color:var(--muted);">Open / Other</div>
+            </div>
+            <div class="rb-legend">Minimum 1/3rd seats reserved for women (all categories combined)</div>
+          </div>
+          <div class="res-bar">
+            <div class="rb-label">Bihar + 21 States — Enhanced Women Reservation</div>
+            <div class="rb-track">
+              <div class="rb-fill" style="width:50%;background:var(--accent3);">50% Women</div>
+              <div class="rb-fill" style="width:50%;background:#1e2135;color:var(--muted);">Open</div>
+            </div>
+            <div class="rb-legend">Central Govt. allowed 50% in 2009 · <strong>1st implemented: Bihar</strong></div>
+          </div>
+          <ul class="arrow-list" style="margin-top:10px;">
+            <li>SC/ST reservation → <strong>Proportional to population</strong></li>
+            <li>1/3rd for women → including <em>1/3rd of SC/ST seats</em> also for women</li>
+            <li>Reservation of seats based on <strong>rotation</strong></li>
+            <li>Panchayat Presidents → same reservation norms apply</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Constitution mein minimum <strong>1/3rd</strong> women reservation hai. Lekin 2009 mein Centre ne
+              <strong>50%</strong> ki permission di. <strong>Bihar ne pehle implement kiya</strong> — BPSC ke liye
+              must-know! Abhi 21+ states mein 50% hai.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header teal">📋 Key Provisions — Art. Numbers</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th>Provision</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="art">243(A)</td>
+                  <td>Gram Sabha — all registered voters</td>
+                </tr>
+                <tr>
+                  <td class="art">243(B)</td>
+                  <td>Formation of 3-tier Panchayats</td>
+                </tr>
+                <tr>
+                  <td class="art">243(C)</td>
+                  <td>Composition of Panchayats</td>
+                </tr>
+                <tr>
+                  <td class="art">243(D)</td>
+                  <td>Reservation (SC/ST + 1/3rd women)</td>
+                </tr>
+                <tr>
+                  <td class="art">243(E)</td>
+                  <td>Term — 5 years</td>
+                </tr>
+                <tr>
+                  <td class="art">243(G)</td>
+                  <td>Powers &amp; functions of Panchayats</td>
+                </tr>
+                <tr>
+                  <td class="art">243(H)</td>
+                  <td>Financial provisions — tax, tolls, fees</td>
+                </tr>
+                <tr>
+                  <td class="art">243(I)</td>
+                  <td>State Finance Commission — every 5 years</td>
+                </tr>
+                <tr>
+                  <td class="art">243(J)</td>
+                  <td>Audit of Panchayat accounts</td>
+                </tr>
+                <tr>
+                  <td class="art">243(K)</td>
+                  <td>State Election Commission — conducts elections</td>
+                </tr>
+                <tr>
+                  <td class="art">243(L)</td>
+                  <td>Applicable to Union Territories</td>
+                </tr>
+                <tr>
+                  <td class="art">243(M)</td>
+                  <td>Does not apply to certain areas</td>
+                </tr>
+                <tr>
+                  <td class="art">243(O)</td>
+                  <td>Restricts courts from intervening in elections</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 5: 74TH AMENDMENT ═══ -->
+  <div id="74th" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header blue">🏙️ 74th Constitutional Amendment Act, 1992</div>
+        <div class="card-body">
+          <div class="amend-box am74">
+            <div class="amb-num">74th</div>
+            <div class="amb-title">Municipalities — Constitutional Status</div>
+            <div class="amb-details">
+              Effective: <b>1st June, 1993</b><br>
+              Part: <b>Part IXA</b> · Articles: <b>243P–243ZG</b><br>
+              Schedule: <b>12th Schedule</b> added with <b>18 subjects</b>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li><strong>1st Municipal Corporation</strong> → Established in <em>Madras, 1687</em>
+              <span class="sub">Later via <b>Charter Act of 1793</b> — Bombay, Calcutta, Madras</span>
+            </li>
+            <li>Ward Committees → Areas with population <em>over 3 lakh</em> <span class="art-pill">Art 243(S)</span>
+            </li>
+            <li>District Planning Committees → <span class="art-pill">Art 243ZD</span></li>
+            <li>Metropolitan Planning Committees → <span class="art-pill">Art 243ZE</span> — 10 lakh+ population</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>1st Municipal Corporation = Madras (1687)</strong> — oldest. <strong>12th Schedule = 18
+                subjects</strong> for Municipalities. Metropolitan Planning Committee = areas with <strong>10 lakh (1
+                million)+</strong> population.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header orange">🏙️ Types of Municipalities</div>
+        <div class="card-body">
+          <div class="muni-grid">
+            <div class="muni-box lower">
+              <div class="mb-type">Lower Level</div>
+              <div class="mb-name">Nagar Panchayat</div>
+              <div class="mb-pop">Population<br>10,000 – 20,000</div>
+            </div>
+            <div class="muni-box middle">
+              <div class="mb-type">Middle Level</div>
+              <div class="mb-name">Municipal Council</div>
+              <div class="mb-pop">Population<br>20,000 – 3 Lakh</div>
+            </div>
+            <div class="muni-box top">
+              <div class="mb-type">Top Level</div>
+              <div class="mb-name">Municipal Corporation</div>
+              <div class="mb-pop">Population<br>Above 3 Lakh</div>
+            </div>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap — Population Ranges</div>
+            <p>Nagar Panchayat = <strong>10K–20K</strong> · Municipal Council = <strong>20K–3L</strong> · Municipal
+              Corporation = <strong>3L+</strong>. Ye ranges exam mein directly pooche jaate hain. Ward Committee =
+              <strong>3L+ areas</strong> mein mandatory!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 6: MUNICIPALITIES DETAILS ═══ -->
+  <div id="municipalities" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header blue">🏛️ 8 Types of Urban Local Bodies (ULBs)</div>
+        <div class="card-body">
+          <div class="ulb-item">
+            <div class="ui-num">1</div>
+            <div class="ui-name">Municipal Corporations</div>
+          </div>
+          <div class="ulb-item">
+            <div class="ui-num">2</div>
+            <div class="ui-name">Municipal Councils</div>
+          </div>
+          <div class="ulb-item">
+            <div class="ui-num">3</div>
+            <div class="ui-name">Cantonment Boards</div>
+          </div>
+          <div class="ulb-item">
+            <div class="ui-num">4</div>
+            <div class="ui-name">Town Area Committee</div>
+          </div>
+          <div class="ulb-item">
+            <div class="ui-num">5</div>
+            <div class="ui-name">Special Purpose Agencies</div>
+          </div>
+          <div class="ulb-item">
+            <div class="ui-num">6</div>
+            <div class="ui-name">Port Trusts</div>
+          </div>
+          <div class="ulb-item">
+            <div class="ui-num">7</div>
+            <div class="ui-name">Townships</div>
+          </div>
+          <div class="ulb-item">
+            <div class="ui-num">8</div>
+            <div class="ui-name">Notified Area Councils</div>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Cantonment Boards</strong> — military areas ke liye hote hain. Under Ministry of Defence. These
+              are NOT under 74th Amendment — they have separate legislation.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header teal">📋 12th Schedule — 18 Subjects (Municipalities)</div>
+        <div class="card-body">
+          <div class="subj-grid">
+            <div class="subj-item">Urban Planning</div>
+            <div class="subj-item">Regulation of Land Use</div>
+            <div class="subj-item">Planning for Economic Dev.</div>
+            <div class="subj-item">Roads &amp; Bridges</div>
+            <div class="subj-item">Water Supply</div>
+            <div class="subj-item">Public Health</div>
+            <div class="subj-item">Slum Improvement</div>
+            <div class="subj-item">Urban Forestry</div>
+            <div class="subj-item">Protection of Environment</div>
+            <div class="subj-item">Burial Grounds</div>
+            <div class="subj-item">Cattle Pounds</div>
+            <div class="subj-item">Fire Services</div>
+            <div class="subj-item">Public Amenities</div>
+            <div class="subj-item">Regulation of Slaughterhouses</div>
+            <div class="subj-item">Vital Statistics</div>
+            <div class="subj-item">Poverty Alleviation</div>
+            <div class="subj-item">Safeguarding Weaker Sections</div>
+            <div class="subj-item">Socio-Economic Development</div>
+          </div>
+          <div class="quick-recall" style="margin-top:12px;">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>11th Schedule (Panchayats)</strong> = <strong>29 subjects</strong>. <strong>12th Schedule
+                (Municipalities)</strong> = <strong>18 subjects</strong>. Total new subjects added via these two
+              amendments = 47. Ye numbers guaranteed exam question!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 7: PESA & OTHERS ═══ -->
+  <div id="pesa" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header orange">📜 PESA Act, 1996</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Full Name</strong>: Panchayats (Extension to Scheduled Areas) Act, 1996</li>
+            <li>Area under <strong>5th Schedule</strong> (Tribal areas)</li>
+            <li>Recommended by <strong>Bhuria Commission</strong></li>
+            <li>Presently implemented in <em>10 States</em></li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>PESA (1996)</strong> extended Panchayat system to Scheduled (tribal) areas under 5th Schedule.
+              These areas were excluded from 73rd Amendment's automatic coverage. 6th Schedule areas (NE states) have
+              different tribal governance arrangements.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">⚖️ Nyaya Panchayats</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>For <strong>villagers</strong> — village-level justice</li>
+            <li>Handles both <strong>Civil + Criminal</strong> cases</li>
+            <li>Punishment &amp; fine → <em>₹50 to ₹1,000</em></li>
+            <li>Recommended by <strong>L.M. Singhvi Committee (1986)</strong></li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Nyaya Panchayat = Singhvi Committee (1986) ne recommend kiya. Gram Nyayalaya (Village Court) = Separate
+              law — Gram Nyayalayas Act, 2008. Dono alag hain — Nyaya Panchayat (informal) vs Gram Nyayalaya (formal
+              court under act).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header teal">🤝 Cooperative Societies</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>97th Constitutional Amendment Act, 2011</strong></li>
+            <li>Added <strong>Part IX(B)</strong> · Articles <em>243(ZH)–243(ZT)</em></li>
+            <li>Gave <strong>Constitutional Status</strong> to Cooperative Societies</li>
+            <li>Connected to <strong>Fundamental Right</strong> → Art. 19(c) — Right to form associations</li>
+            <li>Also added Art. <strong>43B</strong> to DPSP (Gandhian principle)</li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>97th Amendment (2011)</strong> — trifecta: (1) FR mein right to form cooperatives added, (2) DPSP
+              mein Art. 43B added, (3) Part IX(B) add karke Constitutional status diya. Teen changes ek amendment mein!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 8: KEY ARTICLES ═══ -->
+  <div id="articles" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header gold">📋 Key Articles — Local Self-Government</div>
+        <div class="card-body">
+          <div
+            style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--accent3);margin-bottom:8px;font-weight:700;">
+            73rd Amendment — Panchayats (Part IX)</div>
+          <div class="tw">
+            <table class="data-table" style="margin-bottom:16px;">
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th>Subject</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="art">243</td>
+                  <td>Definitions</td>
+                </tr>
+                <tr>
+                  <td class="art">243(A)</td>
+                  <td>Gram Sabha</td>
+                </tr>
+                <tr>
+                  <td class="art">243(B)</td>
+                  <td>Constitution of 3-tier Panchayats</td>
+                </tr>
+                <tr>
+                  <td class="art">243(C)</td>
+                  <td>Composition of Panchayats</td>
+                </tr>
+                <tr>
+                  <td class="art">243(D)</td>
+                  <td>Reservation of seats (SC/ST + Women)</td>
+                </tr>
+                <tr>
+                  <td class="art">243(E)</td>
+                  <td>Duration — 5 years</td>
+                </tr>
+                <tr>
+                  <td class="art">243(G)</td>
+                  <td>Powers, authority, responsibilities</td>
+                </tr>
+                <tr>
+                  <td class="art">243(H)</td>
+                  <td>Taxes, duties, tolls, fees</td>
+                </tr>
+                <tr>
+                  <td class="art">243(I)</td>
+                  <td>State Finance Commission (every 5 years)</td>
+                </tr>
+                <tr>
+                  <td class="art">243(J)</td>
+                  <td>Audit of Panchayat accounts</td>
+                </tr>
+                <tr>
+                  <td class="art">243(K)</td>
+                  <td>State Election Commission — conducts elections</td>
+                </tr>
+                <tr>
+                  <td class="art">243(L)</td>
+                  <td>Applicable to Union Territories</td>
+                </tr>
+                <tr>
+                  <td class="art">243(M)</td>
+                  <td>Does not apply to certain areas</td>
+                </tr>
+                <tr>
+                  <td class="art">243(O)</td>
+                  <td>Restricts courts from intervening in elections</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--accent2);margin-bottom:8px;font-weight:700;">
+            74th Amendment — Municipalities (Part IXA)</div>
+          <div class="tw">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th>Subject</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="art">243(P)</td>
+                  <td>Definitions</td>
+                </tr>
+                <tr>
+                  <td class="art">243(S)</td>
+                  <td>Ward Committees (3L+ population areas)</td>
+                </tr>
+                <tr>
+                  <td class="art">243(ZD)</td>
+                  <td>District Planning Committees</td>
+                </tr>
+                <tr>
+                  <td class="art">243(ZE)</td>
+                  <td>Metropolitan Planning Committees (10L+ population)</td>
+                </tr>
+                <tr>
+                  <td class="art">243(ZG)</td>
+                  <td>Bar to court interference in elections</td>
+                </tr>
+                <tr>
+                  <td class="art">243(ZH-ZT)</td>
+                  <td>Cooperative Societies (97th Amendment)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="quick-recall" style="margin-top:12px;">
+            <div class="recall-title">💡 Quick Recall — Amendment Summary</div>
+            <p><strong>73rd Amend.</strong> → Panchayats · Part IX · Art. 243–243O · 11th Schedule (29 subjects) ·
+              Effective 24 Apr 1993 · <strong>74th Amend.</strong> → Municipalities · Part IXA · Art. 243P–243ZG · 12th
+              Schedule (18 subjects) · Effective 1 Jun 1993</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com &nbsp;·&nbsp; Polity Ch 19 — Local Self-Government &nbsp;·&nbsp;
+    BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

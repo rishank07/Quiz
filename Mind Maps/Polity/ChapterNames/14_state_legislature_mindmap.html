@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 14 – State Legislature | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --gold2: #e0a800;
+      --text: #e8eaf6;
+      --muted: #9095b0;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --red-border: #e74c3c;
+      --blue-border: #3498db;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12152a, #1e2240);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 30px 16px;
+      text-align: center;
+    }
+
+    .page-header .subject-tag {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .page-header .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 13px;
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .tab-nav {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+      padding: 0 16px;
+      flex-shrink: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      height: 3px;
+      display: none;
+    }
+
+    .tab-nav::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .tab {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      user-select: none;
+      margin-bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      background: transparent;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 24px 20px;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content-grid.single {
+      grid-template-columns: 1fr;
+      max-width: 900px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1500);
+      color: var(--gold);
+      border-bottom: 1px solid #3a3000;
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2318, #061510);
+      color: var(--accent3);
+      border-bottom: 1px solid #0d3020;
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #09192e, #060f1e);
+      color: var(--accent2);
+      border-bottom: 1px solid #0e2444;
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #1a0d28, #11071a);
+      color: var(--accent4);
+      border-bottom: 1px solid #2a1540;
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #251500, #180d00);
+      color: var(--accent5);
+      border-bottom: 1px solid #3a2000;
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #250a0a, #160404);
+      color: var(--accent1);
+      border-bottom: 1px solid #3a1010;
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #091e1a, #060f0e);
+      color: var(--accent6);
+      border-bottom: 1px solid #0e2e28;
+    }
+
+    ul.arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.arrow-list li {
+      padding: 5px 0 5px 20px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+      font-size: 13.5px;
+    }
+
+    ul.arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    ul.arrow-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 6px;
+    }
+
+    ul.arrow-list li .sub {
+      display: block;
+      margin-top: 3px;
+      font-size: 12.5px;
+      color: var(--muted);
+      padding-left: 10px;
+      border-left: 2px solid var(--border);
+    }
+
+    ul.arrow-list li .sub b {
+      color: var(--accent2);
+    }
+
+    ul.arrow-list li strong {
+      color: var(--gold);
+    }
+
+    ul.arrow-list li em {
+      color: var(--accent3);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--red-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .exam-trap .trap-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+    }
+
+    .exam-trap p {
+      color: #d0b0b0;
+      line-height: 1.6;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--blue-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .quick-recall .recall-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+    }
+
+    .quick-recall p {
+      color: #a8c8e8;
+      line-height: 1.6;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    .data-table,
+    .priv-table,
+    .exc-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .data-table th,
+    .priv-table th,
+    .exc-table th {
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+    }
+
+    .data-table th,
+    .exc-table th {
+      background: #2a2200;
+      color: var(--gold);
+      text-align: left;
+      border-bottom: 2px solid var(--gold2);
+    }
+
+    .priv-table th {
+      text-align: center;
+    }
+
+    .priv-table th.col-c {
+      background: #09192e;
+      color: var(--accent2);
+      border-bottom: 2px solid var(--accent2);
+    }
+
+    .priv-table th.col-i {
+      background: #0a2318;
+      color: var(--accent3);
+      border-bottom: 2px solid var(--accent3);
+    }
+
+    .data-table td,
+    .priv-table td,
+    .exc-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1e2135;
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    .data-table tr:last-child td,
+    .priv-table tr:last-child td,
+    .exc-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td,
+    .priv-table tr:hover td,
+    .exc-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    .data-table .art {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .data-table .num {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .exc-table .sname {
+      font-weight: 700;
+      color: var(--accent3);
+    }
+
+    .exc-table .snum {
+      color: var(--gold);
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .exc-table th:nth-child(2) {
+      text-align: center;
+    }
+
+    .priv-table .cv {
+      color: var(--accent2);
+    }
+
+    .priv-table .iv {
+      color: var(--accent3);
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: #0e1a30;
+      border: 1px solid #1e3a60;
+      color: var(--accent2);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-right: 3px;
+    }
+
+    /* House compare */
+    .house-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .house-box {
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .house-box.vs {
+      background: #0a2318;
+      border: 1px solid #0d3020;
+    }
+
+    .house-box.vp {
+      background: #09192e;
+      border: 1px solid #0e2444;
+    }
+
+    .house-box .hb-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .house-box.vs .hb-title {
+      color: var(--accent3);
+    }
+
+    .house-box.vp .hb-title {
+      color: var(--accent2);
+    }
+
+    .house-box .hb-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid #1e2135;
+      font-size: 12.5px;
+    }
+
+    .house-box .hb-row:last-child {
+      border-bottom: none;
+    }
+
+    .house-box .hb-label {
+      color: var(--muted);
+    }
+
+    .house-box .hb-val {
+      font-weight: 700;
+    }
+
+    .house-box.vs .hb-val {
+      color: var(--accent3);
+    }
+
+    .house-box.vp .hb-val {
+      color: var(--accent2);
+    }
+
+    /* Stat boxes */
+    .stat-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 100px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 10px;
+      text-align: center;
+    }
+
+    .stat-box .st-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .st-label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Election fraction cards */
+    .fraction-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .fraction-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .fraction-card .fc-frac {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gold);
+      min-width: 52px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .fraction-card .fc-label {
+      font-size: 13.5px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .fraction-card .fc-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Bills compare */
+    .bill-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .bill-box {
+      border-radius: 8px;
+      padding: 13px 14px;
+    }
+
+    .bill-box.ordinary {
+      background: #0a2318;
+      border: 1px solid #0d3020;
+    }
+
+    .bill-box.money {
+      background: #2a2200;
+      border: 1px solid #3a3000;
+    }
+
+    .bill-box .bb-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 9px;
+    }
+
+    .bill-box.ordinary .bb-title {
+      color: var(--accent3);
+    }
+
+    .bill-box.money .bb-title {
+      color: var(--gold);
+    }
+
+    .bill-box ul {
+      list-style: none;
+    }
+
+    .bill-box ul li {
+      padding: 4px 0 4px 16px;
+      position: relative;
+      font-size: 13px;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+    }
+
+    .bill-box ul li:last-child {
+      border-bottom: none;
+    }
+
+    .bill-box ul li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+      font-size: 11px;
+      top: 5px;
+    }
+
+    .bill-box ul li strong {
+      color: var(--gold);
+    }
+
+    /* States with LC */
+    .state-pill {
+      display: inline-block;
+      background: #09192e;
+      border: 1px solid #1e3a60;
+      color: var(--accent2);
+      border-radius: 5px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 3px;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: auto;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ==== RESPONSIVE DESIGN FOR MOBILE ==== */
+    @media (max-width: 600px) {
+
+      .house-compare,
+      .bill-compare {
+        grid-template-columns: 1fr;
+      }
+
+      /* Responsive Tabs */
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      .data-table th,
+      .data-table td,
+      .priv-table th,
+      .priv-table td,
+      .exc-table th,
+      .exc-table td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div class="subject-tag">Polity · Chapter 14</div>
+    <h1>🏛️ State Legislature</h1>
+    <div class="meta">Part VI · Articles 168–212 · Vidhan Sabha &amp; Vidhan Parishad · BPSC / BSSC Mind Map</div>
+    <div class="badge-row">
+      <span class="badge">Part VI</span>
+      <span class="badge">Art. 168–212</span>
+      <span class="badge">Vidhan Sabha</span>
+      <span class="badge">Vidhan Parishad</span>
+      <span class="badge">6 Bicameral States</span>
+    </div>
+  </div>
+
+  <nav class="tab-nav">
+    <div class="tab active" onclick="switchTab('overview')">📌 Overview</div>
+    <div class="tab" onclick="switchTab('vidhansabha')">🟢 Vidhan Sabha</div>
+    <div class="tab" onclick="switchTab('vidhanparishad')">🔵 Vidhan Parishad</div>
+    <div class="tab" onclick="switchTab('speaker')">🎙️ Presiding Officers</div>
+    <div class="tab" onclick="switchTab('bills')">📜 Bills</div>
+    <div class="tab" onclick="switchTab('privileges')">🛡️ Privileges</div>
+    <div class="tab" onclick="switchTab('sessions')">📅 Sessions</div>
+    <div class="tab" onclick="switchTab('articles')">📋 Key Articles</div>
+  </nav>
+
+  <!-- ═══ TAB 1: OVERVIEW ═══ -->
+  <div id="overview" class="tab-content active">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header gold">📖 Structure of State Legislature</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Part VI</strong> · <em>Articles 168–212</em></li>
+            <li>Components → <strong>Governor + State Legislature</strong></li>
+          </ul>
+          <div style="margin: 14px 0;">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">
+              Two Types of State Legislatures</div>
+            <div
+              style="background:#09192e;border:1px solid #0e2444;border-radius:8px;padding:12px 14px;margin-bottom:8px;">
+              <div style="color:var(--accent2);font-weight:700;font-size:13px;margin-bottom:6px;">🔵 UNICAMERAL (Single
+                House)</div>
+              <div style="font-size:13px;color:var(--text);">Only <strong style="color:var(--gold);">Vidhan
+                  Sabha</strong> (Legislative Assembly)</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">22 States + 3 UTs (Delhi, Puducherry,
+                J&amp;K)</div>
+            </div>
+            <div style="background:#0a2318;border:1px solid #0d3020;border-radius:8px;padding:12px 14px;">
+              <div style="color:var(--accent3);font-weight:700;font-size:13px;margin-bottom:6px;">🟢 BICAMERAL (Two
+                Houses)</div>
+              <div style="font-size:13px;color:var(--text);">Vidhan Sabha + <strong style="color:var(--gold);">Vidhan
+                  Parishad</strong></div>
+              <div style="margin-top:8px;">
+                <span class="state-pill">Karnataka</span>
+                <span class="state-pill">Bihar</span>
+                <span class="state-pill">Uttar Pradesh</span>
+                <span class="state-pill">Maharashtra</span>
+                <span class="state-pill">Andhra Pradesh</span>
+                <span class="state-pill">Telangana</span>
+              </div>
+            </div>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Sirf <strong>6 states</strong> mein Vidhan Parishad (Legislative Council) hai. Baaki sab unicameral hain.
+              <strong>Bihar mein Vidhan Parishad hai</strong> — BPSC ke liye must-know! J&amp;K, Delhi, Puducherry UTs
+              hain lekin unke paas Vidhan Sabha hai.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue">⚖️ Vidhan Sabha vs Vidhan Parishad — Quick Compare</div>
+        <div class="card-body">
+          <div class="house-compare">
+            <div class="house-box vs">
+              <div class="hb-title">🟢 Vidhan Sabha</div>
+              <div class="hb-row"><span class="hb-label">Type</span><span class="hb-val">Lower House</span></div>
+              <div class="hb-row"><span class="hb-label">Min Members</span><span class="hb-val">60</span></div>
+              <div class="hb-row"><span class="hb-label">Max Members</span><span class="hb-val">500</span></div>
+              <div class="hb-row"><span class="hb-label">Term</span><span class="hb-val">5 years</span></div>
+              <div class="hb-row"><span class="hb-label">Min. Age</span><span class="hb-val">25 yrs</span></div>
+              <div class="hb-row"><span class="hb-label">Dissolution</span><span class="hb-val">Possible ✅</span></div>
+            </div>
+            <div class="house-box vp">
+              <div class="hb-title">🔵 Vidhan Parishad</div>
+              <div class="hb-row"><span class="hb-label">Type</span><span class="hb-val">Upper House</span></div>
+              <div class="hb-row"><span class="hb-label">Min Members</span><span class="hb-val">40</span></div>
+              <div class="hb-row"><span class="hb-label">Max Members</span><span class="hb-val">1/3rd of VS</span></div>
+              <div class="hb-row"><span class="hb-label">Term</span><span class="hb-val">6 years</span></div>
+              <div class="hb-row"><span class="hb-label">Min. Age</span><span class="hb-val">30 yrs</span></div>
+              <div class="hb-row"><span class="hb-label">Dissolution</span><span class="hb-val">Permanent ❌</span></div>
+            </div>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — Centre Parallel</div>
+            <p>Vidhan Sabha = Lok Sabha (Lower, elected, can dissolve) · Vidhan Parishad = Rajya Sabha (Upper,
+              permanent, 1/3rd retire every 2 years). Same structure, state level pe!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 2: VIDHAN SABHA ═══ -->
+  <div id="vidhansabha" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header green">🟢 Vidhan Sabha — Key Facts</div>
+        <div class="card-body">
+          <div class="stat-row">
+            <div class="stat-box">
+              <div class="st-val">60</div>
+              <div class="st-label">Min Members</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">500</div>
+              <div class="st-label">Max Members</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">403</div>
+              <div class="st-label">UP (Largest)</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">18</div>
+              <div class="st-label">Voting Age</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li><strong>Members based on State Population</strong></li>
+            <li>Election → <em>Adult Suffrage</em> · Voting age 18 years</li>
+            <li><strong>Tenure</strong> → 5 years (can dissolve earlier)
+              <span class="sub">Extension up to <b>1 year</b> during emergency</span>
+              <span class="sub">Not more than <b>6 months</b> after emergency ends</span>
+            </li>
+            <li>Oath → By <em>Governor</em></li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>1st e-Assembly Constituency</strong> → Palampur, Kangra (Himachal Pradesh). Ye current affairs +
+              polity overlap question hai.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header orange">📊 Special Members &amp; Exceptions</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="exc-table">
+              <thead>
+                <tr>
+                  <th>State</th>
+                  <th>VS Seats</th>
+                  <th>Why Notable</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="sname">Uttar Pradesh</td>
+                  <td class="snum">403</td>
+                  <td style="color:var(--gold);font-weight:700;">Largest Assembly in India</td>
+                </tr>
+                <tr>
+                  <td class="sname">Sikkim</td>
+                  <td class="snum">32</td>
+                  <td style="color:var(--accent1);">Exception — below 60 minimum</td>
+                </tr>
+                <tr>
+                  <td class="sname">Goa</td>
+                  <td class="snum">40</td>
+                  <td style="color:var(--accent1);">Exception — below 60 minimum</td>
+                </tr>
+                <tr>
+                  <td class="sname">Mizoram</td>
+                  <td class="snum">40</td>
+                  <td style="color:var(--accent1);">Exception — below 60 minimum</td>
+                </tr>
+                <tr>
+                  <td class="sname">Bihar</td>
+                  <td class="snum">243</td>
+                  <td style="color:var(--accent3);">Bihar Assembly — BPSC important!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Minimum 60</strong> members rule hai, but Sikkim (32), Goa (40), Mizoram (40) ke liye exception
+              hai. Ye small states hain jahan population kam hai. Exam mein "minimum 60" rule yaad rakhna aur exceptions
+              bhi!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">✅ Qualifications for Membership</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Indian <strong>Citizen</strong></li>
+            <li>Min. Age → <em>25 years</em> (Vidhan Sabha) · <em>30 years</em> (Vidhan Parishad)</li>
+            <li>Must be an elector of relevant <strong>Legislative Assembly Constituency</strong></li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Age difference yaad karo: <strong>VS = 25 years, VP = 30 years</strong>. Same as Centre — Lok Sabha = 25,
+              Rajya Sabha = 30. Lower house mein kam age, upper house mein zyada age.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header teal">⚡ Powers of Legislative Assembly</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Executive Powers</strong> → Controls State Government &amp; Council of Ministers
+              <span class="sub">CoM is responsible to Vidhan Sabha, not Vidhan Parishad</span>
+            </li>
+            <li><strong>Legislative Powers</strong> → Makes laws on:
+              <span class="sub">✦ <b>State List</b> subjects</span>
+              <span class="sub">✦ <b>Concurrent List</b> subjects</span>
+            </li>
+            <li><strong>Election-related Powers</strong>
+              <span class="sub">✦ Election of <b>President</b> (MLAs participate)</span>
+              <span class="sub">✦ Election of <b>Rajya Sabha</b> members (MLAs vote)</span>
+            </li>
+            <li><strong>Financial Powers</strong>
+              <span class="sub">✦ Budget introduced only in <b>Legislative Assembly</b></span>
+              <span class="sub">✦ Without Assembly's approval — no taxes, no money withdrawal</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 3: VIDHAN PARISHAD ═══ -->
+  <div id="vidhanparishad" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header blue">🔵 Vidhan Parishad — Key Facts</div>
+        <div class="card-body">
+          <div class="stat-row">
+            <div class="stat-box">
+              <div class="st-val">40</div>
+              <div class="st-label">Min Members</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">1/3rd</div>
+              <div class="st-label">Max (of VS)</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">6 yrs</div>
+              <div class="st-label">Member Term</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">1/3rd</div>
+              <div class="st-label">Retire/2 yrs</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li><strong>Upper House</strong> of State Legislature</li>
+            <li><strong>Permanent Body</strong> — Not subject to dissolution</li>
+            <li>Creation &amp; Abolition → Power lies with <em>Parliament</em>
+              <span class="sub">Created by <b>Special Majority</b> of Legislative Assembly</span>
+              <span class="sub">Requires <b>Simple Majority</b> in Parliament for the motion</span>
+            </li>
+            <li>Max strength → <strong>Not more than 1/3rd of VS</strong></li>
+            <li>Min strength → <strong>40 members</strong></li>
+            <li>Members serve for <strong>6 years</strong></li>
+            <li><strong>1/3rd retire every 2 years</strong> in rotation</li>
+            <li><strong>104th Amendment</strong> → Anglo-Indian representation abolished (2019)</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Vidhan Parishad <strong>create/abolish</strong> karne ka power Parliament ke paas hai, State Legislature
+              ke paas nahi. Lekin process start Legislative Assembly se hoti hai — <strong>Special Majority mein VS
+                resolution pass karta hai</strong>, phir Parliament Simple Majority se pass karta hai.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">🗳️ Mode of Election to Vidhan Parishad</div>
+        <div class="card-body">
+          <div class="fraction-card">
+            <div class="fc-frac">1/3</div>
+            <div>
+              <div class="fc-label">By Legislative Assembly Members</div>
+              <div class="fc-sub">MLAs vote for these VP members</div>
+            </div>
+          </div>
+          <div class="fraction-card">
+            <div class="fc-frac">1/3</div>
+            <div>
+              <div class="fc-label">By Local Body Members</div>
+              <div class="fc-sub">Municipalities, Panchayats etc.</div>
+            </div>
+          </div>
+          <div class="fraction-card">
+            <div class="fc-frac">1/12</div>
+            <div>
+              <div class="fc-label">By Teachers</div>
+              <div class="fc-sub">Secondary &amp; Higher Secondary Schools (3+ years experience)</div>
+            </div>
+          </div>
+          <div class="fraction-card">
+            <div class="fc-frac">1/12</div>
+            <div>
+              <div class="fc-label">By Graduates</div>
+              <div class="fc-sub">Graduate voters registered for 3+ years</div>
+            </div>
+          </div>
+          <div class="fraction-card">
+            <div class="fc-frac">1/6</div>
+            <div>
+              <div class="fc-label">Nominated by Governor</div>
+              <div class="fc-sub">Literature, Arts, Science &amp; Social Service</div>
+            </div>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — Trick</div>
+            <p>1/3 + 1/3 + 1/12 + 1/12 + 1/6 = <strong>12/12 = 1 (Full)</strong>. Verify: 4/12 + 4/12 + 1/12 + 1/12 +
+              2/12 = 12/12 ✓. Governor ka nominated share = <strong>1/6</strong> (not 12 fixed, it's a fraction).</p>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Rajya Sabha mein President <strong>12 nominate</strong> karta hai (fixed number). Vidhan Parishad mein
+              Governor <strong>1/6th nominate</strong> karta hai (fraction, not fixed). Dono alag hain!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 4: PRESIDING OFFICERS ═══ -->
+  <div id="speaker" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header gold">🎙️ Speaker &amp; Deputy Speaker — Vidhan Sabha</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Elected from <strong>among its own members</strong></li>
+            <li>Tenure → Usually till the <strong>Assembly term</strong></li>
+            <li>Resignation → Speaker resigns to <em>Deputy Speaker</em> · Vice versa</li>
+            <li>Removal → By <strong>Legislative Assembly</strong> · <em>14 days' prior notice</em></li>
+            <li>Speaker Absent → <strong>Deputy Speaker acts as Speaker</strong></li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Speaker removal ke liye <strong>14 days prior notice</strong> — same as Centre. Speaker resigns to
+              <strong>Deputy Speaker</strong> (not Governor). Oath Speaker ko Governor dilwata hai.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue">🪑 Chairman &amp; Deputy Chairman — Vidhan Parishad</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Elected from <strong>among the members</strong> of Vidhan Parishad</li>
+            <li>Chairman presides over meetings</li>
+            <li>If Chairman absent → <strong>Deputy Chairman presides</strong></li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — Centre vs State Parallel</div>
+            <p>Centre: <strong>VP of India = RS Chairman</strong> (not a member). State: <strong>Elected member = VP
+                Chairman</strong>. State level pe VP jaise koi constitutional officer nahi hota — directly members se
+              Chairman elect hota hai.</p>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Rajya Sabha ka Chairman = <strong>Vice President of India</strong> (non-member). Vidhan Parishad ka
+              Chairman = <strong>Elected from among VP members</strong> (member hi hota hai). Ye important difference
+              hai!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header orange">💰 Salary &amp; Allowances</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Salaries &amp; Allowances → Determined by <strong>State Legislature</strong> <span class="art-pill">Art
+                195</span></li>
+            <li>Minimum <strong>2 sessions</strong> must be held every year</li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>Centre mein MPs ki salary Parliament decide karti hai. State mein MLAs/MLCs ki salary State Legislature
+              decide karti hai. Dono apni-apni salary khud decide karte hain!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 5: BILLS ═══ -->
+  <div id="bills" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header gold">📜 Bills in State Legislature</div>
+        <div class="card-body">
+          <div class="bill-compare">
+            <div class="bill-box ordinary">
+              <div class="bb-title">🟢 Ordinary Bills</div>
+              <ul>
+                <li>Can be introduced in <strong>either House</strong> (VS or VP)</li>
+                <li>Final authority rests with <strong>Legislative Assembly</strong></li>
+                <li>VP can delay:
+                  <br>→ <strong>3 months</strong> on 1st instance
+                  <br>→ <strong>1 additional month</strong> on re-passage
+                </li>
+              </ul>
+            </div>
+            <div class="bill-box money">
+              <div class="bb-title">💛 Money Bills</div>
+              <ul>
+                <li>Introduced only in <strong>Legislative Assembly</strong></li>
+                <li>VP can only <strong>withhold for 14 days</strong></li>
+                <li>No amendment power for VP</li>
+                <li>Budget also only in <strong>Legislative Assembly</strong></li>
+              </ul>
+            </div>
+          </div>
+          <div class="exam-trap" style="margin-top:14px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>State mein <strong>NO Joint Sitting</strong> provision — unlike Centre (Art. 108). Ordinary bill mein VP
+              total <strong>4 months delay</strong> kar sakta hai (3+1). Money Bill mein sirf <strong>14 days</strong>.
+              State mein Money Bill decide karta hai — <strong>Speaker of Vidhan Sabha</strong>.</p>
+          </div>
+          <div class="quick-recall" style="margin-top:8px;">
+            <div class="recall-title">💡 Quick Recall — Centre vs State Bills</div>
+            <p>Centre: RS Money Bill delay = <strong>14 days</strong>. State: VP Money Bill delay = <strong>14
+                days</strong> (same!). Centre: Ordinary bill RS = indefinite hold → Joint Sitting. State: VP = max
+              <strong>4 months</strong> (3+1), no joint sitting.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 6: PRIVILEGES ═══ -->
+  <div id="privileges" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header purple">🛡️ Privileges of Members (Art. 194)</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="priv-table">
+              <thead>
+                <tr>
+                  <th class="col-c">🔵 Collective Privileges</th>
+                  <th class="col-i">🟢 Individual Privileges</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="cv">Right to hold <strong>secret sessions</strong></td>
+                  <td class="iv">Immunity from <strong>civil arrest</strong></td>
+                </tr>
+                <tr>
+                  <td class="cv">Authority to <strong>arrest under simple warrant</strong></td>
+                  <td class="iv">Proceedings of House cannot be <strong>challenged in Court</strong></td>
+                </tr>
+                <tr>
+                  <td class="cv">Punishment for <strong>Contempt of House</strong> (Member / Non-Member)</td>
+                  <td class="iv">Freedom from being <strong>summoned as witness</strong></td>
+                </tr>
+                <tr>
+                  <td class="cv">Right to <strong>publish or restrict proceedings</strong></td>
+                  <td class="iv"><strong>Freedom of Speech</strong> in Legislature</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="exam-trap" style="margin-top:14px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Civil arrest se immunity hai — <strong>criminal arrest allowed</strong> hai. Immunity 40 days before
+              session, during session, aur 40 days after session tak. Freedom of Speech in Legislature — Court mein
+              challenge NAHI ho sakta.</p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>Art. <strong>194</strong> = State Legislature privileges. Art. <strong>105</strong> = Parliament
+              privileges. Dono basically same hain — individual aur collective privileges ka same set.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 7: SESSIONS ═══ -->
+  <div id="sessions" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header teal">📅 Sessions of State Legislature</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Minimum <strong>2 sessions</strong> must be held every year</li>
+            <li><strong>Prorogation</strong> → By the <em>Governor</em></li>
+            <li><strong>Adjournment</strong> → By the <em>Presiding Officer</em> (Speaker/Chairman)</li>
+            <li><strong>Dissolution</strong> → By the <em>Governor</em> (Only for Vidhan Sabha)</li>
+          </ul>
+          <div style="margin-top:14px;">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">
+              When can Governor dissolve Vidhan Sabha?</div>
+            <ul class="arrow-list">
+              <li>When <strong>tenure is over</strong> (5 years)</li>
+              <li>Or when government <strong>fails to prove majority</strong> in the House</li>
+            </ul>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Prorogation vs Adjournment</strong> — Prorogation: Governor karta hai (session khatam karna).
+              Adjournment: Presiding Officer karta hai (meeting temporarily rokna). <strong>Dissolution</strong> sirf
+              Vidhan Sabha ki hoti hai — Vidhan Parishad permanent hai, dissolve nahi hoti!</p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>Centre mein: Summoning/Prorogation = President · Adjournment = Speaker. State mein: Prorogation =
+              Governor · Adjournment = Presiding Officer. Same parallel!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 8: KEY ARTICLES ═══ -->
+  <div id="articles" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header gold">📋 Key Articles — State Legislature (Art. 168–212)</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th>Subject</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="art">168</td>
+                  <td>Composition of State Legislature (Governor + Houses)</td>
+                </tr>
+                <tr>
+                  <td class="art">169</td>
+                  <td>Creation / Abolition of Legislative Councils</td>
+                </tr>
+                <tr>
+                  <td class="art">170</td>
+                  <td>Structure of Legislative Assembly (Vidhan Sabha)</td>
+                </tr>
+                <tr>
+                  <td class="art">172</td>
+                  <td>Duration of State Legislatures (5 years for VS)</td>
+                </tr>
+                <tr>
+                  <td class="art">173</td>
+                  <td>Qualifications for Membership</td>
+                </tr>
+                <tr>
+                  <td class="art">178</td>
+                  <td>Speaker &amp; Deputy Speaker of Vidhan Sabha</td>
+                </tr>
+                <tr>
+                  <td class="art">179</td>
+                  <td>Vacancies &amp; Resignation of Speaker</td>
+                </tr>
+                <tr>
+                  <td class="art">182</td>
+                  <td>Chairman &amp; Vice Chairman of Vidhan Parishad</td>
+                </tr>
+                <tr>
+                  <td class="art">191</td>
+                  <td>Disqualifications of Members</td>
+                </tr>
+                <tr>
+                  <td class="art">194</td>
+                  <td>Privileges of State Legislature Members</td>
+                </tr>
+                <tr>
+                  <td class="art">195</td>
+                  <td>Salaries &amp; Allowances (determined by State Legislature)</td>
+                </tr>
+                <tr>
+                  <td class="art">199</td>
+                  <td>Money Bills in State Legislature</td>
+                </tr>
+                <tr>
+                  <td class="art">202</td>
+                  <td>Annual Financial Statement (State Budget)</td>
+                </tr>
+                <tr>
+                  <td class="art">212</td>
+                  <td>Courts not to inquire into proceedings of Legislature</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="quick-recall" style="margin-top:12px;">
+            <div class="recall-title">💡 Quick Recall — +89 Rule Verification</div>
+            <p>Parliament (Art. 79) + 89 = State Legislature (Art. 168) ✓ · Rajya Sabha (Art. 80) + 89 = Vidhan Parishad
+              (Art. 169) ✓ · Lok Sabha (Art. 81) + 89 = Vidhan Sabha (Art. 170) ✓</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com &nbsp;·&nbsp; Polity Ch 14 — State Legislature &nbsp;·&nbsp; BPSC
+    / BSSC
+  </div>
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

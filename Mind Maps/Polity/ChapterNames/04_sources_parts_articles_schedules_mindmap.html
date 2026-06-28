@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 04: Sources, Parts, Articles & Schedules | BPSC/BSSC</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --accent: #f5a623;
+      --accent3: #34d399;
+      --accent4: #f87171;
+      --accent5: #60a5fa;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #2d3354;
+      --gold: #fbbf24;
+      --trap: #ef4444;
+      --trap-bg: #1f1010;
+      --recall-bg: #0f1f2d;
+      --recall-border: #1e40af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #100820 0%, #0f1020 50%, #100820 100%);
+      border-bottom: 2px solid #a78bfa;
+      padding: 28px 24px 20px;
+      text-align: center;
+    }
+
+    .chapter-tag {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #a78bfa;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .header h1 {
+      font-size: 23px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .header h1 span {
+      color: var(--gold);
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .b-gold {
+      background: #2a1f00;
+      color: var(--gold);
+      border: 1px solid #4a3800;
+    }
+
+    .b-pur {
+      background: #140f28;
+      color: #a78bfa;
+      border: 1px solid #3d2e80;
+    }
+
+    .b-grn {
+      background: #0a1f15;
+      color: var(--accent3);
+      border: 1px solid #1a5c38;
+    }
+
+    .b-red {
+      background: #1f0a0a;
+      color: var(--accent4);
+      border: 1px solid #5c1a1a;
+    }
+
+    .tab-nav {
+      display: flex;
+      overflow-x: auto;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 12px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 20px 16px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .sec {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 24px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sec::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: var(--gold);
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .sec:first-child {
+      margin-top: 0;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media(max-width:600px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media(max-width:600px) {
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    ul.bl {
+      list-style: none;
+    }
+
+    ul.bl li {
+      font-size: 13px;
+      color: var(--text);
+      padding: 4px 0 4px 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    ul.bl li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      top: 5px;
+    }
+
+    ul.bl li em {
+      color: var(--gold);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    table.dt {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+
+    table.dt th {
+      background: var(--surface2);
+      color: var(--gold);
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    table.dt td {
+      padding: 8px 12px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    table.dt tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.dt tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    table.dt td:first-child {
+      color: var(--accent5);
+      font-weight: 600;
+    }
+
+    .trap-box {
+      background: var(--trap-bg);
+      border: 1px solid #5c1a1a;
+      border-left: 4px solid var(--trap);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .trap-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--trap);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .trap-lbl::before {
+      content: '⚠';
+      font-size: 12px;
+    }
+
+    .trap-box p {
+      font-size: 13px;
+      color: #fca5a5;
+      line-height: 1.5;
+    }
+
+    .trap-box p strong {
+      color: #f87171;
+    }
+
+    .recall-box {
+      background: var(--recall-bg);
+      border: 1px solid var(--recall-border);
+      border-left: 4px solid var(--accent5);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .recall-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent5);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .recall-lbl::before {
+      content: '⚡';
+      font-size: 12px;
+    }
+
+    .rqa {
+      margin-bottom: 8px;
+    }
+
+    .rq {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .ra {
+      font-size: 13px;
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    /* country source cards */
+    .country-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media(max-width:500px) {
+      .country-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .country-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .country-hd {
+      padding: 8px 13px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .country-bd {
+      padding: 8px 13px 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .country-bd ul {
+      list-style: none;
+    }
+
+    .country-bd ul li {
+      font-size: 12px;
+      color: var(--text);
+      padding: 2px 0 2px 12px;
+      position: relative;
+      line-height: 1.4;
+    }
+
+    .country-bd ul li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      top: 2px;
+      font-size: 10px;
+    }
+
+    .c-usa {
+      background: #0a1020;
+    }
+
+    .c-usa .country-hd {
+      background: #0f1828;
+      color: var(--accent5);
+    }
+
+    .c-usa .country-bd ul li::before {
+      color: var(--accent5);
+    }
+
+    .c-uk {
+      background: #1a0a0a;
+    }
+
+    .c-uk .country-hd {
+      background: #280f0f;
+      color: var(--accent4);
+    }
+
+    .c-uk .country-bd ul li::before {
+      color: var(--accent4);
+    }
+
+    .c-ire {
+      background: #061a15;
+    }
+
+    .c-ire .country-hd {
+      background: #0a2018;
+      color: var(--accent3);
+    }
+
+    .c-ire .country-bd ul li::before {
+      color: var(--accent3);
+    }
+
+    .c-aus {
+      background: #1a1000;
+    }
+
+    .c-aus .country-hd {
+      background: #281800;
+      color: var(--gold);
+    }
+
+    .c-aus .country-bd ul li::before {
+      color: var(--gold);
+    }
+
+    .c-can {
+      background: #140f28;
+    }
+
+    .c-can .country-hd {
+      background: #1a1040;
+      color: #a78bfa;
+    }
+
+    .c-can .country-bd ul li::before {
+      color: #a78bfa;
+    }
+
+    .c-ussr {
+      background: #061820;
+    }
+
+    .c-ussr .country-hd {
+      background: #0a2030;
+      color: #22d3ee;
+    }
+
+    .c-ussr .country-bd ul li::before {
+      color: #22d3ee;
+    }
+
+    .c-ger {
+      background: #1a0808;
+    }
+
+    .c-ger .country-hd {
+      background: #200a0a;
+      color: #fbbf24;
+    }
+
+    .c-ger .country-bd ul li::before {
+      color: #fbbf24;
+    }
+
+    .c-fra {
+      background: #080d28;
+    }
+
+    .c-fra .country-hd {
+      background: #0d1238;
+      color: #818cf8;
+    }
+
+    .c-fra .country-bd ul li::before {
+      color: #818cf8;
+    }
+
+    .c-sa {
+      background: #0a1a08;
+    }
+
+    .c-sa .country-hd {
+      background: #0f2510;
+      color: #6ee7b7;
+    }
+
+    .c-sa .country-bd ul li::before {
+      color: #6ee7b7;
+    }
+
+    .c-jap {
+      background: #1a0a14;
+    }
+
+    .c-jap .country-hd {
+      background: #280f1e;
+      color: #f9a8d4;
+    }
+
+    .c-jap .country-bd ul li::before {
+      color: #f9a8d4;
+    }
+
+    .c-gia {
+      background: #0a0a1a;
+    }
+
+    .c-gia .country-hd {
+      background: #0f0f28;
+      color: #c4b5fd;
+    }
+
+    .c-gia .country-bd ul li::before {
+      color: #c4b5fd;
+    }
+
+    /* TEARS trick */
+    .tears-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    @media(max-width:560px) {
+      .tears-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .tears-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 8px;
+      text-align: center;
+    }
+
+    .tears-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      display: block;
+    }
+
+    .tears-letter {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      display: block;
+    }
+
+    .tears-word {
+      font-size: 11px;
+      color: var(--accent5);
+    }
+
+    .tears-full {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* 7th schedule 3 cols */
+    .sch7-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media(max-width:600px) {
+      .sch7-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sch7-card {
+      border-radius: 8px;
+      padding: 12px 13px;
+    }
+
+    .sch7-union {
+      background: #0a1828;
+      border: 1px solid #1e3a5c;
+    }
+
+    .sch7-state {
+      background: #061a15;
+      border: 1px solid #1a5c38;
+    }
+
+    .sch7-conc {
+      background: #140f28;
+      border: 1px solid #3d2e80;
+    }
+
+    .sch7-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .sch7-union .sch7-title {
+      color: var(--accent5);
+    }
+
+    .sch7-state .sch7-title {
+      color: var(--accent3);
+    }
+
+    .sch7-conc .sch7-title {
+      color: #a78bfa;
+    }
+
+    .sch7-card ul {
+      list-style: none;
+    }
+
+    .sch7-card ul li {
+      font-size: 12px;
+      color: var(--text);
+      padding: 2px 0;
+    }
+
+    .page-footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+    }
+
+    /* ==== RESPONSIVE DESIGN FOR MOBILE ==== */
+    @media(max-width:600px) {
+
+      /* Responsive Tabs */
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab-btn {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      table.dt th,
+      table.dt td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="chapter-tag">BPSC / BSSC — Indian Polity</div>
+    <h1>Chapter 04: <span>Sources, Parts, Articles & Schedules</span></h1>
+    <div class="subtitle">11 Countries · 22 Parts · 12 Schedules | Complete Reference</div>
+    <div class="badges">
+      <span class="badge b-gold">⭐ Very High Weightage</span>
+      <span class="badge b-pur">🌍 11 Sources</span>
+      <span class="badge b-grn">📋 22 Parts</span>
+      <span class="badge b-red">📅 12 Schedules</span>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="st('sources')">🌍 Sources</button>
+    <button class="tab-btn" onclick="st('parts')">📋 Parts</button>
+    <button class="tab-btn" onclick="st('schedules')">📅 Schedules</button>
+    <button class="tab-btn" onclick="st('sch7')">⚖️ 7th Schedule</button>
+    <button class="tab-btn" onclick="st('trick')">💡 TEARS Trick</button>
+    <button class="tab-btn" onclick="st('traps')">⚠️ Traps</button>
+    <button class="tab-btn" onclick="st('recall')">⚡ Recall</button>
+  </div>
+
+  <!-- ===== SOURCES ===== -->
+  <div class="tab-content active" id="tab-sources">
+    <div class="sec">11 Countries — Constitutional Sources</div>
+    <div class="country-grid">
+
+      <div class="country-card c-gia">
+        <div class="country-hd">🇮🇳 Govt. of India Act 1935</div>
+        <div class="country-bd">
+          <ul>
+            <li>Federal System</li>
+            <li>Judiciary</li>
+            <li>Public Service Commission</li>
+            <li>Governor's Post</li>
+            <li>Administrative Details</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card c-usa">
+        <div class="country-hd">🇺🇸 USA</div>
+        <div class="country-bd">
+          <ul>
+            <li>Fundamental Rights</li>
+            <li>Vice-President's Post</li>
+            <li>Independent Judiciary</li>
+            <li>Impeachment of President</li>
+            <li>Judicial Review</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card c-uk">
+        <div class="country-hd">🇬🇧 Britain (UK)</div>
+        <div class="country-bd">
+          <ul>
+            <li>Parliamentary System</li>
+            <li>Single Citizenship</li>
+            <li>Cabinet System</li>
+            <li>Rule of Law</li>
+            <li>Parliamentary Privileges</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card c-ire">
+        <div class="country-hd">🇮🇪 Ireland</div>
+        <div class="country-bd">
+          <ul>
+            <li>Directive Principles (DPSP)</li>
+            <li>Presidential Election Method</li>
+            <li>Nomination of Rajya Sabha Members</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card c-aus">
+        <div class="country-hd">🇦🇺 Australia</div>
+        <div class="country-bd">
+          <ul>
+            <li>Concurrent List</li>
+            <li>Language of Preamble</li>
+            <li>Freedom of Trade</li>
+            <li>Joint Sitting of Parliament</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card c-can">
+        <div class="country-hd">🇨🇦 Canada</div>
+        <div class="country-bd">
+          <ul>
+            <li>Appointment of Governors</li>
+            <li>Residuary Powers to Centre</li>
+            <li>Federal System with Strong Centre</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card c-ussr">
+        <div class="country-hd">🇷🇺 Former Soviet Union</div>
+        <div class="country-bd">
+          <ul>
+            <li>Fundamental Duties</li>
+            <li>Five-Year Plans</li>
+            <li>Socio, Economic & Political Justice</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card c-ger">
+        <div class="country-hd">🇩🇪 Germany</div>
+        <div class="country-bd">
+          <ul>
+            <li>Emergency Powers of the President</li>
+            <li>Suspension of Fundamental Rights</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card c-fra">
+        <div class="country-hd">🇫🇷 France</div>
+        <div class="country-bd">
+          <ul>
+            <li>Republican Structure</li>
+            <li>Ideals of Liberty, Equality & Fraternity</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card c-sa">
+        <div class="country-hd">🇿🇦 South Africa</div>
+        <div class="country-bd">
+          <ul>
+            <li>Procedure for Amendment of Constitution</li>
+            <li>Election of Members of Rajya Sabha</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card c-jap">
+        <div class="country-hd">🇯🇵 Japan</div>
+        <div class="country-bd">
+          <ul>
+            <li>Procedure Established by Law</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="recall-box" style="margin-top:16px;">
+      <div class="recall-lbl">Quick Country Match</div>
+      <div class="rqa">
+        <div class="rq">DPSP — from?</div>
+        <div class="ra">Ireland</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Fundamental Rights — from?</div>
+        <div class="ra">USA</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Fundamental Duties — from?</div>
+        <div class="ra">Former Soviet Union (USSR)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Parliamentary System — from?</div>
+        <div class="ra">Britain (UK)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Concurrent List — from?</div>
+        <div class="ra">Australia</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Residuary Powers to Centre — from?</div>
+        <div class="ra">Canada</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Emergency Powers — from?</div>
+        <div class="ra">Germany</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Amendment Procedure — from?</div>
+        <div class="ra">South Africa</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PARTS ===== -->
+  <div class="tab-content" id="tab-parts">
+    <div class="sec">Parts & Articles of Constitution</div>
+    <div class="tw">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>Part</th>
+            <th>Articles</th>
+            <th>Subject</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Part 1</td>
+            <td>1–4</td>
+            <td>Union & its Territory</td>
+          </tr>
+          <tr>
+            <td>Part 2</td>
+            <td>5–11</td>
+            <td>Citizenship</td>
+          </tr>
+          <tr>
+            <td style="color:var(--accent3);font-weight:700;">Part 3</td>
+            <td>12–35</td>
+            <td><strong style="color:var(--accent3)">Fundamental Rights ⭐</strong></td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold);font-weight:700;">Part 4</td>
+            <td>36–51</td>
+            <td><strong style="color:var(--gold)">Directive Principles of State Policy (DPSP)</strong></td>
+          </tr>
+          <tr>
+            <td>Part 4A</td>
+            <td>51A</td>
+            <td>Fundamental Duties</td>
+          </tr>
+          <tr>
+            <td>Part 5</td>
+            <td>52–151</td>
+            <td>The Union</td>
+          </tr>
+          <tr>
+            <td>Part 6</td>
+            <td>152–237</td>
+            <td>The States</td>
+          </tr>
+          <tr>
+            <td>Part 7</td>
+            <td>238</td>
+            <td>Repealed</td>
+          </tr>
+          <tr>
+            <td>Part 8</td>
+            <td>239–242</td>
+            <td>Union Territories</td>
+          </tr>
+          <tr>
+            <td>Part 9</td>
+            <td>243–243(O)</td>
+            <td>Panchayats</td>
+          </tr>
+          <tr>
+            <td>Part 9A</td>
+            <td>243(P)–243(ZG)</td>
+            <td>Municipalities</td>
+          </tr>
+          <tr>
+            <td>Part 9B</td>
+            <td>243(ZH)–243(ZT)</td>
+            <td>Cooperative Societies</td>
+          </tr>
+          <tr>
+            <td>Part 10</td>
+            <td>244–244(A)</td>
+            <td>Scheduled & Tribal Areas</td>
+          </tr>
+          <tr>
+            <td>Part 11</td>
+            <td>245–263</td>
+            <td>Centre-State Relations</td>
+          </tr>
+          <tr>
+            <td>Part 12</td>
+            <td>264–300(A)</td>
+            <td>Finance, Property, Contracts & Suits</td>
+          </tr>
+          <tr>
+            <td>Part 13</td>
+            <td>301–307</td>
+            <td>Trade & Commerce</td>
+          </tr>
+          <tr>
+            <td>Part 14</td>
+            <td>308–323</td>
+            <td>Services under Union & States</td>
+          </tr>
+          <tr>
+            <td>Part 14A</td>
+            <td>323A–323B</td>
+            <td>Tribunals</td>
+          </tr>
+          <tr>
+            <td style="color:var(--accent5);font-weight:700;">Part 15</td>
+            <td>324–329(A)</td>
+            <td>Elections</td>
+          </tr>
+          <tr>
+            <td>Part 16</td>
+            <td>330–342(A)</td>
+            <td>Special Provisions for Certain Classes</td>
+          </tr>
+          <tr>
+            <td>Part 17</td>
+            <td>343–351</td>
+            <td>Official Language</td>
+          </tr>
+          <tr>
+            <td style="color:var(--accent4);font-weight:700;">Part 18</td>
+            <td>352–360</td>
+            <td><strong style="color:var(--accent4)">Emergency Provisions ⭐</strong></td>
+          </tr>
+          <tr>
+            <td>Part 19</td>
+            <td>361–367</td>
+            <td>Miscellaneous</td>
+          </tr>
+          <tr>
+            <td>Part 20</td>
+            <td>368</td>
+            <td>Amendment of the Constitution</td>
+          </tr>
+          <tr>
+            <td>Part 21</td>
+            <td>369–392</td>
+            <td>Temporary, Transitional & Special Provisions</td>
+          </tr>
+          <tr>
+            <td>Part 22</td>
+            <td>393–395</td>
+            <td>Short Title, Commencement, Hindi text & Repeals</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">Key Articles — Must Know</div>
+      <div class="rqa">
+        <div class="rq">Fundamental Rights — Article range?</div>
+        <div class="ra">Articles 12–35 (Part 3)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">DPSP — Article range?</div>
+        <div class="ra">Articles 36–51 (Part 4)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Fundamental Duties — Article?</div>
+        <div class="ra">Article 51A (Part 4A)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Emergency Provisions — Article range?</div>
+        <div class="ra">Articles 352–360 (Part 18)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Amendment Article?</div>
+        <div class="ra">Article 368 (Part 20)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Elections — Article range?</div>
+        <div class="ra">Articles 324–329(A) (Part 15)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Panchayats — Part?</div>
+        <div class="ra">Part 9 (Articles 243–243O)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCHEDULES ===== -->
+  <div class="tab-content" id="tab-schedules">
+    <div class="sec">12 Schedules — Complete List</div>
+    <div class="card">
+      <ul class="bl">
+        <li>Original Constitution: <em>8 Schedules</em></li>
+        <li>Presently: <em>12 Schedules</em></li>
+      </ul>
+    </div>
+
+    <div class="tw">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Schedule</th>
+            <th>Amendment Added</th>
+            <th>Key Content</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1st</td>
+            <td>Union & State Territories</td>
+            <td>—</td>
+            <td>28 States, 8 UTs</td>
+          </tr>
+          <tr>
+            <td>2nd</td>
+            <td>Salaries & Allowances</td>
+            <td>—</td>
+            <td>President, VP, Judges, CAG, etc.</td>
+          </tr>
+          <tr>
+            <td>3rd</td>
+            <td>Oaths & Affirmations</td>
+            <td>—</td>
+            <td>Ministers, MPs, MLAs, Judges, CAG</td>
+          </tr>
+          <tr>
+            <td>4th</td>
+            <td>Rajya Sabha Seats Allocation</td>
+            <td>—</td>
+            <td>State-wise RS seats</td>
+          </tr>
+          <tr>
+            <td>5th</td>
+            <td>Scheduled Areas & Tribes</td>
+            <td>—</td>
+            <td>Administration of Scheduled Areas</td>
+          </tr>
+          <tr>
+            <td>6th</td>
+            <td>Other Tribal Areas</td>
+            <td>—</td>
+            <td>Assam, Meghalaya, Tripura & Mizoram</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold);font-weight:700;">7th</td>
+            <td>Union-State Relations</td>
+            <td>—</td>
+            <td>3 Lists: Union, State, Concurrent</td>
+          </tr>
+          <tr>
+            <td>8th</td>
+            <td>Official Languages</td>
+            <td>—</td>
+            <td>Originally 14, Now 22 languages</td>
+          </tr>
+          <tr>
+            <td>9th</td>
+            <td>Land Reforms</td>
+            <td>1st Amendment (1951)</td>
+            <td>Not challengeable in court (until 1973)</td>
+          </tr>
+          <tr>
+            <td>10th</td>
+            <td>Anti-Defection</td>
+            <td>52nd Amendment (1985)</td>
+            <td>Anti-defection provisions</td>
+          </tr>
+          <tr>
+            <td>11th</td>
+            <td>Panchayat Subjects</td>
+            <td>73rd Amendment (1992)</td>
+            <td>29 subjects of Panchayats</td>
+          </tr>
+          <tr>
+            <td>12th</td>
+            <td>Municipality Subjects</td>
+            <td>74th Amendment (1992)</td>
+            <td>18 subjects of Municipalities</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec">8th Schedule — Language Additions</div>
+    <div class="tw">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>Amendment</th>
+            <th>Year</th>
+            <th>Languages Added</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>21st Amendment</td>
+            <td>1967</td>
+            <td>Sindhi</td>
+          </tr>
+          <tr>
+            <td>71st Amendment</td>
+            <td>1992</td>
+            <td>Konkani, Manipuri, Nepali</td>
+          </tr>
+          <tr>
+            <td>92nd Amendment</td>
+            <td>2003</td>
+            <td>Bodo, Dogri, Maithili, Santhali</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-top:4px;">
+      <ul class="bl">
+        <li>Original languages: <em>14</em></li>
+        <li>Current languages: <em>22</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 7TH SCHEDULE ===== -->
+  <div class="tab-content" id="tab-sch7">
+    <div class="sec">7th Schedule — 3 Lists</div>
+    <div class="sch7-grid">
+      <div class="sch7-card sch7-union">
+        <div class="sch7-title">🇮🇳 Union List</div>
+        <ul>
+          <li>Banking</li>
+          <li>Defence</li>
+          <li>Foreign Affairs</li>
+          <li>Communication</li>
+          <li>Railways</li>
+          <li>Inter-State Trade</li>
+        </ul>
+      </div>
+      <div class="sch7-card sch7-state">
+        <div class="sch7-title">🏛️ State List</div>
+        <ul>
+          <li>Health</li>
+          <li>Agriculture</li>
+          <li>Police</li>
+          <li>Trade</li>
+        </ul>
+      </div>
+      <div class="sch7-card sch7-conc">
+        <div class="sch7-title">⚖️ Concurrent List</div>
+        <ul>
+          <li>Forests</li>
+          <li>Education</li>
+          <li>Marriage</li>
+          <li>Succession</li>
+          <li>Population Control</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px;">
+      <div class="card-title">Key Rules — 7th Schedule</div>
+      <ul class="bl">
+        <li>Union List: <em>Only Parliament</em> can make laws</li>
+        <li>State List: <em>Only State Legislature</em> can make laws (normally)</li>
+        <li>Concurrent List: <em>Both Parliament & State</em> — Parliament prevails in conflict</li>
+        <li>Residuary Powers: Not in any list → <em>Goes to Centre (Parliament)</em> (From Canada)</li>
+      </ul>
+    </div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">List Quick Match</div>
+      <div class="rqa">
+        <div class="rq">Railways — kaunsi list?</div>
+        <div class="ra">Union List</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Agriculture — kaunsi list?</div>
+        <div class="ra">State List</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Education — kaunsi list?</div>
+        <div class="ra">Concurrent List (42nd Amendment 1976 mein State se Concurrent mein shifted)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Forests — kaunsi list?</div>
+        <div class="ra">Concurrent List</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Defence — kaunsi list?</div>
+        <div class="ra">Union List</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TEARS TRICK ===== -->
+  <div class="tab-content" id="tab-trick">
+    <div class="sec">💡 TEARS OF OLD PM — Schedule Memory Trick</div>
+    <div class="card">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Yeh trick se 12 schedules yaad raho:</p>
+      <p
+        style="font-size:16px;font-weight:700;color:var(--gold);letter-spacing:2px;text-align:center;margin-bottom:16px;">
+        T · E · A · R · S · O · F · O · L · D · P · M</p>
+    </div>
+
+    <div class="tears-grid">
+      <div class="tears-card"><span class="tears-num">1st</span><span class="tears-letter">T</span><span
+          class="tears-word">Territories</span><span class="tears-full">Union & States</span></div>
+      <div class="tears-card"><span class="tears-num">2nd</span><span class="tears-letter">E</span><span
+          class="tears-word">Emoluments</span><span class="tears-full">Salaries</span></div>
+      <div class="tears-card"><span class="tears-num">3rd</span><span class="tears-letter">A</span><span
+          class="tears-word">Affirmation</span><span class="tears-full">Oaths</span></div>
+      <div class="tears-card"><span class="tears-num">4th</span><span class="tears-letter">R</span><span
+          class="tears-word">Rajya Sabha</span><span class="tears-full">Seats</span></div>
+      <div class="tears-card"><span class="tears-num">5th</span><span class="tears-letter">S</span><span
+          class="tears-word">Scheduled</span><span class="tears-full">Areas & Tribes</span></div>
+      <div class="tears-card"><span class="tears-num">6th</span><span class="tears-letter">O</span><span
+          class="tears-word">Other Tribal</span><span class="tears-full">Areas (NE States)</span></div>
+      <div class="tears-card"><span class="tears-num">7th</span><span class="tears-letter">F</span><span
+          class="tears-word">Federal Lists</span><span class="tears-full">Union/State/Concurrent</span></div>
+      <div class="tears-card"><span class="tears-num">8th</span><span class="tears-letter">O</span><span
+          class="tears-word">Official Lang.</span><span class="tears-full">22 Languages</span></div>
+      <div class="tears-card"><span class="tears-num">9th</span><span class="tears-letter">L</span><span
+          class="tears-word">Land Reforms</span><span class="tears-full">1st Amend 1951</span></div>
+      <div class="tears-card"><span class="tears-num">10th</span><span class="tears-letter">D</span><span
+          class="tears-word">Defection</span><span class="tears-full">52nd Amend 1985</span></div>
+      <div class="tears-card"><span class="tears-num">11th</span><span class="tears-letter">P</span><span
+          class="tears-word">Panchayats</span><span class="tears-full">29 subjects · 73rd</span></div>
+      <div class="tears-card"><span class="tears-num">12th</span><span class="tears-letter">M</span><span
+          class="tears-word">Municipalities</span><span class="tears-full">18 subjects · 74th</span></div>
+    </div>
+  </div>
+
+  <!-- ===== TRAPS ===== -->
+  <div class="tab-content" id="tab-traps">
+    <div class="sec">⚠️ Exam Traps</div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #1 — Original vs Current Schedules</div>
+      <p>Original Constitution mein <strong>8 Schedules</strong> the. Ab <strong>12 Schedules</strong> hain. 4 baad mein
+        add hue (9th, 10th, 11th, 12th).</p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #2 — Fundamental Rights — USA se, Duties — USSR se</div>
+      <p><strong>Fundamental Rights</strong> = USA se. <strong>Fundamental Duties</strong> = Former Soviet Union (USSR)
+        se. Dono alag countries, alag concepts. Mix mat karo.</p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #3 — DPSP — Ireland se</div>
+      <p><strong>DPSP (Directive Principles)</strong> = <strong>Ireland</strong> se liya. UK se nahi, USA se nahi.
+        Ireland ka Constitution 1937 mein bana tha.</p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #4 — Residuary Powers — Canada se</div>
+      <p>Residuary Powers (jo kisi list mein nahi) = <strong>Centre ke paas</strong> jate hain. Yeh concept
+        <strong>Canada se</strong> liya. USA mein states ko jate hain — India mein Centre ko.
+      </p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #5 — 8th Schedule Languages</div>
+      <p>Originally <strong>14 languages</strong>. Now <strong>22 languages</strong>. Last addition = <strong>92nd
+          Amendment 2003</strong> (Bodo, Dogri, Maithili, Santhali). Exam mein "how many languages now" = 22.</p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #6 — 9th Schedule — Challengeable?</div>
+      <p>9th Schedule (Land Reforms) = originally court mein <strong>challenge nahi ho sakta</strong> tha. Lekin
+        <strong>1973 (Kesavananda Bharati)</strong> ke baad from 1973 onwards <strong>challengeable</strong> ho gaya.
+      </p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #7 — Amendment Procedure — South Africa</div>
+      <p>Constitution Amendment Procedure = <strong>South Africa</strong> se. Germany se nahi (Germany = Emergency
+        Powers). South Africa aur Germany dono ko confuse karte hain students.</p>
+    </div>
+  </div>
+
+  <!-- ===== RECALL ===== -->
+  <div class="tab-content" id="tab-recall">
+    <div class="sec">⚡ Quick Recall Cards</div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">Sources — Country Match</div>
+      <div class="rqa">
+        <div class="rq">Parliamentary System?</div>
+        <div class="ra">UK (Britain)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Fundamental Rights?</div>
+        <div class="ra">USA</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">DPSP?</div>
+        <div class="ra">Ireland</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Fundamental Duties?</div>
+        <div class="ra">Former Soviet Union (USSR)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Concurrent List?</div>
+        <div class="ra">Australia</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Residuary Powers to Centre?</div>
+        <div class="ra">Canada</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Emergency Powers?</div>
+        <div class="ra">Germany</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Amendment Procedure?</div>
+        <div class="ra">South Africa</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Procedure Established by Law?</div>
+        <div class="ra">Japan</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Joint Sitting of Parliament?</div>
+        <div class="ra">Australia</div>
+      </div>
+    </div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">Parts — Key Ranges</div>
+      <div class="rqa">
+        <div class="rq">Fundamental Rights — Articles?</div>
+        <div class="ra">12–35 (Part 3)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">DPSP — Articles?</div>
+        <div class="ra">36–51 (Part 4)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Fundamental Duties — Article?</div>
+        <div class="ra">51A (Part 4A)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Emergency — Articles?</div>
+        <div class="ra">352–360 (Part 18)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Amendment — Article?</div>
+        <div class="ra">368 (Part 20)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Panchayats — Part?</div>
+        <div class="ra">Part 9 (Art 243–243O)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Municipalities — Part?</div>
+        <div class="ra">Part 9A</div>
+      </div>
+    </div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">Schedules — Quick</div>
+      <div class="rqa">
+        <div class="rq">TEARS trick expand karo?</div>
+        <div class="ra">T-Territories, E-Emoluments, A-Affirmation, R-Rajya Sabha, S-Scheduled, O-Other Tribal,
+          F-Federal Lists, O-Official Lang, L-Land, D-Defection, P-Panchayats, M-Municipalities</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">9th Schedule — kab added?</div>
+        <div class="ra">1st Amendment 1951 (Land Reforms)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">10th Schedule — kab?</div>
+        <div class="ra">52nd Amendment 1985 (Anti-Defection)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">11th Schedule — kab?</div>
+        <div class="ra">73rd Amendment 1992 (29 Panchayat subjects)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">12th Schedule — kab?</div>
+        <div class="ra">74th Amendment 1992 (18 Municipality subjects)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Current languages (8th Schedule)?</div>
+        <div class="ra">22 (originally 14)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Last language amendment?</div>
+        <div class="ra">92nd Amendment 2003 — Bodo, Dogri, Maithili, Santhali</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    📚 Exam Fusion Prep | examfusionprep.com | BPSC / BSSC — Ch 04 Polity: Sources, Parts, Articles & Schedules
+  </div>
+
+  <script>
+    function st(name) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

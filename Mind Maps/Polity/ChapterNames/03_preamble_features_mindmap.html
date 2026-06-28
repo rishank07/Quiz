@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 02: Making of Constitution | BPSC/BSSC Mind Map</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --accent: #f5a623;
+      --accent3: #34d399;
+      --accent4: #f87171;
+      --accent5: #60a5fa;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #2d3354;
+      --gold: #fbbf24;
+      --trap: #ef4444;
+      --trap-bg: #1f1010;
+      --recall-bg: #0f1f2d;
+      --recall-border: #1e40af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #080d1a 0%, #0f1020 50%, #080d1a 100%);
+      border-bottom: 2px solid var(--accent5);
+      padding: 28px 24px 20px;
+      text-align: center;
+    }
+
+    .chapter-tag {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--accent5);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .header h1 {
+      font-size: 25px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .header h1 span {
+      color: var(--gold);
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .b-gold {
+      background: #2a1f00;
+      color: var(--gold);
+      border: 1px solid #4a3800;
+    }
+
+    .b-grn {
+      background: #0a1f15;
+      color: var(--accent3);
+      border: 1px solid #1a5c38;
+    }
+
+    .b-blu {
+      background: #0a1828;
+      color: var(--accent5);
+      border: 1px solid #1e3a5c;
+    }
+
+    .b-red {
+      background: #1f0a0a;
+      color: var(--accent4);
+      border: 1px solid #5c1a1a;
+    }
+
+    .tab-nav {
+      display: flex;
+      overflow-x: auto;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 12px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 20px 16px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .sec {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 24px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sec::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: var(--gold);
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .sec:first-child {
+      margin-top: 0;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .tl-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .tl-yr {
+      min-width: 48px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      padding-top: 2px;
+    }
+
+    .tl-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid var(--surface);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .tl-content {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 13px;
+    }
+
+    .tl-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent5);
+      margin-bottom: 4px;
+    }
+
+    .tl-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .tl-desc em {
+      color: var(--gold);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    ul.bl {
+      list-style: none;
+    }
+
+    ul.bl li {
+      font-size: 13px;
+      color: var(--text);
+      padding: 4px 0 4px 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    ul.bl li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      top: 5px;
+    }
+
+    ul.bl li em {
+      color: var(--gold);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    ul.bl li strong {
+      color: var(--accent3);
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    table.dt {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+
+    table.dt th {
+      background: var(--surface2);
+      color: var(--gold);
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    table.dt td {
+      padding: 8px 12px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    table.dt tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.dt tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    table.dt td:first-child {
+      color: var(--accent5);
+      font-weight: 600;
+    }
+
+    .trap-box {
+      background: var(--trap-bg);
+      border: 1px solid #5c1a1a;
+      border-left: 4px solid var(--trap);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .trap-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--trap);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .trap-lbl::before {
+      content: '⚠';
+      font-size: 12px;
+    }
+
+    .trap-box p {
+      font-size: 13px;
+      color: #fca5a5;
+      line-height: 1.5;
+    }
+
+    .trap-box p strong {
+      color: #f87171;
+    }
+
+    .recall-box {
+      background: var(--recall-bg);
+      border: 1px solid var(--recall-border);
+      border-left: 4px solid var(--accent5);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .recall-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent5);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .recall-lbl::before {
+      content: '⚡';
+      font-size: 12px;
+    }
+
+    .rqa {
+      margin-bottom: 8px;
+    }
+
+    .rq {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .ra {
+      font-size: 13px;
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .ig {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    @media(max-width:500px) {
+      .ig {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ii {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .ik {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .iv {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    /* date highlight boxes */
+    .date-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    @media(max-width:500px) {
+      .date-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .date-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 10px;
+      text-align: center;
+    }
+
+    .date-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .date-lbl {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .page-footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+    }
+
+    /* ==== RESPONSIVE DESIGN FOR MOBILE ==== */
+    @media(max-width:600px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      /* Responsive Tabs */
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab-btn {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      table.dt th,
+      table.dt td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="chapter-tag">BPSC / BSSC — Indian Polity</div>
+    <h1>Chapter 02: <span>Making of Constitution</span></h1>
+    <div class="subtitle">1895–1950 | Constituent Assembly · Committees · Key Dates</div>
+    <div class="badges">
+      <span class="badge b-gold">⭐ Very High Weightage</span>
+      <span class="badge b-blu">📜 Background Timeline</span>
+      <span class="badge b-grn">🏛️ Constituent Assembly</span>
+      <span class="badge b-red">⚠️ 7 Exam Traps</span>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="st('bg')">📅 Background</button>
+    <button class="tab-btn" onclick="st('ca')">🏛️ Const. Assembly</button>
+    <button class="tab-btn" onclick="st('committees')">📋 Committees</button>
+    <button class="tab-btn" onclick="st('dates')">📆 Key Dates</button>
+    <button class="tab-btn" onclick="st('cabinet')">🗂️ 1st Cabinet</button>
+    <button class="tab-btn" onclick="st('traps')">⚠️ Traps</button>
+    <button class="tab-btn" onclick="st('recall')">⚡ Recall</button>
+  </div>
+
+  <!-- ===== BACKGROUND ===== -->
+  <div class="tab-content active" id="tab-bg">
+    <div class="sec">Historical Background — Timeline</div>
+
+    <div class="tl-item">
+      <div class="tl-yr">1895</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-title">Swaraj Bill — Bal Gangadhar Tilak</div>
+        <div class="tl-desc">Mentioned the principle of a <em>Constituent Assembly</em> for the first time</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-yr">1928</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-title">Nehru Report — Chairman: Motilal Nehru</div>
+        <div class="tl-desc">Memorandum appealing for <em>new dominion status</em></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-yr">1934</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-title">M.N. Roy's Demand</div>
+        <div class="tl-desc">M.N. Roy demanded formation of <em>Constituent Assembly</em></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-yr">1935</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-title">INC Demand</div>
+        <div class="tl-desc">Indian National Congress demanded <em>Constituent Assembly</em></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-yr">1940</div>
+      <div class="tl-dot" style="border-color:var(--accent5);background:var(--accent5);"></div>
+      <div class="tl-content" style="border-color:#1e3a5c;">
+        <div class="tl-title" style="color:var(--accent5);">August Offer — Viceroy Lord Linlithgow</div>
+        <div class="tl-desc">Promise of <em>Dominion Status</em> & constitutional reforms<br>
+          Congress = Agreed | Muslim League = Disagreed<br>
+          Individual Satyagraha: <em>Vinoba Bhave (1st)</em>, <em>Nehru (2nd)</em></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-yr">1942</div>
+      <div class="tl-dot" style="border-color:var(--accent4);background:var(--accent4);"></div>
+      <div class="tl-content" style="border-color:#5c1a1a;">
+        <div class="tl-title" style="color:var(--accent4);">Cripps Mission</div>
+        <div class="tl-desc">Acceptance of Constituent Assembly formation<br>
+          Against = Muslim League<br>
+          Congress demanded <em>complete independence</em> (not dominion status)<br>
+          <em>Jinnah</em> demanded separate Pakistan
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-yr">1946</div>
+      <div class="tl-dot" style="border-color:var(--accent3);background:var(--accent3);"></div>
+      <div class="tl-content" style="border-color:#1a5c38;">
+        <div class="tl-title" style="color:var(--accent3);">⭐ Cabinet Mission — 3 Members</div>
+        <div class="tl-desc">
+          1. <em>Pethick Lawrence</em> — Secretary of State for India (Chairman)<br>
+          2. <em>Stafford Cripps</em> — Trade Board<br>
+          3. <em>A.V. Alexander</em> — Naval Board<br><br>
+          Outcomes: Formation of CA ✓ | Both Congress & ML accepted ✓<br>
+          Separate Pakistan proposal <em>REJECTED</em> | Communal electorate demand by ML accepted
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONSTITUENT ASSEMBLY ===== -->
+  <div class="tab-content" id="tab-ca">
+    <div class="sec">Structure of Constituent Assembly</div>
+    <div class="ig">
+      <div class="ii">
+        <div class="ik">Total Seats (before partition)</div>
+        <div class="iv">389</div>
+      </div>
+      <div class="ii">
+        <div class="ik">Elected</div>
+        <div class="iv">296 (292 + 4 from Chief Commissioner)</div>
+      </div>
+      <div class="ii">
+        <div class="ik">Nominated (Princely States)</div>
+        <div class="iv">93</div>
+      </div>
+      <div class="ii">
+        <div class="ik">Representation ratio</div>
+        <div class="iv">1 per 10 lakh people</div>
+      </div>
+      <div class="ii">
+        <div class="ik">After Partition (Total)</div>
+        <div class="iv">299 seats</div>
+      </div>
+      <div class="ii">
+        <div class="ik">Women members</div>
+        <div class="iv">15</div>
+      </div>
+    </div>
+
+    <div class="sec">Election Results (296 seats, July–Aug 1946)</div>
+    <div class="card">
+      <ul class="bl">
+        <li><em>Congress</em>: 208 seats</li>
+        <li><em>Muslim League</em>: 73 seats</li>
+        <li><em>Others</em>: 15 seats (11+4)</li>
+      </ul>
+    </div>
+
+    <div class="sec">Key Positions — Constituent Assembly</div>
+    <div class="tw">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>Position</th>
+            <th>Person</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Temporary President</td>
+            <td>Dr. Sachchidananda Sinha</td>
+          </tr>
+          <tr>
+            <td>Permanent President</td>
+            <td>Dr. Rajendra Prasad</td>
+          </tr>
+          <tr>
+            <td>Vice-President</td>
+            <td>H.C. Mukherjee</td>
+          </tr>
+          <tr>
+            <td>Constitutional Advisor</td>
+            <td>B.N. Rau</td>
+          </tr>
+          <tr>
+            <td>First Parliament</td>
+            <td>Constituent Assembly itself</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec">Sessions — Key Facts</div>
+    <div class="ig">
+      <div class="ii">
+        <div class="ik">Total Sessions</div>
+        <div class="iv">11</div>
+      </div>
+      <div class="ii">
+        <div class="ik">Working Days</div>
+        <div class="iv">165 days</div>
+      </div>
+      <div class="ii">
+        <div class="ik">First Meeting</div>
+        <div class="iv">9 Dec 1946 (211 members present)</div>
+      </div>
+      <div class="ii">
+        <div class="ik">First Session</div>
+        <div class="iv">9–23 Dec 1946</div>
+      </div>
+      <div class="ii">
+        <div class="ik">Last Session (11th)</div>
+        <div class="iv">14–26 Nov 1949</div>
+      </div>
+      <div class="ii">
+        <div class="ik">Total Duration</div>
+        <div class="iv">2 years 11 months 18 days</div>
+      </div>
+      <div class="ii">
+        <div class="ik">Total Expense</div>
+        <div class="iv">₹64 lakhs approx.</div>
+      </div>
+      <div class="ii">
+        <div class="ik">Symbol</div>
+        <div class="iv">Elephant</div>
+      </div>
+    </div>
+
+    <div class="sec">Special Note</div>
+    <div class="card">
+      <ul class="bl">
+        <li><em>Mahatma Gandhi</em> and <em>Jinnah</em> — NOT members of Constituent Assembly</li>
+        <li>Public and Press were <em>allowed to attend</em> sessions</li>
+      </ul>
+    </div>
+
+    <div class="sec">Notable Women Members (15 total)</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Sucheta Kriplani</div>
+        <ul class="bl">
+          <li>1st Woman Chief Minister of India (UP)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Sarojini Naidu</div>
+        <ul class="bl">
+          <li>1st Woman Governor of India (UP)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Amrit Kaur</div>
+        <ul class="bl">
+          <li>1st Health Minister of India</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sec">Original Constitution — Who Did What</div>
+    <div class="tw">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Person</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Calligrapher (English)</td>
+            <td>Prem Behari Narain Raizada</td>
+          </tr>
+          <tr>
+            <td>Calligrapher (Hindi)</td>
+            <td>Vasant Krishna Vaidya</td>
+          </tr>
+          <tr>
+            <td>Illustrators</td>
+            <td>Nandalal Bose and Beohar Rammanohar Sinha</td>
+          </tr>
+          <tr>
+            <td>National Flag Designer</td>
+            <td>Pingali Venkayya</td>
+          </tr>
+          <tr>
+            <td>Members who signed</td>
+            <td>284 (out of 299)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== COMMITTEES ===== -->
+  <div class="tab-content" id="tab-committees">
+    <div class="sec">Major Committees (8 Major + 13 Minor)</div>
+    <div class="tw">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Committee</th>
+            <th>President / Chairman</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Drafting Committee</td>
+            <td style="color:var(--gold);font-weight:700;">Dr. B.R. Ambedkar ⭐</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Steering Committee</td>
+            <td>Dr. Rajendra Prasad</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Union Powers Committee</td>
+            <td>Jawaharlal Nehru</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Provincial Committee</td>
+            <td>Sardar Vallabhbhai Patel</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Flag Committee</td>
+            <td>Dr. Rajendra Prasad</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Minorities Committee</td>
+            <td>H.C. Mukherjee</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>House Committee</td>
+            <td>Pattabhi Sitaramayya</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>Rules of Procedure Committee</td>
+            <td>Dr. Rajendra Prasad</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec">Drafting Committee — 7 Members</div>
+    <div class="tw">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Member</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td style="color:var(--gold);font-weight:700;">Dr. B.R. Ambedkar</td>
+            <td>Chairman — Father of Indian Constitution</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Krishnaswamy Iyer</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>N. Gopalaswami Ayyangar</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Saadullah Khan</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>B.L. Mitter</td>
+            <td>Replaced by N. Madhav Rao</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>D.P. Khaitan</td>
+            <td>Passed away → replaced by T.T. Krishnamachari</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>K.M. Munshi</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">Rajendra Prasad — 3 Committees</div>
+      <div class="rqa">
+        <div class="rq">Dr. Rajendra Prasad ne kitni committees chair ki?</div>
+        <div class="ra">3 — Steering Committee, Flag Committee, Rules of Procedure Committee</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== KEY DATES ===== -->
+  <div class="tab-content" id="tab-dates">
+    <div class="sec">Most Important Dates</div>
+    <div class="date-grid">
+      <div class="date-card"><span class="date-val">9 Dec 1946</span><span class="date-lbl">First Meeting of CA</span>
+      </div>
+      <div class="date-card"><span class="date-val">22 Jul 1947</span><span class="date-lbl">National Flag
+          Adopted</span></div>
+      <div class="date-card"><span class="date-val">4 Nov 1948</span><span class="date-lbl">Draft Constitution Presented
+          (Ambedkar)</span></div>
+      <div class="date-card"><span class="date-val">26 Nov 1949</span><span class="date-lbl">Constitution ADOPTED
+          (Constitution Day)</span></div>
+      <div class="date-card"><span class="date-val">24 Jan 1950</span><span class="date-lbl">National Anthem & Song
+          Adopted</span></div>
+      <div class="date-card"><span class="date-val">26 Jan 1950</span><span class="date-lbl">Constitution ENFORCED
+          (Republic Day)</span></div>
+    </div>
+
+    <div class="sec">Complete Chronology</div>
+    <div class="tw">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>Date / Period</th>
+            <th>Event</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Jul–Aug 1946</td>
+            <td>First Election to Constituent Assembly</td>
+          </tr>
+          <tr>
+            <td>9 Dec 1946</td>
+            <td>First Meeting of CA (Temp. President: Sachchidananda Sinha; 211 members present)</td>
+          </tr>
+          <tr>
+            <td>9–23 Dec 1946</td>
+            <td>First Session of CA</td>
+          </tr>
+          <tr>
+            <td>22 Jul 1947</td>
+            <td>National Flag adopted (Designer: Pingali Venkayya)</td>
+          </tr>
+          <tr>
+            <td>May 1949</td>
+            <td>Membership of Commonwealth ratified</td>
+          </tr>
+          <tr>
+            <td>4 Nov 1948</td>
+            <td>Final Draft presented by Dr. B.R. Ambedkar</td>
+          </tr>
+          <tr>
+            <td>14–26 Nov 1949</td>
+            <td>Last Session (11th) of CA</td>
+          </tr>
+          <tr>
+            <td>26 Nov 1949</td>
+            <td>Constitution ADOPTED — Constitution Day</td>
+          </tr>
+          <tr>
+            <td>24 Jan 1950</td>
+            <td>National Anthem & National Song adopted; Rajendra Prasad became First President</td>
+          </tr>
+          <tr>
+            <td>26 Jan 1950</td>
+            <td>Constitution ENFORCED — Republic Day</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:8px;">
+      <div class="card-title">Purna Swaraj Connection</div>
+      <ul class="bl">
+        <li>Lahore Session (1929) — Declaration of <em>Purna Swaraj</em></li>
+        <li>26 Jan 1930 observed as <em>Independence Day</em> (that's why Republic Day = 26 Jan)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== FIRST CABINET ===== -->
+  <div class="tab-content" id="tab-cabinet">
+    <div class="sec">First Interim Cabinet (1946)</div>
+    <div class="tw">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>Minister</th>
+            <th>Portfolio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--gold);font-weight:700;">Jawaharlal Nehru</td>
+            <td>Vice President of Executive Council, External Affairs</td>
+          </tr>
+          <tr>
+            <td>Sardar Vallabhbhai Patel</td>
+            <td>Home, Information & Broadcasting</td>
+          </tr>
+          <tr>
+            <td>Baldev Singh</td>
+            <td>Defence</td>
+          </tr>
+          <tr>
+            <td>Jagjivan Ram</td>
+            <td>Labour</td>
+          </tr>
+          <tr>
+            <td>Liaquat Ali Khan</td>
+            <td>Finance</td>
+          </tr>
+          <tr>
+            <td>Ghaznafar Ali</td>
+            <td>Health</td>
+          </tr>
+          <tr>
+            <td>C. Rajagopalachari</td>
+            <td>Education</td>
+          </tr>
+          <tr>
+            <td>Rajendra Prasad</td>
+            <td>Food & Agriculture</td>
+          </tr>
+          <tr>
+            <td>Jogendra Nath Mandal</td>
+            <td>Law</td>
+          </tr>
+          <tr>
+            <td>Abdur Rab Nishtar</td>
+            <td>Communication</td>
+          </tr>
+          <tr>
+            <td>Asaf Ali</td>
+            <td>Railways & Transport</td>
+          </tr>
+          <tr>
+            <td>T.T. Chundrigar</td>
+            <td>Commerce</td>
+          </tr>
+          <tr>
+            <td>John Mathai</td>
+            <td>Industries & Supplies</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">Quick — Cabinet Firsts</div>
+      <div class="rqa">
+        <div class="rq">Finance Minister (Interim 1946)?</div>
+        <div class="ra">Liaquat Ali Khan</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Home Minister (Interim 1946)?</div>
+        <div class="ra">Sardar Vallabhbhai Patel</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Nehru ka portfolio (Interim 1946)?</div>
+        <div class="ra">VP Executive Council + External Affairs</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TRAPS ===== -->
+  <div class="tab-content" id="tab-traps">
+    <div class="sec">⚠️ Exam Traps</div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #1 — Gandhi & Jinnah — NOT in CA</div>
+      <p>Bahut log sochte hain Mahatma Gandhi Constituent Assembly mein the — <strong>Gandhi aur Jinnah dono CA ke
+          members NAHI the</strong>. Yeh important negative fact hai.</p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #2 — Temporary vs Permanent President</div>
+      <p><strong>Temporary President = Dr. Sachchidananda Sinha</strong>. <strong>Permanent President = Dr. Rajendra
+          Prasad</strong>. Dono alag hain. Exam mein "First President of CA" poochha jaye to = Rajendra Prasad
+        (Permanent).</p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #3 — Adopted vs Enforced</div>
+      <p><strong>Adopted = 26 November 1949</strong> (Constitution Day). <strong>Enforced = 26 January 1950</strong>
+        (Republic Day). Dono dates alag hain. "Constitution Day" = 26 Nov, not 26 Jan.</p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #4 — Total Seats Before vs After Partition</div>
+      <p>Before Partition: <strong>389 total seats</strong> (296 elected + 93 nominated). After Partition: <strong>299
+          seats</strong>. Final Constitution signed by <strong>284 members</strong> (not 299).</p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #5 — Cabinet Mission — Who Rejected Pakistan?</div>
+      <p>Cabinet Mission (1946) ne <strong>separate Pakistan proposal REJECT</strong> kiya. Communal electorate demand
+        by ML = accepted. Both Congress & ML ne CA accept kiya.</p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #6 — Rajendra Prasad — Kitni Committees?</div>
+      <p>Dr. Rajendra Prasad ne <strong>3 committees</strong> chair ki: Steering, Flag, Rules of Procedure. Aksar exam
+        mein sirf 1-2 poochha jata hai — teeno yaad rakho.</p>
+    </div>
+
+    <div class="trap-box">
+      <div class="trap-lbl">Trap #7 — First to Demand Constituent Assembly</div>
+      <p><strong>Pehla mention</strong> = <strong>Swaraj Bill 1895 (Tilak)</strong>. <strong>Pehli formal
+          demand</strong> = <strong>M.N. Roy 1934</strong>. INC ne 1935 mein demand ki. Teen different "firsts" —
+        context se identify karo.</p>
+    </div>
+  </div>
+
+  <!-- ===== RECALL ===== -->
+  <div class="tab-content" id="tab-recall">
+    <div class="sec">⚡ Quick Recall Cards</div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">Background — Quick Dates</div>
+      <div class="rqa">
+        <div class="rq">Swaraj Bill — kab, kiske by?</div>
+        <div class="ra">1895 — Bal Gangadhar Tilak</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Nehru Report — chairman?</div>
+        <div class="ra">1928 — Motilal Nehru</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">M.N. Roy ka demand — kab?</div>
+        <div class="ra">1934</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">August Offer — Viceroy?</div>
+        <div class="ra">1940 — Lord Linlithgow</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Individual Satyagraha — 1st & 2nd?</div>
+        <div class="ra">1st: Vinoba Bhave | 2nd: Jawaharlal Nehru</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Cabinet Mission — 3 members?</div>
+        <div class="ra">Pethick Lawrence (Chair) + Stafford Cripps + A.V. Alexander</div>
+      </div>
+    </div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">Constituent Assembly — Numbers</div>
+      <div class="rqa">
+        <div class="rq">Total seats (before partition)?</div>
+        <div class="ra">389 (296 elected + 93 nominated)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">After partition?</div>
+        <div class="ra">299 seats</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Members who signed?</div>
+        <div class="ra">284</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Women members?</div>
+        <div class="ra">15</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Total Sessions?</div>
+        <div class="ra">11 sessions, 165 working days</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Duration?</div>
+        <div class="ra">2 years 11 months 18 days</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Total expense?</div>
+        <div class="ra">₹64 lakhs approx.</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Symbol?</div>
+        <div class="ra">Elephant</div>
+      </div>
+    </div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">Key People — CA</div>
+      <div class="rqa">
+        <div class="rq">Temporary President?</div>
+        <div class="ra">Dr. Sachchidananda Sinha</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Permanent President?</div>
+        <div class="ra">Dr. Rajendra Prasad</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Constitutional Advisor?</div>
+        <div class="ra">B.N. Rau</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Father of Indian Constitution?</div>
+        <div class="ra">Dr. B.R. Ambedkar (Chairman — Drafting Committee)</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">National Flag designer?</div>
+        <div class="ra">Pingali Venkayya</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Calligrapher — English?</div>
+        <div class="ra">Prem Behari Narain Raizada</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Illustrators?</div>
+        <div class="ra">Nandalal Bose + Beohar Rammanohar Sinha</div>
+      </div>
+    </div>
+
+    <div class="recall-box">
+      <div class="recall-lbl">Critical Dates Pair</div>
+      <div class="rqa">
+        <div class="rq">First meeting of CA?</div>
+        <div class="ra">9 December 1946</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">National Flag adopted?</div>
+        <div class="ra">22 July 1947</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Draft presented by Ambedkar?</div>
+        <div class="ra">4 November 1948</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Constitution ADOPTED (Constitution Day)?</div>
+        <div class="ra">26 November 1949</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">Constitution ENFORCED (Republic Day)?</div>
+        <div class="ra">26 January 1950</div>
+      </div>
+      <div class="rqa">
+        <div class="rq">National Anthem & Song adopted?</div>
+        <div class="ra">24 January 1950</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    📚 Exam Fusion Prep | examfusionprep.com | BPSC / BSSC — Ch 02 Polity: Making of Constitution
+  </div>
+
+  <script>
+    function st(name) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

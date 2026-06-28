@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 20 – Official Language | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --gold2: #e0a800;
+      --text: #e8eaf6;
+      --muted: #9095b0;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --red-border: #e74c3c;
+      --blue-border: #3498db;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12082a, #1e1040);
+      border-bottom: 2px solid var(--accent4);
+      padding: 22px 30px 16px;
+      text-align: center;
+    }
+
+    .page-header .subject-tag {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent4);
+      margin-bottom: 6px;
+    }
+
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .page-header .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 13px;
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .tab-nav {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+      padding: 0 16px;
+      flex-shrink: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      height: 3px;
+      display: none;
+    }
+
+    .tab-nav::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .tab {
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      user-select: none;
+      margin-bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .tab.active {
+      color: var(--accent4);
+      border-bottom-color: var(--accent4);
+      background: transparent;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 24px 20px;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content-grid.single {
+      grid-template-columns: 1fr;
+      max-width: 900px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1500);
+      color: var(--gold);
+      border-bottom: 1px solid #3a3000;
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2318, #061510);
+      color: var(--accent3);
+      border-bottom: 1px solid #0d3020;
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #09192e, #060f1e);
+      color: var(--accent2);
+      border-bottom: 1px solid #0e2444;
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #1a0d28, #11071a);
+      color: var(--accent4);
+      border-bottom: 1px solid #2a1540;
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #251500, #180d00);
+      color: var(--accent5);
+      border-bottom: 1px solid #3a2000;
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #250a0a, #160404);
+      color: var(--accent1);
+      border-bottom: 1px solid #3a1010;
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #091e1a, #060f0e);
+      color: var(--accent6);
+      border-bottom: 1px solid #0e2e28;
+    }
+
+    ul.arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.arrow-list li {
+      padding: 5px 0 5px 20px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+      font-size: 13.5px;
+    }
+
+    ul.arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    ul.arrow-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 6px;
+    }
+
+    ul.arrow-list li .sub {
+      display: block;
+      margin-top: 3px;
+      font-size: 12.5px;
+      color: var(--muted);
+      padding-left: 10px;
+      border-left: 2px solid var(--border);
+    }
+
+    ul.arrow-list li .sub b {
+      color: var(--accent2);
+    }
+
+    ul.arrow-list li strong {
+      color: var(--gold);
+    }
+
+    ul.arrow-list li em {
+      color: var(--accent3);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--red-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .exam-trap .trap-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+    }
+
+    .exam-trap p {
+      color: #d0b0b0;
+      line-height: 1.6;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--blue-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .quick-recall .recall-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+    }
+
+    .quick-recall p {
+      color: #a8c8e8;
+      line-height: 1.6;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    .data-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 12px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      border-bottom: 2px solid var(--gold2);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1e2135;
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    .data-table .art {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: #0e1a30;
+      border: 1px solid #1e3a60;
+      color: var(--accent2);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-right: 3px;
+    }
+
+    /* Language grid */
+    .lang-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .lang-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 4px 10px;
+      font-size: 12.5px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .lang-pill.original {
+      border-color: var(--accent3);
+      color: var(--accent3);
+      background: #0a2318;
+    }
+
+    .lang-pill.added {
+      border-color: var(--accent2);
+      color: var(--accent2);
+      background: #09192e;
+    }
+
+    .lang-pill.classical {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: #2a2200;
+    }
+
+    /* Amendment badges */
+    .amend-badge {
+      display: inline-block;
+      background: #251500;
+      border: 1px solid #3a2000;
+      border-radius: 5px;
+      padding: 2px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent5);
+      margin-left: 6px;
+    }
+
+    /* Classical language timeline */
+    .cl-timeline {
+      position: relative;
+      padding-left: 22px;
+    }
+
+    .cl-timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--gold);
+      opacity: 0.3;
+    }
+
+    .cl-item {
+      position: relative;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .cl-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .cl-item::before {
+      content: '';
+      position: absolute;
+      left: -17px;
+      top: 7px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid var(--bg);
+    }
+
+    .cl-item .cli-year {
+      background: #2a2200;
+      border: 1px solid var(--gold2);
+      color: var(--gold);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .cl-item .cli-langs {
+      font-size: 13.5px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Stat boxes */
+    .stat-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 100px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 10px;
+      text-align: center;
+    }
+
+    .stat-box .st-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .st-label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Date highlight */
+    .date-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent4);
+      border-radius: 0 8px 8px 0;
+      padding: 11px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .date-box:last-child {
+      margin-bottom: 0;
+    }
+
+    .date-box .db-date {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--accent4);
+      min-width: 100px;
+      flex-shrink: 0;
+    }
+
+    .date-box .db-info .db-title {
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 13.5px;
+    }
+
+    .date-box .db-info .db-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: auto;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ==== RESPONSIVE TABS & TABLES FOR MOBILE ==== */
+    @media (max-width: 600px) {
+
+      /* Responsive Tabs */
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      .data-table th,
+      .data-table td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+
+      .date-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .date-box .db-date {
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div class="subject-tag">Polity · Chapter 20</div>
+    <h1>🗣️ Official Language</h1>
+    <div class="meta">Part XVII · Articles 343–351 · 8th Schedule · BPSC / BSSC Mind Map</div>
+    <div class="badge-row">
+      <span class="badge">Part XVII</span>
+      <span class="badge">Art. 343–351</span>
+      <span class="badge">8th Schedule</span>
+      <span class="badge">22 Languages</span>
+      <span class="badge">11 Classical Languages</span>
+      <span class="badge">Hindi Diwas: 14 Sep</span>
+    </div>
+  </div>
+
+  <nav class="tab-nav">
+    <div class="tab active" onclick="switchTab('overview')">📌 Overview</div>
+    <div class="tab" onclick="switchTab('schedule8')">📜 8th Schedule</div>
+    <div class="tab" onclick="switchTab('classical')">🏛️ Classical Languages</div>
+    <div class="tab" onclick="switchTab('dates')">📅 Important Dates</div>
+    <div class="tab" onclick="switchTab('articles')">📋 Key Articles</div>
+  </nav>
+
+  <!-- ═══ TAB 1: OVERVIEW ═══ -->
+  <div id="overview" class="tab-content active">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header purple">📖 Constitutional Provision</div>
+        <div class="card-body">
+          <div class="stat-row">
+            <div class="stat-box">
+              <div class="st-val">XVII</div>
+              <div class="st-label">Part</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">343–351</div>
+              <div class="st-label">Articles</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">22</div>
+              <div class="st-label">8th Schedule Langs</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">11</div>
+              <div class="st-label">Classical Languages</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li><span class="art-pill">Art 343</span> <strong>Hindi</strong> in Devanagari script → <em>Official
+                Language of Union</em></li>
+            <li><span class="art-pill">Art 344</span> Parliamentary Commission &amp; Committee on Official Language</li>
+            <li><span class="art-pill">Art 351</span> Promotion &amp; development of <strong>Hindi language</strong>
+            </li>
+          </ul>
+          <div
+            style="background:#1a0d28;border:2px solid var(--accent4);border-radius:10px;padding:14px;margin-top:14px;">
+            <div
+              style="font-size:10.5px;text-transform:uppercase;letter-spacing:2px;color:var(--accent4);margin-bottom:6px;">
+              Background</div>
+            <ul class="arrow-list">
+              <li><strong>1955</strong> → 1st Official Language Commission · Chairperson: <em>B.G. Kher</em>
+                <span class="sub">Recommended replacement of English with Hindi for official work</span>
+              </li>
+              <li><strong>1967</strong> → Amendment in Official Language Act
+                <span class="sub">Until non-Hindi states adopt Hindi → <b>English continues</b> for government
+                  work</span>
+              </li>
+            </ul>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Hindi is <strong>official language</strong>, NOT national language. India ka koi "national language" nahi
+              hai — Constitution mein "National Language" ka mention hi nahi hai. 8th Schedule = <strong>22 scheduled
+                languages</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">🏛️ Parliamentary Committee on Official Language</div>
+        <div class="card-body">
+          <div class="stat-row">
+            <div class="stat-box">
+              <div class="st-val">30</div>
+              <div class="st-label">Total Members</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">20</div>
+              <div class="st-label">From LS</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">10</div>
+              <div class="st-label">From RS</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li><strong>Function</strong> → Review progress of Hindi in government work &amp; give recommendations</li>
+            <li><strong>1st Joint Parliamentary Committee</strong> → November 1957
+              <span class="sub">Chairperson: <b>Govind Vallabh Pant</b></span>
+            </li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>Committee composition = <strong>20 (LS) + 10 (RS) = 30 total</strong>. Same LS:RS ratio (2:1) as Public
+              Accounts Committee (15+7=22). Remember — LS always has more members in joint committees.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 2: 8TH SCHEDULE ═══ -->
+  <div id="schedule8" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header gold">📜 8th Schedule — 22 Scheduled Languages</div>
+        <div class="card-body">
+          <div style="margin-bottom:14px;">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--accent3);margin-bottom:8px;font-weight:700;">
+              Original Constitution — 14 Languages</div>
+            <div class="lang-grid">
+              <span class="lang-pill original">Assamese</span>
+              <span class="lang-pill original">Bengali</span>
+              <span class="lang-pill original">Gujarati</span>
+              <span class="lang-pill original">Hindi</span>
+              <span class="lang-pill original">Kannada</span>
+              <span class="lang-pill original">Kashmiri</span>
+              <span class="lang-pill original">Malayalam</span>
+              <span class="lang-pill original">Marathi</span>
+              <span class="lang-pill original">Odiya</span>
+              <span class="lang-pill original">Punjabi</span>
+              <span class="lang-pill original">Sanskrit</span>
+              <span class="lang-pill original">Tamil</span>
+              <span class="lang-pill original">Telugu</span>
+              <span class="lang-pill original">Urdu</span>
+            </div>
+          </div>
+          <div style="margin-bottom:14px;">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--accent2);margin-bottom:8px;font-weight:700;">
+              Added Later — 8 Languages</div>
+            <div class="lang-grid">
+              <span class="lang-pill added">Sindhi <span class="amend-badge">21st Amend. 1967</span></span>
+              <span class="lang-pill added">Konkani <span class="amend-badge">71st Amend. 1992</span></span>
+              <span class="lang-pill added">Manipuri <span class="amend-badge">71st Amend. 1992</span></span>
+              <span class="lang-pill added">Nepali <span class="amend-badge">71st Amend. 1992</span></span>
+              <span class="lang-pill added">Bodo <span class="amend-badge">92nd Amend. 2003</span></span>
+              <span class="lang-pill added">Dogri <span class="amend-badge">92nd Amend. 2003</span></span>
+              <span class="lang-pill added">Santhali <span class="amend-badge">92nd Amend. 2003</span></span>
+              <span class="lang-pill added">Maithili <span class="amend-badge">92nd Amend. 2003</span></span>
+            </div>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap — Amendment-wise Additions</div>
+            <p><strong>21st Amendment (1967)</strong> → Sindhi (1 language). <strong>71st Amendment (1992)</strong> →
+              Konkani, Manipuri, Nepali (3 languages). <strong>92nd Amendment (2003)</strong> → Bodo, Dogri, Santhali,
+              Maithili (4 languages). Total added = 1+3+4 = 8. Original 14 + 8 = <strong>22</strong>.</p>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap — BPSC Special</div>
+            <p><strong>Maithili</strong> — Bihar ki major language — 92nd Amendment (2003) se 8th Schedule mein add hui.
+              Santhali bhi 92nd Amendment se add hui. Bihar se related language question aata hai!</p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>English is NOT in 8th Schedule. Sanskrit hai. <strong>Kashmiri, Sindhi</strong> — koi specific region
+              nahi (state/UT without exclusive territory). Agar koi language 8th Schedule mein hai toh uske speaker UPSC
+              exam Hindi/English ke alawa us language mein de sakte hain.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 3: CLASSICAL LANGUAGES ═══ -->
+  <div id="classical" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header gold">🏛️ Classical Languages — 11 Total</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Established from <strong>2004</strong> onwards</li>
+            <li>Based on recommendations from committees formed by <em>Sahitya Akademi</em></li>
+            <li><strong>NOT mentioned</strong> in the Constitution</li>
+          </ul>
+          <div
+            style="margin-top:14px;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">
+            Criteria for Classical Language Status</div>
+          <ul class="arrow-list" style="margin-bottom:14px;">
+            <li>Language must be <strong>1500–2000 years old</strong></li>
+            <li>Related to <strong>Traditional Literature</strong></li>
+            <li>Availability of <strong>Ancient Texts &amp; Literature</strong></li>
+          </ul>
+          <div
+            style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:10px;font-weight:700;">
+            Timeline of Classical Language Declarations</div>
+          <div class="cl-timeline">
+            <div class="cl-item">
+              <div class="cli-year">2004</div>
+              <div class="cli-langs">Tamil <span style="font-size:11.5px;color:var(--accent3);">— 1st Classical
+                  Language</span></div>
+            </div>
+            <div class="cl-item">
+              <div class="cli-year">2005</div>
+              <div class="cli-langs">Sanskrit</div>
+            </div>
+            <div class="cl-item">
+              <div class="cli-year">2008</div>
+              <div class="cli-langs">Telugu &amp; Kannada</div>
+            </div>
+            <div class="cl-item">
+              <div class="cli-year">2013</div>
+              <div class="cli-langs">Malayalam</div>
+            </div>
+            <div class="cl-item">
+              <div class="cli-year">2014</div>
+              <div class="cli-langs">Odia</div>
+            </div>
+            <div class="cl-item">
+              <div class="cli-year">2024 ⭐ NEW</div>
+              <div class="cli-langs" style="color:var(--gold);font-weight:700;">Pali, Marathi, Prakrit, Assamese,
+                Bengali<br><span style="font-size:12px;color:var(--accent5);">(5 languages added in 2024)</span></div>
+            </div>
+          </div>
+          <div class="exam-trap" style="margin-top:14px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Tamil = 1st Classical Language (2004)</strong>. Total now = <strong>11 Classical
+                Languages</strong> (after 2024 additions). Classical Languages are <strong>NOT in Constitution</strong>
+              — govt. decision, not constitutional provision. <strong>Maithili</strong> still NOT a classical language
+              despite being in 8th Schedule.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">📊 Classical Languages — Quick Reference</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>Language(s) Declared Classical</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="art">2004</td>
+                  <td style="color:var(--accent3);font-weight:700;">Tamil 🥇 (First!)</td>
+                  <td style="color:var(--gold);font-weight:700;text-align:center;">1</td>
+                </tr>
+                <tr>
+                  <td class="art">2005</td>
+                  <td>Sanskrit</td>
+                  <td style="color:var(--gold);font-weight:700;text-align:center;">1</td>
+                </tr>
+                <tr>
+                  <td class="art">2008</td>
+                  <td>Telugu, Kannada</td>
+                  <td style="color:var(--gold);font-weight:700;text-align:center;">2</td>
+                </tr>
+                <tr>
+                  <td class="art">2013</td>
+                  <td>Malayalam</td>
+                  <td style="color:var(--gold);font-weight:700;text-align:center;">1</td>
+                </tr>
+                <tr>
+                  <td class="art">2014</td>
+                  <td>Odia</td>
+                  <td style="color:var(--gold);font-weight:700;text-align:center;">1</td>
+                </tr>
+                <tr style="background:#2a2200 !important;">
+                  <td class="art" style="color:var(--accent5);">2024 🆕</td>
+                  <td style="color:var(--accent5);font-weight:700;">Pali, Marathi, Prakrit, Assamese, Bengali</td>
+                  <td style="color:var(--accent5);font-weight:800;text-align:center;">5</td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="font-weight:800;color:var(--gold);">TOTAL</td>
+                  <td style="color:var(--gold);font-weight:800;text-align:center;">11</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="quick-recall" style="margin-top:12px;">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>2024 mein <strong>5 nayi classical languages</strong> add hui — <strong>Pali, Marathi, Prakrit, Assamese,
+                Bengali</strong>. Ye current affairs + polity dono ka hissa hai. Pehle 6 thi (2004–2014), ab
+              <strong>11</strong> ho gayi hain.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 4: IMPORTANT DATES ═══ -->
+  <div id="dates" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header orange">📅 Important Dates — Official Language</div>
+        <div class="card-body">
+          <div class="date-box">
+            <div class="db-date">14 Sep 1949</div>
+            <div class="db-info">
+              <div class="db-title">Hindi Diwas</div>
+              <div class="db-desc">Hindi adopted as Official Language by Constituent Assembly · Celebrated annually on
+                14th September</div>
+            </div>
+          </div>
+          <div class="date-box">
+            <div class="db-date">10 January</div>
+            <div class="db-info">
+              <div class="db-title">World Hindi Day (Vishwa Hindi Diwas)</div>
+              <div class="db-desc">First World Hindi Conference held in Nagpur (1975). Celebrated globally on 10th
+                January.</div>
+            </div>
+          </div>
+          <div class="date-box">
+            <div class="db-date">1955</div>
+            <div class="db-info">
+              <div class="db-title">1st Official Language Commission</div>
+              <div class="db-desc">Chairperson: B.G. Kher · Recommended replacing English with Hindi for official
+                government work</div>
+            </div>
+          </div>
+          <div class="date-box">
+            <div class="db-date">Nov 1957</div>
+            <div class="db-info">
+              <div class="db-title">1st Joint Parliamentary Committee</div>
+              <div class="db-desc">Chairperson: Govind Vallabh Pant · First committee to review Hindi's progress in
+                official use</div>
+            </div>
+          </div>
+          <div class="date-box">
+            <div class="db-date">1967</div>
+            <div class="db-info">
+              <div class="db-title">Official Language Act Amendment</div>
+              <div class="db-desc">English to continue for government work until non-Hindi speaking states adopt Hindi
+                voluntarily</div>
+            </div>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap — Hindi Diwas vs World Hindi Day</div>
+            <p><strong>Hindi Diwas</strong> = <strong>14 September</strong> (1949) — National level, India mein manaya
+              jaata hai. <strong>World Hindi Day (Vishwa Hindi Diwas)</strong> = <strong>10 January</strong> —
+              International level, globally celebrated. Dono alag dates hain — confuse mat karo!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 5: KEY ARTICLES ═══ -->
+  <div id="articles" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header purple">📋 Key Articles — Official Language (Part XVII)</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th>Subject</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="art">343</td>
+                  <td>Official Language of the Union → Hindi in Devanagari script</td>
+                </tr>
+                <tr>
+                  <td class="art">344</td>
+                  <td>Parliamentary Commission &amp; Committee on Official Language</td>
+                </tr>
+                <tr>
+                  <td class="art">345</td>
+                  <td>Official Language of the State</td>
+                </tr>
+                <tr>
+                  <td class="art">346</td>
+                  <td>Language for communication between States &amp; the Union</td>
+                </tr>
+                <tr>
+                  <td class="art">348</td>
+                  <td>Language of the Judiciary &amp; Legislation</td>
+                </tr>
+                <tr>
+                  <td class="art">350(A)</td>
+                  <td>Education in mother tongue at the primary stage</td>
+                </tr>
+                <tr>
+                  <td class="art">351</td>
+                  <td>Promotion &amp; development of Hindi language</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="quick-recall" style="margin-top:12px;">
+            <div class="recall-title">💡 Quick Recall — Must-Know</div>
+            <p><strong>Art. 343</strong> — Hindi = Union Official Language. <strong>Art. 348</strong> — SC &amp; HC
+              proceedings in English (unless President orders otherwise). <strong>Art. 351</strong> — Centre's duty to
+              develop Hindi. <strong>8th Schedule</strong> — 22 languages (NOT part of Art. 343–351 range but linked).
+            </p>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Art. 348</strong> — SC and HC language = <strong>English</strong> (unless President authorizes
+              otherwise). Many assume courts work in Hindi — but constitutionally, English is the court language at the
+              highest levels.</p>
+          </div>
+          <div style="margin-top:14px;background:#1a0d28;border:1px solid #2a1540;border-radius:8px;padding:13px;">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--accent4);margin-bottom:8px;font-weight:700;">
+              8th Schedule Amendments Summary</div>
+            <div class="tw">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Amendment</th>
+                    <th>Year</th>
+                    <th>Languages Added</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="art">21st</td>
+                    <td>1967</td>
+                    <td>Sindhi</td>
+                  </tr>
+                  <tr>
+                    <td class="art">71st</td>
+                    <td>1992</td>
+                    <td>Konkani, Manipuri, Nepali</td>
+                  </tr>
+                  <tr>
+                    <td class="art">92nd</td>
+                    <td>2003</td>
+                    <td style="color:var(--accent5);font-weight:600;">Bodo, Dogri, Santhali, <strong>Maithili</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com &nbsp;·&nbsp; Polity Ch 20 — Official Language &nbsp;·&nbsp; BPSC
+    / BSSC
+  </div>
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 10 – President of India | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --gold2: #e0a800;
+      --text: #e8eaf6;
+      --muted: #9095b0;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --red-border: #e74c3c;
+      --blue-border: #3498db;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12152a 0%, #1e2240 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 30px 16px;
+      text-align: center;
+    }
+
+    .page-header .subject-tag {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .page-header .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 13px;
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .tab-nav {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+      padding: 0 16px;
+      flex-shrink: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      height: 3px;
+      display: none;
+    }
+
+    .tab-nav::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .tab {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      user-select: none;
+      margin-bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      background: transparent;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 24px 20px;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content-grid.single {
+      grid-template-columns: 1fr;
+      max-width: 900px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1500);
+      color: var(--gold);
+      border-bottom: 1px solid #3a3000;
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2318, #061510);
+      color: var(--accent3);
+      border-bottom: 1px solid #0d3020;
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #09192e, #060f1e);
+      color: var(--accent2);
+      border-bottom: 1px solid #0e2444;
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #1a0d28, #11071a);
+      color: var(--accent4);
+      border-bottom: 1px solid #2a1540;
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #251500, #180d00);
+      color: var(--accent5);
+      border-bottom: 1px solid #3a2000;
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #250a0a, #160404);
+      color: var(--accent1);
+      border-bottom: 1px solid #3a1010;
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #091e1a, #060f0e);
+      color: var(--accent6);
+      border-bottom: 1px solid #0e2e28;
+    }
+
+    ul.arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.arrow-list li {
+      padding: 5px 0 5px 20px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+      font-size: 13.5px;
+    }
+
+    ul.arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    ul.arrow-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 6px;
+    }
+
+    ul.arrow-list li .sub {
+      display: block;
+      margin-top: 3px;
+      font-size: 12.5px;
+      color: var(--muted);
+      padding-left: 10px;
+      border-left: 2px solid var(--border);
+    }
+
+    ul.arrow-list li .sub b {
+      color: var(--accent2);
+    }
+
+    ul.arrow-list li strong {
+      color: var(--gold);
+    }
+
+    ul.arrow-list li em {
+      color: var(--accent3);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--red-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .exam-trap .trap-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+    }
+
+    .exam-trap p {
+      color: #d0b0b0;
+      line-height: 1.6;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--blue-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .quick-recall .recall-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+    }
+
+    .quick-recall p {
+      color: #a8c8e8;
+      line-height: 1.6;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    .data-table,
+    .pres-table,
+    .imp-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .data-table th,
+    .pres-table th,
+    .imp-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      border-bottom: 2px solid var(--gold2);
+      white-space: nowrap;
+      text-align: left;
+    }
+
+    .imp-table th {
+      text-align: center;
+    }
+
+    .data-table td,
+    .pres-table td,
+    .imp-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1e2135;
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    .pres-table td {
+      font-size: 12.5px;
+    }
+
+    .imp-table td {
+      text-align: center;
+    }
+
+    .data-table tr:last-child td,
+    .pres-table tr:last-child td,
+    .imp-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td,
+    .pres-table tr:hover td,
+    .imp-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    /* Specific table styles */
+    .data-table .art {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .data-table .num {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .pres-table .pname {
+      font-weight: 700;
+      color: var(--accent2);
+    }
+
+    .pres-table .term {
+      color: var(--muted);
+      font-size: 11.5px;
+      white-space: nowrap;
+    }
+
+    .pres-table .note {
+      color: var(--accent3);
+      font-size: 12px;
+    }
+
+    .pres-table .first-badge {
+      display: inline-block;
+      background: #09192e;
+      border: 1px solid #1e3a60;
+      color: var(--accent2);
+      border-radius: 3px;
+      padding: 1px 6px;
+      font-size: 10.5px;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    .imp-table .voter {
+      font-weight: 700;
+      color: var(--text);
+      text-align: left;
+    }
+
+    .imp-table .yes {
+      color: var(--accent3);
+      font-size: 16px;
+    }
+
+    .imp-table .no {
+      color: var(--accent1);
+      font-size: 16px;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: #0e1a30;
+      border: 1px solid #1e3a60;
+      color: var(--accent2);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    /* Power category cards */
+    .power-section {
+      margin-bottom: 14px;
+    }
+
+    .power-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .power-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 6px 10px;
+      border-radius: 5px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .power-title.executive {
+      background: #251500;
+      color: var(--accent5);
+    }
+
+    .power-title.legislative {
+      background: #09192e;
+      color: var(--accent2);
+    }
+
+    .power-title.judicial {
+      background: #0a2318;
+      color: var(--accent3);
+    }
+
+    .power-title.emergency {
+      background: #250a0a;
+      color: var(--accent1);
+    }
+
+    .power-items {
+      padding-left: 12px;
+    }
+
+    .power-items li {
+      list-style: none;
+      padding: 4px 0 4px 16px;
+      position: relative;
+      font-size: 13px;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+    }
+
+    .power-items li:last-child {
+      border-bottom: none;
+    }
+
+    .power-items li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+      font-size: 11px;
+      top: 5px;
+    }
+
+    .power-items li strong {
+      color: var(--gold);
+    }
+
+    .power-items li .art-tag {
+      color: var(--accent2);
+      font-weight: 700;
+      font-size: 11.5px;
+      margin-left: 4px;
+    }
+
+    /* Stat boxes */
+    .stat-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 110px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 12px;
+      text-align: center;
+    }
+
+    .stat-box .st-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .st-label {
+      font-size: 10.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Electoral college viz */
+    .ec-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ec-box {
+      flex: 1;
+      min-width: 140px;
+      border-radius: 8px;
+      padding: 11px 14px;
+    }
+
+    .ec-box.has-vote {
+      background: #0a2318;
+      border: 1px solid #155230;
+    }
+
+    .ec-box.no-vote {
+      background: #1a0909;
+      border: 1px solid #3a1010;
+    }
+
+    .ec-box .ec-label {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .ec-box.has-vote .ec-label {
+      color: var(--accent3);
+    }
+
+    .ec-box.no-vote .ec-label {
+      color: var(--accent1);
+    }
+
+    .ec-box .ec-items {
+      font-size: 12.5px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* Rashtrapati Bhawan */
+    .rb-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid #1e2135;
+      font-size: 13px;
+    }
+
+    .rb-item:last-child {
+      border-bottom: none;
+    }
+
+    .rb-arrow {
+      color: var(--accent5);
+      font-weight: 700;
+      min-width: 18px;
+    }
+
+    .rb-old {
+      color: var(--muted);
+      text-decoration: line-through;
+      font-size: 12.5px;
+    }
+
+    .rb-new {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: auto;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ==== RESPONSIVE DESIGN FOR MOBILE ==== */
+    @media(max-width: 600px) {
+      .content-grid.single {
+        grid-template-columns: 1fr;
+      }
+
+      /* Responsive Tabs */
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      .data-table th,
+      .data-table td,
+      .pres-table th,
+      .pres-table td,
+      .imp-table th,
+      .imp-table td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="subject-tag">Polity · Chapter 10</div>
+    <h1>🏛️ President of India</h1>
+    <div class="meta">Art. 52–62, 71, 72 · BPSC / BSSC Mind Map</div>
+    <div class="badge-row">
+      <span class="badge">Head of State</span>
+      <span class="badge">Nominal Executive</span>
+      <span class="badge">Art. 52–73</span>
+      <span class="badge">5-Year Term</span>
+      <span class="badge">Supreme Commander</span>
+      <span class="badge">First Citizen</span>
+    </div>
+  </div>
+
+  <!-- TAB NAV -->
+  <nav class="tab-nav">
+    <div class="tab active" onclick="switchTab('overview')">📌 Overview</div>
+    <div class="tab" onclick="switchTab('election')">🗳️ Election</div>
+    <div class="tab" onclick="switchTab('powers')">⚡ Powers</div>
+    <div class="tab" onclick="switchTab('impeachment')">⚖️ Impeachment</div>
+    <div class="tab" onclick="switchTab('bhawan')">🏰 Rashtrapati Bhawan</div>
+    <div class="tab" onclick="switchTab('presidents')">👤 List of Presidents</div>
+    <div class="tab" onclick="switchTab('articles')">📋 Key Articles</div>
+  </nav>
+
+  <!-- ═══ TAB 1: OVERVIEW ═══ -->
+  <div id="overview" class="tab-content active">
+    <div class="content-grid">
+
+      <div class="card">
+        <div class="card-header gold">📖 General Facts</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Head of the State</strong> (Chief of State)</li>
+            <li><strong>Supreme Commander</strong> of Armed Forces</li>
+            <li>Holds all <strong>Executive Powers</strong> — but Nominal Executive
+              <span class="sub">Real Authority → <b>Prime Minister + Council of Ministers</b></span>
+            </li>
+            <li><strong>First Citizen</strong> of India</li>
+            <li><strong>Chancellor</strong> of all Central Universities</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>President <strong>"Nominal Executive"</strong> hai — real power Prime Minister ke paas hai. Isliye
+              President ke decisions Cabinet ki advice pe hoti hain (Art. 74). "De Jure Executive" = President; "De
+              Facto Executive" = PM.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green">✅ Eligibility Criteria</div>
+        <div class="card-body">
+          <div class="stat-row">
+            <div class="stat-box">
+              <div class="st-val">35+</div>
+              <div class="st-label">Min. Age</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">5 yrs</div>
+              <div class="st-label">Term</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">₹5L</div>
+              <div class="st-label">Monthly Salary</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li>Must be a <strong>citizen of India</strong></li>
+            <li>Must be at least <strong>35 years of age</strong></li>
+            <li>Must qualify eligibility of a <strong>Lok Sabha member</strong></li>
+            <li>Must <strong>not hold any office of profit</strong></li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>India mein <strong>naturalized citizen</strong> bhi President ban sakta hai — USA mein nahi! USA ka
+              President sirf <strong>natural-born citizen</strong> ho sakta hai.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header orange">📋 Other Important Details</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Oath Administered by</strong> → Chief Justice of India (or senior-most judge)</li>
+            <li><strong>Resignation To</strong> → Vice-President</li>
+            <li><strong>Term</strong> → 5 years (resign / die / impeached)</li>
+            <li><strong>Salary</strong> → ₹5 Lakh/month from <em>Consolidated Fund of India</em></li>
+            <li><strong>Re-election</strong> → Any number of times (no limit)</li>
+            <li>Conditions: Must not hold any office of profit under Union or State Govt.</li>
+            <li><strong>Dispute in Election</strong> → <em>Supreme Court</em> (Article 71)</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>President ka resignation <strong>Vice-President</strong> ko jaata hai, Speaker ko nahi. Oath CJI dilwate
+              hain — Vice-President nahi. Ye dono popular confusions hain!</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ TAB 2: ELECTION ═══ -->
+  <div id="election" class="tab-content">
+    <div class="content-grid">
+
+      <div class="card">
+        <div class="card-header blue">🗳️ Election Procedure</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Indirect Election</strong></li>
+            <li><strong>Proportional Representation</strong> system</li>
+            <li><strong>Single Transferable Vote</strong></li>
+            <li><strong>Secret Ballot</strong></li>
+            <li>Security Deposit → <em>₹15,000/-</em></li>
+            <li><strong>50 Proposers + 50 Seconders</strong> required</li>
+            <li>Dispute Resolution → <em>Supreme Court</em> (Art. 71)</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>President ka election <strong>Direct nahi, Indirect</strong> hai. Aam janta vote nahi karti — Electoral
+              College vote karta hai. Yahi reason hai Presidential election aur Lok Sabha election alag hain.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">🏛️ Electoral College</div>
+        <div class="card-body">
+          <div class="ec-row">
+            <div class="ec-box has-vote">
+              <div class="ec-label">✅ Vote Dene Ka Adhikar</div>
+              <div class="ec-items">
+                ▸ Elected MPs (Lok Sabha)<br>
+                ▸ Elected MPs (Rajya Sabha)<br>
+                ▸ Elected MLAs (State Legislatures)<br>
+                ▸ Elected MLAs (UT Legislatures)
+              </div>
+            </div>
+            <div class="ec-box no-vote">
+              <div class="ec-label">❌ Vote Nahi De Sakte</div>
+              <div class="ec-items">
+                ▸ Members of Legislative Council<br>
+                ▸ Nominated Members (MP/MLA)
+              </div>
+            </div>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Legislative Council (Vidhan Parishad)</strong> ke members Presidential election mein vote NAHI
+              kar sakte. Sirf <strong>elected</strong> members vote kar sakte hain — nominated members bhi excluded
+              hain.</p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>UT mein sirf <strong>Delhi aur Puducherry</strong> ke elected MLAs vote kar sakte hain — inke paas
+              legislature hai. Baaki UTs ke representatives vote nahi kar sakte.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ TAB 3: POWERS ═══ -->
+  <div id="powers" class="tab-content">
+    <div class="content-grid">
+
+      <div class="card">
+        <div class="card-header gold">⚡ Powers of the President</div>
+        <div class="card-body">
+          <div class="power-section">
+            <div class="power-title executive">🟠 1. Executive Powers</div>
+            <ul class="power-items">
+              <li>Appoints <strong>Prime Minister</strong> &amp; Council of Ministers</li>
+              <li>Appoints <strong>Governors</strong> of States</li>
+              <li>Appoints <strong>Judges</strong> of SC &amp; HCs</li>
+              <li>Appoints <strong>Chairpersons</strong> of Commissions</li>
+              <li>Appoints <strong>Diplomats</strong> (Ambassadors, High Commissioners)</li>
+            </ul>
+          </div>
+          <div class="power-section">
+            <div class="power-title legislative">🔵 2. Legislative Powers</div>
+            <ul class="power-items">
+              <li><strong>Summon &amp; Prorogue</strong> Parliament sessions</li>
+              <li><strong>Dissolution</strong> of Lok Sabha</li>
+              <li><strong>Assent to bills</strong> — can withhold, return, or give assent</li>
+              <li>Issue <strong>Ordinances</strong> when Parliament not in session</li>
+            </ul>
+          </div>
+          <div class="power-section">
+            <div class="power-title judicial">🟢 3. Judicial Powers (Art. 72)</div>
+            <ul class="power-items">
+              <li><strong>Pardon</strong> — completely absolve punishment</li>
+              <li><strong>Reprieve</strong> — temporary stay of punishment</li>
+              <li><strong>Respite</strong> — reduced sentence due to special reason</li>
+              <li><strong>Remission</strong> — reduce quantum of punishment</li>
+            </ul>
+          </div>
+          <div class="power-section">
+            <div class="power-title emergency">🔴 4. Emergency Powers</div>
+            <ul class="power-items">
+              <li><strong>National Emergency</strong> <span class="art-tag">Art. 352</span></li>
+              <li><strong>President's Rule</strong> in States <span class="art-tag">Art. 356</span></li>
+              <li><strong>Financial Emergency</strong> <span class="art-tag">Art. 360</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red">🎁 Pardoning Powers — Art. 72 (Detail)</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Power</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="color:var(--accent3);font-weight:700;">Pardon</td>
+                  <td>Completely absolve — saza khatam, conviction bhi khatam</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--accent2);font-weight:700;">Commutation</td>
+                  <td>Ek saza ko doosri (kam) saza mein badalna</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--accent5);font-weight:700;">Reprieve</td>
+                  <td>Temporary postponement — especially death sentence</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--accent4);font-weight:700;">Respite</td>
+                  <td>Special reason pe sentence reduce karna (e.g. pregnancy)</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--accent1);font-weight:700;">Remission</td>
+                  <td>Punishment ki quantity reduce karna (nature same rahta)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Art. 72 = President</strong> ke pardoning powers. <strong>Art. 161 = Governor</strong> ke
+              pardoning powers. Governor <strong>death sentence</strong> mein pardon nahi de sakta — sirf President de
+              sakta hai!</p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>Giani Zail Singh</strong> (1982–87) — Pocket Veto exercise ki, <strong>Postal Bill</strong> pe
+              assent nahi diya. Pocket veto = na assent dena, na return karna.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ TAB 4: IMPEACHMENT ═══ -->
+  <div id="impeachment" class="tab-content">
+    <div class="content-grid">
+
+      <div class="card">
+        <div class="card-header red">⚖️ Impeachment Procedure (Art. 61)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Quasi-judicial process</strong></li>
+            <li><strong>Any House</strong> (Lok Sabha or Rajya Sabha) can initiate</li>
+            <li><strong>14-days prior notice</strong> required before resolution</li>
+            <li>Passed by <strong>Special Majority</strong> — not less than <em>2/3rd of Total Membership</em> in both
+              Houses</li>
+            <li>If passed in <strong>both Houses</strong> → President stands removed</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Impeachment mein <strong>Special Majority</strong> chahiye — 2/3rd of <strong>Total Membership</strong>
+              (present &amp; voting ki majority nahi). Aur <strong>dono Houses</strong> mein pass hona zaroori hai.</p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>Abhi tak <strong>kisi bhi President ka impeachment nahi hua</strong> India mein. Ye sirf theoretical
+              provision hai. No President has ever been impeached in India.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">🗳️ Impeachment vs Election — Who Votes?</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="imp-table">
+              <thead>
+                <tr>
+                  <th>Voter Category</th>
+                  <th>Impeachment</th>
+                  <th>Election</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="voter">Elected MPs</td>
+                  <td><span class="yes">✓</span></td>
+                  <td><span class="yes">✓</span></td>
+                </tr>
+                <tr>
+                  <td class="voter">Elected MLAs</td>
+                  <td><span class="no">✗</span></td>
+                  <td><span class="yes">✓</span></td>
+                </tr>
+                <tr>
+                  <td class="voter">Nominated MPs</td>
+                  <td><span class="yes">✓</span></td>
+                  <td><span class="no">✗</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>MLAs</strong> — Election mein vote karte hain, Impeachment mein NAHI. <strong>Nominated
+                MPs</strong> — Impeachment mein vote karte hain, Election mein NAHI. Ye table BPSC mein directly aata
+              hai!</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ TAB 5: RASHTRAPATI BHAWAN ═══ -->
+  <div id="bhawan" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header orange">🏰 Rashtrapati Bhawan — Key Facts</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Architect</strong> → <em>Edwin Lutyens</em></li>
+            <li>Official residence of the President of India</li>
+          </ul>
+          <div style="margin: 14px 0;">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">
+              Name Changes (Old → New)</div>
+            <div class="rb-item">
+              <div class="rb-arrow">🌸</div>
+              <div><span class="rb-old">Mughal Garden</span> → <span class="rb-new">Amrit Udyan</span></div>
+            </div>
+            <div class="rb-item">
+              <div class="rb-arrow">🏛️</div>
+              <div><span class="rb-old">Durbar Hall</span> → <span class="rb-new">Gantantra Mandap</span></div>
+            </div>
+            <div class="rb-item">
+              <div class="rb-arrow">🦚</div>
+              <div><span class="rb-old">Ashoka Hall</span> → <span class="rb-new">Ashok Mandap</span></div>
+            </div>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Mughal Garden</strong> — ab <em>Amrit Udyan</em> hai (renamed 2023). Ye current affairs + polity
+              dono ka part hai. Architect <strong>Edwin Lutyens</strong> — Herbert Baker ke saath mila ke New Delhi
+              banaya tha.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 6: PRESIDENTS LIST ═══ -->
+  <div id="presidents" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header gold">👤 List of All Presidents of India</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="pres-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>President</th>
+                  <th>Term</th>
+                  <th>Notable Fact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="num">1</td>
+                  <td class="pname">Dr. Rajendra Prasad</td>
+                  <td class="term">1950–1962</td>
+                  <td class="note">Longest serving · 2 Terms <span class="first-badge">FIRST</span></td>
+                </tr>
+                <tr>
+                  <td class="num">2</td>
+                  <td class="pname">Dr. S. Radhakrishnan</td>
+                  <td class="term">1962–1967</td>
+                  <td class="note">First VP to become President</td>
+                </tr>
+                <tr>
+                  <td class="num">3</td>
+                  <td class="pname">Dr. Zakir Hussain</td>
+                  <td class="term">1967–1969</td>
+                  <td class="note" style="color:var(--accent1);">Died while in office <span class="first-badge"
+                      style="background:#250a0a;color:var(--accent1);border-color:#3a1010;">1st to die</span></td>
+                </tr>
+                <tr>
+                  <td class="num">—</td>
+                  <td class="pname" style="color:var(--muted);">V.V. Giri (Acting)</td>
+                  <td class="term">May–Jul 1969</td>
+                  <td class="note">First Acting President, then elected</td>
+                </tr>
+                <tr>
+                  <td class="num">—</td>
+                  <td class="pname" style="color:var(--muted);">Justice Hidayatullah (Acting)</td>
+                  <td class="term">Jul–Aug 1969</td>
+                  <td class="note">First CJI to become (Acting) President</td>
+                </tr>
+                <tr>
+                  <td class="num">4</td>
+                  <td class="pname">V.V. Giri</td>
+                  <td class="term">1969–1974</td>
+                  <td class="note">First elected as <strong>Independent candidate</strong></td>
+                </tr>
+                <tr>
+                  <td class="num">5</td>
+                  <td class="pname">Fakhruddin Ali Ahmed</td>
+                  <td class="term">1974–1977</td>
+                  <td class="note" style="color:var(--accent1);">Second President to die in office</td>
+                </tr>
+                <tr>
+                  <td class="num">—</td>
+                  <td class="pname" style="color:var(--muted);">B.D. Jatti (Acting)</td>
+                  <td class="term">Feb–Jul 1977</td>
+                  <td class="note">Acting President</td>
+                </tr>
+                <tr>
+                  <td class="num">6</td>
+                  <td class="pname">Neelam Sanjiva Reddy</td>
+                  <td class="term">1977–1982</td>
+                  <td class="note">Elected <strong>unopposed</strong></td>
+                </tr>
+                <tr>
+                  <td class="num">7</td>
+                  <td class="pname">Giani Zail Singh</td>
+                  <td class="term">1982–1987</td>
+                  <td class="note">Exercised <strong>Pocket Veto</strong> (Postal Bill)</td>
+                </tr>
+                <tr>
+                  <td class="num">8</td>
+                  <td class="pname">R. Venkataraman</td>
+                  <td class="term">1987–1992</td>
+                  <td class="note">Also Finance &amp; Defence Minister</td>
+                </tr>
+                <tr>
+                  <td class="num">9</td>
+                  <td class="pname">Dr. Shankar Dayal Sharma</td>
+                  <td class="term">1992–1997</td>
+                  <td class="note">Worked with 4 PMs, appointed 3</td>
+                </tr>
+                <tr>
+                  <td class="num">10</td>
+                  <td class="pname">K.R. Narayanan</td>
+                  <td class="term">1997–2002</td>
+                  <td class="note">Oldest President to be elected</td>
+                </tr>
+                <tr>
+                  <td class="num">11</td>
+                  <td class="pname">Dr. APJ Abdul Kalam</td>
+                  <td class="term">2002–2007</td>
+                  <td class="note"><strong>Missile Man of India</strong> · "People's President"</td>
+                </tr>
+                <tr>
+                  <td class="num">12</td>
+                  <td class="pname">Pratibha Patil</td>
+                  <td class="term">2007–2012</td>
+                  <td class="note"><span class="first-badge"
+                      style="background:#09192e;color:var(--accent2);border-color:#1e3a60;">1st Woman</span> President
+                  </td>
+                </tr>
+                <tr>
+                  <td class="num">13</td>
+                  <td class="pname">Pranab Mukherjee</td>
+                  <td class="term">2012–2017</td>
+                  <td class="note">First from <strong>Bengal</strong></td>
+                </tr>
+                <tr>
+                  <td class="num">14</td>
+                  <td class="pname">Ram Nath Kovind</td>
+                  <td class="term">2017–2022</td>
+                  <td class="note">First from <strong>Uttar Pradesh</strong></td>
+                </tr>
+                <tr>
+                  <td class="num">15</td>
+                  <td class="pname" style="color:var(--gold);">Droupadi Murmu</td>
+                  <td class="term">2022–Present</td>
+                  <td class="note"><span class="first-badge"
+                      style="background:#0a2318;color:var(--accent3);border-color:#155230;">1st Tribal</span> President
+                    · Also 2nd Woman</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="exam-trap" style="margin-top:14px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Droupadi Murmu</strong> — 1st Tribal President AND 2nd Woman President. <strong>Pratibha
+                Patil</strong> — 1st Woman. <strong>K.R. Narayanan</strong> — 1st Dalit President (often asked).
+              <strong>V.V. Giri</strong> — 1st Independent candidate as elected President.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 7: KEY ARTICLES ═══ -->
+  <div id="articles" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header teal">📋 Key Articles — Art. 52–73</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th>Subject</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="art">52</td>
+                  <td>The President of India</td>
+                </tr>
+                <tr>
+                  <td class="art">53</td>
+                  <td>Executive Powers of the Union vested in President</td>
+                </tr>
+                <tr>
+                  <td class="art">54</td>
+                  <td>Election of the President</td>
+                </tr>
+                <tr>
+                  <td class="art">55</td>
+                  <td>Procedure of Election (Proportional Representation)</td>
+                </tr>
+                <tr>
+                  <td class="art">56</td>
+                  <td>Term of Office — 5 years</td>
+                </tr>
+                <tr>
+                  <td class="art">57</td>
+                  <td>Eligibility for re-election (no limit)</td>
+                </tr>
+                <tr>
+                  <td class="art">58</td>
+                  <td>Qualifications for President</td>
+                </tr>
+                <tr>
+                  <td class="art">59</td>
+                  <td>Conditions for Post (no office of profit)</td>
+                </tr>
+                <tr>
+                  <td class="art">60</td>
+                  <td>Oath of President</td>
+                </tr>
+                <tr>
+                  <td class="art">61</td>
+                  <td>Impeachment of President</td>
+                </tr>
+                <tr>
+                  <td class="art">62</td>
+                  <td>Vacancy — how to be filled</td>
+                </tr>
+                <tr>
+                  <td class="art">71</td>
+                  <td>Dispute in election → resolved by Supreme Court</td>
+                </tr>
+                <tr>
+                  <td class="art">72</td>
+                  <td>Pardoning Powers (Pardon, Reprieve, Respite, Remission)</td>
+                </tr>
+                <tr>
+                  <td class="art">73</td>
+                  <td>Extent of Executive Power of Union</td>
+                </tr>
+                <tr>
+                  <td class="art">74</td>
+                  <td>Council of Ministers to aid &amp; advise President</td>
+                </tr>
+                <tr>
+                  <td class="art">352</td>
+                  <td>National Emergency</td>
+                </tr>
+                <tr>
+                  <td class="art">356</td>
+                  <td>President's Rule in States</td>
+                </tr>
+                <tr>
+                  <td class="art">360</td>
+                  <td>Financial Emergency</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="quick-recall" style="margin-top:12px;">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>Art. <strong>52 to 62</strong> — President se directly related articles. Art. <strong>71</strong> —
+              Election dispute (SC). Art. <strong>72</strong> — Pardoning Power. Art. <strong>74</strong> — Cabinet
+              advice binding on President.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com &nbsp;·&nbsp; Polity Ch 10 — President of India &nbsp;·&nbsp;
+    BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

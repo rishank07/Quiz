@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 11 – Prime Minister & Council of Ministers | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --gold2: #e0a800;
+      --text: #e8eaf6;
+      --muted: #9095b0;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --red-border: #e74c3c;
+      --blue-border: #3498db;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12152a 0%, #1e2240 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 30px 16px;
+      text-align: center;
+    }
+
+    .page-header .subject-tag {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .page-header .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 13px;
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .tab-nav {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+      padding: 0 16px;
+      flex-shrink: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      height: 3px;
+      display: none;
+    }
+
+    .tab-nav::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .tab {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      user-select: none;
+      margin-bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      background: transparent;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 24px 20px;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content-grid.single {
+      grid-template-columns: 1fr;
+      max-width: 920px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1500);
+      color: var(--gold);
+      border-bottom: 1px solid #3a3000;
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2318, #061510);
+      color: var(--accent3);
+      border-bottom: 1px solid #0d3020;
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #09192e, #060f1e);
+      color: var(--accent2);
+      border-bottom: 1px solid #0e2444;
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #1a0d28, #11071a);
+      color: var(--accent4);
+      border-bottom: 1px solid #2a1540;
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #251500, #180d00);
+      color: var(--accent5);
+      border-bottom: 1px solid #3a2000;
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #250a0a, #160404);
+      color: var(--accent1);
+      border-bottom: 1px solid #3a1010;
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #091e1a, #060f0e);
+      color: var(--accent6);
+      border-bottom: 1px solid #0e2e28;
+    }
+
+    ul.arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.arrow-list li {
+      padding: 5px 0 5px 20px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+      font-size: 13.5px;
+    }
+
+    ul.arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    ul.arrow-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 6px;
+    }
+
+    ul.arrow-list li .sub {
+      display: block;
+      margin-top: 3px;
+      font-size: 12.5px;
+      color: var(--muted);
+      padding-left: 10px;
+      border-left: 2px solid var(--border);
+    }
+
+    ul.arrow-list li .sub b {
+      color: var(--accent2);
+    }
+
+    ul.arrow-list li strong {
+      color: var(--gold);
+    }
+
+    ul.arrow-list li em {
+      color: var(--accent3);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--red-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .exam-trap .trap-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+    }
+
+    .exam-trap p {
+      color: #d0b0b0;
+      line-height: 1.6;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--blue-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .quick-recall .recall-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+    }
+
+    .quick-recall p {
+      color: #a8c8e8;
+      line-height: 1.6;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    .data-table,
+    .pm-table,
+    .rule89-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .data-table th,
+    .pm-table th,
+    .rule89-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 12px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      border-bottom: 2px solid var(--gold2);
+      white-space: nowrap;
+    }
+
+    .rule89-table th {
+      text-align: center;
+    }
+
+    .data-table td,
+    .pm-table td,
+    .rule89-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1e2135;
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    .pm-table td {
+      font-size: 12.5px;
+    }
+
+    .rule89-table td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .data-table tr:last-child td,
+    .pm-table tr:last-child td,
+    .rule89-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td,
+    .pm-table tr:hover td,
+    .rule89-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    .data-table .art {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: #0e1a30;
+      border: 1px solid #1e3a60;
+      color: var(--accent2);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    /* Minister type cards */
+    .minister-types {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .mtype {
+      flex: 1;
+      min-width: 120px;
+      border-radius: 8px;
+      padding: 12px 14px;
+      text-align: center;
+    }
+
+    .mtype.cabinet {
+      background: #2a2200;
+      border: 1px solid #3a3000;
+    }
+
+    .mtype.mos {
+      background: #09192e;
+      border: 1px solid #0e2444;
+    }
+
+    .mtype.deputy {
+      background: #0a2318;
+      border: 1px solid #0d3020;
+    }
+
+    .mtype .mt-name {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .mtype.cabinet .mt-name {
+      color: var(--gold);
+    }
+
+    .mtype.mos .mt-name {
+      color: var(--accent2);
+    }
+
+    .mtype.deputy .mt-name {
+      color: var(--accent3);
+    }
+
+    .mtype .mt-desc {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* PM list table specific classes */
+    .pm-table .pname {
+      font-weight: 700;
+      color: var(--accent2);
+    }
+
+    .pm-table .pname.acting {
+      color: var(--muted);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .pm-table .term {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .pm-table .note {
+      color: var(--accent3);
+      font-size: 12px;
+    }
+
+    .first-badge {
+      display: inline-block;
+      border-radius: 3px;
+      padding: 1px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      margin-left: 4px;
+      white-space: nowrap;
+    }
+
+    .fb-gold {
+      background: #2a2200;
+      color: var(--gold);
+      border: 1px solid #3a3000;
+    }
+
+    .fb-blue {
+      background: #09192e;
+      color: var(--accent2);
+      border: 1px solid #1e3a60;
+    }
+
+    .fb-green {
+      background: #0a2318;
+      color: var(--accent3);
+      border: 1px solid #155230;
+    }
+
+    .fb-red {
+      background: #250a0a;
+      color: var(--accent1);
+      border: 1px solid #3a1010;
+    }
+
+    .fb-purple {
+      background: #1a0d28;
+      color: var(--accent4);
+      border: 1px solid #2a1540;
+    }
+
+    /* +89 Rule table specific classes */
+    .rule89-table .centre-col {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .rule89-table .arrow-col {
+      color: var(--gold);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .rule89-table .state-col {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .rule89-plus {
+      display: inline-block;
+      background: #251500;
+      border: 1px solid var(--accent5);
+      color: var(--accent5);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 110px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 12px;
+      text-align: center;
+    }
+
+    .stat-box .st-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .st-label {
+      font-size: 10.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .chairperson-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #1e2135;
+      font-size: 13px;
+    }
+
+    .chairperson-item:last-child {
+      border-bottom: none;
+    }
+
+    .chairperson-item .ci-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .chairperson-item .ci-name {
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .chairperson-item .ci-full {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: auto;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ==== RESPONSIVE TABS & TABLES FOR MOBILE ==== */
+    @media(max-width: 600px) {
+
+      /* Responsive Tabs */
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      .data-table th,
+      .data-table td,
+      .pm-table th,
+      .pm-table td,
+      .rule89-table th,
+      .rule89-table td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="subject-tag">Polity · Chapter 11</div>
+    <h1>🏛️ Prime Minister & Council of Ministers</h1>
+    <div class="meta">Art. 74–78 · BPSC / BSSC Mind Map</div>
+    <div class="badge-row">
+      <span class="badge">Real Executive</span>
+      <span class="badge">Art. 74–78</span>
+      <span class="badge">Max 15% of LS</span>
+      <span class="badge">Responsible to Lok Sabha</span>
+      <span class="badge">91st Amendment</span>
+    </div>
+  </div>
+
+  <!-- TAB NAV -->
+  <nav class="tab-nav">
+    <div class="tab active" onclick="switchTab('overview')">📌 Overview</div>
+    <div class="tab" onclick="switchTab('pm')">👑 PM's Role</div>
+    <div class="tab" onclick="switchTab('pmlist')">📜 PM List</div>
+    <div class="tab" onclick="switchTab('ag')">⚖️ Attorney General</div>
+    <div class="tab" onclick="switchTab('rule89')">🔢 +89 Rule</div>
+    <div class="tab" onclick="switchTab('articles')">📋 Key Articles</div>
+  </nav>
+
+  <!-- ═══ TAB 1: OVERVIEW ═══ -->
+  <div id="overview" class="tab-content active">
+    <div class="content-grid">
+
+      <div class="card">
+        <div class="card-header gold">📖 Council of Ministers — Structure</div>
+        <div class="card-body">
+          <div class="minister-types">
+            <div class="mtype cabinet">
+              <div class="mt-name">Cabinet Ministers</div>
+              <div class="mt-desc">Senior rank · Attend Cabinet meetings · Full portfolio</div>
+            </div>
+            <div class="mtype mos">
+              <div class="mt-name">Ministers of State</div>
+              <div class="mt-desc">Independent or attached to Cabinet minister</div>
+            </div>
+            <div class="mtype deputy">
+              <div class="mt-name">Deputy Ministers</div>
+              <div class="mt-desc">Assist Cabinet / MoS</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li>Aid &amp; advice to President — <strong>not binding first time, binding second time</strong>
+              <span class="sub">President can return advice once; on re-submission it becomes binding</span>
+            </li>
+            <li>President <strong>cannot act without Cabinet advice</strong> → as per <em>44th Amendment</em></li>
+            <li>Council is <strong>responsible to Lok Sabha</strong></li>
+            <li><strong>Collective resignation</strong> after losing confidence of Lok Sabha</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Council of Ministers ka advice President ke liye <strong>pehli baar binding nahi</strong>, lekin doosri
+              baar binding hai (44th Amendment, 1978). Isse pehle President ko absolute discretion tha.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green">✅ Eligibility & Appointment</div>
+        <div class="card-body">
+          <div class="stat-row">
+            <div class="stat-box">
+              <div class="st-val">25</div>
+              <div class="st-label">Min. Age (LS)</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">30</div>
+              <div class="st-label">Min. Age (RS)</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">15%</div>
+              <div class="st-label">Max Ministers</div>
+            </div>
+            <div class="stat-box">
+              <div class="st-val">6 mo.</div>
+              <div class="st-label">MP Deadline</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li>Must be a <strong>Citizen of India</strong></li>
+            <li>Age: <em>25+ for Lok Sabha</em> · <em>30+ for Rajya Sabha</em></li>
+            <li>Must be an <strong>MP</strong> — if not, must become within <em>6 months</em></li>
+            <li><strong>Max Ministers</strong> = 15% of total Lok Sabha strength (incl. PM)
+              <span class="sub"><b>91st Constitutional Amendment</b></span>
+            </li>
+            <li><strong>PM appointed by President</strong>; other ministers by President on PM's advice</li>
+            <li><strong>PM resigns to President</strong></li>
+            <li>Salaries paid from <em>Consolidated Fund of India</em> <span class="art-pill">Art 75(6)</span></li>
+            <li><strong>Term</strong> → 5 years or until Lok Sabha dissolved</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>91st Amendment</strong> — maximum 15% MPs se zyada ministers nahi ho sakte. Iska matlab: Lok
+              Sabha 543 members → max ~81 ministers (including PM). Anti-defection bhi is amendment ka hissa hai.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ TAB 2: PM ROLE ═══ -->
+  <div id="pm" class="tab-content">
+    <div class="content-grid">
+
+      <div class="card">
+        <div class="card-header gold">👑 Prime Minister's Role</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Head of the Council of Ministers</strong></li>
+            <li><strong>Leader of the House</strong> (Lok Sabha)</li>
+            <li>Key figure in <strong>Parliamentary Democracy</strong></li>
+            <li><strong>Real Executive</strong> — President is nominal; PM is actual</li>
+            <li>Link between <strong>President and Cabinet</strong>
+              <span class="sub">Art. 78 — PM's duty to inform President about Cabinet decisions</span>
+            </li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>Art. 78</strong> — PM ka duty hai ki woh President ko Cabinet decisions ke baare mein inform kare
+              aur President jo bhi information maange woh de. Ye ek important constitutional obligation hai.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">🪑 PM as Chairperson Of…</div>
+        <div class="card-body">
+          <div class="chairperson-item">
+            <div class="ci-icon">📊</div>
+            <div>
+              <div class="ci-name">NITI Aayog</div>
+              <div class="ci-full">National Institution for Transforming India (replaced Planning Commission, 2015)
+              </div>
+            </div>
+          </div>
+          <div class="chairperson-item">
+            <div class="ci-icon">🌪️</div>
+            <div>
+              <div class="ci-name">NDMA</div>
+              <div class="ci-full">National Disaster Management Authority</div>
+            </div>
+          </div>
+          <div class="chairperson-item">
+            <div class="ci-icon">🤝</div>
+            <div>
+              <div class="ci-name">National Integration Council</div>
+              <div class="ci-full">Promotes unity, brotherhood among communities</div>
+            </div>
+          </div>
+          <div class="chairperson-item">
+            <div class="ci-icon">🐯</div>
+            <div>
+              <div class="ci-name">Indian Board of Wildlife</div>
+              <div class="ci-full">Wildlife conservation policy body</div>
+            </div>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>NITI Aayog</strong> — Planning Commission ki jagah 2015 mein bana. PM iska <strong>Ex-Officio
+                Chairperson</strong> hota hai. Vice-Chairperson alag se appoint hota hai (PM nahi).</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ TAB 3: PM LIST ═══ -->
+  <div id="pmlist" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header gold">📜 All Prime Ministers of India</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="pm-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Prime Minister</th>
+                  <th>Tenure</th>
+                  <th>Notable Fact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">1</td>
+                  <td class="pname">Jawaharlal Nehru</td>
+                  <td class="term">Aug 1947 – May 1964</td>
+                  <td class="note"><span class="first-badge fb-gold">Longest PM</span> Architect of Modern India</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--muted);">—</td>
+                  <td class="pname acting">Gulzarilal Nanda (Acting)</td>
+                  <td class="term">May – Jun 1964</td>
+                  <td class="note"><span class="first-badge fb-blue">1st Acting PM</span></td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">2</td>
+                  <td class="pname">Lal Bahadur Shastri</td>
+                  <td class="term">Jun 1964 – Jan 1966</td>
+                  <td class="note" style="color:var(--accent1);">Died in Tashkent while in office · "Jai Jawan Jai
+                    Kisan"</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--muted);">—</td>
+                  <td class="pname acting">Gulzarilal Nanda (Acting)</td>
+                  <td class="term">Jan – Jan 1966</td>
+                  <td class="note">Acting PM (2nd time)</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">3</td>
+                  <td class="pname">Indira Gandhi</td>
+                  <td class="term">Jan 1966 – Mar 1977</td>
+                  <td class="note"><span class="first-badge fb-blue">1st Woman PM</span> From Rajya Sabha</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">4</td>
+                  <td class="pname">Morarji Desai</td>
+                  <td class="term">Mar 1977 – Jul 1979</td>
+                  <td class="note"><span class="first-badge fb-green">1st Non-Congress PM</span></td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">5</td>
+                  <td class="pname">Charan Singh</td>
+                  <td class="term">Jul 1979 – Jan 1980</td>
+                  <td class="note"><span class="first-badge fb-red">Never faced LS</span> Never addressed Lok Sabha</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">6</td>
+                  <td class="pname">Indira Gandhi</td>
+                  <td class="term">Jan 1980 – Oct 1984</td>
+                  <td class="note" style="color:var(--accent1);">Assassinated while in office</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">7</td>
+                  <td class="pname">Rajiv Gandhi</td>
+                  <td class="term">Oct 1984 – Dec 1989</td>
+                  <td class="note">Youngest PM · Later assassinated</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">8</td>
+                  <td class="pname">V.P. Singh</td>
+                  <td class="term">Dec 1989 – Nov 1990</td>
+                  <td class="note"><span class="first-badge fb-blue">1st No-confidence</span> First PM to resign after
+                    no-confidence vote · Also ex-CM</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">9</td>
+                  <td class="pname">Chandra Shekhar</td>
+                  <td class="term">Nov 1990 – Jun 1991</td>
+                  <td class="note">Govt. fell after Congress withdrew support</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">10</td>
+                  <td class="pname">P.V. Narasimha Rao</td>
+                  <td class="term">Jun 1991 – May 1996</td>
+                  <td class="note"><span class="first-badge fb-green">1st South India PM</span> LPG reforms 1991 · Also
+                    ex-CM of AP</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">11</td>
+                  <td class="pname">Atal Bihari Vajpayee</td>
+                  <td class="term">May 1996 – Jun 1996</td>
+                  <td class="note"><span class="first-badge fb-red">Shortest Tenure</span> Only 13 days (1st stint)</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">12</td>
+                  <td class="pname">H.D. Deve Gowda</td>
+                  <td class="term">Jun 1996 – Apr 1997</td>
+                  <td class="note">Rajya Sabha member · Also ex-CM Karnataka</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">13</td>
+                  <td class="pname">I.K. Gujral</td>
+                  <td class="term">Apr 1997 – Mar 1998</td>
+                  <td class="note">"Gujral Doctrine" — foreign policy</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">14</td>
+                  <td class="pname">Atal Bihari Vajpayee</td>
+                  <td class="term">Mar 1998 – May 2004</td>
+                  <td class="note"><span class="first-badge fb-gold">Nuclear Tests 1998</span> Pokhran-II · NDA govt.
+                  </td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">15</td>
+                  <td class="pname">Dr. Manmohan Singh</td>
+                  <td class="term">May 2004 – May 2014</td>
+                  <td class="note"><span class="first-badge fb-purple">1st Sikh PM</span> Rajya Sabha member · Economic
+                    reforms architect</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--gold);font-weight:700;">16</td>
+                  <td class="pname" style="color:var(--gold);">Narendra Modi</td>
+                  <td class="term">May 2014 – Present</td>
+                  <td class="note"><span class="first-badge fb-green">1st BJP majority PM</span> GST · Demonetisation ·
+                    3 consecutive terms</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="exam-trap" style="margin-top:14px;">
+            <div class="trap-title">⚠ Exam Trap — High Frequency PMs</div>
+            <p>
+              <strong>Nehru</strong> — Longest PM ·
+              <strong>Vajpayee</strong> — Shortest (13 days, 1st stint) ·
+              <strong>Indira</strong> — 1st Woman PM (from RS) ·
+              <strong>Morarji</strong> — 1st Non-Congress ·
+              <strong>Charan Singh</strong> — Never faced LS ·
+              <strong>Manmohan Singh</strong> — 1st Sikh PM (RS member) ·
+              <strong>Narasimha Rao</strong> — 1st South Indian PM
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 4: ATTORNEY GENERAL ═══ -->
+  <div id="ag" class="tab-content">
+    <div class="content-grid">
+
+      <div class="card">
+        <div class="card-header blue">⚖️ Attorney General of India</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Part V</strong> · <em>Article 76</em></li>
+            <li><strong>Chief Legal Advisor</strong> of Government of India</li>
+            <li><strong>Law Officer</strong> of India (highest law officer)</li>
+            <li><strong>Appointed by President</strong> under Art. 76(1)</li>
+            <li>Must be qualified to be appointed <strong>Judge of Supreme Court</strong></li>
+            <li>Can participate in proceedings of <strong>both Houses</strong>
+              <span class="sub">But has <b>NO right to vote</b></span>
+            </li>
+            <li><strong>Not disqualified</strong> from private legal practice</li>
+            <li>Salary &amp; service conditions fixed by <em>the Government</em></li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Attorney General <strong>Parliament ke dono Houses mein participate</strong> kar sakta hai lekin
+              <strong>vote nahi de sakta</strong>. Aur woh private practice bhi kar sakta hai — ye judges se alag hai.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header orange">🏛️ Notable AGs</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>First Attorney General</strong> → <em>M.C. Setalvad</em></li>
+            <li><strong>Current Attorney General</strong> → <em>R. Venkataramani</em></li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>Attorney General (Centre) = Art. 76</strong><br>
+              <strong>Advocate General (State) = Art. 165</strong><br>
+              Centre ka AG, State ka Advocate General ke equivalent hai. +89 Rule se yaad karo!
+            </p>
+          </div>
+          <div class="exam-trap" style="margin-top:8px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Attorney General &amp; Solicitor General alag hain. <strong>AG = Constitutional post (Art. 76)</strong>.
+              Solicitor General = Government appointee, no constitutional basis. AG sabse senior hai.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ TAB 5: +89 RULE ═══ -->
+  <div id="rule89" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header teal">🔢 +89 Rule — Centre to State Equivalents</div>
+        <div class="card-body">
+          <div style="text-align:center;margin-bottom:16px;">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:8px;">
+              The Magic Formula</div>
+            <span class="rule89-plus">Centre Article + 89 = State Equivalent Article</span>
+          </div>
+          <div class="tw">
+            <table class="rule89-table">
+              <thead>
+                <tr>
+                  <th>Centre</th>
+                  <th>Article</th>
+                  <th>+89</th>
+                  <th>Article</th>
+                  <th>State</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="centre-col">PM (Council of Ministers)</td>
+                  <td style="color:var(--accent2);font-weight:700;">74</td>
+                  <td class="arrow-col">→</td>
+                  <td style="color:var(--accent3);font-weight:700;">163</td>
+                  <td class="state-col">CM (Council of Ministers)</td>
+                </tr>
+                <tr>
+                  <td class="centre-col">Presidential Pardon</td>
+                  <td style="color:var(--accent2);font-weight:700;">72</td>
+                  <td class="arrow-col">→</td>
+                  <td style="color:var(--accent3);font-weight:700;">161</td>
+                  <td class="state-col">Governor's Pardon</td>
+                </tr>
+                <tr>
+                  <td class="centre-col">Attorney General</td>
+                  <td style="color:var(--accent2);font-weight:700;">76</td>
+                  <td class="arrow-col">→</td>
+                  <td style="color:var(--accent3);font-weight:700;">165</td>
+                  <td class="state-col">Advocate General</td>
+                </tr>
+                <tr>
+                  <td class="centre-col">Parliament</td>
+                  <td style="color:var(--accent2);font-weight:700;">79</td>
+                  <td class="arrow-col">→</td>
+                  <td style="color:var(--accent3);font-weight:700;">168</td>
+                  <td class="state-col">State Legislature</td>
+                </tr>
+                <tr>
+                  <td class="centre-col">Rajya Sabha</td>
+                  <td style="color:var(--accent2);font-weight:700;">80</td>
+                  <td class="arrow-col">→</td>
+                  <td style="color:var(--accent3);font-weight:700;">169</td>
+                  <td class="state-col">Legislative Council</td>
+                </tr>
+                <tr>
+                  <td class="centre-col">Lok Sabha</td>
+                  <td style="color:var(--accent2);font-weight:700;">81</td>
+                  <td class="arrow-col">→</td>
+                  <td style="color:var(--accent3);font-weight:700;">170</td>
+                  <td class="state-col">Legislative Assembly</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="quick-recall" style="margin-top:14px;">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>Ye trick exam mein article number bhool jaane par kaam aati hai. <strong>Centre ka article number + 89 =
+                State equivalent</strong>. Sirf kuch exceptions hain — baaki sab isi rule mein aate hain.</p>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>+89 Rule ek <strong>memory trick</strong> hai, constitutional rule nahi. Iska use sirf article numbers
+              yaad karne ke liye karo. Exam mein isko "constitutional provision" mat bolo!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 6: KEY ARTICLES ═══ -->
+  <div id="articles" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header gold">📋 Key Articles — PM & Council of Ministers</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th>Subject</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="art">74</td>
+                  <td>Council of Ministers to aid &amp; advise the President</td>
+                </tr>
+                <tr>
+                  <td class="art">75</td>
+                  <td>Appointment, tenure, qualifications of PM &amp; Ministers</td>
+                </tr>
+                <tr>
+                  <td class="art">75(1)</td>
+                  <td>PM appointed by President; other ministers on PM's advice</td>
+                </tr>
+                <tr>
+                  <td class="art">75(2)</td>
+                  <td>Ministers hold office during the pleasure of President</td>
+                </tr>
+                <tr>
+                  <td class="art">75(6)</td>
+                  <td>Salaries paid from Consolidated Fund of India</td>
+                </tr>
+                <tr>
+                  <td class="art">76</td>
+                  <td>Attorney General of India</td>
+                </tr>
+                <tr>
+                  <td class="art">77</td>
+                  <td>Conduct of Govt. business in the name of President</td>
+                </tr>
+                <tr>
+                  <td class="art">78</td>
+                  <td>PM's duty to furnish information to the President</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="quick-recall" style="margin-top:12px;">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>Art. 74</strong> — Cabinet ke advice President pe binding hai (44th Amendment se). <strong>Art.
+                75(2)</strong> — Ministers President ki "pleasure" pe hote hain, lekin practically PM ke kehne pe hata
+              diye jaate hain. <strong>Art. 78</strong> — PM ka duty hai President ko inform karna.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com &nbsp;·&nbsp; Polity Ch 11 — PM &amp; Council of Ministers
+    &nbsp;·&nbsp; BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

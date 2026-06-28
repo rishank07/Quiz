@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 13 – State Executive | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --gold2: #e0a800;
+      --text: #e8eaf6;
+      --muted: #9095b0;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --red-border: #e74c3c;
+      --blue-border: #3498db;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12152a, #1e2240);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 30px 16px;
+      text-align: center;
+    }
+
+    .page-header .subject-tag {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .page-header .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 13px;
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .tab-nav {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+      padding: 0 16px;
+      flex-shrink: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      height: 3px;
+      display: none;
+    }
+
+    .tab-nav::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .tab {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      user-select: none;
+      margin-bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      background: transparent;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 24px 20px;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content-grid.single {
+      grid-template-columns: 1fr;
+      max-width: 900px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1500);
+      color: var(--gold);
+      border-bottom: 1px solid #3a3000;
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2318, #061510);
+      color: var(--accent3);
+      border-bottom: 1px solid #0d3020;
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #09192e, #060f1e);
+      color: var(--accent2);
+      border-bottom: 1px solid #0e2444;
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #1a0d28, #11071a);
+      color: var(--accent4);
+      border-bottom: 1px solid #2a1540;
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #251500, #180d00);
+      color: var(--accent5);
+      border-bottom: 1px solid #3a2000;
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #250a0a, #160404);
+      color: var(--accent1);
+      border-bottom: 1px solid #3a1010;
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #091e1a, #060f0e);
+      color: var(--accent6);
+      border-bottom: 1px solid #0e2e28;
+    }
+
+    ul.arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.arrow-list li {
+      padding: 5px 0 5px 20px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid #1e2135;
+      font-size: 13.5px;
+    }
+
+    ul.arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    ul.arrow-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 6px;
+    }
+
+    ul.arrow-list li .sub {
+      display: block;
+      margin-top: 3px;
+      font-size: 12.5px;
+      color: var(--muted);
+      padding-left: 10px;
+      border-left: 2px solid var(--border);
+    }
+
+    ul.arrow-list li .sub b {
+      color: var(--accent2);
+    }
+
+    ul.arrow-list li strong {
+      color: var(--gold);
+    }
+
+    ul.arrow-list li em {
+      color: var(--accent3);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--red-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .exam-trap .trap-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+    }
+
+    .exam-trap p {
+      color: #d0b0b0;
+      line-height: 1.6;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--blue-border);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .quick-recall .recall-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+    }
+
+    .quick-recall p {
+      color: #a8c8e8;
+      line-height: 1.6;
+    }
+
+    /* ==== UPDATED FOOLPROOF TABLE WRAPPER ==== */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      width: 100%;
+      display: block;
+    }
+
+    .data-table,
+    .vs-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .data-table th,
+    .vs-table th {
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      text-align: left;
+      border-bottom: 2px solid var(--gold2);
+    }
+
+    .vs-table th {
+      text-align: center;
+    }
+
+    .vs-table th.centre {
+      background: #09192e;
+      color: var(--accent2);
+      border-bottom: 2px solid var(--accent2);
+    }
+
+    .vs-table th.state {
+      background: #0a2318;
+      color: var(--accent3);
+      border-bottom: 2px solid var(--accent3);
+    }
+
+    .vs-table th.topic {
+      background: #2a2200;
+      color: var(--gold);
+      border-bottom: 2px solid var(--gold2);
+    }
+
+    .data-table td,
+    .vs-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1e2135;
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+      min-width: 120px;
+      max-width: 400px;
+      white-space: normal;
+    }
+
+    .vs-table td {
+      text-align: center;
+    }
+
+    .data-table tr:last-child td,
+    .vs-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td,
+    .vs-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    /* Specific Table Classes */
+    .data-table .art {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .vs-table .cv {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    .vs-table .sv {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .vs-table .tv {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: #0e1a30;
+      border: 1px solid #1e3a60;
+      color: var(--accent2);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-right: 3px;
+    }
+
+    /* Conditions grid */
+    .cond-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .cond-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 13px;
+    }
+
+    .cond-box .cb-label {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .cond-box .cb-val {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .cond-box .cb-sub {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* Appointment cards */
+    .appt-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .appt-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 9px 13px;
+    }
+
+    .appt-item .ai-icon {
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .appt-item .ai-name {
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 13.5px;
+    }
+
+    .appt-item .ai-art {
+      font-size: 11.5px;
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    /* Power strip */
+    .power-strip {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .ps-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 14px;
+      border-bottom: 1px solid #1e2135;
+      font-size: 13px;
+    }
+
+    .ps-item:last-child {
+      border-bottom: none;
+    }
+
+    .ps-item .ps-icon {
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .ps-item .ps-text strong {
+      color: var(--gold);
+    }
+
+    .ps-item .ps-sub {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .first-badge {
+      display: inline-block;
+      border-radius: 3px;
+      padding: 1px 7px;
+      font-size: 10.5px;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+
+    .fb-gold {
+      background: #2a2200;
+      color: var(--gold);
+      border: 1px solid #3a3000;
+    }
+
+    .fb-green {
+      background: #0a2318;
+      color: var(--accent3);
+      border: 1px solid #155230;
+    }
+
+    .fb-blue {
+      background: #09192e;
+      color: var(--accent2);
+      border: 1px solid #1e3a60;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: auto;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ==== RESPONSIVE TABS & TABLES FOR MOBILE ==== */
+    @media (max-width: 600px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      /* Responsive Tabs */
+      .tab-nav {
+        gap: 5px;
+      }
+
+      .tab {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 9px;
+        font-size: 11.5px;
+      }
+
+      .data-table th,
+      .data-table td,
+      .vs-table th,
+      .vs-table td {
+        font-size: 11.5px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div class="subject-tag">Polity · Chapter 13</div>
+    <h1>🏛️ State Executive</h1>
+    <div class="meta">Part VI · Articles 153–167 · BPSC / BSSC Mind Map</div>
+    <div class="badge-row">
+      <span class="badge">Part VI</span>
+      <span class="badge">Art. 153–167</span>
+      <span class="badge">Governor · CM · CoM · AG</span>
+      <span class="badge">Nominal + Real Executive</span>
+    </div>
+  </div>
+
+  <nav class="tab-nav">
+    <div class="tab active" onclick="switchTab('overview')">📌 Overview</div>
+    <div class="tab" onclick="switchTab('governor')">🏛️ Governor</div>
+    <div class="tab" onclick="switchTab('cm')">👑 Chief Minister</div>
+    <div class="tab" onclick="switchTab('com')">🏢 Council of Ministers</div>
+    <div class="tab" onclick="switchTab('ag')">⚖️ Advocate General</div>
+    <div class="tab" onclick="switchTab('compare')">🔁 Centre vs State</div>
+  </nav>
+
+  <!-- ═══ TAB 1: OVERVIEW ═══ -->
+  <div id="overview" class="tab-content active">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header gold">📖 State Executive — Structure</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Part VI</strong> · <em>Articles 153–167</em></li>
+            <li>Components:
+              <span class="sub">✦ <b>Governor</b> — Constitutional/Nominal Head</span>
+              <span class="sub">✦ <b>Chief Minister</b> — Real Executive Head</span>
+              <span class="sub">✦ <b>Council of Ministers</b> — Aid &amp; Advise Governor</span>
+              <span class="sub">✦ <b>Advocate General</b> — Highest Legal Officer</span>
+            </li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — +89 Rule Link</div>
+            <p>State Executive = Centre ka mirror image. <strong>President → Governor · PM → CM · Attorney General →
+                Advocate General · Parliament → State Legislature</strong>. Article numbers + 89 apply karo!</p>
+          </div>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Governor <strong>"At the pleasure of President"</strong> hota hai — 5-year term fixed nahi hai. President
+              kabhi bhi hata sakta hai. CM "At the pleasure of Governor" hota hai.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue">📋 Key Articles — State Executive</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th>Subject</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="art">153</td>
+                  <td>Governors of States</td>
+                </tr>
+                <tr>
+                  <td class="art">154</td>
+                  <td>Executive Power of States</td>
+                </tr>
+                <tr>
+                  <td class="art">155</td>
+                  <td>Appointment of Governor (by President)</td>
+                </tr>
+                <tr>
+                  <td class="art">157</td>
+                  <td>Qualifications of Governor</td>
+                </tr>
+                <tr>
+                  <td class="art">160</td>
+                  <td>Duties in contingency</td>
+                </tr>
+                <tr>
+                  <td class="art">161</td>
+                  <td>Pardoning Power of Governor</td>
+                </tr>
+                <tr>
+                  <td class="art">162</td>
+                  <td>Extent of Executive Power of State</td>
+                </tr>
+                <tr>
+                  <td class="art">163</td>
+                  <td>Council of Ministers to aid &amp; advise Governor</td>
+                </tr>
+                <tr>
+                  <td class="art">164(1)</td>
+                  <td>CM appointed by Governor</td>
+                </tr>
+                <tr>
+                  <td class="art">165</td>
+                  <td>Advocate General of State</td>
+                </tr>
+                <tr>
+                  <td class="art">166</td>
+                  <td>Nominal Executive — Governor</td>
+                </tr>
+                <tr>
+                  <td class="art">213</td>
+                  <td>Ordinance-making power of Governor</td>
+                </tr>
+                <tr>
+                  <td class="art">233</td>
+                  <td>Judges of Subordinate Courts (Governor appoints)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 2: GOVERNOR ═══ -->
+  <div id="governor" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header gold">🏛️ Governor — Key Facts</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Constitutional Head</strong> of the State</li>
+            <li><strong>Nominal Executive Head</strong> <span class="art-pill">Art 166</span>
+              <span class="sub">Real Power → <b>Chief Minister</b></span>
+            </li>
+            <li><strong>Chancellor</strong> of all State Universities</li>
+            <li><strong>1st Female Governor</strong> → <em>Sarojini Naidu</em> <span class="first-badge fb-gold">1st
+                Woman Gov.</span>
+              <span class="sub">Governor of Uttar Pradesh (then United Provinces), 1947</span>
+            </li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p><strong>7th CAA, 1956</strong> — One person can be Governor of <strong>more than one state</strong>. Aise
+              cases mein salary President decide karta hai.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green">✅ Qualifications (Art. 157)</div>
+        <div class="card-body">
+          <div class="cond-grid">
+            <div class="cond-box">
+              <div class="cb-label">Min. Age</div>
+              <div class="cb-val">35 yrs</div>
+              <div class="cb-sub">Must be citizen of India</div>
+            </div>
+            <div class="cond-box">
+              <div class="cb-label">Term</div>
+              <div class="cb-val">5 years</div>
+              <div class="cb-sub">At pleasure of President</div>
+            </div>
+            <div class="cond-box">
+              <div class="cb-label">Salary</div>
+              <div class="cb-val">₹3.5 Lakh</div>
+              <div class="cb-sub">Per month · from CF of State</div>
+            </div>
+            <div class="cond-box">
+              <div class="cb-label">Oath By</div>
+              <div class="cb-val">CJ of HC</div>
+              <div class="cb-sub">Chief Justice of High Court</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li>Must be a <strong>Citizen of India</strong></li>
+            <li>Min. age <em>35 years</em></li>
+            <li>Must <strong>NOT</strong> be a Member of Parliament or State Legislature</li>
+            <li>Must <strong>NOT</strong> hold any office of profit</li>
+            <li>Appointment → <strong>By the President</strong> <span class="art-pill">Art 155</span></li>
+            <li>Resignation → To the <em>President</em></li>
+            <li>Salary from <strong>Consolidated Fund of the State</strong></li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Governor ka oath <strong>Chief Justice of High Court</strong> dilwata hai (President nahi). President ka
+              oath CJI dilwata hai. Dono alag-alag hain!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header orange">🎯 Appointments by Governor</div>
+        <div class="card-body">
+          <div class="appt-row">
+            <div class="appt-item">
+              <div class="ai-icon">👥</div>
+              <div>
+                <div class="ai-name">Chairman, State Public Service Commission</div>
+                <div class="ai-art">State PSC</div>
+              </div>
+            </div>
+            <div class="appt-item">
+              <div class="ai-icon">⚖️</div>
+              <div>
+                <div class="ai-name">Advocate General</div>
+                <div class="ai-art">Art. 165</div>
+              </div>
+            </div>
+            <div class="appt-item">
+              <div class="ai-icon">🗳️</div>
+              <div>
+                <div class="ai-name">Chairman, State Election Commission</div>
+                <div class="ai-art">State Elections</div>
+              </div>
+            </div>
+            <div class="appt-item">
+              <div class="ai-icon">👨‍⚖️</div>
+              <div>
+                <div class="ai-name">Judges of Subordinate Courts</div>
+                <div class="ai-art">Art. 233</div>
+              </div>
+            </div>
+            <div class="appt-item">
+              <div class="ai-icon">🎓</div>
+              <div>
+                <div class="ai-name">Vice-Chancellors of State Universities</div>
+                <div class="ai-art">As Chancellor</div>
+              </div>
+            </div>
+            <div class="appt-item">
+              <div class="ai-icon">💰</div>
+              <div>
+                <div class="ai-name">State Finance Commission</div>
+                <div class="ai-art">Devolution of funds</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">⚡ Powers of Governor</div>
+        <div class="card-body">
+          <div class="power-strip">
+            <div class="ps-item">
+              <div class="ps-icon">📅</div>
+              <div class="ps-text"><strong>Summon &amp; Prorogue</strong> State Legislature sessions<div class="ps-sub">
+                  Also dissolve Legislative Assembly</div>
+              </div>
+            </div>
+            <div class="ps-item">
+              <div class="ps-icon">🏛️</div>
+              <div class="ps-text"><strong>Nominate 1/6th members</strong> in Legislative Council<div class="ps-sub">In
+                  states with Vidhan Parishad</div>
+              </div>
+            </div>
+            <div class="ps-item">
+              <div class="ps-icon">📜</div>
+              <div class="ps-text"><strong>Promulgate Ordinances</strong> <span class="art-pill">Art 213</span>
+                <div class="ps-sub">When State Legislature not in session</div>
+              </div>
+            </div>
+            <div class="ps-item">
+              <div class="ps-icon">🤲</div>
+              <div class="ps-text"><strong>Grant Pardon</strong> <span class="art-pill">Art 161</span> — Suspension,
+                Remission, Commutation<div class="ps-sub">❌ Cannot pardon Death Penalty (only President can) · ❌ No
+                  jurisdiction over Court Martial</div>
+              </div>
+            </div>
+            <div class="ps-item">
+              <div class="ps-icon">🚨</div>
+              <div class="ps-text"><strong>Recommend President's Rule</strong> (Art. 356)<div class="ps-sub">In case of
+                  constitutional failure in State</div>
+              </div>
+            </div>
+            <div class="ps-item">
+              <div class="ps-icon">💰</div>
+              <div class="ps-text"><strong>Operate State Contingency Fund</strong>
+                <div class="ps-sub">Emergency expenditure without Legislative approval</div>
+              </div>
+            </div>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>Governor <strong>Death Penalty PARDON NAHI</strong> kar sakta — sirf President kar sakta hai (Art. 72).
+              Governor ki pardoning power Art. 161 ke under hai — Suspension, Remission, Commutation only.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 3: CHIEF MINISTER ═══ -->
+  <div id="cm" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header gold">👑 Chief Minister — Key Facts</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Real Executive Head</strong> of the State</li>
+            <li><strong>Head of the Council of Ministers</strong></li>
+            <li>Leader of the Majority Party in Legislative Assembly</li>
+            <li><strong>Chairman of State Planning Board</strong></li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>CM = State ka PM. <strong>PM → President ko inform karta hai</strong> (Art. 78). Similarly, <strong>CM →
+                Governor ko inform karta hai</strong>. Ye parallel structure hai Centre-State mein.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green">✅ Conditions of Office</div>
+        <div class="card-body">
+          <div class="cond-grid">
+            <div class="cond-box">
+              <div class="cb-label">Min. Age</div>
+              <div class="cb-val">25 yrs</div>
+              <div class="cb-sub">Citizen of India</div>
+            </div>
+            <div class="cond-box">
+              <div class="cb-label">Appointment</div>
+              <div class="cb-val">Governor</div>
+              <div class="cb-sub">Art. 164(1)</div>
+            </div>
+            <div class="cond-box">
+              <div class="cb-label">Term</div>
+              <div class="cb-val">5 years</div>
+              <div class="cb-sub">At pleasure of Governor</div>
+            </div>
+            <div class="cond-box">
+              <div class="cb-label">Salary</div>
+              <div class="cb-val">By State</div>
+              <div class="cb-sub">State Legislature decides</div>
+            </div>
+          </div>
+          <ul class="arrow-list">
+            <li>Must be <strong>Member of State Legislature</strong>
+              <span class="sub">If not, must get elected within <b>6 months</b></span>
+            </li>
+            <li>Appointed by <strong>Governor</strong> <span class="art-pill">Art 164(1)</span></li>
+            <li>Resignation → To the <em>Governor</em></li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p>CM ka oath Governor dilwata hai, CJI ya HC CJ nahi. CM State Legislature ka member hona chahiye — MLA ya
+              MLC ho sakta hai. Agar nahi hai toh <strong>6 mahine mein elected hona padega</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple">⚡ Powers of Chief Minister</div>
+        <div class="card-body">
+          <div class="power-strip">
+            <div class="ps-item">
+              <div class="ps-icon">🪑</div>
+              <div class="ps-text"><strong>Presides over</strong> meetings of Council of Ministers</div>
+            </div>
+            <div class="ps-item">
+              <div class="ps-icon">📂</div>
+              <div class="ps-text"><strong>Distributes portfolios</strong> among ministers</div>
+            </div>
+            <div class="ps-item">
+              <div class="ps-icon">📅</div>
+              <div class="ps-text"><strong>Advises Governor</strong> to summon &amp; dissolve Legislative Assembly</div>
+            </div>
+            <div class="ps-item">
+              <div class="ps-icon">👥</div>
+              <div class="ps-text"><strong>Recommends appointments &amp; removals</strong> of ministers to Governor
+              </div>
+            </div>
+            <div class="ps-item">
+              <div class="ps-icon">🚨</div>
+              <div class="ps-text"><strong>Crisis Manager-in-Chief</strong> during Emergency</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 4: COUNCIL OF MINISTERS ═══ -->
+  <div id="com" class="tab-content">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header blue">🏢 Council of Ministers (State)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>To <strong>aid and advise the Governor</strong></li>
+            <li>Must be member of <strong>State Legislature</strong>
+              <span class="sub">If not, must get elected within <b>6 months</b></span>
+            </li>
+            <li>Appointed by <strong>Governor on advice of CM</strong></li>
+            <li>Responsible to <strong>State Legislative Assembly</strong></li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall</div>
+            <p>Ministers can participate in committee discussions but <strong>do NOT have voting rights</strong> in
+              Parliamentary committees — same as Centre.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header orange">📊 Strength of Council of Ministers</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Rule</th>
+                  <th>Amendment</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Maximum Strength</td>
+                  <td style="color:var(--accent3);font-weight:700;">15% of total Members of Legislative Assembly</td>
+                  <td class="art">91st Amendment</td>
+                </tr>
+                <tr>
+                  <td>Minimum Strength</td>
+                  <td style="color:var(--gold);font-weight:700;">Not less than 12 Ministers</td>
+                  <td class="art">91st Amendment</td>
+                </tr>
+                <tr>
+                  <td>Delhi (Special)</td>
+                  <td style="color:var(--accent2);font-weight:700;">Max 10% of Assembly or 7 (whichever is less)</td>
+                  <td class="art">69th Amendment</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="exam-trap" style="margin-top:12px;">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>91st Amendment</strong> — Max 15% (same as Centre) lekin min. 12 bhi fix kiya. <strong>Delhi ke
+                liye 69th Amendment</strong> special rule — max 10% or 7, whichever is less. Delhi special status wali
+              state hai!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 5: ADVOCATE GENERAL ═══ -->
+  <div id="ag" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header teal">⚖️ Advocate General (Art. 165)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li><strong>Highest Legal Officer</strong> of the State</li>
+            <li>Must be qualified to be a <strong>Judge of High Court</strong></li>
+            <li>Appointed by the <strong>Governor</strong></li>
+            <li>Main Role → Advise State Government on <strong>legal matters</strong></li>
+            <li>Can participate in proceedings of <strong>State Legislature</strong>
+              <span class="sub">But <b>CANNOT vote</b></span>
+            </li>
+            <li>Term → At the <strong>pleasure of the Governor</strong></li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-title">⚠ Exam Trap</div>
+            <p><strong>Advocate General (State)</strong> = Art. 165 → qualified as HC Judge. <strong>Attorney General
+                (Centre)</strong> = Art. 76 → qualified as SC Judge. State level mein qualification bar lower hai.</p>
+          </div>
+          <div class="quick-recall">
+            <div class="recall-title">💡 Quick Recall — +89 Rule</div>
+            <p>Attorney General (Art. 76) + 89 = Advocate General (Art. 165). Dono Parliament/Legislature mein
+              participate kar sakte hain, dono vote nahi de sakte!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 6: CENTRE vs STATE ═══ -->
+  <div id="compare" class="tab-content">
+    <div class="content-grid single">
+      <div class="card">
+        <div class="card-header red">🔁 Centre vs State — Full Comparison</div>
+        <div class="card-body">
+          <div class="tw">
+            <table class="vs-table">
+              <thead>
+                <tr>
+                  <th class="topic">Feature</th>
+                  <th class="centre">🔵 Centre</th>
+                  <th class="state">🟢 State</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="tv">Constitutional Head</td>
+                  <td class="cv">President</td>
+                  <td class="sv">Governor</td>
+                </tr>
+                <tr>
+                  <td class="tv">Real Executive</td>
+                  <td class="cv">Prime Minister</td>
+                  <td class="sv">Chief Minister</td>
+                </tr>
+                <tr>
+                  <td class="tv">Chief Legal Officer</td>
+                  <td class="cv">Attorney General (Art. 76)</td>
+                  <td class="sv">Advocate General (Art. 165)</td>
+                </tr>
+                <tr>
+                  <td class="tv">Qualification (Legal Officer)</td>
+                  <td class="cv">Judge of SC</td>
+                  <td class="sv">Judge of HC</td>
+                </tr>
+                <tr>
+                  <td class="tv">Min. Age (Head)</td>
+                  <td class="cv">35 yrs (President)</td>
+                  <td class="sv">35 yrs (Governor)</td>
+                </tr>
+                <tr>
+                  <td class="tv">Min. Age (Executive)</td>
+                  <td class="cv">25 yrs (PM — LS)</td>
+                  <td class="sv">25 yrs (CM — MLA)</td>
+                </tr>
+                <tr>
+                  <td class="tv">Oath Administered by</td>
+                  <td class="cv">CJI</td>
+                  <td class="sv">CJ of High Court</td>
+                </tr>
+                <tr>
+                  <td class="tv">Resignation to</td>
+                  <td class="cv">VP (President) / President (PM)</td>
+                  <td class="sv">President (Gov.) / Governor (CM)</td>
+                </tr>
+                <tr>
+                  <td class="tv">Salary</td>
+                  <td class="cv">₹5 Lakh (President)</td>
+                  <td class="sv">₹3.5 Lakh (Governor)</td>
+                </tr>
+                <tr>
+                  <td class="tv">Salary Source</td>
+                  <td class="cv">CF of India</td>
+                  <td class="sv">CF of State</td>
+                </tr>
+                <tr>
+                  <td class="tv">Pardoning Power</td>
+                  <td class="cv">Art. 72 (incl. Death Penalty)</td>
+                  <td class="sv">Art. 161 (NO Death Penalty)</td>
+                </tr>
+                <tr>
+                  <td class="tv">Ordinance Power</td>
+                  <td class="cv">Art. 123</td>
+                  <td class="sv">Art. 213</td>
+                </tr>
+                <tr>
+                  <td class="tv">Max Ministers</td>
+                  <td class="cv">15% of LS (91st Amend.)</td>
+                  <td class="sv">15% of Assembly (91st Amend.)</td>
+                </tr>
+                <tr>
+                  <td class="tv">Min. Ministers</td>
+                  <td class="cv">Not specified</td>
+                  <td class="sv">12 (91st Amendment)</td>
+                </tr>
+                <tr>
+                  <td class="tv">Legislature</td>
+                  <td class="cv">Art. 79 (Parliament)</td>
+                  <td class="sv">Art. 168 (State Legislature)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="exam-trap" style="margin-top:14px;">
+            <div class="trap-title">⚠ Exam Trap — Most Common Confusions</div>
+            <p>
+              1. Governor ka oath → <strong>CJ of HC</strong> (not CJI) ·
+              2. Governor death penalty pardon → <strong>NAHI kar sakta</strong> ·
+              3. Governor salary → <strong>CF of State</strong> (CF of India nahi) ·
+              4. Advocate General qualification → <strong>HC Judge level</strong> (SC nahi)
+            </p>
+          </div>
+          <div class="quick-recall" style="margin-top:8px;">
+            <div class="recall-title">💡 Quick Recall — For BPSC</div>
+            <p>Bihar ke Governor — <strong>Arif Mohammad Khan</strong> (currently). Bihar ke CM — <strong>Nitish
+                Kumar</strong> (currently). Ye current affairs mein frequently aata hai!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com &nbsp;·&nbsp; Polity Ch 13 — State Executive &nbsp;·&nbsp; BPSC /
+    BSSC
+  </div>
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>
