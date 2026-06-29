@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 13: Our Universe | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: 13.5px;
+      width: 100%;
+      min-width: 550px;
+      margin: 0;
+    }
+
+    .data-table.min-w-auto {
+      min-width: 280px;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .data-table tr:nth-child(even) td {
+      background: var(--surface2);
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 140px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 15px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    .formula-box {
+      background: #0d1a10;
+      border: 1px solid var(--accent3);
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      color: var(--accent3);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .formula-box span {
+      color: var(--text-muted);
+      font-size: 12px;
+      display: block;
+      margin-top: 4px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+    }
+
+    .type-card.gold-left {
+      border-left: 4px solid var(--gold);
+    }
+
+    .type-card.green-left {
+      border-left: 4px solid var(--accent3);
+    }
+
+    .type-card.blue-left {
+      border-left: 4px solid var(--accent2);
+    }
+
+    .type-card.purple-left {
+      border-left: 4px solid var(--accent4);
+    }
+
+    .type-card.orange-left {
+      border-left: 4px solid var(--accent5);
+    }
+
+    .type-card.red-left {
+      border-left: 4px solid var(--accent1);
+    }
+
+    .type-card.teal-left {
+      border-left: 4px solid var(--accent6);
+    }
+
+    .type-card .type-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .type-card .type-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .type-card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* theory timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 12px 0;
+    }
+
+    .tl-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tl-item:last-child {
+      border-bottom: none;
+    }
+
+    .tl-year {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      min-width: 70px;
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    .tl-content {
+      flex: 1;
+    }
+
+    .tl-content .tl-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .tl-content .tl-person {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* planet orbit strip */
+    .planet-strip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 14px 0;
+      padding: 14px;
+      background: var(--surface2);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .planet-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .planet-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .planet-name {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .orbit-arrow {
+      color: var(--border);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    /* gas composition bar */
+    .gas-bar {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 36px;
+      margin: 12px 0;
+    }
+
+    .gb-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 20px;
+      }
+
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+
+      .tab-content {
+        padding: 20px 14px 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">General Science · Space Science</div>
+      <h1>🌌 Chapter 13: Our Universe</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; Big Bang · Galaxies · Stars · Solar System · Planets · India's
+        Space Missions</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🔍 Overview</button>
+    <button onclick="switchTab('theories')">📜 Theories</button>
+    <button onclick="switchTab('galaxies')">🌌 Galaxies</button>
+    <button onclick="switchTab('stars')">⭐ Stars</button>
+    <button onclick="switchTab('solar')">☀️ Solar System</button>
+    <button onclick="switchTab('planets')">🪐 Planets</button>
+    <button onclick="switchTab('india')">🇮🇳 India & Space</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">🌌 Universe — At a Glance</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Collective form of all celestial bodies — Galaxies, Stars, Planets, Satellites — present in sky and space.
+          </p>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">13.8 Billion</div>
+            <div class="stat-lbl">Age of Universe (years)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">10²²</div>
+            <div class="stat-lbl">Total Stars in Universe</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">8 min 20 sec</div>
+            <div class="stat-lbl">Sunlight Reaching Earth</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">1.44 M☉</div>
+            <div class="stat-lbl">Chandrasekhar Limit</div>
+          </div>
+        </div>
+        <ul class="arrow-list" style="margin-top:10px;">
+          <li>Universe origin: <strong>Big Bang Theory</strong> — George Lemaitre (1930)</li>
+          <li>Age: <strong>13.8 billion years</strong> | Hubble constant H = 67 km/s/Mpc</li>
+          <li>Nearest star to Earth (after Sun): <strong>Proxima Centauri</strong></li>
+          <li>Brightest star in the night sky: <strong>Sirius</strong></li>
+          <li>Our galaxy: <strong>Milky Way</strong> (Spiral type)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-theories" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">📜 Theories of Universe — Timeline</div>
+      <div class="card-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-year">Ancient</div>
+            <div class="tl-content">
+              <div class="tl-name">Geocentric Theory</div>
+              <div class="tl-person">Ptolemy — Earth is the centre of the universe; all celestial bodies revolve around
+                Earth</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1543 AD</div>
+            <div class="tl-content">
+              <div class="tl-name">Heliocentric Theory</div>
+              <div class="tl-person">Copernicus — Sun is the centre; planets revolve around the Sun</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1785</div>
+            <div class="tl-content">
+              <div class="tl-name">Herschel Theory</div>
+              <div class="tl-person">Herschel — described shape and structure of the Milky Way galaxy</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1925</div>
+            <div class="tl-content">
+              <div class="tl-name">Hubble Theory</div>
+              <div class="tl-person">Edwin Hubble — universe is expanding; galaxies are moving away</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1930</div>
+            <div class="tl-content">
+              <div class="tl-name">Big Bang Theory</div>
+              <div class="tl-person">George Lemaitre — universe originated ~13.8 billion years ago from a singularity
+                explosion</div>
+            </div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Theory Propounders</div>
+          <ul class="arrow-list">
+            <li><strong>Geocentric</strong> → Ptolemy | <strong>Heliocentric</strong> → Copernicus (1543)</li>
+            <li><strong>Big Bang</strong> → <strong>George Lemaitre</strong> (1930) — NOT Einstein or Hawking</li>
+            <li><strong>Hubble</strong> gave the law of expansion (1925), NOT Big Bang</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">🔴 Red Shift & Hubble Law</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card red-left">
+            <div class="type-tag">Red Shift</div>
+            <div class="type-name">Galaxy Moving AWAY from Earth</div>
+            <p>Light from galaxy shifts toward red end (longer wavelength). Indicates the galaxy is receding.</p>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Blue Shift</div>
+            <div class="type-name">Galaxy Coming CLOSER to Earth</div>
+            <p>Light shifts toward blue end (shorter wavelength). Indicates the galaxy is approaching.</p>
+          </div>
+        </div>
+        <div class="formula-box">V = Hd<span>Hubble Law | V = recession velocity, H = Hubble constant (67 km/s/Mpc), d =
+            distance</span></div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Hubble Constant (H)</div>
+            <div class="info-val">67 km/s/Mpc</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Age of Universe</div>
+            <div class="info-val">13.8 Billion yrs</div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Red & Blue Shift</div>
+          <ul class="arrow-list">
+            <li><strong>Red shift</strong> = galaxy moving <strong>away</strong> (most galaxies show red shift —
+              universe is expanding)</li>
+            <li><strong>Blue shift</strong> = galaxy moving <strong>toward</strong> us (Andromeda shows blue shift —
+              approaching Milky Way)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-galaxies" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🌌 Galaxy</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>A huge group of stars, dust and gases gathered in large quantities by <strong>gravity</strong>. Total stars
+            in universe ≈ <strong>10²²</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📂 Classification of Galaxies</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Elliptical</th>
+                <th>Spiral</th>
+                <th>Irregular</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Shape</td>
+                <td>Elliptical / oval</td>
+                <td>Spiral arms</td>
+                <td>No regular shape</td>
+              </tr>
+              <tr>
+                <td>Star Age</td>
+                <td>Old, small stars</td>
+                <td>New stars in arms; Old stars in centre bulge</td>
+                <td>Mix of new &amp; old stars</td>
+              </tr>
+              <tr>
+                <td>Colour</td>
+                <td>Yellow-Red</td>
+                <td>Arms: Blue; Centre: Red</td>
+                <td>Unpredictable variation</td>
+              </tr>
+              <tr>
+                <td>Star Formation</td>
+                <td><span class="hl-red">Minimum</span></td>
+                <td><span class="hl-green">Maximum</span></td>
+                <td>Intermediate</td>
+              </tr>
+              <tr>
+                <td>Example</td>
+                <td><span class="hl-orange">Maffei-1</span></td>
+                <td><span class="hl-gold">Milky Way</span></td>
+                <td><span class="hl-blue">Sextans A</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Galaxy Types</div>
+          <ul class="arrow-list">
+            <li><strong>Milky Way</strong> = Spiral galaxy (our galaxy)</li>
+            <li>Spiral galaxies have <strong>maximum</strong> star formation activity</li>
+            <li>Elliptical galaxies have <strong>minimum</strong> star formation (old stars, very little gas/dust)</li>
+            <li>Spiral arms are <strong>Blue</strong> (new hot stars); centre bulge is <strong>Red</strong> (old stars)
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-stars" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">⭐ Stars</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Celestial bodies that shine with their <strong>own light and energy</strong> (due to nuclear fusion in
+            their core).</p>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">Proxima Centauri</div>
+            <div class="stat-lbl">Nearest Star (after Sun)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Sirius</div>
+            <div class="stat-lbl">Brightest Star (night sky)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Pole Star</div>
+            <div class="stat-lbl">Always in Northern direction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">🧪 Composition of Gases in Stars</div>
+      <div class="card-body">
+        <div class="gas-bar">
+          <div class="gb-seg" style="background:#e74c3c;flex:70;">H — 70%</div>
+          <div class="gb-seg" style="background:#3498db;flex:28;">He — 28%</div>
+          <div class="gb-seg" style="background:#2ecc71;flex:1.5;font-size:10px;">C 1.5%</div>
+          <div class="gb-seg" style="background:#9b59b6;flex:0.5;font-size:10px;">N+Ne</div>
+        </div>
+        <ul class="arrow-list" style="margin-top:10px;">
+          <li>Hydrogen (H) = <strong>70%</strong></li>
+          <li>Helium (He) = <strong>28%</strong></li>
+          <li>Carbon (C) = <strong>1.5%</strong></li>
+          <li>Nitrogen (N) + Neon (Ne) = <strong>0.5%</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card red-card">
+      <div class="card-header">💀 Black Holes & Chandrasekhar Limit</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Black Hole</div>
+          <p>Formed due to <strong>energy loss in stars</strong>. Gravity so strong that not even light can escape.</p>
+        </div>
+        <div class="formula-box">M_star ≤ 1.44 M_sun → White Dwarf (stable)<span>Chandrasekhar Limit</span></div>
+        <ul class="arrow-list">
+          <li>If star mass ≤ 1.44 solar masses → becomes <strong>White Dwarf</strong> (stable end state)</li>
+          <li>If star mass &gt; Chandrasekhar limit → <strong>Supernova</strong> explosion → Neutron star or Black hole
+          </li>
+          <li>Chandrasekhar limit named after <strong>Subrahmanyan Chandrasekhar</strong> (Indian astrophysicist)</li>
+        </ul>
+        <div class="type-card gold-left" style="margin-top:12px;">
+          <div class="type-tag">Types of Stars</div>
+          <div class="type-name">Classified by colour (temperature)</div>
+          <ul class="arrow-list">
+            <li><span class="hl-red">Red stars</span> — coolest (3000–4000 K)</li>
+            <li><span class="hl-gold">Yellow stars</span> — medium (5000–6000 K); our Sun is a yellow star</li>
+            <li><span class="hl-blue">Blue stars</span> — hottest (above 10,000 K)</li>
+            <li><strong>White dwarf</strong> — dense remnant of dead star</li>
+          </ul>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Constellation</div>
+          <p>Group of stars forming organised and beautiful shapes. Examples: <strong>Saptarishi (Ursa Major)</strong>,
+            <strong>Orion</strong> (points to Sirius), <strong>Cassiopeia</strong>.
+          </p>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Stars</div>
+          <ul class="arrow-list">
+            <li><strong>Nearest star</strong> (after Sun) = <strong>Proxima Centauri</strong></li>
+            <li><strong>Brightest star</strong> in night sky = <strong>Sirius</strong> (Dog Star)</li>
+            <li>Chandrasekhar limit = <strong>1.44 solar masses</strong> — above this → star explodes as Supernova</li>
+            <li>Pole Star is always in the <strong>North</strong> — used for navigation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-solar" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">☀️ The Sun — Key Facts</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">109×</div>
+            <div class="stat-lbl">Diameter (vs Earth)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">28×</div>
+            <div class="stat-lbl">Gravity (vs Earth)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">8 min 20 s</div>
+            <div class="stat-lbl">Light Travel to Earth</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Photosphere</div>
+            <div class="stat-lbl">External Surface</div>
+          </div>
+        </div>
+        <div class="gas-bar">
+          <div class="gb-seg" style="background:#e74c3c;flex:71;">H — 71%</div>
+          <div class="gb-seg" style="background:#3498db;flex:26.5;">He — 26.5%</div>
+          <div class="gb-seg" style="background:#2ecc71;flex:2.5;font-size:11px;">Others 2.5%</div>
+        </div>
+        <ul class="arrow-list" style="margin-top:8px;">
+          <li>H = <strong>71%</strong> | He = <strong>26.5%</strong> | Other elements = <strong>2.5%</strong></li>
+          <li>External surface (visible layer) = <strong>Photosphere</strong></li>
+          <li>Sun is a <strong>Star</strong> of the Milky Way galaxy</li>
+          <li>Energy produced by <strong>nuclear fusion</strong> (H → He)</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Sun Facts</div>
+          <ul class="arrow-list">
+            <li>Sunlight takes <strong>8 minutes 20 seconds</strong> to reach Earth (not 8 min or 8.5 min)</li>
+            <li>External surface of Sun = <strong>Photosphere</strong> (not chromosphere or corona — those are above)
+            </li>
+            <li>Sun's gravity = <strong>28 times</strong> Earth's gravity</li>
+            <li>Sun's diameter = <strong>109 times</strong> Earth's diameter</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-planets" class="tab-content">
+    <div class="card blue-card">
+      <div class="card-header">🪐 Planets of Solar System</div>
+      <div class="card-body">
+        <div class="planet-strip">
+          <div class="planet-item">
+            <div class="planet-icon" style="background:#b0b0b0;">☿</div>
+            <div class="planet-name">Mercury</div>
+          </div>
+          <div class="orbit-arrow">→</div>
+          <div class="planet-item">
+            <div class="planet-icon" style="background:#e8a020;">♀</div>
+            <div class="planet-name">Venus</div>
+          </div>
+          <div class="orbit-arrow">→</div>
+          <div class="planet-item">
+            <div class="planet-icon" style="background:#2a7a4a;">🌍</div>
+            <div class="planet-name">Earth</div>
+          </div>
+          <div class="orbit-arrow">→</div>
+          <div class="planet-item">
+            <div class="planet-icon" style="background:#c0401a;">♂</div>
+            <div class="planet-name">Mars</div>
+          </div>
+          <div class="orbit-arrow">→</div>
+          <div class="planet-item">
+            <div class="planet-icon" style="background:#c8a060;">♃</div>
+            <div class="planet-name">Jupiter</div>
+          </div>
+          <div class="orbit-arrow">→</div>
+          <div class="planet-item">
+            <div class="planet-icon" style="background:#d4b870;">♄</div>
+            <div class="planet-name">Saturn</div>
+          </div>
+          <div class="orbit-arrow">→</div>
+          <div class="planet-item">
+            <div class="planet-icon" style="background:#4090d0;">⛢</div>
+            <div class="planet-name">Uranus</div>
+          </div>
+          <div class="orbit-arrow">→</div>
+          <div class="planet-item">
+            <div class="planet-icon" style="background:#2040a0;">♆</div>
+            <div class="planet-name">Neptune</div>
+          </div>
+        </div>
+        <div class="two-col" style="margin-top:14px;">
+          <div class="type-card gold-left">
+            <div class="type-tag">Inner Planets (Terrestrial)</div>
+            <div class="type-name">Mercury, Venus, Earth, Mars</div>
+            <ul class="arrow-list">
+              <li>Closer to Sun</li>
+              <li>Rocky, dense surface</li>
+              <li>Smaller in size</li>
+              <li>Fewer moons</li>
+            </ul>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Outer Planets (Jovian)</div>
+            <div class="type-name">Jupiter, Saturn, Uranus, Neptune</div>
+            <ul class="arrow-list">
+              <li>Farther from Sun</li>
+              <li>Gaseous (gas giants)</li>
+              <li>Much larger in size</li>
+              <li>Many moons &amp; rings</li>
+            </ul>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" style="margin-top:12px;">
+            <thead>
+              <tr>
+                <th>Planet</th>
+                <th>Key Fact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mercury</td>
+                <td>Closest to Sun; Smallest planet; No atmosphere; Extreme temp variation</td>
+              </tr>
+              <tr>
+                <td>Venus</td>
+                <td>Hottest planet (greenhouse effect); Brightest planet; Rotates east to west (retrograde)</td>
+              </tr>
+              <tr>
+                <td>Earth</td>
+                <td>Only planet with life; One natural satellite (Moon); Blue planet</td>
+              </tr>
+              <tr>
+                <td>Mars</td>
+                <td>Red planet (iron oxide); 2 moons (Phobos, Deimos); India's MOM mission</td>
+              </tr>
+              <tr>
+                <td>Jupiter</td>
+                <td>Largest planet; Great Red Spot (giant storm); 95 known moons</td>
+              </tr>
+              <tr>
+                <td>Saturn</td>
+                <td>Least dense; Prominent rings; 146 moons</td>
+              </tr>
+              <tr>
+                <td>Uranus</td>
+                <td>Rotates on its side (axial tilt ~98°); Coldest planet</td>
+              </tr>
+              <tr>
+                <td>Neptune</td>
+                <td>Farthest from Sun; Strongest winds in solar system</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Planets</div>
+          <ul class="arrow-list">
+            <li><strong>Hottest planet = Venus</strong> (NOT Mercury, even though Mercury is closer to Sun)</li>
+            <li><strong>Largest planet = Jupiter</strong> | <strong>Smallest = Mercury</strong></li>
+            <li><strong>Red planet = Mars</strong> | <strong>Blue planet = Earth</strong></li>
+            <li><strong>Pluto</strong> is a <strong>dwarf planet</strong> (demoted in 2006) — NOT a full planet</li>
+            <li>Inner planets = Mercury, Venus, Earth, Mars (4); Outer = Jupiter, Saturn, Uranus, Neptune (4)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-india" class="tab-content">
+    <div class="card teal-card">
+      <div class="card-header">🇮🇳 India's Important Space Missions & Satellites</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mission / Satellite</th>
+                <th>Full Name / Details</th>
+                <th>Significance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">MOM</span></td>
+                <td>Mars Orbiter Mission</td>
+                <td>Famous Mars mission by ISRO</td>
+              </tr>
+              <tr>
+                <td><span class="hl-gold">Mangalyaan</span></td>
+                <td>Mars Orbiter Mission (2013)</td>
+                <td><strong>India's first Interplanetary Mission</strong></td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">GISAT-1</span></td>
+                <td>Geo Imaging Satellite-1</td>
+                <td><strong>India's first satellite in Geostationary Orbit</strong></td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">APPLE</span></td>
+                <td>Ariane Passenger Payload Experiment</td>
+                <td><strong>First Geostationary Telecommunication Satellite</strong> (India)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Chandrayaan-1</span></td>
+                <td>India's first Moon mission (2008)</td>
+                <td>Discovered water molecules on Moon</td>
+              </tr>
+              <tr>
+                <td><span class="hl-purple">Chandrayaan-3</span></td>
+                <td>India's Moon lander (2023)</td>
+                <td>Soft-landed on Moon's South Pole (first country)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-teal">Aditya-L1</span></td>
+                <td>Solar observation mission (2023)</td>
+                <td>India's first solar observatory mission</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — India's Firsts in Space</div>
+          <ul class="arrow-list">
+            <li><strong>First Interplanetary Mission = Mangalyaan</strong> (Mars, 2013)</li>
+            <li><strong>First Geostationary Satellite = GISAT-1</strong></li>
+            <li><strong>First Geostationary Telecom Satellite = APPLE</strong> (Ariane Passenger Payload Experiment)
+            </li>
+            <li>APPLE full form is very frequently asked — memorize all 4 words</li>
+            <li>MOM = Mars Orbiter Mission = Mangalyaan (same mission, two names)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Big Bang Theory → <strong>George Lemaitre (1930)</strong></li>
+          <li>Heliocentric Theory → <strong>Copernicus (1543)</strong></li>
+          <li>Geocentric Theory → <strong>Ptolemy</strong></li>
+          <li>Red shift = galaxy moving <strong>away</strong>; Blue shift = coming <strong>closer</strong></li>
+          <li>Hubble Law: V = Hd | H = <strong>67 km/s/Mpc</strong></li>
+          <li>Age of Universe = <strong>13.8 billion years</strong></li>
+          <li>Our galaxy = <strong>Milky Way</strong> (Spiral type)</li>
+          <li>Galaxy examples: Elliptical = Maffei-1 | Spiral = Milky Way | Irregular = Sextans A</li>
+          <li>Total stars in universe ≈ <strong>10²²</strong></li>
+          <li>Nearest star (after Sun) = <strong>Proxima Centauri</strong></li>
+          <li>Brightest star (night sky) = <strong>Sirius</strong></li>
+          <li>Pole Star = always in <strong>North</strong></li>
+          <li>Chandrasekhar limit = <strong>1.44 solar masses</strong></li>
+          <li>Star composition: H=70%, He=28%, C=1.5%, N+Ne=0.5%</li>
+          <li>Sun: Diameter=109×Earth | Gravity=28×Earth | Light=8 min 20 sec</li>
+          <li>Sun surface = <strong>Photosphere</strong> | H=71%, He=26.5%</li>
+          <li>Hottest planet = <strong>Venus</strong> | Largest = <strong>Jupiter</strong> | Smallest =
+            <strong>Mercury</strong>
+          </li>
+          <li>Red planet = <strong>Mars</strong> | Blue planet = <strong>Earth</strong></li>
+          <li>Inner planets: Mercury, Venus, Earth, Mars (rocky)</li>
+          <li>Outer planets: Jupiter, Saturn, Uranus, Neptune (gaseous)</li>
+          <li>India's first Interplanetary Mission = <strong>Mangalyaan</strong></li>
+          <li>APPLE = <strong>Ariane Passenger Payload Experiment</strong> (first geostationary telecom satellite)</li>
+          <li><strong>GISAT-1</strong> = India's first satellite in geostationary orbit</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">📋 Quick Reference — Theories</div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="data-table min-w-auto">
+              <thead>
+                <tr>
+                  <th>Theory</th>
+                  <th>Propounder</th>
+                  <th>Year</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Geocentric</td>
+                  <td>Ptolemy</td>
+                  <td>Ancient</td>
+                </tr>
+                <tr>
+                  <td>Heliocentric</td>
+                  <td>Copernicus</td>
+                  <td>1543</td>
+                </tr>
+                <tr>
+                  <td>Herschel Theory</td>
+                  <td>Herschel</td>
+                  <td>1785</td>
+                </tr>
+                <tr>
+                  <td>Hubble Theory</td>
+                  <td>Edwin Hubble</td>
+                  <td>1925</td>
+                </tr>
+                <tr>
+                  <td>Big Bang</td>
+                  <td>George Lemaitre</td>
+                  <td>1930</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">⚠️ Most Common Exam Traps</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Big Bang = <strong>Lemaitre</strong> (NOT Hubble or Einstein)</li>
+            <li>Hottest planet = <strong>Venus</strong> (NOT Mercury)</li>
+            <li>Pluto = <strong>Dwarf planet</strong> (not a full planet since 2006)</li>
+            <li>Sun surface = <strong>Photosphere</strong> (not chromosphere)</li>
+            <li>Sunlight = <strong>8 min 20 sec</strong> (not 8 min)</li>
+            <li>Nearest star = <strong>Proxima Centauri</strong> (Sun is NOT counted as "nearest star" in these
+              questions)</li>
+            <li>APPLE full form: <strong>Ariane Passenger Payload Experiment</strong></li>
+            <li>Milky Way = <strong>Spiral</strong> galaxy (not elliptical)</li>
+            <li>Chandrasekhar = <strong>1.44 solar masses</strong></li>
+            <li>Red shift = moving <strong>away</strong>; Blue shift = coming <strong>closer</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 13: Our Universe · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

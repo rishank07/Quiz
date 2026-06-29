@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 10: Magnetism | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: 13.5px;
+      width: 100%;
+      min-width: 550px;
+      margin: 0;
+    }
+
+    .data-table.min-w-auto {
+      min-width: 280px;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      vertical-align: top;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 140px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 15px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    .formula-box {
+      background: #0d1a10;
+      border: 1px solid var(--accent3);
+      border-radius: 8px;
+      padding: 13px 18px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      color: var(--accent3);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .formula-box span {
+      color: var(--text-muted);
+      font-size: 12px;
+      display: block;
+      margin-top: 4px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+    }
+
+    .type-card.gold-left {
+      border-left: 4px solid var(--gold);
+    }
+
+    .type-card.green-left {
+      border-left: 4px solid var(--accent3);
+    }
+
+    .type-card.blue-left {
+      border-left: 4px solid var(--accent2);
+    }
+
+    .type-card.purple-left {
+      border-left: 4px solid var(--accent4);
+    }
+
+    .type-card.orange-left {
+      border-left: 4px solid var(--accent5);
+    }
+
+    .type-card.red-left {
+      border-left: 4px solid var(--accent1);
+    }
+
+    .type-card.teal-left {
+      border-left: 4px solid var(--accent6);
+    }
+
+    .type-card .type-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .type-card .type-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .type-card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* Fleming's hand rule visual */
+    .hand-rule {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .hand-rule .hr-title {
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .hand-rule .finger-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .finger-box {
+      flex: 1;
+      min-width: 100px;
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .finger-box .f-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .finger-box .f-val {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    /* three material col */
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media(max-width:720px) {
+      .three-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mat-box {
+      border-radius: 8px;
+      padding: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .mat-box .mat-head {
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 8px;
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 20px;
+      }
+
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+
+      .tab-content {
+        padding: 20px 14px 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">General Science · Physics</div>
+      <h1>🧲 Chapter 10: Magnetism</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; Magnets · Magnetic Materials · Biot-Savart · Lorentz Force ·
+        Fleming's Rules · EMI</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🔍 Overview</button>
+    <button onclick="switchTab('magnets')">🧲 Magnets</button>
+    <button onclick="switchTab('materials')">🧱 Mag. Materials</button>
+    <button onclick="switchTab('magnetic-field')">🌐 Magnetic Field</button>
+    <button onclick="switchTab('forces')">⚡ Forces & Rules</button>
+    <button onclick="switchTab('field-lines')">〰️ Field Lines</button>
+    <button onclick="switchTab('emi')">⚙️ EMI & Flux</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">🧲 Chapter At a Glance</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">Oersted</div>
+            <div class="stat-lbl">Discovered Magnetic Effect of Current (1820)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Faraday</div>
+            <div class="stat-lbl">Discovered EMI (1831)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Weber</div>
+            <div class="stat-lbl">SI Unit of Magnetic Flux</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Fe₃O₄</div>
+            <div class="stat-lbl">Lodestone (Natural Magnet)</div>
+          </div>
+        </div>
+        <ul class="arrow-list" style="margin-top:10px;">
+          <li><strong>Magnet</strong> — attracts iron and its ores; always exists as dipole (N-S)</li>
+          <li><strong>Magnetic effect of current</strong> — discovered by Oersted (1820)</li>
+          <li><strong>Electromagnetic Induction</strong> — discovered by Faraday (1831)</li>
+          <li>Key rules: Biot-Savart Law · Ampere's Law · Lorentz Force · Fleming's Left &amp; Right Hand Rules</li>
+          <li>3 magnetic material types: Diamagnetic · Paramagnetic · Ferromagnetic</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card blue-card">
+      <div class="card-header">📋 Key Formulae — Quick Look</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div>
+            <div class="formula-box">B = (μ₀/4π)·(IΔl sinθ/r²)<span>Biot-Savart Law</span></div>
+            <div class="formula-box">∮ B·dl = μ₀I<span>Ampere's Law</span></div>
+          </div>
+          <div>
+            <div class="formula-box">F = qvB sinθ<span>Lorentz Force</span></div>
+            <div class="formula-box">Φ = B·A cosθ<span>Magnetic Flux | Unit: Weber</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-magnets" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🧲 Magnet — Basics</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Substances that have the property of <strong>attracting iron and its ores</strong>. Always exist as a
+            <strong>dipole</strong> with North and South poles — magnetic monopoles do NOT exist.
+          </p>
+        </div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Like Poles</div>
+            <div class="info-val" style="color:var(--accent1);">Repulsion</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Unlike Poles</div>
+            <div class="info-val" style="color:var(--accent3);">Attraction</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">When suspended freely</div>
+            <div class="info-val">N→ Geographic North</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📂 Types of Magnets</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card gold-left">
+            <div class="type-tag">Natural Magnet</div>
+            <div class="type-name">Found in Nature</div>
+            <ul class="arrow-list">
+              <li>Minerals naturally possessing magnetism</li>
+              <li><strong>Lodestone (Magnetite)</strong> = Fe₃O₄</li>
+              <li>Irregular shape, weak magnetic force</li>
+            </ul>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Artificial Magnet</div>
+            <div class="type-name">Man-Made</div>
+            <ul class="arrow-list">
+              <li>Made from iron, steel, nickel combinations</li>
+              <li><strong>Bar magnet</strong></li>
+              <li><strong>Electromagnet</strong></li>
+              <li><strong>Horse-shoe magnet</strong></li>
+              <li><strong>Magnetic compass</strong></li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Natural Magnet</div>
+          <ul class="arrow-list">
+            <li>Lodestone = <strong>Magnetite = Fe₃O₄</strong> (iron oxide)</li>
+            <li>When freely suspended, North pole of bar magnet points toward <strong>geographic North</strong>
+              (actually Earth's magnetic south pole!)</li>
+            <li>Magnetic monopoles <strong>do NOT exist</strong> — if you cut a magnet, you get TWO dipoles</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-materials" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">🧱 Classification of Materials Based on Magnetism</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="mat-box" style="background:#1a0909;border-color:#4a1a4a;">
+            <div class="mat-head" style="background:#2a0a2a;color:var(--accent4);">🔵 Diamagnetic</div>
+            <ul class="arrow-list">
+              <li>Caused by: <strong>Orbital motion</strong> of electrons</li>
+              <li>Magnetised in <strong>opposite direction</strong> to applied field</li>
+              <li>Weakly repelled by magnets</li>
+            </ul>
+            <div
+              style="margin-top:10px;padding:8px;background:var(--surface2);border-radius:6px;font-size:12.5px;color:var(--text-muted);">
+              <strong style="color:var(--accent4);">Examples:</strong><br />
+              Bismuth, Zinc, Gold, Copper, Silver, Diamond, Salt
+            </div>
+          </div>
+          <div class="mat-box" style="background:#091524;border-color:#1a3a5a;">
+            <div class="mat-head" style="background:#0a1e35;color:var(--accent2);">🟡 Paramagnetic</div>
+            <ul class="arrow-list">
+              <li>Caused by: <strong>Spinning motion</strong> of electrons</li>
+              <li>Magnetised in the <strong>direction of field</strong></li>
+              <li>Weakly attracted by magnets</li>
+            </ul>
+            <div
+              style="margin-top:10px;padding:8px;background:var(--surface2);border-radius:6px;font-size:12.5px;color:var(--text-muted);">
+              <strong style="color:var(--accent2);">Examples:</strong><br />
+              Chromium, Sodium, Aluminium, Oxygen
+            </div>
+          </div>
+          <div class="mat-box" style="background:#0b1f10;border-color:#1a4a2a;">
+            <div class="mat-head" style="background:#0b2a1a;color:var(--accent3);">🔴 Ferromagnetic</div>
+            <ul class="arrow-list">
+              <li>Caused by: <strong>Domain formation</strong></li>
+              <li><strong>Strongly</strong> magnetised in direction of field</li>
+              <li>Strongly attracted by magnets</li>
+            </ul>
+            <div
+              style="margin-top:10px;padding:8px;background:var(--surface2);border-radius:6px;font-size:12.5px;color:var(--text-muted);">
+              <strong style="color:var(--accent3);">Examples:</strong><br />
+              Iron, Nickel, Cobalt, Steel
+            </div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Magnetic Materials</div>
+          <ul class="arrow-list">
+            <li><strong>Diamagnetic</strong> = repelled by magnet; magnetised OPPOSITE to field (Bismuth, Copper,
+              Silver)</li>
+            <li><strong>Paramagnetic</strong> = weakly attracted; magnetised in direction of field (Al, O₂, Cr)</li>
+            <li><strong>Ferromagnetic</strong> = strongly attracted; domain formation (Iron, Nickel, Cobalt)</li>
+            <li>Silver &amp; Copper = <strong>Diamagnetic</strong> (NOT ferromagnetic) — common trap!</li>
+            <li>Aluminium = <strong>Paramagnetic</strong> (NOT ferromagnetic)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-magnetic-field" class="tab-content">
+    <div class="card teal-card">
+      <div class="card-header">🌐 Magnetic Field</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>The region around a magnet or current-carrying conductor where magnetic effects are experienced.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gold-card">
+      <div class="card-header">⚡ Magnetic Effect of Electric Current</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Discovery</div>
+          <p>A <strong>magnetic field</strong> is produced around a current-carrying conductor. Discovered by
+            <strong>Oersted (1820)</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📐 Biot-Savart Law</div>
+      <div class="card-body">
+        <div class="formula-box">B = (μ₀/4π) · (IΔl sinθ / r²)<span>Intensity of Magnetic Field | Unit: N/Am</span>
+        </div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">μ₀/4π</div>
+            <div class="info-val">10⁻⁷ N/A²</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">μ₀</div>
+            <div class="info-val">Permeability of vacuum</div>
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-top:12px;">
+          <table class="data-table" style="margin:0;">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Relationship with B</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Current (I)</td>
+                <td>B ∝ I (directly proportional)</td>
+              </tr>
+              <tr>
+                <td>Length (Δl)</td>
+                <td>B ∝ Δl (directly proportional)</td>
+              </tr>
+              <tr>
+                <td>Distance (r)</td>
+                <td>B ∝ 1/r² (inverse square)</td>
+              </tr>
+              <tr>
+                <td>Angle (θ)</td>
+                <td>B ∝ sinθ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card green-card">
+      <div class="card-header">📏 Ampere's Law</div>
+      <div class="card-body">
+        <div class="formula-box">∮ B · dl = μ₀I<span>Line integral of B around a closed loop = μ₀ × enclosed
+            current</span></div>
+        <ul class="arrow-list">
+          <li>μ₀ = Permeability of vacuum</li>
+          <li>dl = infinitesimal length element of the closed loop</li>
+          <li>Used to find B for symmetric current configurations (solenoid, toroid)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">🧭 Rules for Direction of Magnetic Field</div>
+      <div class="card-body">
+        <div class="type-card gold-left">
+          <div class="type-tag">Rule A</div>
+          <div class="type-name">Right Hand Palm Rule</div>
+          <p><strong>Thumb</strong> → Direction of current (I)<br /><strong>Fingers</strong> → Direction of magnetic
+            field (B)</p>
+        </div>
+        <div class="type-card blue-left">
+          <div class="type-tag">Rule B</div>
+          <div class="type-name">Maxwell's Right Hand Rule</div>
+          <p><strong>Thumb</strong> → Direction of current<br /><strong>Curled fingers</strong> → Direction of magnetic
+            field around the conductor</p>
+        </div>
+        <div class="type-card purple-left">
+          <div class="type-tag">Rule C</div>
+          <div class="type-name">Maxwell's Cork Screw Rule</div>
+          <ul class="arrow-list">
+            <li>Current going <strong>upward</strong> → field is <strong>anti-clockwise</strong></li>
+            <li>Current going <strong>downward</strong> → field is <strong>clockwise</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-forces" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">⚡ Lorentz Force</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Force experienced by a <strong>moving charged particle</strong> in a magnetic field.</p>
+        </div>
+        <div class="formula-box">F = qvB sinθ &nbsp;=&nbsp; q(v × B)<span>Lorentz Force</span></div>
+        <ul class="arrow-list">
+          <li>F ∝ charge (q)</li>
+          <li>F ∝ velocity (v)</li>
+          <li>F ∝ magnetic field intensity (B)</li>
+          <li>F = 0 when θ = 0° or 180° (particle moves parallel to field)</li>
+          <li>F is maximum when θ = 90° (particle moves perpendicular to field)</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Lorentz Force</div>
+          <p>A stationary charge in a magnetic field experiences <strong>NO force</strong> (F = qvB sinθ; v=0 → F=0).
+            The charge must be <strong>moving</strong> to experience magnetic force.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">🔌 Force on Current-Carrying Conductor</div>
+      <div class="card-body">
+        <div class="formula-box">F = BIl sinθ (Newton)<span>Force on conductor of length l carrying current I in field
+            B</span></div>
+        <ul class="arrow-list">
+          <li>Direction: <strong>Perpendicular</strong> to both the magnetic field and the current</li>
+          <li>Maximum when current is perpendicular to B (θ = 90°)</li>
+          <li>Zero when current is parallel to B (θ = 0°)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">✋ Fleming's Rules — Left & Right Hand</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="hand-rule" style="border-color:var(--accent1);">
+            <div class="hr-title" style="color:var(--accent1);">✊ Fleming's LEFT Hand Rule</div>
+            <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:10px;">Used for: <strong>Motor (Force on
+                conductor)</strong></p>
+            <div class="finger-row">
+              <div class="finger-box">
+                <div class="f-label">Thumb</div>
+                <div class="f-val" style="color:var(--accent1);">Force (F)</div>
+              </div>
+              <div class="finger-box">
+                <div class="f-label">Forefinger</div>
+                <div class="f-val" style="color:var(--accent2);">Field (B)</div>
+              </div>
+              <div class="finger-box">
+                <div class="f-label">Middle Finger</div>
+                <div class="f-val" style="color:var(--accent3);">Current (I)</div>
+              </div>
+            </div>
+          </div>
+          <div class="hand-rule" style="border-color:var(--accent3);">
+            <div class="hr-title" style="color:var(--accent3);">🤚 Fleming's RIGHT Hand Rule</div>
+            <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:10px;">Used for: <strong>Generator (Induced
+                Current)</strong></p>
+            <div class="finger-row">
+              <div class="finger-box">
+                <div class="f-label">Thumb</div>
+                <div class="f-val" style="color:var(--accent5);">Motion of Conductor</div>
+              </div>
+              <div class="finger-box">
+                <div class="f-label">Forefinger</div>
+                <div class="f-val" style="color:var(--accent2);">Field (B)</div>
+              </div>
+              <div class="finger-box">
+                <div class="f-label">Middle Finger</div>
+                <div class="f-val" style="color:var(--gold);">Induced Current</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Left vs Right Hand</div>
+          <ul class="arrow-list">
+            <li><strong>LEFT hand</strong> = MOTOR effect (current → force/motion) — FBI rule</li>
+            <li><strong>RIGHT hand</strong> = GENERATOR / DYNAMO effect (motion → induced current)</li>
+            <li>Memory trick: <strong>Motor = Left</strong> | <strong>Generator = Right</strong></li>
+            <li>Both rules use: Forefinger = Field (B), Middle = Current</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-field-lines" class="tab-content">
+    <div class="card teal-card">
+      <div class="card-header">〰️ Magnetic Field Lines</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Continuous imaginary lines representing the direction and strength of a magnetic field.</p>
+        </div>
+        <ul class="arrow-list">
+          <li>Direction: <strong>North → South pole</strong> (outside the magnet)</li>
+          <li>Form <strong>closed curves</strong> (unlike electric field lines)</li>
+          <li><strong>Non-intersecting</strong> (never cross each other)</li>
+          <li><strong>Parallel and equally spaced</strong> in a uniform field</li>
+          <li>Magnetic field = <strong>zero at neutral point</strong></li>
+          <li>Closer lines = stronger field; farther lines = weaker field</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Magnetic vs Electric Field Lines</div>
+          <div class="table-wrap" style="margin-top:8px;">
+            <table class="data-table" style="margin:0;">
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Electric Field Lines</th>
+                  <th>Magnetic Field Lines</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Direction</td>
+                  <td>+ to −</td>
+                  <td>N to S (outside magnet)</td>
+                </tr>
+                <tr>
+                  <td>Closed loops?</td>
+                  <td><span class="hl-red">No</span></td>
+                  <td><span class="hl-green">Yes</span></td>
+                </tr>
+                <tr>
+                  <td>Intersect?</td>
+                  <td>No</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Originate/end</td>
+                  <td>On charges</td>
+                  <td>No start/end (continuous)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">🔌 Electromagnet</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>A magnet obtained by <strong>winding wire around an iron core</strong> and passing electric current through
+            it. Becomes magnetic only when current flows.</p>
+        </div>
+        <ul class="arrow-list">
+          <li>Core material: <strong>Soft iron</strong> (easily magnetised and demagnetised)</li>
+          <li>Magnetic strength increases with: more turns of wire, more current, better core material</li>
+          <li>Applications: Electric bells, cranes for lifting scrap iron, MRI machines, electric motors</li>
+          <li>Advantage over permanent magnets: <strong>strength can be controlled</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-emi" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">🌀 Magnetic Flux (Φ)</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Total number of magnetic field lines passing <strong>perpendicularly through a surface</strong> in a
+            magnetic field.</p>
+        </div>
+        <div class="formula-box">Φ = B · A cosθ<span>Magnetic Flux | B = field, A = area, θ = angle between B and normal
+            to surface</span></div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">SI Unit</div>
+            <div class="info-val">Weber (Wb)</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Other SI</div>
+            <div class="info-val">N·m/A</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">CGS Unit</div>
+            <div class="info-val">Maxwell</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Conversion</div>
+            <div class="info-val">1 Wb = 10⁸ Maxwell</div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Magnetic Flux</div>
+          <ul class="arrow-list">
+            <li>Flux is maximum when B is <strong>perpendicular</strong> to surface (θ = 0°, cosθ = 1)</li>
+            <li>Flux is zero when B is <strong>parallel</strong> to surface (θ = 90°, cosθ = 0)</li>
+            <li>Unit: <strong>Weber</strong> (SI); Maxwell (CGS) | 1 Wb = 10⁸ Maxwell</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card green-card">
+      <div class="card-header">⚙️ Electromagnetic Induction (EMI)</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Phenomenon of generation of <strong>EMF and induced current</strong> in a conductor due to <strong>changing
+              magnetic flux</strong>.</p>
+        </div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Discoverer</div>
+            <div class="info-val">Michael Faraday</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Year</div>
+            <div class="info-val">1831</div>
+          </div>
+        </div>
+        <ul class="arrow-list">
+          <li>EMF is induced only when magnetic flux is <strong>changing</strong></li>
+          <li>Key principle: A changing magnetic field creates an electric field</li>
+        </ul>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Applications of EMI</div>
+          <ul class="arrow-list">
+            <li><strong>Dynamo / Generator</strong> — converts mechanical energy to electrical</li>
+            <li><strong>Transformer</strong> — changes AC voltage levels</li>
+            <li><strong>Artificial Pacemaker</strong> — regulates heartbeat</li>
+            <li>Induction cooktop, wireless charging</li>
+          </ul>
+        </div>
+        <div class="type-card green-left" style="margin-top:12px;">
+          <div class="type-tag">Direction of Induced Current</div>
+          <div class="type-name">Fleming's Right Hand Rule</div>
+          <div class="hand-rule" style="border:none;padding:10px 0 0 0;background:transparent;">
+            <div class="finger-row">
+              <div class="finger-box">
+                <div class="f-label">Thumb</div>
+                <div class="f-val" style="color:var(--accent5);">Motion of Conductor</div>
+              </div>
+              <div class="finger-box">
+                <div class="f-label">Forefinger</div>
+                <div class="f-val" style="color:var(--accent2);">Magnetic Field (B)</div>
+              </div>
+              <div class="finger-box">
+                <div class="f-label">Middle Finger</div>
+                <div class="f-val" style="color:var(--gold);">Induced Current</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — EMI</div>
+          <ul class="arrow-list">
+            <li>EMI requires <strong>changing</strong> flux — static magnet near a coil produces NO EMF</li>
+            <li>Faraday discovered EMI in <strong>1831</strong> (NOT Oersted — Oersted discovered magnetic effect of
+              current in 1820)</li>
+            <li>Generator works on EMI; Motor works on magnetic force on current (reverse of EMI)</li>
+            <li>Right hand rule = <strong>Generator</strong>; Left hand rule = <strong>Motor</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Natural magnet = <strong>Lodestone = Magnetite = Fe₃O₄</strong></li>
+          <li>Like poles = <strong>Repulsion</strong>; Unlike poles = <strong>Attraction</strong></li>
+          <li>Magnetic monopoles do <strong>NOT exist</strong> — magnet always has N and S</li>
+          <li>Diamagnetic: Bismuth, Copper, Silver, Gold (repelled, opposite magnetisation)</li>
+          <li>Paramagnetic: Aluminium, Oxygen, Chromium (weakly attracted)</li>
+          <li>Ferromagnetic: <strong>Iron, Nickel, Cobalt</strong> (strongly attracted, domains)</li>
+          <li>Magnetic effect of current: <strong>Oersted (1820)</strong></li>
+          <li>Biot-Savart: B ∝ I, B ∝ Δl, B ∝ 1/r², B ∝ sinθ</li>
+          <li>μ₀/4π = <strong>10⁻⁷ N/A²</strong></li>
+          <li>Lorentz force: F = qvB sinθ (zero for stationary charge)</li>
+          <li>Force on conductor: F = <strong>BIl sinθ</strong></li>
+          <li><strong>Left Hand Rule</strong> → Motor (Force); <strong>Right Hand Rule</strong> → Generator (Induced
+            current)</li>
+          <li>Magnetic field lines: N→S, closed curves, non-intersecting</li>
+          <li>Electromagnetic Induction: <strong>Faraday (1831)</strong></li>
+          <li>Magnetic Flux unit: <strong>Weber</strong> (SI) | 1 Wb = 10⁸ Maxwell</li>
+          <li>Φ = B·A cosθ; max when θ = 0°, zero when θ = 90°</li>
+          <li>Applications of EMI: Dynamo, Transformer, Pacemaker</li>
+          <li>Cork screw rule: Current up → B anti-clockwise; Current down → B clockwise</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">📋 Formula Quick Reference</div>
+        <div class="card-body">
+          <div class="formula-box">B = (μ₀/4π)·IΔl sinθ/r²<span>Biot-Savart Law | μ₀/4π = 10⁻⁷</span></div>
+          <div class="formula-box">∮ B·dl = μ₀I<span>Ampere's Law</span></div>
+          <div class="formula-box">F = qvB sinθ<span>Lorentz Force</span></div>
+          <div class="formula-box">F = BIl sinθ<span>Force on Current Conductor</span></div>
+          <div class="formula-box">Φ = B·A cosθ<span>Magnetic Flux (Weber)</span></div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">⚠️ Most Common Exam Traps</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Silver &amp; Copper = <strong>Diamagnetic</strong> (NOT conductors of magnetism)</li>
+            <li>Aluminium = <strong>Paramagnetic</strong> (NOT ferromagnetic)</li>
+            <li>Oersted (1820) ≠ Faraday (1831) — different discoveries</li>
+            <li>Stationary charge: Lorentz force = <strong>0</strong></li>
+            <li>Left hand = <strong>Motor</strong>; Right hand = <strong>Generator</strong></li>
+            <li>Magnetic field lines form <strong>closed loops</strong> (electric field lines do NOT)</li>
+            <li>1 Weber = <strong>10⁸ Maxwell</strong> (not 10⁶ or 10¹⁰)</li>
+            <li>EMI requires <strong>changing</strong> flux, not just a magnetic field</li>
+            <li>Lodestone = Fe₃O₄ (iron(II,III) oxide — NOT FeO or Fe₂O₃)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 10: Magnetism · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

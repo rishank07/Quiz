@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 04: Work, Power &amp; Energy | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: #d0d6f0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12141f 0%, #1a1d30 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 18px 24px 14px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      color: var(--gold);
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .page-header .subtitle {
+      color: #8892b0;
+      font-size: .82rem;
+      margin-top: 4px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      padding: 0 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #8892b0;
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .4px;
+      padding: 11px 13px 8px;
+      text-transform: uppercase;
+      transition: color .2s, border-color .2s;
+    }
+
+    .tab-nav button:hover {
+      color: #c8d0e8;
+    }
+
+    .tab-nav button.active {
+      border-bottom-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 22px 20px 30px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .6px;
+      padding: 10px 16px;
+      text-transform: uppercase;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1d27);
+      color: var(--gold);
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2218, #1a1d27);
+      color: var(--accent3);
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #091524, #1a1d27);
+      color: var(--accent2);
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #160d24, #1a1d27);
+      color: var(--accent4);
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #211100, #1a1d27);
+      color: var(--accent5);
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #1a0909, #1a1d27);
+      color: var(--accent1);
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #041a17, #1a1d27);
+      color: var(--accent6);
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .arrow-list {
+      list-style: none;
+    }
+
+    .arrow-list li {
+      padding: 4px 0 4px 22px;
+      position: relative;
+    }
+
+    .arrow-list li::before {
+      color: var(--gold);
+      content: '▸';
+      left: 0;
+      position: absolute;
+    }
+
+    .arrow-list li.sub {
+      padding-left: 42px;
+    }
+
+    .arrow-list li.sub::before {
+      color: var(--accent2);
+      content: '▸';
+      left: 20px;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .exam-trap .trap-label {
+      color: var(--accent1);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .quick-recall .recall-label {
+      color: var(--accent2);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: .82rem;
+      width: 100%;
+      min-width: 550px;
+    }
+
+    /* Added min-width */
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 8px 10px;
+      text-align: left;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    /* Prevents header breaking */
+    .data-table td {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 7px 10px;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .data-table tr:hover td {
+      background: #252840;
+    }
+
+    .art-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--gold);
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      padding: 2px 10px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      flex: 1 1 130px;
+      padding: 10px 14px;
+    }
+
+    .stat-box .s-val {
+      color: var(--gold);
+      font-size: .88rem;
+      font-weight: 700;
+      font-family: monospace;
+    }
+
+    .stat-box .s-lbl {
+      color: #8892b0;
+      font-size: .72rem;
+      margin-top: 2px;
+    }
+
+    .info-row {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .info-row span {
+      font-size: .82rem;
+    }
+
+    .info-row .ik {
+      color: #8892b0;
+      margin-right: 4px;
+    }
+
+    .info-row .iv {
+      color: var(--gold);
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    .two-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .three-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+    }
+
+    .mini-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .mini-card .mc-title {
+      font-weight: 700;
+      font-size: .85rem;
+      margin-bottom: 7px;
+    }
+
+    .formula-box {
+      background: #0d1a0d;
+      border: 1px solid #1a3a1a;
+      border-radius: 8px;
+      color: var(--accent3);
+      font-family: monospace;
+      font-size: .9rem;
+      margin: 8px 0;
+      padding: 10px 16px;
+      text-align: center;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 600;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 600;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 600;
+    }
+
+    .mono {
+      font-family: monospace;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      color: #555e7a;
+      font-size: .75rem;
+      margin-top: 30px;
+      padding: 12px 20px;
+      text-align: center;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+
+      table.data-table th,
+      table.data-table td {
+        padding: 8px 10px;
+        font-size: .78rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <h1>⚡ Chapter 04 — Work, Power &amp; Energy</h1>
+    <div class="subtitle">General Science · Physics · BPSC / BSSC Exam Preparation</div>
+  </div>
+
+  <nav class="tab-nav">
+    <button class="active" onclick="switchTab('tab1',this)">🔨 Work</button>
+    <button onclick="switchTab('tab2',this)">⚙️ Power</button>
+    <button onclick="switchTab('tab3',this)">⚡ Energy Types</button>
+    <button onclick="switchTab('tab4',this)">🏃 KE &amp; PE</button>
+    <button onclick="switchTab('tab5',this)">♻️ Conservation</button>
+    <button onclick="switchTab('tab6',this)">🔌 Energy Conversion</button>
+  </nav>
+
+  <div id="tab1" class="tab-panel active">
+
+    <div class="card">
+      <div class="card-header gold">🔨 Work — Introduction</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Change in position of object by applying a <span class="hl-gold">force</span></li>
+          <li>Scalar quantity</li>
+        </ul>
+        <div class="formula-box">W = F·s·cosθ</div>
+        <div class="stat-row" style="margin-top:10px;">
+          <div class="stat-box">
+            <div class="s-val">Joule (J)</div>
+            <div class="s-lbl">SI / MKS Unit</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">erg</div>
+            <div class="s-lbl">CGS Unit</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">1 J = 10⁷ erg</div>
+            <div class="s-lbl">Conversion</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">1 erg = 1 dyne × 1 cm</div>
+            <div class="s-lbl">CGS definition</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📋 Types of Work</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Angle (θ)</th>
+                <th>Value</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-green">Positive Work</td>
+                <td><span class="mono">0° ≤ θ &lt; 90°</span></td>
+                <td>W = F·s (+ve)</td>
+                <td>Gravity on freely falling body</td>
+              </tr>
+              <tr>
+                <td class="hl-red">Negative Work</td>
+                <td><span class="mono">90° &lt; θ &lt; 270°</span></td>
+                <td>W = −F·s (−ve)</td>
+                <td>Gravity while lifting a body upward</td>
+              </tr>
+              <tr>
+                <td class="hl-orange">Zero Work</td>
+                <td><span class="mono">θ = 90° or 270°</span></td>
+                <td>W = 0</td>
+                <td>Lifting load sideways; Circular motion</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Work done in <span class="hl-gold">circular motion = Zero</span> (force ⊥ displacement). Work done against
+          gravity while lifting = <span class="hl-red">Negative</span>. Work done by gravity while falling = <span
+            class="hl-green">Positive</span>. cosθ determines the sign!
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Worked Example</div>
+          F=40N, s=10m, θ=30°<br />
+          W = 40 × 10 × cos30° = 400 × (√3/2) = <span class="hl-gold">346.41 J</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">⚖️ Conservative vs Non-Conservative Force</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th style="color:var(--accent3)">Conservative Force</th>
+                <th style="color:var(--accent1)">Non-Conservative Force</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Work depends on</td>
+                <td>Initial &amp; final positions only</td>
+                <td>Initial, final positions AND path</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Path dependence</td>
+                <td><span class="hl-green">Path independent</span></td>
+                <td><span class="hl-red">Path dependent</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Closed path work</td>
+                <td><span class="hl-green">= 0 (zero)</span></td>
+                <td><span class="hl-red">≠ 0 (non-zero)</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Examples</td>
+                <td>Gravitation, Electrostatic force, Magnetic force</td>
+                <td>Friction force, Viscous force</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab2" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header orange">⚙️ Power</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Time rate of work done by a machine or person</li>
+          <li>Scalar quantity</li>
+        </ul>
+        <div class="formula-box">P = W / t = Work / Time</div>
+        <div class="stat-row" style="margin-top:10px;">
+          <div class="stat-box">
+            <div class="s-val">Watt (W)</div>
+            <div class="s-lbl">SI Unit = J/s</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">1 HP = 746 W</div>
+            <div class="s-lbl">Horse Power</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">1 kW = 10³ W</div>
+            <div class="s-lbl">Kilowatt</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">1 MW = 10⁶ W</div>
+            <div class="s-lbl">Megawatt</div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          1 Horse Power = <span class="hl-gold">746 Watt</span> (not 1000 W!). 1 kW = 10³ W. Power is <span
+            class="hl-gold">Scalar</span> quantity.
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Worked Example</div>
+          m=40kg, h=2m, t=4s<br />
+          W = mgh = 40×9.8×2 = 784 J<br />
+          P = 784/4 = <span class="hl-gold">196 Watt</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab3" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">⚡ Energy — Introduction</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Capacity of an object to do work</li>
+          <li>Scalar quantity</li>
+          <li>Unit: Joule (J) | Commercial unit: <span class="hl-gold">kilowatt-hour (kWh)</span></li>
+        </ul>
+        <div class="table-wrap" style="margin-top:10px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Unit</th>
+                <th>Equivalence in Joules</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">erg</td>
+                <td class="mono">10⁻⁷ J</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Calorie</td>
+                <td class="mono">4.2 J</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Kilowatt-hour (kWh)</td>
+                <td class="mono">3.6 × 10⁶ J</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Electron-volt (eV)</td>
+                <td class="mono">1.6 × 10⁻¹⁹ J</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🌈 Forms of Energy</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Form</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Thermal Energy</td>
+                <td>Energy from heat</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Electric Energy</td>
+                <td>Energy from flow of electric current</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Chemical Energy</td>
+                <td>Energy from chemical reactions</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Light Energy</td>
+                <td>Energy from sun and light sources</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Sound Energy</td>
+                <td>Energy from sound sources / musical instruments</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Nuclear Energy</td>
+                <td>Energy from <span class="hl-red">fission or fusion</span> of nuclei</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Mechanical Energy</td>
+                <td>Energy from mechanical work (KE + PE)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Nuclear energy = Fission OR Fusion. 1 calorie = <span class="hl-gold">4.2 J</span> (not 4 J, not 4.5 J). 1 kWh
+          = <span class="hl-gold">3.6 × 10⁶ J</span>. eV = <span class="hl-gold">1.6 × 10⁻¹⁹ J</span> — used in atomic
+          physics.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab4" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header green">🏃 Kinetic Energy (KE)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Energy due to <span class="hl-gold">motion</span> of an object</li>
+          <li>Proportional to mass and square of velocity</li>
+          <li>e.g. Wind mills, Bullet fired from gun</li>
+        </ul>
+        <div class="formula-box">KE = ½mv²</div>
+        <div class="info-row">
+          <span><span class="ik">KE-Momentum relation:</span><span class="iv">KE = p²/2m = ½pv</span></span>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          If momentum (P) of two objects is same → <span class="hl-gold">lighter object has MORE KE</span> (KE = p²/2m —
+          smaller m means larger KE). KE is always <span class="hl-green">positive</span>.
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Worked Example</div>
+          m=1500kg, v=72km/h = 20m/s<br />
+          KE = ½ × 1500 × 20² = <span class="hl-gold">3 × 10⁵ J</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🏔️ Potential Energy (PE)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Energy due to <span class="hl-gold">position or configuration</span> of a body</li>
+        </ul>
+        <div class="two-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">1. Gravitational PE</div>
+            <ul class="arrow-list">
+              <li>Body of mass m at height h</li>
+            </ul>
+            <div class="formula-box">U = mgh</div>
+            <div class="quick-recall" style="margin-top:8px;">
+              <div class="recall-label">⚡ Example</div>
+              m=40kg, h=5m, g=10<br />
+              U = 40×10×5 = <span class="hl-gold">2000 J</span>
+            </div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">2. Elastic PE</div>
+            <ul class="arrow-list">
+              <li>Energy due to elastic deformation of spring</li>
+              <li>k = spring force constant</li>
+              <li>x = deformation / extension</li>
+            </ul>
+            <div class="formula-box">U = ½kx²</div>
+            <ul class="arrow-list" style="margin-top:6px;">
+              <li>e.g. Stretched bow string, Compressed spring</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📊 KE vs PE — Quick Compare</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th style="color:var(--accent3)">Kinetic Energy</th>
+                <th style="color:var(--accent2)">Potential Energy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Depends on</td>
+                <td>Mass + Velocity</td>
+                <td>Mass + Height (or configuration)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Formula</td>
+                <td class="mono">½mv²</td>
+                <td class="mono">mgh or ½kx²</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Examples</td>
+                <td>Moving bullet, Running car</td>
+                <td>Water in dam, Stretched spring</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Can be zero?</td>
+                <td>Yes (when v=0)</td>
+                <td>Yes (at reference point h=0)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab5" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">♻️ Law of Conservation of Energy</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><span class="hl-gold">"Energy can neither be created nor destroyed — only converted from one form to
+              another"</span></li>
+          <li>Total energy of an isolated system remains constant</li>
+        </ul>
+        <div class="card" style="margin-top:12px; border-color:var(--border);">
+          <div class="card-header blue">🎢 Free Fall — KE + PE = Constant</div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Position</th>
+                    <th>KE</th>
+                    <th>PE</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>At highest point</td>
+                    <td class="hl-red">Minimum (0)</td>
+                    <td class="hl-green">Maximum</td>
+                    <td class="hl-gold">Constant</td>
+                  </tr>
+                  <tr>
+                    <td>Midway</td>
+                    <td>½ total</td>
+                    <td>½ total</td>
+                    <td class="hl-gold">Constant</td>
+                  </tr>
+                  <tr>
+                    <td>At lowest point</td>
+                    <td class="hl-green">Maximum</td>
+                    <td class="hl-red">Minimum (0)</td>
+                    <td class="hl-gold">Constant</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="formula-box">KE + PE = Total Mechanical Energy = Constant</div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          At highest point: PE = max, KE = <span class="hl-red">0</span>. At lowest: KE = max, PE = <span
+            class="hl-red">0</span>. Total always constant! Energy "created" or "destroyed" = impossible.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab6" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header orange">🔌 Energy Conversion Table</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Equipment / Device</th>
+                <th>Energy Conversion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Solar cell</td>
+                <td><span class="hl-orange">Solar (Light)</span> → <span class="hl-blue">Electrical</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Dynamo</td>
+                <td><span class="hl-green">Mechanical</span> → <span class="hl-blue">Electrical</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Electric Motor</td>
+                <td><span class="hl-blue">Electrical</span> → <span class="hl-green">Mechanical</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Microphone</td>
+                <td><span class="hl-purple">Sound</span> → <span class="hl-blue">Electrical</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Loudspeaker</td>
+                <td><span class="hl-blue">Electrical</span> → <span class="hl-purple">Sound</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Sitar</td>
+                <td><span class="hl-green">Mechanical</span> → <span class="hl-purple">Sound</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Bulb / Tube light / Heater</td>
+                <td><span class="hl-blue">Electrical</span> → <span class="hl-orange">Light + Thermal</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Burning candle</td>
+                <td><span class="hl-teal">Chemical</span> → <span class="hl-orange">Light + Thermal</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Burning coal</td>
+                <td><span class="hl-teal">Chemical</span> → <span class="hl-red">Thermal</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Electric cell (battery)</td>
+                <td><span class="hl-teal">Chemical</span> → <span class="hl-blue">Electrical</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Engine</td>
+                <td><span class="hl-red">Thermal</span> → <span class="hl-green">Mechanical</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Photoelectric cell</td>
+                <td><span class="hl-orange">Light</span> → <span class="hl-blue">Electrical</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Dynamo = Mechanical → Electrical (generator). Motor = Electrical → Mechanical (opposite of dynamo!). Solar
+          cell + Photoelectric cell dono = Light → Electrical. Microphone + Loudspeaker = opposite conversions.
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall — Units Summary</div>
+          Work = Energy = <span class="hl-gold">Joule</span>. Power = <span class="hl-gold">Watt = J/s</span>. 1 HP =
+          <span class="hl-gold">746 W</span>. 1 J = <span class="hl-gold">10⁷ erg</span>. 1 cal = <span
+            class="hl-gold">4.2 J</span>. 1 kWh = <span class="hl-gold">3.6×10⁶ J</span>.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Work, Power &amp; Energy · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

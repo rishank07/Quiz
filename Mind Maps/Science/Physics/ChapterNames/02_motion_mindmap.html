@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 02: Motion | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: #d0d6f0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12141f 0%, #1a1d30 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 18px 24px 14px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      color: var(--gold);
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .page-header .subtitle {
+      color: #8892b0;
+      font-size: .82rem;
+      margin-top: 4px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      padding: 0 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #8892b0;
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .4px;
+      padding: 11px 13px 8px;
+      text-transform: uppercase;
+      transition: color .2s, border-color .2s;
+    }
+
+    .tab-nav button:hover {
+      color: #c8d0e8;
+    }
+
+    .tab-nav button.active {
+      border-bottom-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 22px 20px 30px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .6px;
+      padding: 10px 16px;
+      text-transform: uppercase;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1d27);
+      color: var(--gold);
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2218, #1a1d27);
+      color: var(--accent3);
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #091524, #1a1d27);
+      color: var(--accent2);
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #160d24, #1a1d27);
+      color: var(--accent4);
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #211100, #1a1d27);
+      color: var(--accent5);
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #1a0909, #1a1d27);
+      color: var(--accent1);
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #041a17, #1a1d27);
+      color: var(--accent6);
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .arrow-list {
+      list-style: none;
+    }
+
+    .arrow-list li {
+      padding: 4px 0 4px 22px;
+      position: relative;
+    }
+
+    .arrow-list li::before {
+      color: var(--gold);
+      content: '▸';
+      left: 0;
+      position: absolute;
+    }
+
+    .arrow-list li.sub {
+      padding-left: 42px;
+    }
+
+    .arrow-list li.sub::before {
+      color: var(--accent2);
+      content: '▸';
+      left: 20px;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .exam-trap .trap-label {
+      color: var(--accent1);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .quick-recall .recall-label {
+      color: var(--accent2);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: .82rem;
+      width: 100%;
+      min-width: 550px;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 8px 10px;
+      text-align: left;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 7px 10px;
+      vertical-align: top;
+    }
+
+    .data-table tr:hover td {
+      background: #252840;
+    }
+
+    .art-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--gold);
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      flex: 1 1 130px;
+      padding: 10px 14px;
+    }
+
+    .stat-box .s-val {
+      color: var(--gold);
+      font-size: .9rem;
+      font-weight: 700;
+      font-family: monospace;
+    }
+
+    .stat-box .s-lbl {
+      color: #8892b0;
+      font-size: .73rem;
+      margin-top: 2px;
+    }
+
+    .info-row {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .info-row span {
+      font-size: .82rem;
+    }
+
+    .info-row .ik {
+      color: #8892b0;
+      margin-right: 4px;
+    }
+
+    .info-row .iv {
+      color: var(--gold);
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    .two-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .three-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+    }
+
+    .mini-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .mini-card .mc-title {
+      font-weight: 700;
+      font-size: .85rem;
+      margin-bottom: 7px;
+    }
+
+    .formula-box {
+      background: #0d1a0d;
+      border: 1px solid #1a3a1a;
+      border-radius: 8px;
+      color: var(--accent3);
+      font-family: monospace;
+      font-size: .9rem;
+      margin: 8px 0;
+      padding: 10px 16px;
+      text-align: center;
+    }
+
+    .compare-row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .compare-cell {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+
+    .compare-cell .cc-title {
+      font-weight: 700;
+      font-size: .8rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 600;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 600;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 600;
+    }
+
+    .mono {
+      font-family: monospace;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      color: #555e7a;
+      font-size: .75rem;
+      margin-top: 30px;
+      padding: 12px 20px;
+      text-align: center;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <h1>🚀 Chapter 02 — Motion</h1>
+    <div class="subtitle">General Science · Physics · BPSC / BSSC Exam Preparation</div>
+  </div>
+
+  <nav class="tab-nav">
+    <button class="active" onclick="switchTab('tab1',this)">🏃 Types of Motion</button>
+    <button onclick="switchTab('tab2',this)">📏 Key Terms</button>
+    <button onclick="switchTab('tab3',this)">⚡ Equations</button>
+    <button onclick="switchTab('tab4',this)">📊 Motion Graphs</button>
+    <button onclick="switchTab('tab5',this)">🎯 Projectile</button>
+    <button onclick="switchTab('tab6',this)">🔄 Circular Motion</button>
+  </nav>
+
+  <div id="tab1" class="tab-panel active">
+
+    <div class="card">
+      <div class="card-header gold">🏃 What is Motion?</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><span class="hl-gold">Change in position of an object with time</span> is called motion</li>
+          <li>e.g. Bird flying, Flowing water, Bus moving on road</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">(A) Motion Based on Nature of Path</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Meaning</th>
+                <th>Examples</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Straight Line Motion</td>
+                <td>Particle moving in a straight line</td>
+                <td>Running child, Car on straight road</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Rotational Motion</td>
+                <td>Body rotating on its axis in circular path</td>
+                <td>Motion of fan, Bicycle wheel</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Oscillatory Motion</td>
+                <td>Back and forth about a fixed point / mean position</td>
+                <td>Pendulum in clock, Needle of sewing machine</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">(B) Motion Based on Dimensions</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Meaning</th>
+                <th>Axes</th>
+                <th>Examples</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">1D Motion</td>
+                <td>Variation of ONE coordinate with time</td>
+                <td><span class="hl-green">x-axis only</span></td>
+                <td>Car on straight road</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">2D Motion</td>
+                <td>Variation of TWO coordinates with time</td>
+                <td><span class="hl-blue">x and y axes</span></td>
+                <td>Projectile motion, Circular motion, Planet revolving around sun</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">3D Motion</td>
+                <td>Variation of THREE coordinates with time</td>
+                <td><span class="hl-purple">x, y, and z axes</span></td>
+                <td>Motion of mosquito, Bird, Water molecules</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Projectile motion = <span class="hl-gold">2D</span> (not 3D). Circular motion = <span
+            class="hl-gold">2D</span>. Mosquito flying = <span class="hl-gold">3D</span>. Car on straight road = <span
+            class="hl-gold">1D</span>.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">⚖️ Uniform vs Non-Uniform Motion</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Uniform Motion</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Equal distance</span> covered in equal time intervals</li>
+              <li>s-t graph = straight line through origin</li>
+              <li>Slope = constant</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">Non-Uniform Motion</div>
+            <ul class="arrow-list">
+              <li><span class="hl-gold">Unequal distance</span> covered in equal time intervals</li>
+              <li>s-t graph = curved line</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab2" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">📏 Distance vs Displacement</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th style="color:var(--accent3)">Distance (d)</th>
+                <th style="color:var(--accent2)">Displacement (x)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Meaning</td>
+                <td>Length of path covered</td>
+                <td>Shortest path between initial &amp; final position</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Quantity</td>
+                <td><span class="hl-orange">Scalar</span></td>
+                <td><span class="hl-blue">Vector</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Unit</td>
+                <td>meter (m)</td>
+                <td>meter (m)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Value</td>
+                <td><span class="hl-green">Always positive (+)</span></td>
+                <td>Positive, Negative, or Zero</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Formula</td>
+                <td>Length of path</td>
+                <td>Final position − Initial position</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          If object goes A→B (50m) then B→A (50m): Distance = <span class="hl-gold">100m</span> but Displacement = <span
+            class="hl-red">0m</span>. Distance can NEVER be zero if object moves, but displacement CAN be zero!
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">⚡ Speed vs Velocity</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th style="color:var(--accent3)">Speed (v)</th>
+                <th style="color:var(--accent2)">Velocity (v)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Meaning</td>
+                <td>Distance covered in unit time</td>
+                <td>Displacement per unit time (with direction)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Quantity</td>
+                <td><span class="hl-orange">Scalar</span></td>
+                <td><span class="hl-blue">Vector</span></td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Unit</td>
+                <td>m/s</td>
+                <td>m/s</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Value</td>
+                <td>Always positive</td>
+                <td>Positive, Negative, Zero</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Formula</td>
+                <td>Distance ÷ Time</td>
+                <td>Displacement ÷ Time</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Average</td>
+                <td>Total distance ÷ Total time</td>
+                <td>Total displacement ÷ Total time</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🔥 Acceleration</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Rate of change of <span class="hl-gold">velocity</span></li>
+          <li>Quantity: <span class="hl-blue">Vector</span> | Unit: <span class="hl-gold">m/s²</span></li>
+          <li>Value: Positive, Negative, or Zero</li>
+          <li><span class="hl-red">Negative acceleration</span> = <span class="hl-gold">Deceleration /
+              Retardation</span></li>
+        </ul>
+        <div class="formula-box">a = Δv / Δt = (v − u) / t</div>
+        <div class="formula-box">Average a = (v₂ − v₁) / (t₂ − t₁)</div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Worked Example</div>
+          Car from rest (u=0) to 60 km/h in 20s: v = 60 × 5/18 = 50/3 m/s<br />
+          a = (50/3 − 0) / 20 = <span class="hl-gold">5/6 m/s²</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab3" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header green">📐 Equations of Motion — Straight Line</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="s-val">u</div>
+            <div class="s-lbl">Initial velocity</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">v</div>
+            <div class="s-lbl">Final velocity</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">a</div>
+            <div class="s-lbl">Acceleration</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">t</div>
+            <div class="s-lbl">Time</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">s</div>
+            <div class="s-lbl">Displacement</div>
+          </div>
+        </div>
+        <div class="three-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--gold)">1st Equation</div>
+            <div class="mc-title" style="color:#8892b0;font-size:.78rem;font-weight:400;">Velocity-Time</div>
+            <div class="formula-box" style="font-size:1.1rem;">v = u + at</div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--gold)">2nd Equation</div>
+            <div class="mc-title" style="color:#8892b0;font-size:.78rem;font-weight:400;">Position-Time</div>
+            <div class="formula-box" style="font-size:1.1rem;">s = ut + ½at²</div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--gold)">3rd Equation</div>
+            <div class="mc-title" style="color:#8892b0;font-size:.78rem;font-weight:400;">Position-Velocity</div>
+            <div class="formula-box" style="font-size:1.1rem;">v² = u² + 2as</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌏 Equations of Motion — Vertical (Free Fall)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Replace <span class="hl-gold">a</span> with <span class="hl-gold">g</span> (acceleration due to gravity)
+            and <span class="hl-gold">s</span> with <span class="hl-gold">h</span> (height)</li>
+        </ul>
+        <div class="three-col" style="margin-top:10px;">
+          <div class="formula-box">v = u + gt</div>
+          <div class="formula-box">h = ut + ½gt²</div>
+          <div class="formula-box">v² = u² + 2gh</div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Worked Example — Deceleration</div>
+          Bullet: u=350 m/s, v=0, s=5 cm=0.05 m<br />
+          Using v²=u²+2as → 0 = 350² − 2a(0.05)<br />
+          a = <span class="hl-gold">12.25 × 10⁵ m/s²</span> (deceleration)
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab4" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">📊 Graph Slope Key Rules</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Distance-Time Graph</div>
+            <ul class="arrow-list">
+              <li>Slope = <span class="hl-gold">Speed</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Displacement-Time Graph</div>
+            <ul class="arrow-list">
+              <li>Slope = <span class="hl-gold">Velocity</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent5)">Velocity-Time Graph</div>
+            <ul class="arrow-list">
+              <li>Slope = <span class="hl-gold">Acceleration</span></li>
+              <li>Area under graph = <span class="hl-gold">Displacement</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📈 Position-Time (s-t) Graph</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Graph Shape</th>
+                <th>Motion Type</th>
+                <th>Condition</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Horizontal line (parallel to time axis)</td>
+                <td>State of Rest</td>
+                <td class="mono">v = 0</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Straight line with positive slope</td>
+                <td>Uniform motion</td>
+                <td class="mono">s = ut</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Upward curve (concave up)</td>
+                <td>Uniform accelerated motion</td>
+                <td class="mono">u = 0, s = ½at²</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Downward curve (concave down)</td>
+                <td>Uniform decelerated motion</td>
+                <td class="mono">s = ut − ½at²</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">📉 Velocity-Time (v-t) Graph</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Graph Shape</th>
+                <th>Motion Type</th>
+                <th>Condition</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Horizontal line (parallel to time axis)</td>
+                <td>Uniform motion</td>
+                <td class="mono">v = const, a = 0</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Straight line with positive slope</td>
+                <td>Uniform accelerated motion</td>
+                <td class="mono">a = const, v = at</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Straight line with negative slope</td>
+                <td>Uniform decelerated motion</td>
+                <td class="mono">v = u − at</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Upward curve</td>
+                <td>Non-uniform accelerated motion</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Slope of <span class="hl-gold">s-t graph</span> = Speed/Velocity. Slope of <span class="hl-gold">v-t
+            graph</span> = Acceleration. Area under <span class="hl-gold">v-t graph</span> = Displacement. Horizontal
+          line in s-t graph = REST (not uniform motion!).
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab5" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header purple">🎯 Projectile Motion</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Body thrown at angle θ with horizontal → moves in <span class="hl-gold">curved parabolic path</span></li>
+          <li><span class="hl-gold">Two-dimensional</span> motion</li>
+          <li>Path is <span class="hl-gold">parabolic</span></li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Examples:</span><span class="iv">Bomb from aeroplane, Ball hit by bat, Cannon ball,
+              Rocket after fuel exhausted</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">📐 Projectile Formulas</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Time of Flight (T)</div>
+            <div class="formula-box">T = 2u sinθ / g</div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Maximum Height (H)</div>
+            <div class="formula-box">H = u² sin²θ / 2g</div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent5)">Range (R)</div>
+            <div class="formula-box">R = u² sin 2θ / g</div>
+          </div>
+        </div>
+
+        <div class="two-col" style="margin-top:12px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--gold)">Special Angle Conditions</div>
+            <ul class="arrow-list">
+              <li>At <span class="hl-gold">θ = 90°</span> → <span class="hl-gold">Maximum Height</span></li>
+              <li>At <span class="hl-gold">θ = 45°</span> → <span class="hl-gold">Maximum Range</span></li>
+              <li><span class="hl-gold">R_max = 4 × H_max</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent6)">Key Properties</div>
+            <ul class="arrow-list">
+              <li>Horizontal velocity = <span class="hl-gold">constant</span> (no air resistance)</li>
+              <li>Vertical velocity = changes due to gravity</li>
+              <li>At highest point: vertical velocity = 0</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          θ = 45° → Maximum Range (NOT maximum height!). θ = 90° → Maximum Height. <span class="hl-gold">R_max = 4 ×
+            H_max</span> — ye formula direct MCQ mein aata hai. Projectile path = <span class="hl-gold">Parabola</span>.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab6" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header teal">🔄 Circular Motion</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Motion of a body on a <span class="hl-gold">circular path</span></li>
+          <li><span class="hl-gold">Uniform circular motion</span>: Speed constant, <span class="hl-red">velocity
+              variable</span></li>
+          <li><span class="hl-gold">Non-uniform circular motion</span>: Speed and velocity both variable</li>
+          <li>e.g. Electron around nucleus, Moon around Earth</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Uniform circular motion mein <span class="hl-gold">speed constant</span> hoti hai lekin <span
+            class="hl-red">velocity constant nahi</span> (direction changes constantly!). So it IS accelerated motion
+          even at constant speed!
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📐 Components of Circular Motion</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Formula</th>
+                <th>Unit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Angular Displacement (θ)</td>
+                <td class="mono">θ = Arc (Δs) / Radius (r)</td>
+                <td>Radian</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Angular Velocity (ω)</td>
+                <td class="mono">ω = Δθ / Δt</td>
+                <td>radian/second (rad/s)</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Linear ↔ Angular relation</td>
+                <td class="mono">v = ωr = 2πnr</td>
+                <td>m/s</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Angular Acceleration (α)</td>
+                <td class="mono">α = ω / t</td>
+                <td>rad/s²</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Centripetal Acceleration (a)</td>
+                <td class="mono">a = v²/r = rω²</td>
+                <td>m/s² (always towards centre)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Centripetal acceleration always points <span class="hl-gold">towards the centre</span>. Centrifugal force =
+          <span class="hl-gold">outward</span> (pseudo force). v = ωr is the key relation between linear and angular
+          velocity.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">📋 Motion — Master Comparison</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Quantity</th>
+                <th>Scalar/Vector</th>
+                <th>Unit</th>
+                <th>Formula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Distance</td>
+                <td>Scalar</td>
+                <td>m</td>
+                <td>Path length</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Displacement</td>
+                <td>Vector</td>
+                <td>m</td>
+                <td>Final − Initial position</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Speed</td>
+                <td>Scalar</td>
+                <td>m/s</td>
+                <td>d/t</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Velocity</td>
+                <td>Vector</td>
+                <td>m/s</td>
+                <td>x/t</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Acceleration</td>
+                <td>Vector</td>
+                <td>m/s²</td>
+                <td>(v−u)/t</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Angular velocity</td>
+                <td>Vector</td>
+                <td>rad/s</td>
+                <td>θ/t</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Angular acceleration</td>
+                <td>Vector</td>
+                <td>rad/s²</td>
+                <td>ω/t</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Motion · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

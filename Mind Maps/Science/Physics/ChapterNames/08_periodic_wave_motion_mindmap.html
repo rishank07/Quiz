@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 08: Periodic & Wave Motion | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* TAB NAV */
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* TAB CONTENT */
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    /* ARROW LIST */
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    /* EXAM TRAP */
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    /* QUICK RECALL */
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      width: 100%;
+      min-width: 550px;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 13.5px;
+    }
+
+    .data-table.min-w-auto {
+      min-width: 280px;
+    }
+
+    /* For smaller tables */
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 14px;
+      text-align: left;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .data-table tr:nth-child(even) td {
+      background: var(--surface2);
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    /* ART PILL & STATS */
+    .art-pill {
+      display: inline-block;
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+      letter-spacing: .3px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 140px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 15px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    .formula-box {
+      background: #0d1a10;
+      border: 1px solid var(--accent3);
+      border-radius: 8px;
+      padding: 13px 18px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      color: var(--accent3);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .formula-box span {
+      color: var(--text-muted);
+      font-size: 12px;
+      display: block;
+      margin-top: 4px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* TWO COL */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+    }
+
+    .type-card.gold-left {
+      border-left: 4px solid var(--gold);
+    }
+
+    .type-card.green-left {
+      border-left: 4px solid var(--accent3);
+    }
+
+    .type-card.blue-left {
+      border-left: 4px solid var(--accent2);
+    }
+
+    .type-card.purple-left {
+      border-left: 4px solid var(--accent4);
+    }
+
+    .type-card.orange-left {
+      border-left: 4px solid var(--accent5);
+    }
+
+    .type-card.red-left {
+      border-left: 4px solid var(--accent1);
+    }
+
+    .type-card.teal-left {
+      border-left: 4px solid var(--accent6);
+    }
+
+    .type-card .type-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .type-card .type-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .type-card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* EM wave spectrum bar */
+    .em-spectrum {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 14px 0;
+      height: 44px;
+    }
+
+    .em-seg {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      padding: 2px;
+      cursor: default;
+    }
+
+    .em-seg:hover {
+      filter: brightness(1.2);
+    }
+
+    /* sound range bar */
+    .sound-range {
+      display: flex;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .sr-box {
+      flex: 1;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .sr-box .sr-val {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .sr-box .sr-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* mach speed indicator */
+    .mach-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .mach-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .mach-box .m-val {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .mach-box .m-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* PAGE FOOTER */
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 20px;
+      }
+
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+
+      .tab-content {
+        padding: 20px 14px 30px;
+      }
+
+      .sound-range {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">General Science · Physics</div>
+      <h1>〰️ Chapter 08: Periodic & Wave Motion</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; SHM · Pendulum · EM Waves · Sound · Ultrasonic · Echo · Mach
+        Number</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🔍 Overview</button>
+    <button onclick="switchTab('shm')">🔄 SHM</button>
+    <button onclick="switchTab('pendulum')">🕰️ Pendulum</button>
+    <button onclick="switchTab('waves')">〰️ Waves</button>
+    <button onclick="switchTab('em')">📡 EM Waves</button>
+    <button onclick="switchTab('sound')">🔊 Sound</button>
+    <button onclick="switchTab('speed')">💨 Speed of Sound</button>
+    <button onclick="switchTab('echo')">🔁 Echo & Mach</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">〰️ Chapter At a Glance</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">84.6 min</div>
+            <div class="stat-lbl">Max Time Period of Pendulum</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">3×10⁸ m/s</div>
+            <div class="stat-lbl">Speed of EM Waves</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">340 m/s</div>
+            <div class="stat-lbl">Speed of Sound in Air</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">20–20000 Hz</div>
+            <div class="stat-lbl">Human Hearing Range</div>
+          </div>
+        </div>
+        <ul class="arrow-list" style="margin-top:10px;">
+          <li><strong>Periodic Motion</strong> — repeats at regular intervals along a fixed path</li>
+          <li><strong>SHM</strong> — oscillation about mean position on a straight line; acceleration directed toward
+            mean position</li>
+          <li><strong>Waves</strong> — carriers of energy; two types: Mechanical &amp; Electromagnetic</li>
+          <li><strong>Sound</strong> — longitudinal mechanical wave; travels fastest in solids</li>
+          <li>Key topics: SHM · Simple Pendulum · EM spectrum · Sound characteristics · Echo · Mach number</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📊 Key Formulae — Quick Look</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div>
+            <div class="formula-box">T = 2π/ω<span>Time Period (SHM)</span></div>
+            <div class="formula-box">T = 2π√(l/g)<span>Simple Pendulum Time Period</span></div>
+            <div class="formula-box">n = 1/T<span>Frequency | Unit: Hz</span></div>
+          </div>
+          <div>
+            <div class="formula-box">v = nλ<span>Wave Speed</span></div>
+            <div class="formula-box">λ = v/n<span>Wavelength</span></div>
+            <div class="formula-box">v ∝ √T<span>Speed of Sound ∝ √Temperature</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-shm" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🔄 Periodic Motion & SHM</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card gold-left">
+            <div class="type-tag">Periodic Motion</div>
+            <div class="type-name">Regular Repetitive Motion</div>
+            <p>Motion that repeats itself along a fixed path at a <strong>regular interval of time</strong>.</p>
+            <ul class="arrow-list" style="margin-top:8px;">
+              <li>Motion of a swing</li>
+              <li>Motion of a fan</li>
+              <li>Vibrations in musical instruments</li>
+              <li>Motion of a satellite around Earth</li>
+            </ul>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Simple Harmonic Motion (SHM)</div>
+            <div class="type-name">Oscillation About Mean Position</div>
+            <p>Repetition of motion about the <strong>mean position</strong> on a straight line. Acceleration always
+              directed <strong>toward the mean position</strong>.</p>
+            <ul class="arrow-list" style="margin-top:8px;">
+              <li>Clock's pendulum</li>
+              <li>Load on a spring</li>
+              <li>Ball hanging from rigid support</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">📐 Important Terms in SHM</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Term</th>
+                <th>Meaning</th>
+                <th>Formula / Unit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Displacement</span></td>
+                <td>Change in position of particle relative to origin</td>
+                <td>metres (m)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Amplitude</span></td>
+                <td>Position of maximum displacement</td>
+                <td>metres (m)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Phase</span></td>
+                <td>Term expressing the direction of motion</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Time Period (T)</span></td>
+                <td>Time to complete one full vibration</td>
+                <td>T = 2π/ω (seconds)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-purple">Frequency (n)</span></td>
+                <td>Number of vibrations per second</td>
+                <td>n = 1/T | Hz</td>
+              </tr>
+              <tr>
+                <td><span class="hl-teal">Wavelength (λ)</span></td>
+                <td>Distance between two successive crests or troughs</td>
+                <td>λ = v/n | metres</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap</div>
+          <ul class="arrow-list">
+            <li>In SHM, acceleration is <strong>NOT constant</strong> — it varies with displacement</li>
+            <li>Acceleration direction = always toward <strong>mean position</strong> (restoring force)</li>
+            <li>Frequency (Hz) = 1/Time Period. Higher frequency → shorter time period</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-pendulum" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🕰️ Simple Pendulum</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>A heavy point mass (bob) suspended from a fixed support by a <strong>light, inextensible string</strong>,
+            free to oscillate under gravity.</p>
+        </div>
+        <div class="formula-box">T = 2π√(l/g)<span>Time Period of Simple Pendulum | l = length, g = gravitational
+            acceleration</span></div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">84.6 min</div>
+            <div class="stat-lbl">Maximum Time Period (T_max)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">∞ (Infinite)</div>
+            <div class="stat-lbl">Time Period in Satellite</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">No Effect</div>
+            <div class="stat-lbl">Mass of Bob on T</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">📋 Conditions Affecting Simple Pendulum</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Condition</th>
+                <th>Effect on Time Period (T)</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Going Up (altitude) on Earth</td>
+                <td><span class="hl-red">Increases ↑</span></td>
+                <td>g decreases with altitude</td>
+              </tr>
+              <tr>
+                <td>Going Down (depth) on Earth</td>
+                <td><span class="hl-red">Increases ↑</span></td>
+                <td>g decreases with depth</td>
+              </tr>
+              <tr>
+                <td>In a Satellite (orbit)</td>
+                <td><span class="hl-red">Infinite (∞)</span></td>
+                <td>Effective g = 0 (weightlessness)</td>
+              </tr>
+              <tr>
+                <td>Summer (Temperature ↑)</td>
+                <td><span class="hl-red">Increases ↑</span></td>
+                <td>Length increases with heat</td>
+              </tr>
+              <tr>
+                <td>Winter (Temperature ↓)</td>
+                <td><span class="hl-green">Decreases ↓</span></td>
+                <td>Length decreases with cold</td>
+              </tr>
+              <tr>
+                <td>On Moon</td>
+                <td><span class="hl-red">Increases ↑</span></td>
+                <td>g_moon = g_earth/6 (much lower g)</td>
+              </tr>
+              <tr>
+                <td>Change in Mass</td>
+                <td><span class="hl-gold">No Change</span></td>
+                <td>T is independent of mass</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Pendulum</div>
+          <ul class="arrow-list">
+            <li>T <strong>does NOT depend on mass</strong> of the bob — most commonly asked trap!</li>
+            <li>T depends on <strong>length (l)</strong> and <strong>g</strong> only</li>
+            <li>Going up OR down both <strong>increase</strong> T (g decreases both ways)</li>
+            <li>In a satellite, pendulum does <strong>NOT oscillate</strong> — T = ∞</li>
+            <li>T_max = <strong>84.6 minutes</strong> (pendulum with length = Earth's radius)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-waves" class="tab-content">
+    <div class="card blue-card">
+      <div class="card-header">〰️ Wave Motion</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Wave = <strong>Disturbance</strong> that carries energy from one place to another</li>
+          <li>Wave motion = process of transmission of disturbance with a certain velocity</li>
+        </ul>
+        <div class="formula-box">v = λ/T = nλ<span>Wave Speed | n = frequency, λ = wavelength, T = time period</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gold-card">
+      <div class="card-header">📂 Types of Waves</div>
+      <div class="card-body">
+        <div class="type-card gold-left">
+          <div class="type-tag">Type A</div>
+          <div class="type-name">Mechanical Waves — require a medium</div>
+          <div class="two-col" style="margin-top:10px;">
+            <div>
+              <div
+                style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;border-left:3px solid var(--accent5);">
+                <div style="color:var(--accent5);font-weight:700;font-size:12px;margin-bottom:5px;">LONGITUDINAL WAVES
+                </div>
+                <ul class="arrow-list">
+                  <li>Particles vibrate <strong>along</strong> direction of wave</li>
+                  <li>Transmission: compression &amp; rarefaction</li>
+                  <li>Examples: Sound, seismic, tsunami, spring vibrations</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div
+                style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;border-left:3px solid var(--accent4);">
+                <div style="color:var(--accent4);font-weight:700;font-size:12px;margin-bottom:5px;">TRANSVERSE WAVES
+                </div>
+                <ul class="arrow-list">
+                  <li>Particles vibrate <strong>perpendicular</strong> to direction of wave</li>
+                  <li>Transmission: crests &amp; troughs</li>
+                  <li>Examples: Light wave, spring motion</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="type-card blue-left" style="margin-top:12px;">
+          <div class="type-tag">Type B</div>
+          <div class="type-name">Electromagnetic Waves — NO medium required</div>
+          <ul class="arrow-list">
+            <li>Generated by <strong>high-frequency electrical oscillations</strong></li>
+            <li>Can travel through <strong>vacuum</strong></li>
+            <li>Nature: Neutral &amp; <strong>Transverse</strong></li>
+            <li>Speed: <strong>3 × 10⁸ m/s</strong> (in vacuum)</li>
+          </ul>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap</div>
+          <ul class="arrow-list">
+            <li>Sound = <strong>Longitudinal</strong> wave; Light = <strong>Transverse</strong> wave</li>
+            <li>Sound needs a <strong>medium</strong>; Light does NOT (can travel in vacuum)</li>
+            <li>EM waves are <strong>transverse</strong> in nature (NOT longitudinal)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-em" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">📡 Electromagnetic Wave Spectrum</div>
+      <div class="card-body">
+        <div class="em-spectrum">
+          <div class="em-seg" style="background:#4a0a4a;flex:1.5;">Radio</div>
+          <div class="em-seg" style="background:#2a0a6a;">Micro</div>
+          <div class="em-seg" style="background:#6a1a0a;">IR</div>
+          <div class="em-seg"
+            style="background:linear-gradient(90deg,#e74c3c,#e67e22,#f5c842,#2ecc71,#3498db,#9b59b6);flex:1.2;">Visible
+          </div>
+          <div class="em-seg" style="background:#0a1a6a;">UV</div>
+          <div class="em-seg" style="background:#1a1a1a;border:1px solid #555;">X-ray</div>
+          <div class="em-seg" style="background:#0a2a0a;">γ-ray</div>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-bottom:12px;">← Increasing Wavelength
+          &nbsp;|&nbsp; Increasing Frequency →</p>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Wave</th>
+                <th>Wavelength</th>
+                <th>Discoverer (Year)</th>
+                <th>Key Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-purple">Radio Wave</span></td>
+                <td>&gt; 0.1 m</td>
+                <td>Marconi (1895)</td>
+                <td>Radio &amp; TV communication</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Microwave</span></td>
+                <td>1 m to 1 mm</td>
+                <td>Heinrich Hertz (1888)</td>
+                <td>Satellites, wireless communication</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Infrared</span></td>
+                <td>1 mm to 700 nm</td>
+                <td>Herschel (1800)</td>
+                <td>Remote control, fog photography</td>
+              </tr>
+              <tr>
+                <td><span class="hl-gold">Visible Light</span></td>
+                <td>700 nm to 400 nm</td>
+                <td>Newton (1666)</td>
+                <td>Human vision, electric bulb</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Ultraviolet (UV)</span></td>
+                <td>400 nm to 1 nm</td>
+                <td>Ritter (1801)</td>
+                <td>Forged document detection, food preservation</td>
+              </tr>
+              <tr>
+                <td><span class="hl-teal">X-Rays</span></td>
+                <td>1 nm to 10⁻³ nm</td>
+                <td>Roentgen (1895)</td>
+                <td>Bone fractures, lung diseases</td>
+              </tr>
+              <tr>
+                <td><span class="hl-red">Gamma (γ) Rays</span></td>
+                <td>&lt; 10⁻³ nm</td>
+                <td>Paul Villard (1900)</td>
+                <td>Cancer treatment, nuclear structure</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="quick-recall" style="margin-top:10px;">
+          <div class="recall-label">📘 Special Note</div>
+          <p>Gamma rays were <strong>named by Rutherford</strong>, though discovered by Paul Villard (1900). Microwaves
+            are generated by a device called <strong>magnetron</strong>.</p>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — EM Wave Discoverers</div>
+          <ul class="arrow-list">
+            <li><strong>Radio</strong> → Marconi (1895) | <strong>Microwave</strong> → Hertz (1888)</li>
+            <li><strong>Infrared</strong> → Herschel (1800) | <strong>UV</strong> → Ritter (1801)</li>
+            <li><strong>X-Ray</strong> → Roentgen (1895) | <strong>γ-Ray</strong> → Paul Villard (1900), named by
+              Rutherford</li>
+            <li>Visible light spectrum (VIBGYOR): Violet (400 nm) to Red (700 nm)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-sound" class="tab-content">
+    <div class="card teal-card">
+      <div class="card-header">🔊 Sound Wave — Basics</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Sound = <strong>hearing sensation</strong> in ears; a form of energy</li>
+          <li>Type: <strong>Longitudinal mechanical wave</strong></li>
+          <li>Requires a <strong>medium</strong> to travel (cannot travel in vacuum)</li>
+        </ul>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Sources of Sound</div>
+          <p>Clapping · Birds chirping · Lightning · Musical instruments · Vehicle sounds</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">📊 Characteristics of Sound Waves</div>
+      <div class="card-body">
+        <div class="type-card gold-left">
+          <div class="type-tag">1. Loudness</div>
+          <div class="type-name">Intensity of Sound</div>
+          <ul class="arrow-list">
+            <li>Loudness ∝ <strong>(Amplitude)²</strong></li>
+            <li>Loudness ∝ <strong>1/(Distance)²</strong></li>
+            <li>Unit: <strong>Watt/m², Decibel (dB), Phon</strong></li>
+            <li>Noise above <strong>85 dB is harmful</strong> for human ears</li>
+          </ul>
+          <div class="table-wrap" style="margin-top:8px;">
+            <table class="data-table min-w-auto">
+              <thead>
+                <tr>
+                  <th>Sound Source</th>
+                  <th>Loudness (dB)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Normal Breathing</td>
+                  <td>10 dB</td>
+                </tr>
+                <tr>
+                  <td>Whisper</td>
+                  <td>15–30 dB</td>
+                </tr>
+                <tr>
+                  <td>General Conversation</td>
+                  <td>30–60 dB</td>
+                </tr>
+                <tr>
+                  <td>Busy Traffic</td>
+                  <td>70 dB</td>
+                </tr>
+                <tr>
+                  <td>Jet Plane</td>
+                  <td><span class="hl-red">140–150 dB</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="type-card green-left" style="margin-top:10px;">
+          <div class="type-tag">2. Pitch</div>
+          <div class="type-name">Shrillness of Sound</div>
+          <ul class="arrow-list">
+            <li>Pitch ∝ <strong>Frequency</strong></li>
+            <li>Women's voice → <strong>Higher pitch</strong> (shrill)</li>
+            <li>Men's voice → <strong>Lower pitch</strong> (grave)</li>
+          </ul>
+        </div>
+        <div class="type-card blue-left" style="margin-top:10px;">
+          <div class="type-tag">3. Quality / Timbre</div>
+          <div class="type-name">Distinguishing Quality</div>
+          <ul class="arrow-list">
+            <li>Distinguishes two sounds of <strong>same pitch &amp; loudness</strong></li>
+            <li><strong>Tone</strong> = single frequency sound</li>
+            <li><strong>Note</strong> = sound of multiple frequencies</li>
+            <li>Example: Harmonium, sitar, sarangi have different timbre at same frequency</li>
+          </ul>
+        </div>
+        <div class="type-card purple-left" style="margin-top:10px;">
+          <div class="type-tag">4. Intensity</div>
+          <div class="type-name">Sound Energy per Unit Area per Second</div>
+          <ul class="arrow-list">
+            <li>Unit: <strong>Watt/m²</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">👂 Audible Range of Sound</div>
+      <div class="card-body">
+        <div class="sound-range">
+          <div class="sr-box" style="background:#1a0909;border:1px solid var(--accent1);">
+            <div class="sr-val" style="color:var(--accent1);">&lt; 20 Hz</div>
+            <div class="sr-lbl">Infrasonic</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:5px;">Seismic waves, heartbeat</div>
+          </div>
+          <div class="sr-box" style="background:#0b2a1a;border:1px solid var(--accent3);">
+            <div class="sr-val" style="color:var(--accent3);">20–20,000 Hz</div>
+            <div class="sr-lbl">Audible (Human)</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:5px;">Normal human hearing range</div>
+          </div>
+          <div class="sr-box" style="background:#0a1e35;border:1px solid var(--accent2);">
+            <div class="sr-val" style="color:var(--accent2);">&gt; 20,000 Hz</div>
+            <div class="sr-lbl">Ultrasonic</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:5px;">Bat, Dog, Dolphin, Cat</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table min-w-auto">
+            <thead>
+              <tr>
+                <th>Animal / Entity</th>
+                <th>Hearing Range</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dolphin</td>
+                <td>150 – 1,50,000 Hz</td>
+              </tr>
+              <tr>
+                <td>Bat</td>
+                <td>1,000 – 1,20,000 Hz</td>
+              </tr>
+              <tr>
+                <td>Dog</td>
+                <td>15 – 45,000 Hz</td>
+              </tr>
+              <tr>
+                <td>Cat</td>
+                <td>60 – 65,000 Hz</td>
+              </tr>
+              <tr>
+                <td>Children</td>
+                <td>Up to 25,000 Hz</td>
+              </tr>
+              <tr>
+                <td>Human (Adult)</td>
+                <td>20 – 20,000 Hz</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Applications of Ultrasonic Waves</div>
+          <ul class="arrow-list">
+            <li>Ultrasonography &amp; Echocardiography (medical imaging)</li>
+            <li>Measuring depth of sea (SONAR)</li>
+            <li>Detecting submarines, icebergs</li>
+            <li>Industrial cleaning, welding</li>
+          </ul>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Ultrasonic Users</div>
+          <p>Bat, Dog, Cat, Dolphin all use ultrasound. <strong>Bat</strong> uses it for navigation (echolocation).
+            <strong>SONAR</strong> = Sound Navigation And Ranging — uses ultrasonic waves to detect underwater objects.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-speed" class="tab-content">
+    <div class="card green-card">
+      <div class="card-header">💨 Speed of Sound in Different Media</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Key Rules</div>
+          <ul class="arrow-list">
+            <li>Speed of sound: <strong>Solid &gt; Liquid &gt; Gas</strong></li>
+            <li>Speed &amp; wavelength <strong>change</strong> when medium changes</li>
+            <li><strong>Frequency remains unchanged</strong> when moving between media</li>
+            <li>Depends on <strong>elasticity and density</strong> of medium</li>
+          </ul>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Medium</th>
+                <th>Speed at 25°C</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Solid</td>
+                <td>Aluminium</td>
+                <td><span class="hl-gold">6420 m/s</span></td>
+              </tr>
+              <tr>
+                <td>Solid</td>
+                <td>Nickel</td>
+                <td>6040 m/s</td>
+              </tr>
+              <tr>
+                <td>Solid</td>
+                <td>Steel</td>
+                <td>5960 m/s</td>
+              </tr>
+              <tr>
+                <td>Solid</td>
+                <td>Iron</td>
+                <td>5950 m/s</td>
+              </tr>
+              <tr>
+                <td>Solid</td>
+                <td>Brass</td>
+                <td>4700 m/s</td>
+              </tr>
+              <tr>
+                <td>Solid</td>
+                <td>Glass</td>
+                <td>3980 m/s</td>
+              </tr>
+              <tr>
+                <td>Liquid</td>
+                <td>Sea Water</td>
+                <td>1531 m/s</td>
+              </tr>
+              <tr>
+                <td>Liquid</td>
+                <td>Distilled Water</td>
+                <td>1498 m/s</td>
+              </tr>
+              <tr>
+                <td>Liquid</td>
+                <td>Ethanol</td>
+                <td>1207 m/s</td>
+              </tr>
+              <tr>
+                <td>Liquid</td>
+                <td>Methanol</td>
+                <td>1103 m/s</td>
+              </tr>
+              <tr>
+                <td>Gas</td>
+                <td>Hydrogen</td>
+                <td>1284 m/s</td>
+              </tr>
+              <tr>
+                <td>Gas</td>
+                <td>Helium</td>
+                <td>965 m/s</td>
+              </tr>
+              <tr>
+                <td>Gas</td>
+                <td><strong>Air</strong></td>
+                <td><span class="hl-green">340 m/s</span></td>
+              </tr>
+              <tr>
+                <td>Gas</td>
+                <td>Oxygen</td>
+                <td>316 m/s</td>
+              </tr>
+              <tr>
+                <td>Gas</td>
+                <td>Sulphur Dioxide</td>
+                <td>213 m/s</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">🌡️ Effect of Temperature on Speed of Sound</div>
+      <div class="card-body">
+        <div class="formula-box">v ∝ √T<span>Speed of sound increases with temperature (T in Kelvin)</span></div>
+        <ul class="arrow-list">
+          <li>At <strong>constant temperature</strong>, pressure has <strong>NO effect</strong> on speed of sound</li>
+          <li>Moisture (humidity) ↑ → Speed ↑ (moist air is lighter than dry air)</li>
+          <li>Rainy days: Sound of whistle heard from farther away (due to moisture)</li>
+        </ul>
+        <div class="table-wrap" style="margin-top:12px;">
+          <table class="data-table min-w-auto">
+            <thead>
+              <tr>
+                <th>Temperature</th>
+                <th>Speed in Air</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0°C</td>
+                <td>332 m/s</td>
+              </tr>
+              <tr>
+                <td>22°C</td>
+                <td>344 m/s</td>
+              </tr>
+              <tr>
+                <td>25°C</td>
+                <td>346 m/s</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Speed of Sound</div>
+          <ul class="arrow-list">
+            <li>Pressure change at <strong>constant temperature</strong> has <strong>NO effect</strong> on speed of
+              sound</li>
+            <li>Speed in air at room temperature ≈ <strong>340 m/s</strong></li>
+            <li>Sound travels <strong>fastest in solids</strong> (Aluminium = 6420 m/s)</li>
+            <li>Frequency does NOT change when medium changes — only speed &amp; wavelength change</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-echo" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">🔁 Reflection of Sound, Echo & Reverberation</div>
+      <div class="card-body">
+        <div class="type-card gold-left">
+          <div class="type-tag">Reflection of Sound</div>
+          <div class="type-name">Sound striking a surface and returning</div>
+          <p>The phenomenon of sound striking a surface and returning back along the same path.</p>
+        </div>
+        <div class="type-card orange-left" style="margin-top:10px;">
+          <div class="type-tag">Echo</div>
+          <div class="type-name">Re-hearing of sound</div>
+          <ul class="arrow-list">
+            <li>Persistence of sound in human ears = <strong>0.1 seconds</strong></li>
+            <li>Minimum distance between source and obstacle = <strong>17.2 m</strong></li>
+          </ul>
+        </div>
+        <div class="type-card blue-left" style="margin-top:10px;">
+          <div class="type-tag">Reverberation</div>
+          <div class="type-name">Persistence of sound after source stops</div>
+          <ul class="arrow-list">
+            <li>Sound persists even after source has stopped</li>
+            <li>Used in: <strong>Megaphone, Loudspeakers, Stethoscope</strong></li>
+            <li>Cinema halls: walls made rough or covered with <strong>sound-absorbent material</strong> to prevent
+              reverberation</li>
+          </ul>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Echo vs Reverberation</div>
+          <ul class="arrow-list">
+            <li><strong>Echo</strong> = distinct repetition of sound (min distance 17.2 m)</li>
+            <li><strong>Reverberation</strong> = prolonged sound due to multiple reflections</li>
+            <li>Persistence of hearing = <strong>0.1 sec</strong> (1/10th of a second)</li>
+            <li>Stethoscope works on the principle of <strong>reverberation/multiple reflection</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card red-card">
+      <div class="card-header">✈️ Mach Number</div>
+      <div class="card-body">
+        <div class="formula-box">Mach No. = Speed of body / Speed of sound (same medium)<span>Named after Ernst
+            Mach</span></div>
+        <div class="mach-row">
+          <div class="mach-box">
+            <div class="m-val" style="color:var(--accent3);">Mach &lt; 1</div>
+            <div class="m-lbl">Subsonic</div>
+          </div>
+          <div class="mach-box">
+            <div class="m-val" style="color:var(--gold);">1 &lt; Mach ≤ 5</div>
+            <div class="m-lbl">Supersonic</div>
+          </div>
+          <div class="mach-box">
+            <div class="m-val" style="color:var(--accent1);">Mach &gt; 5</div>
+            <div class="m-lbl">Hypersonic</div>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Examples</div>
+          <ul class="arrow-list">
+            <li>Fighter jets (e.g., MiG, F-22) → <strong>Supersonic</strong></li>
+            <li>Space shuttles during re-entry → <strong>Hypersonic</strong></li>
+            <li>Commercial aircraft → <strong>Subsonic</strong> (~Mach 0.8)</li>
+          </ul>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Mach Classification</div>
+          <ul class="arrow-list">
+            <li>Supersonic = Mach 1 to 5 (NOT everything above 1)</li>
+            <li>Hypersonic = <strong>Mach &gt; 5</strong></li>
+            <li>Sonic boom is produced when aircraft crosses the <strong>sound barrier</strong> (Mach 1)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>SHM: acceleration always toward <strong>mean position</strong></li>
+          <li>Simple Pendulum: T = 2π√(l/g) — <strong>independent of mass</strong></li>
+          <li>T_max of pendulum = <strong>84.6 minutes</strong></li>
+          <li>Pendulum in satellite: T = <strong>∞</strong> (g = 0 in orbit)</li>
+          <li>Speed of EM waves in vacuum = <strong>3 × 10⁸ m/s</strong></li>
+          <li>EM waves: transverse, neutral, no medium required</li>
+          <li>Radio → Marconi (1895); X-Ray → Roentgen (1895); γ-Ray → Villard (1900), named by Rutherford</li>
+          <li>Sound = <strong>longitudinal</strong> mechanical wave</li>
+          <li>Speed of sound: <strong>Solid &gt; Liquid &gt; Gas</strong></li>
+          <li>Speed of sound in air ≈ <strong>340 m/s</strong> at 25°C</li>
+          <li>Loudness ∝ (Amplitude)² | Pitch ∝ Frequency</li>
+          <li>Noise &gt; <strong>85 dB</strong> is harmful for ears</li>
+          <li>Human hearing range: <strong>20 Hz to 20,000 Hz</strong></li>
+          <li>Ultrasonic users: Bat, Dog, Cat, Dolphin</li>
+          <li>Echo: persistence of hearing = <strong>0.1 sec</strong>; min distance = <strong>17.2 m</strong></li>
+          <li>Mach: Subsonic &lt;1 | Supersonic 1–5 | Hypersonic &gt;5</li>
+          <li>Pressure at constant temp has <strong>NO effect</strong> on speed of sound</li>
+          <li>Moisture ↑ → Speed of sound ↑</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">📋 Formula Quick Reference</div>
+        <div class="card-body">
+          <div class="formula-box">T = 2π/ω<span>Time Period (SHM)</span></div>
+          <div class="formula-box">T = 2π√(l/g)<span>Simple Pendulum</span></div>
+          <div class="formula-box">n = 1/T &nbsp;|&nbsp; λ = v/n<span>Frequency &amp; Wavelength</span></div>
+          <div class="formula-box">v = nλ<span>Wave Speed</span></div>
+          <div class="formula-box">v ∝ √T<span>Sound Speed vs Temperature</span></div>
+          <div class="formula-box">Mach = v_body / v_sound<span>Mach Number</span></div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">⚠️ Most Common Exam Traps</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>T of pendulum does <strong>NOT depend on mass</strong></li>
+            <li>Going up AND down both <strong>increase</strong> pendulum T</li>
+            <li>Sound = Longitudinal; Light = Transverse</li>
+            <li>Frequency <strong>does NOT change</strong> when sound changes medium</li>
+            <li>Pressure change has <strong>NO effect</strong> on speed of sound (at const. temp)</li>
+            <li>γ-Ray named by <strong>Rutherford</strong>, discovered by Villard</li>
+            <li>SONAR uses <strong>ultrasonic</strong> waves (not sound)</li>
+            <li>Echo min distance = <strong>17.2 m</strong> (not 17 or 18)</li>
+            <li>Hypersonic = Mach &gt; <strong>5</strong> (not Mach &gt; 3)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 08: Periodic & Wave Motion · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

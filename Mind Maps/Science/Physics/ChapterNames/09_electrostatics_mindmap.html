@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 09: Electrostatics | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: 13.5px;
+      width: 100%;
+      min-width: 550px;
+      margin: 10px 0;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      vertical-align: top;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+      letter-spacing: .3px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 140px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 15px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    .formula-box {
+      background: #0d1a10;
+      border: 1px solid var(--accent3);
+      border-radius: 8px;
+      padding: 13px 18px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      color: var(--accent3);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .formula-box span {
+      color: var(--text-muted);
+      font-size: 12px;
+      display: block;
+      margin-top: 4px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+    }
+
+    .type-card.gold-left {
+      border-left: 4px solid var(--gold);
+    }
+
+    .type-card.green-left {
+      border-left: 4px solid var(--accent3);
+    }
+
+    .type-card.blue-left {
+      border-left: 4px solid var(--accent2);
+    }
+
+    .type-card.purple-left {
+      border-left: 4px solid var(--accent4);
+    }
+
+    .type-card.orange-left {
+      border-left: 4px solid var(--accent5);
+    }
+
+    .type-card.red-left {
+      border-left: 4px solid var(--accent1);
+    }
+
+    .type-card.teal-left {
+      border-left: 4px solid var(--accent6);
+    }
+
+    .type-card .type-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .type-card .type-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .type-card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* conductor cards */
+    .cond-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin: 12px 0;
+    }
+
+    @media(max-width:700px) {
+      .cond-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .cond-box {
+      border-radius: 8px;
+      padding: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .cond-box .c-head {
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    /* series-parallel comparison */
+    .sp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 12px 0;
+    }
+
+    @media(max-width:600px) {
+      .sp-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sp-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .sp-box .sp-head {
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 20px;
+      }
+
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+
+      .tab-content {
+        padding: 20px 14px 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">General Science · Physics</div>
+      <h1>⚡ Chapter 09: Electrostatics</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; Coulomb's Law · Electric Field · Resistance · Ohm's Law · Cells ·
+        Instruments</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🔍 Overview</button>
+    <button onclick="switchTab('charge')">⚡ Electric Charge</button>
+    <button onclick="switchTab('field')">🌐 Electric Field</button>
+    <button onclick="switchTab('current')">🔋 Current & Ohm</button>
+    <button onclick="switchTab('resistance')">🔩 Resistance</button>
+    <button onclick="switchTab('heating')">🔥 Heating Effect</button>
+    <button onclick="switchTab('cells')">🔌 Cells</button>
+    <button onclick="switchTab('instruments')">🧰 Instruments</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">⚡ Chapter At a Glance</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">9×10⁹</div>
+            <div class="stat-lbl">Coulomb's Constant K (Nm²/C²)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">1.6×10⁻¹⁹C</div>
+            <div class="stat-lbl">Charge of 1 Electron</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Farad</div>
+            <div class="stat-lbl">Unit of Capacitance</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Silver</div>
+            <div class="stat-lbl">Best Conductor</div>
+          </div>
+        </div>
+        <ul class="arrow-list" style="margin-top:10px;">
+          <li><strong>Electrostatics</strong> — branch of physics dealing with electric charges at rest</li>
+          <li>Key laws: Coulomb's Law · Ohm's Law · Faraday's Law of Electrolysis</li>
+          <li>Key concepts: Charge properties · Electric field · Potential · Capacitance · Resistance · Cells</li>
+          <li>Key instruments: Ammeter (series) · Voltmeter (parallel) · Galvanometer</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card blue-card">
+      <div class="card-header">📋 Key Formulae — Quick Look</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div>
+            <div class="formula-box">F = K(q₁q₂)/r²<span>Coulomb's Law</span></div>
+            <div class="formula-box">V = W/q₀<span>Electric Potential</span></div>
+            <div class="formula-box">C = Q/V<span>Capacitance</span></div>
+          </div>
+          <div>
+            <div class="formula-box">V = IR &nbsp;|&nbsp; P = VI = I²R<span>Ohm's Law &amp; Power</span></div>
+            <div class="formula-box">R = ρl/A<span>Resistance Formula</span></div>
+            <div class="formula-box">H = I²Rt<span>Joule's Heating Effect</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-charge" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">⚡ Electric Charge — Properties</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Basic property of matter due to which it produces and experiences electrical and magnetic effects. Unit:
+            <strong>Coulomb (C)</strong>.
+          </p>
+        </div>
+        <div class="type-card gold-left">
+          <div class="type-tag">Property I</div>
+          <div class="type-name">Additive Nature</div>
+          <div class="formula-box" style="margin-top:6px;">Q = q₁ + q₂ + q₃<span>Total charge = algebraic sum of all
+              charges</span></div>
+        </div>
+        <div class="type-card blue-left">
+          <div class="type-tag">Property II</div>
+          <div class="type-name">Quantisation</div>
+          <p>Charge exists in integral multiples of the electronic charge.</p>
+          <div class="formula-box" style="margin-top:6px;">Q = ne &nbsp;|&nbsp; e = ±1.6 × 10⁻¹⁹ C<span>n = integer, e =
+              electronic charge</span></div>
+        </div>
+        <div class="type-card green-left">
+          <div class="type-tag">Property III</div>
+          <div class="type-name">Conservation</div>
+          <p>Charge can <strong>neither be created nor destroyed</strong>. Total charge of an isolated system remains
+            constant.</p>
+        </div>
+        <div class="type-card orange-left">
+          <div class="type-tag">Property IV</div>
+          <div class="type-name">Attraction & Repulsion</div>
+          <ul class="arrow-list" style="margin-top:6px;">
+            <li><strong>Same charges</strong> → <span class="hl-red">Repulsion</span></li>
+            <li><strong>Opposite charges</strong> → <span class="hl-green">Attraction</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">🔗 Coulomb's Law</div>
+      <div class="card-body">
+        <div class="formula-box">F = K(q₁q₂)/r²<span>Force between two point charges</span></div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">K (Coulomb's constant)</div>
+            <div class="info-val">9 × 10⁹ Nm²/C²</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">K = 1/4πε₀</div>
+            <div class="info-val">ε₀ = 8.85×10⁻¹² C²/Nm²</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">ε₀</div>
+            <div class="info-val">Permittivity of Vacuum</div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Coulomb's Law</div>
+          <ul class="arrow-list">
+            <li>Force ∝ product of charges &amp; inversely ∝ <strong>square of distance</strong> (inverse square law)
+            </li>
+            <li>K = <strong>9 × 10⁹ Nm²/C²</strong> — must memorize</li>
+            <li>Coulomb's law is valid for <strong>point charges</strong> only</li>
+            <li>Similar to Newton's gravitation law but can be repulsive too</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">🧱 Classification of Materials by Conductivity</div>
+      <div class="card-body">
+        <div class="cond-row">
+          <div class="cond-box" style="background:#0b1f10;border-color:#1a4a2a;">
+            <div class="c-head" style="color:var(--accent3);">✅ Conductor</div>
+            <ul class="arrow-list">
+              <li>Charge flows easily</li>
+              <li>Has <strong>free electrons</strong></li>
+              <li>Silver (best), Gold, Copper, Graphite, Sea water</li>
+            </ul>
+          </div>
+          <div class="cond-box" style="background:#1a0909;border-color:#4a1a1a;">
+            <div class="c-head" style="color:var(--accent1);">🚫 Insulator</div>
+            <ul class="arrow-list">
+              <li>Charge does NOT flow</li>
+              <li>No free electrons</li>
+              <li>Rubber, Oil, Polythene, Pure water, Lead</li>
+            </ul>
+          </div>
+          <div class="cond-box" style="background:#0a1e35;border-color:#1a3a5a;">
+            <div class="c-head" style="color:var(--accent2);">⚙️ Semiconductor</div>
+            <ul class="arrow-list">
+              <li>Between conductor &amp; insulator</li>
+              <li>Conductivity varies with conditions</li>
+              <li>Silicon, Germanium</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap</div>
+          <ul class="arrow-list">
+            <li><strong>Silver</strong> is the best conductor (NOT copper or gold)</li>
+            <li><strong>Pure water</strong> is an insulator; <strong>sea water</strong> is a conductor (dissolved salts
+              = ions)</li>
+            <li>Semiconductors: only <strong>Silicon &amp; Germanium</strong> (most common answers)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-field" class="tab-content">
+    <div class="card blue-card">
+      <div class="card-header">🌐 Electric Field & Intensity</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Electric Field</div>
+          <p>The space surrounding an electric charge in which any other charge experiences a force of attraction or
+            repulsion.</p>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Intensity of Electric Field (E)</div>
+          <p>Ratio of force applied on a test charge at a point to the magnitude of the test charge.</p>
+        </div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Unit</div>
+            <div class="info-val">N/C</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Quantity</div>
+            <div class="info-val">Vector</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card green-card">
+      <div class="card-header">📏 Electric Field Lines — Properties</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Direction: <strong>Positive → Negative</strong> charge</li>
+          <li><strong>Non-intersecting</strong> — two field lines never cross</li>
+          <li>Do <strong>NOT form closed loops</strong></li>
+          <li><strong>Conserved</strong> in nature</li>
+          <li>Closer lines = <strong>stronger field</strong>; farther lines = weaker field</li>
+          <li>Perpendicular to the surface of a conductor at every point</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Field Lines</div>
+          <p>Electric field lines <strong>never intersect</strong> each other. If they did, there would be two
+            directions of force at that point — impossible. Field lines go FROM + TO − charge.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">🔋 Electric Potential & Potential Difference</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card gold-left">
+            <div class="type-tag">Electric Potential (V)</div>
+            <div class="type-name">Work done to bring unit +ve charge from ∞ to a point</div>
+            <div class="formula-box" style="margin-top:8px;">V = W/q₀<span>Unit: Volt (V) or J/C | Scalar</span></div>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Potential Difference (V_A − V_B)</div>
+            <div class="type-name">Work done to move unit +ve charge between two points</div>
+            <div class="formula-box" style="margin-top:8px;">Va − Vb = W/q₀<span>Unit: Volt | Scalar</span></div>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Solved Example</div>
+          <p>Work = 2.25 J, Charge = 12 × 10⁻⁴ C<br />
+            V = W/q = 2.25 / (12 × 10⁻⁴) = <strong>1875 Volt</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card teal-card">
+      <div class="card-header">🔲 Capacitance & Capacitor</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Capacitor</div>
+          <p>A device that <strong>stores charge</strong> on a conductor without changing its shape.</p>
+        </div>
+        <div class="formula-box">C = Q/V<span>Capacitance | Unit: Farad (F) = Coulomb/Volt</span></div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Solved Example</div>
+          <p>C = 1.0 μF = 1.0 × 10⁻⁶ F, V = 6.0 kV = 6.0 × 10³ V<br />
+            Q = CV = 1.0×10⁻⁶ × 6.0×10³ = <strong>6 × 10⁻³ Coulomb</strong></p>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap</div>
+          <p>Capacitance unit = <strong>Farad</strong> (not Ohm, not Volt). 1 Farad = 1 Coulomb/Volt. Practical units:
+            μF (microfarad) and pF (picofarad).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-current" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🔋 Electric Current</div>
+      <div class="card-body">
+        <div class="formula-box">i = q/t<span>Electric Current | Unit: Ampere (A) = C/s</span></div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">Ampere</div>
+            <div class="stat-lbl">SI Unit of Current</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">6.25×10¹⁸</div>
+            <div class="stat-lbl">Electrons per second (1A)</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Direction of current</td>
+                <td>Opposite to direction of electron flow (conventional)</td>
+              </tr>
+              <tr>
+                <td>Flow direction</td>
+                <td>High potential → Low potential</td>
+              </tr>
+              <tr>
+                <td>In solids</td>
+                <td>By <strong>free electrons</strong></td>
+              </tr>
+              <tr>
+                <td>In liquids</td>
+                <td>By <strong>ions and electrons</strong></td>
+              </tr>
+              <tr>
+                <td>In semiconductors</td>
+                <td>By <strong>holes and electrons</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="two-col" style="margin-top:12px;">
+          <div class="type-card gold-left">
+            <div class="type-tag">AC — Alternating Current</div>
+            <div class="type-name">Direction alternates periodically</div>
+            <p>Used in: Household supply, generators, transformers</p>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">DC — Direct Current</div>
+            <div class="type-name">Direction remains constant</div>
+            <p>Used in: Batteries, electronic circuits, charging</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📐 Ohm's Law</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Statement</div>
+          <p>If physical conditions (temperature etc.) of a conductor remain unchanged, the <strong>potential
+              difference</strong> across it is <strong>proportional to the current</strong> through it.</p>
+        </div>
+        <div class="formula-box">V ∝ I &nbsp;→&nbsp; V = IR<span>Ohm's Law | Proposed by George Simon Ohm (1827)</span>
+        </div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Proposed by</div>
+            <div class="info-val">George Simon Ohm</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Year</div>
+            <div class="info-val">1827</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">R = constant =</div>
+            <div class="info-val">Resistance</div>
+          </div>
+        </div>
+        <div class="two-col" style="margin-top:10px;">
+          <div class="type-card green-left">
+            <div class="type-tag">Ohmic Resistance</div>
+            <div class="type-name">Obeys Ohm's Law</div>
+            <p>V-I graph is a straight line.<br /><strong>Example: Manganese wire</strong></p>
+          </div>
+          <div class="type-card red-left">
+            <div class="type-tag">Non-Ohmic Resistance</div>
+            <div class="type-name">Does NOT obey Ohm's Law</div>
+            <p>V-I graph is non-linear.<br /><strong>Example: Diode, bulb</strong></p>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Ohm's Law</div>
+          <ul class="arrow-list">
+            <li>Ohm's Law is valid only when <strong>temperature &amp; physical conditions are constant</strong></li>
+            <li>Current flows from <strong>high potential to low potential</strong> (conventional direction)</li>
+            <li>Electrons flow from <strong>low to high potential</strong> (opposite to conventional current)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-resistance" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">🔩 Electric Resistance</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Property of a conductor that <strong>opposes the flow of electric current</strong>.</p>
+        </div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Unit</div>
+            <div class="info-val">Ohm (Ω)</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">R ∝ Length</div>
+            <div class="info-val">More length → More R</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">R ∝ 1/Area</div>
+            <div class="info-val">More area → Less R</div>
+          </div>
+        </div>
+        <div class="formula-box">R = ρl/A<span>ρ (rho) = Specific Resistance (Resistivity)</span></div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">🔀 Series vs Parallel Combination</div>
+      <div class="card-body">
+        <div class="sp-grid">
+          <div class="sp-box">
+            <div class="sp-head" style="background:#2a2000;color:var(--gold);">➡️ Series Combination</div>
+            <div class="formula-box">R_eq = R₁ + R₂ + R₃<span>Equivalent resistance</span></div>
+            <ul class="arrow-list">
+              <li>Current is <strong>equal</strong> through all</li>
+              <li>Potential difference is <strong>unequal</strong></li>
+              <li>R_eq is always <strong>greater</strong> than any individual R</li>
+              <li>Uses: Fuse, Ammeter</li>
+            </ul>
+          </div>
+          <div class="sp-box">
+            <div class="sp-head" style="background:#0a1e35;color:var(--accent2);">⇉ Parallel Combination</div>
+            <div class="formula-box">1/R_eq = 1/R₁ + 1/R₂ + 1/R₃<span>Equivalent resistance</span></div>
+            <ul class="arrow-list">
+              <li>Current is <strong>unequal</strong> through branches</li>
+              <li>Potential difference is <strong>equal</strong></li>
+              <li>R_eq is always <strong>less</strong> than smallest R</li>
+              <li>Uses: Domestic wiring, Voltmeter</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Series vs Parallel</div>
+          <ul class="arrow-list">
+            <li>In series: same <strong>current</strong>, different voltage</li>
+            <li>In parallel: same <strong>voltage</strong>, different current</li>
+            <li>Household wiring = <strong>parallel</strong> (each appliance gets full voltage)</li>
+            <li>Ammeter connected in <strong>series</strong>; Voltmeter in <strong>parallel</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card teal-card">
+      <div class="card-header">📊 Resistivity & Conductance</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div>
+            <div class="type-card teal-left">
+              <div class="type-tag">Resistivity (ρ)</div>
+              <div class="type-name">Specific Resistance</div>
+              <div class="formula-box" style="margin-top:6px;">ρ = RA/l<span>Unit: Ω·m</span></div>
+            </div>
+            <div class="type-card green-left">
+              <div class="type-tag">Conductance (G)</div>
+              <div class="type-name">Inverse of Resistance</div>
+              <div class="formula-box" style="margin-top:6px;">G = 1/R<span>Unit: Siemens (S) or Ω⁻¹</span></div>
+            </div>
+            <div class="type-card gold-left">
+              <div class="type-tag">Specific Conductivity (σ)</div>
+              <div class="type-name">Inverse of Resistivity</div>
+              <div class="formula-box" style="margin-top:6px;">σ = 1/ρ<span>Unit: Ω⁻¹m⁻¹</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Material</th>
+                    <th>Resistivity (Ω·m)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="hl-gold">Silver</span></td>
+                    <td>1.60 × 10⁻⁸</td>
+                  </tr>
+                  <tr>
+                    <td>Copper</td>
+                    <td>1.62 × 10⁻⁸</td>
+                  </tr>
+                  <tr>
+                    <td>Aluminium</td>
+                    <td>2.63 × 10⁻⁸</td>
+                  </tr>
+                  <tr>
+                    <td>Tungsten</td>
+                    <td>5.20 × 10⁻⁸</td>
+                  </tr>
+                  <tr>
+                    <td>Nickel</td>
+                    <td>6.84 × 10⁻⁸</td>
+                  </tr>
+                  <tr>
+                    <td>Iron</td>
+                    <td>10 × 10⁻⁸</td>
+                  </tr>
+                  <tr>
+                    <td><span class="hl-orange">Constantan</span></td>
+                    <td>49 × 10⁻⁶</td>
+                  </tr>
+                  <tr>
+                    <td><span class="hl-orange">Manganin</span></td>
+                    <td>44 × 10⁻⁶</td>
+                  </tr>
+                  <tr>
+                    <td><span class="hl-orange">Nichrome</span></td>
+                    <td>100 × 10⁻⁶</td>
+                  </tr>
+                  <tr>
+                    <td><span class="hl-red">Glass</span></td>
+                    <td>10¹⁰–10¹⁴</td>
+                  </tr>
+                  <tr>
+                    <td><span class="hl-red">Rubber</span></td>
+                    <td>10¹³–10¹⁶</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Solved Example</div>
+          <p>Wire: l = 15 m, A = 6×10⁻⁷ m², R = 5 Ω<br />
+            ρ = RA/l = 5 × 6×10⁻⁷ / 15 = <strong>2×10⁻⁷ Ω·m</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-heating" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🔥 Heating Effect of Electric Current</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Joule's Law</div>
+          <p>When electric current flows through a conductor, heat energy is produced due to resistance.</p>
+        </div>
+        <div class="formula-box">H = I²Rt Joules &nbsp;=&nbsp; I²Rt/4.2 calories<span>Joule's Law of Heating</span>
+        </div>
+        <div class="formula-box">W = VIt = I²Rt = V²t/R<span>Electrical Energy / Work Done</span></div>
+        <div class="formula-box">P = VI = V²/R = I²R<span>Electric Power | Unit: Watt (W), Horsepower (HP)</span></div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Energy Unit</div>
+            <div class="info-val">Joule or kWh</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Power Unit</div>
+            <div class="info-val">Watt or HP</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">1 kWh =</div>
+            <div class="info-val">1 Unit of Electricity</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">🏠 Applications of Heating Effect</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Appliance</th>
+                <th>Key Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Electric Bulb</span></td>
+                <td>Filament: <strong>Thin Tungsten wire</strong> | High resistivity, Melting point 3422°C | Inert gas:
+                  N₂ + Argon | Operating temp: 1500–2500°C</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Electric Press (Iron)</span></td>
+                <td>Wire: <strong>Nichrome</strong> (80% Nickel + 20% Chromium)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Electric Heater</span></td>
+                <td>Ceramic plate + <strong>Nichrome wire</strong></td>
+              </tr>
+              <tr>
+                <td><span class="hl-red">Fuse</span></td>
+                <td>Protects against short circuit &amp; overloading | Made of alloy (Cu + Sn + Pb) | Modern:
+                  <strong>MCB</strong> (Miniature Circuit Breaker)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Heating Applications</div>
+          <ul class="arrow-list">
+            <li>Bulb filament = <strong>Tungsten</strong> (highest melting point 3422°C)</li>
+            <li>Heater/Iron wire = <strong>Nichrome</strong> (Ni + Cr)</li>
+            <li>Fuse = <strong>low melting point alloy</strong> (Cu + Sn + Pb) — melts to break circuit</li>
+            <li>MCB = modern replacement of fuse — can be reset unlike fuse</li>
+            <li>Inert gas in bulb = <strong>Nitrogen + Argon</strong> (prevents tungsten oxidation)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">⚗️ Chemical Effect of Electric Current</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>When current passes through acidic solutions → solution decomposes into <strong>ions</strong>
+            (Electrolysis)</li>
+          <li>Law of Electrolysis proposed by: <strong>Faraday</strong></li>
+          <li>Applications: Electric cell, <strong>Electroplating</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-cells" class="tab-content">
+    <div class="card green-card">
+      <div class="card-header">🔌 Electric Cell</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Converts <strong>chemical energy → electrical energy</strong>.</p>
+        </div>
+        <div class="formula-box">EMF: E = W/q (Volt) &nbsp;|&nbsp; Terminal PD: V = E − ir<span>EMF and Terminal
+            Potential Difference</span></div>
+        <div class="formula-box">Current: I = E/(R+r) &nbsp;|&nbsp; Internal resistance: r = (E/V − 1)R<span>Cell
+            current and internal resistance</span></div>
+        <div class="two-col" style="margin-top:12px;">
+          <div class="type-card gold-left">
+            <div class="type-tag">Primary Cell</div>
+            <div class="type-name">Chemical → Electrical (one-time use)</div>
+            <p>Cannot be recharged. Chemical energy directly converted to electrical.</p>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Secondary Cell</div>
+            <div class="type-name">Rechargeable</div>
+            <p>Electrical → Chemical (charging), then Chemical → Electrical (discharging). Can be reused.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">📊 Types of Cells — Details</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Cell Name</th>
+                <th>Anode</th>
+                <th>Cathode</th>
+                <th>EMF (V)</th>
+                <th>Int. Resistance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="4" style="color:var(--accent5);font-weight:700;">Primary</td>
+                <td>Voltaic Cell</td>
+                <td>Zinc</td>
+                <td>Copper</td>
+                <td>1.08 V</td>
+                <td>2–4 Ω</td>
+              </tr>
+              <tr>
+                <td>Leclanche Cell</td>
+                <td>Zinc</td>
+                <td>Carbon</td>
+                <td>1.46 V</td>
+                <td>0.5–2 Ω</td>
+              </tr>
+              <tr>
+                <td>Dry Cell</td>
+                <td>Zinc</td>
+                <td>Carbon</td>
+                <td>1.46 V</td>
+                <td>0.5–1.5 Ω</td>
+              </tr>
+              <tr>
+                <td>Daniell Cell</td>
+                <td>Zinc</td>
+                <td>Copper</td>
+                <td>1.1 V</td>
+                <td>0.1–0.5 Ω</td>
+              </tr>
+              <tr>
+                <td rowspan="4" style="color:var(--accent2);font-weight:700;">Secondary</td>
+                <td>Bichromate Cell</td>
+                <td>Zinc</td>
+                <td>Carbon</td>
+                <td>2.0 V</td>
+                <td>Very low</td>
+              </tr>
+              <tr>
+                <td>Weston Cadmium</td>
+                <td>Cd amalgam</td>
+                <td>Mercury</td>
+                <td>1.018 V</td>
+                <td>~2 Ω</td>
+              </tr>
+              <tr>
+                <td><span class="hl-gold">Lead Accumulator</span></td>
+                <td>PbO₂</td>
+                <td>Spongy Pb</td>
+                <td><span class="hl-green">2.2 V</span></td>
+                <td>0.02 Ω</td>
+              </tr>
+              <tr>
+                <td>Alkaline Accumulator</td>
+                <td>Zinc</td>
+                <td>MnO₂</td>
+                <td>1.35 V</td>
+                <td>0.01 Ω</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Cells</div>
+          <ul class="arrow-list">
+            <li><strong>Dry cell / Leclanche</strong>: both Zinc-Carbon, EMF = <strong>1.46 V</strong></li>
+            <li><strong>Lead Accumulator</strong> (car battery): PbO₂ cathode, EMF = <strong>2.2 V</strong> per cell
+            </li>
+            <li>Secondary cells are <strong>rechargeable</strong>; Primary cells are <strong>not</strong></li>
+            <li>Lower internal resistance = better cell performance</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-instruments" class="tab-content">
+    <div class="card teal-card">
+      <div class="card-header">🧰 Electrical Measuring Instruments</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Instrument</th>
+                <th>Measures</th>
+                <th>Connection</th>
+                <th>Ideal Resistance</th>
+                <th>Symbol</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Ammeter</span></td>
+                <td>Electric Current</td>
+                <td><strong>Series</strong></td>
+                <td><strong>Zero (0)</strong></td>
+                <td>(+)—(A)—(−)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Voltmeter</span></td>
+                <td>Potential Difference</td>
+                <td><strong>Parallel</strong></td>
+                <td><strong>Infinite (∞)</strong></td>
+                <td>(+)—(V)—(−)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Galvanometer</span></td>
+                <td>Detects current (direction &amp; magnitude)</td>
+                <td>—</td>
+                <td>Medium</td>
+                <td>—(G)—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="type-card purple-left" style="margin-top:14px;">
+          <div class="type-tag">Galvanometer Conversions</div>
+          <div class="type-name">Converting Galvanometer into Other Instruments</div>
+          <ul class="arrow-list">
+            <li>Galvanometer + <strong>Low resistance in parallel</strong> → <strong>Ammeter</strong></li>
+            <li>Galvanometer + <strong>High resistance in series</strong> → <strong>Voltmeter</strong></li>
+          </ul>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Instruments</div>
+          <ul class="arrow-list">
+            <li>Ammeter in <strong>series</strong> (low resistance — must not disturb current)</li>
+            <li>Voltmeter in <strong>parallel</strong> (high resistance — must not draw current)</li>
+            <li>Ideal Ammeter resistance = <strong>0</strong>; Ideal Voltmeter resistance = <strong>∞</strong></li>
+            <li>Galvanometer → Ammeter: add <strong>shunt (low R in parallel)</strong></li>
+            <li>Galvanometer → Voltmeter: add <strong>high R in series</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Charge unit = <strong>Coulomb</strong>; Charge of electron = <strong>1.6 × 10⁻¹⁹ C</strong></li>
+          <li>Properties of charge: Additive, Quantised (Q=ne), Conserved, Attraction/Repulsion</li>
+          <li>Coulomb's Law: F = Kq₁q₂/r² | K = <strong>9 × 10⁹ Nm²/C²</strong></li>
+          <li><strong>Silver</strong> = best conductor; Silicon &amp; Germanium = semiconductors</li>
+          <li>Electric field lines: + to −, non-intersecting, no closed loops</li>
+          <li>Electric Potential: Scalar, unit = <strong>Volt = J/C</strong></li>
+          <li>Capacitance unit = <strong>Farad</strong> | C = Q/V</li>
+          <li>Current unit = <strong>Ampere</strong> | i = q/t | 1A = 6.25 × 10¹⁸ e/s</li>
+          <li>Current direction = <strong>opposite to electron flow</strong></li>
+          <li>Ohm's Law (1827): V = IR; valid at <strong>constant temperature</strong></li>
+          <li>Series: same current, R adds; Parallel: same voltage, 1/R adds</li>
+          <li>Domestic wiring = <strong>parallel</strong></li>
+          <li>Resistance ρ = RA/l | Unit = <strong>Ω·m</strong></li>
+          <li>Joule's heating: H = <strong>I²Rt</strong>; Power P = <strong>VI = I²R = V²/R</strong></li>
+          <li>Bulb filament = <strong>Tungsten</strong>; Heater/Iron = <strong>Nichrome</strong></li>
+          <li>Fuse = Cu+Sn+Pb alloy; modern = <strong>MCB</strong></li>
+          <li>Electrolysis law by <strong>Faraday</strong></li>
+          <li>Lead accumulator EMF = <strong>2.2 V</strong>; Dry cell EMF = <strong>1.46 V</strong></li>
+          <li>Ammeter: series, R=0; Voltmeter: parallel, R=∞</li>
+          <li>Galvanometer → Ammeter: low R parallel; → Voltmeter: high R series</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">📋 Formula Quick Reference</div>
+        <div class="card-body">
+          <div class="formula-box">Q = ne &nbsp;|&nbsp; e = 1.6×10⁻¹⁹C<span>Quantisation of charge</span></div>
+          <div class="formula-box">F = K·q₁q₂/r²<span>Coulomb's Law | K=9×10⁹</span></div>
+          <div class="formula-box">C = Q/V<span>Capacitance (Farad)</span></div>
+          <div class="formula-box">V = IR &nbsp;|&nbsp; P = VI = I²R<span>Ohm's Law &amp; Power</span></div>
+          <div class="formula-box">R = ρl/A<span>Resistance</span></div>
+          <div class="formula-box">H = I²Rt<span>Joule's Heating</span></div>
+          <div class="formula-box">I = E/(R+r)<span>Cell Current</span></div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">⚠️ Most Common Exam Traps</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Best conductor = <strong>Silver</strong> (NOT copper)</li>
+            <li>Pure water = <strong>insulator</strong>; Sea water = conductor</li>
+            <li>Current flows <strong>opposite</strong> to electron movement</li>
+            <li>Ammeter → series, zero resistance; Voltmeter → parallel, infinite resistance</li>
+            <li>Domestic wiring = <strong>parallel</strong> (not series)</li>
+            <li>Bulb = Tungsten; Heater = Nichrome (not swapped)</li>
+            <li>Fuse melts (breaks) on excess current; MCB trips and can be reset</li>
+            <li>Ohm's Law: only valid at <strong>constant physical conditions</strong></li>
+            <li>Electrolysis = <strong>Faraday's law</strong></li>
+            <li>EMF unit = <strong>Volt</strong> (same as potential, not Ampere)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 09: Electrostatics · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

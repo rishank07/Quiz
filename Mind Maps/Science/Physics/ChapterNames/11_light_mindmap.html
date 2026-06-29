@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 11: Light | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 13px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+      font-weight: 700;
+    }
+
+    .data-table td {
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+
+    .data-table tr:nth-child(even) td {
+      background: var(--surface2);
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 120px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 14px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 140px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 15px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    .formula-box {
+      background: #0d1a10;
+      border: 1px solid var(--accent3);
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      color: var(--accent3);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .formula-box span {
+      color: var(--text-muted);
+      font-size: 12px;
+      display: block;
+      margin-top: 4px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+    }
+
+    .type-card.gold-left {
+      border-left: 4px solid var(--gold);
+    }
+
+    .type-card.green-left {
+      border-left: 4px solid var(--accent3);
+    }
+
+    .type-card.blue-left {
+      border-left: 4px solid var(--accent2);
+    }
+
+    .type-card.purple-left {
+      border-left: 4px solid var(--accent4);
+    }
+
+    .type-card.orange-left {
+      border-left: 4px solid var(--accent5);
+    }
+
+    .type-card.red-left {
+      border-left: 4px solid var(--accent1);
+    }
+
+    .type-card.teal-left {
+      border-left: 4px solid var(--accent6);
+    }
+
+    .type-card .type-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .type-card .type-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .type-card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* VIBGYOR spectrum */
+    .vibgyor {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 40px;
+      margin: 12px 0;
+    }
+
+    .vib-seg {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .7);
+    }
+
+    /* eye structure grid */
+    .eye-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .eye-part {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    .eye-part .ep-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--accent2);
+      margin-bottom: 3px;
+    }
+
+    .eye-part .ep-fn {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    /* colour mixing */
+    .colour-mix {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .cm-box {
+      flex: 1;
+      min-width: 160px;
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-align: center;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: 13.5px;
+      width: 100%;
+      min-width: 550px;
+      margin: 10px 0;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      vertical-align: top;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">General Science · Physics</div>
+      <h1>💡 Chapter 11: Light</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; Reflection · Refraction · TIR · Lenses · Dispersion · Human Eye ·
+        Photoelectric Effect</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🔍 Overview</button>
+    <button onclick="switchTab('reflection')">🪞 Reflection</button>
+    <button onclick="switchTab('mirrors')">🔮 Mirrors</button>
+    <button onclick="switchTab('refraction')">🌊 Refraction</button>
+    <button onclick="switchTab('lenses')">🔭 Lenses</button>
+    <button onclick="switchTab('dispersion')">🌈 Dispersion</button>
+    <button onclick="switchTab('eye')">👁️ Human Eye</button>
+    <button onclick="switchTab('optical')">🔬 Optical Inst.</button>
+    <button onclick="switchTab('advanced')">⚛️ Advanced</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">💡 Light — At a Glance</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">3×10⁸ m/s</div>
+            <div class="stat-lbl">Speed in Vacuum</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">3900–7800 Å</div>
+            <div class="stat-lbl">Visible Wavelength Range</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">25 cm</div>
+            <div class="stat-lbl">Min. Distance of Distinct Vision</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Transverse EM</div>
+            <div class="stat-lbl">Nature of Light</div>
+          </div>
+        </div>
+        <ul class="arrow-list" style="margin-top:10px;">
+          <li>Light = form of energy; travels in straight line; no medium required</li>
+          <li><strong>Dual nature</strong> — Particle (Newton, 1700) &amp; Wave (Huygens, 1678)</li>
+          <li>Photoelectric effect → Einstein (1905) | Photon theory → Planck (1900)</li>
+          <li>Interference → Thomas Young (1801)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card blue-card">
+      <div class="card-header">📋 Key Formulae</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div>
+            <div class="formula-box">1/v + 1/u = 1/f<span>Mirror Formula</span></div>
+            <div class="formula-box">1/v − 1/u = 1/f<span>Lens Formula</span></div>
+            <div class="formula-box">P = 1/f(m) &nbsp;|&nbsp; Unit: Diopter<span>Power of Lens</span></div>
+          </div>
+          <div>
+            <div class="formula-box">μ = c / v_medium<span>Refractive Index</span></div>
+            <div class="formula-box">E = hν &nbsp;|&nbsp; P = h/λ<span>Photon Energy &amp; Momentum</span></div>
+            <div class="formula-box">n = 360/θ or 360/θ−1<span>Images in Plane Mirror</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-reflection" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🪞 Reflection of Light</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Light returns to its original medium after striking a smooth surface.</p>
+        </div>
+        <div class="type-card gold-left">
+          <div class="type-tag">Law 1</div>
+          <div class="type-name">Angle of Incidence = Angle of Reflection</div>
+          <div class="formula-box" style="margin-top:6px;">∠i = ∠r<span>Both measured from the normal to the
+              surface</span></div>
+        </div>
+        <div class="type-card blue-left">
+          <div class="type-tag">Law 2</div>
+          <div class="type-name">Coplanarity</div>
+          <p>Incident ray, reflected ray, and the normal — all three lie in the <strong>same plane</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">🪟 Classification of Objects (Optical)</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Examples</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Illuminated (Self-luminous)</span></td>
+                <td>Produces own light</td>
+                <td>Sun, Stars, Bulb, Fire</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Non-illuminated</span></td>
+                <td>Visible only when light falls on it</td>
+                <td>Chair, Table, Moon</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Transparent</span></td>
+                <td>Light passes through completely</td>
+                <td>Glass, Water, Air</td>
+              </tr>
+              <tr>
+                <td><span class="hl-red">Opaque</span></td>
+                <td>Light does not pass through</td>
+                <td>Metal, Wood, Brick</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">💡 Dual Nature of Light</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card gold-left">
+            <div class="type-tag">Particle Nature</div>
+            <div class="type-name">Corpuscular Theory</div>
+            <ul class="arrow-list">
+              <li>Proposed by <strong>Descartes (1637)</strong></li>
+              <li>Elaborated by <strong>Newton (1700)</strong></li>
+              <li>Explains: Reflection, Refraction</li>
+            </ul>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Wave Nature</div>
+            <div class="type-name">Wave Theory</div>
+            <ul class="arrow-list">
+              <li>Advocated by <strong>Huygens (1678)</strong></li>
+              <li>Explains: Interference, Diffraction, Polarisation</li>
+              <li>Light = transverse EM wave</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-mirrors" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🔮 Plane Mirror</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Image: <strong>Virtual, Erect, Equal size, Laterally inverted</strong></li>
+          <li>Image distance = Object distance (behind mirror)</li>
+        </ul>
+        <div class="formula-box">n = 360/θ (if n is odd) &nbsp;|&nbsp; n = 360/θ − 1 (if n is even)<span>Number of
+            images formed between two mirrors at angle θ</span></div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Uses of Plane Mirror</div>
+          <p>Solar cooker · Periscope · Kaleidoscope · Regular mirrors</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">🔵 Spherical Mirrors — Image Table</div>
+      <div class="card-body">
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:10px;"><span class="hl-gold">Concave</span> =
+          Converging mirror &nbsp;|&nbsp; <span class="hl-blue">Convex</span> = Diverging mirror</p>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mirror</th>
+                <th>Object Position</th>
+                <th>Image Position</th>
+                <th>Nature</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="6" style="color:var(--gold);font-weight:700;">Concave</td>
+                <td>At Infinity</td>
+                <td>At Focus F</td>
+                <td>Real, inverted, highly diminished</td>
+              </tr>
+              <tr>
+                <td>Beyond C</td>
+                <td>Between C &amp; F</td>
+                <td>Real, inverted, diminished</td>
+              </tr>
+              <tr>
+                <td>At C</td>
+                <td>At C</td>
+                <td>Real, inverted, same size</td>
+              </tr>
+              <tr>
+                <td>Between C &amp; F</td>
+                <td>Beyond C</td>
+                <td>Real, inverted, enlarged</td>
+              </tr>
+              <tr>
+                <td>At F</td>
+                <td>At Infinity</td>
+                <td>Real, inverted, highly enlarged</td>
+              </tr>
+              <tr>
+                <td>Between F &amp; P</td>
+                <td>Behind mirror</td>
+                <td><span class="hl-green">Virtual, erect, enlarged</span></td>
+              </tr>
+              <tr>
+                <td rowspan="2" style="color:var(--accent2);font-weight:700;">Convex</td>
+                <td>At Infinity</td>
+                <td>At F (behind)</td>
+                <td><span class="hl-green">Virtual, erect, highly diminished</span></td>
+              </tr>
+              <tr>
+                <td>Anywhere else</td>
+                <td>Between F &amp; P</td>
+                <td><span class="hl-green">Virtual, erect, diminished</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="two-col" style="margin-top:14px;">
+          <div class="type-card gold-left">
+            <div class="type-tag">Concave Mirror Uses</div>
+            <div class="type-name">Converging Mirror</div>
+            <p>Shaving mirror · Dentist's mirror · Torch/Headlight · Solar cookers</p>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Convex Mirror Uses</div>
+            <div class="type-name">Diverging Mirror</div>
+            <p>Rear-view mirror (vehicles) · Eyeglass · Street lights</p>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Mirror Uses</div>
+          <ul class="arrow-list">
+            <li><strong>Rear-view mirror = Convex</strong> (wide field of view, always virtual diminished image)</li>
+            <li><strong>Shaving/Dentist mirror = Concave</strong> (enlarged virtual image when object between F and P)
+            </li>
+            <li>Convex mirror always gives virtual, erect, diminished image (no exceptions)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">📐 Mirror Formulae & Sign Convention</div>
+      <div class="card-body">
+        <div class="formula-box">1/v + 1/u = 1/f<span>Mirror Formula</span></div>
+        <div class="formula-box">f = R/2 &nbsp;|&nbsp; m = −v/u = I/O<span>Focal length &amp; Magnification</span></div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Solved Example</div>
+          <p>Focal length of concave mirror = 10 m<br />
+            f = R/2 → 10 = R/2 → <strong>R = 20 m</strong></p>
+        </div>
+        <div class="table-wrap" style="margin-top:10px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Convex Mirror</th>
+                <th>Concave Mirror</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Focal length (f)</td>
+                <td>Positive (+)</td>
+                <td>Negative (−)</td>
+              </tr>
+              <tr>
+                <td>Radius of curvature</td>
+                <td>Positive (+)</td>
+                <td>Negative (−)</td>
+              </tr>
+              <tr>
+                <td>Object distance (u)</td>
+                <td>Negative (−)</td>
+                <td>Negative (−)</td>
+              </tr>
+              <tr>
+                <td>Real image distance</td>
+                <td>N/A</td>
+                <td>Negative (−)</td>
+              </tr>
+              <tr>
+                <td>Virtual image distance</td>
+                <td>Positive (+)</td>
+                <td>Positive (+)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-refraction" class="tab-content">
+    <div class="card teal-card">
+      <div class="card-header">🌊 Refraction of Light</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Deviation of the path of light when it enters from one transparent medium into another. Light bends
+            <strong>toward the normal</strong> when entering a denser medium.
+          </p>
+        </div>
+        <div class="type-card gold-left">
+          <div class="type-tag">Law 1 — Coplanarity</div>
+          <p>Incident ray, refracted ray, and the normal all lie in the <strong>same plane</strong>.</p>
+        </div>
+        <div class="type-card blue-left">
+          <div class="type-tag">Law 2 — Snell's Law</div>
+          <div class="formula-box" style="margin-top:6px;">sin i / sin r = constant (μ)<span>Snell's Law of
+              Refraction</span></div>
+        </div>
+        <div class="quick-recall" style="margin-top:12px;">
+          <div class="recall-label">📘 Examples of Refraction</div>
+          <ul class="arrow-list">
+            <li>Stars <strong>twinkling</strong> at night</li>
+            <li>Pond appears <strong>shallower</strong> than actual depth</li>
+            <li>Pencil dipped in water appears <strong>bent</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">📐 Refractive Index</div>
+      <div class="card-body">
+        <div class="formula-box">μ = c / v_medium<span>Refractive index = Speed in vacuum / Speed in medium</span></div>
+        <div class="two-col">
+          <div class="type-card gold-left">
+            <div class="type-tag">Absolute Refractive Index</div>
+            <p>Refractive index of a medium with respect to <strong>vacuum/air</strong>.</p>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Relative Refractive Index</div>
+            <p>Refractive index of second medium with respect to <strong>first medium</strong>.</p>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Refraction</div>
+          <ul class="arrow-list">
+            <li>Higher refractive index = <strong>denser medium</strong> = light slows down and bends toward normal</li>
+            <li>Speed of light is reduced in denser medium; frequency remains unchanged</li>
+            <li>Rainbow = refraction + TIR + refraction in water droplets</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card red-card">
+      <div class="card-header">💎 Total Internal Reflection (TIR)</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>When light travels from <strong>denser → rarer</strong> medium and angle of incidence exceeds the
+            <strong>critical angle</strong>, light reflects back into the denser medium entirely.
+          </p>
+        </div>
+        <div class="formula-box">sin c = 1/μ &nbsp;(or 1n2 = 1/sin c)<span>Critical angle formula | c = critical
+            angle</span></div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Conditions for TIR</div>
+          <ul class="arrow-list">
+            <li>Light must travel from <strong>denser → rarer</strong> medium</li>
+            <li>Angle of incidence must be <strong>greater than critical angle</strong></li>
+          </ul>
+        </div>
+        <div class="type-card red-left">
+          <div class="type-tag">Examples of TIR</div>
+          <div class="type-name">Real-World Applications</div>
+          <ul class="arrow-list">
+            <li>Shining of a crack in glass</li>
+            <li><strong>Mirage formation</strong> (hot road appears wet)</li>
+            <li><strong>Optical fibre</strong> communication</li>
+            <li>Shining of air bubble in water</li>
+            <li><strong>Brilliance of Diamonds</strong> (high μ → small critical angle)</li>
+          </ul>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — TIR</div>
+          <ul class="arrow-list">
+            <li>TIR only in <strong>denser to rarer</strong> medium (NOT rarer to denser)</li>
+            <li>Diamond sparkles because its critical angle is very small (~24°) → TIR occurs easily</li>
+            <li>Optical fibres work on TIR — used in internet cables, medical endoscopes</li>
+            <li>Mirage = TIR due to hot air layers near ground (rarer medium near ground)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-lenses" class="tab-content">
+    <div class="card green-card">
+      <div class="card-header">🔭 Lenses — Basics</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card green-left">
+            <div class="type-tag">Convex Lens</div>
+            <div class="type-name">Converging Lens</div>
+            <ul class="arrow-list">
+              <li>Thicker at centre</li>
+              <li>Converges parallel rays to a <strong>focus</strong></li>
+              <li>Positive focal length</li>
+              <li>Used for: farsightedness, magnifying glass, camera</li>
+            </ul>
+          </div>
+          <div class="type-card red-left">
+            <div class="type-tag">Concave Lens</div>
+            <div class="type-name">Diverging Lens</div>
+            <ul class="arrow-list">
+              <li>Thinner at centre</li>
+              <li>Diverges parallel rays <strong>away</strong> from axis</li>
+              <li>Negative focal length</li>
+              <li>Used for: shortsightedness (Myopia)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📊 Lens Image Table</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Lens</th>
+                <th>Object Position</th>
+                <th>Image Position</th>
+                <th>Nature</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="6" style="color:var(--accent3);font-weight:700;">Convex</td>
+                <td>At Infinity</td>
+                <td>At F₂</td>
+                <td>Real, inverted, highly diminished</td>
+              </tr>
+              <tr>
+                <td>Beyond C₁</td>
+                <td>Between F₂ &amp; C₂</td>
+                <td>Real, inverted, diminished</td>
+              </tr>
+              <tr>
+                <td>At C₁</td>
+                <td>At C₂</td>
+                <td>Real, inverted, same size</td>
+              </tr>
+              <tr>
+                <td>Between C₁ &amp; F₁</td>
+                <td>Beyond C₂</td>
+                <td>Real, inverted, magnified</td>
+              </tr>
+              <tr>
+                <td>At F₁</td>
+                <td>At Infinity</td>
+                <td>Real, inverted, highly magnified</td>
+              </tr>
+              <tr>
+                <td>Between O &amp; F₁</td>
+                <td>Same side as object</td>
+                <td><span class="hl-green">Virtual, erect, magnified</span></td>
+              </tr>
+              <tr>
+                <td rowspan="2" style="color:var(--accent1);font-weight:700;">Concave</td>
+                <td>At Infinity</td>
+                <td>At F₁</td>
+                <td><span class="hl-green">Virtual, erect, highly diminished</span></td>
+              </tr>
+              <tr>
+                <td>Anywhere else</td>
+                <td>Between F₁ &amp; O</td>
+                <td><span class="hl-green">Virtual, erect, diminished</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">📐 Lens Formulae</div>
+      <div class="card-body">
+        <div class="formula-box">1/v − 1/u = 1/f<span>Lens Formula</span></div>
+        <div class="formula-box">m = v/u = I/O<span>Magnification</span></div>
+        <div class="formula-box">P = 1/f(metres) &nbsp;|&nbsp; Unit: Diopter (D)<span>Power of Lens</span></div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Solved Example</div>
+          <p>f = −20 cm = −0.2 m<br />
+            P = 1/f = 1/(−0.2) = <strong>−5 D</strong> (negative = concave lens)</p>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Lens vs Mirror Formula</div>
+          <ul class="arrow-list">
+            <li>Mirror: <strong>1/v + 1/u = 1/f</strong> (addition)</li>
+            <li>Lens: <strong>1/v − 1/u = 1/f</strong> (subtraction)</li>
+            <li>Convex lens: P is <strong>positive</strong>; Concave lens: P is <strong>negative</strong></li>
+            <li>Power unit = <strong>Diopter (D)</strong> — not metre or Hz</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-dispersion" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">🌈 Dispersion of Light</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Dispersion</div>
+          <p>Splitting of white light into its <strong>seven constituent colours</strong> when it passes through a
+            prism. Due to different colours having different refractive indices.</p>
+        </div>
+        <div class="vibgyor">
+          <div class="vib-seg" style="background:#7b00b4;">V</div>
+          <div class="vib-seg" style="background:#4b0082;">I</div>
+          <div class="vib-seg" style="background:#0000ff;">B</div>
+          <div class="vib-seg" style="background:#008000;">G</div>
+          <div class="vib-seg" style="background:#ffff00;color:#333;">Y</div>
+          <div class="vib-seg" style="background:#ff7f00;">O</div>
+          <div class="vib-seg" style="background:#ff0000;">R</div>
+        </div>
+        <p style="text-align:center;font-size:12px;color:var(--text-muted);margin-bottom:12px;">Violet · Indigo · Blue ·
+          Green · Yellow · Orange · Red</p>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Most Deviated</div>
+            <div class="info-val" style="color:#9b59b6;">Violet</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Least Deviated</div>
+            <div class="info-val" style="color:#e74c3c;">Red</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Scatters Most</div>
+            <div class="info-val" style="color:#9b59b6;">Violet</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Scatters Least</div>
+            <div class="info-val" style="color:#e74c3c;">Red</div>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Rainbow</div>
+          <p>Formed by <strong>reflection + total internal reflection + refraction</strong> of sunlight in water
+            droplets. Always seen when sun is behind the observer.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card teal-card">
+      <div class="card-header">🎨 Colour Mixing</div>
+      <div class="card-body">
+        <div class="colour-mix">
+          <div class="cm-box" style="background:#1a2a00;border-color:#5a7a00;color:#c8e040;">Green + Red = Yellow</div>
+          <div class="cm-box" style="background:#1a001a;border-color:#7a007a;color:#e040e0;">Blue + Red = Magenta</div>
+          <div class="cm-box" style="background:#001a1a;border-color:#007a7a;color:#40e0e0;">Blue + Green = Cyan</div>
+          <div class="cm-box" style="background:#1a1a1a;border-color:#888;color:#fff;">Green + Red + Blue = White</div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Primary Colours of Light</div>
+          <ul class="arrow-list">
+            <li>Primary colours of <strong>light</strong>: Red, Green, Blue (RGB)</li>
+            <li>Primary colours of <strong>pigment/paint</strong>: Red, Yellow, Blue (different!)</li>
+            <li>Red + Green + Blue light = <strong>White</strong></li>
+            <li>Complementary colours: Red↔Cyan, Green↔Magenta, Blue↔Yellow</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">🌤️ Scattering of Light</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Scattering (Rayleigh Scattering)</div>
+          <p>Scattering of light after colliding with dust/air particles. <strong>Shorter wavelength → more
+              scattering.</strong></p>
+        </div>
+        <ul class="arrow-list">
+          <li><strong>Violet</strong> scatters the most (shortest wavelength)</li>
+          <li><strong>Red</strong> scatters the least (longest wavelength)</li>
+          <li>Sky appears <strong>blue</strong> — blue is scattered more than red/orange (blue has shorter λ than red)
+          </li>
+          <li>Sun appears <strong>red at sunrise/sunset</strong> — light travels longer path, blue scattered away, only
+            red reaches eyes</li>
+          <li>Danger signals are <strong>red</strong> — red scatters least, visible from long distance</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Scattering</div>
+          <p>Sky appears blue (NOT violet) because human eye is more sensitive to blue than violet. But violet actually
+            scatters MORE than blue.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-eye" class="tab-content">
+    <div class="card blue-card">
+      <div class="card-header">👁️ Structure of Human Eye</div>
+      <div class="card-body">
+        <div class="eye-grid">
+          <div class="eye-part">
+            <div class="ep-name">Cornea</div>
+            <div class="ep-fn">Entry path of light; transparent, protruding front part</div>
+          </div>
+          <div class="eye-part">
+            <div class="ep-name">Iris</div>
+            <div class="ep-fn">Coloured opaque part; controls size of pupil</div>
+          </div>
+          <div class="eye-part">
+            <div class="ep-name">Pupil</div>
+            <div class="ep-fn">Controls the amount of light entering the eye</div>
+          </div>
+          <div class="eye-part">
+            <div class="ep-name">Eye Lens</div>
+            <div class="ep-fn">Transparent protein; soft converging lens; adjustable focal length</div>
+          </div>
+          <div class="eye-part">
+            <div class="ep-name">Retina</div>
+            <div class="ep-fn">Transparent membrane; image formed here (real &amp; inverted)</div>
+          </div>
+          <div class="eye-part">
+            <div class="ep-name">Yellow Spot (Fovea)</div>
+            <div class="ep-fn">Centre of retina; sharpest, clearest vision</div>
+          </div>
+          <div class="eye-part">
+            <div class="ep-name">Blind Spot</div>
+            <div class="ep-fn">Light sensitivity = zero; image not visible here</div>
+          </div>
+          <div class="eye-part">
+            <div class="ep-name">Ciliary Muscles</div>
+            <div class="ep-fn">Increase or decrease focal length of eye lens (accommodation)</div>
+          </div>
+          <div class="eye-part">
+            <div class="ep-name">Choroid Membrane</div>
+            <div class="ep-fn">Black membrane; absorbs stray light</div>
+          </div>
+          <div class="eye-part">
+            <div class="ep-name">Sclera</div>
+            <div class="ep-fn">Rigid outer membrane; hollow sphere; diameter 25 mm; protective shield</div>
+          </div>
+        </div>
+        <div class="info-row" style="margin-top:12px;">
+          <div class="info-box">
+            <div class="info-label">Min. Distinct Vision Distance</div>
+            <div class="info-val">25 cm</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Normal Vision Range</div>
+            <div class="info-val">25 cm to ∞</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Power of Human Eye</div>
+            <div class="info-val">4 Diopter</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card red-card">
+      <div class="card-header">👓 Vision Defects & Corrections</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Defect</th>
+                <th>Symptoms / Cause</th>
+                <th>Correction</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-red">Colour Blindness</span></td>
+                <td>Cannot distinguish Red &amp; Green; Genetic/hereditary</td>
+                <td><span class="hl-red">No cure</span></td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Myopia (Short-sightedness)</span></td>
+                <td>Near objects clear, far objects blurred; Curvature of lens increases</td>
+                <td><span class="hl-gold">Concave lens</span></td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Hypermetropia (Farsightedness)</span></td>
+                <td>Far objects clear, near objects blurred; Curvature of lens reduces</td>
+                <td><span class="hl-gold">Convex lens</span></td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Presbyopia</span></td>
+                <td>Cannot see near OR far clearly (old age)</td>
+                <td><span class="hl-gold">Bifocal lens</span></td>
+              </tr>
+              <tr>
+                <td><span class="hl-purple">Astigmatism</span></td>
+                <td>Blurred at all distances; irregular curvature of cornea/lens</td>
+                <td><span class="hl-gold">Cylindrical lens</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Vision Defects</div>
+          <ul class="arrow-list">
+            <li><strong>Myopia</strong> → <strong>Concave</strong> (diverging) lens</li>
+            <li><strong>Hypermetropia</strong> → <strong>Convex</strong> (converging) lens</li>
+            <li><strong>Presbyopia</strong> → <strong>Bifocal</strong> (both near &amp; far correction)</li>
+            <li><strong>Colour blindness</strong> = <strong>no cure</strong>, genetic disease</li>
+            <li><strong>Astigmatism</strong> → Cylindrical lens (not spherical)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-optical" class="tab-content">
+    <div class="card teal-card">
+      <div class="card-header">🔬 Microscope</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Uses <strong>convex lens</strong> of short focal length</li>
+          <li>For viewing <strong>microscopic objects</strong></li>
+          <li>Simple microscope magnification: <strong>M = 1 + D/F</strong> (D = 25 cm, least distance of vision)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card purple-card">
+      <div class="card-header">🔭 Telescope</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card gold-left">
+            <div class="type-tag">Reflecting Telescope</div>
+            <div class="type-name">Bright &amp; Magnified Distant Images</div>
+            <p>Uses a concave mirror as objective. Produces bright images of distant objects.</p>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Astronomical Telescope</div>
+            <div class="type-name">For Celestial Bodies</div>
+            <ul class="arrow-list">
+              <li>Image at ∞: <strong>M = −Fₒ/Fₑ</strong></li>
+              <li>Image at min. dist: <strong>M = −(Fₒ/Fₑ)(1 + Fₑ/D)</strong></li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Telescope</div>
+          <ul class="arrow-list">
+            <li>Objective lens: <strong>large focal length</strong> (Fₒ)</li>
+            <li>Eyepiece lens: <strong>small focal length</strong> (Fₑ)</li>
+            <li>Higher Fₒ/Fₑ ratio = greater magnifying power</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-advanced" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🌊 Interference of Light</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>When two waves of <strong>equal frequency from coherent sources</strong> travel in the same direction,
+            superposition causes <strong>alternating bright and dark fringes</strong>.</p>
+        </div>
+        <ul class="arrow-list">
+          <li>Propounder: <strong>Thomas Young (1801)</strong></li>
+          <li>Constructive interference → bright fringe (max intensity)</li>
+          <li>Destructive interference → dark fringe (min intensity)</li>
+          <li>Example: <strong>Soap bubble</strong> appearing coloured in white light</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">〰️ Diffraction & Polarisation</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card blue-left">
+            <div class="type-tag">Diffraction</div>
+            <div class="type-name">Bending of light at sharp edges</div>
+            <ul class="arrow-list">
+              <li>Partial bending around obstacles or holes</li>
+              <li><strong>Fresnel diffraction</strong> — nearby point source</li>
+              <li><strong>Fraunhofer diffraction</strong> — parallel rays (source at ∞)</li>
+            </ul>
+          </div>
+          <div class="type-card purple-left">
+            <div class="type-tag">Polarisation</div>
+            <div class="type-name">Restricting vibration to one direction</div>
+            <ul class="arrow-list">
+              <li>Light vibrations perpendicular to direction of travel</li>
+              <li><strong>Plane polarised</strong> — vibrates in one plane only</li>
+              <li><strong>Unpolarised</strong> — vibrates in all planes</li>
+              <li>Polarisation proves light is a <strong>transverse</strong> wave (not longitudinal)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">⚛️ Photoelectric Effect & Photon Theory</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card red-left">
+            <div class="type-tag">Photoelectric Effect</div>
+            <div class="type-name">Einstein (1905)</div>
+            <ul class="arrow-list">
+              <li>When light of sufficient frequency hits a metal, <strong>electrons are emitted</strong></li>
+              <li>Minimum frequency needed = <strong>threshold frequency</strong></li>
+              <li>Proved particle nature of light</li>
+              <li>Einstein won Nobel Prize (1921) for this</li>
+            </ul>
+          </div>
+          <div class="type-card gold-left">
+            <div class="type-tag">Photon (Quantum) Theory</div>
+            <div class="type-name">Planck (1900)</div>
+            <ul class="arrow-list">
+              <li>Energy emitted/absorbed in discrete bundles = <strong>photons</strong></li>
+            </ul>
+            <div class="formula-box" style="margin-top:8px;">E = hν = mc²<span>Energy of photon</span></div>
+            <div class="formula-box">P = h/λ<span>Momentum of photon</span></div>
+            <div class="formula-box">ν = c/λ<span>Frequency–wavelength relation</span></div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Photoelectric Effect</div>
+          <ul class="arrow-list">
+            <li>Proposed by <strong>Einstein (1905)</strong>, NOT Planck (Planck gave quantum theory)</li>
+            <li>Einstein won <strong>Nobel Prize in 1921</strong> for photoelectric effect (not for relativity!)</li>
+            <li>Intensity of light does NOT affect kinetic energy of emitted electrons — only <strong>frequency</strong>
+              does</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Speed of light in vacuum = <strong>3 × 10⁸ m/s</strong></li>
+          <li>Visible light wavelength = <strong>3900 Å to 7800 Å</strong></li>
+          <li>Light = <strong>Transverse EM wave</strong>; no medium needed</li>
+          <li>Particle nature → <strong>Descartes (1637), Newton (1700)</strong>; Wave → <strong>Huygens (1678)</strong>
+          </li>
+          <li>Laws of reflection: ∠i = ∠r; all three in same plane</li>
+          <li>Plane mirror: image = Virtual, Erect, Equal, Laterally inverted</li>
+          <li><strong>Rear-view = Convex</strong>; Shaving/Dentist = <strong>Concave</strong></li>
+          <li>Mirror formula: <strong>1/v + 1/u = 1/f</strong> | f = R/2</li>
+          <li>Snell's Law: sin i / sin r = constant (μ)</li>
+          <li>TIR: denser → rarer, angle &gt; critical angle | Applications: Optical fibre, Diamond, Mirage</li>
+          <li>Lens formula: <strong>1/v − 1/u = 1/f</strong></li>
+          <li>Power of lens = 1/f(m); unit = <strong>Diopter</strong></li>
+          <li>VIBGYOR: Violet most deviated &amp; most scattered; Red least</li>
+          <li>Sky = blue (Rayleigh scattering); Sunrise/Sunset = red</li>
+          <li>Myopia → Concave | Hypermetropia → Convex | Presbyopia → Bifocal | Astigmatism → Cylindrical</li>
+          <li>Colour Blindness = <strong>No cure</strong>, genetic</li>
+          <li>Min. distance of distinct vision = <strong>25 cm</strong></li>
+          <li>Interference: <strong>Thomas Young (1801)</strong>; soap bubble colours</li>
+          <li>Photoelectric effect: <strong>Einstein (1905)</strong>; Nobel 1921</li>
+          <li>Photon theory: <strong>Planck (1900)</strong>; E = hν</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">📋 Formula Quick Reference</div>
+        <div class="card-body">
+          <div class="formula-box">1/v + 1/u = 1/f &nbsp;|&nbsp; f = R/2<span>Mirror Formula</span></div>
+          <div class="formula-box">m = −v/u (mirror) &nbsp;|&nbsp; m = v/u (lens)<span>Magnification</span></div>
+          <div class="formula-box">1/v − 1/u = 1/f<span>Lens Formula</span></div>
+          <div class="formula-box">P = 1/f(m) | Unit: D<span>Power of Lens</span></div>
+          <div class="formula-box">μ = c/v &nbsp;|&nbsp; sin c = 1/μ<span>Refractive Index &amp; Critical Angle</span>
+          </div>
+          <div class="formula-box">E = hν &nbsp;|&nbsp; P_photon = h/λ<span>Photon Energy &amp; Momentum</span></div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">⚠️ Most Common Exam Traps</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Mirror formula has <strong>+</strong>; Lens formula has <strong>−</strong></li>
+            <li>Rear-view = <strong>Convex</strong> (always virtual, diminished)</li>
+            <li>Concave mirror: only when between F &amp; P → virtual image</li>
+            <li>TIR requires <strong>denser→rarer</strong> medium</li>
+            <li>Convex lens power = positive; Concave = negative</li>
+            <li>Colour Blindness: <strong>no lens correction</strong></li>
+            <li>Einstein won Nobel for <strong>photoelectric effect</strong>, NOT relativity</li>
+            <li>Sky appears blue (NOT violet — eye sensitivity)</li>
+            <li>Danger signals = Red (least scattering → visible from far)</li>
+            <li>Image on retina = <strong>Real &amp; Inverted</strong> (brain corrects it)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 11: Light · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

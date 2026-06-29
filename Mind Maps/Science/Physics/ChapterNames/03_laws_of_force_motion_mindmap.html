@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 03: Laws of Force &amp; Motion | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: #d0d6f0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12141f 0%, #1a1d30 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 18px 24px 14px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      color: var(--gold);
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .page-header .subtitle {
+      color: #8892b0;
+      font-size: .82rem;
+      margin-top: 4px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      padding: 0 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #8892b0;
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .4px;
+      padding: 11px 13px 8px;
+      text-transform: uppercase;
+      transition: color .2s, border-color .2s;
+    }
+
+    .tab-nav button:hover {
+      color: #c8d0e8;
+    }
+
+    .tab-nav button.active {
+      border-bottom-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 22px 20px 30px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .6px;
+      padding: 10px 16px;
+      text-transform: uppercase;
+    }
+
+    .card-header.gold {
+      background: linear-gradient(90deg, #2a2200, #1a1d27);
+      color: var(--gold);
+    }
+
+    .card-header.green {
+      background: linear-gradient(90deg, #0a2218, #1a1d27);
+      color: var(--accent3);
+    }
+
+    .card-header.blue {
+      background: linear-gradient(90deg, #091524, #1a1d27);
+      color: var(--accent2);
+    }
+
+    .card-header.purple {
+      background: linear-gradient(90deg, #160d24, #1a1d27);
+      color: var(--accent4);
+    }
+
+    .card-header.orange {
+      background: linear-gradient(90deg, #211100, #1a1d27);
+      color: var(--accent5);
+    }
+
+    .card-header.red {
+      background: linear-gradient(90deg, #1a0909, #1a1d27);
+      color: var(--accent1);
+    }
+
+    .card-header.teal {
+      background: linear-gradient(90deg, #041a17, #1a1d27);
+      color: var(--accent6);
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .arrow-list {
+      list-style: none;
+    }
+
+    .arrow-list li {
+      padding: 4px 0 4px 22px;
+      position: relative;
+    }
+
+    .arrow-list li::before {
+      color: var(--gold);
+      content: '▸';
+      left: 0;
+      position: absolute;
+    }
+
+    .arrow-list li.sub {
+      padding-left: 42px;
+    }
+
+    .arrow-list li.sub::before {
+      color: var(--accent2);
+      content: '▸';
+      left: 20px;
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .exam-trap .trap-label {
+      color: var(--accent1);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .quick-recall .recall-label {
+      color: var(--accent2);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: .82rem;
+      width: 100%;
+      min-width: 550px;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 8px 10px;
+      text-align: left;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 7px 10px;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .data-table tr:hover td {
+      background: #252840;
+    }
+
+    .art-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--gold);
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      flex: 1 1 130px;
+      padding: 10px 14px;
+    }
+
+    .stat-box .s-val {
+      color: var(--gold);
+      font-size: .9rem;
+      font-weight: 700;
+      font-family: monospace;
+    }
+
+    .stat-box .s-lbl {
+      color: #8892b0;
+      font-size: .73rem;
+      margin-top: 2px;
+    }
+
+    .info-row {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 10px 0;
+      padding: 10px 14px;
+    }
+
+    .info-row span {
+      font-size: .82rem;
+    }
+
+    .info-row .ik {
+      color: #8892b0;
+      margin-right: 4px;
+    }
+
+    .info-row .iv {
+      color: var(--gold);
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    .two-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .three-col {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+    }
+
+    .mini-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .mini-card .mc-title {
+      font-weight: 700;
+      font-size: .85rem;
+      margin-bottom: 7px;
+    }
+
+    .formula-box {
+      background: #0d1a0d;
+      border: 1px solid #1a3a1a;
+      border-radius: 8px;
+      color: var(--accent3);
+      font-family: monospace;
+      font-size: .9rem;
+      margin: 8px 0;
+      padding: 10px 16px;
+      text-align: center;
+    }
+
+    .law-badge {
+      display: inline-block;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      margin-bottom: 6px;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 600;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 600;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 600;
+    }
+
+    .mono {
+      font-family: monospace;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      color: #555e7a;
+      font-size: .75rem;
+      margin-top: 30px;
+      padding: 12px 20px;
+      text-align: center;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <h1>⚡ Chapter 03 — Laws of Force &amp; Motion</h1>
+    <div class="subtitle">General Science · Physics · BPSC / BSSC Exam Preparation</div>
+  </div>
+
+  <nav class="tab-nav">
+    <button class="active" onclick="switchTab('tab1',this)">💥 Force</button>
+    <button onclick="switchTab('tab2',this)">📜 Newton's Laws</button>
+    <button onclick="switchTab('tab3',this)">🔄 Momentum</button>
+    <button onclick="switchTab('tab4',this)">🧲 Friction</button>
+    <button onclick="switchTab('tab5',this)">🌀 Circular Forces</button>
+    <button onclick="switchTab('tab6',this)">🔧 Torque &amp; Lever</button>
+  </nav>
+
+  <div id="tab1" class="tab-panel active">
+
+    <div class="card">
+      <div class="card-header gold">💥 Force — Introduction</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>External factor required for change in <span class="hl-gold">shape, direction and state of motion</span>
+          </li>
+          <li>Effect: Change in speed/direction/shape (Push, Pull, Hit)</li>
+        </ul>
+        <div class="stat-row" style="margin-top:10px;">
+          <div class="stat-box">
+            <div class="s-val">Newton (N)</div>
+            <div class="s-lbl">SI Unit</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">Dyne</div>
+            <div class="s-lbl">CGS Unit</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">1 N = 10⁵ dyne</div>
+            <div class="s-lbl">Conversion</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📋 Types of Force</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">1. Contact Force</div>
+            <ul class="arrow-list">
+              <li>Requires <span class="hl-gold">physical contact</span></li>
+              <li>e.g. Frictional force, Muscular force</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">2. Non-Contact Force</div>
+            <ul class="arrow-list">
+              <li>No physical contact needed (Field force)</li>
+              <li>e.g. Gravitational force, Magnetic force</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent6)">3. Balanced Force</div>
+            <ul class="arrow-list">
+              <li>Resultant force = <span class="hl-gold">Zero</span></li>
+              <li>Position unchanged, a = 0</li>
+              <li class="mono">Fnet = 200 − 200 = 0 N</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">4. Unbalanced Force</div>
+            <ul class="arrow-list">
+              <li>Resultant force ≠ Zero</li>
+              <li>Position changed, a &gt; 0</li>
+              <li class="mono">Fnet = 400 − 200 = 200 N</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Balanced force → <span class="hl-gold">a = 0</span> (object stays at rest OR moves with constant velocity).
+          Unbalanced → <span class="hl-gold">a ≠ 0</span>. Gravitational force = Non-contact force (no touch required).
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab2" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header green">1️⃣ Newton's First Law — Law of Inertia</div>
+      <div class="card-body">
+        <div class="law-badge">Also known as: Galileo's Law / Law of Inertia</div>
+        <ul class="arrow-list">
+          <li>An object at rest stays at rest; an object in motion stays in motion in a straight line</li>
+          <li><span class="hl-red">Until an external force acts on it</span></li>
+          <li>Gives the definition of <span class="hl-gold">Force</span> and <span class="hl-gold">Inertia</span></li>
+          <li>e.g. Books on shelf, leaves falling, ball on inclined plane</li>
+        </ul>
+        <div class="two-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--gold)">Inertia</div>
+            <ul class="arrow-list">
+              <li>Proportional to <span class="hl-gold">mass</span></li>
+              <li>Types: Rest, Motion and Direction</li>
+              <li>Meaning: Opposes change, maintains stability</li>
+              <li>e.g. Bullet causing a hole in glass (inertia of motion)</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Momentum</div>
+            <ul class="arrow-list">
+              <li>P = <span class="hl-gold">m × v</span></li>
+              <li>Unit: <span class="hl-gold">kg·m/s</span></li>
+              <li>Proportional to mass × velocity</li>
+              <li>Vector quantity</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">2️⃣ Newton's Second Law</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Rate of change of momentum is proportional to applied force</li>
+          <li>F ∝ dp/dt → F = m(dv/dt)</li>
+          <li><span class="hl-gold">F = ma</span></li>
+          <li>The expression of force is derived from 2nd law</li>
+        </ul>
+        <div class="formula-box" style="font-size:1.15rem;">F = ma</div>
+        <div class="card" style="margin-top:12px; border-color:var(--border);">
+          <div class="card-header orange">⚡ Impulse</div>
+          <div class="card-body">
+            <ul class="arrow-list">
+              <li>Impulse = Average force × Time interval</li>
+              <li><span class="hl-gold">I = F × Δt = ΔP</span></li>
+              <li>Unit: <span class="hl-gold">Ns</span></li>
+              <li>Practical examples: Hammer use, Players taking catch</li>
+            </ul>
+            <div class="formula-box">I = F·Δt = m(v−u)</div>
+            <div class="quick-recall">
+              <div class="recall-label">⚡ Worked Example</div>
+              m=10g=0.01kg, u=0, v=10m/s<br />
+              I = 0.01 × (10−0) = <span class="hl-gold">0.1 Ns</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">3️⃣ Newton's Third Law — Action-Reaction Law</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>"Every action has an equal and opposite reaction"</li>
+          <li>F₁ = −F₂ (equal in magnitude, opposite in direction)</li>
+          <li>Action and reaction act on <span class="hl-red">DIFFERENT bodies</span></li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Examples:</span><span class="iv">Rocket launching, Rowing a boat, Swimming, Bouncing a
+              ball, Firing a gun (recoil)</span></span>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          1st Law = <span class="hl-gold">Inertia / Galileo's law</span>. 2nd Law = <span class="hl-gold">F = ma</span>
+          (force defined here). 3rd Law = <span class="hl-gold">Action-Reaction</span>. Action and reaction NEVER cancel
+          each other (they act on different bodies).
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab3" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header purple">🔄 Conservation of Linear Momentum</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>If external force = 0, total linear momentum remains <span class="hl-gold">conserved</span></li>
+          <li>F = dp/dt = 0 → P = constant</li>
+          <li>e.g. Rocket propulsion, Gun recoil, Boat moves back when person jumps</li>
+        </ul>
+        <div class="formula-box">m₁u₁ + m₂u₂ = m₁v₁ + m₂v₂</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🎯 Collision — Worked Example</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>m₁ = 10 kg (moving right at 20 m/s)</li>
+          <li>m₂ = 4 kg (moving left at 20 m/s → u₂ = −20 m/s)</li>
+          <li>Combined mass = 14 kg (perfectly inelastic collision)</li>
+        </ul>
+        <div class="formula-box">
+          m₁u₁ + m₂u₂ = (m₁+m₂)v<br />
+          10(20) + 4(−20) = 14v<br />
+          200 − 80 = 14v<br />
+          v = 120/14 = <span style="color:var(--gold)">8.57 m/s →</span>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall</div>
+          Momentum = <span class="hl-gold">P = mv</span>. Conservation only when external force = 0. Rocket works on
+          conservation of momentum + Newton's 3rd law.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab4" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header orange">🧲 Friction — Introduction</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Force acting along <span class="hl-gold">tangential direction</span> between contact surfaces</li>
+          <li>Opposes <span class="hl-gold">relative motion</span></li>
+          <li>Parallel to contact surfaces</li>
+          <li>Formula: F = μR (μ = coefficient of friction, R = Normal Reaction)</li>
+        </ul>
+        <div class="two-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--gold)">Causes of Friction</div>
+            <ul class="arrow-list">
+              <li>Irregularity of surfaces (rough surface → more friction)</li>
+              <li>Molecular bonds formed at contact points</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent5)">Key Formula</div>
+            <div class="formula-box">F = μR</div>
+            <ul class="arrow-list">
+              <li>μ = coefficient of friction</li>
+              <li>R = Normal reaction</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📋 Types of Friction</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Explanation</th>
+                <th>Formula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">Static Friction</td>
+                <td>Between surface &amp; object BEFORE motion starts</td>
+                <td class="mono">—</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Limiting Friction</td>
+                <td>Maximum value of static friction (just about to move)</td>
+                <td class="mono">Fs = μsR</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Kinetic Friction</td>
+                <td>Between contact surfaces of MOVING objects</td>
+                <td class="mono">Fk = μkR</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Rolling Friction</td>
+                <td>Weak friction when object ROLLS over surface (type of kinetic)</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">Sliding Friction</td>
+                <td>Friction due to SLIDING of object (type of kinetic)</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="info-row" style="margin-top:10px;">
+          <span><span class="ik">Order:</span><span class="iv">Limiting Friction &gt; Static Friction &gt; Sliding
+              Friction &gt; Rolling Friction</span></span>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Rolling friction is the <span class="hl-gold">LEAST</span> among all friction types — that's why wheels are
+          used! Limiting friction = Maximum static friction (object is on the verge of moving).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">⚖️ Advantages vs Disadvantages of Friction</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">✅ Advantages</div>
+            <ul class="arrow-list">
+              <li>Walking and moving on ground</li>
+              <li>Brakes work due to friction</li>
+              <li>Writing on blackboard</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">❌ Disadvantages</div>
+            <ul class="arrow-list">
+              <li>Energy consumption (opposes motion)</li>
+              <li>Decrease in machine efficiency</li>
+              <li>Wear and tear of machine parts</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🔧 Increasing vs Decreasing Friction</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Increasing Friction</div>
+            <ul class="arrow-list">
+              <li>Making grooves in wheels (tyres)</li>
+              <li>Sprinkling sand on snow-covered roads</li>
+              <li>Making soles of shoes rough (hard rubber/leather)</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Decreasing Friction</div>
+            <ul class="arrow-list">
+              <li>Polishing rough surfaces</li>
+              <li>Using <span class="hl-gold">lubricants</span> between surfaces</li>
+              <li>Using materials with low coefficient of friction</li>
+              <li>Using <span class="hl-gold">ball bearings</span> in machines</li>
+              <li>Streamlined motion in fluids</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab5" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header teal">🌀 Centripetal vs Centrifugal Force</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent6)">Centripetal Force</div>
+            <ul class="arrow-list">
+              <li>Acts <span class="hl-gold">towards the centre</span> of circular path</li>
+              <li>Real force</li>
+            </ul>
+            <div class="formula-box">F = mv²/r</div>
+            <ul class="arrow-list" style="margin-top:6px;">
+              <li>Car turning on circular path</li>
+              <li>Electron around nucleus</li>
+              <li>Max speed on circular road: <span class="mono">v_max = √(μsrg)</span></li>
+              <li>Road slope angle: <span class="mono">tan θ = v²/rg</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent1)">Centrifugal Force</div>
+            <ul class="arrow-list">
+              <li>Apparent force acting <span class="hl-red">away from centre</span></li>
+              <li>Pseudo force (not real)</li>
+            </ul>
+            <div class="formula-box">F = mv²/r</div>
+            <ul class="arrow-list" style="margin-top:6px;">
+              <li>Cream extractor from milk</li>
+              <li>Washing machine dryer</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          Centripetal = <span class="hl-gold">towards centre</span> (real force). Centrifugal = <span
+            class="hl-red">away from centre</span> (pseudo/apparent force — nahi hoti actually!). Same magnitude formula
+          but opposite directions.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="tab6" class="tab-panel">
+
+    <div class="card">
+      <div class="card-header gold">🔧 Torque / Moment of Force</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Tendency of force to <span class="hl-gold">rotate an object around a fixed axis</span></li>
+          <li>Vector quantity</li>
+          <li>Unit: <span class="hl-gold">Newton-meter (Nm)</span></li>
+        </ul>
+        <div class="formula-box">τ = r × F = rF sinθ</div>
+        <div class="two-col" style="margin-top:10px;">
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent2)">Couple</div>
+            <ul class="arrow-list">
+              <li>Two equal and opposite parallel forces</li>
+              <li>Moment of couple = Force × Distance between parallel forces</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="color:var(--accent3)">Simple Machine</div>
+            <ul class="arrow-list">
+              <li>Equipment for lifting weights</li>
+              <li>Works on principle of <span class="hl-gold">moment</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🔩 Lever</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Straight, bent, rigid rod</li>
+          <li>Principle: <span class="hl-gold">P × a = W × b</span></li>
+          <li><span class="hl-gold">Mechanical Advantage (MA) = W/P = a/b</span></li>
+        </ul>
+        <div class="info-row">
+          <span><span class="ik">Effort (P):</span><span class="iv">Force applied to lift load</span></span>
+          <span><span class="ik">Fulcrum (F):</span><span class="iv">Free rotation point</span></span>
+          <span><span class="ik">Weight (W):</span><span class="iv">Load to be lifted</span></span>
+        </div>
+        <div class="table-wrap" style="margin-top:10px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Class</th>
+                <th>Position</th>
+                <th>MA</th>
+                <th>Effort Arm vs Load Arm</th>
+                <th>Examples</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl-gold">1st Class</td>
+                <td>Fulcrum between Load &amp; Effort</td>
+                <td>&gt;1, =1, or &lt;1</td>
+                <td>Can be any</td>
+                <td>Scissors, See-saw, Hammer, Pliers, Beam balance</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">2nd Class</td>
+                <td>Load between Fulcrum &amp; Effort</td>
+                <td><span class="hl-green">Always &gt; 1</span></td>
+                <td>a &gt; b</td>
+                <td>Wheelbarrow, Lemon squeezer, Nutcracker, Wheel &amp; axle</td>
+              </tr>
+              <tr>
+                <td class="hl-gold">3rd Class</td>
+                <td>Effort between Fulcrum &amp; Load</td>
+                <td><span class="hl-red">Always &lt; 1</span></td>
+                <td>a &lt; b</td>
+                <td>Tongs, Ladder, Plough</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠ Exam Trap</div>
+          1st class lever = Fulcrum in middle (Scissors, See-saw). 2nd class = Load in middle (Wheelbarrow, Nutcracker).
+          3rd class = Effort in middle (Tongs, Ladder). MA always &gt;1 for 2nd class, always &lt;1 for 3rd class.
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">⚡ Quick Recall — Order Trick</div>
+          <span class="hl-gold">F</span>ulcrum-<span class="hl-gold">L</span>oad-<span class="hl-gold">E</span>ffort
+          order:<br />
+          1st: <span class="hl-gold">F</span>-L-E (Fulcrum middle? No: <span class="hl-gold">L-F-E</span>) → Fulcrum
+          between L&amp;E<br />
+          2nd: L-F-E → Load between (actually F-<span class="hl-gold">L</span>-E)<br />
+          3rd: F-E-L → Effort between (F-<span class="hl-gold">E</span>-L)
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Laws of Force &amp; Motion · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

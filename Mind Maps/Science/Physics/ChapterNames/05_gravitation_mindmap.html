@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 05: Gravitation | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* TAB NAV */
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* TAB CONTENT */
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    /* ARROW LIST */
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    .sub-list {
+      list-style: none;
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .sub-list li {
+      border-bottom: none;
+      padding: 2px 0 2px 18px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .sub-list li::before {
+      content: '◦';
+      position: absolute;
+      left: 0;
+      color: var(--accent2);
+    }
+
+    /* EXAM TRAP */
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    /* QUICK RECALL */
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      width: 100%;
+      min-width: 550px;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 13.5px;
+    }
+
+    .data-table.min-w-auto {
+      min-width: 280px;
+    }
+
+    /* For smaller tables */
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 14px;
+      text-align: left;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .data-table tr:nth-child(even) td {
+      background: var(--surface2);
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    /* ART PILL */
+    .art-pill {
+      display: inline-block;
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+      letter-spacing: .3px;
+    }
+
+    /* STAT BOXES */
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 140px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* INFO ROW */
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 150px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 15px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    /* FORMULA BOX */
+    .formula-box {
+      background: #0d1a10;
+      border: 1px solid var(--accent3);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 12px 0;
+      font-family: 'Courier New', monospace;
+      color: var(--accent3);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .formula-box span {
+      color: var(--text-muted);
+      font-size: 12px;
+      display: block;
+      margin-top: 4px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* TWO COL */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* KEPLER STEP */
+    .kepler-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 10px 0;
+    }
+
+    .kepler-step {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      border-left: 4px solid var(--accent4);
+    }
+
+    .kepler-step .law-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent4);
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .kepler-step .law-name {
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .kepler-step p {
+      font-size: 13.5px;
+      color: var(--text);
+    }
+
+    /* PAGE FOOTER */
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* highlight spans */
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 20px;
+      }
+
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+
+      .tab-content {
+        padding: 20px 14px 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">General Science · Physics</div>
+      <h1>⚡ Chapter 05: Gravitation</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; Newton's Law · Kepler's Laws · Satellites · Escape Velocity</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🌍 Overview</button>
+    <button onclick="switchTab('newton')">🍎 Newton's Law</button>
+    <button onclick="switchTab('g-value')">📉 Value of g</button>
+    <button onclick="switchTab('kepler')">🪐 Kepler's Laws</button>
+    <button onclick="switchTab('satellite')">🛰️ Satellites</button>
+    <button onclick="switchTab('escape')">🚀 Escape Velocity</button>
+    <button onclick="switchTab('masswt')">⚖️ Mass & Weight</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">⭐ Gravitation — At a Glance</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">9.8</div>
+            <div class="stat-lbl">g on Earth (m/s²)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">6.67×10⁻¹¹</div>
+            <div class="stat-lbl">G (Nm²/kg²)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">11.2</div>
+            <div class="stat-lbl">Escape Vel. Earth (km/s)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">8</div>
+            <div class="stat-lbl">Orbital Vel. (km/s)</div>
+          </div>
+        </div>
+        <ul class="arrow-list" style="margin-top:10px;">
+          <li><strong>Gravitation</strong> = Force of attraction between any two bodies in the universe</li>
+          <li>Proponent: <strong>Isaac Newton</strong></li>
+          <li>Universal Gravitational Constant <strong>G</strong> discovered by <strong>Cavendish (1798)</strong></li>
+          <li>Key topics: Newton's Law · g variation · Kepler's Laws · Satellites · Escape Velocity</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card blue-card">
+        <div class="card-header">📌 Key Formulas</div>
+        <div class="card-body">
+          <div class="formula-box">F = G(m₁m₂) / r²<span>Newton's Gravitational Force</span></div>
+          <div class="formula-box">g = GMₑ / Rₑ²<span>Gravitational Acceleration</span></div>
+          <div class="formula-box">Vₒ = √(gR)<span>Orbital Velocity</span></div>
+          <div class="formula-box">Vₑ = √(2gR)<span>Escape Velocity</span></div>
+        </div>
+      </div>
+      <div class="card green-card">
+        <div class="card-header">🗂️ Chapter Topics</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Newton's Universal Law of Gravitation</li>
+            <li>Gravitational Constant (G) vs Acceleration (g)</li>
+            <li>Change in value of g (altitude, depth, latitude)</li>
+            <li>Kepler's 3 Laws of Planetary Motion</li>
+            <li>Mass vs Weight</li>
+            <li>Satellites &amp; Geostationary Orbit</li>
+            <li>Escape Velocity</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-newton" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🍎 Newton's Universal Law of Gravitation</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Every object in the universe attracts every other object with a force that is <strong>directly proportional
+              to the product of their masses</strong> and <strong>inversely proportional to the square of the
+              distance</strong> between them.</p>
+        </div>
+        <div class="formula-box">
+          F ∝ m₁ × m₂ / r²
+          <span>Proportional form</span>
+        </div>
+        <div class="formula-box">
+          F = G × (m₁ × m₂) / r²
+          <span>Full formula with G</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card blue-card">
+        <div class="card-header">🔢 Gravitational Constant (G)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Symbol: <strong>G</strong></li>
+            <li>Value: <strong>6.67 × 10⁻¹¹ Nm²/kg²</strong></li>
+            <li>Discovered by: <strong>Henry Cavendish (1798)</strong></li>
+            <li>Universal constant — same everywhere in universe</li>
+            <li>Does NOT change with location or mass</li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-label">⚠️ Exam Trap</div>
+            <p><strong>G</strong> (Gravitational Constant) ≠ <strong>g</strong> (Gravitational Acceleration). G is
+              universal &amp; fixed; g changes with location.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card green-card">
+        <div class="card-header">📐 Gravitational Acceleration (g)</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Symbol: <strong>g</strong></li>
+            <li>Standard value: <strong>9.8 m/s²</strong> (approx. <strong>10 m/s²</strong>)</li>
+            <li>Formula: <span class="hl-green">g = GMₑ / Rₑ²</span></li>
+            <li>Does <strong>NOT</strong> depend on mass of the falling object</li>
+            <li>Depends on: mass of Earth &amp; distance from centre</li>
+          </ul>
+          <div class="info-row">
+            <div class="info-box">
+              <div class="info-label">Earth</div>
+              <div class="info-val">9.8 m/s²</div>
+            </div>
+            <div class="info-box">
+              <div class="info-label">Moon</div>
+              <div class="info-val">1/6 of Earth</div>
+            </div>
+            <div class="info-box">
+              <div class="info-label">Centre of Earth</div>
+              <div class="info-val">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-g-value" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">📉 Change in Value of g</div>
+      <div class="card-body">
+        <p style="color:var(--text-muted);margin-bottom:12px;">The value of g is NOT constant — it varies with position
+          on/in Earth.</p>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Location</th>
+                <th>g Value</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Poles</td>
+                <td><span class="hl-green">Maximum</span></td>
+                <td>Closer to Earth's centre (Earth is oblate)</td>
+              </tr>
+              <tr>
+                <td>Equator</td>
+                <td><span class="hl-red">Minimum</span></td>
+                <td>Farthest from Earth's centre + rotation effect</td>
+              </tr>
+              <tr>
+                <td>Going Up (altitude)</td>
+                <td><span class="hl-red">Decreases</span></td>
+                <td>Distance from centre increases</td>
+              </tr>
+              <tr>
+                <td>Going Down (depth)</td>
+                <td><span class="hl-red">Decreases</span></td>
+                <td>Effective mass of Earth reduces</td>
+              </tr>
+              <tr>
+                <td>Centre of Earth</td>
+                <td><span class="hl-red">Zero (0)</span></td>
+                <td>Equal pull from all directions</td>
+              </tr>
+              <tr>
+                <td>Moon's Surface</td>
+                <td><span class="hl-orange">1/6 of Earth</span></td>
+                <td>Moon has less mass &amp; radius</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="exam-trap" style="margin:0;">
+        <div class="trap-label">⚠️ Exam Trap — Poles vs Equator</div>
+        <ul class="arrow-list">
+          <li>g is <strong>maximum at poles</strong> — frequently asked!</li>
+          <li>g is <strong>minimum at equator</strong></li>
+          <li>Weight of a body at poles &gt; weight at equator (because W = mg)</li>
+          <li>At centre of Earth, g = 0, so Weight = 0 but Mass ≠ 0</li>
+        </ul>
+      </div>
+      <div class="quick-recall" style="margin:0;">
+        <div class="recall-label">📘 Key Trick</div>
+        <p>g ∝ 1/r² → As distance from centre increases (going up), g decreases.</p>
+        <br />
+        <p>At depth d: g decreases linearly.</p>
+        <br />
+        <p><strong>Moon:</strong> g_moon = g_earth / 6 → Weight on Moon = 1/6 of Earth weight</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-kepler" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">🪐 Kepler's Laws of Planetary Motion</div>
+      <div class="card-body">
+        <p style="color:var(--text-muted);margin-bottom:16px;">Johannes Kepler gave 3 laws describing how planets orbit
+          the Sun.</p>
+        <div class="kepler-steps">
+          <div class="kepler-step">
+            <div class="law-tag">Law 1</div>
+            <div class="law-name">Law of Orbits</div>
+            <p>Every planet moves in an <strong>elliptical orbit</strong> around the Sun, with the Sun at one of the two
+              <strong>foci</strong> of the ellipse.
+            </p>
+          </div>
+          <div class="kepler-step">
+            <div class="law-tag">Law 2</div>
+            <div class="law-name">Law of Areal Speed (Equal Areas)</div>
+            <p>The imaginary line joining the planet to the Sun sweeps <strong>equal areas in equal time
+                intervals</strong>. → Planet moves <strong>faster when closer</strong> to the Sun (perihelion) and
+              <strong>slower when farther</strong> (aphelion).
+            </p>
+          </div>
+          <div class="kepler-step">
+            <div class="law-tag">Law 3</div>
+            <div class="law-name">Law of Period of Revolution (Harmonic Law)</div>
+            <p>The <strong>square of the orbital period (T²)</strong> of a planet is proportional to the <strong>cube of
+                the semi-major axis (a³)</strong> of its orbit.</p>
+            <div class="formula-box" style="margin-top:10px;">T² ∝ a³<span>Kepler's Third Law Formula</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="trap-label">⚠️ Exam Trap — Kepler's Laws</div>
+      <ul class="arrow-list">
+        <li><strong>Law 1 = Orbits</strong> → Elliptical (NOT circular)</li>
+        <li><strong>Law 2 = Areas</strong> → Equal area in equal time → Areal speed is constant</li>
+        <li><strong>Law 3 = Periods</strong> → T² ∝ a³</li>
+        <li>Sun is at <strong>focus</strong> of the ellipse (not centre)</li>
+        <li>Law 2 is a consequence of <strong>Conservation of Angular Momentum</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="tab-satellite" class="tab-content">
+    <div class="card blue-card">
+      <div class="card-header">🛰️ Satellites</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Bodies revolving around a planet are called <strong>satellites</strong>. Moon is a natural satellite of
+            Earth. INSAT, GPS etc. are artificial satellites.</p>
+        </div>
+        <ul class="arrow-list">
+          <li>Orbital Velocity (nearest to Earth's surface): <strong>Vₒ = √(gR)</strong></li>
+          <li>Value: <strong class="hl-green">8 km/s</strong> (approx.)</li>
+          <li>A satellite in orbit is in a state of <strong>free fall</strong></li>
+          <li>Satellite feels <strong>weightlessness</strong> (apparent weight = 0)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card teal-card">
+      <div class="card-header">🌐 Geostationary Satellite</div>
+      <div class="card-body">
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Time Period</div>
+            <div class="info-val">24 Hours</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Height from Surface</div>
+            <div class="info-val">36,000 km</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Direction</div>
+            <div class="info-val">West → East</div>
+          </div>
+        </div>
+        <ul class="arrow-list" style="margin-top:10px;">
+          <li>Appears <strong>stationary</strong> relative to Earth's surface</li>
+          <li>Period = Earth's rotation period = <strong>24 hours</strong></li>
+          <li>Height = <strong>36,000 km</strong> above Earth's surface</li>
+          <li>Rotates in the <strong>equatorial plane</strong></li>
+          <li>Used for: TV broadcast, weather monitoring, communication</li>
+          <li>Examples: INSAT series (India)</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Geostationary vs Polar</div>
+          <ul class="arrow-list">
+            <li><strong>Geostationary</strong> → 36,000 km height, 24 hr period, equatorial orbit</li>
+            <li><strong>Polar satellite</strong> → Low orbit (~500–800 km), passes over poles, used for spy/remote
+              sensing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-escape" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🚀 Escape Velocity</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>The <strong>minimum velocity</strong> with which a body, when thrown upward from Earth's surface, can
+            escape the gravitational field of Earth permanently (without further propulsion).</p>
+        </div>
+        <div class="formula-box">Vₑ = √(2gR)<span>Escape Velocity Formula</span></div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">11.2 km/s</div>
+            <div class="stat-lbl">Escape Vel. — Earth</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">2.35 km/s</div>
+            <div class="stat-lbl">Escape Vel. — Moon</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">√2 × Vₒ</div>
+            <div class="stat-lbl">Vₑ in terms of Vₒ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">🔗 Relation: Escape Velocity vs Orbital Velocity</div>
+      <div class="card-body">
+        <div class="formula-box">Vₑ = √2 × Vₒ<span>Escape Velocity = √2 times Orbital Velocity</span></div>
+        <ul class="arrow-list">
+          <li>Orbital Velocity (Vₒ) = <strong>8 km/s</strong></li>
+          <li>Escape Velocity (Vₑ) = <strong>11.2 km/s</strong> = √2 × 8 ≈ 11.31 km/s</li>
+          <li>If satellite speed increased by <strong>√2 times (~41%)</strong>, it escapes Earth's gravity</li>
+          <li>Moon has lower escape velocity → atmosphere not retained (gases escape)</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap</div>
+          <ul class="arrow-list">
+            <li>Escape velocity does <strong>NOT depend on mass</strong> of the object thrown</li>
+            <li>Escape velocity depends on <strong>mass and radius</strong> of the planet</li>
+            <li>If velocity &lt; 11.2 km/s → object falls back to Earth</li>
+            <li>If velocity = 11.2 km/s → object just escapes Earth</li>
+            <li>If velocity &gt; 11.2 km/s → object leaves with kinetic energy to spare</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-masswt" class="tab-content">
+    <div class="card green-card">
+      <div class="card-header">⚖️ Mass vs Weight</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Mass</th>
+                <th>Weight</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Definition</td>
+                <td>Intrinsic/inherent property of a body (amount of matter)</td>
+                <td>Force of attraction on object towards Earth's centre</td>
+              </tr>
+              <tr>
+                <td>Symbol</td>
+                <td>m</td>
+                <td>W</td>
+              </tr>
+              <tr>
+                <td>Formula</td>
+                <td>—</td>
+                <td>W = mg</td>
+              </tr>
+              <tr>
+                <td>Unit</td>
+                <td>kg (kilogram)</td>
+                <td>Newton (N)</td>
+              </tr>
+              <tr>
+                <td>Type</td>
+                <td>Scalar</td>
+                <td>Vector</td>
+              </tr>
+              <tr>
+                <td>Changes?</td>
+                <td>Never changes</td>
+                <td>Changes with g (location)</td>
+              </tr>
+              <tr>
+                <td>At Earth's centre</td>
+                <td>Same</td>
+                <td>Zero (g=0)</td>
+              </tr>
+              <tr>
+                <td>On Moon</td>
+                <td>Same</td>
+                <td>1/6 of Earth weight</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula-box" style="margin-top:14px;">W = m × g<span>Weight Formula — W in Newtons, m in kg, g in
+            m/s²</span></div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Mass vs Weight</div>
+          <ul class="arrow-list">
+            <li>Mass is same everywhere; Weight changes with location</li>
+            <li>In space (far from all bodies), <strong>weight = 0</strong> but <strong>mass ≠ 0</strong></li>
+            <li>"Weightlessness" means apparent weight is zero — NOT that mass is zero</li>
+            <li>A spring balance measures <strong>Weight</strong>; a beam balance measures <strong>Mass</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Value of <strong>G = 6.67 × 10⁻¹¹ Nm²/kg²</strong> — discovered by <strong>Cavendish (1798)</strong></li>
+          <li>Value of <strong>g = 9.8 m/s²</strong> (use <strong>10 m/s²</strong> for calculations)</li>
+          <li>g is <strong>maximum at poles</strong>, <strong>minimum at equator</strong></li>
+          <li>g = 0 at <strong>centre of Earth</strong></li>
+          <li>g on Moon = <strong>1/6 of Earth's g</strong></li>
+          <li><strong>Escape velocity of Earth = 11.2 km/s</strong></li>
+          <li><strong>Escape velocity of Moon = 2.35 km/s</strong></li>
+          <li><strong>Orbital velocity = 8 km/s</strong></li>
+          <li>Vₑ = <strong>√2 × Vₒ</strong></li>
+          <li>Geostationary satellite → height = <strong>36,000 km</strong>, period = <strong>24 hours</strong></li>
+          <li>Kepler's Law 1 = Ellipse, Law 2 = Equal Areas, Law 3 = T² ∝ a³</li>
+          <li>Weight = 0 at centre of Earth (g=0), but Mass remains same</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">🔢 Important Values Quick Table</div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="data-table min-w-auto">
+              <thead>
+                <tr>
+                  <th>Quantity</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>G</td>
+                  <td>6.67 × 10⁻¹¹ Nm²/kg²</td>
+                </tr>
+                <tr>
+                  <td>g (Earth)</td>
+                  <td>9.8 m/s²</td>
+                </tr>
+                <tr>
+                  <td>g (Moon)</td>
+                  <td>~1.63 m/s² (1/6 of Earth)</td>
+                </tr>
+                <tr>
+                  <td>g (Centre)</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Orbital Velocity</td>
+                  <td>8 km/s</td>
+                </tr>
+                <tr>
+                  <td>Escape Vel. Earth</td>
+                  <td>11.2 km/s</td>
+                </tr>
+                <tr>
+                  <td>Escape Vel. Moon</td>
+                  <td>2.35 km/s</td>
+                </tr>
+                <tr>
+                  <td>Geostationary Ht.</td>
+                  <td>36,000 km</td>
+                </tr>
+                <tr>
+                  <td>Geostationary Period</td>
+                  <td>24 hours</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">📝 Formula Summary</div>
+        <div class="card-body">
+          <div class="formula-box">F = G(m₁m₂)/r²<span>Newton's Gravitational Law</span></div>
+          <div class="formula-box">g = GMₑ/Rₑ²<span>Gravitational Acceleration</span></div>
+          <div class="formula-box">W = mg<span>Weight</span></div>
+          <div class="formula-box">T² ∝ a³<span>Kepler's 3rd Law</span></div>
+          <div class="formula-box">Vₒ = √(gR)<span>Orbital Velocity</span></div>
+          <div class="formula-box">Vₑ = √(2gR) = √2 × Vₒ<span>Escape Velocity</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="trap-label">⚠️ Most Common Exam Traps</div>
+      <ul class="arrow-list">
+        <li>G (universal constant) ≠ g (varies with location)</li>
+        <li>Mass ≠ Weight. Mass never changes; weight changes with g.</li>
+        <li>Kepler's orbits are <strong>elliptical</strong>, NOT circular</li>
+        <li>Escape velocity does NOT depend on mass of the projectile</li>
+        <li>Satellite in orbit → weightless (apparent weight = 0), NOT massless</li>
+        <li>Geostationary satellite period = <strong>24 hrs</strong>, height = <strong>36,000 km</strong> (not 3,600
+          km!)</li>
+        <li>g is maximum at <strong>poles</strong> → NOT at equator</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 05: Gravitation · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

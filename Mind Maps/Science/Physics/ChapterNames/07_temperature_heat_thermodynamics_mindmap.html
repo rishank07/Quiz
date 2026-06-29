@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 07: Temperature, Heat & Thermodynamics | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* TAB NAV */
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* TAB CONTENT */
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    /* ARROW LIST */
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    .sub-list {
+      list-style: none;
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .sub-list li {
+      border-bottom: none;
+      padding: 2px 0 2px 18px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      position: relative;
+    }
+
+    .sub-list li::before {
+      content: '◦';
+      position: absolute;
+      left: 0;
+      color: var(--accent2);
+    }
+
+    /* EXAM TRAP & RECALL */
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      width: 100%;
+      min-width: 550px;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 13.5px;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 14px;
+      text-align: left;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .data-table tr:nth-child(even) td {
+      background: var(--surface2);
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    /* ART PILL & STATS */
+    .art-pill {
+      display: inline-block;
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+      letter-spacing: .3px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 140px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 15px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    /* FORMULAS & GRIDS */
+    .formula-box {
+      background: #0d1a10;
+      border: 1px solid var(--accent3);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      color: var(--accent3);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .formula-box span {
+      color: var(--text-muted);
+      font-size: 12px;
+      display: block;
+      margin-top: 4px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media(max-width:700px) {
+      .three-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--accent2);
+    }
+
+    .type-card.gold-left {
+      border-left-color: var(--gold);
+    }
+
+    .type-card.green-left {
+      border-left-color: var(--accent3);
+    }
+
+    .type-card.blue-left {
+      border-left-color: var(--accent2);
+    }
+
+    .type-card.purple-left {
+      border-left-color: var(--accent4);
+    }
+
+    .type-card.orange-left {
+      border-left-color: var(--accent5);
+    }
+
+    .type-card.red-left {
+      border-left-color: var(--accent1);
+    }
+
+    .type-card.teal-left {
+      border-left-color: var(--accent6);
+    }
+
+    .type-card .type-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .type-card .type-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .type-card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* State change flow */
+    .state-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 14px 0;
+    }
+
+    .state-node {
+      background: var(--surface2);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 14px;
+    }
+
+    .state-arrow {
+      color: var(--text-muted);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .state-label {
+      font-size: 11px;
+      color: var(--accent3);
+      text-align: center;
+    }
+
+    /* Law cards for Thermodynamics */
+    .law-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+
+    .law-card.zeroth {
+      border-left: 4px solid var(--accent6);
+    }
+
+    .law-card.first {
+      border-left: 4px solid var(--accent3);
+    }
+
+    .law-card.second {
+      border-left: 4px solid var(--accent1);
+    }
+
+    .law-card .law-num {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .law-card.zeroth .law-num {
+      color: var(--accent6);
+    }
+
+    .law-card.first .law-num {
+      color: var(--accent3);
+    }
+
+    .law-card.second .law-num {
+      color: var(--accent1);
+    }
+
+    .law-card .law-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    /* Heat transfer columns */
+    .transfer-col {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .transfer-col .t-head {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 10px;
+      text-align: center;
+      padding: 6px;
+      border-radius: 6px;
+    }
+
+    .transfer-col.cond .t-head {
+      background: #2a2000;
+      color: var(--gold);
+    }
+
+    .transfer-col.rad .t-head {
+      background: #1a0f2e;
+      color: var(--accent4);
+    }
+
+    .transfer-col.conv .t-head {
+      background: #0a1e35;
+      color: var(--accent2);
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 20px;
+      }
+
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+
+      .tab-content {
+        padding: 20px 14px 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">General Science · Physics</div>
+      <h1>🌡️ Chapter 07: Temperature, Heat & Thermodynamics</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; Scales · Specific Heat · Expansion · Latent Heat · Heat Transfer ·
+        Thermodynamic Laws</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🔍 Overview</button>
+    <button onclick="switchTab('temperature')">🌡️ Temperature</button>
+    <button onclick="switchTab('thermometers')">🔬 Thermometers</button>
+    <button onclick="switchTab('heat')">🔥 Heat</button>
+    <button onclick="switchTab('expansion')">📏 Expansion</button>
+    <button onclick="switchTab('statechange')">💧 State Change</button>
+    <button onclick="switchTab('transfer')">♨️ Heat Transfer</button>
+    <button onclick="switchTab('thermo')">⚙️ Thermodynamics</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">🌡️ Chapter At a Glance</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">5</div>
+            <div class="stat-lbl">Temperature Scales</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">-273.15°C</div>
+            <div class="stat-lbl">Absolute Zero</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">4.186 J</div>
+            <div class="stat-lbl">Mechanical Equiv. of Heat (per cal)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">3</div>
+            <div class="stat-lbl">Laws of Thermodynamics</div>
+          </div>
+        </div>
+        <ul class="arrow-list" style="margin-top:10px;">
+          <li><strong>Temperature</strong> — measure of hotness/coldness; SI unit = Kelvin; instrument = Thermometer
+          </li>
+          <li><strong>Heat</strong> — form of energy; flows from hot to cold body; SI unit = Joule</li>
+          <li><strong>Thermodynamics</strong> — study of heat and mechanical energy relations; governed by 4 laws
+            (Zeroth to Third)</li>
+          <li>Key concepts: Specific heat · Latent heat · Thermal expansion · State change · Heat transfer (Conduction,
+            Convection, Radiation)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📊 Temperature Scales — Quick Comparison</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Scale</th>
+                <th>Freezing Point</th>
+                <th>Boiling Point</th>
+                <th>No. of Divisions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Celsius</span></td>
+                <td>0°C</td>
+                <td>100°C</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Fahrenheit</span></td>
+                <td>32°F</td>
+                <td>212°F</td>
+                <td>180</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Reaumur</span></td>
+                <td>0°R</td>
+                <td>80°R</td>
+                <td>80</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Kelvin</span></td>
+                <td>273 K</td>
+                <td>373 K</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td><span class="hl-purple">Rankin</span></td>
+                <td>492 Ra</td>
+                <td>672 Ra</td>
+                <td>180</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-temperature" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🌡️ Temperature — Basics</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Measure of <strong>hotness and coldness</strong> of a substance</li>
+          <li>Measuring instrument: <strong>Thermometer</strong></li>
+          <li>SI Unit: <strong>Kelvin (K)</strong></li>
+          <li>Cause of energy (heat) transfer between bodies</li>
+          <li>Heat always flows from <strong>Hot → Cold</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">🔗 Relation Between Temperature Scales</div>
+      <div class="card-body">
+        <div class="formula-box">(C − 0)/100 = (F − 32)/180 = (R − 0)/80 = (K − 273)/100 = (Ra − 492)/180<span>Universal
+            Temperature Conversion Formula</span></div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Solved Example</div>
+          <p>Express 60°F in Kelvin:<br />
+            (F−32)/180 = (K−273)/100<br />
+            (60−32)/180 = (K−273)/100<br />
+            28/180 = (K−273)/100 → <strong>K = 288.5 K</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">⭐ Important Temperature Facts</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fact</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Absolute Zero Temperature</td>
+                <td><span class="hl-red">−273.15°C</span></td>
+              </tr>
+              <tr>
+                <td>Same value on Celsius &amp; Fahrenheit</td>
+                <td><span class="hl-gold">−40°C = −40°F</span></td>
+              </tr>
+              <tr>
+                <td>Same value on Fahrenheit &amp; Kelvin</td>
+                <td><span class="hl-green">574.25°F = 574.25 K</span></td>
+              </tr>
+              <tr>
+                <td>Same value on Fahrenheit &amp; Reaumur</td>
+                <td><span class="hl-blue">−25.6°F = −25.6°R</span></td>
+              </tr>
+              <tr>
+                <td>Human Body Temperature</td>
+                <td><span class="hl-orange">310.5 K = 37°C = 98.4°F</span></td>
+              </tr>
+              <tr>
+                <td>Triple Point of Water</td>
+                <td><span class="hl-teal">273.16 K</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Equal Values</div>
+          <ul class="arrow-list">
+            <li><strong>−40°C = −40°F</strong> — only point where Celsius and Fahrenheit are equal</li>
+            <li>Human body temp: <strong>37°C = 98.4°F = 310.5 K</strong> — all three must be memorized</li>
+            <li>Absolute zero = <strong>−273.15°C = 0 K</strong> — lowest possible temperature</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-thermometers" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">🔬 Types of Thermometers & Temperature Ranges</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Thermometer Type</th>
+                <th>Temperature Range</th>
+                <th>Special Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Gas (Nitrogen)</td>
+                <td>500°C to 1500°C</td>
+                <td>Very high temperatures</td>
+              </tr>
+              <tr>
+                <td>Platinum</td>
+                <td>−200°C to 1000°C</td>
+                <td>Wide range, precision</td>
+              </tr>
+              <tr>
+                <td>Thermocouple</td>
+                <td><span class="hl-green">−200°C to 1600°C</span></td>
+                <td>Widest range among all</td>
+              </tr>
+              <tr>
+                <td>Total Radiation</td>
+                <td>Above 800°C</td>
+                <td>Very high temp (no contact)</td>
+              </tr>
+              <tr>
+                <td>Alcohol</td>
+                <td><span class="hl-blue">Below −40°C</span> (freezing pt −115°C)</td>
+                <td>Very low temperatures</td>
+              </tr>
+              <tr>
+                <td>Clinical</td>
+                <td><span class="hl-gold">35°C to 42°C</span></td>
+                <td>Human body temperature</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Thermometer Selection</div>
+          <ul class="arrow-list">
+            <li><strong>Clinical thermometer</strong> range = 35°C to 42°C (only for body temperature)</li>
+            <li><strong>Thermocouple</strong> has the widest range: −200°C to 1600°C</li>
+            <li><strong>Alcohol</strong> thermometer is used for very low temperatures (NOT mercury — mercury freezes at
+              −39°C)</li>
+            <li><strong>Total Radiation</strong> thermometer = no physical contact needed (pyrometer)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-heat" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🔥 Heat — Basics</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Heat is a <strong>form of energy</strong></li>
+          <li>Transfer occurs due to <strong>temperature difference</strong></li>
+          <li>Flows from <strong>hotter body → colder body</strong></li>
+          <li>Mechanical equivalent of heat: <strong>J = W/Q = 4.186 J/cal</strong></li>
+        </ul>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">SI Unit</div>
+            <div class="info-val">Joule (J)</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">CGS Unit</div>
+            <div class="info-val">Calorie (cal)</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">British Unit</div>
+            <div class="info-val">BTU (1 BTU = 252 cal)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card green-card">
+      <div class="card-header">💧 Specific Heat (s)</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Heat required to raise the temperature of <strong>unit mass</strong> of a substance by
+            <strong>1°C</strong>.
+          </p>
+        </div>
+        <div class="formula-box">s = Q / (mΔT)<span>s = specific heat | Q = heat | m = mass | ΔT = temp change</span>
+        </div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">SI Unit</div>
+            <div class="info-val">J/kg°C</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">CGS Unit</div>
+            <div class="info-val">cal/g°C</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Water's s</div>
+            <div class="info-val">4186 J/kg°C</div>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Water has Highest Specific Heat (1 cal/g°C)</div>
+          <ul class="arrow-list">
+            <li>Hot water bottle used to foment patients</li>
+            <li>Farmers fill fields with water to protect crops from frost</li>
+            <li>Water used in radiators to cool vehicle engines</li>
+          </ul>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Solved Example</div>
+          <p>Heat to raise 2 kg metal from 30°C to 100°C (s = 300 J/kg°C):<br />
+            Q = m × s × ΔT = 2 × 300 × 70 = <strong>4.2 × 10⁴ J</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card teal-card">
+      <div class="card-header">⚖️ Latent Heat (L)</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Heat required for a <strong>change of state</strong> (no temperature change during state change).</p>
+        </div>
+        <div class="formula-box">L = Q / m<span>Unit: J/kg (SI) | cal/g (CGS)</span></div>
+        <div class="table-wrap">
+          <table class="data-table" style="margin-top:10px;">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Change</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Latent Heat of Fusion</td>
+                <td>Solid → Liquid</td>
+                <td><span class="hl-gold">80 cal/g</span></td>
+              </tr>
+              <tr>
+                <td>Latent Heat of Vaporisation</td>
+                <td>Liquid → Gas</td>
+                <td><span class="hl-red">539 cal/g</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Latent Heat</div>
+          <ul class="arrow-list">
+            <li>During state change, <strong>temperature does NOT change</strong> — only latent heat is
+              absorbed/released</li>
+            <li>Latent heat of vaporisation (539 cal/g) &gt;&gt; fusion (80 cal/g) — steam burns are worse than hot
+              water burns!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">⚖️ Principle of Calorimetry</div>
+      <div class="card-body">
+        <div class="formula-box">Heat Lost by Hot Object = Heat Gained by Cold Object<span>Conservation of thermal
+            energy in an isolated system</span></div>
+        <ul class="arrow-list">
+          <li>Used in <strong>calorimeter</strong> experiments</li>
+          <li>Assumes no heat loss to surroundings (isolated system)</li>
+          <li>Basis for finding unknown specific heats</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-expansion" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">📏 Thermal Expansion</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Expansion of substances on absorbing heat. All substances (except water 0–4°C) expand on heating.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gold-card">
+      <div class="card-header">🧱 Expansion in Solids</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Coefficient</th>
+                <th>Symbol</th>
+                <th>Formula</th>
+                <th>Expansion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Linear Expansion</td>
+                <td><span class="hl-gold">α</span></td>
+                <td>ΔL / LΔt</td>
+                <td>In Length</td>
+              </tr>
+              <tr>
+                <td>Area (Superficial) Expansion</td>
+                <td><span class="hl-green">β</span></td>
+                <td>ΔA / AΔt</td>
+                <td>In Area</td>
+              </tr>
+              <tr>
+                <td>Volumetric Expansion</td>
+                <td><span class="hl-blue">γ</span></td>
+                <td>ΔV / VΔt</td>
+                <td>In Volume</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula-box">α : β : γ = 1 : 2 : 3<span>Relation between coefficients of expansion | Unit: per
+            °C</span></div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Application</div>
+          <p>Gap left between railway tracks to allow for <strong>summer expansion</strong> — prevents buckling.</p>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — α:β:γ = 1:2:3</div>
+          <p>β = 2α and γ = 3α. If α is given, you can find the others. This ratio is asked very frequently!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card blue-card">
+        <div class="card-header">💧 Anomalous Behaviour of Water</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Water contracts (volume ↓) from <strong>0°C to 4°C</strong></li>
+            <li>Water expands (volume ↑) above <strong>4°C</strong></li>
+            <li>Volume is <strong>minimum at 4°C</strong></li>
+            <li>Density is <strong>maximum at 4°C</strong></li>
+          </ul>
+          <div class="exam-trap">
+            <div class="trap-label">⚠️ Exam Trap</div>
+            <p>In cold regions, fishes survive even when pond surface freezes — because water at 4°C (bottom) is densest
+              and remains liquid.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card green-card">
+        <div class="card-header">💨 Expansion in Gases</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Gases have the <strong>highest volume expansion</strong></li>
+            <li>Coefficient of volumetric expansion for ideal gas:<br /><strong>γp = γv = 1/273.15 per °C</strong></li>
+            <li>All ideal gases have the <strong>same</strong> coefficient of expansion</li>
+          </ul>
+          <div class="quick-recall">
+            <div class="recall-label">📘 Key Point</div>
+            <p>Gas expands much more than solids or liquids for the same temperature rise. Gases &gt; Liquids &gt;
+              Solids in expansion.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-statechange" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">💧 Changes of State</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Process</th>
+                <th>Transition</th>
+                <th>Heat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Melting</span></td>
+                <td>Solid → Liquid</td>
+                <td>Absorbed</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Freezing</span></td>
+                <td>Liquid → Solid</td>
+                <td>Released</td>
+              </tr>
+              <tr>
+                <td><span class="hl-red">Boiling / Evaporation</span></td>
+                <td>Liquid → Gas</td>
+                <td>Absorbed</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Condensation / Liquefaction</span></td>
+                <td>Gas → Liquid</td>
+                <td>Released</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Sublimation</span></td>
+                <td>Solid → Gas</td>
+                <td>Absorbed</td>
+              </tr>
+              <tr>
+                <td><span class="hl-teal">Deposition</span></td>
+                <td>Gas → Solid</td>
+                <td>Released</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="quick-recall" style="margin-top:12px;">
+          <div class="recall-label">📘 Examples of Sublimation</div>
+          <p>Dry ice (CO₂), Camphor (Kapoor), Naphthalene balls, Iodine — all sublime directly from solid to gas.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">🔑 Important Definitions</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><strong>Melting Point</strong> — constant temperature at which solid changes to liquid</li>
+          <li><strong>Boiling Point</strong> — constant temperature at which liquid changes to vapour</li>
+          <li><strong>Freezing Point</strong> — constant temperature at which liquid changes to solid</li>
+          <li><strong>Sublimation Point</strong> — constant temperature at which solid changes directly to gas</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card red-card">
+      <div class="card-header">⚡ Effects of Pressure & Impurity</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Effect on Melting Point</th>
+                <th>Effect on Boiling Point</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Increase Pressure</td>
+                <td><span class="hl-red">Decreases</span> (for ice)</td>
+                <td><span class="hl-green">Increases</span></td>
+              </tr>
+              <tr>
+                <td>Decrease Pressure</td>
+                <td>Increases</td>
+                <td><span class="hl-red">Decreases</span></td>
+              </tr>
+              <tr>
+                <td>Add Impurity</td>
+                <td>Decreases</td>
+                <td><span class="hl-green">Increases</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Pressure Effects</div>
+          <ul class="arrow-list">
+            <li>Pressure ↑ → Boiling point ↑ → <strong>Pressure cooker</strong> works on this principle</li>
+            <li>Pressure ↓ (at altitude) → Boiling point ↓ → Food cooks slower on mountains</li>
+            <li>Pressure ↑ → Melting point of <strong>ice decreases</strong> (ice skating works on this!)</li>
+            <li>Adding salt to ice/water → lowers freezing point (used in ice cream making)</li>
+          </ul>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Triple Point of Water</div>
+          <p>All three states (solid, liquid, gas) coexist in equilibrium at <strong>273.16 K</strong>. This is a unique
+            fixed point used to define the Kelvin scale.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-transfer" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">♨️ Methods of Heat Transfer</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="transfer-col cond">
+            <div class="t-head">🔩 Conduction</div>
+            <ul class="arrow-list">
+              <li>Heat transfer by <strong>direct contact</strong></li>
+              <li>Occurs in <strong>solids</strong> (and mercury)</li>
+              <li>Slow process</li>
+              <li>No movement of particles</li>
+            </ul>
+            <div style="margin-top:10px;font-size:12.5px;color:var(--text-muted);">
+              <strong style="color:var(--gold);">Examples:</strong><br />
+              Cooking on gas stove · Hot handle of a pan · Soldering iron
+            </div>
+          </div>
+          <div class="transfer-col rad">
+            <div class="t-head">☀️ Radiation</div>
+            <ul class="arrow-list">
+              <li>Transfer via <strong>electromagnetic waves</strong></li>
+              <li><strong>No medium</strong> required (works in vacuum)</li>
+              <li>Source: <strong>Sun</strong></li>
+              <li>Fastest method of heat transfer</li>
+            </ul>
+            <div style="margin-top:10px;font-size:12.5px;color:var(--text-muted);">
+              <strong style="color:var(--accent4);">Examples:</strong><br />
+              Sunlight · UV rays · Wi-Fi signals · Remote control · Infrared heaters
+            </div>
+          </div>
+          <div class="transfer-col conv">
+            <div class="t-head">🌊 Convection</div>
+            <ul class="arrow-list">
+              <li>Transfer by <strong>movement of particles</strong></li>
+              <li>Occurs in <strong>gases and liquids</strong></li>
+              <li>Requires a medium</li>
+              <li>Bulk motion of fluid</li>
+            </ul>
+            <div style="margin-top:10px;font-size:12.5px;color:var(--text-muted);">
+              <strong style="color:var(--accent2);">Examples:</strong><br />
+              Sea breeze · Land breeze · Hot water circulation · Radiators · Desert temp. variation
+            </div>
+          </div>
+        </div>
+        <div class="exam-trap" style="margin-top:16px;">
+          <div class="trap-label">⚠️ Exam Trap — Heat Transfer</div>
+          <ul class="arrow-list">
+            <li><strong>Radiation</strong> is the only method that works in <strong>vacuum</strong> (e.g., heat from Sun
+              reaches Earth)</li>
+            <li><strong>Conduction</strong> = solids; <strong>Convection</strong> = fluids (liquids &amp; gases);
+              <strong>Radiation</strong> = no medium needed
+            </li>
+            <li>Sea breeze &amp; land breeze = <strong>Convection</strong> (NOT radiation)</li>
+            <li>Thermos flask prevents all 3 types: silvered walls (radiation) + vacuum (conduction/convection)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-thermo" class="tab-content">
+    <div class="card blue-card">
+      <div class="card-header">⚙️ Thermodynamics — Basics</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Study of <strong>heat and mechanical energy relations</strong></li>
+          <li>Thermodynamic System → a system with definite <strong>pressure, volume, temperature</strong></li>
+          <li>Made up of molecules and atoms</li>
+        </ul>
+        <div class="formula-box">PV = μRT<span>Ideal Gas Equation | P=pressure, V=volume, μ=moles, R=gas constant,
+            T=temperature</span></div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">📜 Laws of Thermodynamics</div>
+      <div class="card-body">
+        <div class="law-card zeroth">
+          <div class="law-num">Zeroth Law</div>
+          <div class="law-name">Thermal Equilibrium</div>
+          <ul class="arrow-list">
+            <li>Proposed by: <strong>Fowler (1931)</strong></li>
+            <li>If A is in thermal equilibrium with C, and B is in thermal equilibrium with C → then A and B are also in
+              thermal equilibrium with each other</li>
+            <li>Mathematically: If T_A = T_C and T_B = T_C → then <strong>T_A = T_B</strong></li>
+            <li>Basis of thermometry (concept of temperature measurement)</li>
+          </ul>
+        </div>
+        <div class="law-card first">
+          <div class="law-num">First Law</div>
+          <div class="law-name">Conservation of Energy</div>
+          <ul class="arrow-list">
+            <li>Heat given to a system (ΔQ) = Increase in internal energy (ΔU) + Work done by system (ΔW)</li>
+            <li>Based on: <strong>Law of Conservation of Energy</strong></li>
+          </ul>
+          <div class="formula-box" style="margin-top:10px;">ΔQ = ΔU + ΔW<span>First Law of Thermodynamics</span></div>
+        </div>
+        <div class="law-card second">
+          <div class="law-num">Second Law</div>
+          <div class="law-name">Limits of Heat Conversion</div>
+          <ul class="arrow-list">
+            <li><strong>Complete</strong> conversion of heat into mechanical energy is <strong>impossible</strong></li>
+            <li><strong>Kelvin-Planck Statement:</strong> Complete conversion of heat into work is impossible</li>
+            <li><strong>Clausius Statement:</strong> Heat cannot flow spontaneously from cold to hot body without an
+              external energy source</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="trap-label">⚠️ Exam Trap — Thermodynamic Laws</div>
+      <ul class="arrow-list">
+        <li><strong>Zeroth Law</strong> = Thermal equilibrium concept; proposed by <strong>Fowler</strong> (1931) —
+          named "zeroth" as it was added later but is most fundamental</li>
+        <li><strong>First Law</strong> = Energy conservation: ΔQ = ΔU + ΔW</li>
+        <li><strong>Second Law</strong> = No 100% efficient heat engine is possible</li>
+        <li><strong>Refrigerator/AC</strong> moves heat from cold to hot — needs external work (proves Clausius
+          statement)</li>
+        <li>Ideal gas equation: PV = μRT (not PV = nRT confusion — μ = number of moles)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>SI unit of temperature = <strong>Kelvin</strong>; Heat = <strong>Joule</strong></li>
+          <li>Heat flows from <strong>hot → cold</strong></li>
+          <li>Absolute zero = <strong>−273.15°C = 0 K</strong></li>
+          <li>Human body temp = <strong>37°C = 98.4°F = 310.5 K</strong></li>
+          <li><strong>−40°C = −40°F</strong> (only equal point of C and F scales)</li>
+          <li>Specific heat of water is highest: <strong>4186 J/kg°C = 1 cal/g°C</strong></li>
+          <li>Latent heat of fusion = <strong>80 cal/g</strong>; vaporisation = <strong>539 cal/g</strong></li>
+          <li>α : β : γ = <strong>1 : 2 : 3</strong> for thermal expansion coefficients</li>
+          <li>Water density is <strong>maximum at 4°C</strong>; anomalous expansion 0–4°C</li>
+          <li>Triple point of water = <strong>273.16 K</strong></li>
+          <li>Pressure ↑ → Boiling point ↑, Melting point of ice ↓</li>
+          <li>Impurity added → Boiling point ↑, Melting point ↓</li>
+          <li>Conduction → solids; Convection → fluids; Radiation → no medium (vacuum)</li>
+          <li>Zeroth Law proposed by <strong>Fowler (1931)</strong></li>
+          <li>First Law: <strong>ΔQ = ΔU + ΔW</strong> (energy conservation)</li>
+          <li>Second Law: Complete conversion of heat to work is <strong>impossible</strong></li>
+          <li>Mechanical equivalent of heat: <strong>1 cal = 4.186 J</strong></li>
+          <li>Thermocouple thermometer has widest range: <strong>−200°C to 1600°C</strong></li>
+          <li>Clinical thermometer range: <strong>35°C to 42°C</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">📋 Formula Quick Reference</div>
+        <div class="card-body">
+          <div class="formula-box">(C/100) = (F−32)/180 = (K−273)/100<span>Temperature Scale Conversion</span></div>
+          <div class="formula-box">Q = msΔT<span>Heat (Specific Heat)</span></div>
+          <div class="formula-box">L = Q/m<span>Latent Heat</span></div>
+          <div class="formula-box">α : β : γ = 1 : 2 : 3<span>Thermal Expansion Coefficients</span></div>
+          <div class="formula-box">ΔQ = ΔU + ΔW<span>First Law of Thermodynamics</span></div>
+          <div class="formula-box">PV = μRT<span>Ideal Gas Equation</span></div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">⚠️ Most Common Exam Traps</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>During state change, <strong>temperature does NOT change</strong></li>
+            <li>Latent heat of steam (539) &gt;&gt; ice (80) — steam burns are worse</li>
+            <li>Radiation works in <strong>vacuum</strong> — Sun's heat reaches Earth via radiation</li>
+            <li>Sea breeze &amp; land breeze = <strong>Convection</strong></li>
+            <li>Water is <strong>densest at 4°C</strong>, not at 0°C</li>
+            <li>Ice floats because its density is LESS than water</li>
+            <li>Zeroth Law = <strong>Fowler</strong>; NOT Newton or Kelvin</li>
+            <li>Pressure cooker: pressure ↑ → boiling point ↑ → faster cooking</li>
+            <li><strong>BTU</strong> = 252 cal (British thermal unit — not 1000 cal!)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 07: Temperature, Heat & Thermodynamics · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 12: Semiconductor | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 22px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: 13.5px;
+      width: 100%;
+      min-width: 550px;
+      margin: 10px 0;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .data-table tr:nth-child(even) td {
+      background: var(--surface2);
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 140px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 15px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+
+    .type-card.gold-left {
+      border-left: 4px solid var(--gold);
+    }
+
+    .type-card.green-left {
+      border-left: 4px solid var(--accent3);
+    }
+
+    .type-card.blue-left {
+      border-left: 4px solid var(--accent2);
+    }
+
+    .type-card.purple-left {
+      border-left: 4px solid var(--accent4);
+    }
+
+    .type-card.orange-left {
+      border-left: 4px solid var(--accent5);
+    }
+
+    .type-card.red-left {
+      border-left: 4px solid var(--accent1);
+    }
+
+    .type-card.teal-left {
+      border-left: 4px solid var(--accent6);
+    }
+
+    .type-card .type-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .type-card .type-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .type-card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* conductivity band */
+    .cond-band {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 44px;
+      margin: 14px 0;
+    }
+
+    .cb-seg {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    /* app card grid */
+    .app-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 12px 0;
+    }
+
+    @media(max-width:600px) {
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .app-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .app-card .ac-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .app-card .ac-name {
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .app-card .ac-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .app-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 20px;
+      }
+
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+
+      .tab-content {
+        padding: 20px 14px 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">General Science · Physics</div>
+      <h1>💻 Chapter 12: Semiconductor</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; Intrinsic · Extrinsic · n-Type · p-Type · Diodes · LED · Solar
+        Cell</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🔍 Overview</button>
+    <button onclick="switchTab('types')">🧪 Types</button>
+    <button onclick="switchTab('doping')">⚗️ Doping</button>
+    <button onclick="switchTab('applications')">📱 Applications</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">💻 Semiconductor — At a Glance</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Solid substances whose electrical conductivity is <strong>less than conductors</strong> but <strong>more
+              than insulators</strong>. Conductivity increases with temperature.</p>
+        </div>
+        <div class="cond-band">
+          <div class="cb-seg" style="background:#1a0909;color:var(--accent1);flex:2;">🚫 Insulator<br /><span
+              style="font-size:10px;font-weight:400;">Rubber, Glass</span></div>
+          <div class="cb-seg" style="background:#2a1800;color:var(--gold);border:2px solid var(--gold);">⚙️
+            Semiconductor<br /><span style="font-size:10px;font-weight:400;">Si, Ge</span></div>
+          <div class="cb-seg" style="background:#0b2a1a;color:var(--accent3);flex:2;">✅ Conductor<br /><span
+              style="font-size:10px;font-weight:400;">Cu, Ag, Al</span></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">Si & Ge</div>
+            <div class="stat-lbl">Pure Semiconductors</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Doping</div>
+            <div class="stat-lbl">Process to Make Extrinsic</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">n & p</div>
+            <div class="stat-lbl">Types of Extrinsic SC</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">4</div>
+            <div class="stat-lbl">Key Semiconductor Devices</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📊 Semiconductor vs Conductor vs Insulator</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Conductor</th>
+                <th>Semiconductor</th>
+                <th>Insulator</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Conductivity</td>
+                <td><span class="hl-green">High</span></td>
+                <td><span class="hl-gold">Medium</span></td>
+                <td><span class="hl-red">Very Low</span></td>
+              </tr>
+              <tr>
+                <td>Band Gap</td>
+                <td>Zero (overlap)</td>
+                <td>Small (~1 eV)</td>
+                <td>Large (&gt;5 eV)</td>
+              </tr>
+              <tr>
+                <td>Temp Effect</td>
+                <td>Resistance ↑</td>
+                <td>Resistance ↓</td>
+                <td>Minimal change</td>
+              </tr>
+              <tr>
+                <td>Examples</td>
+                <td>Ag, Cu, Au, Al</td>
+                <td>Si, Ge</td>
+                <td>Glass, Rubber, Diamond</td>
+              </tr>
+              <tr>
+                <td>Current Carriers</td>
+                <td>Free electrons</td>
+                <td>Electrons &amp; Holes</td>
+                <td>None</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Temperature Effect</div>
+          <ul class="arrow-list">
+            <li>Semiconductors: Conductivity <strong>increases</strong> with temperature (resistance ↓)</li>
+            <li>Conductors: Conductivity <strong>decreases</strong> with temperature (resistance ↑)</li>
+            <li>This is the <strong>opposite</strong> behaviour — most asked trap!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== TYPES ===================== -->
+  <div id="tab-types" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🧪 Types of Semiconductors</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card gold-left">
+            <div class="type-tag">Type 1</div>
+            <div class="type-name">Intrinsic (Pure) Semiconductor</div>
+            <ul class="arrow-list">
+              <li><strong>No impurity</strong> added</li>
+              <li>Conductivity depends on <strong>temperature</strong></li>
+              <li>Obtained in <strong>pure form</strong> in nature</li>
+              <li>Substances: <strong>Germanium (Ge)</strong> and <strong>Silicon (Si)</strong></li>
+              <li>At room temp: very few free electrons &amp; holes</li>
+              <li>Equal number of electrons and holes</li>
+            </ul>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Type 2</div>
+            <div class="type-name">Extrinsic (Impure) Semiconductor</div>
+            <ul class="arrow-list">
+              <li><strong>Impurities added</strong> to increase conductivity</li>
+              <li>Process of adding impurity = <strong>Doping</strong></li>
+              <li>Added impurities = <strong>Dopants</strong></li>
+              <li>Two types: <strong>n-Type</strong> and <strong>p-Type</strong></li>
+              <li>Much higher conductivity than intrinsic</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Intrinsic SC</div>
+          <ul class="arrow-list">
+            <li>Only <strong>Silicon (Si)</strong> and <strong>Germanium (Ge)</strong> are intrinsic semiconductors
+              (most asked)</li>
+            <li>Carbon (diamond form) is an <strong>insulator</strong>, NOT a semiconductor</li>
+            <li>At absolute zero (0 K), intrinsic semiconductor behaves like a perfect <strong>insulator</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== DOPING ===================== -->
+  <div id="tab-doping" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">⚗️ Doping — n-Type & p-Type</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Doping</div>
+          <p>Adding a small amount of trivalent or pentavalent impurity to an intrinsic semiconductor to increase its
+            conductivity. The added substance is called a <strong>dopant</strong>.</p>
+        </div>
+        <div class="two-col">
+          <div class="type-card blue-left">
+            <div class="type-tag">n-Type Semiconductor</div>
+            <div class="type-name">Negative carriers (Electrons)</div>
+            <ul class="arrow-list">
+              <li>Impurity added: <strong>Pentavalent</strong> (5 valence electrons)</li>
+              <li>Dopants: <strong>Arsenic (As), Antimony (Sb), Phosphorus (P)</strong></li>
+              <li>Current flow by: <strong>Electrons</strong> (majority carriers)</li>
+              <li>Holes = minority carriers</li>
+              <li>Extra electron from dopant becomes free</li>
+            </ul>
+            <div style="margin-top:10px;padding:8px;background:var(--surface);border-radius:6px;text-align:center;">
+              <span class="hl-blue">5 valence electrons → 4 bonds + 1 free electron</span>
+            </div>
+          </div>
+          <div class="type-card orange-left">
+            <div class="type-tag">p-Type Semiconductor</div>
+            <div class="type-name">Positive carriers (Holes)</div>
+            <ul class="arrow-list">
+              <li>Impurity added: <strong>Trivalent</strong> (3 valence electrons)</li>
+              <li>Dopants: <strong>Aluminium (Al), Boron (B), Gallium (Ga), Indium (In)</strong></li>
+              <li>Current flow by: <strong>Holes</strong> (majority carriers)</li>
+              <li>Electrons = minority carriers</li>
+              <li>Missing electron creates a "hole"</li>
+            </ul>
+            <div style="margin-top:10px;padding:8px;background:var(--surface);border-radius:6px;text-align:center;">
+              <span class="hl-orange">3 valence electrons → 4 bonds − 1 = 1 hole created</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">📊 n-Type vs p-Type — Quick Comparison</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>n-Type</th>
+                <th>p-Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dopant valency</td>
+                <td><span class="hl-blue">Pentavalent (5)</span></td>
+                <td><span class="hl-orange">Trivalent (3)</span></td>
+              </tr>
+              <tr>
+                <td>Dopant examples</td>
+                <td>As, Sb, P</td>
+                <td>Al, B, Ga, In</td>
+              </tr>
+              <tr>
+                <td>Majority carriers</td>
+                <td><span class="hl-blue">Electrons (−)</span></td>
+                <td><span class="hl-orange">Holes (+)</span></td>
+              </tr>
+              <tr>
+                <td>Minority carriers</td>
+                <td>Holes</td>
+                <td>Electrons</td>
+              </tr>
+              <tr>
+                <td>"n" stands for</td>
+                <td>Negative (electrons)</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>"p" stands for</td>
+                <td>—</td>
+                <td>Positive (holes)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Doping</div>
+          <ul class="arrow-list">
+            <li><strong>n-type</strong> → Pentavalent (5) dopant → extra <strong>electron</strong> → current by
+              electrons</li>
+            <li><strong>p-type</strong> → Trivalent (3) dopant → <strong>hole</strong> created → current by holes</li>
+            <li>Aluminium dopant → <strong>p-type</strong> (NOT n-type, even though Al is a conductor)</li>
+            <li>Phosphorus dopant → <strong>n-type</strong></li>
+            <li>Overall, both n-type and p-type are <strong>electrically neutral</strong> (no net charge)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== APPLICATIONS ===================== -->
+  <div id="tab-applications" class="tab-content">
+    <div class="card teal-card">
+      <div class="card-header">📱 Semiconductor Devices — Applications</div>
+      <div class="card-body">
+        <div class="app-grid">
+          <div class="app-card" style="border-left:4px solid var(--accent2);">
+            <div class="ac-icon">📷</div>
+            <div class="ac-name">Photodiode</div>
+            <div class="ac-tag" style="color:var(--accent2);">Optical Detection</div>
+            <ul class="arrow-list">
+              <li>Flow of <strong>optical signals</strong></li>
+              <li>Principle: <strong>Photoelectric effect</strong></li>
+              <li>Uses: Detecting intensity of optical signals in light-operated keys</li>
+            </ul>
+          </div>
+          <div class="app-card" style="border-left:4px solid var(--accent1);">
+            <div class="ac-icon">⚡</div>
+            <div class="ac-name">Zener Diode</div>
+            <div class="ac-tag" style="color:var(--accent1);">Voltage Regulation</div>
+            <ul class="arrow-list">
+              <li>Designed for <strong>reverse bias</strong> in breakdown region</li>
+              <li>Use: <strong>Voltage control / regulation</strong></li>
+              <li>Maintains constant voltage across load</li>
+            </ul>
+          </div>
+          <div class="app-card" style="border-left:4px solid var(--gold);">
+            <div class="ac-icon">💡</div>
+            <div class="ac-name">LED</div>
+            <div class="ac-tag" style="color:var(--gold);">Light Emitting Diode</div>
+            <ul class="arrow-list">
+              <li>Converts <strong>electrical energy → radiant (light) energy</strong></li>
+              <li>Principle: <strong>Electroluminescence</strong></li>
+              <li>Inventor: <strong>Nick Holonyak</strong></li>
+              <li>Uses: Remote control, burglar alarm, optical communication</li>
+            </ul>
+          </div>
+          <div class="app-card" style="border-left:4px solid var(--accent3);">
+            <div class="ac-icon">☀️</div>
+            <div class="ac-name">Solar Cell</div>
+            <div class="ac-tag" style="color:var(--accent3);">Photovoltaic Effect</div>
+            <ul class="arrow-list">
+              <li>Converts <strong>solar energy → electrical energy</strong></li>
+              <li>Principle: <strong>Photovoltaic effect</strong></li>
+              <li>Uses: Remote areas power generation, artificial satellite batteries</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gold-card">
+      <div class="card-header">📋 Semiconductor Devices — Summary Table</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Device</th>
+                <th>Energy Conversion</th>
+                <th>Principle</th>
+                <th>Key Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-blue">Photodiode</span></td>
+                <td>Light → Electrical signal</td>
+                <td>Photoelectric Effect</td>
+                <td>Light-operated keys, intensity detection</td>
+              </tr>
+              <tr>
+                <td><span class="hl-red">Zener Diode</span></td>
+                <td>Electrical → Electrical (regulated)</td>
+                <td>Reverse breakdown</td>
+                <td>Voltage regulation/control</td>
+              </tr>
+              <tr>
+                <td><span class="hl-gold">LED</span></td>
+                <td>Electrical → Light</td>
+                <td>Electroluminescence</td>
+                <td>Remote control, burglar alarm, optical comm.</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Solar Cell</span></td>
+                <td>Solar (Light) → Electrical</td>
+                <td>Photovoltaic Effect</td>
+                <td>Satellite batteries, remote power</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Device Principles</div>
+          <ul class="arrow-list">
+            <li><strong>Photodiode</strong> → Photoelectric Effect | <strong>Solar Cell</strong> → Photovoltaic Effect
+              (different!)</li>
+            <li><strong>LED</strong> inventor = <strong>Nick Holonyak</strong> (not Edison, not Tesla)</li>
+            <li>LED principle = <strong>Electroluminescence</strong> (NOT photoelectric effect)</li>
+            <li>Zener diode works in <strong>reverse bias</strong> (NOT forward bias like normal diode)</li>
+            <li>Solar cell = <strong>Photovoltaic</strong>; Photodiode = <strong>Photoelectric</strong> — easy to
+              confuse!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== EXAM TIPS ===================== -->
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Semiconductor conductivity: <strong>between conductor and insulator</strong></li>
+          <li>Intrinsic semiconductors: <strong>Silicon (Si)</strong> and <strong>Germanium (Ge)</strong></li>
+          <li>Doping = adding impurity to increase conductivity</li>
+          <li><strong>n-Type</strong> → Pentavalent dopant (As, Sb, P) → current by <strong>electrons</strong></li>
+          <li><strong>p-Type</strong> → Trivalent dopant (Al, B, Ga) → current by <strong>holes</strong></li>
+          <li>Semiconductor conductivity <strong>increases with temperature</strong> (opposite of conductors)</li>
+          <li>Photodiode principle = <strong>Photoelectric effect</strong></li>
+          <li>LED principle = <strong>Electroluminescence</strong> | Inventor = <strong>Nick Holonyak</strong></li>
+          <li>Solar cell principle = <strong>Photovoltaic effect</strong></li>
+          <li>Zener diode = <strong>voltage regulation</strong>, works in <strong>reverse bias</strong></li>
+          <li>LED uses: Remote control, burglar alarm, optical communication</li>
+          <li>Solar cell uses: Remote areas, satellite batteries, power generation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">📋 Quick Reference Table</div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Concept</th>
+                  <th>Key Fact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Intrinsic SC</td>
+                  <td>Si, Ge — no impurity</td>
+                </tr>
+                <tr>
+                  <td>Extrinsic SC</td>
+                  <td>Doped Si or Ge</td>
+                </tr>
+                <tr>
+                  <td>n-Type dopant</td>
+                  <td>Pentavalent (As, Sb, P)</td>
+                </tr>
+                <tr>
+                  <td>p-Type dopant</td>
+                  <td>Trivalent (Al, B, Ga)</td>
+                </tr>
+                <tr>
+                  <td>n-Type carriers</td>
+                  <td>Electrons (majority)</td>
+                </tr>
+                <tr>
+                  <td>p-Type carriers</td>
+                  <td>Holes (majority)</td>
+                </tr>
+                <tr>
+                  <td>LED principle</td>
+                  <td>Electroluminescence</td>
+                </tr>
+                <tr>
+                  <td>LED inventor</td>
+                  <td>Nick Holonyak</td>
+                </tr>
+                <tr>
+                  <td>Solar cell</td>
+                  <td>Photovoltaic effect</td>
+                </tr>
+                <tr>
+                  <td>Zener diode</td>
+                  <td>Reverse bias, voltage control</td>
+                </tr>
+                <tr>
+                  <td>Photodiode</td>
+                  <td>Photoelectric effect</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">⚠️ Most Common Exam Traps</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>SC conductivity ↑ with temp (NOT decreases like conductors)</li>
+            <li>n-type = <strong>Pentavalent</strong> (5); p-type = <strong>Trivalent</strong> (3)</li>
+            <li>Aluminium → <strong>p-type</strong> dopant (though Al is a good conductor)</li>
+            <li>LED = Electroluminescence; Solar = <strong>Photovoltaic</strong>; Photodiode = Photoelectric — 3
+              different principles!</li>
+            <li>LED invented by <strong>Nick Holonyak</strong> (not a common name — easy to miss)</li>
+            <li>Zener diode = <strong>reverse bias</strong> operation (opposite of normal diode)</li>
+            <li>At 0 K, intrinsic SC = perfect <strong>insulator</strong></li>
+            <li>Carbon (diamond) = <strong>insulator</strong>, NOT semiconductor</li>
+            <li>Both n-type and p-type are electrically <strong>neutral</strong> overall</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 12: Semiconductor · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>
