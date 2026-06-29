@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 05: Solution & Colloid | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: 13.5px;
+      width: 100%;
+      min-width: 550px;
+      margin: 0;
+    }
+
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      vertical-align: top;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 15px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+    }
+
+    .type-card.gold-left {
+      border-left: 4px solid var(--gold);
+    }
+
+    .type-card.green-left {
+      border-left: 4px solid var(--accent3);
+    }
+
+    .type-card.blue-left {
+      border-left: 4px solid var(--accent2);
+    }
+
+    .type-card.purple-left {
+      border-left: 4px solid var(--accent4);
+    }
+
+    .type-card.orange-left {
+      border-left: 4px solid var(--accent5);
+    }
+
+    .type-card.red-left {
+      border-left: 4px solid var(--accent1);
+    }
+
+    .type-card.teal-left {
+      border-left: 4px solid var(--accent6);
+    }
+
+    .type-card .type-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .type-card .type-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .type-card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* Three-column comparison */
+    .three-col-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin: 14px 0;
+    }
+
+    @media(max-width:720px) {
+      .three-col-compare {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tcc-box {
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .tcc-box .tcc-title {
+      font-weight: 800;
+      font-size: 15px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    /* particle size bar */
+    .size-bar {
+      display: flex;
+      align-items: stretch;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 44px;
+      margin: 14px 0;
+    }
+
+    .sb-seg {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      text-align: center;
+      padding: 4px;
+    }
+
+    /* emulsion cards */
+    .emul-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .emul-box {
+      flex: 1;
+      min-width: 200px;
+      border-radius: 8px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .emul-box .eb-type {
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .emul-box .eb-ex {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 20px;
+      }
+
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+
+      .tab-content {
+        padding: 20px 14px 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">Chemistry · Ch 05</div>
+      <h1>🧪 Solution & Colloid</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; Solution Types · Saturated · Colloid · Suspension · Tyndall Effect
+        · Emulsion · Buffer</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🔍 Overview</button>
+    <button onclick="switchTab('solution')">💧 Solution</button>
+    <button onclick="switchTab('types')">📂 Solution Types</button>
+    <button onclick="switchTab('saturation')">🌡️ Saturation</button>
+    <button onclick="switchTab('comparison')">📊 Sol vs Colloid</button>
+    <button onclick="switchTab('colloid')">🌫️ Colloid</button>
+    <button onclick="switchTab('emulsion')">🥛 Emulsion</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">🧪 Chapter At a Glance</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Solution</div>
+          <p><strong>Homogeneous mixture</strong> of two or more substances. Solute (less quantity) + Solvent (more
+            quantity) → Solution. Universal Solvent = <strong>Water (H₂O)</strong>.</p>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">Water</div>
+            <div class="stat-lbl">Universal Solvent</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">1–1000 nm</div>
+            <div class="stat-lbl">Colloid Particle Size</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Tyndall</div>
+            <div class="stat-lbl">Effect in Colloid & Suspension</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Centrifuge</div>
+            <div class="stat-lbl">Separates Colloid</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📏 Particle Size Comparison</div>
+      <div class="card-body">
+        <div class="size-bar">
+          <div class="sb-seg" style="background:#0b2a1a;flex:2;">✅ TRUE SOLUTION<br />&lt; 1 nm</div>
+          <div class="sb-seg" style="background:#2a1600;flex:3;">🌫️ COLLOID<br />1 – 1000 nm</div>
+          <div class="sb-seg" style="background:#2a0a0a;flex:2;">🪨 SUSPENSION<br />&gt; 1000 nm</div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Particle Sizes</div>
+          <ul class="arrow-list">
+            <li>True solution: &lt; <strong>1 nm</strong> | Colloid: <strong>1–1000 nm</strong> | Suspension: &gt;
+              <strong>1000 nm</strong>
+            </li>
+            <li>Tyndall Effect: Colloid ✓ and Suspension ✓; True Solution ✗</li>
+            <li>Visible to naked eye: Suspension ✓ only</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-solution" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">💧 Solution — Basics</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card gold-left">
+            <div class="type-tag">Solute</div>
+            <div class="type-name">Dissolved substance (less quantity)</div>
+            <ul class="arrow-list">
+              <li><strong>Soluble substance</strong> — dissolves in solvent</li>
+              <li><strong>Insoluble substance</strong> — does NOT dissolve</li>
+              <li>e.g., Sugar, Salt, NaCl</li>
+            </ul>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Solvent</div>
+            <div class="type-name">Dissolving medium (more quantity)</div>
+            <ul class="arrow-list">
+              <li>Universal solvent = <strong>Water (H₂O)</strong></li>
+              <li>More quantity than solute</li>
+              <li>e.g., Water, Alcohol, Acetone</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Key Formula</div>
+          <p><strong>Solute</strong> (less) + <strong>Solvent</strong> (more) → <strong>Solution</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-types" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">📂 Classification of Solutions</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Solution Type</th>
+                <th>Solute</th>
+                <th>Solvent</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="3"><span class="hl-gold">Solid Solution</span></td>
+                <td>Gas</td>
+                <td>Solid</td>
+                <td>Absorption of H₂ in Palladium (Pd)</td>
+              </tr>
+              <tr>
+                <td>Liquid</td>
+                <td>Solid</td>
+                <td>Amalgam of Mercury with Sodium</td>
+              </tr>
+              <tr>
+                <td>Solid</td>
+                <td>Solid</td>
+                <td>Zinc dissolved in Copper (Brass/alloys)</td>
+              </tr>
+              <tr>
+                <td rowspan="3"><span class="hl-blue">Liquid Solution</span></td>
+                <td>Gas</td>
+                <td>Liquid</td>
+                <td>O₂ dissolved in Water</td>
+              </tr>
+              <tr>
+                <td>Liquid</td>
+                <td>Liquid</td>
+                <td>Alcohol solution in Water</td>
+              </tr>
+              <tr>
+                <td>Solid</td>
+                <td>Liquid</td>
+                <td>Sugar solution in Water</td>
+              </tr>
+              <tr>
+                <td rowspan="3"><span class="hl-green">Gaseous Solution</span></td>
+                <td>Gas</td>
+                <td>Gas</td>
+                <td>Air (mixture of gases)</td>
+              </tr>
+              <tr>
+                <td>Liquid</td>
+                <td>Gas</td>
+                <td>Chloroform + N₂ → Fog</td>
+              </tr>
+              <tr>
+                <td>Solid</td>
+                <td>Gas</td>
+                <td>Camphor + N₂ → Smoke</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Solution Types</div>
+          <ul class="arrow-list">
+            <li>H₂ absorbed in Palladium (Pd) = <strong>Gas in Solid</strong> solution</li>
+            <li>Mercury amalgam with Na = <strong>Liquid in Solid</strong> solution</li>
+            <li>Air = <strong>Gas in Gas</strong> (gaseous solution)</li>
+            <li>Fog = <strong>Liquid in Gas</strong> | Smoke = <strong>Solid in Gas</strong></li>
+            <li>O₂ in water = <strong>Gas in Liquid</strong> (fish breathe this dissolved O₂)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-saturation" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">🌡️ Saturated vs Unsaturated Solution</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card red-left">
+            <div class="type-tag">Saturated Solution</div>
+            <div class="type-name">No more solute can dissolve</div>
+            <ul class="arrow-list">
+              <li>At given <strong>temperature and pressure</strong>, maximum solute already dissolved</li>
+              <li>Adding more solute → remains undissolved</li>
+              <li>On <strong>increasing temperature</strong> → becomes <strong>Unsaturated</strong> (more can dissolve)
+              </li>
+            </ul>
+          </div>
+          <div class="type-card green-left">
+            <div class="type-tag">Unsaturated Solution</div>
+            <div class="type-name">More solute can still dissolve</div>
+            <ul class="arrow-list">
+              <li>At given T and P, more solute <strong>can still be added</strong></li>
+              <li>On <strong>decreasing temperature</strong> → becomes <strong>Saturated</strong></li>
+              <li>Example: 30g NaCl + 100 ml H₂O = Unsaturated</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <div class="recall-label">📘 Temperature Effect on Solubility</div>
+          <ul class="arrow-list">
+            <li>Temperature <strong>increases</strong> → Saturated solution → becomes <strong>Unsaturated</strong>
+              (capacity increases)</li>
+            <li>Temperature <strong>decreases</strong> → Unsaturated → becomes <strong>Saturated</strong> (capacity
+              decreases)</li>
+            <li>Most solids: solubility <strong>increases</strong> with temperature</li>
+            <li>Gases in liquid: solubility <strong>decreases</strong> with temperature (carbonated drinks go flat when
+              warm)</li>
+          </ul>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap</div>
+          <ul class="arrow-list">
+            <li>Temp ↑ → Saturated becomes <strong>Unsaturated</strong> (more dissolves)</li>
+            <li>Temp ↓ → Unsaturated becomes <strong>Saturated</strong> (less can dissolve)</li>
+            <li>Gas solubility in liquid: <strong>opposite</strong> — decreases with temp (O₂ in water)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-comparison" class="tab-content">
+    <div class="card blue-card">
+      <div class="card-header">📊 Solution vs Colloid vs Suspension</div>
+      <div class="card-body">
+        <div class="three-col-compare">
+          <div class="tcc-box" style="background:#0b2a1a;border-color:#1a4a2a;">
+            <div class="tcc-title" style="color:var(--accent3);">✅ True Solution</div>
+            <ul class="arrow-list">
+              <li>Homogeneous mixture</li>
+              <li>Particle size &lt; <strong>1 nm</strong></li>
+              <li><strong>No Tyndall Effect</strong></li>
+              <li>Particles NOT visible</li>
+              <li>Cannot be separated by filtration</li>
+              <li>Examples: Sugar in water, Salt in water, NaCl(aq)</li>
+            </ul>
+          </div>
+          <div class="tcc-box" style="background:#2a1600;border-color:#4a2a00;">
+            <div class="tcc-title" style="color:var(--accent5);">🌫️ Colloid</div>
+            <ul class="arrow-list">
+              <li>Appears homogeneous, actually heterogeneous</li>
+              <li>Particle size <strong>1–1000 nm</strong></li>
+              <li><strong>Shows Tyndall Effect</strong></li>
+              <li>Particles too small to see with naked eye</li>
+              <li>Separated by <strong>Centrifugation</strong></li>
+              <li>Examples: Milk, Ink, Blood, Fog, Smoke</li>
+            </ul>
+          </div>
+          <div class="tcc-box" style="background:#2a0a0a;border-color:#4a1a1a;">
+            <div class="tcc-title" style="color:var(--accent1);">🪨 Suspension</div>
+            <ul class="arrow-list">
+              <li>Heterogeneous mixture</li>
+              <li>Particle size &gt; <strong>1000 nm</strong></li>
+              <li><strong>Shows Tyndall Effect</strong></li>
+              <li>Particles <strong>visible to naked eye</strong></li>
+              <li>Separated by <strong>Filtration</strong></li>
+              <li>Examples: Chalk in water, Mud in water</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Tyndall Effect</div>
+          <ul class="arrow-list">
+            <li>Tyndall Effect = scattering of light by colloidal particles</li>
+            <li>Shown by: <strong>Colloid ✓</strong> and <strong>Suspension ✓</strong></li>
+            <li>NOT shown by: <strong>True Solution ✗</strong></li>
+            <li>Colloid separated by <strong>Centrifugation</strong>; Suspension by <strong>Filtration</strong></li>
+            <li>Milk = Colloid (separated by centrifugation → butter/cream); NOT a true solution</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-colloid" class="tab-content">
+    <div class="card teal-card">
+      <div class="card-header">🌫️ Colloid — Applications</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="type-card blue-left">
+            <div class="type-tag">Industrial / Technical Applications</div>
+            <ul class="arrow-list">
+              <li>Smoke precipitation (removing smoke from chimneys)</li>
+              <li>Purification of clothes (detergent action)</li>
+              <li>Stopping secretion of blood (FeCl₃ as coagulant)</li>
+            </ul>
+          </div>
+          <div class="type-card green-left">
+            <div class="type-tag">Natural Applications</div>
+            <ul class="arrow-list">
+              <li><strong>Rain formation</strong> — clouds are colloids</li>
+              <li><strong>Blue colour of sky</strong> — Tyndall Effect (scattering)</li>
+              <li><strong>Delta formation</strong> — colloidal river silt coagulates at sea</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card blue-card" style="margin-top:14px;border:none;">
+          <div class="card-header">💡 Tyndall Effect</div>
+          <div class="card-body">
+            <div class="quick-recall">
+              <div class="recall-label">📘 Definition</div>
+              <p>Scattering of a beam of light by colloidal particles. Observed in <strong>Colloid and
+                  Suspension</strong> but NOT in a true solution.</p>
+            </div>
+            <ul class="arrow-list">
+              <li>Colloid particle size: <strong>1 nm to 1000 nm</strong></li>
+              <li>Examples: Beam of sunlight through dusty room, Headlights shining in fog</li>
+              <li>Blue colour of sky = Tyndall Effect (smaller wavelength blue light scattered more)</li>
+              <li>Smoke and fog visible from headlights = Tyndall Effect</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card orange-card" style="margin-top:14px;border:none;">
+          <div class="card-header">🔋 Buffer Solution</div>
+          <div class="card-body">
+            <div class="quick-recall">
+              <div class="recall-label">📘 Definition</div>
+              <p>A solution whose <strong>pH does not change significantly</strong> even after adding small amounts of
+                acid or base (amphiprotic buffer solution).</p>
+            </div>
+            <ul class="arrow-list">
+              <li>Resists change in pH</li>
+              <li>Important in biological systems (blood pH ≈ 7.4 maintained by buffer)</li>
+              <li>Used in medicine, food preservation, chemical labs</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Colloid Applications</div>
+          <ul class="arrow-list">
+            <li>Blue colour of sky = <strong>Tyndall Effect</strong> (NOT reflection)</li>
+            <li>Delta formation at river mouth = <strong>coagulation of colloidal river silt</strong> by sea salt</li>
+            <li>Rain = charged clouds (colloids) attract dust particles → coagulate → rain</li>
+            <li>Blood is a colloid → FeCl₃ (ferric chloride) can stop bleeding (coagulation)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-emulsion" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">🥛 Emulsion</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>A <strong>colloidal system</strong> made of two <strong>immiscible liquids</strong> (liquids that do not
+            mix with each other, like oil and water).</p>
+        </div>
+        <div class="emul-row">
+          <div class="emul-box" style="background:#0b2a1a;border-color:var(--accent3);">
+            <div class="eb-type" style="color:var(--accent3);">💧 Oil in Water (O/W)</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Oil droplets dispersed in water</div>
+            <ul class="arrow-list" style="text-align:left;">
+              <li><strong>Milk</strong></li>
+              <li><strong>Mayonnaise</strong></li>
+              <li>Vanishing cream</li>
+            </ul>
+          </div>
+          <div class="emul-box" style="background:#1a0f2e;border-color:var(--accent4);">
+            <div class="eb-type" style="color:var(--accent4);">🧈 Water in Oil (W/O)</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Water droplets dispersed in oil</div>
+            <ul class="arrow-list" style="text-align:left;">
+              <li><strong>Butter</strong></li>
+              <li><strong>Cold Cream</strong></li>
+              <li>Margarine</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Emulsion Types</div>
+          <ul class="arrow-list">
+            <li>Milk = <strong>Oil in Water (O/W)</strong> emulsion (fat globules in water)</li>
+            <li>Butter = <strong>Water in Oil (W/O)</strong> emulsion (water droplets in fat)</li>
+            <li>Mayonnaise = <strong>O/W</strong> emulsion</li>
+            <li>Cold Cream = <strong>W/O</strong> emulsion</li>
+            <li>All emulsions are <strong>colloids</strong> (particle size 1–1000 nm)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Solution = <strong>Homogeneous mixture</strong>; Solute (less) + Solvent (more)</li>
+          <li>Universal Solvent = <strong>Water (H₂O)</strong></li>
+          <li>H₂ in Palladium = Gas in <strong>Solid</strong> solution</li>
+          <li>Mercury amalgam = Liquid in <strong>Solid</strong> solution</li>
+          <li>Air = Gas in <strong>Gas</strong> (gaseous solution)</li>
+          <li>Fog = Liquid in Gas | Smoke = Solid in Gas</li>
+          <li>Saturated: no more solute dissolves at given T &amp; P</li>
+          <li>Temp ↑ → Saturated becomes <strong>Unsaturated</strong></li>
+          <li>Temp ↓ → Unsaturated becomes <strong>Saturated</strong></li>
+          <li>True solution particle: &lt; <strong>1 nm</strong> | Colloid: <strong>1–1000 nm</strong> | Suspension:
+            &gt; 1000 nm</li>
+          <li>Tyndall Effect: Colloid ✓ + Suspension ✓ | True Solution ✗</li>
+          <li>Colloid separated by <strong>Centrifugation</strong> (e.g., Milk, Ink)</li>
+          <li>Suspension separated by <strong>Filtration</strong> (e.g., Chalk in water)</li>
+          <li>Colloid appears homogeneous but is <strong>actually heterogeneous</strong></li>
+          <li>Blue colour of sky = <strong>Tyndall Effect</strong></li>
+          <li>Delta formation = colloid coagulation at river-sea junction</li>
+          <li>Blood = colloid; FeCl₃ stops bleeding (coagulation)</li>
+          <li>Emulsion = colloidal system of <strong>immiscible liquids</strong></li>
+          <li>Milk = <strong>Oil in Water (O/W)</strong> | Butter = <strong>Water in Oil (W/O)</strong></li>
+          <li>Buffer solution = pH remains stable even on adding acid/base</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">📋 Quick Reference Table</div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Solution</th>
+                  <th>Colloid</th>
+                  <th>Suspension</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Particle size</td>
+                  <td>&lt; 1 nm</td>
+                  <td>1–1000 nm</td>
+                  <td>&gt; 1000 nm</td>
+                </tr>
+                <tr>
+                  <td>Nature</td>
+                  <td>Homogeneous</td>
+                  <td>Pseudo-homogeneous</td>
+                  <td>Heterogeneous</td>
+                </tr>
+                <tr>
+                  <td>Tyndall Effect</td>
+                  <td>No</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Visible particles</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Separation</td>
+                  <td>Not by filtration</td>
+                  <td>Centrifugation</td>
+                  <td>Filtration</td>
+                </tr>
+                <tr>
+                  <td>Examples</td>
+                  <td>Sugar water</td>
+                  <td>Milk, Ink, Blood</td>
+                  <td>Chalk water</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">⚠️ Most Common Exam Traps</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Colloid appears homogeneous but is <strong>heterogeneous</strong></li>
+            <li>Tyndall Effect: <strong>NOT</strong> in true solution</li>
+            <li>Milk = <strong>Colloid</strong> (not true solution)</li>
+            <li>Milk = <strong>O/W</strong> emulsion; Butter = <strong>W/O</strong> emulsion</li>
+            <li>Colloid → Centrifugation; Suspension → <strong>Filtration</strong></li>
+            <li>Temp ↑ → Saturated becomes <strong>Unsaturated</strong> (opposite intuition!)</li>
+            <li>Gas in liquid: solubility <strong>decreases</strong> with temp (opposite of solids)</li>
+            <li>Blue sky = Tyndall Effect (NOT because sky is blue inherently)</li>
+            <li>Delta = colloidal <strong>coagulation</strong> (charged particles neutralised by sea salt)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 05: Solution & Colloid (Chemistry) · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

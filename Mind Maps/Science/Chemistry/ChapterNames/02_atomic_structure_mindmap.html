@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 02: Atomic Structure | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 13px 17px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      font-size: 13.5px;
+      width: 100%;
+      min-width: 550px;
+      margin: 10px 0;
+    }
+
+    .data-table.min-w-auto {
+      min-width: 280px;
+    }
+
+    /* For smaller tables */
+    .data-table th {
+      background: #2a2200;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+
+    .data-table tr:nth-child(even) td {
+      background: var(--surface2);
+    }
+
+    .data-table tr:hover td {
+      background: #1e2235;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 120px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 14px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    .formula-box {
+      background: #0d1a10;
+      border: 1px solid var(--accent3);
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      color: var(--accent3);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .formula-box span {
+      color: var(--text-muted);
+      font-size: 12px;
+      display: block;
+      margin-top: 4px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+    }
+
+    .type-card.gold-left {
+      border-left: 4px solid var(--gold);
+    }
+
+    .type-card.green-left {
+      border-left: 4px solid var(--accent3);
+    }
+
+    .type-card.blue-left {
+      border-left: 4px solid var(--accent2);
+    }
+
+    .type-card.purple-left {
+      border-left: 4px solid var(--accent4);
+    }
+
+    .type-card.orange-left {
+      border-left: 4px solid var(--accent5);
+    }
+
+    .type-card.red-left {
+      border-left: 4px solid var(--accent1);
+    }
+
+    .type-card.teal-left {
+      border-left: 4px solid var(--accent6);
+    }
+
+    .type-card .type-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .type-card .type-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .type-card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* model timeline */
+    .model-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .mt-item {
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mt-item:last-child {
+      border-bottom: none;
+    }
+
+    .mt-year {
+      background: var(--surface2);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      height: fit-content;
+      min-width: 65px;
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    .mt-content .mt-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .mt-content .mt-person {
+      font-size: 12.5px;
+      color: var(--accent5);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .mt-content p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* particle cards */
+    .particle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    @media(max-width:700px) {
+      .particle-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .p-card {
+      border-radius: 8px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .p-card .pc-symbol {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .p-card .pc-name {
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .p-card .pc-by {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .p-card .pc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .p-card .pc-row span:last-child {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* hund's rule orbital display */
+    .orbital-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin: 4px 0;
+    }
+
+    .orb-box {
+      width: 36px;
+      height: 28px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      background: var(--surface2);
+    }
+
+    .orb-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      min-width: 30px;
+    }
+
+    .orb-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+
+    /* quantum number cards */
+    .qn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .qn-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .qn-box .qn-sym {
+      font-size: 24px;
+      font-weight: 900;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 4px;
+    }
+
+    .qn-box .qn-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .qn-box .qn-info {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    /* memory trick box */
+    .memory-box {
+      background: #0a2a1a;
+      border: 1px solid var(--accent3);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 12px 0;
+    }
+
+    .memory-box .mb-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">Chemistry · Ch 02</div>
+      <h1>⚛️ Atomic Structure</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; Atomic Models · Particles · Isotopes · Quantum Numbers ·
+        Electronic Config · Gas Laws</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🔍 Overview</button>
+    <button onclick="switchTab('laws')">📜 Chem. Laws</button>
+    <button onclick="switchTab('models')">🔬 Atomic Models</button>
+    <button onclick="switchTab('particles')">⚡ Particles</button>
+    <button onclick="switchTab('numbers')">🔢 Mass & Atomic No.</button>
+    <button onclick="switchTab('isotopes')">🧬 Isotopes</button>
+    <button onclick="switchTab('quantum')">🌀 Quantum Nos.</button>
+    <button onclick="switchTab('config')">📐 Electron Config</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">⚛️ Atom — At a Glance</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Atom — Origin</div>
+          <p><strong>Greek word</strong> for indivisible. Smallest particle of matter that participates in chemical
+            reactions. Discoverer: <strong>Democritus</strong>. Called indestructible by Indian philosopher
+            <strong>Maharishi Kanada</strong>.
+          </p>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">Democritus</div>
+            <div class="stat-lbl">Discoverer of Atom concept</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">1808</div>
+            <div class="stat-lbl">Dalton's Atomic Theory</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">2n²</div>
+            <div class="stat-lbl">e⁻ in nth Orbit</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">1/1836</div>
+            <div class="stat-lbl">Electron mass vs Proton</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📊 Key Discoverers — Quick Reference</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Discovery / Law</th>
+                <th>Person</th>
+                <th>Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Atom concept</td>
+                <td>Democritus</td>
+                <td>Ancient Greece</td>
+              </tr>
+              <tr>
+                <td>Law of Conservation of Mass</td>
+                <td>Antoine Lavoisier</td>
+                <td>1789</td>
+              </tr>
+              <tr>
+                <td>Law of Definite Proportion</td>
+                <td>Joseph Proust</td>
+                <td>1799</td>
+              </tr>
+              <tr>
+                <td>Law of Multiple Proportion + Atomic Theory</td>
+                <td>Dalton</td>
+                <td>1803 / 1808</td>
+              </tr>
+              <tr>
+                <td>Electron</td>
+                <td>J.J. Thomson</td>
+                <td>1897</td>
+              </tr>
+              <tr>
+                <td>Thomson's Atomic Model</td>
+                <td>J.J. Thomson</td>
+                <td>1898</td>
+              </tr>
+              <tr>
+                <td>Rutherford's Nuclear Model</td>
+                <td>Rutherford</td>
+                <td>1911</td>
+              </tr>
+              <tr>
+                <td>Proton</td>
+                <td>Rutherford</td>
+                <td>1919</td>
+              </tr>
+              <tr>
+                <td>Bohr's Model</td>
+                <td>Niels Bohr</td>
+                <td>1913</td>
+              </tr>
+              <tr>
+                <td>Neutron</td>
+                <td>James Chadwick</td>
+                <td>1932</td>
+              </tr>
+              <tr>
+                <td>Millikan Oil Drop (charge of e⁻)</td>
+                <td>R.A. Millikan</td>
+                <td>1909</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-laws" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">📜 Laws of Chemical Combination</div>
+      <div class="card-body">
+        <div class="type-card gold-left">
+          <div class="type-tag">Law 1 — Antoine Lavoisier (1789)</div>
+          <div class="type-name">Law of Conservation of Mass</div>
+          <p>"Matter can neither be created nor be destroyed." Total mass of <strong>reactants = total mass of
+              products</strong>.</p>
+          <div class="formula-box" style="margin-top:8px;">O (16u) + H₂ (2u) → H₂O (18u)<span>Mass is conserved in
+              reactions</span></div>
+        </div>
+        <div class="type-card blue-left">
+          <div class="type-tag">Law 2 — Joseph Proust (1799)</div>
+          <div class="type-name">Law of Definite Proportion (Law of Constant Proportion)</div>
+          <p>A compound always contains elements in the <strong>exact same proportion by weight</strong>, regardless of
+            source.</p>
+          <div class="formula-box" style="margin-top:8px;">H : O in water = 2:16 = 1:8 (by mass)<span>Same everywhere —
+              Ganges, ocean, lab</span></div>
+        </div>
+        <div class="type-card purple-left">
+          <div class="type-tag">Law 3 — Dalton (1803)</div>
+          <div class="type-name">Law of Multiple Proportion</div>
+          <p>When two elements form more than one compound, masses of one element combining with a fixed mass of the
+            other are in <strong>ratio of small whole numbers</strong>.</p>
+          <div class="quick-recall" style="margin-top:8px;">
+            <div class="recall-label">📘 Example</div>
+            <p>CO and CO₂ — Oxygen combining with Carbon: 16:32 = <strong>1:2</strong> (small whole numbers)</p>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Laws</div>
+          <ul class="arrow-list">
+            <li>Law of Conservation of Mass = <strong>Lavoisier (1789)</strong></li>
+            <li>Law of Definite Proportion = <strong>Proust (1799)</strong> — also called <strong>Law of Constant
+                Proportion</strong></li>
+            <li>Law of Multiple Proportion = <strong>Dalton (1803)</strong></li>
+            <li>These three are distinct laws — propounders are frequently swapped in MCQs!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-models" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">🔬 Atomic Models — Timeline</div>
+      <div class="card-body">
+        <div class="model-timeline">
+          <div class="mt-item">
+            <div class="mt-year">1808</div>
+            <div class="mt-content">
+              <div class="mt-name">Dalton's Atomic Theory</div>
+              <div class="mt-person">John Dalton</div>
+              <p>Atoms are indivisible, smallest particles of matter. Atoms of same element have same mass &amp;
+                properties. Mass is conserved in reactions.</p>
+            </div>
+          </div>
+          <div class="mt-item">
+            <div class="mt-year">1898</div>
+            <div class="mt-content">
+              <div class="mt-name">Thomson's Atomic Model (Watermelon / Plum Pudding Model)</div>
+              <div class="mt-person">J.J. Thomson</div>
+              <p>Atom = spherical, electrically neutral (radius 10⁻¹⁰ m). Electrons embedded in positively charged
+                matter — like <strong>seeds in a watermelon</strong>.</p>
+            </div>
+          </div>
+          <div class="mt-item">
+            <div class="mt-year">1911</div>
+            <div class="mt-content">
+              <div class="mt-name">Rutherford's Nuclear Model (α-Particle Scattering)</div>
+              <div class="mt-person">Ernest Rutherford</div>
+              <ul class="arrow-list" style="margin-top:4px;">
+                <li>Most of atom is <strong>empty space</strong> (α-particles pass through)</li>
+                <li>Positive charge &amp; most mass concentrated at <strong>nucleus</strong> (centre)</li>
+                <li>Electrons and nucleus bound by <strong>electrostatic force</strong></li>
+                <li>α-particles that hit nucleus → repelled (positive charge)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="mt-item">
+            <div class="mt-year">1913</div>
+            <div class="mt-content">
+              <div class="mt-name">Bohr's Atomic Model</div>
+              <div class="mt-person">Niels Bohr (based on Planck's Quantum Theory)</div>
+              <ul class="arrow-list" style="margin-top:4px;">
+                <li>Electrons revolve in <strong>fixed circular orbits</strong> (K, L, M, N shells)</li>
+                <li>Energy emitted <strong>in the form of Quanta</strong> when electron jumps from high to low energy
+                  level</li>
+                <li>Fixed energy for each orbit — no radiation while in orbit</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Atomic Models</div>
+          <ul class="arrow-list">
+            <li>Thomson model = <strong>Watermelon model / Plum Pudding model</strong></li>
+            <li>Rutherford model = <strong>Nuclear model</strong> (discovered nucleus)</li>
+            <li>Bohr model: electrons in <strong>K, L, M, N</strong> shells (fixed orbits)</li>
+            <li>Bohr's model based on <strong>Planck's quantum theory</strong></li>
+            <li>Rutherford used <strong>α-particle scattering</strong> experiment on gold foil</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-particles" class="tab-content">
+    <div class="card blue-card">
+      <div class="card-header">⚡ Stable Elementary Particles</div>
+      <div class="card-body">
+        <div class="particle-grid">
+          <div class="p-card" style="background:#0a1e35;border-color:#1a3a5a;">
+            <div class="pc-symbol" style="color:var(--accent1);">e⁻</div>
+            <div class="pc-name">Electron</div>
+            <div class="pc-by">J.J. Thomson — 1897</div>
+            <div class="pc-row"><span>Charge</span><span>−1.6022×10⁻¹⁹ C</span></div>
+            <div class="pc-row"><span>Relative</span><span>−1</span></div>
+            <div class="pc-row"><span>Mass</span><span>9.1095×10⁻³¹ kg</span></div>
+            <div class="pc-row"><span>Mass (u)</span><span>0.00054 u</span></div>
+            <div class="pc-row"><span>Location</span><span>Outside Nucleus</span></div>
+          </div>
+          <div class="p-card" style="background:#0b2a1a;border-color:#1a4a2a;">
+            <div class="pc-symbol" style="color:var(--accent3);">p⁺</div>
+            <div class="pc-name">Proton</div>
+            <div class="pc-by">Rutherford — 1919</div>
+            <div class="pc-row"><span>Charge</span><span>+1.6022×10⁻¹⁹ C</span></div>
+            <div class="pc-row"><span>Relative</span><span>+1</span></div>
+            <div class="pc-row"><span>Mass</span><span>1.672×10⁻²⁷ kg</span></div>
+            <div class="pc-row"><span>Mass (u)</span><span>1.00727 u</span></div>
+            <div class="pc-row"><span>Location</span><span>Inside Nucleus</span></div>
+          </div>
+          <div class="p-card" style="background:#1a0f2e;border-color:#2e1a4e;">
+            <div class="pc-symbol" style="color:var(--accent4);">n⁰</div>
+            <div class="pc-name">Neutron</div>
+            <div class="pc-by">James Chadwick — 1932</div>
+            <div class="pc-row"><span>Charge</span><span>0 (Neutral)</span></div>
+            <div class="pc-row"><span>Relative</span><span>0</span></div>
+            <div class="pc-row"><span>Mass</span><span>1.675×10⁻²⁷ kg</span></div>
+            <div class="pc-row"><span>Mass (u)</span><span>1.00868 u</span></div>
+            <div class="pc-row"><span>Location</span><span>Inside Nucleus</span></div>
+          </div>
+        </div>
+
+        <div class="memory-box">
+          <div class="mb-label">🧠 Memory Trick — NEP</div>
+          <ul class="arrow-list">
+            <li><strong>N</strong>acho → <strong>N</strong>eutron → <strong>C</strong>hadwick</li>
+            <li><strong>E</strong>at → <strong>E</strong>lectron → <strong>T</strong>homson</li>
+            <li><strong>P</strong>ass → <strong>P</strong>roton → <strong>R</strong>utherford</li>
+          </ul>
+        </div>
+
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Electron mass vs Proton</div>
+            <div class="info-val">1/1836 of proton</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Proton mass vs Neutron</div>
+            <div class="info-val">≈ Equal</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Millikan Oil Drop</div>
+            <div class="info-val">R.A. Millikan (1909)</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Charge of e⁻</div>
+            <div class="info-val">1.602×10⁻¹⁹ C</div>
+          </div>
+        </div>
+
+        <div class="quick-recall" style="margin-top:12px;">
+          <div class="recall-label">📘 Special Notes</div>
+          <ul class="arrow-list">
+            <li><strong>Hydrogen</strong> nucleus = only proton (NO neutron) — only stable nucleus without neutron</li>
+            <li>Protons + Neutrons inside nucleus = <strong>Nucleons</strong></li>
+            <li>De-Broglie: All particles have <strong>dual nature</strong> (wave + particle)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card teal-card">
+      <div class="card-header">💥 Non-Stable (Unstable) Elementary Particles</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Particle</th>
+                <th>Discoverer</th>
+                <th>Year</th>
+                <th>Sign</th>
+                <th>Mass</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Positron</span></td>
+                <td>C.D. Anderson</td>
+                <td>1932</td>
+                <td>+1e⁰</td>
+                <td>= Electron mass</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Meson</span></td>
+                <td>Yukawa</td>
+                <td>1935</td>
+                <td>π⁺, π⁻, π⁰</td>
+                <td>200× electron mass</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Neutrino</span></td>
+                <td>Pauli</td>
+                <td>1927</td>
+                <td>ν</td>
+                <td>Indefinite</td>
+              </tr>
+              <tr>
+                <td><span class="hl-red">Anti-Proton</span></td>
+                <td>Segre</td>
+                <td>1955</td>
+                <td>p⁻</td>
+                <td>= Proton mass</td>
+              </tr>
+              <tr>
+                <td><span class="hl-purple">Anti-Neutron</span></td>
+                <td>Cork</td>
+                <td>1956</td>
+                <td>−</td>
+                <td>= Neutron mass</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-numbers" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🔢 Mass Number & Atomic Number</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div>
+            <div class="formula-box">A = P + N<span>Mass Number = Protons + Neutrons</span></div>
+            <div class="formula-box">Z = P = e⁻ (neutral atom)<span>Atomic Number = No. of Protons</span></div>
+            <div class="formula-box">A = e⁻ + N (neutral atom)<span>Mass No. = Electrons + Neutrons</span></div>
+          </div>
+          <div>
+            <div class="table-wrap">
+              <table class="data-table min-w-auto">
+                <thead>
+                  <tr>
+                    <th>Symbol</th>
+                    <th>Meaning</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>A</td>
+                    <td>Mass Number</td>
+                  </tr>
+                  <tr>
+                    <td>Z</td>
+                    <td>Atomic Number</td>
+                  </tr>
+                  <tr>
+                    <td>P</td>
+                    <td>Number of Protons</td>
+                  </tr>
+                  <tr>
+                    <td>N</td>
+                    <td>Number of Neutrons</td>
+                  </tr>
+                  <tr>
+                    <td>e⁻</td>
+                    <td>Number of Electrons</td>
+                  </tr>
+                  <tr>
+                    <td>ᴬzX</td>
+                    <td>Standard element notation</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap</div>
+          <ul class="arrow-list">
+            <li>Atomic Number (Z) = number of <strong>protons</strong> = number of electrons (neutral atom)</li>
+            <li>Mass Number (A) = protons + <strong>neutrons</strong> (NOT electrons!)</li>
+            <li>Carbon (C): Z = 6 → 6 protons, 6 electrons; A = 12 → 6 neutrons</li>
+            <li>Neutrons = A − Z</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-isotopes" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">🧬 Isotopes, Isobars & Isotones</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Same</th>
+                <th>Different</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Isotopes</span></td>
+                <td>Atomic Number (Z)</td>
+                <td>Mass Number (A)</td>
+                <td>¹H, ²H (Deuterium), ³H (Tritium)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Isobars</span></td>
+                <td>Mass Number (A)</td>
+                <td>Atomic Number (Z)</td>
+                <td>¹⁸Ar⁴⁰, ¹⁹K⁴⁰, ²⁰Ca⁴⁰</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Isotones</span></td>
+                <td>Number of Neutrons</td>
+                <td>Atomic Number &amp; Mass No.</td>
+                <td>₁H³ and ₂He⁴ (both 2 neutrons)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-purple">Isoelectronic</span></td>
+                <td>Number of Electrons</td>
+                <td>Atomic Number</td>
+                <td>Ne, Na⁺, Mg²⁺, Al³⁺ (all 10 e⁻)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="two-col" style="margin-top:12px;">
+          <div class="type-card gold-left">
+            <div class="type-tag">Special Isotope Facts</div>
+            <ul class="arrow-list">
+              <li>³₁H (Tritium) = <strong>Lightest isotope → Radioactive</strong></li>
+              <li>Heaviest stable isotope = <strong>Lead (Pb)-208</strong> (mass 207.974 u)</li>
+              <li>Element with <strong>most isotopes</strong> = <strong>Polonium (Po)</strong></li>
+              <li>Hydrogen has 3 isotopes: Protium (¹H), Deuterium (²H), Tritium (³H)</li>
+            </ul>
+          </div>
+          <div class="type-card blue-left">
+            <div class="type-tag">Isoelectronic Examples</div>
+            <ul class="arrow-list">
+              <li>Ne, Na⁺, Mg²⁺, Al³⁺ — all have <strong>10 electrons</strong></li>
+              <li>Z determines basic properties of atom</li>
+              <li>In neutral atom: Z = number of electrons</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Iso- Terms</div>
+          <ul class="arrow-list">
+            <li><strong>Isotopes</strong> = same Z, different A (same element, different mass)</li>
+            <li><strong>Isobars</strong> = same A, different Z (different elements, same mass)</li>
+            <li><strong>Isotones</strong> = same neutron count (N = A − Z is same)</li>
+            <li>Most isotopes = <strong>Polonium (Po)</strong> (NOT Carbon or Hydrogen)</li>
+            <li>Tritium (³H) = <strong>radioactive</strong> isotope of hydrogen</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-quantum" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">🌀 Quantum Numbers</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Numbers indicating the <strong>position and energy of an electron</strong> in an atom. Four types required
+            to uniquely identify any electron.</p>
+        </div>
+        <div class="qn-grid">
+          <div class="qn-box" style="border-left:4px solid var(--gold);">
+            <div class="qn-sym" style="color:var(--gold);">n</div>
+            <div class="qn-name">Principal Quantum Number</div>
+            <div class="qn-info">Indicates electron energy level and distance from nucleus. Values: 1, 2, 3, 4... (K, L,
+              M, N shells)</div>
+          </div>
+          <div class="qn-box" style="border-left:4px solid var(--accent2);">
+            <div class="qn-sym" style="color:var(--accent2);">l</div>
+            <div class="qn-name">Azimuthal Quantum Number</div>
+            <div class="qn-info">Shows the <strong>shape</strong> of the orbital. Values: 0 to (n−1). s(0), p(1), d(2),
+              f(3)</div>
+          </div>
+          <div class="qn-box" style="border-left:4px solid var(--accent3);">
+            <div class="qn-sym" style="color:var(--accent3);">m</div>
+            <div class="qn-name">Magnetic Quantum Number</div>
+            <div class="qn-info">Determines <strong>orientation</strong> of orbital in space. Values: −l to +l</div>
+          </div>
+          <div class="qn-box" style="border-left:4px solid var(--accent4);">
+            <div class="qn-sym" style="color:var(--accent4);">s</div>
+            <div class="qn-name">Spin Quantum Number</div>
+            <div class="qn-info">Direction of <strong>spin of electron</strong>. Values: +½ (clockwise) or −½
+              (anti-clockwise)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-config" class="tab-content">
+    <div class="card green-card">
+      <div class="card-header">📐 Electronic Configuration Rules</div>
+      <div class="card-body">
+        <div class="formula-box">Max e⁻ in nth orbit = 2n²<span>K(n=1)=2 | L(n=2)=8 | M(n=3)=18 | N(n=4)=32</span></div>
+      </div>
+    </div>
+
+    <div class="type-card gold-left">
+      <div class="type-tag">Rule 1 — Aufbau Principle</div>
+      <div class="type-name">Fill lowest energy orbitals first</div>
+      <p>Electrons are filled in <strong>increasing order of energy</strong>.</p>
+      <div class="formula-box" style="margin-top:8px;font-size:12px;">1s &lt; 2s &lt; 2p &lt; 3s &lt; 3p &lt; 4s &lt; 3d
+        &lt; 4p &lt; 5s &lt; 4d &lt; 5p &lt; 6s &lt; 4f &lt; 5d<span>Aufbau Order | "Aufbau" = German for
+          "construction/building up"</span></div>
+      <div class="quick-recall" style="margin-top:10px;">
+        <div class="recall-label">📘 Special Cases (Exceptions to Aufbau)</div>
+        <ul class="arrow-list">
+          <li>²⁴Cr: Expected 3d⁴4s² → Actual: <strong>3d⁵4s¹</strong> (half-filled 3d is more stable)</li>
+          <li>²⁹Cu: Expected 3d⁹4s² → Actual: <strong>3d¹⁰4s¹</strong> (fully-filled 3d is more stable)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="type-card blue-left" style="margin-top:10px;">
+      <div class="type-tag">Rule 2 — Pauli Exclusion Principle</div>
+      <div class="type-name">No two electrons can have identical quantum numbers</div>
+      <p>If n, l, m are the same for two electrons → their spin (s) must be <strong>opposite</strong> (+½ and −½).</p>
+      <p style="margin-top:6px;font-size:13px;color:var(--accent6);">→ Maximum 2 electrons per orbital (opposite spins)
+      </p>
+    </div>
+
+    <div class="type-card purple-left" style="margin-top:10px;">
+      <div class="type-tag">Rule 3 — Hund's Rule of Maximum Multiplicity</div>
+      <div class="type-name">Fill each orbital singly before pairing</div>
+      <p>Electrons occupy orbitals with same energy <strong>singly first</strong>, then pair up.</p>
+      <div style="margin-top:10px;padding:12px;background:var(--surface);border-radius:8px;">
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;font-weight:700;">p subshell filling pattern:
+        </p>
+        <div class="orbital-row">
+          <div class="orb-label">p¹:</div>
+          <div class="orb-box">↑</div>
+          <div class="orb-box"></div>
+          <div class="orb-box"></div>
+        </div>
+        <div class="orbital-row">
+          <div class="orb-label">p²:</div>
+          <div class="orb-box">↑</div>
+          <div class="orb-box">↑</div>
+          <div class="orb-box"></div>
+        </div>
+        <div class="orbital-row">
+          <div class="orb-label">p³:</div>
+          <div class="orb-box">↑</div>
+          <div class="orb-box">↑</div>
+          <div class="orb-box">↑</div>
+          <div class="orb-note">(half-filled = stable)</div>
+        </div>
+        <div class="orbital-row">
+          <div class="orb-label">p⁴:</div>
+          <div class="orb-box">↑↓</div>
+          <div class="orb-box">↑</div>
+          <div class="orb-box">↑</div>
+        </div>
+        <div class="orbital-row">
+          <div class="orb-label">p⁵:</div>
+          <div class="orb-box">↑↓</div>
+          <div class="orb-box">↑↓</div>
+          <div class="orb-box">↑</div>
+        </div>
+        <div class="orbital-row">
+          <div class="orb-label">p⁶:</div>
+          <div class="orb-box">↑↓</div>
+          <div class="orb-box">↑↓</div>
+          <div class="orb-box">↑↓</div>
+          <div class="orb-note">(fully filled = stable)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="trap-label">⚠️ Exam Trap — Electronic Config</div>
+      <ul class="arrow-list">
+        <li>In Aufbau: <strong>4s fills before 3d</strong> (4s has lower energy than 3d)</li>
+        <li>Cr (24) and Cu (29) are <strong>exceptions</strong> — half-filled &amp; fully-filled d orbitals are more
+          stable</li>
+        <li>Pauli Exclusion: max <strong>2 electrons per orbital</strong>, opposite spins</li>
+        <li>Hund's Rule: all orbitals in subshell get <strong>one electron first</strong>, then pairing</li>
+        <li>Max electrons: K=2, L=8, M=18, N=32 (formula: <strong>2n²</strong>)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Atom concept: <strong>Democritus</strong> (Greek); Indestructible: <strong>Maharishi Kanada</strong></li>
+          <li>Law of Conservation of Mass: <strong>Lavoisier (1789)</strong></li>
+          <li>Law of Definite Proportion = Law of Constant Proportion: <strong>Proust (1799)</strong></li>
+          <li>Law of Multiple Proportion: <strong>Dalton (1803)</strong></li>
+          <li>Thomson model (1898) = <strong>Watermelon/Plum Pudding model</strong></li>
+          <li>Rutherford model (1911) = <strong>Nuclear model</strong> (α-particle scattering on gold foil)</li>
+          <li>Bohr model (1913) = electrons in <strong>K, L, M, N</strong> fixed orbits; energy as
+            <strong>Quanta</strong>
+          </li>
+          <li>Electron: <strong>J.J. Thomson (1897)</strong> | Mass = 9.1095×10⁻³¹ kg | Charge = −1</li>
+          <li>Proton: <strong>Rutherford (1919)</strong> | Mass = 1.672×10⁻²⁷ kg | Charge = +1</li>
+          <li>Neutron: <strong>James Chadwick (1932)</strong> | Mass = 1.675×10⁻²⁷ kg | Charge = 0</li>
+          <li>Electron mass = <strong>1/1836 of proton mass</strong></li>
+          <li>Proton mass ≈ Neutron mass</li>
+          <li>Millikan Oil Drop = <strong>R.A. Millikan (1909)</strong> → charge of e⁻ = 1.602×10⁻¹⁹ C</li>
+          <li>Hydrogen = only stable nucleus with <strong>no neutron</strong></li>
+          <li>Protons + Neutrons = <strong>Nucleons</strong></li>
+          <li>Mass Number A = P + N | Atomic Number Z = P = e⁻ (neutral)</li>
+          <li>Isotopes = same Z, different A | Isobars = same A, different Z | Isotones = same N</li>
+          <li>Most isotopes: <strong>Polonium (Po)</strong></li>
+          <li>Tritium (³H) = <strong>radioactive</strong> | Heaviest stable = <strong>Pb-208</strong></li>
+          <li>Max e⁻ in nth orbit = <strong>2n²</strong></li>
+          <li>Aufbau: 4s fills <strong>before</strong> 3d | Exceptions: Cr (3d⁵4s¹), Cu (3d¹⁰4s¹)</li>
+          <li>Hund's Rule: each orbital gets <strong>one electron first</strong>, then pairing</li>
+          <li>Pauli: max <strong>2 electrons per orbital</strong> (opposite spin)</li>
+          <li>Isoelectronic: Ne, Na⁺, Mg²⁺, Al³⁺ — all 10 electrons</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">🧠 Memory Tricks</div>
+        <div class="card-body">
+          <div class="memory-box">
+            <div class="mb-label">Particle Discoverers — NEP</div>
+            <ul class="arrow-list">
+              <li><strong>N</strong>acho → Neutron → <strong>Chadwick</strong></li>
+              <li><strong>E</strong>at → Electron → <strong>Thomson</strong></li>
+              <li><strong>P</strong>ass → Proton → <strong>Rutherford</strong></li>
+            </ul>
+          </div>
+          <div class="memory-box" style="margin-top:10px;">
+            <div class="mb-label">Laws Order — LEP→D (Chronological)</div>
+            <ul class="arrow-list">
+              <li><strong>L</strong>avoisier → Conservation of Mass (1789)</li>
+              <li><strong>P</strong>roust → Definite Proportion (1799)</li>
+              <li><strong>D</strong>alton → Multiple Proportion (1803)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">⚠️ Most Common Exam Traps</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Thomson = Watermelon model (NOT nuclear)</li>
+            <li>Rutherford = discovered <strong>nucleus &amp; proton</strong> (two different discoveries)</li>
+            <li>Bohr = fixed orbits; energy as <strong>Quanta</strong></li>
+            <li>Most isotopes = <strong>Polonium</strong> (NOT Tin or Carbon)</li>
+            <li>Heaviest stable isotope = <strong>Lead (Pb)</strong></li>
+            <li>Aufbau: 4s before 3d (order matters!)</li>
+            <li>Cr &amp; Cu: exceptions to Aufbau (half/fully filled d is stable)</li>
+            <li>Neutrons in H = <strong>0</strong> (only proton, no neutron)</li>
+            <li>Electron mass = 1/<strong>1836</strong> × proton (not 1/2000)</li>
+            <li>Isobar = same <strong>A</strong>; Isotope = same <strong>Z</strong>; Isotone = same <strong>N</strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 02: Atomic Structure (Chemistry) · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

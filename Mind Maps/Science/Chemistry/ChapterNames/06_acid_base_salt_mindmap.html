@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch 06: Acid, Base & Salt | Exam Fusion Prep</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --gold: #f5c842;
+      --accent1: #e74c3c;
+      --accent2: #3498db;
+      --accent3: #2ecc71;
+      --accent4: #9b59b6;
+      --accent5: #e67e22;
+      --accent6: #1abc9c;
+      --text: #e8eaf0;
+      --text-muted: #8b90a8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #12151f 0%, #1a1d2e 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 22px 32px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 13px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .tab-nav button:hover {
+      color: var(--text);
+    }
+
+    .tab-nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 28px 28px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    .gold-card .card-header {
+      background: linear-gradient(90deg, #2a2000, #1e1800);
+      color: var(--gold);
+      border-bottom: 1px solid #3d3000;
+    }
+
+    .green-card .card-header {
+      background: linear-gradient(90deg, #0b2a1a, #0a2016);
+      color: var(--accent3);
+      border-bottom: 1px solid #1a4a2a;
+    }
+
+    .blue-card .card-header {
+      background: linear-gradient(90deg, #0a1e35, #091828);
+      color: var(--accent2);
+      border-bottom: 1px solid #1a3a5a;
+    }
+
+    .purple-card .card-header {
+      background: linear-gradient(90deg, #1a0f2e, #150d24);
+      color: var(--accent4);
+      border-bottom: 1px solid #2e1a4e;
+    }
+
+    .orange-card .card-header {
+      background: linear-gradient(90deg, #2a1600, #221200);
+      color: var(--accent5);
+      border-bottom: 1px solid #4a2a00;
+    }
+
+    .red-card .card-header {
+      background: linear-gradient(90deg, #2a0a0a, #200808);
+      color: var(--accent1);
+      border-bottom: 1px solid #4a1a1a;
+    }
+
+    .teal-card .card-header {
+      background: linear-gradient(90deg, #0a2a28, #082220);
+      color: var(--accent6);
+      border-bottom: 1px solid #1a4a48;
+    }
+
+    .arrow-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .arrow-list li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arrow-list li:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 12px;
+      top: 7px;
+    }
+
+    .arrow-list li b,
+    .arrow-list li strong {
+      color: var(--gold);
+    }
+
+    .exam-trap {
+      background: #1a0909;
+      border-left: 4px solid var(--accent1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .exam-trap .trap-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent1);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .exam-trap p,
+    .exam-trap li {
+      font-size: 13.5px;
+      color: #f0c0c0;
+    }
+
+    .quick-recall {
+      background: #091524;
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .quick-recall .recall-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .quick-recall p,
+    .quick-recall li {
+      font-size: 13.5px;
+      color: #a0c8f0;
+    }
+
+    /* ============================================================
+     FOOLPROOF TABLE WRAPPER (Anti-squish & Scrollable)
+  ============================================================ */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .data-table,
+    .ind-table {
+      border-collapse: collapse;
+      font-size: 13.5px;
+      width: 100%;
+      min-width: 550px;
+      margin: 10px 0;
+    }
+
+    .data-table.min-w-auto {
+      min-width: 280px;
+    }
+
+    .data-table th,
+    .ind-table th {
+      background: #2a2200;
+      color: var(--gold);
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .ind-table th {
+      text-align: center;
+    }
+
+    .data-table td,
+    .ind-table td {
+      background: var(--surface2);
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .ind-table td {
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .data-table tr:hover td,
+    .ind-table tr:hover td {
+      background: #1e2235;
+    }
+
+    .art-pill {
+      display: inline-block;
+      background: var(--gold);
+      color: #0f1117;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 120px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 14px;
+      text-align: center;
+    }
+
+    .stat-box .stat-val {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+    }
+
+    .info-box .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .info-box .info-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-top: 3px;
+    }
+
+    .formula-box {
+      background: #0d1a10;
+      border: 1px solid var(--accent3);
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      color: var(--accent3);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .formula-box span {
+      color: var(--text-muted);
+      font-size: 12px;
+      display: block;
+      margin-top: 4px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+    }
+
+    .type-card.gold-left {
+      border-left: 4px solid var(--gold);
+    }
+
+    .type-card.green-left {
+      border-left: 4px solid var(--accent3);
+    }
+
+    .type-card.blue-left {
+      border-left: 4px solid var(--accent2);
+    }
+
+    .type-card.purple-left {
+      border-left: 4px solid var(--accent4);
+    }
+
+    .type-card.orange-left {
+      border-left: 4px solid var(--accent5);
+    }
+
+    .type-card.red-left {
+      border-left: 4px solid var(--accent1);
+    }
+
+    .type-card.teal-left {
+      border-left: 4px solid var(--accent6);
+    }
+
+    .type-card .type-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .type-card .type-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .type-card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* pH scale bar */
+    .ph-bar {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 48px;
+      margin: 14px 0;
+    }
+
+    .ph-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .8);
+      padding: 2px;
+      text-align: center;
+    }
+
+    /* acid-base comparison */
+    .ab-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 12px 0;
+    }
+
+    @media(max-width:600px) {
+      .ab-compare {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ab-box {
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .ab-box .ab-title {
+      font-weight: 800;
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .page-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+
+    .page-footer span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hl-green {
+      color: var(--accent3);
+      font-weight: 700;
+    }
+
+    .hl-blue {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .hl-red {
+      color: var(--accent1);
+      font-weight: 700;
+    }
+
+    .hl-orange {
+      color: var(--accent5);
+      font-weight: 700;
+    }
+
+    .hl-purple {
+      color: var(--accent4);
+      font-weight: 700;
+    }
+
+    .hl-teal {
+      color: var(--accent6);
+      font-weight: 700;
+    }
+
+    /* Mobile Tweaks */
+    @media(max-width: 500px) {
+      .table-wrap {
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="header-badge">Chemistry · Ch 06</div>
+      <h1>🧪 Acid, Base & Salt</h1>
+      <p>BPSC / BSSC · Exam Fusion Prep &nbsp;|&nbsp; pH Scale · Indicators · Aqua Regia · Salt Types · Acid Sources ·
+        Base Uses</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="active" onclick="switchTab('overview')">🔍 Overview</button>
+    <button onclick="switchTab('acid')">🔴 Acids</button>
+    <button onclick="switchTab('acid-sources')">🍋 Acid Sources</button>
+    <button onclick="switchTab('base')">🔵 Bases</button>
+    <button onclick="switchTab('salt')">🧂 Salts</button>
+    <button onclick="switchTab('indicators')">🎨 Indicators</button>
+    <button onclick="switchTab('ph')">📊 pH Scale</button>
+    <button onclick="switchTab('examtips')">🎯 Exam Tips</button>
+  </div>
+
+  <div id="tab-overview" class="tab-content active">
+    <div class="card gold-card">
+      <div class="card-header">🧪 Chapter At a Glance</div>
+      <div class="card-body">
+        <div class="ab-compare">
+          <div class="ab-box" style="background:#2a0909;border-color:#4a1a1a;">
+            <div class="ab-title" style="color:var(--accent1);">🔴 ACID</div>
+            <ul class="arrow-list">
+              <li>pH &lt; 7</li>
+              <li>Sour taste</li>
+              <li>Blue litmus → <span class="hl-red">Red</span></li>
+              <li>Releases H⁺ (Arrhenius)</li>
+              <li>Proton donor (Brønsted)</li>
+              <li>Accepts e⁻ pair (Lewis)</li>
+            </ul>
+          </div>
+          <div class="ab-box" style="background:#0a1e35;border-color:#1a3a5a;">
+            <div class="ab-title" style="color:var(--accent2);">🔵 BASE</div>
+            <ul class="arrow-list">
+              <li>pH &gt; 7</li>
+              <li>Bitter taste</li>
+              <li>Red litmus → <span class="hl-blue">Blue</span></li>
+              <li>Releases OH⁻ (Arrhenius)</li>
+              <li>Proton acceptor (Brønsted)</li>
+              <li>Donates e⁻ pair (Lewis)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="ph-bar">
+          <div class="ph-seg" style="background:linear-gradient(90deg,#8b0000,#e74c3c);flex:7;">← ACIDS (pH 0–6) →</div>
+          <div class="ph-seg" style="background:#2a2000;flex:1;border:2px solid var(--gold);">7<br />Neutral</div>
+          <div class="ph-seg" style="background:linear-gradient(90deg,#1a3a8a,#0a1030);flex:7;">← BASES (pH 8–14) →
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-card">
+      <div class="card-header">📊 Key Facts — Quick Reference</div>
+      <div class="card-body">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">Aqua Regia</div>
+            <div class="stat-lbl">3:1 HCl:HNO₃ (dissolves Au, Pt)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">Sørensen</div>
+            <div class="stat-lbl">Discoverer of pH concept</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">7.35–7.45</div>
+            <div class="stat-lbl">Normal Blood pH</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">±0.2</div>
+            <div class="stat-lbl">Blood pH change → Death</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-acid" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🔴 Acids — Concepts & Properties</div>
+      <div class="card-body">
+        <div class="type-card gold-left">
+          <div class="type-tag">Arrhenius Concept</div>
+          <div class="type-name">Releases H⁺ in aqueous solution</div>
+          <p>e.g., HCl → H⁺ + Cl⁻ in water | H₂SO₄ → 2H⁺ + SO₄²⁻</p>
+        </div>
+        <div class="type-card blue-left">
+          <div class="type-tag">Brønsted-Lowry Concept</div>
+          <div class="type-name">Proton (H⁺) donor</div>
+          <p>e.g., HCl, H₂SO₄ donate proton to base</p>
+        </div>
+        <div class="type-card purple-left">
+          <div class="type-tag">Lewis Concept</div>
+          <div class="type-name">Accepts electron pair</div>
+          <p>Lewis acids: <strong>BF₃, AlCl₃</strong> (electron deficient)</p>
+        </div>
+        <ul class="arrow-list" style="margin-top:12px;">
+          <li>Nature: <strong>Corrosive</strong></li>
+          <li>Taste: <strong>Sour</strong></li>
+          <li>Blue litmus → <span class="hl-red">Red litmus</span></li>
+          <li>pH &lt; <strong>7</strong></li>
+          <li>Aqueous solution = <strong>Good conductor</strong> of electricity</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card orange-card">
+      <div class="card-header">⚗️ Acid Reactions</div>
+      <div class="card-body">
+        <div class="formula-box">Acid + Metal → Salt + H₂↑<span>Zn + 2HCl → ZnCl₂ + H₂↑</span></div>
+        <div class="formula-box">Acid + Carbonate → Salt + H₂O + CO₂↑<span>CaCO₃ + H₂SO₄ → CaSO₄ + H₂O + CO₂↑</span>
+        </div>
+        <div class="formula-box">Acid + Alkali (Base) → Salt + Water (Neutralisation)<span>HCl + KOH → KCl + H₂O</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card teal-card">
+      <div class="card-header">👑 Aqua Regia</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Aqua Regia</div>
+          <p>Fresh mixture of <strong>3 parts concentrated HCl + 1 part concentrated HNO₃</strong>. Called "Royal
+            Water". Dissolves <strong>Gold (Au) and Platinum (Pt)</strong> — noble metals that resist ordinary acids.
+          </p>
+        </div>
+        <div class="info-row">
+          <div class="info-box">
+            <div class="info-label">Ratio</div>
+            <div class="info-val">3:1 (HCl:HNO₃)</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Dissolves</div>
+            <div class="info-val">Gold (Au) & Platinum (Pt)</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">Nature</div>
+            <div class="info-val">Must be freshly prepared</div>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Special Acids</div>
+          <ul class="arrow-list">
+            <li>HCl (Hydrochloric acid) = helps in <strong>digestion of food</strong> (stomach acid)</li>
+            <li>HF (Hydrofluoric acid) = dissolves <strong>glass</strong> (only acid that does)</li>
+            <li>Benzoic acid = used in <strong>medicine</strong></li>
+            <li>Glacial acetic acid = <strong>99–100% pure</strong> acetic acid (ethanoic acid)</li>
+            <li>Aqua Regia ratio = <strong>3:1 (HCl:HNO₃)</strong> NOT 1:3</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-acid-sources" class="tab-content">
+    <div class="card purple-card">
+      <div class="card-header">🍋 Natural Sources & Uses of Major Acids</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Acid</th>
+                <th>Natural Source</th>
+                <th>Industrial Formation</th>
+                <th>Key Uses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Citric Acid</span></td>
+                <td>Citrus fruit, lemon, orange, tomato</td>
+                <td>Fermentation of raw sugar</td>
+                <td>Food, medicine, cleaning, textile</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Acetic Acid</span></td>
+                <td>Fruit juice, milk, vinegar, oil</td>
+                <td>Fermentation of vinegar; synthesis from acetylene</td>
+                <td>Sour foods; solvent (acetone)</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Formic Acid</span></td>
+                <td>Red ants, scorpions</td>
+                <td>Carbonylation of methanol</td>
+                <td>Fruit preservation, antibacterial, leather &amp; rubber</td>
+              </tr>
+              <tr>
+                <td><span class="hl-red">Sulphuric Acid</span></td>
+                <td>Acid rain, volcanic activity</td>
+                <td>Lead chamber process &amp; Contact method</td>
+                <td>Rechargeable batteries, medicines, explosives</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Nitric Acid</span></td>
+                <td>Alum and saltpeter</td>
+                <td>Saltpeter method &amp; Workland extract</td>
+                <td>Photography, batteries, medicines, fertilisers</td>
+              </tr>
+              <tr>
+                <td><span class="hl-purple">Benzoic Acid</span></td>
+                <td>Grass, leaves, urine of herbivores</td>
+                <td>Hydrolysis of benzoyl chloride</td>
+                <td>Medicine, food preservation</td>
+              </tr>
+              <tr>
+                <td><span class="hl-teal">Oxalic Acid</span></td>
+                <td>Sorrel tree, spinach, beetroot</td>
+                <td>From sodium formate</td>
+                <td>Photography, printing, leather bleaching</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Maleic Acid</span></td>
+                <td>Apple, banana, orange peel, potato, carrot</td>
+                <td>Hydrolysis of maleic anhydride</td>
+                <td>Cosmetics, skin care products</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Acid Sources</div>
+          <ul class="arrow-list">
+            <li>Formic acid = <strong>Red ants &amp; Scorpions</strong> (also causes ant bite sting)</li>
+            <li>Citric acid = <strong>Lemon, Orange, Tomato</strong></li>
+            <li>Oxalic acid = <strong>Spinach, Beetroot</strong></li>
+            <li>Acetic acid = <strong>Vinegar</strong> (glacial acetic = 99–100% pure)</li>
+            <li>Sulphuric acid (Contact method): catalyst = <strong>V₂O₅</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-base" class="tab-content">
+    <div class="card blue-card">
+      <div class="card-header">🔵 Bases — Concepts & Properties</div>
+      <div class="card-body">
+        <div class="type-card gold-left">
+          <div class="type-tag">Arrhenius Concept</div>
+          <div class="type-name">Gives OH⁻ ions in aqueous solution</div>
+          <p>e.g., NaOH → Na⁺ + OH⁻ | KOH → K⁺ + OH⁻</p>
+        </div>
+        <div class="type-card blue-left">
+          <div class="type-tag">Brønsted-Lowry Concept</div>
+          <div class="type-name">Accepts protons (H⁺)</div>
+          <p>e.g., NH₃, H₂O act as bases by accepting H⁺</p>
+        </div>
+        <div class="type-card purple-left">
+          <div class="type-tag">Lewis Concept</div>
+          <div class="type-name">Donates (loses) electron pair</div>
+          <p>e.g., Cl⁻, F⁻, OH⁻ (electron pair donors)</p>
+        </div>
+        <ul class="arrow-list" style="margin-top:12px;">
+          <li>Taste: <strong>Bitter</strong></li>
+          <li>Red litmus → <span class="hl-blue">Blue litmus</span></li>
+          <li>pH &gt; <strong>7</strong></li>
+          <li>Insoluble bases (ZnO, FeO) — react with acids but do NOT have basic properties in water</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card green-card">
+      <div class="card-header">💊 Uses of Important Bases</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Base</th>
+                <th>Common Name</th>
+                <th>Key Uses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ca(OH)₂</td>
+                <td>Slaked Lime</td>
+                <td>Treating acid burns</td>
+              </tr>
+              <tr>
+                <td><span class="hl-gold">NaOH</span></td>
+                <td>Caustic Soda</td>
+                <td>Soap making, petroleum refining</td>
+              </tr>
+              <tr>
+                <td>Mg(OH)₂</td>
+                <td>Milk of Magnesia</td>
+                <td>Removing stomach acidity (antacid)</td>
+              </tr>
+              <tr>
+                <td>CaO</td>
+                <td>Quicklime</td>
+                <td>Making bleaching powder &amp; sodium carbonate</td>
+              </tr>
+              <tr>
+                <td>MgO</td>
+                <td>Magnesia</td>
+                <td>Pharmaceuticals, rubber fillers, boilers</td>
+              </tr>
+              <tr>
+                <td>KOH</td>
+                <td>Caustic Potash</td>
+                <td>Lab reagents, CO₂ &amp; SO₂ absorber</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Base Uses</div>
+          <ul class="arrow-list">
+            <li>Stomach acidity = <strong>Mg(OH)₂</strong> (Milk of Magnesia) — NOT NaOH</li>
+            <li>Soap making = <strong>NaOH</strong> (Caustic Soda)</li>
+            <li>Acid burns treatment = <strong>Ca(OH)₂</strong> (Slaked Lime)</li>
+            <li>KOH absorbs <strong>CO₂ and SO₂</strong> gases in lab</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-salt" class="tab-content">
+    <div class="card gold-card">
+      <div class="card-header">🧂 Salt — Definition & Types</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Product of <strong>neutralisation reaction</strong> of an acid and a base.<br />Acid + Base → Salt + Water
+          </p>
+        </div>
+        <div class="formula-box">HNO₃ + KOH → KNO₃ + H₂O<span>Acid + Base → Salt + Water (Neutralisation)</span></div>
+        <div class="table-wrap" style="margin-top:12px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Type of Salt</th>
+                <th>Description</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Common Salt</span></td>
+                <td>Sodium Chloride</td>
+                <td>NaCl</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Acidic Salt</span></td>
+                <td>Partial neutralisation of polyprotic acid</td>
+                <td>NaHCO₃</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Basic Salt</span></td>
+                <td>Partial neutralisation of weak base with strong acid</td>
+                <td>Mg(OH)Cl</td>
+              </tr>
+              <tr>
+                <td><span class="hl-purple">Double Salt</span></td>
+                <td>Mixing two or more salts</td>
+                <td>Alum: K₂SO₄·Al₂(SO₄)₃·24H₂O</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">Mixed Salt</span></td>
+                <td>One acid + two bases OR two acids + one base</td>
+                <td>CaOCl₂ (Bleaching Powder)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card teal-card">
+      <div class="card-header">💊 Important Salts & Their Uses</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Salt</th>
+                <th>Formula</th>
+                <th>Common Name</th>
+                <th>Key Uses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">NaCl</span></td>
+                <td>NaCl</td>
+                <td>Common Salt / Table Salt</td>
+                <td>Food, pickle preservation; making baking soda &amp; NaOH</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">NaOH</span></td>
+                <td>NaOH</td>
+                <td>Caustic Soda</td>
+                <td>Soap, detergents, wood pulp (paper), purification of bauxite</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Na₂CO₃</span></td>
+                <td>Na₂CO₃</td>
+                <td>Washing Soda</td>
+                <td>Glass, paper, soap, borax making; treats permanent hardness of water</td>
+              </tr>
+              <tr>
+                <td><span class="hl-orange">NaHCO₃</span></td>
+                <td>NaHCO₃</td>
+                <td>Baking Soda</td>
+                <td>Fire extinguisher; yeast agent in baking; making fried food</td>
+              </tr>
+              <tr>
+                <td><span class="hl-red">Ca(OCl)₂</span></td>
+                <td>Ca(OCl)₂</td>
+                <td>Bleaching Powder</td>
+                <td>Swimming pool cleaning; water disinfection; making chloroform</td>
+              </tr>
+              <tr>
+                <td><span class="hl-purple">CaSO₄·½H₂O</span></td>
+                <td>CaSO₄·½H₂O</td>
+                <td>Plaster of Paris (P.O.P.)</td>
+                <td>Plastering broken bones; chalk, toys, decorative items</td>
+              </tr>
+              <tr>
+                <td>C₆H₅COONa</td>
+                <td>C₆H₅COONa</td>
+                <td>Sodium Benzoate</td>
+                <td>Preservative; making jam, tomato sauce</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple-card">
+      <div class="card-header">🔬 Important Salt Formulas (Crystalline Salts)</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Substance</th>
+                <th>Formula</th>
+                <th>Common Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl-gold">Epsom Salt</span></td>
+                <td>MgSO₄·7H₂O</td>
+                <td>Magnesium Sulphate heptahydrate</td>
+              </tr>
+              <tr>
+                <td><span class="hl-green">Mohr's Salt</span></td>
+                <td>FeSO₄·(NH₄)₂SO₄·6H₂O</td>
+                <td>Iron Ammonium Sulphate</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Alum</span></td>
+                <td>K₂SO₄·Al₂(SO₄)₃·24H₂O</td>
+                <td>Potassium Alum</td>
+              </tr>
+              <tr>
+                <td><span class="hl-blue">Blue Vitriol</span></td>
+                <td>CuSO₄·5H₂O</td>
+                <td>Copper Sulphate pentahydrate</td>
+              </tr>
+              <tr>
+                <td><span class="hl-teal">White Vitriol</span></td>
+                <td>ZnSO₄·7H₂O</td>
+                <td>Zinc Sulphate heptahydrate</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Salt Uses</div>
+          <ul class="arrow-list">
+            <li>Baking Soda (NaHCO₃) = <strong>fire extinguisher</strong> + yeast agent</li>
+            <li>Washing Soda (Na₂CO₃) = treats <strong>permanent hardness</strong> of water</li>
+            <li>Bleaching Powder = <strong>Ca(OCl)₂</strong> (Mixed salt) = pool + water disinfection</li>
+            <li>Plaster of Paris = <strong>CaSO₄·½H₂O</strong> (NOT CaSO₄·2H₂O which is Gypsum)</li>
+            <li>Blue Vitriol = <strong>CuSO₄·5H₂O</strong> (Copper sulphate — blue colour)</li>
+            <li>Epsom salt = <strong>MgSO₄·7H₂O</strong> (laxative, bath salt)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-indicators" class="tab-content">
+    <div class="card orange-card">
+      <div class="card-header">🎨 Indicators</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 Definition</div>
+          <p>Substances used to test <strong>acidity or basicity</strong> of a solution by changing colour.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="ind-table">
+            <thead>
+              <tr>
+                <th>Indicator</th>
+                <th style="color:#e74c3c;">Colour in Acid</th>
+                <th style="color:#3498db;">Colour in Base</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Litmus</td>
+                <td style="color:#e74c3c;">Red</td>
+                <td style="color:#3498db;">Blue</td>
+              </tr>
+              <tr>
+                <td>Phenolphthalein</td>
+                <td style="color:#888;">Colourless</td>
+                <td style="color:#ff69b4;">Pink</td>
+              </tr>
+              <tr>
+                <td>Methyl Orange</td>
+                <td style="color:#e74c3c;">Red</td>
+                <td style="color:#f5c842;">Yellow</td>
+              </tr>
+              <tr>
+                <td>Methyl Red</td>
+                <td style="color:#e74c3c;">Red</td>
+                <td style="color:#f5c842;">Yellow</td>
+              </tr>
+              <tr>
+                <td>Phenol Red</td>
+                <td style="color:#f5c842;">Yellow</td>
+                <td style="color:#e74c3c;">Red/Pink</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="type-card teal-left" style="margin-top:14px;">
+          <div class="type-tag">Olfactory Indicators (Smell-based)</div>
+          <div class="type-name">Lose smell in Base; Retain smell in Acid</div>
+          <div class="table-wrap" style="margin-top:8px;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Indicator</th>
+                  <th>In Base</th>
+                  <th>In Acid</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Clove Oil</td>
+                  <td><span class="hl-red">Smell lost ✗</span></td>
+                  <td><span class="hl-green">Smell retained ✓</span></td>
+                </tr>
+                <tr>
+                  <td>Vanilla</td>
+                  <td><span class="hl-red">Smell lost ✗</span></td>
+                  <td><span class="hl-green">Smell retained ✓</span></td>
+                </tr>
+                <tr>
+                  <td>Onion</td>
+                  <td><span class="hl-red">Smell lost ✗</span></td>
+                  <td><span class="hl-green">Smell retained ✓</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — Indicators</div>
+          <ul class="arrow-list">
+            <li>Phenolphthalein: Acid = <strong>Colourless</strong>; Base = <strong>Pink</strong></li>
+            <li>Methyl Orange: Acid = <strong>Red</strong>; Base = <strong>Yellow</strong></li>
+            <li>Phenol Red: Acid = <strong>Yellow</strong>; Base = <strong>Red/Pink</strong> (opposite of Methyl
+              Orange!)</li>
+            <li>Olfactory indicators: smell <strong>lost in Base</strong>, retained in Acid</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-ph" class="tab-content">
+    <div class="card blue-card">
+      <div class="card-header">📊 pH Scale</div>
+      <div class="card-body">
+        <div class="quick-recall">
+          <div class="recall-label">📘 pH Definition</div>
+          <p>Measure of <strong>H⁺ ion concentration</strong> in a solution. Discovered by
+            <strong>Sørensen</strong>.<br />pH = "Power of Hydrogen"
+          </p>
+        </div>
+        <div class="formula-box">pH = −log[H⁺]<span>Or [H⁺] = 10^(−pH) | Discovered by Sørensen</span></div>
+        <div class="ph-bar" style="margin:14px 0;">
+          <div class="ph-seg" style="background:linear-gradient(90deg,#8b0000,#e74c3c);flex:7;">← ACIDS (pH 0–6) →</div>
+          <div class="ph-seg" style="background:#2a2000;flex:1;border:2px solid var(--gold);color:var(--gold);">
+            7<br />Neutral</div>
+          <div class="ph-seg" style="background:linear-gradient(90deg,#1a3a8a,#0a1030);flex:7;">← BASES (pH 8–14) →
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Substance</th>
+                <th>pH Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Lemon Juice</td>
+                <td><span class="hl-red">2.0–2.5</span></td>
+              </tr>
+              <tr>
+                <td>Vinegar</td>
+                <td><span class="hl-red">2.4–3.4</span></td>
+              </tr>
+              <tr>
+                <td>Milk (cow)</td>
+                <td><span class="hl-orange">6.4–6.8</span></td>
+              </tr>
+              <tr>
+                <td>Saliva</td>
+                <td><span class="hl-gold">6.2–7.6</span></td>
+              </tr>
+              <tr>
+                <td>Neutral (Pure Water)</td>
+                <td><span class="hl-gold">7.0</span></td>
+              </tr>
+              <tr>
+                <td>Tears</td>
+                <td><span class="hl-green">7.0–7.5</span></td>
+              </tr>
+              <tr>
+                <td><strong>Blood Plasma</strong></td>
+                <td><span class="hl-green">7.35–7.45</span></td>
+              </tr>
+              <tr>
+                <td>Sea water</td>
+                <td><span class="hl-blue">7.8–8.4</span></td>
+              </tr>
+              <tr>
+                <td>Beverages</td>
+                <td><span class="hl-orange">2–4</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <div class="trap-label">⚠️ Exam Trap — pH</div>
+          <ul class="arrow-list">
+            <li>pH discovered by <strong>Sørensen</strong> (NOT Arrhenius or Brønsted)</li>
+            <li>Blood pH = <strong>7.35–7.45</strong> (slightly basic)</li>
+            <li>Blood pH change of <strong>±0.2 units</strong> = death</li>
+            <li>Lemon pH = <strong>2.0–2.5</strong> (most acidic commonly asked)</li>
+            <li>Sea water pH = <strong>7.8–8.4</strong> (basic)</li>
+            <li>Higher pH = more basic; Lower pH = more acidic</li>
+            <li>pH = 0 → strongest acid | pH = 14 → strongest base</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-examtips" class="tab-content">
+    <div class="card red-card">
+      <div class="card-header">🎯 High-Frequency BPSC/BSSC Exam Points</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Acid: pH &lt; 7, sour, Blue litmus → <strong>Red</strong></li>
+          <li>Base: pH &gt; 7, bitter, Red litmus → <strong>Blue</strong></li>
+          <li>Arrhenius Acid = H⁺ donor | Arrhenius Base = OH⁻ donor</li>
+          <li>Brønsted: Acid = proton donor; Base = proton acceptor</li>
+          <li>Lewis: Acid = accepts e⁻ pair (BF₃, AlCl₃); Base = donates e⁻ pair</li>
+          <li>Aqua Regia = <strong>3:1 HCl:HNO₃</strong>; dissolves <strong>Gold &amp; Platinum</strong></li>
+          <li>HCl = stomach acid (digestion) | HF = dissolves glass</li>
+          <li>Glacial acetic acid = <strong>99–100% pure</strong> acetic acid</li>
+          <li>Formic acid found in <strong>Red ants &amp; Scorpions</strong></li>
+          <li>Citric acid in <strong>lemon, orange, tomato</strong></li>
+          <li>Oxalic acid in <strong>spinach, beetroot</strong></li>
+          <li>NaOH = Caustic Soda = soap making, paper (wood pulp)</li>
+          <li>Mg(OH)₂ = stomach antacid</li>
+          <li>Baking Soda = <strong>NaHCO₃</strong> = fire extinguisher + baking</li>
+          <li>Washing Soda = <strong>Na₂CO₃</strong> = treats permanent hardness of water</li>
+          <li>Bleaching Powder = <strong>Ca(OCl)₂</strong> = pool cleaning, water disinfection</li>
+          <li>Plaster of Paris = <strong>CaSO₄·½H₂O</strong></li>
+          <li>Blue Vitriol = <strong>CuSO₄·5H₂O</strong> | Epsom Salt = <strong>MgSO₄·7H₂O</strong></li>
+          <li>Phenolphthalein: Acid = Colourless; Base = <strong>Pink</strong></li>
+          <li>Methyl Orange: Acid = <strong>Red</strong>; Base = Yellow</li>
+          <li>Olfactory indicators: smell lost in <strong>Base</strong>, retained in Acid</li>
+          <li>pH = <strong>−log[H⁺]</strong>; discovered by <strong>Sørensen</strong></li>
+          <li>Blood pH = <strong>7.35–7.45</strong>; change of ±0.2 = death</li>
+          <li>Lemon pH = 2.0–2.5 | Sea water pH = 7.8–8.4</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card purple-card">
+        <div class="card-header">📋 Acid vs Base Quick Table</div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="data-table min-w-auto">
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Acid</th>
+                  <th>Base</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>pH</td>
+                  <td>&lt; 7</td>
+                  <td>&gt; 7</td>
+                </tr>
+                <tr>
+                  <td>Taste</td>
+                  <td>Sour</td>
+                  <td>Bitter</td>
+                </tr>
+                <tr>
+                  <td>Litmus</td>
+                  <td>Blue → Red</td>
+                  <td>Red → Blue</td>
+                </tr>
+                <tr>
+                  <td>Arrhenius</td>
+                  <td>Gives H⁺</td>
+                  <td>Gives OH⁻</td>
+                </tr>
+                <tr>
+                  <td>Brønsted</td>
+                  <td>Proton donor</td>
+                  <td>Proton acceptor</td>
+                </tr>
+                <tr>
+                  <td>Lewis</td>
+                  <td>Accepts e⁻ pair</td>
+                  <td>Donates e⁻ pair</td>
+                </tr>
+                <tr>
+                  <td>Phenolphthalein</td>
+                  <td>Colourless</td>
+                  <td>Pink</td>
+                </tr>
+                <tr>
+                  <td>Methyl Orange</td>
+                  <td>Red</td>
+                  <td>Yellow</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card teal-card">
+        <div class="card-header">⚠️ Most Common Exam Traps</div>
+        <div class="card-body">
+          <ul class="arrow-list">
+            <li>Aqua Regia = HCl:HNO₃ = <strong>3:1</strong> (NOT 1:3)</li>
+            <li>HF dissolves <strong>glass</strong> (NOT HCl)</li>
+            <li>Phenolphthalein in acid = <strong>Colourless</strong> (NOT red)</li>
+            <li>Phenol Red: acid = <strong>Yellow</strong> (opposite of Methyl Orange)</li>
+            <li>Olfactory indicators lose smell in <strong>Base</strong></li>
+            <li>POP = CaSO₄·<strong>½H₂O</strong> (NOT 2H₂O — that's Gypsum)</li>
+            <li>Washing Soda = Na₂CO₃ (NOT NaHCO₃ — that's Baking Soda)</li>
+            <li>Bleaching powder = Mixed salt (NOT double salt)</li>
+            <li>Lewis ACID accepts e⁻; Lewis BASE donates e⁻</li>
+            <li>Blood pH ±0.2 = <strong>death</strong> (very small tolerance)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Exam Fusion Prep</span> | examfusionprep.com · Ch 06: Acid, Base & Salt (Chemistry) · BPSC / BSSC
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>
