@@ -1,98 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fluid Mechanics (Numerical)</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluid Mechanics (Numerical)</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-Q1WNRY8ECV");
+    </script>
+
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>Fluid Mechanics (Numerical)</h1>
-        <h2>Questions 403 – 404</h2>
-        <div class="subtitle-hi">द्रव यांत्रिकी (संख्यात्मक) — प्रश्न 403 – 404</div>
+    <div class="container">
+        <div class="header">
+            <h1>Fluid Mechanics (Numerical)</h1>
+            <h2>Questions 403 – 404</h2>
+            <div class="subtitle-hi">द्रव यांत्रिकी (संख्यात्मक) — प्रश्न 403 – 404</div>
+        </div>
+
+        <div class="score-bar" id="scoreBar">
+            <span class="score-item total-count">Total: <span id="totalAttempted">0</span>/2</span>
+            <span class="score-item correct-count">Correct: <span id="correctCount">0</span></span>
+            <span class="score-item wrong-count">Wrong: <span id="wrongCount">0</span></span>
+        </div>
+
+        <div class="question-box" id="q403">
+            <span class="q-number">403</span>
+            <div class="q-text-en">When an object is immersed in water, its weight reduces from 4 N in air to 2 N in
+                water. Calculate the amount of buoyant force acting on an object in water.</div>
+            <div class="q-text-hi">जब किसी वस्तु को पानी में डुबाया जाता है, तो उसका भार हवा में 4 N से घटकर पानी में 2
+                N हो जाता है। पानी में वस्तु पर कार्य करने वाले उत्प्लावन बल की मात्रा की गणना कीजिए।</div>
+            <div class="options" data-correct="c">
+                <label class="option-label"><input type="radio" name="q403" value="a"><span class="opt-text"><span
+                            class="opt-en">(A) 3 N</span><br><span class="opt-hi">(A) 3 N</span></span></label>
+                <label class="option-label"><input type="radio" name="q403" value="b"><span class="opt-text"><span
+                            class="opt-en">(B) 5 N</span><br><span class="opt-hi">(B) 5 N</span></span></label>
+                <label class="option-label"><input type="radio" name="q403" value="c"><span class="opt-text"><span
+                            class="opt-en">(C) 2 N</span><br><span class="opt-hi">(C) 2 N</span></span></label>
+                <label class="option-label"><input type="radio" name="q403" value="d"><span class="opt-text"><span
+                            class="opt-en">(D) 8 N</span><br><span class="opt-hi">(D) 8 N</span></span></label>
+                <button class="check-btn" onclick="checkAnswer(403)">Check Answer / उत्तर जाँचें</button>
+            </div>
+            <div class="explanation">
+                <div class="exp-label">&#x2705; Correct Answer: (C)</div>
+                <div class="exp-en">
+                    <ul>
+                        <li>Given: Weight of the body in air = 4 N; Weight of the body in water = 2 N.</li>
+                        <li>In water, there is a buoyancy force which opposes the weight of the body.</li>
+                        <li>Therefore, buoyant force = 4 N &minus; 2 N = 2 N.</li>
+                    </ul>
+                </div>
+                <div class="exp-hi">
+                    <ul>
+                        <li>दिया गया है: हवा में वस्तु का भार = 4 N; पानी में वस्तु का भार = 2 N।</li>
+                        <li>पानी में, एक उत्प्लावन बल होता है जो वस्तु के भार का विरोध करता है।</li>
+                        <li>इसलिए, उत्प्लावन बल = 4 N &minus; 2 N = 2 N।</li>
+                    </ul>
+                </div>
+                <span class="exam-tag">RRB Group D 23/10/2018 (Afternoon)</span>
+            </div>
+        </div>
+
+        <div class="question-box" id="q404">
+            <span class="q-number">404</span>
+            <div class="q-text-en">What amount of water can reach a height of 10 m by a pump of 1 kW in a minute? (Take
+                g = 10 m/s&sup2;)</div>
+            <div class="q-text-hi">1 kW के पंप द्वारा एक मिनट में कितना पानी 10 मीटर की ऊंचाई तक पहुंच सकता है? (g = 10
+                m/s&sup2; लें)</div>
+            <div class="options" data-correct="b">
+                <label class="option-label"><input type="radio" name="q404" value="a"><span class="opt-text"><span
+                            class="opt-en">(A) 100 kg</span><br><span class="opt-hi">(A) 100
+                            किग्रा</span></span></label>
+                <label class="option-label"><input type="radio" name="q404" value="b"><span class="opt-text"><span
+                            class="opt-en">(B) 600 kg</span><br><span class="opt-hi">(B) 600
+                            किग्रा</span></span></label>
+                <label class="option-label"><input type="radio" name="q404" value="c"><span class="opt-text"><span
+                            class="opt-en">(C) 1000 kg</span><br><span class="opt-hi">(C) 1000
+                            किग्रा</span></span></label>
+                <label class="option-label"><input type="radio" name="q404" value="d"><span class="opt-text"><span
+                            class="opt-en">(D) 500 kg</span><br><span class="opt-hi">(D) 500
+                            किग्रा</span></span></label>
+                <button class="check-btn" onclick="checkAnswer(404)">Check Answer / उत्तर जाँचें</button>
+            </div>
+            <div class="explanation">
+                <div class="exp-label">&#x2705; Correct Answer: (B)</div>
+                <div class="exp-en">
+                    <ul>
+                        <li>Given: Power = 1 kW = 1000 W, g = 10 m/s&sup2;, Height (h) = 10 m, Time (t) = 1 minute = 60
+                            s.</li>
+                        <li>Power = Work done / time = (mass &times; acceleration &times; Distance) / time.</li>
+                        <li>1 &times; 10&sup3; = (mass &times; 10 &times; 10) / 60.</li>
+                        <li>mass = (1000 &times; 60) / 100 = 600 kg.</li>
+                    </ul>
+                </div>
+                <div class="exp-hi">
+                    <ul>
+                        <li>दिया गया है: शक्ति = 1 kW = 1000 W, g = 10 m/s&sup2;, ऊँचाई (h) = 10 m, समय (t) = 1 मिनट =
+                            60 s।</li>
+                        <li>शक्ति = किया गया कार्य / समय = (द्रव्यमान &times; त्वरण &times; दूरी) / समय।</li>
+                        <li>1 &times; 10&sup3; = (द्रव्यमान &times; 10 &times; 10) / 60।</li>
+                        <li>द्रव्यमान = (1000 &times; 60) / 100 = 600 किग्रा।</li>
+                    </ul>
+                </div>
+                <span class="exam-tag">RRB Group D 07/12/2018 (Afternoon)</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="footer">
+        Fluid Mechanics (Numerical) — Interactive Quiz<br>
+        For SSC, Railway, UPSC, State PCS Exam Preparation
     </div>
 
-    <div class="score-bar" id="scoreBar">
-        <span class="score-item total-count">Total: <span id="totalAttempted">0</span>/2</span>
-        <span class="score-item correct-count">Correct: <span id="correctCount">0</span></span>
-        <span class="score-item wrong-count">Wrong: <span id="wrongCount">0</span></span>
-    </div>
-
-    <div class="question-box" id="q403">
-        <span class="q-number">403</span>
-        <div class="q-text-en">An object weighs 10 N in air and 8 N when fully immersed in water. What is the magnitude of the buoyant force acting on the object?</div>
-        <div class="q-text-hi">हवा में एक वस्तु का भार 10 N है और पानी में पूरी तरह से डूबने पर 8 N है। वस्तु पर कार्य करने वाले उत्प्लावन बल का परिमाण क्या है?</div>
-        <div class="options" data-correct="a">
-            <label class="option-label"><input type="radio" name="q403" value="a"><span class="opt-text"><span class="opt-en">(A) 2 N</span><br><span class="opt-hi">(A) 2 N</span></span></label>
-            <label class="option-label"><input type="radio" name="q403" value="b"><span class="opt-text"><span class="opt-en">(B) 8 N</span><br><span class="opt-hi">(B) 8 N</span></span></label>
-            <label class="option-label"><input type="radio" name="q403" value="c"><span class="opt-text"><span class="opt-en">(C) 10 N</span><br><span class="opt-hi">(C) 10 N</span></span></label>
-            <label class="option-label"><input type="radio" name="q403" value="d"><span class="opt-text"><span class="opt-en">(D) 18 N</span><br><span class="opt-hi">(D) 18 N</span></span></label>
-            <button class="check-btn" onclick="checkAnswer(403)">Check Answer / उत्तर जाँचें</button>
-        </div>
-        <div class="explanation">
-            <div class="exp-label">✅ Correct Answer: (A)</div>
-            <div class="exp-en">
-                <ul>
-                    <li>The true weight of the object in air is 10 N.</li>
-                    <li>The apparent weight of the object when fully immersed in water is 8 N.</li>
-                    <li>According to Archimedes' principle, Buoyant force = True weight - Apparent weight.</li>
-                    <li>Therefore, Buoyant force = 10 N - 8 N = 2 N.</li>
-                </ul>
-            </div>
-            <div class="exp-hi">
-                <ul>
-                    <li>हवा में वस्तु का वास्तविक भार 10 N है।</li>
-                    <li>पानी में पूरी तरह डूबने पर वस्तु का आभासी भार 8 N है।</li>
-                    <li>आर्किमिडीज के सिद्धांत के अनुसार, उत्प्लावन बल = वास्तविक भार - आभासी भार।</li>
-                    <li>इसलिए, उत्प्लावन बल = 10 N - 8 N = 2 N।</li>
-                </ul>
-            </div>
-            <span class="exam-tag">RRB Group D 12/10/2018 (Morning)</span>
-        </div>
-    </div>
-
-    <div class="question-box" id="q404">
-        <span class="q-number">404</span>
-        <div class="q-text-en">A solid block has a mass of 50 kg and a volume of 0.05 m³. What is the density of the block?</div>
-        <div class="q-text-hi">एक ठोस ब्लॉक का द्रव्यमान 50 kg और आयतन 0.05 m³ है। ब्लॉक का घनत्व क्या है?</div>
-        <div class="options" data-correct="a">
-            <label class="option-label"><input type="radio" name="q404" value="a"><span class="opt-text"><span class="opt-en">(A) 1000 kg/m³</span><br><span class="opt-hi">(A) 1000 kg/m³</span></span></label>
-            <label class="option-label"><input type="radio" name="q404" value="b"><span class="opt-text"><span class="opt-en">(B) 500 kg/m³</span><br><span class="opt-hi">(B) 500 kg/m³</span></span></label>
-            <label class="option-label"><input type="radio" name="q404" value="c"><span class="opt-text"><span class="opt-en">(C) 2500 kg/m³</span><br><span class="opt-hi">(C) 2500 kg/m³</span></span></label>
-            <label class="option-label"><input type="radio" name="q404" value="d"><span class="opt-text"><span class="opt-en">(D) 100 kg/m³</span><br><span class="opt-hi">(D) 100 kg/m³</span></span></label>
-            <button class="check-btn" onclick="checkAnswer(404)">Check Answer / उत्तर जाँचें</button>
-        </div>
-        <div class="explanation">
-            <div class="exp-label">✅ Correct Answer: (A)</div>
-            <div class="exp-en">
-                <ul>
-                    <li>Density (ρ) is defined as the mass of an object per unit volume.</li>
-                    <li>Given: Mass (m) = 50 kg, Volume (V) = 0.05 m³.</li>
-                    <li>Formula: Density = Mass / Volume (ρ = m/V).</li>
-                    <li>Calculation: Density = 50 / 0.05 = 1000 kg/m³.</li>
-                </ul>
-            </div>
-            <div class="exp-hi">
-                <ul>
-                    <li>घनत्व (ρ) को प्रति इकाई आयतन वस्तु के द्रव्यमान के रूप में परिभाषित किया जाता है।</li>
-                    <li>दिया गया है: द्रव्यमान (m) = 50 kg, आयतन (V) = 0.05 m³।</li>
-                    <li>सूत्र: घनत्व = द्रव्यमान / आयतन (ρ = m/V)।</li>
-                    <li>गणना: घनत्व = 50 / 0.05 = 1000 kg/m³।</li>
-                </ul>
-            </div>
-            <span class="exam-tag">RRB ALP Tier-I (14/08/2018) Afternoon</span>
-        </div>
-    </div>
-
-</div>
-<div class="footer">
-    Fluid Mechanics (Numerical) — Interactive Quiz<br>
-    For SSC, Railway, UPSC, State PCS Exam Preparation
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>
