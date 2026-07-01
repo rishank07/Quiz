@@ -5,15 +5,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Exam Fusion Prep</title>
+  <title>Exam Fusion Prep — Free MCQs, Mind Maps & Current Affairs</title>
   <link rel="icon" type="image/png" href="./favicon.png">
+  <meta name="theme-color" content="#070a13">
   <meta name="description"
-    content="Free SSC, Railway, Bihar GK, Lucent, Blackbook, Current Affairs and PYQ Quiz Platform for Competitive Exams.">
+    content="Free SSC, Railway, BPSC & BSSC preparation — Lucent's Objective MCQs, Pinnacle GS, Blackbook Vocabulary, Bihar Special, Mind Maps and daily Current Affairs. हिंदी + English.">
 
-  <meta property="og:title" content="Exam Fusion Prep">
+  <meta property="og:title" content="Exam Fusion Prep — Free Competitive Exam Hub">
+  <meta property="og:description"
+    content="Lucent MCQs · Pinnacle GS · Blackbook · Bihar Special · Mind Maps · Current Affairs — 100% free, bilingual (हिंदी + English).">
   <meta property="og:url" content="https://examfusionprep.com">
   <meta property="og:image" content="https://examfusionprep.com/logo.png">
   <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Exam Fusion Prep — Free Competitive Exam Hub">
+  <meta name="twitter:image" content="https://examfusionprep.com/logo.png">
 
   <script type="application/ld+json">
   {
@@ -21,7 +27,12 @@
     "@type": "EducationalOrganization",
     "name": "Exam Fusion Prep",
     "url": "https://examfusionprep.com",
-    "logo": "https://examfusionprep.com/logo.png"
+    "logo": "https://examfusionprep.com/logo.png",
+    "description": "Free bilingual (Hindi + English) preparation platform for SSC, Railway, BPSC and BSSC exams — MCQs, mind maps and current affairs.",
+    "sameAs": [
+      "https://youtube.com/@examfusionprep",
+      "https://t.me/examfusionprep"
+    ]
   }
   </script>
 
@@ -97,6 +108,14 @@
       opacity: 0.035;
       mix-blend-mode: overlay;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Visible keyboard focus */
+    a:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--gold-soft);
+      outline-offset: 3px;
+      border-radius: 6px;
     }
 
     /* ===== YouTube Banner ===== */
@@ -193,6 +212,10 @@
       grid-area: subtitle;
     }
 
+    .stats {
+      grid-area: stats;
+    }
+
     nav.menu-container {
       grid-area: menu;
     }
@@ -243,7 +266,91 @@
       font-size: 13px;
       font-weight: 500;
       letter-spacing: 0.6px;
-      margin-bottom: 30px;
+      margin-bottom: 18px;
+    }
+
+    /* ===== Stats chips ===== */
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 26px;
+      animation: rise 0.7s cubic-bezier(.2, .8, .2, 1) 0.14s both;
+    }
+
+    .stats span {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      color: var(--gold-soft);
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(246, 217, 138, 0.07);
+      border: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    .stats span i {
+      margin-right: 6px;
+      font-size: 10px;
+      opacity: 0.8;
+    }
+
+    /* ===== Search ===== */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 18px;
+      animation: rise 0.7s cubic-bezier(.2, .8, .2, 1) 0.16s both;
+    }
+
+    .search-wrap .fa-magnifying-glass {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: var(--gold);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    #searchBox {
+      width: 100%;
+      padding: 13px 16px 13px 42px;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line);
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    }
+
+    #searchBox::placeholder {
+      color: var(--muted);
+    }
+
+    #searchBox:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.07);
+      border-color: var(--line-strong);
+      box-shadow: 0 0 0 3px rgba(246, 217, 138, 0.10), 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .no-results {
+      display: none;
+      padding: 22px 14px;
+      font-size: 13.5px;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      line-height: 1.6;
+    }
+
+    .no-results.show {
+      display: block;
     }
 
     /* ===== Menu ===== */
@@ -255,6 +362,10 @@
       margin: 12px 0;
       opacity: 0;
       animation: rise 0.65s cubic-bezier(.2, .8, .2, 1) forwards;
+    }
+
+    .menu li.hidden {
+      display: none;
     }
 
     /* Animation Delays */
@@ -310,7 +421,7 @@
       transition: transform 0.3s cubic-bezier(.2, .8, .2, 1), border-color 0.3s, background 0.3s, box-shadow 0.3s;
     }
 
-    /* Item Left Icon (Using FontAwesome directly in HTML now) */
+    /* Item Left Icon */
     .menu-icon {
       flex: 0 0 auto;
       width: 40px;
@@ -328,6 +439,20 @@
 
     .link-text {
       flex: 1;
+    }
+
+    /* NEW badge */
+    .badge-new {
+      flex: 0 0 auto;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: #0c0f18;
+      background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+      padding: 4px 8px;
+      border-radius: 999px;
+      box-shadow: 0 4px 12px rgba(246, 217, 138, 0.25);
+      animation: pulseGlow 2.4s ease-in-out infinite;
     }
 
     /* Chevron Right */
@@ -356,7 +481,7 @@
       transform: translateX(4px);
     }
 
-    /* Telegram Title (Replaces disabled a tag) */
+    /* Telegram Title */
     .group-title {
       display: flex;
       align-items: center;
@@ -374,7 +499,6 @@
     .group-title i {
       font-size: 16px;
       color: #3b82f6;
-      /* Telegram Blue tone */
     }
 
     /* Telegram sub-menu */
@@ -417,6 +541,14 @@
       animation: rise 0.7s ease 0.8s both;
     }
 
+    .footer .tagline {
+      display: block;
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--gold-soft);
+      opacity: 0.65;
+    }
+
     /* ===== Media Queries ===== */
     @media (min-width: 601px) and (max-width: 1024px) {
       .container {
@@ -441,7 +573,7 @@
 
       p.subtitle {
         font-size: 15px;
-        margin-bottom: 38px;
+        margin-bottom: 20px;
       }
 
       .menu {
@@ -457,8 +589,6 @@
       .menu>li:nth-child(8) {
         grid-column: 1 / -1;
       }
-
-      /* Sub-menu spans full width */
 
       .sub-menu {
         flex-direction: row;
@@ -478,12 +608,13 @@
         text-align: left;
         align-items: start;
         grid-template-columns: 340px 1fr;
-        grid-template-rows: auto auto auto auto 1fr auto;
+        grid-template-rows: auto auto auto auto auto 1fr auto;
         grid-template-areas:
           "logo    menu"
           "kicker  menu"
           "title   menu"
           "subtitle menu"
+          "stats   menu"
           ".       menu"
           "footer  menu";
       }
@@ -507,6 +638,11 @@
       p.subtitle {
         font-size: 15px;
         max-width: 280px;
+      }
+
+      .stats {
+        justify-content: flex-start;
+        max-width: 300px;
       }
 
       .footer {
@@ -587,6 +723,18 @@
       }
     }
 
+    @keyframes pulseGlow {
+
+      0%,
+      100% {
+        box-shadow: 0 4px 12px rgba(246, 217, 138, 0.25);
+      }
+
+      50% {
+        box-shadow: 0 4px 20px rgba(246, 217, 138, 0.55);
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
 
       *,
@@ -598,6 +746,8 @@
 
       .menu li,
       .container,
+      .stats,
+      .search-wrap,
       .footer {
         opacity: 1 !important;
       }
@@ -618,10 +768,22 @@
 
     <span class="kicker">Competitive Exam Hub</span>
     <h1>Exam Fusion Prep</h1>
-    <p class="subtitle">Select a Book/Topic to Begin</p>
+    <p class="subtitle">Free MCQs, Mind Maps &amp; Current Affairs for SSC · Railway · BPSC · BSSC</p>
 
-    <nav class="menu-container">
-      <ul class="menu">
+    <div class="stats" aria-label="Highlights">
+      <span><i class="fa-solid fa-layer-group"></i>7 Study Hubs</span>
+      <span><i class="fa-solid fa-language"></i>हिंदी + English</span>
+      <span><i class="fa-solid fa-indian-rupee-sign"></i>100% Free</span>
+    </div>
+
+    <nav class="menu-container" aria-label="Study sections">
+      <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="search" id="searchBox" placeholder="Search — Lucent, Bihar, करेंट अफेयर्स…"
+          aria-label="Search study sections" autocomplete="off">
+      </div>
+
+      <ul class="menu" id="menuList">
         <li>
           <a href="./Books/Ghatnachakra Purvalokan/SubjectName.html" onclick="openPage(event)">
             <i class="fa-solid fa-clock-rotate-left menu-icon"></i>
@@ -674,12 +836,13 @@
           <a href="./Mind Maps/SubjectName.html" onclick="openPage(event)">
             <i class="fa-solid fa-sitemap menu-icon"></i>
             <span class="link-text">Mind Maps / माइंड मैप्स</span>
+            <span class="badge-new">NEW</span>
             <i class="fa-solid fa-chevron-right chevron-icon"></i>
           </a>
         </li>
 
         <!-- Telegram Section -->
-        <li>
+        <li data-noresult>
           <div class="group-title">
             <i class="fa-brands fa-telegram"></i> Telegram Community
           </div>
@@ -693,12 +856,19 @@
           </div>
         </li>
       </ul>
+
+      <div class="no-results" id="noResults">
+        कोई section नहीं मिला। Try "Lucent", "Bihar", "Current Affairs" या "Mind Maps".
+      </div>
     </nav>
 
-    <footer class="footer">© 2026 ExamFusion Prep. All Rights Reserved.</footer>
+    <footer class="footer">
+      © 2026 ExamFusion Prep. All Rights Reserved.
+      <span class="tagline">मेहनत आपकी, साथ हमारा 🎯</span>
+    </footer>
   </div>
 
-  <!-- ✨ Optimized Loading Script -->
+  <!-- ✨ Loading + Search Script -->
   <script>
     function openPage(event) {
       const linkEl = event.currentTarget;
@@ -736,6 +906,34 @@
         a.style.pointerEvents = "auto";
       });
     });
+
+    // 🔍 Live section search (English + Hindi)
+    (function () {
+      const box = document.getElementById("searchBox");
+      const items = Array.from(document.querySelectorAll("#menuList > li"));
+      const noResults = document.getElementById("noResults");
+
+      box.addEventListener("input", function () {
+        const q = box.value.trim().toLowerCase();
+        let visible = 0;
+
+        items.forEach(function (li) {
+          // Telegram block always stays visible
+          if (li.hasAttribute("data-noresult")) {
+            li.classList.toggle("hidden", q.length > 0 &&
+              !("telegram community notes channel discussion group टेलीग्राम".includes(q)));
+            if (!li.classList.contains("hidden")) visible++;
+            return;
+          }
+          const text = li.textContent.toLowerCase();
+          const match = text.includes(q);
+          li.classList.toggle("hidden", !match);
+          if (match) visible++;
+        });
+
+        noResults.classList.toggle("show", visible === 0);
+      });
+    })();
   </script>
 </body>
 
