@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latitude, Longitude and Standard Time | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1020px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.9rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.2rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.92rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.95rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .pill-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+  .pill-list span{
+    background:var(--surface2);border:1px solid var(--border);
+    color:#dfe2ee;font-size:0.82rem;padding:5px 12px;border-radius:999px;
+  }
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🧭 LATITUDE, LONGITUDE &amp; STANDARD TIME <span class="art-pill">World Geography · Ch 05</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('latitude')">Latitude</button>
+    <button class="tab-btn" onclick="switchTab('zones')">Temperature Zones</button>
+    <button class="tab-btn" onclick="switchTab('countries')">Countries on Lines</button>
+    <button class="tab-btn" onclick="switchTab('longitude')">Longitude</button>
+    <button class="tab-btn" onclick="switchTab('time')">Standard Time</button>
+    <button class="tab-btn" onclick="switchTab('idl')">Int'l Date Line</button>
+    <button class="tab-btn" onclick="switchTab('hemisphere')">Hemispheres</button>
+  </div>
+
+  <!-- TAB 1: LATITUDE -->
+  <div id="latitude" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">📐 Latitude</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Imaginary horizontal lines drawn on the globe (East to West)</li>
+          <li>Angular distance of a place North or South from the Equator</li>
+          <li>Distance between latitudes is equal / Parallel</li>
+          <li>Distance between two latitude lines – 111 km</li>
+          <li>Total latitudes – 181 • Latitude lines/circles at the interval of 1° – 179 (excluding the two poles)</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Use of Latitude</span>
+          <span class="v">Useful in locating a place and determining climatic zones</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📏 Important Latitude Lines</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Latitude</th><th>Name</th><th>Key Feature</th></tr></thead>
+          <tbody>
+            <tr><td>0°</td><td>Equator</td><td>Divides Earth into Northern and Southern hemispheres</td></tr>
+            <tr><td>23½° N</td><td>Tropic of Cancer</td><td>Sun is directly overhead on 21 June (Summer Solstice)</td></tr>
+            <tr><td>23½° S</td><td>Tropic of Capricorn</td><td>Sun is directly overhead on 22 December (Winter Solstice)</td></tr>
+            <tr><td>66½° N</td><td>Arctic Circle</td><td>Northern boundary of midnight sun</td></tr>
+            <tr><td>66½° S</td><td>Antarctic Circle</td><td>Southern boundary of midnight sun</td></tr>
+            <tr><td>90° N</td><td>North Pole</td><td>Northern end of Earth's axis</td></tr>
+            <tr><td>90° S</td><td>South Pole</td><td>Southern end of Earth's axis</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Distance between two latitude lines is fixed at <b>111 km</b> everywhere (lines are parallel and equally spaced).
+    </div>
+  </div>
+
+  <!-- TAB 2: TEMPERATURE ZONES -->
+  <div id="zones" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌡️ Temperature Zones</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Torrid Zone</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Region between Tropic of Cancer and Tropic of Capricorn</p>
+          </div>
+          <div class="sub-box">
+            <h4>Temperate Zone</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Region between Tropic of Cancer / Capricorn and the Arctic / Antarctic circles (in respective hemispheres)</p>
+          </div>
+          <div class="sub-box">
+            <h4>Frigid Zone</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Region between Arctic Circle and North Pole (Northern Hemisphere) / Region between Antarctic Circle and South Pole (Southern Hemisphere)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Torrid Zone lies entirely between the two Tropics — don't confuse it with the Temperate Zone, which lies beyond the Tropics up to the Polar Circles.
+    </div>
+  </div>
+
+  <!-- TAB 3: COUNTRIES ON LINES -->
+  <div id="countries" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🌍 Countries on the Equator (13 Countries)</div>
+      <div class="card-body">
+        <div class="pill-list">
+          <span>Ecuador</span><span>Colombia</span><span>Brazil</span><span>Sao Tome</span><span>Principe</span>
+          <span>Gabon</span><span>Rep. of the Congo</span><span>Uganda</span><span>Kenya</span><span>Somalia</span>
+          <span>Maldives</span><span>Indonesia</span><span>Kiribati</span>
+        </div>
+        <div class="info-row" style="margin-top:12px;">
+          <span class="k">📌 Oceans crossed</span>
+          <span class="v">Atlantic, Pacific &amp; Indian Ocean</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🌍 Countries on Tropic of Cancer (18 Countries)</div>
+      <div class="card-body">
+        <div class="pill-list">
+          <span>Mexico</span><span>Bahamas</span><span>W. Sahara</span><span>Mauritania</span><span>Mali</span>
+          <span>Algeria</span><span>Niger</span><span>Libya</span><span>Chad</span><span>Egypt</span>
+          <span>Saudi Arabia</span><span>UAE</span><span>Oman</span><span>India</span><span>Myanmar</span>
+          <span>Bangladesh</span><span>China</span><span>Taiwan</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🌍 Countries on Tropic of Capricorn (12 Countries)</div>
+      <div class="card-body">
+        <div class="pill-list">
+          <span>Chile</span><span>Argentina</span><span>Paraguay</span><span>Brazil</span><span>Namibia</span>
+          <span>Botswana</span><span>S. Africa</span><span>Mozambique</span><span>Madagascar</span><span>Australia</span>
+          <span>Tonga</span><span>French Polynesia (France)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      <b>Brazil</b> is the only country that lies on both the Equator and Tropic of Capricorn.
+    </div>
+  </div>
+
+  <!-- TAB 4: LONGITUDE -->
+  <div id="longitude" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">📍 Longitude</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Prime Meridian (0° Longitude) or Greenwich Line – reference for angular distance of any place</li>
+          <li>Imaginary lines joining North and South Pole</li>
+          <li>Lines are not parallel</li>
+          <li>Distance between longitudes increases from poles towards the equator</li>
+          <li>Minimum distance – at poles • Maximum distance – 111.32 km (at the Equator)</li>
+          <li>Total Longitudes – 360</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Measurement unit</span>
+          <span class="v">Degree, Minute and Second</span>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Distance between two longitude lines</span>
+          <span class="v">Called a "Gusset"</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">🇬🇧 Prime Meridian / Greenwich Mean Time</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Passes through Greenwich Observatory (London)</li>
+          <li>Passes through 8 countries spanning 3 continents — Europe, Africa and Antarctica</li>
+        </ul>
+        <div class="pill-list">
+          <span>United Kingdom</span><span>France</span><span>Spain</span><span>Algeria</span>
+          <span>Mali</span><span>Burkina Faso</span><span>Togo</span><span>Ghana</span>
+        </div>
+        <div class="info-row" style="margin-top:12px;">
+          <span class="k">📌 0° Latitude × 0° Longitude intersect</span>
+          <span class="v">In the Atlantic Ocean (Gulf of Guinea)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Mnemonic for Greenwich-line countries: <b>"TVM SAB FRANCE GAYE"</b> — Togo, (UK), Mali, Spain, Algeria, Burkina Faso, France, Ghana.
+    </div>
+  </div>
+
+  <!-- TAB 5: STANDARD TIME -->
+  <div id="time" class="tab-content">
+    <div class="card">
+      <div class="card-header red">🕒 Time Determination / Standard Time</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Earth rotates 360° in 24 hours</li>
+          <li>In 1 hour = 15° (360° ÷ 24 = 15°)</li>
+          <li>Time taken to rotate 1° = 4 minutes</li>
+          <li>Increase in time for going east of 0° Longitude</li>
+          <li>Decrease in time for going west of 0° Longitude</li>
+          <li>Time difference for 1° longitude: 4 minutes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🇮🇳 India's Standard Time</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">82½° E</div><div class="lbl">India's Standard Meridian</div></div>
+          <div class="stat-box"><div class="num">+5:30</div><div class="lbl">Ahead of GMT</div></div>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Basis of World's Standard Time</span>
+          <span class="v">Greenwich Mean Time (GMT)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      India is <b>ahead</b> of GMT by 5 hours 30 minutes (not behind) since 82½°E lies east of the Prime Meridian.
+    </div>
+  </div>
+
+  <!-- TAB 6: IDL -->
+  <div id="idl" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🌐 International Date Line (IDL)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Location: 180° Longitude → Zig-Zag path</li>
+          <li>One day difference between East and West of the line</li>
+          <li>Runs parallel to the Bering Strait</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🔁 Crossing the IDL</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Going West (East → West)</h4>
+            <ul class="arrow-list">
+              <li>Day is LOST</li>
+              <li>Date is GAINED</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Going East (West → East)</h4>
+            <ul class="arrow-list">
+              <li>Day is GAINED</li>
+              <li>Date is LOST</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📌 Important Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>World is divided into 24 time zones</li>
+          <li>France has the most time zones – 12 (due to overseas territories)</li>
+          <li>When it is 12 noon on the Greenwich meridian, sunrise (local 6 AM) occurs at 90° West longitude</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Mnemonic: <b>"FEST"</b> — IDL zig-zags to avoid splitting countries, especially around Russia/Alaska and Pacific island nations.
+    </div>
+  </div>
+
+  <!-- TAB 7: HEMISPHERES -->
+  <div id="hemisphere" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">🌎 Hemispheres</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Horizontal Division — by Equator</h4>
+            <ul class="arrow-list">
+              <li>Northern Hemisphere (0° to 90° North Pole)</li>
+              <li>Southern Hemisphere (0° to 90° South Pole)</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Vertical Division — by Prime Meridian &amp; IDL</h4>
+            <ul class="arrow-list">
+              <li>Eastern Hemisphere</li>
+              <li>Western Hemisphere</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Equator → splits Earth North/South · Prime Meridian + IDL → splits Earth East/West
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Latitude, Longitude and Standard Time · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

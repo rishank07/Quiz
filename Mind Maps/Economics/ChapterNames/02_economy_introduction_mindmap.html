@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economy: An Introduction - Ch02 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:120px;
+}
+.stat-box .num{color:var(--gold);font-size:22px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 02 · Economics</span>
+    <h1>Economy: An Introduction</h1>
+    <p>Economic Activities · Types of Economy · Sectors · India's Global Position — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('intro')">📘 Economy & Activities</button>
+    <button class="tab-btn" onclick="switchTab('types')">🏛 Types of Economy</button>
+    <button class="tab-btn" onclick="switchTab('indian')">🇮🇳 Indian Economy Traits</button>
+    <button class="tab-btn" onclick="switchTab('sectors')">⚙ Sectors of Economy</button>
+    <button class="tab-btn" onclick="switchTab('position')">🌍 India's Global Position</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: ECONOMY & ACTIVITIES -->
+  <div class="tab-content active" id="intro">
+    <div class="card">
+      <div class="card-header gold">What is Economy?</div>
+      <div class="card-body">
+        <p class="note">Economy relates to the overall economic activities of any country — in the form of investment, production, and consumption.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Economic vs Non-Economic Activities</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Description</th><th>Examples</th></tr>
+          <tr><td>Economic Activities</td><td>Engaged in to earn money</td><td>Doctor, Teacher, Trader</td></tr>
+          <tr><td>Non-Economic Activities</td><td>Not aimed at earning money</td><td>Social, NGO, and Religious activities</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          The core test for "economic activity" is whether it's aimed at earning money — not whether it produces value for society.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: TYPES OF ECONOMY -->
+  <div class="tab-content" id="types">
+    <div class="card">
+      <div class="card-header green">Types of Economy (By Govt. Control)</div>
+      <div class="card-body">
+        <h4 class="sub2">1. Capitalist (Liberal) Economy</h4>
+        <ul class="arrow-list">
+          <li>Production and price decisions made by market forces</li>
+          <li>Minimal/negligible government control on economic activities</li>
+          <li>Full economic freedom — non-interference (Laissez-faire)</li>
+          <li>Economic Objective: To earn profit</li>
+          <li>Private ownership; unequal distribution of resources</li>
+          <li>Key aspect of the free-market economy</li>
+        </ul>
+        <div class="info-row"><span class="k">Examples</span><span class="v">USA, UK</span></div>
+
+        <h4 class="sub2">2. Socialist (State) Economy</h4>
+        <ul class="arrow-list">
+          <li>Concept developed by German philosopher Karl Marx</li>
+          <li>State holds significant power; public ownership of resources</li>
+          <li>Economic Objective: Social welfare</li>
+          <li>Lack of economic freedom</li>
+        </ul>
+        <div class="info-row"><span class="k">Example</span><span class="v">Former Soviet Union (now Russia)</span></div>
+
+        <h4 class="sub2">3. Mixed Economy</h4>
+        <ul class="arrow-list">
+          <li>Coexistence of both private and public sectors</li>
+          <li>Limited role of state government</li>
+          <li>Economic Objective: Social welfare + Profit</li>
+          <li>Less unequal income distribution</li>
+          <li>Gandhian Economy is based on the Principle of Trusteeship</li>
+        </ul>
+        <div class="info-row"><span class="k">Example</span><span class="v">Indian Economy</span></div>
+
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Socialism ≠ Communism in strict economic classification — this chapter defines Socialist Economy via Karl Marx's concept with state ownership, distinct from the Mixed Economy model India follows.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Types of Economy (By External Relations)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Key Features</th><th>Example</th></tr>
+          <tr><td>Open Economy</td><td>Dominance of liberal/private elements; minimal import-export restrictions</td><td>Hong Kong, Singapore</td></tr>
+          <tr><td>Closed Economy</td><td>No relation with external economies; zero imports and exports</td><td>North Korea</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: INDIAN ECONOMY TRAITS -->
+  <div class="tab-content" id="indian">
+    <div class="card">
+      <div class="card-header orange">Characteristics of Indian Economy</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Predominance of Agriculture</li>
+          <li>Technological backwardness</li>
+          <li>Low rate of Capital formation</li>
+          <li>Unemployment</li>
+          <li>Low national and per capita income</li>
+          <li>Industrial backwardness</li>
+        </ul>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          India is classified as a Mixed Economy, based on the Gandhian Principle of Trusteeship for balancing private ownership with social welfare.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: SECTORS OF ECONOMY -->
+  <div class="tab-content" id="sectors">
+    <div class="card">
+      <div class="card-header teal">Five Sectors of the Economy</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">5</span><span class="lbl">Sectors Total</span></div>
+        </div>
+        <ul class="arrow-list">
+          <li>Primary Sector</li>
+          <li>Secondary Sector</li>
+          <li>Tertiary Sector</li>
+          <li>Quaternary Sector</li>
+          <li>Quinary Sector</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">1. Primary Sector</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Dependency</span><span class="v">Directly dependent on environment</span></div>
+        <div class="info-row"><span class="k">Activities</span><span class="v">Agriculture, Animal Husbandry, Forestry, Fisheries, Mining</span></div>
+        <div class="info-row"><span class="k">Workers</span><span class="v">Red Collar Workers</span></div>
+        <div class="info-row"><span class="k">GDP Contribution</span><span class="v">~16%</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">2. Secondary Sector</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Function</span><span class="v">Uses primary sector output as raw material; transforms into finished goods</span></div>
+        <div class="info-row"><span class="k">Activities</span><span class="v">Construction, Manufacturing (textile, bread), Electricity, Gas, Water Supply</span></div>
+        <div class="info-row"><span class="k">Also Called</span><span class="v">Industrial Sector</span></div>
+        <div class="info-row"><span class="k">Workers</span><span class="v">Blue Collar Workers</span></div>
+        <div class="info-row"><span class="k">GDP Contribution</span><span class="v">~27.6%</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">3. Tertiary Sector (Service Sector)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Function</span><span class="v">Provides services to both Primary and Secondary sectors</span></div>
+        <div class="info-row"><span class="k">Activities</span><span class="v">Banking, Trade, Insurance, Transport, Storage, Education, Health, Tourism, Public Administration</span></div>
+        <div class="info-row"><span class="k">Workers</span><span class="v">White Collar Workers</span></div>
+        <div class="info-row"><span class="k">GDP Contribution</span><span class="v">~55% (Highest)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">4. Quaternary Sector</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Knowledge-based services: Culture, Library, Research, Education, Information Technology</li>
+          <li>Also called the "Knowledge Sector"</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">5. Quinary Sector</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Related to the highest level of decision-makers or policy-makers</li>
+          <li>Creation of new ideas</li>
+          <li>Re-evaluation of old ideas</li>
+          <li>Universities, media, science, politics</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Sectors – Summary Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Sector</th><th>Activities</th><th>Workers</th><th>GDP Share (India)</th></tr>
+          <tr><td>Primary</td><td>Agriculture, Animal Husbandry, Forestry, Fisheries, Mining</td><td>Red Collar</td><td>~16%</td></tr>
+          <tr><td>Secondary</td><td>Manufacturing, Construction, Electricity, Gas, Water Supply</td><td>Blue Collar</td><td>~27.6%</td></tr>
+          <tr><td>Tertiary (Service)</td><td>Banking, Trade, Insurance, Transport, Education, Health, Tourism</td><td>White Collar</td><td>~55% (Highest)</td></tr>
+          <tr><td>Quaternary</td><td>Knowledge-based: Culture, Library, Research, IT, Education</td><td>Knowledge Workers</td><td>—</td></tr>
+          <tr><td>Quinary</td><td>Highest decision-making, policy-making, new ideas, media, science</td><td>Policy Makers</td><td>—</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          As a country develops, sector GDP contribution generally follows: Agriculture < Industry < Services. India already fits this pattern with Services contributing the highest share (~55%).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: INDIA'S GLOBAL POSITION -->
+  <div class="tab-content" id="position">
+    <div class="card">
+      <div class="card-header gold">India's Position in the World Economy</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">GDP Rank</span><span class="v">4th (IMF World Economic Outlook, April 2025)</span></div>
+        <div class="info-row"><span class="k">PPP Rank</span><span class="v">3rd (after China and USA)</span></div>
+        <h4 class="sub2">Top 5 Economies by GDP (2025)</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Rank</th><th>Country</th></tr>
+          <tr><td>1</td><td>USA</td></tr>
+          <tr><td>2</td><td>China</td></tr>
+          <tr><td>3</td><td>Germany</td></tr>
+          <tr><td>4</td><td>India</td></tr>
+          <tr><td>5</td><td>Japan</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          India ranks 4th by nominal GDP but 3rd by PPP — the PPP ranking adjusts for cost-of-living differences, pushing India ahead of Germany and Japan.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Reference Summary</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>Economy</td><td>Overall economic activities (investment, production, consumption)</td></tr>
+          <tr><td>Economic Activities</td><td>Aimed at earning money – Doctor, Teacher, Trader</td></tr>
+          <tr><td>Non-Economic Activities</td><td>Not for earning – Social, NGO, Religious activities</td></tr>
+          <tr><td>Capitalist Economy</td><td>Private ownership; free market; Laissez-faire; Examples: USA, UK</td></tr>
+          <tr><td>Socialist Economy</td><td>Karl Marx concept; State power; public ownership; Example: Former USSR</td></tr>
+          <tr><td>Mixed Economy</td><td>Both private + public; India is example; based on Trusteeship (Gandhian)</td></tr>
+          <tr><td>Open Economy</td><td>Liberal elements; minimal import-export restrictions; Example: Hong Kong, Singapore</td></tr>
+          <tr><td>Closed Economy</td><td>No external relations; zero imports/exports; Example: North Korea</td></tr>
+          <tr><td>Indian Economy – Key Feature</td><td>Mixed Economy</td></tr>
+          <tr><td>Gandhian Economy</td><td>Based on Principle of Trusteeship</td></tr>
+          <tr><td>Primary Sector</td><td>Agriculture, Forestry, Fisheries, Mining; Red Collar Workers; ~16% GDP</td></tr>
+          <tr><td>Secondary Sector</td><td>Manufacturing, Construction; Blue Collar Workers; ~27.6% GDP</td></tr>
+          <tr><td>Tertiary Sector</td><td>Services (Banking, Trade, Transport); White Collar Workers; ~55% GDP (Highest)</td></tr>
+          <tr><td>Quaternary Sector</td><td>"Knowledge Sector" – Culture, Library, Research, IT</td></tr>
+          <tr><td>Quinary Sector</td><td>Policy makers, highest decision-making, new ideas</td></tr>
+          <tr><td>India GDP Rank (2025)</td><td>4th by GDP; 3rd by PPP (after China and USA)</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Economy: An Introduction (Ch02) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

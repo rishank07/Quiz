@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abbreviation - Ch19 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+td.abbr{color:var(--gold);font-weight:bold;white-space:nowrap;}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:120px;
+}
+.stat-box .num{color:var(--gold);font-size:22px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 19</span>
+    <h1>Abbreviation</h1>
+    <p>Complete A–Z Abbreviations Reference — BPSC / BSSC</p>
+    <div class="stat-grid">
+      <div class="stat-box"><span class="num">150+</span><span class="lbl">Abbreviations Covered</span></div>
+      <div class="stat-box"><span class="num">A–Z</span><span class="lbl">Full Coverage</span></div>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('ac')">A–C</button>
+    <button class="tab-btn" onclick="switchTab('dg')">D–G</button>
+    <button class="tab-btn" onclick="switchTab('hk')">H–K</button>
+    <button class="tab-btn" onclick="switchTab('ln')">L–N</button>
+    <button class="tab-btn" onclick="switchTab('oq')">O–Q</button>
+    <button class="tab-btn" onclick="switchTab('rs')">R–S</button>
+    <button class="tab-btn" onclick="switchTab('tz')">T–Z</button>
+  </div>
+
+  <!-- TAB A-C -->
+  <div class="tab-content active" id="ac">
+    <div class="card">
+      <div class="card-header gold">A</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">AIDS</td><td>Acquired Immuno-deficiency Syndrome</td></tr>
+          <tr><td class="abbr">AICTE</td><td>All India Council for Technical Education</td></tr>
+          <tr><td class="abbr">ASLV</td><td>Augmented Satellite Launch Vehicle</td></tr>
+          <tr><td class="abbr">ASI</td><td>Archaeological Survey of India</td></tr>
+          <tr><td class="abbr">ASSOCHAM</td><td>Associated Chambers of Commerce and Industry</td></tr>
+          <tr><td class="abbr">AWACS</td><td>Airborne Warning and Aircraft Control System</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">B</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">BARC</td><td>Bhabha Atomic Research Centre</td></tr>
+          <tr><td class="abbr">BBC</td><td>British Broadcasting Corporation</td></tr>
+          <tr><td class="abbr">BCCI</td><td>Board of Control for Cricket in India</td></tr>
+          <tr><td class="abbr">BHIM</td><td>Bharat Interface for Money</td></tr>
+          <tr><td class="abbr">BIFR</td><td>Board for Industrial and Financial Reconstruction</td></tr>
+          <tr><td class="abbr">BIS</td><td>Bureau of Indian Standards</td></tr>
+          <tr><td class="abbr">BSNL</td><td>Bharat Sanchar Nigam Limited</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">C</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">CAD</td><td>Command Area Development / Computer-Aided Design / Current Account Deficit</td></tr>
+          <tr><td class="abbr">CAG</td><td>Comptroller and Auditor-General</td></tr>
+          <tr><td class="abbr">CBSE</td><td>Central Board of Secondary Education</td></tr>
+          <tr><td class="abbr">CBDT</td><td>Central Board of Direct Taxes</td></tr>
+          <tr><td class="abbr">CBS</td><td>Core Banking Solution</td></tr>
+          <tr><td class="abbr">CDS</td><td>Chief of Defence Staff</td></tr>
+          <tr><td class="abbr">CRISIL</td><td>Credit Rating Information Services of India Limited</td></tr>
+          <tr><td class="abbr">CRR</td><td>Cash Reserve Ratio</td></tr>
+          <tr><td class="abbr">CSAT</td><td>Civil Services Aptitude Test</td></tr>
+          <tr><td class="abbr">CSO</td><td>Central Statistical Organisation (now Office)</td></tr>
+          <tr><td class="abbr">CTBT</td><td>Comprehensive Test Ban Treaty</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          CAD has 3 different full forms depending on context (Command Area Development / Computer-Aided Design / Current Account Deficit) — options often test the economics one (Current Account Deficit).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB D-G -->
+  <div class="tab-content" id="dg">
+    <div class="card">
+      <div class="card-header purple">D</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">DBT</td><td>Direct Benefit Transfer</td></tr>
+          <tr><td class="abbr">DGCA</td><td>Directorate General of Civil Aviation</td></tr>
+          <tr><td class="abbr">DNA</td><td>Deoxyribonucleic Acid</td></tr>
+          <tr><td class="abbr">DPT</td><td>Diphtheria, Pertussis and Tetanus</td></tr>
+          <tr><td class="abbr">DPIIT</td><td>Department for Promotion of Industry and Internal Trade</td></tr>
+          <tr><td class="abbr">DRDO</td><td>Defence Research and Development Organization</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">E</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">ECG</td><td>Electrocardiogram</td></tr>
+          <tr><td class="abbr">ED</td><td>Enforcement Directorate</td></tr>
+          <tr><td class="abbr">EFTA</td><td>European Free Trade Association</td></tr>
+          <tr><td class="abbr">EPZ</td><td>Export Processing Zone</td></tr>
+          <tr><td class="abbr">ERDA</td><td>Energy Research and Development Administration</td></tr>
+          <tr><td class="abbr">ESCAP</td><td>Economic and Social Commission for Asia and the Pacific</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">F</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">FBTR</td><td>Fast Breeder Test Reactor</td></tr>
+          <tr><td class="abbr">FERA</td><td>Foreign Exchange Regulation Act</td></tr>
+          <tr><td class="abbr">FEMA</td><td>Foreign Exchange Management Act</td></tr>
+          <tr><td class="abbr">FICCI</td><td>Federation of Indian Chambers of Commerce and Industry</td></tr>
+          <tr><td class="abbr">FSIB</td><td>Financial Services Institutions Bureau</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          FERA (repealed) vs FEMA (current law replacing it) — a classic mix-up. FEMA replaced FERA in 1999.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">G</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">GATE</td><td>Graduate Aptitude Test in Engineering</td></tr>
+          <tr><td class="abbr">GATT</td><td>General Agreement on Tariffs and Trade</td></tr>
+          <tr><td class="abbr">GPS</td><td>Global Positioning System</td></tr>
+          <tr><td class="abbr">GSLV</td><td>Geosynchronous Satellite Launch Vehicle</td></tr>
+          <tr><td class="abbr">GSM</td><td>Global System for Mobile Communication</td></tr>
+          <tr><td class="abbr">GRAP</td><td>Graded Response Action Plan</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          GATT was the predecessor of WTO (World Trade Organization) — remember this chain for international trade questions.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB H-K -->
+  <div class="tab-content" id="hk">
+    <div class="card">
+      <div class="card-header gold">H</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">HDFC</td><td>Housing Development Finance Corporation</td></tr>
+          <tr><td class="abbr">HIV</td><td>Human Immunodeficiency Virus</td></tr>
+          <tr><td class="abbr">HRIDAY</td><td>Heritage City Development and Augmentation Yojana</td></tr>
+          <tr><td class="abbr">HUDCO</td><td>Housing and Urban Development Corporation</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">I</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">IAAI</td><td>International Airports Authority of India</td></tr>
+          <tr><td class="abbr">IAEA</td><td>International Atomic Energy Agency</td></tr>
+          <tr><td class="abbr">ICAR</td><td>Indian Council of Agricultural Research</td></tr>
+          <tr><td class="abbr">ICICI</td><td>Industrial Credit and Investment Corporation of India Limited</td></tr>
+          <tr><td class="abbr">ICMR</td><td>Indian Council of Medical Research</td></tr>
+          <tr><td class="abbr">IDBI</td><td>Industrial Development Bank of India</td></tr>
+          <tr><td class="abbr">IFCI</td><td>Industrial Finance Corporation of India</td></tr>
+          <tr><td class="abbr">ILO</td><td>International Labour Organization</td></tr>
+          <tr><td class="abbr">IMF</td><td>International Monetary Fund / Indian Mountaineering Foundation</td></tr>
+          <tr><td class="abbr">INTERPOL</td><td>International Criminal Police Organization</td></tr>
+          <tr><td class="abbr">IRNSS</td><td>Indian Regional Navigation Satellite System</td></tr>
+          <tr><td class="abbr">IUCN</td><td>International Union for Conservation of Nature</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          IMF is usually International Monetary Fund, but it can also stand for Indian Mountaineering Foundation — context in the question matters.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">J</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">JAM</td><td>Jan Dhan Aadhaar Mobile</td></tr>
+          <tr><td class="abbr">JAXA</td><td>Japan Aerospace Exploration Agency</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">K</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">KCC</td><td>Kisan Call Centre or Kisan Credit Card</td></tr>
+          <tr><td class="abbr">KVK</td><td>Krishi Vigyan Kendra</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB L-N -->
+  <div class="tab-content" id="ln">
+    <div class="card">
+      <div class="card-header orange">L</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">LASER</td><td>Light Amplification by Stimulated Emission of Radiation</td></tr>
+          <tr><td class="abbr">LED</td><td>Light Emitting Diode</td></tr>
+          <tr><td class="abbr">LIC</td><td>Life Insurance Corporation of India</td></tr>
+          <tr><td class="abbr">LIGO</td><td>Laser Interferometer Gravitational-Wave Observatory</td></tr>
+          <tr><td class="abbr">LOC</td><td>Line of Control</td></tr>
+          <tr><td class="abbr">LPG</td><td>Liquefied Petroleum Gas</td></tr>
+          <tr><td class="abbr">LTTE</td><td>Liberation Tigers of Tamil Eelam</td></tr>
+          <tr><td class="abbr">LUPEX</td><td>Lunar Polar Exploration Mission</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">M</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">MASER</td><td>Microwave Amplification by Stimulated Emission of Radiation</td></tr>
+          <tr><td class="abbr">MBBS</td><td>Bachelor of Medicine and Bachelor of Surgery</td></tr>
+          <tr><td class="abbr">MLC</td><td>Member of Legislative Council</td></tr>
+          <tr><td class="abbr">MNP</td><td>Mobile Number Portability</td></tr>
+          <tr><td class="abbr">MSP</td><td>Minimum Support Price</td></tr>
+          <tr><td class="abbr">MUDRA</td><td>Micro Units Development and Refinance Agency Limited</td></tr>
+          <tr><td class="abbr">MOU</td><td>Memorandum of Understanding</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          LASER and MASER differ only by one word — Light vs Microwave amplification. A common swap trick in options.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">N</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">NABARD</td><td>National Bank for Agriculture and Rural Development</td></tr>
+          <tr><td class="abbr">NASA</td><td>National Aeronautics and Space Administration (USA)</td></tr>
+          <tr><td class="abbr">NBT</td><td>National Book Trust</td></tr>
+          <tr><td class="abbr">NCERT</td><td>National Council of Educational Research and Training</td></tr>
+          <tr><td class="abbr">NEERI</td><td>National Environmental Engineering Research Institute</td></tr>
+          <tr><td class="abbr">NGO</td><td>Non-Governmental Organization</td></tr>
+          <tr><td class="abbr">NHRC</td><td>National Human Rights Commission</td></tr>
+          <tr><td class="abbr">NOIDA</td><td>New Okhla Industrial Development Authority</td></tr>
+          <tr><td class="abbr">NITI</td><td>National Institution for Transforming India</td></tr>
+          <tr><td class="abbr">NRC</td><td>National Register of Citizens</td></tr>
+          <tr><td class="abbr">NSSO</td><td>National Sample Survey Office</td></tr>
+          <tr><td class="abbr">NTPC</td><td>National Thermal Power Corporation</td></tr>
+          <tr><td class="abbr">NTCA</td><td>National Tiger Conservation Authority</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB O-Q -->
+  <div class="tab-content" id="oq">
+    <div class="card">
+      <div class="card-header gold">O</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">OECD</td><td>Organization for Economic Co-operation and Development</td></tr>
+          <tr><td class="abbr">OMR</td><td>Optical Mark Recognition or Optical Mark Reader</td></tr>
+          <tr><td class="abbr">ONGC</td><td>Oil and Natural Gas Corporation</td></tr>
+          <tr><td class="abbr">OPEC</td><td>Organization of the Petroleum Exporting Countries</td></tr>
+          <tr><td class="abbr">OROP</td><td>One Rank One Pension</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">P</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">PAN</td><td>Permanent Account Number</td></tr>
+          <tr><td class="abbr">PCS</td><td>Provincial Civil Service</td></tr>
+          <tr><td class="abbr">PL480</td><td>Public Law 480</td></tr>
+          <tr><td class="abbr">PLA</td><td>People's Liberation Army (Manipur)</td></tr>
+          <tr><td class="abbr">PMKVY</td><td>Pradhan Mantri Kaushal Vikas Yojana</td></tr>
+          <tr><td class="abbr">POTO</td><td>Prevention of Terrorism Ordinance</td></tr>
+          <tr><td class="abbr">PSLV</td><td>Polar Satellite Launch Vehicle</td></tr>
+          <tr><td class="abbr">PUMA</td><td>Personal Urban Mobility and Accessibility</td></tr>
+          <tr><td class="abbr">PURA</td><td>Providing Urban Amenities in Rural Areas</td></tr>
+          <tr><td class="abbr">PWD</td><td>Public Works Department</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          PSLV vs GSLV vs ASLV — all ISRO launch vehicles but for different orbit types; PSLV (Polar), GSLV (Geosynchronous), ASLV (Augmented, early experimental).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Q</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">QMG</td><td>Quarter Master General</td></tr>
+          <tr><td class="abbr">QMS</td><td>Quick Mail Service</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB R-S -->
+  <div class="tab-content" id="rs">
+    <div class="card">
+      <div class="card-header purple">R</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">R&D</td><td>Research and Development</td></tr>
+          <tr><td class="abbr">RADAR</td><td>Radio Detection and Ranging</td></tr>
+          <tr><td class="abbr">RAM</td><td>Random Access Memory</td></tr>
+          <tr><td class="abbr">RAW</td><td>Research and Analysis Wing</td></tr>
+          <tr><td class="abbr">RDX</td><td>Research Department Explosive or Royal Demolition Explosive</td></tr>
+          <tr><td class="abbr">RTI</td><td>Right to Information</td></tr>
+          <tr><td class="abbr">RTE</td><td>Right to Education</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">S</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">SAARC</td><td>South Asian Association for Regional Co-operation</td></tr>
+          <tr><td class="abbr">SAMBHAV</td><td>Secure Army Mobile Bharat Version</td></tr>
+          <tr><td class="abbr">SCOPE</td><td>Standing Conference of Public Enterprises</td></tr>
+          <tr><td class="abbr">SEBI</td><td>Securities and Exchange Board of India</td></tr>
+          <tr><td class="abbr">SIDBI</td><td>Small Industries Development Bank of India</td></tr>
+          <tr><td class="abbr">SIM</td><td>Subscriber Identification Module</td></tr>
+          <tr><td class="abbr">SLV</td><td>Satellite Launch Vehicle</td></tr>
+          <tr><td class="abbr">SMS</td><td>Short Messaging Service</td></tr>
+          <tr><td class="abbr">STD</td><td>Subscribers Trunk Dialing</td></tr>
+          <tr><td class="abbr">STEP</td><td>Satellite Telecommunication Experiment Project</td></tr>
+          <tr><td class="abbr">SWIFT</td><td>Society for Worldwide Interbank Financial Telecommunication</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          RDX has two accepted full forms — Research Department Explosive and Royal Demolition Explosive — both appear in different sources.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB T-Z -->
+  <div class="tab-content" id="tz">
+    <div class="card">
+      <div class="card-header red">T</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">TADA</td><td>Terrorist and Disruptive Activities Prevention Act</td></tr>
+          <tr><td class="abbr">TISCO</td><td>Tata Iron and Steel Company Limited</td></tr>
+          <tr><td class="abbr">TRAI</td><td>Telecom Regulatory Authority of India</td></tr>
+          <tr><td class="abbr">TRIPS</td><td>Trade-Related Aspects of Intellectual Property Rights</td></tr>
+          <tr><td class="abbr">TRYSEM</td><td>Training of Rural Youth for Self-Employment</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">U</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">UIDAI</td><td>Unique Identification Authority of India</td></tr>
+          <tr><td class="abbr">UNCTAD</td><td>United Nations Conference on Trade and Development</td></tr>
+          <tr><td class="abbr">UNDP</td><td>United Nations Development Programme</td></tr>
+          <tr><td class="abbr">UNO</td><td>United Nations Organization</td></tr>
+          <tr><td class="abbr">UNEP</td><td>United Nations Environment Programme</td></tr>
+          <tr><td class="abbr">UNESCO</td><td>United Nations Educational, Scientific and Cultural Organization</td></tr>
+          <tr><td class="abbr">UNICEF</td><td>United Nations International Children's Emergency Fund</td></tr>
+          <tr><td class="abbr">UPI</td><td>Unified Payments Interface</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">V</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">VAT</td><td>Value Added Tax</td></tr>
+          <tr><td class="abbr">VRS</td><td>Voluntary Retirement Scheme</td></tr>
+          <tr><td class="abbr">VSSC</td><td>Vikram Sarabhai Space Centre</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">W</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">WEF</td><td>World Economic Forum</td></tr>
+          <tr><td class="abbr">WWF</td><td>World Wide Fund for Nature</td></tr>
+          <tr><td class="abbr">WTO</td><td>World Trade Organization</td></tr>
+          <tr><td class="abbr">WWW</td><td>World-Wide Web</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Y & Z</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Abbreviation</th><th>Full Form</th></tr>
+          <tr><td class="abbr">YMCA</td><td>Young Men's Christian Association</td></tr>
+          <tr><td class="abbr">YWCA</td><td>Young Women's Christian Association</td></tr>
+          <tr><td class="abbr">ZETA</td><td>Zero Energy Thermonuclear Assembly</td></tr>
+          <tr><td class="abbr">ZS</td><td>Zoological Society</td></tr>
+          <tr><td class="abbr">ZUPO</td><td>Zimbabwe United Peoples Organization</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          UNO's full form is United Nations Organization — commonly written wrong as "United Nation Organizations" in weak sources; always use the correct singular "Nations."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Abbreviation (Ch19) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

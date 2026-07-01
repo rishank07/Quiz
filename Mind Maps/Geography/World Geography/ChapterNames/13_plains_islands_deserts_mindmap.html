@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plains, Islands and Deserts | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.15rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🏝️ PLAINS, ISLANDS AND DESERTS <span class="art-pill">World Geography · Ch 13</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('plains')">Plains</button>
+    <button class="tab-btn" onclick="switchTab('islands')">Major Islands</button>
+    <button class="tab-btn" onclick="switchTab('deserts')">Major Deserts</button>
+    <button class="tab-btn" onclick="switchTab('facts')">Important Facts</button>
+    <button class="tab-btn" onclick="switchTab('records')">Quick Records</button>
+  </div>
+
+  <!-- TAB 1: PLAINS -->
+  <div id="plains" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌾 Plains</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Flat region – covers <b>41%</b> of the Earth's surface</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📂 Types of Plains</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Type of Plain</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Karst Plains (Limestone region)</td><td>Serbia, Montenegro, and Nullarbor Plain (Australia)</td></tr>
+            <tr><td>Alluvial Plains</td><td>Indus-Ganga Plain, Mississippi Plain, Nile Plain, Danube Plain, Yangtze-Kiang Plain, etc.</td></tr>
+            <tr><td>Glacial Plains</td><td>Plains of Canada, Finland, and Sweden</td></tr>
+            <tr><td>Loess Plain</td><td>Northern China Plain (Wind-deposited plain)</td></tr>
+            <tr><td>Coastal Plains</td><td>Florida Plain, Coromandel Coast Plain</td></tr>
+            <tr><td>Uniform Plains</td><td>Paris Basin, Central Russian Plain</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Netherlands Plain</span>
+          <span class="v">Known as "Plain of Lakes"</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Alluvial Plains (e.g. Indus-Ganga) are formed by river sediment deposition; Loess Plains (e.g. Northern China) are formed by wind-deposited silt.
+    </div>
+  </div>
+
+  <!-- TAB 2: ISLANDS -->
+  <div id="islands" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🏝️ Major Islands of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Island</th><th>Area (sq. km)</th><th>Location</th></tr></thead>
+          <tbody>
+            <tr><td>Greenland (World's largest island)</td><td>2,166,086</td><td>Between Arctic (North Pole) Ocean and Atlantic Ocean</td></tr>
+            <tr><td>New Guinea</td><td>821,400</td><td>Western Pacific Ocean</td></tr>
+            <tr><td>Borneo / Kalimantan (Asia's largest)</td><td>748,168</td><td>Western Pacific / Southeast Asia (Malay Archipelago)</td></tr>
+            <tr><td>Madagascar</td><td>587,295</td><td>Indian Ocean</td></tr>
+            <tr><td>Baffin Island</td><td>507,451</td><td>North Arctic Ocean</td></tr>
+            <tr><td>Sumatra</td><td>443,066</td><td>Indian Ocean</td></tr>
+            <tr><td>Victoria Island</td><td>217,290</td><td>Arctic Ocean</td></tr>
+            <tr><td>Honshu (Japan's main island, location of Tokyo)</td><td>227,898</td><td>Northwestern Pacific Ocean</td></tr>
+            <tr><td>Great Britain</td><td>209,331</td><td>North Atlantic Ocean</td></tr>
+            <tr><td>Ellesmere Island</td><td>196,236</td><td>Arctic Ocean</td></tr>
+            <tr><td>Sulawesi / Celebes</td><td>188,522</td><td>Pacific Ocean</td></tr>
+            <tr><td>Java Island (Densest Island)</td><td>127,570</td><td>Indian Ocean</td></tr>
+            <tr><td>Luzon Island</td><td>105,688</td><td>Western Pacific Ocean</td></tr>
+            <tr><td>Newfoundland</td><td>108,860</td><td>Northwestern Atlantic Ocean</td></tr>
+            <tr><td>Cuba</td><td>104,339</td><td>Caribbean Sea</td></tr>
+            <tr><td>Iceland (Island of Fire)</td><td>103,000</td><td>Northern Atlantic Ocean and Arctic Ocean</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Greenland = World's largest island; Borneo = Asia's largest island — don't confuse "world's largest" with "Asia's largest."
+    </div>
+  </div>
+
+  <!-- TAB 3: DESERTS -->
+  <div id="deserts" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">🏜️ Major Deserts of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Desert</th><th>Location</th></tr></thead>
+          <tbody>
+            <tr><td>Sahara (across 11 countries) — World's largest hot desert</td><td>Northern Africa</td></tr>
+            <tr><td>Kalahari</td><td>Southern Africa</td></tr>
+            <tr><td>Taklamakan</td><td>Xinjiang Province (China)</td></tr>
+            <tr><td>Australian Deserts: Barbartan, Simpson, Stuart, Gibson, Victoria, Great Sandy</td><td>Australia</td></tr>
+            <tr><td>Namib</td><td>Namibia</td></tr>
+            <tr><td>Somali Desert</td><td>Somalia</td></tr>
+            <tr><td>Thar Desert (Highest population density desert)</td><td>North-west India and Pakistan</td></tr>
+            <tr><td>Atacama (Driest) — World's driest desert</td><td>Northern Chile</td></tr>
+            <tr><td>An-Nafud, Hamad, Rub' al Khali</td><td>Saudi Arabia</td></tr>
+            <tr><td>Gobi (Largest in Asia)</td><td>Mongolia and China</td></tr>
+            <tr><td>Sonoran</td><td>USA, Mexico</td></tr>
+            <tr><td>Karakum</td><td>Turkmenistan</td></tr>
+            <tr><td>Dasht-e-Lut</td><td>Eastern Iran</td></tr>
+            <tr><td>Dasht-e-Kavir</td><td>Northern Iran</td></tr>
+            <tr><td>Patagonia</td><td>Argentina</td></tr>
+            <tr><td>Mojave</td><td>USA (California, near the Sierra Nevada)</td></tr>
+            <tr><td>Antarctic Desert (World's largest cold desert)</td><td>Antarctica</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      "Desert" isn't only hot/sandy — Antarctica qualifies as a desert too, since deserts are defined by low precipitation, not temperature.
+    </div>
+  </div>
+
+  <!-- TAB 4: IMPORTANT FACTS -->
+  <div id="facts" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">📝 Important Facts</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fact</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>World's largest island</td><td>Greenland (2,166,086 sq. km)</td></tr>
+            <tr><td>Asia's largest island</td><td>Borneo / Kalimantan</td></tr>
+            <tr><td>World's largest hot desert</td><td>Sahara (Northern Africa) – across 11 countries</td></tr>
+            <tr><td>World's largest cold desert</td><td>Antarctic Desert (Antarctica)</td></tr>
+            <tr><td>World's driest desert</td><td>Atacama (Northern Chile)</td></tr>
+            <tr><td>Largest desert in Asia</td><td>Gobi Desert (Mongolia and China)</td></tr>
+            <tr><td>Highest population density desert</td><td>Thar Desert (India-Pakistan)</td></tr>
+            <tr><td>Plains cover</td><td>41% of the Earth's surface</td></tr>
+            <tr><td>Densest island (by population)</td><td>Java Island (Indonesia)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Sahara = largest <b>hot</b> desert; Antarctic = largest <b>cold</b> desert — both are valid "largest desert" answers depending on the qualifier used in the question.
+    </div>
+  </div>
+
+  <!-- TAB 5: QUICK RECORDS -->
+  <div id="records" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🏆 Quick Records Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">41%</div><div class="lbl">Earth covered by Plains</div></div>
+          <div class="stat-box"><div class="num">Greenland</div><div class="lbl">World's Largest Island</div></div>
+          <div class="stat-box"><div class="num">Sahara</div><div class="lbl">World's Largest Hot Desert</div></div>
+          <div class="stat-box"><div class="num">Antarctic</div><div class="lbl">World's Largest Cold Desert</div></div>
+          <div class="stat-box"><div class="num">Atacama</div><div class="lbl">World's Driest Desert</div></div>
+          <div class="stat-box"><div class="num">Thar</div><div class="lbl">Densest-populated Desert</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Java Island = densest <b>by population</b> · Thar Desert = densest <b>desert</b> by population — both "densest" facts but for different geography categories.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Plains, Islands and Deserts · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

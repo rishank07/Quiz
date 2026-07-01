@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First in the World | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 03</span>
+  <h1>First in the World</h1>
+  <p>Men & Women Firsts · Space · Mountaineering · Country Firsts · World Institutions</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">✈ Men's Firsts</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🚀 First in Space</button>
+  <button class="tab-btn" onclick="switchTab('t3')">🏔 Mountaineering & Poles</button>
+  <button class="tab-btn" onclick="switchTab('t4')">👩 Women's Firsts</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🌍 First Country — Political/Social</button>
+  <button class="tab-btn" onclick="switchTab('t6')">🏛 First Country — Institutions</button>
+  <button class="tab-btn" onclick="switchTab('t7')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: MEN'S FIRSTS -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header blue">First in the World (Men)</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Person</th><th>Country / Year</th></tr>
+        <tr><td>To fly an airship</td><td>Henri Giffard</td><td>France, 1852</td></tr>
+        <tr><td>Theory of expansion of the universe</td><td>Edwin Hubble</td><td>America, 1929</td></tr>
+        <tr><td>Black player to win Wimbledon</td><td>Arthur Ashe</td><td>America, 1975</td></tr>
+        <tr><td>To skydive from the highest altitude</td><td>Felix Baumgartner</td><td>Austria, 2012</td></tr>
+        <tr><td>To fly an airplane</td><td>Wright Brothers</td><td>America, 1903</td></tr>
+        <tr><td>Test flight of a Jet Aircraft</td><td>Erich Warsitz</td><td>Germany, 1939</td></tr>
+        <tr><td>Asian President of ICC</td><td>Jagmohan Dalmiya</td><td>India, 1997–2000</td></tr>
+        <tr><td>Six sixes in an over, International Cricket</td><td>Herschelle Gibbs</td><td>South Africa</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Wright Brothers (1903, powered airplane) came AFTER Henri Giffard (1852, airship) — airships predate powered fixed-wing flight by half a century.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: FIRST IN SPACE -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header purple">First in Space</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Person</th><th>Country / Year</th></tr>
+        <tr><td>Person to go into Space</td><td>Yuri Gagarin</td><td>Soviet Union, 1961</td></tr>
+        <tr><td>Youngest person in Space</td><td>Gherman Stepanovich Titov</td><td>Soviet Union, 1961</td></tr>
+        <tr><td>Person to walk in Space</td><td>Alexei Leonov</td><td>Soviet Union, 1965</td></tr>
+        <tr><td>Astronaut to go to Space seven times</td><td>Jerry Ross</td><td>America, first: 1985</td></tr>
+        <tr><td>Space Tourist</td><td>Dennis Tito</td><td>USA, 2001</td></tr>
+        <tr><td>Person to touch the Moon's surface</td><td>Neil Armstrong</td><td>USA, 1969</td></tr>
+        <tr><td>Space Tourist to travel twice</td><td>Charles Simonyi</td><td>USA, 2007 & 2009</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>John Glenn (77 years old) is the oldest astronaut to go into Space.</li>
+        <li>Neil Armstrong (USA) was the first person to touch the surface of the Moon (1969).</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Yuri Gagarin (1961) went into space FIRST, but Neil Armstrong (1969) was the first to touch the MOON — two different milestones, often confused as the same "first man in space" fact.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: MOUNTAINEERING & POLES -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header green">Climbing Mount Everest</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Person(s)</th><th>Year</th></tr>
+        <tr><td>To climb Mount Everest</td><td>Tenzing Norgay (Nepal) & Edmund Hillary (New Zealand)</td><td>1953</td></tr>
+        <tr><td>Oldest man to climb Everest</td><td>Yuichiro Miura</td><td>Japan, 2013</td></tr>
+        <tr><td>Climbing without Oxygen</td><td>Reinhold Messner (Italy) & Peter Habeler (Austria)</td><td>1978</td></tr>
+        <tr><td>Disabled Person to climb Everest</td><td>Tom Whittaker</td><td>1999</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">On the Poles & First Voyage</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Person</th><th>Country / Year</th></tr>
+        <tr><td>To reach the North Pole</td><td>Robert Peary</td><td>USA, 1909</td></tr>
+        <tr><td>To reach the South Pole</td><td>Roald Amundsen</td><td>Norway, 1911</td></tr>
+        <tr><td>To reach both North and South Poles</td><td>Roald Amundsen</td><td>Norway (South: 1911, North: 1926)</td></tr>
+        <tr><td>Voyage around the World</td><td>Ferdinand Magellan</td><td>1519–21</td></tr>
+        <tr><td>First Atlantic Ocean crossing by balloon</td><td>Ben Abruzzo, Maxie Anderson, Larry Newman</td><td>1978</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Peary reached North Pole first (1909); Amundsen reached South Pole first (1911) and later also North Pole (1926) — making him first to reach BOTH poles.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: WOMEN'S FIRSTS -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header red">First Women in Space</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Person</th><th>Country / Year</th></tr>
+        <tr><td>To go into Space</td><td>Valentina Tereshkova</td><td>Soviet Union, 1963</td></tr>
+        <tr><td>To walk in Space</td><td>Svetlana Savitskaya</td><td>Soviet Union, 1984</td></tr>
+        <tr><td>Space Tourist</td><td>Anousheh Ansari</td><td>Iranian-American, 2006</td></tr>
+        <tr><td>To discover a comet</td><td>Caroline Herschel</td><td>Germany, 1786</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">First Women in Top Positions</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Position</th><th>Person</th><th>Country</th></tr>
+        <tr><td>President in the World</td><td>Maria Estela Perón</td><td>Argentina</td></tr>
+        <tr><td>Prime Minister in the World</td><td>Sirimavo Bandaranaike</td><td>Sri Lanka</td></tr>
+        <tr><td>Prime Minister of United Kingdom</td><td>Margaret Thatcher</td><td>UK, 1979–90</td></tr>
+        <tr><td>Prime Minister of a Muslim country</td><td>Benazir Bhutto</td><td>Pakistan</td></tr>
+        <tr><td>Managing Director, World Bank</td><td>Jessica Einhorn</td><td>1996–98</td></tr>
+        <tr><td>Chief Financial Officer (CFO), World Bank</td><td>Anshula Kant</td><td>2019</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Sirimavo Bandaranaike = first woman PM in the WORLD (Sri Lanka). Indira Gandhi = first woman PM of INDIA only. Don't mix the two in "world first" questions.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Women's Firsts — Other Fields</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Person</th><th>Country / Year</th></tr>
+        <tr><td>Climb Mount Everest</td><td>Junko Tabei</td><td>Japan, 1975</td></tr>
+        <tr><td>Swim across seven major oceans</td><td>Bula Choudhury</td><td>India, 2004</td></tr>
+        <tr><td>To reach Antarctica</td><td>Caroline Mikkelsen</td><td>Denmark, 1935</td></tr>
+        <tr><td>To cross the English Channel</td><td>Gertrude Ederle</td><td>USA, 1926</td></tr>
+        <tr><td>To umpire a men's ICC Cricket Match</td><td>Claire Polosak</td><td>Australia, 2021</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: FIRST COUNTRY POLITICAL/SOCIAL -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header gold">First Country — Political & Social Reforms</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>First to …</th><th>Country (Year)</th></tr>
+        <tr><td>Organise the Modern Olympic Games</td><td>Greece (1896)</td></tr>
+        <tr><td>Win the FIFA World Cup</td><td>Uruguay (1930)</td></tr>
+        <tr><td>Sign a civil nuclear deal with India</td><td>France (2008)</td></tr>
+        <tr><td>Implement a family planning programme</td><td>India (1952)</td></tr>
+        <tr><td>Implement Right to Information (RTI)</td><td>Sweden (1766)</td></tr>
+        <tr><td>Grant women right to vote</td><td>New Zealand (1893)</td></tr>
+        <tr><td>Abolish the death penalty</td><td>Venezuela (1863)</td></tr>
+        <tr><td>Appoint a Lokpal (Ombudsman)</td><td>Sweden (1809)</td></tr>
+        <tr><td>Ban smoking in public places</td><td>Ireland (2004)</td></tr>
+        <tr><td>Implement Value Added Tax (VAT)</td><td>France (1954)</td></tr>
+        <tr><td>Make a written Constitution</td><td>United States of America (1789)</td></tr>
+        <tr><td>Recognise euthanasia (mercy killing)</td><td>Netherlands (2002)</td></tr>
+        <tr><td>Recognise same-sex marriage</td><td>Netherlands (2001)</td></tr>
+        <tr><td>Give constitutional recognition to animal rights</td><td>Ecuador (2008)</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Sweden appears TWICE: first RTI law (1766) AND first Ombudsman/Lokpal-type office (1809) — two separate "firsts," often merged into one wrong answer.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: FIRST COUNTRY INSTITUTIONS -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header blue">First Country — Science, Trade & Transport</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>First to …</th><th>Country (Year)</th></tr>
+        <tr><td>Create a map</td><td>Sumerian Civilisation (3800 BCE)</td></tr>
+        <tr><td>Invent paper</td><td>China, Cai Lun (105 CE)</td></tr>
+        <tr><td>Invent glass</td><td>Ancient Egypt or Mesopotamia (3rd–4th century)</td></tr>
+        <tr><td>Issue plastic currency</td><td>Australia (1988)</td></tr>
+        <tr><td>Produce silk</td><td>China (3rd century)</td></tr>
+        <tr><td>Launch a radio satellite</td><td>USSR, now Russia (1986)</td></tr>
+        <tr><td>Launch artificial satellite into space</td><td>Russia — Sputnik (1957)</td></tr>
+        <tr><td>Organise Goodwill Games</td><td>Russia (1986)</td></tr>
+        <tr><td>Start underground metro rail</td><td>United Kingdom, London (1863)</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">World's First — Institutions & Landmarks</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>First</th><th>Details</th></tr>
+        <tr><td>Nuclear Power Plant</td><td>Obninsk Nuclear Power Plant</td><td>Russia, 1954</td></tr>
+        <tr><td>University</td><td>Takshashila University</td><td>Punjab region, present-day Pakistan</td></tr>
+        <tr><td>Cloned Sheep</td><td>Dolly</td><td>Scotland, 1996</td></tr>
+        <tr><td>Solar-Powered Parliament</td><td>Masjid-e-Shoora</td><td>Pakistan, 2016</td></tr>
+        <tr><td>Malaria Free Region</td><td>Europe</td><td>1963</td></tr>
+        <tr><td>City destroyed by an atomic bomb</td><td>Hiroshima</td><td>Japan, 1945</td></tr>
+        <tr><td>Cricket Club</td><td>Marylebone Cricket Club (MCC)</td><td>England, 1787</td></tr>
+        <tr><td>Planned Multipurpose River Valley Project</td><td>Tennessee Valley Authority (TVA)</td><td>USA, 1933</td></tr>
+        <tr><td>International Film Festival</td><td>Venice Film Festival</td><td>Italy, 1932</td></tr>
+        <tr><td>Asian Games hosted</td><td>New Delhi</td><td>India, 1951</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Takshashila University is regarded as the world's first university — it existed in ancient India, in a region that is present-day Pakistan.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: QUICK REFERENCE -->
+<div class="tab-content" id="t7">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">First to fly an airship</span><span class="v">Henri Giffard (France, 1852)</span></div>
+      <div class="info-row"><span class="k">First to fly an airplane</span><span class="v">Wright Brothers (America, 1903)</span></div>
+      <div class="info-row"><span class="k">Theory of expansion of universe</span><span class="v">Edwin Hubble (America, 1929)</span></div>
+      <div class="info-row"><span class="k">First Black Wimbledon winner</span><span class="v">Arthur Ashe (America, 1975)</span></div>
+      <div class="info-row"><span class="k">Person in Space</span><span class="v">Yuri Gagarin (Soviet Union, 1961)</span></div>
+      <div class="info-row"><span class="k">Youngest person in Space</span><span class="v">Gherman Titov (Soviet Union, 1961)</span></div>
+      <div class="info-row"><span class="k">First to walk in Space</span><span class="v">Alexei Leonov (Soviet Union, 1965)</span></div>
+      <div class="info-row"><span class="k">First to touch Moon's surface</span><span class="v">Neil Armstrong (USA, 1969)</span></div>
+      <div class="info-row"><span class="k">First Space Tourist</span><span class="v">Dennis Tito (USA, 2001)</span></div>
+      <div class="info-row"><span class="k">Oldest Astronaut in Space</span><span class="v">John Glenn (77 years old)</span></div>
+      <div class="info-row"><span class="k">First to climb Everest</span><span class="v">Tenzing Norgay & Edmund Hillary, 1953</span></div>
+      <div class="info-row"><span class="k">Oldest to climb Everest</span><span class="v">Yuichiro Miura (Japan, 2013)</span></div>
+      <div class="info-row"><span class="k">Disabled person to climb Everest</span><span class="v">Tom Whittaker (1999)</span></div>
+      <div class="info-row"><span class="k">First to reach North Pole</span><span class="v">Robert Peary (USA, 1909)</span></div>
+      <div class="info-row"><span class="k">First to reach South Pole</span><span class="v">Roald Amundsen (Norway, 1911)</span></div>
+      <div class="info-row"><span class="k">Voyage around the World</span><span class="v">Ferdinand Magellan (1519–21)</span></div>
+      <div class="info-row"><span class="k">First Woman in Space</span><span class="v">Valentina Tereshkova (Soviet Union, 1963)</span></div>
+      <div class="info-row"><span class="k">First Woman to walk in Space</span><span class="v">Svetlana Savitskaya (Soviet Union, 1984)</span></div>
+      <div class="info-row"><span class="k">First Woman President (World)</span><span class="v">Maria Estela Perón (Argentina)</span></div>
+      <div class="info-row"><span class="k">First Woman PM (World)</span><span class="v">Sirimavo Bandaranaike (Sri Lanka)</span></div>
+      <div class="info-row"><span class="k">First UK Woman PM</span><span class="v">Margaret Thatcher (1979–90)</span></div>
+      <div class="info-row"><span class="k">First Woman PM (Muslim country)</span><span class="v">Benazir Bhutto (Pakistan)</span></div>
+      <div class="info-row"><span class="k">First Woman to climb Everest</span><span class="v">Junko Tabei (Japan, 1975)</span></div>
+      <div class="info-row"><span class="k">First Woman to cross English Channel</span><span class="v">Gertrude Ederle (USA, 1926)</span></div>
+      <div class="info-row"><span class="k">First country to create a map</span><span class="v">Sumerian Civilisation (3800 BCE)</span></div>
+      <div class="info-row"><span class="k">First country to invent paper</span><span class="v">China, Cai Lun (105 CE)</span></div>
+      <div class="info-row"><span class="k">First country to launch satellite</span><span class="v">Russia — Sputnik (1957)</span></div>
+      <div class="info-row"><span class="k">First country to organise Olympics</span><span class="v">Greece (1896)</span></div>
+      <div class="info-row"><span class="k">First country to win FIFA World Cup</span><span class="v">Uruguay (1930)</span></div>
+      <div class="info-row"><span class="k">First written Constitution</span><span class="v">United States of America (1789)</span></div>
+      <div class="info-row"><span class="k">First RTI law</span><span class="v">Sweden (1766)</span></div>
+      <div class="info-row"><span class="k">First to grant women's right to vote</span><span class="v">New Zealand (1893)</span></div>
+      <div class="info-row"><span class="k">First to abolish death penalty</span><span class="v">Venezuela (1863)</span></div>
+      <div class="info-row"><span class="k">First to legalise euthanasia</span><span class="v">Netherlands (2002)</span></div>
+      <div class="info-row"><span class="k">First to legalise same-sex marriage</span><span class="v">Netherlands (2001)</span></div>
+      <div class="info-row"><span class="k">First Nuclear Power Plant</span><span class="v">Obninsk, Russia (1954)</span></div>
+      <div class="info-row"><span class="k">First University</span><span class="v">Takshashila University</span></div>
+      <div class="info-row"><span class="k">First Cloned animal</span><span class="v">Dolly the sheep (Scotland, 1996)</span></div>
+      <div class="info-row"><span class="k">First international film festival</span><span class="v">Venice Film Festival (Italy, 1932)</span></div>
+      <div class="info-row"><span class="k">First city destroyed by atomic bomb</span><span class="v">Hiroshima (Japan, 1945)</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · First in the World · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

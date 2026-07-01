@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agriculture and Animal Husbandry (World) | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 14px;font-size:0.82rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.86rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌾 AGRICULTURE AND ANIMAL HUSBANDRY (WORLD) <span class="art-pill">World Geography · Ch 23</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('types')">Types of Agriculture</button>
+    <button class="tab-btn" onclick="switchTab('shifting')">Shifting Cultivation Names</button>
+    <button class="tab-btn" onclick="switchTab('crops')">Crop Classification</button>
+    <button class="tab-btn" onclick="switchTab('institutions')">Golden Crescent &amp; Institutions</button>
+    <button class="tab-btn" onclick="switchTab('producers')">Top Crop Producers</button>
+    <button class="tab-btn" onclick="switchTab('husbandry')">Animal Husbandry &amp; Fisheries</button>
+  </div>
+
+  <!-- TAB 1: TYPES OF AGRICULTURE -->
+  <div id="types" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌾 Agriculture</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>A Primary activity (Primary sector)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📂 Types of Agriculture</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Subsistence Agriculture</h4>
+            <ul class="arrow-list">
+              <li>Primitive Subsistence Agriculture → Shifting / Jhum Agriculture</li>
+              <li>Intensive Subsistence Agriculture</li>
+              <li>Use of traditional methods</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Commercial Agriculture</h4>
+            <ul class="arrow-list">
+              <li>Commercial Crop Farming</li>
+              <li>Mixed Farming (Agriculture &amp; Animal Husbandry)</li>
+              <li>Plantation / Single crop farming — e.g. Brazil coffee plantations (Fazenda)</li>
+              <li>Organic Farming</li>
+              <li>Truck Farming</li>
+              <li>Mediterranean Agriculture</li>
+              <li>Garden Farming</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Other Types</h4>
+            <ul class="arrow-list">
+              <li>Cooperative Farming</li>
+              <li>Community Farming</li>
+              <li>Dairy Farming</li>
+              <li>Intensive Farming (increasing yield through intensive use of available land)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-row" style="margin-top:12px;">
+          <span class="k">📌 Largest agricultural land (area)</span>
+          <span class="v">India &gt; USA &gt; China</span>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Rain measuring instrument</span>
+          <span class="v">Rain Gauge</span>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Taungya System</span>
+          <span class="v">Growing crops between rows of trees</span>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Country with highest number of tubewells</span>
+          <span class="v">India</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Subsistence Agriculture = grown for own consumption · Commercial Agriculture = grown for sale/market — the core dividing line across all sub-types.
+    </div>
+  </div>
+
+  <!-- TAB 2: SHIFTING CULTIVATION -->
+  <div id="shifting" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🔥 Shifting Cultivation in the World — Local Names</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Region</th></tr></thead>
+          <tbody>
+            <tr><td>Ray</td><td>Vietnam and Laos</td></tr>
+            <tr><td>Masole</td><td>Congo (Zaire River Valley)</td></tr>
+            <tr><td>Milpa</td><td>Mexico and Central America</td></tr>
+            <tr><td>Chitemene</td><td>Uganda, Zambia, Zimbabwe</td></tr>
+            <tr><td>Taungya</td><td>Myanmar (Burma)</td></tr>
+            <tr><td>Ladang</td><td>Java and Malaysia</td></tr>
+            <tr><td>Humah</td><td>Java and Indonesia</td></tr>
+            <tr><td>Fang</td><td>Equatorial African Countries</td></tr>
+            <tr><td>Chena</td><td>Sri Lanka</td></tr>
+            <tr><td>Conuco</td><td>Venezuela</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Shifting Cultivation goes by a different local name almost everywhere it's practiced — India calls it Jhum; Sri Lanka calls it Chena; Myanmar calls it Taungya.
+    </div>
+  </div>
+
+  <!-- TAB 3: CROP CLASSIFICATION -->
+  <div id="crops" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🌱 Classification of Crops</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Crop Type</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Food Crops</td><td>Rice, Wheat, Maize, Barley</td></tr>
+            <tr><td>Coarse Grains</td><td>Jowar / Ragi / Bajra</td></tr>
+            <tr><td>Pulse Crops</td><td>Gram, Pea, Moong, Arhar</td></tr>
+            <tr><td>Oilseed Crops</td><td>Mustard, Sesame, Linseed, Groundnut, Coconut, Sunflower</td></tr>
+            <tr><td>Horticultural Crops</td><td>Coffee, Tea, Cocoa, Rubber, etc.</td></tr>
+            <tr><td>Beverage Crops</td><td>Tea and Coffee</td></tr>
+            <tr><td>Fibre Crops</td><td>Cotton, Jute</td></tr>
+            <tr><td>Other / Cash / Commercial Crops</td><td>Sugarcane, Beetroot, Rubber, Tobacco, Spices, etc.</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Tea and Coffee are classified as both "Beverage Crops" AND "Horticultural Crops" — they overlap across categories.
+    </div>
+  </div>
+
+  <!-- TAB 4: GOLDEN CRESCENT & INSTITUTIONS -->
+  <div id="institutions" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">🌙 Golden Crescent</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Opium producing and exporting countries of Central and South Asia</li>
+          <li>Countries: Pakistan, Afghanistan, Iran</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🏛️ Important Institutions Related to Agriculture</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Institution</th><th>Headquarters</th></tr></thead>
+          <tbody>
+            <tr><td>Food and Agriculture Organization (FAO)</td><td>Rome (Italy)</td></tr>
+            <tr><td>International Food Policy Research Institute (IFPRI)</td><td>Washington D.C. (USA)</td></tr>
+            <tr><td>Tropical Agriculture Institute</td><td>Ibadan (Nigeria)</td></tr>
+            <tr><td>International Rice Research Institute (IRRI)</td><td>Manila (Philippines)</td></tr>
+            <tr><td>World Meteorological Organization (WMO)</td><td>Geneva (Switzerland)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      FAO (Rome) and IFPRI (Washington D.C.) are both agriculture-related UN/research bodies but headquartered on <b>different continents</b> — a common mix-up in MCQs.
+    </div>
+  </div>
+
+  <!-- TAB 5: TOP CROP PRODUCERS -->
+  <div id="producers" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🌍 Top Countries in Global Agricultural Production</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Major Crop</th><th>Leading Countries</th></tr></thead>
+          <tbody>
+            <tr><td>Rice</td><td>China, India, Bangladesh, Indonesia, Vietnam</td></tr>
+            <tr><td>Wheat</td><td>China, India, Russia, USA, Australia</td></tr>
+            <tr><td>Maize</td><td>USA, China, Brazil, Argentina, India</td></tr>
+            <tr><td>Barley</td><td>Russia, Australia, France, Germany, Canada</td></tr>
+            <tr><td>Jowar</td><td>Nigeria, Sudan, USA, Mexico, Ethiopia</td></tr>
+            <tr><td>Pulses</td><td>India, Poland, UK, Mozambique, France</td></tr>
+            <tr><td>Soyabean</td><td>Brazil, USA, Argentina, China, India</td></tr>
+            <tr><td>Sunflower (Seed)</td><td>Russia, Ukraine, Argentina, China, Turkey</td></tr>
+            <tr><td>Sugarcane</td><td>Brazil, India, China, Thailand, Pakistan</td></tr>
+            <tr><td>Cotton (Seed)</td><td>India, China, USA, Brazil, Pakistan</td></tr>
+            <tr><td>Jute</td><td>India, Bangladesh, Cambodia, Uzbekistan, China</td></tr>
+            <tr><td>Onion (Dry)</td><td>China, India, Egypt, USA</td></tr>
+            <tr><td>Tomato</td><td>China, India, Turkey, USA, Egypt</td></tr>
+            <tr><td>Apple</td><td>China, USA, Turkey, Poland, India</td></tr>
+            <tr><td>Guava</td><td>India, Indonesia, Mexico, China</td></tr>
+            <tr><td>Coconut</td><td>Indonesia, Philippines, India, Sri Lanka, Brazil</td></tr>
+            <tr><td>Spices</td><td>India, Ethiopia, Turkey, Indonesia, Bangladesh</td></tr>
+            <tr><td>Tea</td><td>China, India, Kenya, Sri Lanka, Turkey</td></tr>
+            <tr><td>Coffee (Green)</td><td>Brazil, Vietnam, Indonesia, Colombia, Ethiopia</td></tr>
+            <tr><td>Tobacco</td><td>China, India, Brazil, Indonesia, USA</td></tr>
+            <tr><td>Rubber (Natural)</td><td>Thailand, Indonesia, Vietnam, Côte d'Ivoire, India</td></tr>
+            <tr><td>Cocoa</td><td>Ivory Coast, Ghana, Indonesia</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      India ranks #1 in Pulses, Jute, and Spices among these lists — a useful set of "India is #1" facts for quick recall.
+    </div>
+  </div>
+
+  <!-- TAB 6: ANIMAL HUSBANDRY & FISHERIES -->
+  <div id="husbandry" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🐄 Animal Husbandry</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>An ancient livelihood activity — a Primary Activity</li>
+          <li>Country with the largest milch animal / livestock population: <b>India</b></li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Top 5 Milk-producing countries</span>
+          <span class="v">India &gt; USA &gt; China &gt; Pakistan &gt; Brazil</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🎣 Other Activities</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Activity</th><th>Key Facts</th></tr></thead>
+          <tbody>
+            <tr><td>Fisheries</td><td>Continental shelf accounts for the majority of world fishing • Habitat of plankton (mixing of warm and cold ocean currents) • Top producer – China</td></tr>
+            <tr><td>India's Fisheries rank</td><td>Second in fish production (Top producer – China)</td></tr>
+            <tr><td>Silk production in India</td><td>Four varieties – Mulberry, Tasar, Eri and Muga</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      India leads the world in milk and livestock population, but ranks only <b>second</b> in fish production, behind China.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Agriculture and Animal Husbandry (World) · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

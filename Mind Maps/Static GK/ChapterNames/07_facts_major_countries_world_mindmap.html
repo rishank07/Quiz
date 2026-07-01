@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facts Related to Major Countries | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 07</span>
+  <h1>Facts Related to Major Countries of the World</h1>
+  <p>Parliaments · Intelligence Agencies · Residences · Landmarks · Wonders · Travellers</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">🏛 Parliaments & Intelligence</button>
+  <button class="tab-btn" onclick="switchTab('t2')">📄 Documents & Parties</button>
+  <button class="tab-btn" onclick="switchTab('t3')">🏰 Official Residences</button>
+  <button class="tab-btn" onclick="switchTab('t4')">🗽 Landmarks — Americas & Europe</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🕌 Landmarks — Asia, Africa & Oceania</button>
+  <button class="tab-btn" onclick="switchTab('t6')">🗿 Seven Wonders of the World</button>
+  <button class="tab-btn" onclick="switchTab('t7')">⛵ World Travellers</button>
+  <button class="tab-btn" onclick="switchTab('t8')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: PARLIAMENTS & INTELLIGENCE -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header blue">Names of Parliaments of Major Countries</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Name of Parliament</th><th>Country</th></tr>
+        <tr><td>Parliament (Lok Sabha, Rajya Sabha)</td><td>India</td></tr>
+        <tr><td>Jatiya Sansad</td><td>Bangladesh</td></tr>
+        <tr><td>Parliament</td><td>Britain, Ireland, South Africa, Malaysia, Canada, France</td></tr>
+        <tr><td>Federal Parliament</td><td>Australia, Nepal</td></tr>
+        <tr><td>Federal Assembly</td><td>Switzerland</td></tr>
+        <tr><td>House of Representatives</td><td>Egypt</td></tr>
+        <tr><td>National Assembly</td><td>Kuwait</td></tr>
+        <tr><td>National Congress</td><td>Argentina, Brazil</td></tr>
+        <tr><td>National People's Congress</td><td>China</td></tr>
+        <tr><td>Congress (Senate + House of Representatives)</td><td>America</td></tr>
+        <tr><td>Majlis</td><td>Iran, Maldives</td></tr>
+        <tr><td>Shura / National Assembly</td><td>Afghanistan</td></tr>
+        <tr><td>Riksdag</td><td>Sweden</td></tr>
+        <tr><td>Knesset</td><td>Israel</td></tr>
+        <tr><td>Yuan</td><td>Taiwan</td></tr>
+        <tr><td>Bundestag</td><td>Germany</td></tr>
+        <tr><td>Diet</td><td>Japan</td></tr>
+        <tr><td>Duma (Lower) / Federation Council (Upper)</td><td>Russia</td></tr>
+        <tr><td>Tshogdu</td><td>Bhutan</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Bicameral names to remember: India (Lok Sabha + Rajya Sabha), USA (Senate + House), Russia (Duma + Federation Council). One house name per country is a favourite one-mark question.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Major Intelligence Agencies of the World</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>Intelligence Agency / Agencies</th></tr>
+        <tr><td>India</td><td>RAW, CBI, IB</td></tr>
+        <tr><td>Pakistan</td><td>ISI (Inter Services Intelligence)</td></tr>
+        <tr><td>China</td><td>International Liaison Department; MSS</td></tr>
+        <tr><td>America</td><td>CIA, NSA, FBI</td></tr>
+        <tr><td>Australia</td><td>ASIO</td></tr>
+        <tr><td>Russia</td><td>GRU; KGB</td></tr>
+        <tr><td>Canada</td><td>CSIS</td></tr>
+        <tr><td>Japan</td><td>Naicho</td></tr>
+        <tr><td>Germany</td><td>BND</td></tr>
+        <tr><td>Iraq</td><td>INIS</td></tr>
+        <tr><td>France</td><td>DGSE</td></tr>
+        <tr><td>South Africa</td><td>SSA</td></tr>
+        <tr><td>Iran</td><td>VAJA; MOIS</td></tr>
+        <tr><td>Israel</td><td>Mossad</td></tr>
+        <tr><td>Britain</td><td>MI5, MI6, GCHQ</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        KGB was the SOVIET-era agency; modern Russia's external intelligence is the GRU/SVR. KGB no longer formally exists but is still listed historically — check exam context before answering.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: DOCUMENTS & PARTIES -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header purple">Official Documents and Reports</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Document Name</th><th>Country</th></tr>
+        <tr><td>Blue Book</td><td>Britain</td></tr>
+        <tr><td>White Book</td><td>Germany, China, Portugal</td></tr>
+        <tr><td>Green Book</td><td>Italy, Iran</td></tr>
+        <tr><td>Orange Book</td><td>Netherlands</td></tr>
+        <tr><td>Grey Book</td><td>Japan, Belgium</td></tr>
+        <tr><td>White Paper</td><td>India (on a particular subject), Britain, China</td></tr>
+        <tr><td>Yellow Book</td><td>France (Livre Jaune)</td></tr>
+        <tr><td>Beige Book</td><td>USA</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Colour-code trick: Blue = Britain, White = Germany/China/Portugal, Yellow = France, Beige = USA. Group by colour, not by country, for faster recall.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Major Political Parties in Different Countries</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>Major Political Parties</th></tr>
+        <tr><td>India</td><td>BJP, INC, AAP, NPP, BSP, CPI-M</td></tr>
+        <tr><td>Bangladesh</td><td>BNP, Awami League, Jatiya Party</td></tr>
+        <tr><td>Sri Lanka</td><td>United National Party, Freedom Party, SLPP</td></tr>
+        <tr><td>Pakistan</td><td>PPP, PTI, Pakistan Muslim League</td></tr>
+        <tr><td>United Kingdom</td><td>Liberal Democratic Party, Labour, Conservative</td></tr>
+        <tr><td>South Africa</td><td>ANC, Inkatha Freedom Party</td></tr>
+        <tr><td>Israel</td><td>Labour, Shas, Hadash, Likud</td></tr>
+        <tr><td>Russia</td><td>LDPR, United Russia, Communist Party</td></tr>
+        <tr><td>Nepal</td><td>Nepali Congress, Nepali Communist Party</td></tr>
+        <tr><td>France</td><td>Socialist Party, National Rally (formerly National Front)</td></tr>
+        <tr><td>Australia</td><td>Liberal Party, Labour Party</td></tr>
+        <tr><td>United States</td><td>Republican Party, Democratic Party</td></tr>
+        <tr><td>China</td><td>Communist Party of China (CPC)</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: OFFICIAL RESIDENCES -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header teal">Official Residences of Heads of State / Government</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Head of State / Government</th><th>Official Residence</th><th>City</th></tr>
+        <tr><td>President of India</td><td>Rashtrapati Bhavan</td><td>New Delhi</td></tr>
+        <tr><td>PM of India</td><td>7, Lok Kalyan Marg</td><td>New Delhi</td></tr>
+        <tr><td>PM of Nepal</td><td>Singha Durbar / Baluwatar</td><td>Kathmandu</td></tr>
+        <tr><td>PM of Sri Lanka</td><td>Temple Trees</td><td>Colombo</td></tr>
+        <tr><td>President of Pakistan</td><td>Aiwan-e-Sadr</td><td>Islamabad</td></tr>
+        <tr><td>President of Bangladesh</td><td>Bangabhavan</td><td>Dhaka</td></tr>
+        <tr><td>PM of Britain</td><td>10, Downing Street</td><td>London</td></tr>
+        <tr><td>The Monarch (Britain)</td><td>Buckingham Palace</td><td>London</td></tr>
+        <tr><td>Chancellor of Germany</td><td>Federal Chancellery</td><td>Berlin</td></tr>
+        <tr><td>President of Portugal</td><td>Palácio de Belém</td><td>Lisbon</td></tr>
+        <tr><td>PM of Australia</td><td>The Lodge</td><td>Canberra</td></tr>
+        <tr><td>President of Indonesia</td><td>Merdeka Palace</td><td>Jakarta</td></tr>
+        <tr><td>President of China</td><td>Zhongnanhai</td><td>Beijing</td></tr>
+        <tr><td>President of South Korea</td><td>Yongsan Presidential Office</td><td>Seoul</td></tr>
+        <tr><td>President of North Korea</td><td>Ryongsong Residence</td><td>Pyongyang</td></tr>
+        <tr><td>President of USA</td><td>White House</td><td>Washington DC</td></tr>
+        <tr><td>President of France</td><td>Élysée Palace</td><td>Paris</td></tr>
+        <tr><td>President of Russia</td><td>Kremlin</td><td>Moscow</td></tr>
+        <tr><td>PM of Canada</td><td>24, Sussex Drive / Rideau Cottage</td><td>Ottawa</td></tr>
+        <tr><td>President of Italy</td><td>Quirinal Palace</td><td>Rome</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        India's President stays at Rashtrapati Bhavan, but the PM's official residence is 7, Lok Kalyan Marg (not Rashtrapati Bhavan) — commonly mixed up by beginners.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: LANDMARKS AMERICAS & EUROPE -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header blue">Famous Places — Americas</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Landmark</th><th>Location</th><th>Key Facts</th></tr>
+        <tr><td>White Sands Missile Range</td><td>New Mexico, USA</td><td>Site of America's first nuclear explosion (16 July 1945)</td></tr>
+        <tr><td>Disneyland</td><td>California, USA</td><td>Amusement park; built by Walt Disney in 1955</td></tr>
+        <tr><td>Mount Rushmore</td><td>South Dakota, USA</td><td>Faces of Washington, Jefferson, T. Roosevelt, Lincoln</td></tr>
+        <tr><td>The Pentagon</td><td>Virginia, USA</td><td>HQ of US Dept. of Defense; world's largest office building</td></tr>
+        <tr><td>Empire State Building</td><td>New York, USA</td><td>One of the tallest buildings historically; Height: 1,250 feet</td></tr>
+        <tr><td>Detroit</td><td>Michigan, USA</td><td>Automobile manufacturing hub; HQ of Ford, GM, Chrysler</td></tr>
+        <tr><td>Statue of Liberty</td><td>New York, USA</td><td>Symbol of American Independence; gift from France; designed by Bartholdi; unveiled 28 Oct 1886</td></tr>
+        <tr><td>Brooklyn Bridge</td><td>New York, USA</td><td>Cable-based suspension bridge</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Famous Places — Europe</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Landmark</th><th>Location</th><th>Key Facts</th></tr>
+        <tr><td>Eiffel Tower</td><td>Paris, France</td><td>Symbol of French culture; Height: 1,083 feet; built by Gustave Eiffel (1887–89)</td></tr>
+        <tr><td>Cannes</td><td>France</td><td>Hosts the Cannes Film Festival annually</td></tr>
+        <tr><td>Élysée Palace</td><td>France</td><td>Official residence of the President</td></tr>
+        <tr><td>Big Ben</td><td>London, England</td><td>Giant clock at the Palace of Westminster</td></tr>
+        <tr><td>Humber Bridge</td><td>England</td><td>World's longest suspension bridge at construction; built 1973–81</td></tr>
+        <tr><td>Davos</td><td>Switzerland</td><td>Hosts World Economic Forum (WEF) annual meetings</td></tr>
+        <tr><td>Elba</td><td>Italy</td><td>Island in the Mediterranean; site of Napoleon's exile, 1814</td></tr>
+        <tr><td>Red Square</td><td>Moscow, Russia</td><td>Iconic square; Lenin's Mausoleum</td></tr>
+        <tr><td>St. Petersburg</td><td>Russia</td><td>Cultural-historical city; Northern Capital of Russia</td></tr>
+        <tr><td>Monte Carlo</td><td>Monaco</td><td>World-famous gambling centre</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: LANDMARKS ASIA/AFRICA/OCEANIA -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header orange">Famous Places — Asia</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Landmark</th><th>Location</th><th>Key Facts</th></tr>
+        <tr><td>Grand Canal</td><td>China</td><td>World's longest man-made canal</td></tr>
+        <tr><td>Temple of Heaven</td><td>Beijing, China</td><td>'Heavenly Temple' complex; built 1406–1420 AD</td></tr>
+        <tr><td>Osaka</td><td>Japan</td><td>Major industrial city; known as the 'Kitchen of Japan'</td></tr>
+        <tr><td>Angkor Wat</td><td>Cambodia</td><td>Largest religious monument; UNESCO site; originally a Hindu (Vishnu) temple, later Buddhist</td></tr>
+        <tr><td>Al-Aqsa Mosque</td><td>Jerusalem, Israel</td><td>Third holiest mosque after Mecca and Medina</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Famous Places — Africa & Oceania</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Landmark</th><th>Location</th><th>Key Facts</th></tr>
+        <tr><td>Abu Simbel Temples</td><td>Egypt</td><td>Ancient monument dedicated to Nubia</td></tr>
+        <tr><td>Kalgoorlie</td><td>Australia</td><td>Famous for gold mines</td></tr>
+        <tr><td>Opera House</td><td>Sydney, Australia</td><td>World-famous tourist attraction and cultural centre</td></tr>
+        <tr><td>Amsterdam</td><td>Netherlands</td><td>Famous for its diamond cutting industry</td></tr>
+        <tr><td>Dusseldorf</td><td>Germany</td><td>Famous for iron machinery</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Angkor Wat began as a HINDU temple dedicated to Vishnu and was later converted to a Buddhist site — a frequently tested transition.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: SEVEN WONDERS -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header red">Seven Wonders of the World (New/Latest List)</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Wonder</th><th>Location</th><th>Key Facts</th></tr>
+        <tr><td>Great Wall of China</td><td>China, Asia</td><td>7th century BC; Length: 21,196 km; Height: 20 m</td></tr>
+        <tr><td>Petra</td><td>Jordan, Asia</td><td>106 AD; 'Rose City' — built of red sandstone</td></tr>
+        <tr><td>Machu Picchu</td><td>Peru, South America</td><td>1430 AD; discovered by Hiram Bingham (1911); Inca civilization site at 2,450 m</td></tr>
+        <tr><td>Christ the Redeemer</td><td>Rio de Janeiro, Brazil</td><td>1926–31 AD; 38 m statue; largest Art Deco sculpture in the world</td></tr>
+        <tr><td>Roman Colosseum</td><td>Rome, Italy</td><td>70 AD; oval amphitheatre built under Roman emperors</td></tr>
+        <tr><td>Chichén Itzá</td><td>Yucatan, Mexico</td><td>600 AD; city of the Mayan civilization</td></tr>
+        <tr><td>Taj Mahal</td><td>Agra, India</td><td>1632 AD; built by Shah Jahan for Mumtaz Mahal</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Angkor Wat is often called the "8th Wonder" but is NOT part of the official New Seven Wonders list — a favourite trick question. Built by King Suryavarman II, originally a Hindu temple.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: WORLD TRAVELLERS -->
+<div class="tab-content" id="t7">
+  <div class="card">
+    <div class="card-header teal">World Famous Travellers and Their Achievements</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Traveller</th><th>Country</th><th>Achievements</th></tr>
+        <tr><td>James Cook</td><td>Britain</td><td>Circumnavigated globe 3 times; discovered New Zealand (1769–70), New South Wales (1770), Hawaii (1778)</td></tr>
+        <tr><td>John Davis</td><td>Britain</td><td>Discovered Falkland Islands (1592); invented 'Backstaff' navigation tool</td></tr>
+        <tr><td>Amerigo Vespucci</td><td>Italy</td><td>America named after him; discovered South American coast (1501) and Amazon mouth (1499); gave 'New World' concept</td></tr>
+        <tr><td>Christopher Columbus</td><td>Spain (sponsored voyage)</td><td>Discovery of America, Cuba, West Indies — 1492</td></tr>
+        <tr><td>Roald Amundsen</td><td>Norway</td><td>Reached South Pole (1911) and North Pole (1926)</td></tr>
+        <tr><td>Sir Francis Drake</td><td>Britain</td><td>Circumnavigated the world in a single voyage (1577–80)</td></tr>
+        <tr><td>Vasco Núñez de Balboa</td><td>Spain</td><td>First European to see the Pacific Ocean from the 'New World' (1513)</td></tr>
+        <tr><td>Vasco da Gama</td><td>Portugal</td><td>First European to reach India by sea (1498)</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Amerigo Vespucci was Italian but his voyages were sponsored by Spain/Portugal — America is named after him, NOT Columbus, even though Columbus is more commonly linked to "discovering America."
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: QUICK REFERENCE -->
+<div class="tab-content" id="t8">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">India's Parliament</span><span class="v">Lok Sabha + Rajya Sabha</span></div>
+      <div class="info-row"><span class="k">China's Parliament</span><span class="v">National People's Congress</span></div>
+      <div class="info-row"><span class="k">USA's Parliament</span><span class="v">Congress — Senate + House of Representatives</span></div>
+      <div class="info-row"><span class="k">Japan's Parliament</span><span class="v">Diet</span></div>
+      <div class="info-row"><span class="k">Germany's Parliament</span><span class="v">Bundestag</span></div>
+      <div class="info-row"><span class="k">Russia's Parliament</span><span class="v">Duma + Federation Council</span></div>
+      <div class="info-row"><span class="k">Israel's Parliament</span><span class="v">Knesset</span></div>
+      <div class="info-row"><span class="k">India's Intelligence Agencies</span><span class="v">RAW, CBI, IB</span></div>
+      <div class="info-row"><span class="k">USA's Intelligence Agencies</span><span class="v">CIA, NSA, FBI</span></div>
+      <div class="info-row"><span class="k">Pakistan's Intelligence</span><span class="v">ISI</span></div>
+      <div class="info-row"><span class="k">Israel's Intelligence</span><span class="v">Mossad</span></div>
+      <div class="info-row"><span class="k">Russia's Intelligence</span><span class="v">GRU, KGB</span></div>
+      <div class="info-row"><span class="k">Blue Book</span><span class="v">Britain</span></div>
+      <div class="info-row"><span class="k">White Paper</span><span class="v">India, Britain, China</span></div>
+      <div class="info-row"><span class="k">Yellow Book</span><span class="v">France (Livre Jaune)</span></div>
+      <div class="info-row"><span class="k">India's PM Residence</span><span class="v">7, Lok Kalyan Marg, New Delhi</span></div>
+      <div class="info-row"><span class="k">India's President Residence</span><span class="v">Rashtrapati Bhavan</span></div>
+      <div class="info-row"><span class="k">USA President Residence</span><span class="v">White House, Washington DC</span></div>
+      <div class="info-row"><span class="k">UK PM Residence</span><span class="v">10, Downing Street, London</span></div>
+      <div class="info-row"><span class="k">France President Residence</span><span class="v">Élysée Palace, Paris</span></div>
+      <div class="info-row"><span class="k">Russia President Residence</span><span class="v">Kremlin, Moscow</span></div>
+      <div class="info-row"><span class="k">Statue of Liberty</span><span class="v">New York — unveiled 28 Oct 1886</span></div>
+      <div class="info-row"><span class="k">Eiffel Tower</span><span class="v">Paris — Height 1,083 ft, built 1887–89</span></div>
+      <div class="info-row"><span class="k">Taj Mahal</span><span class="v">Agra — 1632 AD, Shah Jahan</span></div>
+      <div class="info-row"><span class="k">Great Wall of China</span><span class="v">7th century BC; Length: 21,196 km</span></div>
+      <div class="info-row"><span class="k">Angkor Wat</span><span class="v">Cambodia — built by Suryavarman II; called '8th Wonder'</span></div>
+      <div class="info-row"><span class="k">Chichén Itzá</span><span class="v">Yucatan, Mexico — 600 AD; Mayan civilization</span></div>
+      <div class="info-row"><span class="k">Machu Picchu</span><span class="v">Peru — 1430 AD; Inca civilization</span></div>
+      <div class="info-row"><span class="k">Christ the Redeemer</span><span class="v">Rio de Janeiro — 1926–31 AD</span></div>
+      <div class="info-row"><span class="k">Roman Colosseum</span><span class="v">Rome — 70 AD</span></div>
+      <div class="info-row"><span class="k">Petra</span><span class="v">Jordan — 106 AD; Rose City</span></div>
+      <div class="info-row"><span class="k">Vasco da Gama</span><span class="v">First European to reach India by sea (1498)</span></div>
+      <div class="info-row"><span class="k">Christopher Columbus</span><span class="v">Discovery of America, Cuba, West Indies (1492)</span></div>
+      <div class="info-row"><span class="k">Amerigo Vespucci</span><span class="v">America named after him; discovered S. America coast (1501)</span></div>
+      <div class="info-row"><span class="k">James Cook</span><span class="v">Circumnavigated globe 3 times; discovered NZ, NSW, Hawaii</span></div>
+      <div class="info-row"><span class="k">Al-Aqsa Mosque</span><span class="v">Jerusalem — 3rd holiest mosque after Mecca and Medina</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · Facts Related to Major Countries of the World · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

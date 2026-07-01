@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rocks | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1020px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.9rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.2rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.92rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.95rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .cycle-row{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+    gap:10px;margin:16px 0;
+  }
+  .cycle-node{
+    background:var(--surface2);border:1px solid var(--gold);color:var(--gold);
+    font-weight:700;font-size:0.88rem;padding:10px 16px;border-radius:8px;
+  }
+  .cycle-arrow{color:#aab0c4;font-size:1.1rem;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🪨 ROCKS <span class="art-pill">World Geography · Ch 08</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('igneous')">Igneous Rocks</button>
+    <button class="tab-btn" onclick="switchTab('sedimentary')">Sedimentary Rocks</button>
+    <button class="tab-btn" onclick="switchTab('sedclass')">Sedimentary Classification</button>
+    <button class="tab-btn" onclick="switchTab('metamorphic')">Metamorphic Rocks</button>
+    <button class="tab-btn" onclick="switchTab('summary')">Quick Summary</button>
+    <button class="tab-btn" onclick="switchTab('cycle')">Rock Cycle</button>
+  </div>
+
+  <!-- TAB 1: IGNEOUS -->
+  <div id="igneous" class="tab-content active">
+    <div class="card">
+      <div class="card-header red">🌋 1. Igneous Rocks</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Formed by the cooling and solidification of lava or magma inside or outside the Earth</li>
+          <li>Examples: Granite, Basalt, Pegmatite, Dianite, Gabbro, Pumice, etc.</li>
+        </ul>
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Intrusive (Inside the Earth)</h4>
+            <ul class="arrow-list">
+              <li>Forms the Continental crust</li>
+              <li>Cools slowly under the surface (e.g., Granite)</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Extrusive (Outside the Earth)</h4>
+            <ul class="arrow-list">
+              <li>Forms the Oceanic crust</li>
+              <li>Cools rapidly on the surface (e.g., Basalt)</li>
+              <li>Weathering of basaltic Deccan Trap lava → Black (Regur) Soil</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🔄 Transformation of Igneous Rocks</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Igneous Rock</th><th>Transformed (Metamorphic)</th></tr></thead>
+          <tbody>
+            <tr><td>Granite</td><td>Gneiss</td></tr>
+            <tr><td>Basalt</td><td>Schist / Amphibolite</td></tr>
+            <tr><td>Gabbro</td><td>Serpentine</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Mica of Koderma (Jharkhand)</span>
+          <span class="v">Obtained from Pegmatite rock</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Black (Regur) Soil comes from the weathering of <b>Basalt</b> — an <b>Extrusive</b> igneous rock — not from Intrusive rocks. This pairing is frequently mixed up in MCQs.
+    </div>
+  </div>
+
+  <!-- TAB 2: SEDIMENTARY -->
+  <div id="sedimentary" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🏖️ 2. Sedimentary Rocks (Layered Rocks)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Formed by weathering and erosion of existing rocks</li>
+          <li>Process – Lithification</li>
+          <li>Examples: Sandstone, Limestone, Conglomerate, Rock salt, Shale, etc.</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Famous monuments</span>
+          <span class="v">Agra Fort &amp; Red Fort of Delhi built using sedimentary rocks (sandstone)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🔄 Transformation of Sedimentary Rocks</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Sedimentary</th><th>Metamorphic</th></tr></thead>
+          <tbody>
+            <tr><td>Sandstone</td><td>Quartzite</td></tr>
+            <tr><td>Limestone</td><td>Marble</td></tr>
+            <tr><td>Shale</td><td>Slate</td></tr>
+            <tr><td>Dolomite</td><td>Marble</td></tr>
+            <tr><td>Lignite Coal</td><td>Anthracite Coal</td></tr>
+            <tr><td>Coal</td><td>Graphite / Diamond</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Wind-formed sedimentary rock</span>
+          <span class="v">Loess</span>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Glacier-formed sedimentary rock</span>
+          <span class="v">Moraine</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Both Sandstone → Quartzite and Shale → Slate — fine-grained sediments turn into hard, compact metamorphic rocks under pressure.
+    </div>
+  </div>
+
+  <!-- TAB 3: SEDIMENTARY CLASSIFICATION -->
+  <div id="sedclass" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">📂 Classification of Sedimentary Rocks</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Mechanically / Inorganically Formed</h4>
+            <ul class="arrow-list">
+              <li>Sand-dominant rocks (Sandstone)</li>
+              <li>Clay-dominant rocks (Shale)</li>
+              <li>Gravel-dominant rocks (Conglomerate)</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Biologically / Organically Formed</h4>
+            <ul class="arrow-list">
+              <li>Lime-dominant rocks (Limestone, Chalk)</li>
+              <li>Carbon-dominant rocks (Coal)</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Chemically Formed</h4>
+            <ul class="arrow-list">
+              <li>Rock Salt, Gypsum, Dolomite, Halite</li>
+              <li>Iron deposits, Stalactites</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      <b>Limestone</b> is organically (biologically) formed from marine shells/calcium carbonate — don't classify it as clay-dominant/mechanical; <b>Shale</b> is the clay-dominant mechanical rock.
+    </div>
+  </div>
+
+  <!-- TAB 4: METAMORPHIC -->
+  <div id="metamorphic" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🔥 3. Metamorphic Rocks (Transformed Rocks)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Transformation of sedimentary and igneous rocks due to heat, pressure, and chemical reactions</li>
+          <li>Examples: Gneiss, Amphibolite, Greenstone, Serpentine, Phyllite, etc.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🔄 Transformation of Metamorphic Rocks</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Metamorphic Rock</th><th>Transformed into</th></tr></thead>
+          <tbody>
+            <tr><td>Slate</td><td>Phyllite</td></tr>
+            <tr><td>Phyllite</td><td>Schist</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Petrology</span>
+          <span class="v">Scientific study of rock composition, structure, etc.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Progressive metamorphism chain: Shale → Slate → Phyllite → Schist (increasing heat &amp; pressure)
+    </div>
+  </div>
+
+  <!-- TAB 5: QUICK SUMMARY -->
+  <div id="summary" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">📝 Quick Summary — All 3 Rock Types</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Rock Type</th><th>Formation</th><th>Examples</th><th>Transforms To</th></tr></thead>
+          <tbody>
+            <tr><td>Igneous</td><td>Cooling &amp; solidification of lava/magma</td><td>Granite, Basalt, Gabbro, Pumice, Pegmatite</td><td>Metamorphic (Gneiss, Schist, Serpentine)</td></tr>
+            <tr><td>Sedimentary</td><td>Weathering &amp; erosion (Lithification)</td><td>Sandstone, Limestone, Shale, Coal, Rock salt</td><td>Metamorphic (Quartzite, Marble, Slate, Diamond)</td></tr>
+            <tr><td>Metamorphic</td><td>Heat, pressure, chemical reaction</td><td>Gneiss, Marble, Slate, Schist, Phyllite</td><td>Igneous (via melting → Magma)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      All three rock types are interconvertible through the Rock Cycle — none is a permanent "final" form.
+    </div>
+  </div>
+
+  <!-- TAB 6: ROCK CYCLE -->
+  <div id="cycle" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">🔁 The Rock Cycle</div>
+      <div class="card-body">
+        <div class="cycle-row">
+          <div class="cycle-node">Igneous</div>
+          <div class="cycle-arrow">▸</div>
+          <div class="cycle-node">Sedimentary</div>
+          <div class="cycle-arrow">▸</div>
+          <div class="cycle-node">Metamorphic</div>
+          <div class="cycle-arrow">▸</div>
+          <div class="cycle-node">Magma (Melting)</div>
+          <div class="cycle-arrow">▸</div>
+          <div class="cycle-node">Igneous</div>
+        </div>
+        <ul class="arrow-list">
+          <li>Weathering and Erosion drive the transition from Igneous → Sedimentary</li>
+          <li>Heat and Pressure drive the transition from Sedimentary → Metamorphic</li>
+          <li>Melting drives the transition from Metamorphic → Magma → Igneous (cycle repeats)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      The Rock Cycle has <b>no fixed starting point</b> — any rock type can transform into any other given the right conditions; it is not a strictly one-directional sequence.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Rocks · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

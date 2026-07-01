@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Geography Ch01 - Geography: An Introduction | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{
+    color:var(--gold);
+    font-size:1.5rem;
+    letter-spacing:0.5px;
+  }
+  .header p{
+    color:#9aa0b4;
+    font-size:0.9rem;
+    margin-top:6px;
+  }
+  .container{
+    max-width:980px;
+    margin:0 auto;
+    padding:18px 16px;
+  }
+  /* Tab Navigation */
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+    padding-bottom:0;
+  }
+  .tab-nav button{
+    background:var(--surface);
+    color:#aab0c4;
+    border:1px solid var(--border);
+    border-bottom:none;
+    padding:10px 16px;
+    font-size:0.88rem;
+    font-weight:600;
+    border-radius:8px 8px 0 0;
+    cursor:pointer;
+    transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{
+    background:var(--surface2);
+    color:#fff;
+  }
+  .tab-nav button.active{
+    background:var(--surface2);
+    color:var(--gold);
+    border-color:var(--gold);
+    box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  /* Cards */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1rem;
+    color:#0f1117;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  /* Arrow list */
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;
+    border-bottom:1px dashed #2a2d3d;
+    display:flex;
+    gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{
+    content:"▸";
+    color:var(--gold);
+    font-weight:700;
+    flex-shrink:0;
+  }
+
+  /* Exam Trap */
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    margin-bottom:6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  /* Quick Recall */
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    margin-bottom:6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  /* Tables */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.92rem;
+  }
+  thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+  }
+  tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:#dfe2ee;
+  }
+  tbody tr:hover{background:var(--surface2);}
+
+  /* Art pill */
+  .art-pill{
+    display:inline-block;
+    background:var(--surface2);
+    border:1px solid var(--gold);
+    color:var(--gold);
+    font-size:0.75rem;
+    font-weight:700;
+    padding:2px 10px;
+    border-radius:999px;
+    margin-left:8px;
+  }
+
+  /* Stat boxes */
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;
+    margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    color:var(--gold);
+    font-size:1.3rem;
+    font-weight:800;
+  }
+  .stat-box .lbl{
+    color:#9aa0b4;
+    font-size:0.78rem;
+    margin-top:4px;
+  }
+
+  /* Info row */
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:10px 14px;
+    margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.92rem;}
+
+  /* Two column grid for branch comparison */
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  @media (max-width:640px){
+    .two-col{grid-template-columns:1fr;}
+  }
+  .sub-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:12px 14px;
+  }
+  .sub-box h4{
+    color:#fff;
+    font-size:0.92rem;
+    margin-bottom:6px;
+  }
+  .sub-box .founder{
+    color:var(--gold);
+    font-size:0.85rem;
+    margin-bottom:8px;
+  }
+
+  /* Three column for philosophies */
+  .three-col{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+  }
+  @media (max-width:760px){
+    .three-col{grid-template-columns:1fr;}
+  }
+
+  .footer{
+    text-align:center;
+    color:#6c7286;
+    font-size:0.8rem;
+    margin-top:30px;
+    padding-top:16px;
+    border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ===== Mobile Overflow Fix v2 ===== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{
+  align-items:flex-start;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+.arrow-list li b{display:inline;}
+table{table-layout:auto;}
+@media(max-width:768px){
+  *{max-width:100%;}
+  .header h1{font-size:1.1rem;}
+  .container{padding:10px;}
+  .card{margin-bottom:14px;}
+  .card-header{padding:12px 14px;font-size:1rem;}
+  .card-body{padding:12px;}
+  .arrow-list li{
+    display:block;
+    padding-left:18px;
+    position:relative;
+    line-height:1.7;
+  }
+  .arrow-list li::before{
+    position:absolute;
+    left:0;
+    top:8px;
+  }
+  .stat-grid{grid-template-columns:1fr;}
+  .info-row{
+    display:block;
+  }
+  .info-row .v{
+    display:block;
+    margin-top:4px;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .tab-nav::-webkit-scrollbar{display:none;}
+  .tab-nav button{
+    flex:0 0 auto;
+    white-space:nowrap;
+  }
+  table{
+    display:block;
+    width:100%;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌍 GEOGRAPHY: AN INTRODUCTION <span class="art-pill">World Geography · Ch 01</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('overview')">Basics</button>
+    <button class="tab-btn" onclick="switchTab('branches')">Branches</button>
+    <button class="tab-btn" onclick="switchTab('philosophy')">Philosophies</button>
+    <button class="tab-btn" onclick="switchTab('founders')">Founders</button>
+    <button class="tab-btn" onclick="switchTab('books')">Books</button>
+    <button class="tab-btn" onclick="switchTab('lines')">Imaginary Lines</button>
+  </div>
+
+  <!-- TAB 1: BASICS -->
+  <div id="overview" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">📖 Geography — Meaning & Origin</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><b>Geography</b> = Geo (Earth) + Graphia (Description) → "Description of the Earth"</li>
+          <li>First use of the term <b>'Geography'</b> by <b>Eratosthenes</b> (Greek Scholar)</li>
+        </ul>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="num">276–139</div>
+            <div class="lbl">BCE — Eratosthenes' Lifetime</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Geography term coined by <b>Eratosthenes</b> — also remembered as "Father of Systematic Geography / Geophysics".
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Don't confuse <b>Father of Geography (Hecataeus)</b> with <b>Father of Systematic Geography (Eratosthenes)</b> — both are frequently swapped in MCQs.
+    </div>
+  </div>
+
+  <!-- TAB 2: BRANCHES -->
+  <div id="branches" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">🌐 Branches of Geography</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>1. Physical Geography</h4>
+            <div class="founder">Founder: Polybius</div>
+            <p style="font-size:0.88rem;color:#cfd3e2;margin-bottom:8px;">Study of landforms, soil, climate, etc.</p>
+            <ul class="arrow-list">
+              <li>Climatology</li>
+              <li>Geomorphology</li>
+              <li>Pedology</li>
+              <li>Hydrology</li>
+              <li>Biogeography</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>2. Human Geography</h4>
+            <div class="founder">Founder: Friedrich Ratzel (Book: Anthropogeography)</div>
+            <p style="font-size:0.88rem;color:#cfd3e2;margin-bottom:8px;">Study of culture, cities, population, etc.</p>
+            <ul class="arrow-list">
+              <li>Economic Geography</li>
+              <li>Political Geography</li>
+              <li>Population Geography</li>
+              <li>Behavioural Geography</li>
+              <li>Historical Geography</li>
+              <li>Cultural Geography</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Founder of <b>Physical Geography = Polybius</b>, while founder of <b>Human Geography = Friedrich Ratzel</b> — these founder names are commonly interchanged in exams.
+    </div>
+  </div>
+
+  <!-- TAB 3: PHILOSOPHIES -->
+  <div id="philosophy" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🧭 Philosophies of Geography</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>1. Determinism</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;margin-bottom:8px;">Human is subordinate to nature</p>
+            <div class="founder">Proponents:</div>
+            <ul class="arrow-list">
+              <li>Ratzel</li>
+              <li>Huntington</li>
+              <li>Ellen Semple</li>
+              <li>Ritter</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>2. Possibilism</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;margin-bottom:8px;">Human capabilities take precedence over nature</p>
+            <div class="founder">Proponents:</div>
+            <ul class="arrow-list">
+              <li>Paul Vidal de la Blache</li>
+              <li>Lucien Febvre</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>3. Neo-Determinism</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;margin-bottom:8px;">Equal importance to both human and nature</p>
+            <div class="founder">Originator:</div>
+            <ul class="arrow-list">
+              <li>Griffith Taylor</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Determinism → Nature dominates · Possibilism → Human dominates · Neo-Determinism → Stop &amp; Go (Balance of both)
+    </div>
+  </div>
+
+  <!-- TAB 4: FOUNDERS -->
+  <div id="founders" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">👤 Prominent Geographers / Founders</div>
+      <div class="card-body">
+        <table>
+          <thead>
+            <tr><th>Title</th><th>Name</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Father of Geography</td><td>Hecataeus</td></tr>
+            <tr><td>Father of Systematic Geography / Geophysics</td><td>Eratosthenes</td></tr>
+            <tr><td>Father of Modern Geography / Sequential Geography</td><td>Alexander von Humboldt</td></tr>
+            <tr><td>Father of Cultural Geography</td><td>Carl-O-Sauer</td></tr>
+            <tr><td>Founders of Mathematical Geography</td><td>Thales and Anaximander (World map makers)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      "Father of Modern Geography" and "Father of Geography" are two different people — <b>Humboldt</b> vs <b>Hecataeus</b>. PYQs often test this pair directly.
+    </div>
+  </div>
+
+  <!-- TAB 5: BOOKS -->
+  <div id="books" class="tab-content">
+    <div class="card">
+      <div class="card-header green">📚 Prominent Books and Authors</div>
+      <div class="card-body">
+        <table>
+          <thead>
+            <tr><th>Book</th><th>Author</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>A Brief History of Time</td><td>Stephen Hawking</td></tr>
+            <tr><td>The Theory of Everything</td><td>Stephen Hawking</td></tr>
+            <tr><td>The World As I See It</td><td>Albert Einstein</td></tr>
+            <tr><td>The Mathematical Theory of Black Holes</td><td>Subrahmanyan Chandrasekhar</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Stephen Hawking authored <b>two</b> books in this list — "A Brief History of Time" &amp; "The Theory of Everything".
+    </div>
+  </div>
+
+  <!-- TAB 6: IMAGINARY LINES -->
+  <div id="lines" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">📏 Important Lines — Connecting Places of Equal...</div>
+      <div class="card-body">
+        <table>
+          <thead>
+            <tr><th>Line</th><th>Connects Places of Equal...</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Contour Line</td><td>Elevation</td></tr>
+            <tr><td>Isobar</td><td>Air Pressure</td></tr>
+            <tr><td>Isohyets</td><td>Rainfall</td></tr>
+            <tr><td>Isotherm</td><td>Temperature</td></tr>
+            <tr><td>Isoneph</td><td>Cloud Cover</td></tr>
+            <tr><td>Isoseismal</td><td>Earthquake Intensity</td></tr>
+            <tr><td>Isohaline</td><td>Salinity</td></tr>
+            <tr><td>Isochrone</td><td>Travel Time from a Point</td></tr>
+          </tbody>
+        </table>
+        <div class="info-row">
+          <span class="k">📌 Hachure Line</span>
+          <span class="v">Disconnected short lines showing slope in maps</span>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Railway &amp; Telephone lines on maps</span>
+          <span class="v">Represented in Black colour</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Isohyet (Rainfall) vs Isohaline (Salinity) vs Isoneph (Cloud Cover) — sound similar, frequently confused in objective questions.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Geography: An Introduction (World Geography) · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

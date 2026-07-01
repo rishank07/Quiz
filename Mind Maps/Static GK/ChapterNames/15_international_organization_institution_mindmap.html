@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>International Organization / Institution | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 15</span>
+  <h1>International Organization / Institution</h1>
+  <p>United Nations · Financial Bodies · Regional Blocs · Treaties · Indian Research Institutes</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">🇺🇳 United Nations & Organs</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🌐 UN Agencies</button>
+  <button class="tab-btn" onclick="switchTab('t3')">💰 Financial & Economic Bodies</button>
+  <button class="tab-btn" onclick="switchTab('t4')">🌍 Regional & Political Blocs</button>
+  <button class="tab-btn" onclick="switchTab('t5')">☢ Nuclear Treaties & Environment</button>
+  <button class="tab-btn" onclick="switchTab('t6')">🌾 Agricultural & Food Institutions</button>
+  <button class="tab-btn" onclick="switchTab('t7')">⚙ Mining, Energy & Environment</button>
+  <button class="tab-btn" onclick="switchTab('t8')">🛡 Defence & Other Institutions</button>
+  <button class="tab-btn" onclick="switchTab('t9')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: UN & ORGANS -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">United Nations — Overview</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Established: 24 October 1945</li>
+        <li>Founding Member Countries: 51 (Poland was the 51st)</li>
+        <li>Predecessor Organisation: League of Nations</li>
+        <li>Headquarters: New York (Manhattan Island)</li>
+        <li>Official Languages: English, French, Chinese, Spanish, Arabic, Russian; Working Languages: English & French</li>
+        <li>Logo: World map between two olive branches on light blue background</li>
+        <li>Member Countries: 193 (South Sudan — 193rd, 2011)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Six Organs of the United Nations</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Organ</th><th>Key Details</th></tr>
+        <tr><td>General Assembly</td><td>All member states; equal voting rights; "Mini Parliament of the World"; session held once a year in September</td></tr>
+        <tr><td>Secretariat</td><td>Administrative organ; Head: Secretary-General (5-year term); Current: António Guterres; First: Trygve Lie (Norway)</td></tr>
+        <tr><td>Economic & Social Council (ECOSOC)</td><td>54 members; studies economic, social, educational, health issues</td></tr>
+        <tr><td>Trusteeship Council</td><td>Administered non-self-governing territories post-WWII; not operational now</td></tr>
+        <tr><td>Security Council</td><td>15 members total: 5 Permanent (Veto power: USA, Britain, France, Russia, China) + 10 Non-Permanent (elected by General Assembly for 2 years)</td></tr>
+        <tr><td>International Court of Justice (ICJ)</td><td>HQ: The Hague, Netherlands; 15 judges (quorum 9); 9-year term; 5 judges retire every 3 years</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Indian Judges at ICJ: Sir Benegal Rau, Nagendra Singh, Raghunandan Swarup Pathak, Dalveer Bhandari</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        The Trusteeship Council still technically exists as an organ of the UN but has been INACTIVE since 1994 — don't say it was "abolished," just non-operational.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: UN AGENCIES -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header green">United Nations Agencies & Specialised Bodies</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Organisation</th><th>Established</th><th>HQ</th><th>Key Facts</th></tr>
+        <tr><td>UNEP</td><td>1972</td><td>Nairobi</td><td>Global leader in environmental initiatives</td></tr>
+        <tr><td>UNESCO</td><td>1945; effective 1946</td><td>Paris, France</td><td>Educational, Scientific and Cultural</td></tr>
+        <tr><td>ITU</td><td>1865</td><td>Geneva, Switzerland</td><td>194 members; 194th — Republic of Palau</td></tr>
+        <tr><td>IMO</td><td>1948</td><td>London, UK</td><td>176 members; navigation safety regulations</td></tr>
+        <tr><td>ILO</td><td>1919</td><td>Geneva, Switzerland</td><td>Improves worker conditions; Nobel Peace Prize 1969; publishes WSPR</td></tr>
+        <tr><td>IFAD</td><td>1977</td><td>Rome, Italy</td><td>—</td></tr>
+        <tr><td>UNICEF</td><td>1946</td><td>New York, USA</td><td>190 members</td></tr>
+        <tr><td>ICAO</td><td>1944</td><td>Montreal, Canada</td><td>193 members; civil aviation standards</td></tr>
+        <tr><td>WMO</td><td>1950</td><td>Geneva, Switzerland</td><td>185 members + 6 territorial members</td></tr>
+        <tr><td>UNWTO</td><td>1975</td><td>Madrid, Spain</td><td>Promotes economic growth via tourism</td></tr>
+        <tr><td>WHO</td><td>1948</td><td>Geneva, Switzerland</td><td>World Health Organization</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Most UN agencies are headquartered in GENEVA (ITU, ILO, WMO, WHO, WIPO) — a common grouping fact useful for elimination-based MCQs.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: FINANCIAL & ECONOMIC BODIES -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header purple">Financial & Economic Organisations</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Organisation</th><th>Established</th><th>HQ</th><th>Key Facts</th></tr>
+        <tr><td>IMF</td><td>27 Dec 1945</td><td>Washington DC</td><td>191 members; President: Kristalina Georgieva; promotes monetary cooperation</td></tr>
+        <tr><td>World Bank</td><td>1945</td><td>Washington DC</td><td>189 members; President: Ajay Banga; provides development loans</td></tr>
+        <tr><td>WTO</td><td>1 Jan 1995</td><td>Geneva, Switzerland</td><td>166 members; Timor-Leste 166th; sets trade rules, resolves disputes</td></tr>
+        <tr><td>ADB</td><td>1966</td><td>Manila, Philippines</td><td>69 members; 2025 Annual Meeting: Tbilisi, Georgia</td></tr>
+        <tr><td>UNIDO</td><td>1966</td><td>Vienna, Austria</td><td>Prepares industrial base for prosperity</td></tr>
+        <tr><td>WIPO</td><td>1969</td><td>Geneva, Switzerland</td><td>193 members</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        IMF and World Bank were BOTH founded in 1945, both HQ'd in Washington DC — but IMF ensures monetary/financial stability while World Bank provides development LOANS. Don't confuse their functions.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: REGIONAL & POLITICAL BLOCS -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header orange">Regional & Political Organisations</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Organisation</th><th>Established</th><th>HQ</th><th>Key Facts</th></tr>
+        <tr><td>BRICS</td><td>2009</td><td>—</td><td>11 members; 5 new: Egypt, Iran, UAE, Ethiopia, Indonesia; 2025 Summit: Brazil</td></tr>
+        <tr><td>European Union (EU)</td><td>1959 (EEC); 1993 (EU)</td><td>Brussels</td><td>27 member countries; 2025 Summit: London</td></tr>
+        <tr><td>SCO</td><td>2001</td><td>Beijing, China</td><td>10 members; latest: Belarus; 2025 Summit: China</td></tr>
+        <tr><td>Commonwealth of Nations</td><td>1926</td><td>London</td><td>56 members</td></tr>
+        <tr><td>Non-Aligned Movement (NAM)</td><td>1961</td><td>—</td><td>Founders: Nehru, Sukarno, Tito, Nasser, Nkrumah; 120 members</td></tr>
+        <tr><td>NATO</td><td>1949</td><td>Brussels, Belgium</td><td>32 members; 32nd: Sweden</td></tr>
+        <tr><td>BIMSTEC</td><td>1997</td><td>Dhaka, Bangladesh</td><td>7 members; 2025 Summit: Bangkok, Thailand</td></tr>
+        <tr><td>ASEAN</td><td>1967</td><td>Jakarta, Indonesia</td><td>10 members; 2025 Summit: Kuala Lumpur</td></tr>
+        <tr><td>SAARC</td><td>1985</td><td>Kathmandu, Nepal</td><td>8 members</td></tr>
+        <tr><td>G20</td><td>1999</td><td>—</td><td>19 countries + EU + African Union</td></tr>
+        <tr><td>G7</td><td>1975</td><td>—</td><td>7 members: US, UK, Germany, Italy, Japan, Canada, France</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        NAM founding fathers: Nehru (India), Sukarno (Indonesia), Tito (Yugoslavia), Nasser (Egypt), Nkrumah (Ghana) — a classic "5 leaders" recall question.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: NUCLEAR TREATIES & ENVIRONMENT -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header red">Nuclear & Arms Control</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Body/Treaty</th><th>Details</th></tr>
+        <tr><td>Nuclear Suppliers Group (NSG)</td><td>Established 1974–75; 48 members; controls export of nuclear weapons, materials, technology</td></tr>
+        <tr><td>Comprehensive Nuclear-Test-Ban Treaty (CTBT)</td><td>Treaty 1996; prohibits all nuclear test explosions; India is NOT a signatory</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Environment & Climate Agreements</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Agreement</th><th>Year</th><th>Details</th></tr>
+        <tr><td>Earth Summit</td><td>1992</td><td>Rio de Janeiro, Brazil</td></tr>
+        <tr><td>Montreal Protocol</td><td>1987</td><td>Montreal, Canada; protects ozone layer</td></tr>
+        <tr><td>Kyoto Protocol</td><td>1997</td><td>Kyoto, Japan; reduces greenhouse gas emissions</td></tr>
+        <tr><td>Vienna Convention</td><td>1985</td><td>Protects ozone layer</td></tr>
+        <tr><td>Paris Agreement</td><td>2015</td><td>Limit global warming below 2°C; pursue 1.5°C target</td></tr>
+        <tr><td>International Solar Alliance (ISA)</td><td>2015</td><td>India's concept (Narendra Modi); HQ: Gurugram; 120 members, 116 signatories</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Vienna Convention (1985) and Montreal Protocol (1987) BOTH protect the ozone layer — Vienna Convention is the framework, Montreal Protocol is the specific action plan under it. Don't treat them as unrelated.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: AGRICULTURAL & FOOD INSTITUTIONS -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header green">Major Agricultural Research Institutions</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Institution</th><th>Location</th></tr>
+        <tr><td>Central Rice Research Institute</td><td>Cuttack, Odisha</td></tr>
+        <tr><td>Indian Agricultural Research Institute</td><td>Pusa, New Delhi</td></tr>
+        <tr><td>Central Potato Research Institute</td><td>Shimla, Himachal Pradesh</td></tr>
+        <tr><td>Indian Institute of Sugarcane Research</td><td>Lucknow, Uttar Pradesh</td></tr>
+        <tr><td>Central Tobacco Research Institute</td><td>Rajahmundry, Andhra Pradesh</td></tr>
+        <tr><td>Central Coconut Research Institute</td><td>Kasaragod, Kerala</td></tr>
+        <tr><td>Indian Institute of Pulses Research</td><td>Kanpur, Uttar Pradesh</td></tr>
+        <tr><td>National Coffee Research Institute</td><td>Chikmagalur, Karnataka</td></tr>
+        <tr><td>National Dairy Research Institute</td><td>Karnal, Haryana</td></tr>
+        <tr><td>Central Institute for Subtropical Horticulture</td><td>Bengaluru, Karnataka</td></tr>
+        <tr><td>National Sugarcane Breeding Institute</td><td>Coimbatore, Tamil Nadu</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Food / Nutrition Related Institutions</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Institution</th><th>Location</th></tr>
+        <tr><td>Indian Food Corporation</td><td>New Delhi</td></tr>
+        <tr><td>National Institute of Nutrition and Research</td><td>Hyderabad, Telangana</td></tr>
+        <tr><td>Central Drug Research Institute</td><td>Lucknow, Uttar Pradesh</td></tr>
+        <tr><td>Central Food Technological Research Institute</td><td>Mysore, Karnataka</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: MINING, ENERGY & ENVIRONMENT -->
+<div class="tab-content" id="t7">
+  <div class="card">
+    <div class="card-header purple">Mining, Energy & Industrial Institutions</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Institution</th><th>Location</th></tr>
+        <tr><td>Central Leather Research Institute</td><td>Chennai, Tamil Nadu</td></tr>
+        <tr><td>National Metallurgical Laboratory</td><td>Jamshedpur, Jharkhand</td></tr>
+        <tr><td>Textile Industry Research Association</td><td>Ahmedabad, Gujarat</td></tr>
+        <tr><td>Central Mining & Fuel Research Institute</td><td>Dhanbad, Jharkhand</td></tr>
+        <tr><td>Central Salt & Marine Chemicals Research Institute</td><td>Bhavnagar, Gujarat</td></tr>
+        <tr><td>Indian Institute of Petroleum Research</td><td>Dehradun, Uttarakhand</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Environment / Wildlife Related Institutions</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Institution</th><th>Location</th></tr>
+        <tr><td>Indian Institute of Forest Management</td><td>Bhopal, Madhya Pradesh</td></tr>
+        <tr><td>Indira Gandhi National Forest Academy</td><td>Dehradun, Uttarakhand</td></tr>
+        <tr><td>Centre for Ecological Sciences</td><td>Bengaluru, Karnataka</td></tr>
+        <tr><td>Wildlife Institute of India</td><td>Dehradun, Uttarakhand</td></tr>
+        <tr><td>Central Forest Research Institute</td><td>Dehradun, Uttarakhand</td></tr>
+        <tr><td>Indian Meteorological Observatory</td><td>Pune, Maharashtra</td></tr>
+        <tr><td>National Environmental Engineering Research Institute</td><td>Nagpur, Maharashtra</td></tr>
+        <tr><td>Central Avian Research Institute</td><td>Bareilly, Uttar Pradesh</td></tr>
+        <tr><td>Zoological Survey of India</td><td>Kolkata, West Bengal</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Dehradun hosts FOUR environment/forest institutions — Indira Gandhi National Forest Academy, Wildlife Institute of India, Central Forest Research Institute, and Indian Institute of Petroleum Research. Remember Dehradun as a forestry/petroleum research hub.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: DEFENCE & OTHER INSTITUTIONS -->
+<div class="tab-content" id="t8">
+  <div class="card">
+    <div class="card-header red">Defence Production Institutions</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Institution</th><th>Location</th></tr>
+        <tr><td>Hindustan Aeronautics Limited (HAL)</td><td>Bengaluru, Karnataka</td></tr>
+        <tr><td>Bharat Earth Movers Limited (BEML)</td><td>Bengaluru, Karnataka</td></tr>
+        <tr><td>Mazagon Dock Shipbuilders</td><td>Mumbai, Maharashtra</td></tr>
+        <tr><td>Bharat Dynamics Limited (BDL)</td><td>Hyderabad, Telangana</td></tr>
+        <tr><td>Garden Reach Shipbuilders & Engineers Limited</td><td>Kolkata, West Bengal</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header gold">Other Major Organisations/Institutions</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Institution</th><th>Location</th></tr>
+        <tr><td>National Institute of Oceanography</td><td>Goa</td></tr>
+        <tr><td>Indian Institute of Astrophysics</td><td>Bengaluru, Karnataka</td></tr>
+        <tr><td>National Institute of Ocean Technology</td><td>Chennai, Tamil Nadu</td></tr>
+        <tr><td>Indian Institute of Skiing and Mountaineering</td><td>Gulmarg, Jammu & Kashmir</td></tr>
+        <tr><td>Indian Space Research Organization (ISRO)</td><td>Bengaluru, Karnataka</td></tr>
+        <tr><td>Defence Research and Development Organization (DRDO)</td><td>New Delhi</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: QUICK REFERENCE -->
+<div class="tab-content" id="t9">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">United Nations (UN)</span><span class="v">New York; est. 1945; 193 members; 6 organs</span></div>
+      <div class="info-row"><span class="k">UN Secretary-General</span><span class="v">António Guterres (Current); Trygve Lie (First)</span></div>
+      <div class="info-row"><span class="k">Security Council</span><span class="v">15 members; 5 permanent (P5)</span></div>
+      <div class="info-row"><span class="k">ICJ</span><span class="v">The Hague; 15 judges; 9-year term</span></div>
+      <div class="info-row"><span class="k">UNESCO</span><span class="v">Paris; est. 1945/46; Educational, Scientific & Cultural</span></div>
+      <div class="info-row"><span class="k">WHO</span><span class="v">Geneva; est. 1948</span></div>
+      <div class="info-row"><span class="k">IMF</span><span class="v">Washington DC; est. 1945; 191 members; Georgieva (President)</span></div>
+      <div class="info-row"><span class="k">World Bank</span><span class="v">Washington DC; est. 1945; 189 members; Banga (President)</span></div>
+      <div class="info-row"><span class="k">WTO</span><span class="v">Geneva; est. 1995; 166 members</span></div>
+      <div class="info-row"><span class="k">ADB</span><span class="v">Manila; est. 1966; 69 members</span></div>
+      <div class="info-row"><span class="k">BRICS</span><span class="v">Est. 2009; 11 members (5 new: Egypt, Iran, UAE, Ethiopia, Indonesia)</span></div>
+      <div class="info-row"><span class="k">EU</span><span class="v">Brussels; 27 member countries</span></div>
+      <div class="info-row"><span class="k">SCO</span><span class="v">Beijing; est. 2001; 10 members; latest: Belarus</span></div>
+      <div class="info-row"><span class="k">NATO</span><span class="v">Brussels; est. 1949; 32 members; latest: Sweden</span></div>
+      <div class="info-row"><span class="k">SAARC</span><span class="v">Kathmandu; est. 1985; 8 members</span></div>
+      <div class="info-row"><span class="k">ASEAN</span><span class="v">Jakarta; est. 1967; 10 members</span></div>
+      <div class="info-row"><span class="k">G20</span><span class="v">Est. 1999; 19 countries + EU + African Union</span></div>
+      <div class="info-row"><span class="k">NSG</span><span class="v">Est. 1974–75; 48 members; nuclear export control</span></div>
+      <div class="info-row"><span class="k">ISA</span><span class="v">Gurugram; est. 2015; India's concept; 120 members</span></div>
+      <div class="info-row"><span class="k">CTBT</span><span class="v">1996; bans all nuclear tests; India not a signatory</span></div>
+      <div class="info-row"><span class="k">Paris Agreement</span><span class="v">2015; limit warming below 2°C / 1.5°C</span></div>
+      <div class="info-row"><span class="k">Montreal Protocol</span><span class="v">1987; protects ozone layer</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · International Organization / Institution · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

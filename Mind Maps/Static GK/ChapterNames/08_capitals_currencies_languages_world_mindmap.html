@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitals, Currencies and Languages | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 08</span>
+  <h1>Capitals, Currencies and Languages</h1>
+  <p>Continent-wise World Countries — Capital · Currency · Official Language</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">🌏 Asia</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🇪🇺 Europe</button>
+  <button class="tab-btn" onclick="switchTab('t3')">🌍 Africa</button>
+  <button class="tab-btn" onclick="switchTab('t4')">🌎 Americas</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🌏 Australia / Oceania</button>
+  <button class="tab-btn" onclick="switchTab('t6')">📋 Quick Reference (A–Z)</button>
+</div>
+
+<!-- TAB 1: ASIA -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">Asia Continent</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>Capital</th><th>Currency</th><th>Language</th></tr>
+        <tr><td>India</td><td>New Delhi</td><td>Rupee</td><td>Hindi / English</td></tr>
+        <tr><td>Japan</td><td>Tokyo</td><td>Yen</td><td>Japanese</td></tr>
+        <tr><td>China</td><td>Beijing</td><td>Yuan (Renminbi)</td><td>Mandarin</td></tr>
+        <tr><td>South Korea</td><td>Seoul</td><td>Won</td><td>Korean</td></tr>
+        <tr><td>Israel</td><td>Jerusalem</td><td>Shekel</td><td>English / Hebrew</td></tr>
+        <tr><td>Iran</td><td>Tehran</td><td>Iranian Rial (IRR)</td><td>Persian</td></tr>
+        <tr><td>Iraq</td><td>Baghdad</td><td>Iraqi Dinar</td><td>Arabic</td></tr>
+        <tr><td>Saudi Arabia</td><td>Riyadh</td><td>Saudi Riyal</td><td>Arabic</td></tr>
+        <tr><td>Syria</td><td>Damascus</td><td>Syrian Pound</td><td>Arabic</td></tr>
+        <tr><td>Mauritius</td><td>Port Louis</td><td>Rupee</td><td>English / French / Bhojpuri / Hindi</td></tr>
+        <tr><td>Myanmar</td><td>Naypyidaw</td><td>Kyat</td><td>Burmese</td></tr>
+        <tr><td>Malaysia</td><td>Kuala Lumpur</td><td>Ringgit</td><td>Malay / Chinese (Mandarin)</td></tr>
+        <tr><td>Philippines</td><td>Manila</td><td>Peso</td><td>Filipino / English</td></tr>
+        <tr><td>Pakistan</td><td>Islamabad</td><td>Rupee</td><td>Urdu / Sindhi / Punjabi</td></tr>
+        <tr><td>Bangladesh</td><td>Dhaka</td><td>Taka</td><td>Bengali / Chakma</td></tr>
+        <tr><td>Afghanistan</td><td>Kabul</td><td>Afghani</td><td>Pashto / Persian</td></tr>
+        <tr><td>Bhutan</td><td>Thimphu</td><td>Ngultrum</td><td>Dzongkha / Nepali</td></tr>
+        <tr><td>Nepal</td><td>Kathmandu</td><td>Nepalese Rupee</td><td>Nepali</td></tr>
+        <tr><td>Maldives</td><td>Malé</td><td>Maldivian Rufiyaa</td><td>Dhivehi</td></tr>
+        <tr><td>Sri Lanka</td><td>Colombo</td><td>Rupee</td><td>Sinhalese / Tamil</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Multiple Asian countries use "Rupee" as currency name — India, Pakistan, Nepal (Nepalese Rupee), Sri Lanka, Mauritius. Don't assume "Rupee" always means Indian Rupee in a mixed-country question.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: EUROPE -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header blue">Europe Continent</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>Capital</th><th>Currency</th><th>Language</th></tr>
+        <tr><td>Russia</td><td>Moscow</td><td>Ruble</td><td>Russian</td></tr>
+        <tr><td>Germany</td><td>Berlin</td><td>Euro</td><td>German</td></tr>
+        <tr><td>France</td><td>Paris</td><td>Euro</td><td>French</td></tr>
+        <tr><td>UK</td><td>London</td><td>Sterling Pound</td><td>English</td></tr>
+        <tr><td>Italy</td><td>Rome</td><td>Euro</td><td>Italian</td></tr>
+        <tr><td>Ukraine</td><td>Kyiv</td><td>Hryvnia</td><td>Ukrainian</td></tr>
+        <tr><td>Belarus</td><td>Minsk</td><td>Ruble</td><td>Belarusian</td></tr>
+        <tr><td>Netherlands</td><td>Amsterdam</td><td>Euro</td><td>Dutch</td></tr>
+        <tr><td>Norway</td><td>Oslo</td><td>Krone</td><td>Norwegian</td></tr>
+        <tr><td>Belgium</td><td>Brussels</td><td>Euro</td><td>Dutch / French / German</td></tr>
+        <tr><td>Denmark</td><td>Copenhagen</td><td>Danish Krone</td><td>Danish</td></tr>
+        <tr><td>Spain</td><td>Madrid</td><td>Euro</td><td>Spanish (Castilian)</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Most Western European countries use the Euro (Germany, France, Italy, Netherlands, Belgium, Spain). UK, Russia, Norway, Denmark, Ukraine, Belarus DON'T use the Euro — remember the exceptions.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: AFRICA -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header green">Africa Continent</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>Capital</th><th>Currency</th><th>Language</th></tr>
+        <tr><td>Sudan</td><td>Khartoum</td><td>Sudanese Pound</td><td>Arabic</td></tr>
+        <tr><td>Morocco</td><td>Rabat</td><td>Moroccan Dirham</td><td>Arabic / Moroccan Berber</td></tr>
+        <tr><td>South Sudan</td><td>Juba</td><td>South Sudanese Pound</td><td>English</td></tr>
+        <tr><td>Nigeria</td><td>Abuja</td><td>Nigerian Naira</td><td>English</td></tr>
+        <tr><td>Algeria</td><td>Algiers</td><td>Algerian Dinar</td><td>Arabic / Berber</td></tr>
+        <tr><td>Egypt</td><td>Cairo</td><td>Egyptian Pound</td><td>Arabic</td></tr>
+        <tr><td>Libya</td><td>Tripoli</td><td>Libyan Dinar</td><td>Arabic</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Sudan and South Sudan are separate countries (split in 2011) with different capitals — Khartoum (Sudan) vs Juba (South Sudan). Frequently confused as one nation.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: AMERICAS -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header purple">North America</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>Capital</th><th>Currency</th><th>Language</th></tr>
+        <tr><td>USA</td><td>Washington D.C.</td><td>Dollar</td><td>English</td></tr>
+        <tr><td>Canada</td><td>Ottawa</td><td>Canadian Dollar</td><td>English / French</td></tr>
+        <tr><td>Mexico</td><td>Mexico City</td><td>Mexican Peso</td><td>Spanish</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">South America</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>Capital</th><th>Currency</th><th>Language</th></tr>
+        <tr><td>Argentina</td><td>Buenos Aires</td><td>Argentine Peso</td><td>Spanish</td></tr>
+        <tr><td>Chile</td><td>Santiago</td><td>Chilean Peso</td><td>Spanish</td></tr>
+        <tr><td>Venezuela</td><td>Caracas</td><td>Bolívar</td><td>Spanish</td></tr>
+        <tr><td>Colombia</td><td>Bogotá</td><td>Colombian Peso</td><td>Spanish</td></tr>
+        <tr><td>Brazil</td><td>Brasília</td><td>Real</td><td>Portuguese / English</td></tr>
+        <tr><td>Peru</td><td>Lima</td><td>Sol</td><td>Spanish</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Brazil is the odd one out in South America — its official language is Portuguese, while nearly every other South American country speaks Spanish.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: AUSTRALIA/OCEANIA -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header teal">Australia / Oceania Continent</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>Capital</th><th>Currency</th><th>Language</th></tr>
+        <tr><td>Australia</td><td>Canberra</td><td>Australian Dollar</td><td>English</td></tr>
+        <tr><td>New Zealand</td><td>Wellington</td><td>New Zealand Dollar</td><td>English / Māori</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Canberra, not Sydney, is Australia's capital — Sydney is only the largest and most well-known city, a very common trap in GK exams.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: QUICK REFERENCE A-Z -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header gold">Quick Reference — All Countries (A–Z)</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>Capital</th><th>Currency</th><th>Language</th></tr>
+        <tr><td>Afghanistan</td><td>Kabul</td><td>Afghani</td><td>Pashto / Persian</td></tr>
+        <tr><td>Algeria</td><td>Algiers</td><td>Algerian Dinar</td><td>Arabic / Berber</td></tr>
+        <tr><td>Argentina</td><td>Buenos Aires</td><td>Argentine Peso</td><td>Spanish</td></tr>
+        <tr><td>Australia</td><td>Canberra</td><td>Australian Dollar</td><td>English</td></tr>
+        <tr><td>Bangladesh</td><td>Dhaka</td><td>Taka</td><td>Bengali / Chakma</td></tr>
+        <tr><td>Belarus</td><td>Minsk</td><td>Ruble</td><td>Belarusian</td></tr>
+        <tr><td>Belgium</td><td>Brussels</td><td>Euro</td><td>Dutch / French / German</td></tr>
+        <tr><td>Bhutan</td><td>Thimphu</td><td>Ngultrum</td><td>Dzongkha / Nepali</td></tr>
+        <tr><td>Brazil</td><td>Brasília</td><td>Real</td><td>Portuguese / English</td></tr>
+        <tr><td>Canada</td><td>Ottawa</td><td>Canadian Dollar</td><td>English / French</td></tr>
+        <tr><td>Chile</td><td>Santiago</td><td>Chilean Peso</td><td>Spanish</td></tr>
+        <tr><td>China</td><td>Beijing</td><td>Yuan (Renminbi)</td><td>Mandarin</td></tr>
+        <tr><td>Colombia</td><td>Bogotá</td><td>Colombian Peso</td><td>Spanish</td></tr>
+        <tr><td>Denmark</td><td>Copenhagen</td><td>Danish Krone</td><td>Danish</td></tr>
+        <tr><td>Egypt</td><td>Cairo</td><td>Egyptian Pound</td><td>Arabic</td></tr>
+        <tr><td>France</td><td>Paris</td><td>Euro</td><td>French</td></tr>
+        <tr><td>Germany</td><td>Berlin</td><td>Euro</td><td>German</td></tr>
+        <tr><td>India</td><td>New Delhi</td><td>Rupee</td><td>Hindi / English</td></tr>
+        <tr><td>Iran</td><td>Tehran</td><td>Iranian Rial (IRR)</td><td>Persian</td></tr>
+        <tr><td>Iraq</td><td>Baghdad</td><td>Iraqi Dinar</td><td>Arabic</td></tr>
+        <tr><td>Israel</td><td>Jerusalem</td><td>Shekel</td><td>English / Hebrew</td></tr>
+        <tr><td>Italy</td><td>Rome</td><td>Euro</td><td>Italian</td></tr>
+        <tr><td>Japan</td><td>Tokyo</td><td>Yen</td><td>Japanese</td></tr>
+        <tr><td>Libya</td><td>Tripoli</td><td>Libyan Dinar</td><td>Arabic</td></tr>
+        <tr><td>Malaysia</td><td>Kuala Lumpur</td><td>Ringgit</td><td>Malay / Chinese (Mandarin)</td></tr>
+        <tr><td>Maldives</td><td>Malé</td><td>Maldivian Rufiyaa</td><td>Dhivehi</td></tr>
+        <tr><td>Mauritius</td><td>Port Louis</td><td>Rupee</td><td>English / French / Bhojpuri / Hindi</td></tr>
+        <tr><td>Mexico</td><td>Mexico City</td><td>Mexican Peso</td><td>Spanish</td></tr>
+        <tr><td>Morocco</td><td>Rabat</td><td>Moroccan Dirham</td><td>Arabic / Moroccan Berber</td></tr>
+        <tr><td>Myanmar</td><td>Naypyidaw</td><td>Kyat</td><td>Burmese</td></tr>
+        <tr><td>Nepal</td><td>Kathmandu</td><td>Nepalese Rupee</td><td>Nepali</td></tr>
+        <tr><td>Netherlands</td><td>Amsterdam</td><td>Euro</td><td>Dutch</td></tr>
+        <tr><td>New Zealand</td><td>Wellington</td><td>New Zealand Dollar</td><td>English / Māori</td></tr>
+        <tr><td>Nigeria</td><td>Abuja</td><td>Nigerian Naira</td><td>English</td></tr>
+        <tr><td>Norway</td><td>Oslo</td><td>Krone</td><td>Norwegian</td></tr>
+        <tr><td>Pakistan</td><td>Islamabad</td><td>Rupee</td><td>Urdu / Sindhi / Punjabi</td></tr>
+        <tr><td>Peru</td><td>Lima</td><td>Sol</td><td>Spanish</td></tr>
+        <tr><td>Philippines</td><td>Manila</td><td>Peso</td><td>Filipino / English</td></tr>
+        <tr><td>Russia</td><td>Moscow</td><td>Ruble</td><td>Russian</td></tr>
+        <tr><td>Saudi Arabia</td><td>Riyadh</td><td>Saudi Riyal</td><td>Arabic</td></tr>
+        <tr><td>South Korea</td><td>Seoul</td><td>Won</td><td>Korean</td></tr>
+        <tr><td>South Sudan</td><td>Juba</td><td>South Sudanese Pound</td><td>English</td></tr>
+        <tr><td>Spain</td><td>Madrid</td><td>Euro</td><td>Spanish (Castilian)</td></tr>
+        <tr><td>Sri Lanka</td><td>Colombo</td><td>Rupee</td><td>Sinhalese / Tamil</td></tr>
+        <tr><td>Sudan</td><td>Khartoum</td><td>Sudanese Pound</td><td>Arabic</td></tr>
+        <tr><td>Syria</td><td>Damascus</td><td>Syrian Pound</td><td>Arabic</td></tr>
+        <tr><td>UK</td><td>London</td><td>Sterling Pound</td><td>English</td></tr>
+        <tr><td>Ukraine</td><td>Kyiv</td><td>Hryvnia</td><td>Ukrainian</td></tr>
+        <tr><td>USA</td><td>Washington D.C.</td><td>Dollar</td><td>English</td></tr>
+        <tr><td>Venezuela</td><td>Caracas</td><td>Bolívar</td><td>Spanish</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · Capitals, Currencies and Languages · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

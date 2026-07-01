@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sports Panorama | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 11</span>
+  <h1>Sports Panorama</h1>
+  <p>Olympics · Commonwealth · Cricket · Hockey · Football · Racquet Sports · Chess</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">🏅 Olympics Overview</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🥇 Indian Olympic Medalists</button>
+  <button class="tab-btn" onclick="switchTab('t3')">🌐 Commonwealth Games & Cricket</button>
+  <button class="tab-btn" onclick="switchTab('t4')">🏑 Hockey & Football</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🏸 Badminton & Tennis</button>
+  <button class="tab-btn" onclick="switchTab('t6')">♟ Table Tennis & Chess</button>
+  <button class="tab-btn" onclick="switchTab('t7')">🏷 Nicknames & National Sports</button>
+  <button class="tab-btn" onclick="switchTab('t8')">🏟 Institutes & Other Facts</button>
+  <button class="tab-btn" onclick="switchTab('t9')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: OLYMPICS OVERVIEW -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">Olympic Games — Origin & Motto</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Origin: 776 AD (Olympia, Greece)</li>
+        <li>Modern Olympics: 1896 AD (Athens, Greece)</li>
+        <li>Motto: Citius (Faster) | Altius (Higher) | Fortius (Stronger) | Communiter (Together)</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Edition</th><th>Host</th><th>Year</th></tr>
+        <tr><td>First Summer Olympics</td><td>Athens, Greece</td><td>1896</td></tr>
+        <tr><td>First Winter Olympics</td><td>Chamonix, France</td><td>1924</td></tr>
+        <tr><td>First Paralympics</td><td>Rome, Italy</td><td>1960</td></tr>
+        <tr><td>First Youth Summer Olympics</td><td>Singapore</td><td>2010</td></tr>
+        <tr><td>First Youth Winter Olympics</td><td>Innsbruck, Austria</td><td>2012</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Olympic Ring Colours by Continent: Blue = Europe, Yellow = Asia, Black = Africa, Green = Australia, Red = North & South America.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">IOC & Indian Olympic Association</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Body</th><th>Details</th></tr>
+        <tr><td>International Olympic Committee (IOC)</td><td>Established 1894; HQ: Lausanne, Switzerland (formerly Paris); First President: Demetrios Vikelas (Greece); Current President: Kirsty Coventry</td></tr>
+        <tr><td>Indian Olympic Association</td><td>Established 1927; President: P.T. Usha</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Paris Olympics & Paralympics 2024</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Event</th><th>Details</th></tr>
+        <tr><td>Paris Olympics 2024 (33rd)</td><td>26 July – 11 Aug 2024; Motto: "Games Wide Open"; Mascot: The Phryges</td></tr>
+        <tr><td>Top Rank</td><td>USA — 126 medals (40 Gold, 44 Silver, 42 Bronze)</td></tr>
+        <tr><td>India's Rank</td><td>71st — 1 Silver, 5 Bronze</td></tr>
+        <tr><td>17th Paris Paralympics 2024</td><td>28 Aug – 8 Sep 2024; Mascot: Paralympic Phryge</td></tr>
+        <tr><td>Paralympics Top Rank</td><td>China — 220 medals (94 Gold, 76 Silver, 50 Bronze)</td></tr>
+        <tr><td>India's Paralympic Rank</td><td>18th — 29 medals (7 Gold, 9 Silver, 13 Bronze)</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        London and Paris have both hosted the Olympics THREE times each — the joint record for most hostings by a city. 2028 Summer Olympics go to Los Angeles, USA.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: INDIAN OLYMPIC MEDALISTS -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header purple">Indian Olympic Medalists</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Player</th><th>Sport</th><th>Medal</th><th>Olympics (Year)</th></tr>
+        <tr><td>KD Jadhav</td><td>Wrestling</td><td>Bronze</td><td>Helsinki (1952)</td></tr>
+        <tr><td>Leander Paes</td><td>Tennis</td><td>Bronze</td><td>Atlanta (1996)</td></tr>
+        <tr><td>Karnam Malleswari</td><td>Weightlifting</td><td>Bronze</td><td>Sydney (2000)</td></tr>
+        <tr><td>Rajyavardhan Singh Rathore</td><td>Shooting</td><td>Silver</td><td>Athens (2004)</td></tr>
+        <tr><td>Abhinav Bindra</td><td>10m Air Rifle</td><td>Gold</td><td>Beijing (2008)</td></tr>
+        <tr><td>Sushil Kumar</td><td>Wrestling</td><td>Bronze</td><td>Beijing (2008)</td></tr>
+        <tr><td>Vijender Singh</td><td>Boxing</td><td>Bronze</td><td>Beijing (2008)</td></tr>
+        <tr><td>Vijay Kumar</td><td>Shooting</td><td>Silver</td><td>London (2012)</td></tr>
+        <tr><td>Sushil Kumar</td><td>Wrestling</td><td>Silver</td><td>London (2012)</td></tr>
+        <tr><td>Yogeshwar Dutt</td><td>Wrestling</td><td>Bronze</td><td>London (2012)</td></tr>
+        <tr><td>Mary Kom</td><td>Boxing</td><td>Bronze</td><td>London (2012)</td></tr>
+        <tr><td>Saina Nehwal</td><td>Badminton</td><td>Bronze</td><td>London (2012)</td></tr>
+        <tr><td>Gagan Narang</td><td>Shooting</td><td>Bronze</td><td>London (2012)</td></tr>
+        <tr><td>PV Sindhu</td><td>Badminton</td><td>Silver</td><td>Rio (2016)</td></tr>
+        <tr><td>Sakshi Malik</td><td>Wrestling</td><td>Bronze</td><td>Rio (2016)</td></tr>
+        <tr><td>Mirabai Chanu</td><td>Weightlifting</td><td>Silver</td><td>Tokyo (2020)</td></tr>
+        <tr><td>Ravi Dahiya</td><td>Wrestling</td><td>Silver</td><td>Tokyo (2020)</td></tr>
+        <tr><td>L. Borgohain</td><td>Boxing</td><td>Bronze</td><td>Tokyo (2020)</td></tr>
+        <tr><td>PV Sindhu</td><td>Badminton</td><td>Bronze</td><td>Tokyo (2020)</td></tr>
+        <tr><td>Bajrang Punia</td><td>Wrestling</td><td>Bronze</td><td>Tokyo (2020)</td></tr>
+        <tr><td>Men's Hockey Team</td><td>Hockey</td><td>Bronze</td><td>Tokyo (2020)</td></tr>
+        <tr><td>Neeraj Chopra</td><td>Javelin Throw</td><td>Gold</td><td>Tokyo (2020)</td></tr>
+        <tr><td>Men's Hockey Team</td><td>Hockey</td><td>Bronze</td><td>Paris (2024)</td></tr>
+        <tr><td>Neeraj Chopra</td><td>Javelin Throw</td><td>Silver</td><td>Paris (2024)</td></tr>
+        <tr><td>Swapnil Kusale</td><td>Shooting</td><td>Bronze</td><td>Paris (2024)</td></tr>
+        <tr><td>Aman Sehrawat</td><td>Wrestling</td><td>Bronze</td><td>Paris (2024)</td></tr>
+        <tr><td>Manu Bhaker</td><td>Shooting</td><td>Bronze</td><td>Paris (2024)</td></tr>
+        <tr><td>Manu Bhaker & Sarabjeet Singh</td><td>Shooting (Team)</td><td>Bronze</td><td>Paris (2024)</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        PV Sindhu has TWO Olympic medals — Silver (Rio 2016) and Bronze (Tokyo 2020) — making her the first Indian woman with two individual Olympic medals. Neeraj Chopra also has two: Gold (Tokyo 2020) and Silver (Paris 2024).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: COMMONWEALTH & CRICKET -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header orange">Commonwealth Games</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Origin: 1930 AD, Hamilton, Canada; held every 4 years among Commonwealth member countries.</li>
+        <li>India first participated in 1934, London (England).</li>
+        <li>India hosted the Commonwealth Games in 2010 (finished 2nd position).</li>
+        <li>Most hosting: Australia (5 times).</li>
+        <li>23rd Commonwealth Games will be held in Glasgow, Scotland (2026).</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>22nd CWG 2022</th><th>Details</th></tr>
+        <tr><td>Held</td><td>Birmingham, UK</td></tr>
+        <tr><td>Mascot</td><td>Perry (multi-coloured Bull)</td></tr>
+        <tr><td>Top Rank</td><td>Australia — 178 medals (67G, 57S, 54B)</td></tr>
+        <tr><td>India's Rank</td><td>4th — 61 medals (22G, 16S, 23B)</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Cricket</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>First Test Match (1877) and First ODI (1971): Australia vs England — Melbourne</li>
+        <li>First Women's Cricket World Cup: 1973, England (Winner: England)</li>
+        <li>First Men's Cricket World Cup: 1975, Host: England (Winner: West Indies)</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Tournament</th><th>Result</th></tr>
+        <tr><td>Cricket World Cup 2023 (Men)</td><td>Winner: Australia (6th time); Runner-up: India (2011, 1983); Host: South Africa, Zimbabwe, Namibia</td></tr>
+        <tr><td>Cricket World Cup 2022 (Women)</td><td>Winner: Australia; Runner-up: England</td></tr>
+        <tr><td>T20 World Cup 2024 (9th, Men)</td><td>Winner: India (2nd time); Runner-up: South Africa</td></tr>
+        <tr><td>T20 World Cup 2024 (Women)</td><td>Winner: New Zealand; Runner-up: South Africa</td></tr>
+        <tr><td>First T20 World Cup (2007)</td><td>South Africa; Winner: India</td></tr>
+        <tr><td>World Test Championship 2023–25</td><td>Winner: South Africa; Runner-up: Australia</td></tr>
+        <tr><td>First WTC (2019–21)</td><td>Winner: New Zealand</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>First Women's International Test Match in India: 1976, Bengaluru.</li>
+        <li>ICC (Cricket Governing Body) HQ: Dubai, UAE.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Terminology to remember: Chinaman, Silly Point, Cow Corner, Follow-on (Test format only), Agricultural Shot. Major trophies: World Cup, T20 World Cup, Border-Gavaskar Trophy, Duleep Trophy, Ashes.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: HOCKEY & FOOTBALL -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header teal">Hockey</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>First World Cup: Barcelona (1971); Winner: Pakistan (max 4 times)</li>
+        <li>Playing Time: 70 minutes; Field Length: 91.44 m; Players: 11</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Event</th><th>Details</th></tr>
+        <tr><td>Men's Hockey WC 2023</td><td>Held: Bhubaneswar, India; Winner: Germany; Runner-up: Belgium; 2026 Host: Belgium & Netherlands</td></tr>
+        <tr><td>Women's Hockey WC 2023</td><td>Held: Netherlands; Winner: Netherlands; Runner-up: Argentina; 2026 Host: Belgium & New Zealand</td></tr>
+        <tr><td>FIH (International Hockey Federation)</td><td>HQ: Lausanne, Switzerland</td></tr>
+        <tr><td>Indian Hockey Federation</td><td>Established 1925 in Gwalior; renamed Hockey India (2008); HQ: New Delhi</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Wizard of Hockey: Major Dhyan Chand</li>
+        <li>India's Highest Hockey Stadium: Shilaroo Hockey Stadium, Himachal Pradesh</li>
+        <li>India won the first Men's Asian Hockey Championship in 2011.</li>
+        <li>Indian Men's Hockey team has won 12 Olympic medals (8 Gold).</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        The term "Blue Line" belongs to ICE hockey, NOT field hockey — a frequent mix-up between the two hockey formats.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Football / Soccer</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Highest Authority: FIFA — established 1904, Paris, France; HQ: Zurich, Switzerland; Players: 11</li>
+        <li>First FIFA World Cup: 1930; First Winner: Uruguay; First Runner-up: Argentina</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>FIFA World Cup 2022</th><th>Details</th></tr>
+        <tr><td>Held</td><td>Qatar</td></tr>
+        <tr><td>Winner</td><td>Argentina</td></tr>
+        <tr><td>Runner-up</td><td>France</td></tr>
+        <tr><td>2026 Host</td><td>Canada, Mexico, USA</td></tr>
+        <tr><td>Most Wins</td><td>Brazil (5 times)</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>India Trophies: Santosh Trophy, Durand Cup (first held 1888), Rovers Cup</li>
+        <li>Prominent Indian Players: Sunil Chhetri, P.K. Banerjee, Bhaichung Bhutia</li>
+        <li>Ballon d'Or 2024 (Male): Rodri (Spain); Lionel Messi holds the record for most Ballon d'Or wins overall.</li>
+        <li>Ballon d'Or Féminin 2024: Aitana Bonmatí (Spain); most wins jointly held by Alexia Putellas & Aitana Bonmatí (2 each).</li>
+        <li>FIFA 2022 Golden Boot: Kylian Mbappé (France)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: BADMINTON & TENNIS -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header green">Badminton</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Highest Authority: International Badminton Federation (1934)</li>
+        <li>HQ: Kuala Lumpur, Malaysia</li>
+        <li>Net height at center: 5 feet</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Thomas Cup & Uber Cup 2024</th><th>Details</th></tr>
+        <tr><td>Held</td><td>China</td></tr>
+        <tr><td>Winner</td><td>China (both)</td></tr>
+        <tr><td>Runner-up</td><td>Indonesia</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Trophies: Thomas Cup (Men), Uber Cup (Women), Narang Cup, Syed Modi International</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Sports card colours: Yellow = warning for misconduct, Red = warning for foul (ejection), Black = equivalent to 2 Yellow Cards.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Lawn Tennis — Grand Slams</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Grand Slam</th><th>Started</th><th>Country</th><th>Court Type</th></tr>
+        <tr><td>Wimbledon</td><td>1877</td><td>UK</td><td>Grass</td></tr>
+        <tr><td>US Open</td><td>1881</td><td>USA</td><td>Hard (Artificial)</td></tr>
+        <tr><td>French Open</td><td>1891</td><td>France</td><td>Red Clay</td></tr>
+        <tr><td>Australian Open</td><td>1905</td><td>Australia</td><td>Hard</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Chronological order of the Grand Slam calendar each year: Australian Open → French Open → Wimbledon → US Open.
+      </div>
+      <div class="tbl-wrap"><table>
+        <tr><th>2025 Slam</th><th>Men's Winner</th><th>Women's Winner</th></tr>
+        <tr><td>Australian Open</td><td>Jannik Sinner (Italy)</td><td>Madison Keys (USA)</td></tr>
+        <tr><td>French Open</td><td>Carlos Alcaraz (Spain)</td><td>Coco Gauff (USA)</td></tr>
+        <tr><td>Wimbledon</td><td>Jannik Sinner (Italy)</td><td>Iga Świątek (Poland)</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Wimbledon 2025 introduced electronic line calling, replacing line judges for the first time in the tournament's history — a fresh current-affairs-linked fact.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: TABLE TENNIS & CHESS -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header orange">Table Tennis</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Organisation: International Table Tennis Association (1926)</li>
+        <li>First World Championship: 1927; now held every 2 years</li>
+        <li>Players: 1 or 2</li>
+        <li>Cups: Corbillon Cup (Women's), Swaythling Cup (Men's)</li>
+        <li>Indian Players: Achanta Sharath Kamal, Manika Batra, Sreeja Akula</li>
+        <li>Global Players: Lin Shidong (China), Hugo Calderano (Brazil), Felix Lebrun (France)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Chess</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Organisation: FIDE (Fédération Internationale des Échecs); World Cup held every 2 years</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Event</th><th>Details</th></tr>
+        <tr><td>FIDE Chess World Cup 2023</td><td>Held: Baku, Azerbaijan; Winner: Magnus Carlsen (Norway); Runner-up: R. Praggnanandhaa (India)</td></tr>
+        <tr><td>Chess World Championship 2024</td><td>Winner: D. Gukesh (India)</td></tr>
+        <tr><td>FIDE Women's Chess World Cup 2025</td><td>Winner: Divya Deshmukh (India); Runner-up: Koneru Humpy (India)</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Terminology: Bishop, Gambit, Checkmate, Grandmaster, Knight, Castling</li>
+        <li>King moves one step in all four directions; Rook (called "Elephant" in Hindi chess terms) moves straight (vertical/horizontal)</li>
+        <li>Total chess pieces per side: 16</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        D. Gukesh (World Championship 2024) and Divya Deshmukh (Women's World Cup 2025) are DIFFERENT titles/events — don't confuse the World Championship with the World Cup format.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: NICKNAMES & NATIONAL SPORTS -->
+<div class="tab-content" id="t7">
+  <div class="card">
+    <div class="card-header teal">Player Nicknames</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Player</th><th>Nickname</th></tr>
+        <tr><td>P.T. Usha</td><td>Udanpari</td></tr>
+        <tr><td>K.D. Jadhav</td><td>Pocket Dynamo</td></tr>
+        <tr><td>Mary Kom</td><td>Super Mom</td></tr>
+        <tr><td>Rahul Dravid</td><td>The Wall</td></tr>
+        <tr><td>Mahendra Singh Dhoni</td><td>Captain Cool</td></tr>
+        <tr><td>Paes & Bhupathi</td><td>Indian Express</td></tr>
+        <tr><td>Pelé</td><td>Black Pearl</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">National Sports of Major Countries</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>National Sport</th></tr>
+        <tr><td>USA</td><td>Baseball</td></tr>
+        <tr><td>Spain</td><td>Bull Fighting</td></tr>
+        <tr><td>Canada</td><td>Ice Hockey</td></tr>
+        <tr><td>Japan</td><td>Judo</td></tr>
+        <tr><td>China</td><td>Table Tennis</td></tr>
+        <tr><td>France</td><td>Football</td></tr>
+        <tr><td>Malaysia</td><td>Badminton</td></tr>
+        <tr><td>South Korea</td><td>Taekwondo</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Sports Complexes & Terminology</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Complex Name</th><th>Sports Played</th></tr>
+        <tr><td>Ring</td><td>Skating, Boxing</td></tr>
+        <tr><td>Pool</td><td>Swimming</td></tr>
+        <tr><td>Diamond</td><td>Baseball</td></tr>
+        <tr><td>Course</td><td>Golf</td></tr>
+        <tr><td>Court</td><td>Kho-Kho, Squash, Badminton, Tennis</td></tr>
+        <tr><td>Track</td><td>Athletics</td></tr>
+        <tr><td>Rink</td><td>Ice Hockey</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Golf terminology: Bogey, Bunker, Caddy, Putt, Tee. Boxing terminology: Jab, Hook, Uppercut, Knock Out, Kidney Punch. Cross-match terms to their correct sport in MCQs.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: INSTITUTES & OTHER FACTS -->
+<div class="tab-content" id="t8">
+  <div class="card">
+    <div class="card-header gold">Important Sports Training Institutes in India</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Institute</th><th>Location</th></tr>
+        <tr><td>National Institute of Water Sports</td><td>Dona Paula, Goa</td></tr>
+        <tr><td>Netaji Subhas National Institute of Sports (NSNIS)</td><td>Patiala, Punjab</td></tr>
+        <tr><td>National Sports Club of India</td><td>Mumbai, Maharashtra</td></tr>
+        <tr><td>Institute of Sport Science and Technology</td><td>Pune, Maharashtra</td></tr>
+        <tr><td>Guru Gobind Singh Sports College</td><td>Lucknow, Uttar Pradesh</td></tr>
+        <tr><td>Indian Institute of Skiing & Mountaineering</td><td>Baramulla, Jammu & Kashmir</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Sports Authority of India (SAI)</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Established: 1984</li>
+        <li>Registered under: Societies Act, 1860</li>
+        <li>Nodal Ministry: Department of Sports, Ministry of Youth Affairs & Sports</li>
+        <li>Current Director General: Sujata Chaturvedi</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Other Important Sports Facts</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Cycling track is known as 'Velodrome'.</li>
+        <li>Olympic shooting guns: Rifle (single loaded, 5.6 mm), Pistol, Shotgun.</li>
+        <li>Calcutta Polo Club established 1862 — oldest polo tournament in the world.</li>
+        <li>First Asian Kabaddi Championship: 1980.</li>
+        <li>First Kabaddi World Cup: Mumbai (2004).</li>
+        <li>Mumbai Marathon is considered the biggest marathon in Asia.</li>
+        <li>Pro-Kabaddi League in India started in 2014.</li>
+        <li>India won its first medal at World Athletics Championship in 2003, France.</li>
+        <li>First Indian athlete to win a medal at World Athletics Championship: Anju Bobby George (2003).</li>
+        <li>Overall winner (men and women) at first tribal sports festival Championship: Odisha.</li>
+        <li>Neeraj Chopra won Gold at Paris Diamond League 2025.</li>
+        <li>Raja Bhalendra Singh Trophy — awarded to the state with the best overall performance (highest medals) in national sports.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: QUICK REFERENCE -->
+<div class="tab-content" id="t9">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">Olympic Origin</span><span class="v">776 AD, Olympia, Greece</span></div>
+      <div class="info-row"><span class="k">Modern Olympics</span><span class="v">1896 AD, Athens, Greece</span></div>
+      <div class="info-row"><span class="k">IOC Founded</span><span class="v">1894; HQ: Lausanne, Switzerland</span></div>
+      <div class="info-row"><span class="k">IOC Current President</span><span class="v">Kirsty Coventry</span></div>
+      <div class="info-row"><span class="k">Paris Olympics 2024</span><span class="v">33rd Summer Olympics; USA topped; India 71st</span></div>
+      <div class="info-row"><span class="k">Paris Paralympics 2024</span><span class="v">17th Edition; China topped; India 18th (29 medals)</span></div>
+      <div class="info-row"><span class="k">Commonwealth Games 2022</span><span class="v">Birmingham; Australia topped; India 4th</span></div>
+      <div class="info-row"><span class="k">Next Commonwealth Games</span><span class="v">2026, Glasgow, Scotland</span></div>
+      <div class="info-row"><span class="k">Cricket World Cup 2023</span><span class="v">Australia won (6th time); Host: South Africa</span></div>
+      <div class="info-row"><span class="k">Hockey World Cup 2023</span><span class="v">Germany won; Runner-up: Belgium</span></div>
+      <div class="info-row"><span class="k">FIFA World Cup 2022</span><span class="v">Argentina won; Runner-up: France</span></div>
+      <div class="info-row"><span class="k">Thomas/Uber Cup 2024</span><span class="v">China won both</span></div>
+      <div class="info-row"><span class="k">Chess World 2024</span><span class="v">D. Gukesh (India) won</span></div>
+      <div class="info-row"><span class="k">FIDE Women's Chess 2025</span><span class="v">Divya Deshmukh won; Runner-up: Koneru Humpy</span></div>
+      <div class="info-row"><span class="k">Australian Open 2025 (M)</span><span class="v">Jannik Sinner (Italy)</span></div>
+      <div class="info-row"><span class="k">Australian Open 2025 (W)</span><span class="v">Madison Keys (USA)</span></div>
+      <div class="info-row"><span class="k">French Open 2025 (M)</span><span class="v">Carlos Alcaraz (Spain)</span></div>
+      <div class="info-row"><span class="k">French Open 2025 (W)</span><span class="v">Coco Gauff (USA)</span></div>
+      <div class="info-row"><span class="k">Wimbledon 2025 (M)</span><span class="v">Jannik Sinner (Italy)</span></div>
+      <div class="info-row"><span class="k">Wimbledon 2025 (W)</span><span class="v">Iga Świątek (Poland)</span></div>
+      <div class="info-row"><span class="k">Sports Authority of India</span><span class="v">Est. 1984; Sujata Chaturvedi (DG)</span></div>
+      <div class="info-row"><span class="k">Neeraj Chopra</span><span class="v">Gold Tokyo 2020; Silver Paris 2024; Gold Diamond League 2025</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · Sports Panorama · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

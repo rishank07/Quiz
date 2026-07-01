@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atmosphere | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.9rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.15rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .layer-diagram{
+    display:flex;flex-direction:column-reverse;border-radius:10px;overflow:hidden;
+    margin:14px 0;border:1px solid var(--border);
+  }
+  .layer-band{
+    padding:14px 18px;display:flex;justify-content:space-between;align-items:center;
+    font-weight:700;font-size:0.9rem;
+  }
+  .layer-band .tag{font-size:0.75rem;font-weight:600;opacity:0.85;}
+  .layer-band.tropo{background:linear-gradient(90deg,#3498db,#2477b3);color:#fff;}
+  .layer-band.strato{background:linear-gradient(90deg,#2ecc71,#23a05a);color:#08130c;}
+  .layer-band.meso{background:linear-gradient(90deg,#9b59b6,#7d3f99);color:#fff;}
+  .layer-band.iono{background:linear-gradient(90deg,#e74c3c,#c0392b);color:#fff;}
+  .layer-band.exo{background:linear-gradient(90deg,#f5c842,#caa42e);color:#0f1117;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌫️ ATMOSPHERE <span class="art-pill">World Geography · Ch 15</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('composition')">Composition</button>
+    <button class="tab-btn" onclick="switchTab('layers')">Atmospheric Layers</button>
+    <button class="tab-btn" onclick="switchTab('ozone')">Ozone Layer</button>
+    <button class="tab-btn" onclick="switchTab('insolation')">Insolation</button>
+    <button class="tab-btn" onclick="switchTab('heatbudget')">Heat Budget &amp; Albedo</button>
+    <button class="tab-btn" onclick="switchTab('heating')">Heating &amp; Cooling</button>
+    <button class="tab-btn" onclick="switchTab('tempvariation')">Temp Variation &amp; Inversion</button>
+  </div>
+
+  <!-- TAB 1: COMPOSITION -->
+  <div id="composition" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌍 Atmosphere</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Layers of various gases / envelope of air spread around the Earth</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🧪 Composition of Atmosphere</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Gas</th><th>% (Volume)</th></tr></thead>
+          <tbody>
+            <tr><td>Nitrogen</td><td>78</td></tr>
+            <tr><td>Oxygen</td><td>21</td></tr>
+            <tr><td>Argon</td><td>0.93</td></tr>
+            <tr><td>Carbon Dioxide</td><td>0.03</td></tr>
+            <tr><td>Neon</td><td>0.0018</td></tr>
+            <tr><td>Helium</td><td>0.0005</td></tr>
+            <tr><td>Ozone</td><td>0.000004</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="two-col" style="margin-top:10px;">
+          <div class="sub-box">
+            <h4>Water Vapour</h4>
+            <ul class="arrow-list">
+              <li>Up to 0–4% of atmosphere</li>
+              <li>Responsible for Clouds, Rain, Fog</li>
+              <li>Responsible for Earth's heat retention</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Dust Particles</h4>
+            <ul class="arrow-list">
+              <li>Act as humidity-sensing / condensation centres</li>
+              <li>Responsible for making the sky appear blue (scattering)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Nitrogen (78%) + Oxygen (21%) together make up ~99% of the atmosphere's dry composition.
+    </div>
+  </div>
+
+  <!-- TAB 2: LAYERS -->
+  <div id="layers" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌐 Layers of Atmosphere</div>
+      <div class="card-body">
+        <div class="layer-diagram">
+          <div class="layer-band tropo"><span>Troposphere</span><span class="tag">0–18 km</span></div>
+          <div class="layer-band strato"><span>Stratosphere</span><span class="tag">Up to 50 km</span></div>
+          <div class="layer-band meso"><span>Mesosphere</span><span class="tag">Up to 80 km</span></div>
+          <div class="layer-band iono"><span>Ionosphere / Thermosphere</span><span class="tag">80–640 km</span></div>
+          <div class="layer-band exo"><span>Exosphere</span><span class="tag">Above 640 km</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌦️ Troposphere</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Height: 0–18 km (Pole: 8 km, Equator: 18 km, Average: 13 km)</li>
+          <li>Lowest layer of atmosphere</li>
+          <li>All weather phenomena occur here</li>
+          <li>Normal Lapse Rate of temperature: 1 km → 6.5°C decrease</li>
+          <li><b>Tropopause:</b> boundary separating Troposphere and Stratosphere</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">✈️ Stratosphere</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Up to 50 km</li>
+          <li>Increase in temperature with height</li>
+          <li>Temperature stable up to 20 km</li>
+          <li>Suitable for airplane flight</li>
+          <li>"Mother of Pearl" clouds present here</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">☄️ Mesosphere</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Up to 80 km</li>
+          <li>Decrease in temperature with increasing height</li>
+          <li>Coldest layer of the atmosphere</li>
+          <li>Burning up of meteoroids occurs here</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">📡 Ionosphere / Thermosphere</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>80–640 km</li>
+          <li>Increase in temperature with increasing height — hottest layer</li>
+          <li>Reflection of radio waves</li>
+          <li>Red glow of Aurora at poles</li>
+          <li>Northern Lights (Aurora Borealis) and Southern Lights (Aurora Australis)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🌌 Exosphere</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>From Thermosphere to about 10,000 km</li>
+          <li>Composed mainly of Hydrogen (H₂) and Helium (He) gases</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Karman Line (100 km)</span>
+          <span class="v">Line separating atmosphere from outer space</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Temperature <b>decreases</b> with height in Troposphere and Mesosphere, but <b>increases</b> with height in Stratosphere and Thermosphere — the pattern alternates layer by layer.
+    </div>
+  </div>
+
+  <!-- TAB 3: OZONE LAYER -->
+  <div id="ozone" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🛡️ Ozone Layer (15–35 km, in Stratosphere)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Protects Earth from the Sun's ultraviolet rays</li>
+          <li>Maximum concentration – 22 km height</li>
+          <li>Measurement unit – Dobson unit</li>
+          <li>Maximum depletion – Over South Pole (Antarctica)</li>
+        </ul>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">16 Sep</div><div class="lbl">Ozone Day (since 1987)</div></div>
+          <div class="stat-box"><div class="num">22 km</div><div class="lbl">Maximum Concentration Height</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🕳️ Ozone Depletion &amp; Protection</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Depletion – Thinning / Hole in the ozone layer</li>
+          <li><b>Montreal Protocol</b> (Canada) → Aims to reduce CFCs (Chlorofluorocarbons)</li>
+          <li><b>Kigali Amendment</b> → Aims to reduce HFCs (Hydrofluorocarbons)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Montreal Protocol → targets CFCs · Kigali Amendment (an amendment to Montreal Protocol) → targets HFCs
+    </div>
+  </div>
+
+  <!-- TAB 4: INSOLATION -->
+  <div id="insolation" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">☀️ Insolation</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Solar radiation energy received from the Sun</li>
+          <li>Aphelion (4 July): Relatively receives <b>less</b> insolation</li>
+          <li>Perihelion (3 January): Relatively receives <b>more</b> insolation</li>
+          <li>Equator – comparatively less • Deserts – maximum</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🧭 Factors Affecting Insolation</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Latitude</li>
+          <li>Conditions of the atmosphere</li>
+          <li>Day length</li>
+          <li>Transparency of atmosphere</li>
+          <li>Sunspots</li>
+          <li>Distance between Earth and Sun</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Deserts receive <b>more</b> insolation than the Equator, despite the Equator getting more direct sunlight overall — because deserts have clear skies and low humidity/cloud cover, allowing more solar radiation to reach the surface.
+    </div>
+  </div>
+
+  <!-- TAB 5: HEAT BUDGET & ALBEDO -->
+  <div id="heatbudget" class="tab-content">
+    <div class="card">
+      <div class="card-header green">⚖️ Heat Budget</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Balance of temperature (Earth not getting excessively hot or cold)</li>
+          <li>Average temperature of Earth – 15°C</li>
+          <li>Solar radiation / amount of energy received by Earth's surface – ~51%</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🪞 Albedo</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Amount of light reflected from any surface or object</li>
+          <li>Earth's average surface albedo value – 23% to 34%</li>
+          <li>Maximum Albedo – Ice / Glacier (40–70%)</li>
+          <li>Albedo of Dry sand – 35–45%</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Higher Albedo = More reflection, less absorption → Ice/Snow (highest albedo) stays cooler.
+    </div>
+  </div>
+
+  <!-- TAB 6: HEATING & COOLING -->
+  <div id="heating" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🔥 Heating and Cooling of the Atmosphere</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Process</th><th>Key Details</th></tr></thead>
+          <tbody>
+            <tr><td>Conduction</td><td>Transfer of heat from higher to lower temperature • Heating of lower layers of atmosphere</td></tr>
+            <tr><td>Convection</td><td>Vertical transfer of heat • Vertical heating of atmosphere</td></tr>
+            <tr><td>Radiation</td><td>Heating through transmission of heat waves • Earth's heating from solar radiation</td></tr>
+            <tr><td>Advection</td><td>Horizontal transfer of heat • 'Loo' is the result of advection</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Convection = <b>vertical</b> heat transfer; Advection = <b>horizontal</b> heat transfer — the hot "Loo" winds of North India are a classic example of Advection, not Convection.
+    </div>
+  </div>
+
+  <!-- TAB 7: TEMPERATURE VARIATION & INVERSION -->
+  <div id="tempvariation" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🌡️ Temperature Variation</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Causes: Latitude, Distance from sea, Ocean Currents, Altitude, Air circulation, Local factors</li>
+          <li><b>Isotherms:</b> Lines connecting places having equal temperature</li>
+          <li><b>Temperature Range:</b> Difference between maximum and minimum temperature</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🔄 Temperature Inversion</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Lower layer of air is cold and upper layer is warm (reversal of the normal pattern)</li>
+        </ul>
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Favourable Conditions</h4>
+            <ul class="arrow-list">
+              <li>Dry and Calm air</li>
+              <li>Long cold nights</li>
+              <li>Cloudless and clear sky</li>
+              <li>Stability in atmosphere</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Effects</h4>
+            <ul class="arrow-list">
+              <li>Formation of toxic fog / smog in industrial areas</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Temperature Inversion is exactly the opposite of the normal Lapse Rate (normally temperature falls with height in the Troposphere).
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Atmosphere · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

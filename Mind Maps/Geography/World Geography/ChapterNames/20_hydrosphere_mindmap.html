@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hydrosphere | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 14px;font-size:0.82rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.86rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.15rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌊 HYDROSPHERE <span class="art-pill">World Geography · Ch 20</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('distribution')">Water Distribution</button>
+    <button class="tab-btn" onclick="switchTab('oceans')">Oceans Overview</button>
+    <button class="tab-btn" onclick="switchTab('straits')">Major Straits</button>
+    <button class="tab-btn" onclick="switchTab('floor')">Ocean Floor &amp; Trenches</button>
+    <button class="tab-btn" onclick="switchTab('salinity')">Temperature &amp; Salinity</button>
+    <button class="tab-btn" onclick="switchTab('coral')">Coral Reefs</button>
+  </div>
+
+  <!-- TAB 1: WATER DISTRIBUTION -->
+  <div id="distribution" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">💧 Distribution of Water</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Water covers 70.8% of the Earth's surface</li>
+        </ul>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Category</th><th>Distribution</th></tr></thead>
+          <tbody>
+            <tr><td>Saline / Salty Water (97.5%)</td><td>Ocean – 97.3% • Terrestrial sea &amp; Saline Lakes – 0.008%</td></tr>
+            <tr><td>Fresh Water (2.5%)</td><td>Snow/Glacier/Ice caps – 0.015% (68% of freshwater) • Groundwater – 0.58% (30%) • Fresh water in Lakes – 0.003% (2%) • Atmosphere – 0.0013% • Rivers – 0.0001%</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🔄 Water Cycle</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Conversion of water into vapour and vapour again into water</li>
+          <li>Key Processes: Evaporation, Transpiration, Condensation</li>
+          <li>Evaporation: Water → Water vapour (Liquid → Gas)</li>
+          <li>Condensation: Water vapour → Water</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Of all freshwater, Glaciers/Ice caps hold ~68% and Groundwater ~30% — together these two account for almost all usable freshwater; surface lakes and rivers are a tiny fraction.
+    </div>
+  </div>
+
+  <!-- TAB 2: OCEANS OVERVIEW -->
+  <div id="oceans" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌐 Oceans of the World</div>
+      <div class="card-body">
+        <div class="info-row">
+          <span class="k">Decreasing size order</span>
+          <span class="v">Pacific &gt; Atlantic &gt; Indian &gt; Antarctic &gt; Arctic</span>
+        </div>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Ocean</th><th>Key Features</th></tr></thead>
+          <tbody>
+            <tr><td>Pacific Ocean (Semicircular)</td><td>Largest and deepest • Challenger Deep is the deepest point on Earth (11,034 m)</td></tr>
+            <tr><td>Atlantic Ocean ('S' shape)</td><td>Sargasso Sea (coastless sea) • 'S' shaped</td></tr>
+            <tr><td>Indian Ocean (Triangular)</td><td>Deepest trench – Java/Sunda Trench (7,290 m) • Largest sea in northern Indian Ocean is the Arabian Sea</td></tr>
+            <tr><td>Antarctic Ocean</td><td>Surrounds the Antarctic continent → also called the Southern Ocean</td></tr>
+            <tr><td>Arctic Ocean</td><td>Widest continental shelf</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      The Pacific Ocean holds the deepest point on Earth (Challenger Deep, Mariana Trench); the Indian Ocean's deepest point (Java/Sunda Trench) is much shallower in comparison.
+    </div>
+  </div>
+
+  <!-- TAB 3: MAJOR STRAITS -->
+  <div id="straits" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🌉 Major Straits of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Strait</th><th>Seas Connected</th><th>Geographical Location</th></tr></thead>
+          <tbody>
+            <tr><td>Malacca</td><td>Andaman Sea and South China Sea</td><td>Indonesia – Malaysia</td></tr>
+            <tr><td>Palk</td><td>Mannar Sea and Bay of Bengal</td><td>India – Sri Lanka</td></tr>
+            <tr><td>Bering</td><td>Bering Sea (Pacific) and Chukchi Sea (Arctic)</td><td>Alaska – Russia</td></tr>
+            <tr><td>Davis</td><td>Baffin Bay and Atlantic Ocean</td><td>Greenland – Canada</td></tr>
+            <tr><td>Dover</td><td>English Channel and North Sea</td><td>England – France</td></tr>
+            <tr><td>Gibraltar</td><td>Mediterranean Sea and Atlantic Ocean</td><td>Spain – Morocco</td></tr>
+            <tr><td>Florida</td><td>Gulf of Mexico and Atlantic Ocean</td><td>USA – Cuba</td></tr>
+            <tr><td>Bass</td><td>Tasman Sea and Southern Ocean</td><td>Australia</td></tr>
+            <tr><td>Sunda</td><td>Java Sea and Indian Ocean</td><td>Indonesia</td></tr>
+            <tr><td>Hormuz</td><td>Persian Gulf and Gulf of Oman</td><td>Oman – Iran</td></tr>
+            <tr><td>Torres</td><td>Arafura Sea and Gulf of Papua</td><td>Papua New Guinea – Australia</td></tr>
+            <tr><td>Bosphorus</td><td>Black Sea and Sea of Marmara</td><td>Turkey</td></tr>
+            <tr><td>Makassar</td><td>Java Sea and Celebes Sea</td><td>Indonesia</td></tr>
+            <tr><td>Bab-el-Mandeb</td><td>Red Sea and Arabian Sea (separates Asia from Africa)</td><td>Yemen – Djibouti</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Grand Channel (6° Channel)</span>
+          <span class="v">Strait between Great Nicobar Island and Sumatra Island (Indonesia)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      <b>Palk Strait</b> (India-Sri Lanka) and <b>Bab-el-Mandeb</b> (Yemen-Djibouti) are both narrow but strategically important straits — often tested for the exact countries/seas they connect.
+    </div>
+  </div>
+
+  <!-- TAB 4: OCEAN FLOOR & TRENCHES -->
+  <div id="floor" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">🌊 Ocean Floor and Their Reliefs</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Measurement of ocean depth: <b>Fathometer</b></li>
+          <li>Depth/height shown by: <b>Hypsographic curve</b></li>
+        </ul>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Ocean Floor Feature</th><th>Key Details</th></tr></thead>
+          <tbody>
+            <tr><td>(1) Continental Shelf</td><td>Region of mineral oil and natural gas • Dogger Bank (Western Europe), Grand Bank and Georges Bank (North America) – prominent fishing zones</td></tr>
+            <tr><td>(2) Continental Slope</td><td>Absence of marine deposits (steep gradient prevents sediment settling)</td></tr>
+            <tr><td>(3) Deep Sea Plains / Abyssal Plains</td><td>75–90% of oceanic area • Regions with the lowest slope in oceanic basins</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Other Ocean Landforms</span>
+          <span class="v">Bay &amp; Gulf, Spit, Submarine Canyon, Seamount, Guyot, etc.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🕳️ Important Trenches of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Trench</th><th>Location</th><th>Depth (metres)</th></tr></thead>
+          <tbody>
+            <tr><td>Mariana</td><td>Western Pacific Ocean</td><td>11,034</td></tr>
+            <tr><td>Tonga</td><td>Central South Pacific Ocean</td><td>10,882</td></tr>
+            <tr><td>Puerto Rico</td><td>Atlantic Ocean (near West Indies)</td><td>8,385</td></tr>
+            <tr><td>Diamantina</td><td>Southeastern Indian Ocean</td><td>8,047</td></tr>
+            <tr><td>Sunda (Java Trench)</td><td>Eastern Indian Ocean</td><td>7,290</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Mariana Trench (Pacific) contains the Challenger Deep — the single deepest point in all the world's oceans (11,034 m).
+    </div>
+  </div>
+
+  <!-- TAB 5: TEMPERATURE & SALINITY -->
+  <div id="salinity" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🌡️ Temperature of Ocean Water</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Average temperature (near equator) – Approx 27°C (decreases towards the poles)</li>
+          <li>Highest temperature found between Tropic of Cancer and Tropic of Capricorn</li>
+        </ul>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Pycnocline</td><td>Represents density gradient in water body</td></tr>
+            <tr><td>Halocline</td><td>Represents salinity gradient in water body</td></tr>
+            <tr><td>Thermocline</td><td>Represents variation in temperature with depth</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">🧂 Salinity of Ocean Water (Average – 35‰)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Amount of salt present per thousand grams of water (‰)</li>
+          <li>Average ocean salinity – 35 grams per thousand grams (35‰)</li>
+          <li>Salinity increases with increasing depth</li>
+          <li>Highest salinity band – Between 20°–40° North and 10°–30° South latitudes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🏔️ Highest Salinity — Closed Seas</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Water Body</th><th>Salinity / Details</th></tr></thead>
+          <tbody>
+            <tr><td>Dead Sea (Between Israel and Jordan)</td><td>330–340‰ – Highest in world</td></tr>
+            <tr><td>Van Lake (Turkey)</td><td>~33‰</td></tr>
+            <tr><td>Great Salt Lake (USA)</td><td>220‰</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📌 Fast Facts – Salinity</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Salinity of Indian Ocean – 33‰</li>
+          <li>Instrument to measure salinity: <b>Salinometer</b></li>
+          <li>Normal salinity at Equator despite high evaporation (due to heavy rainfall balancing it)</li>
+          <li>Asia's largest saline water lake/lagoon – Chilika (Odisha), India</li>
+          <li>Southern Ocean surrounds the Antarctic continent</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🧪 Types of Sea Salts</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Type of Salt</th><th>Salinity (‰)</th><th>Quantity (%)</th></tr></thead>
+          <tbody>
+            <tr><td>Sodium Chloride (NaCl)</td><td>27.213</td><td>77.8</td></tr>
+            <tr><td>Magnesium Chloride</td><td>3.807</td><td>10.9</td></tr>
+            <tr><td>Magnesium Sulphate</td><td>1.658</td><td>4.7</td></tr>
+            <tr><td>Calcium Sulphate</td><td>1.260</td><td>3.6</td></tr>
+            <tr><td>Potassium Sulphate</td><td>0.863</td><td>2.5</td></tr>
+            <tr><td>Calcium Carbonate</td><td>0.123</td><td>0.3</td></tr>
+            <tr><td>Magnesium Bromide</td><td>0.076</td><td>0.2</td></tr>
+            <tr><td><b>Total</b></td><td><b>35</b></td><td><b>100</b></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      The <b>Dead Sea</b> (330–340‰) — not Lake Van (~33‰) — holds the "highest salinity in the world" record; the two are easily confused since both are closed, landlocked salt bodies.
+    </div>
+  </div>
+
+  <!-- TAB 6: CORAL REEFS -->
+  <div id="coral" class="tab-content">
+    <div class="card">
+      <div class="card-header red">🪸 Coral Reefs</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Coral = Coral Polyps – formed by marine organisms</li>
+          <li>Symbiotic relationship with zooxanthellae algae</li>
+          <li>Lime-dominant structures – formed from Calcium Carbonate (CaCO₃)</li>
+          <li>Live in colonies in warm, shallow, clear saltwater</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">✅ Conditions Required for Coral Growth</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Temperature – 20–21°C</li>
+          <li>Ocean depth till sunlight can penetrate</li>
+          <li>Sediment-free water</li>
+          <li>Normal marine salinity</li>
+          <li>Presence of Submarine platforms (relatively flat, shallow area in ocean)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">📂 Types of Coral Reefs</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Type</th><th>Key Details</th></tr></thead>
+          <tbody>
+            <tr><td>1. Fringing Coral Reef</td><td>South Florida, Islands of Malaysia and Solomon Islands, Gulf of Mannar, etc.</td></tr>
+            <tr><td>2. Barrier Reef</td><td>World's largest – Great Barrier Reef – Pacific Ocean (Australia)</td></tr>
+            <tr><td>3. Coral Atoll / Ring</td><td>World-famous Funafuti Atoll, Atolls of Lakshadweep Island, etc.</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🥀 Coral Bleaching</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Effect of global warming</li>
+          <li>Density of zooxanthellae algae declines</li>
+          <li>Concentration of photosynthesis pigments within the zooxanthellae falls</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Great Barrier Reef (Australia) = World's largest Barrier Reef · Funafuti Atoll = World-famous Coral Atoll — two different reef types, two different records.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Hydrosphere · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

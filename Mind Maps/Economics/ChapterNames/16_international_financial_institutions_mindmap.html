@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>International Financial Institutions | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:100;
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.86rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.9rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.82rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:0.92rem;
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:#aab0c6;}
+  .info-row .v{color:var(--text);font-weight:600;}
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+  .scheme-year{
+    display:inline-block;
+    background:var(--surface2);
+    color:var(--gold);
+    font-size:0.78rem;
+    font-weight:700;
+    padding:2px 10px;
+    border-radius:12px;
+    margin-left:8px;
+  }
+  p.fullform{
+    color:#aab0c6;
+    font-size:0.85rem;
+    margin-bottom:8px;
+  }
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+
+<div class="header">
+  <span class="art-pill">Chapter 16</span>
+  <h1>International Financial Institutions</h1>
+  <p>Bretton Woods institutions, trade bodies, regional groupings, development banks & global forums — for BPSC / BSSC preparation</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('bretton')">Bretton Woods Twins</button>
+  <button onclick="switchTab('trade')">Trade Bodies</button>
+  <button onclick="switchTab('banks')">Development Banks</button>
+  <button onclick="switchTab('regional')">Regional Groupings</button>
+  <button onclick="switchTab('forums')">Global Forums &amp; Groups</button>
+  <button onclick="switchTab('others')">Other Bodies</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">17</div><div class="lbl">Institutions Covered</div></div>
+          <div class="stat-box"><div class="num">1944</div><div class="lbl">Bretton Woods Year</div></div>
+          <div class="stat-box"><div class="num">1995</div><div class="lbl">WTO Formed (from GATT)</div></div>
+          <div class="stat-box"><div class="num">6</div><div class="lbl">Thematic Categories</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>This chapter covers major International Financial & Economic Institutions frequently tested in BPSC/BSSC — establishment year, headquarters, membership numbers and objectives.</li>
+          <li>Grouped thematically: Bretton Woods Twins (IMF, World Bank), Trade Bodies (WTO, GATT, NAFTA, APEC), Development Banks (ADB, AIIB, NDB), Regional Groupings (ASEAN, SAARC, BIMSTEC), Global Forums (WEF, BRICS, G-20, G-7, EU), and Other Bodies (OPEC, UNCTAD).</li>
+          <li>Special focus on tricky numbers — member counts, exact establishment dates, and recent changes (new members, exits) which are high-yield for Prelims.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          IMF + World Bank = the two "Bretton Woods Institutions", both established in 1944 at the Bretton Woods Conference (USA).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BRETTON WOODS -->
+  <div id="bretton" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🏦 International Monetary Fund (IMF)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">1944</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Washington D.C.</span></div>
+        <div class="info-row"><span class="k">Member Countries</span><span class="v">191 (191st: Liechtenstein)</span></div>
+        <div class="info-row"><span class="k">India joined</span><span class="v">27th December, 1945</span></div>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Objectives</h3>
+        <ul class="arrow-list">
+          <li>To promote international monetary cooperation.</li>
+          <li>Correction of adverse balance of payments of member countries.</li>
+          <li>Provides short-term loan assistance to member countries.</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Special Drawing Rights (SDR) — "Paper Gold"</h3>
+        <ul class="arrow-list">
+          <li>SDR value is based on a basket of five currencies:</li>
+          <li>US Dollar</li>
+          <li>Euro</li>
+          <li>Japanese Yen</li>
+          <li>Pound Sterling</li>
+          <li>Chinese Renminbi (Yuan)</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          SDR is nicknamed "Paper Gold" — don't confuse it with actual currency; it is an international reserve asset, not a physical currency.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🏦 World Bank (WB)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">1944</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Washington D.C.</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">189</span></div>
+        <div class="info-row"><span class="k">Objective</span><span class="v">Long-term loans for reconstruction & development</span></div>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Five Institutions of World Bank Group</h3>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Institution</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>International Bank for Reconstruction and Development (IBRD)</td></tr>
+            <tr><td>2</td><td>International Development Association (IDA)</td></tr>
+            <tr><td>3</td><td>International Finance Corporation (IFC)</td></tr>
+            <tr><td>4</td><td>Multilateral Investment Guarantee Agency (MIGA)</td></tr>
+            <tr><td>5</td><td>International Centre for Settlement of Investment Disputes (ICSID)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Mnemonic for World Bank Group's 5 institutions: "I Ate Ice-cream For Money" → IBRD, IDA, IFC, MIGA, ICSID.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRADE BODIES -->
+  <div id="trade" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">🌐 World Trade Organisation (WTO)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">1st January, 1995 (replacing GATT)</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Geneva</span></div>
+        <div class="info-row"><span class="k">Member Countries</span><span class="v">166 (166th: Timor-Leste)</span></div>
+        <div class="info-row"><span class="k">Objective</span><span class="v">Regulation & promotion of international trade</span></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          GATT (General Agreement on Tariffs and Trade) was established 1st January 1948 — WTO replaced it decades later on 1st January 1995. Don't mix up the two dates.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🚚 NAFTA (North American Free Trade Agreement)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Signed</span><span class="v">1992</span></div>
+        <div class="info-row"><span class="k">Entered into force</span><span class="v">1994</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">USA, Canada, Mexico</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🌏 APEC (Asia-Pacific Economic Cooperation)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">1989</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">21</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Singapore</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEVELOPMENT BANKS -->
+  <div id="banks" class="tab-panel">
+    <div class="card">
+      <div class="card-header orange">🏗 Asian Development Bank (ADB)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">19th December, 1966</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Manila (Philippines)</span></div>
+        <div class="info-row"><span class="k">Member Countries</span><span class="v">69 (India is a founding country)</span></div>
+        <div class="info-row"><span class="k">Objective</span><span class="v">Prosperous, inclusive, resilient & sustainable Asia-Pacific</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">🏗 Asian Infrastructure Investment Bank (AIIB)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">2015</span></div>
+        <div class="info-row"><span class="k">Operations began</span><span class="v">2016</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Beijing</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">110 countries</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🏗 New Development Bank (NDB) / BRICS Bank</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">2014</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Shanghai (China)</span></div>
+        <div class="info-row"><span class="k">Objective</span><span class="v">Mobilise resources for infra & sustainable development in emerging countries</span></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          ADB (1966) → oldest regional dev. bank here | NDB (2014) → BRICS-founded | AIIB (2015) → China-led, HQ Beijing.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGIONAL GROUPINGS -->
+  <div id="regional" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">🌏 ASEAN</div>
+      <div class="card-body">
+        <p class="fullform">Full Form: Association of Southeast Asian Nations</p>
+        <div class="info-row"><span class="k">Established</span><span class="v">8th December, 1985</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Jakarta (Indonesia)</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">10</span></div>
+        <ul class="arrow-list">
+          <li>Indonesia, Philippines, Malaysia, Singapore, Thailand, Cambodia, Vietnam, Myanmar, Brunei and Laos.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🌏 SAARC</div>
+      <div class="card-body">
+        <p class="fullform">Full Form: South Asian Association for Regional Cooperation</p>
+        <div class="info-row"><span class="k">Established</span><span class="v">8th December, 1985</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Kathmandu (Nepal)</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">8</span></div>
+        <ul class="arrow-list">
+          <li>India, Pakistan, Bangladesh, Nepal, Bhutan, Sri Lanka, Maldives and Afghanistan.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          ASEAN and SAARC were both established on the exact same date — 8th December 1985 — but are entirely different groupings (Southeast Asia vs South Asia). Frequently confused in exams.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🌏 BIMSTEC</div>
+      <div class="card-body">
+        <p class="fullform">Full Form: Bay of Bengal Initiative for Multi-Sectoral Technical and Economic Cooperation</p>
+        <div class="info-row"><span class="k">Established</span><span class="v">1997</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">7</span></div>
+        <ul class="arrow-list">
+          <li>Bangladesh, India, Sri Lanka, Thailand, Nepal, Myanmar and Bhutan.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOBAL FORUMS & GROUPS -->
+  <div id="forums" class="tab-panel">
+    <div class="card">
+      <div class="card-header purple">🌍 World Economic Forum (WEF)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">January 1971 (by Klaus Schwab)</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Geneva</span></div>
+        <div class="info-row"><span class="k">Annual Meeting</span><span class="v">Davos (January)</span></div>
+        <div class="info-row"><span class="k">Objective</span><span class="v">Shape global, regional & industrial agendas responsibly</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">🌍 BRICS</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">2009</span></div>
+        <div class="info-row"><span class="k">First Summit</span><span class="v">2009, Yekaterinburg (Russia)</span></div>
+        <div class="info-row"><span class="k">Current Members</span><span class="v">11 (11th: Indonesia, joined Jan 2025)</span></div>
+        <div class="info-row"><span class="k">South Africa joined</span><span class="v">2010</span></div>
+        <div class="info-row"><span class="k">17th BRICS Summit</span><span class="v">6–7 July 2025, Rio de Janeiro (Brazil)</span></div>
+        <ul class="arrow-list">
+          <li>Five new members added on 1st January 2024: Saudi Arabia, Egypt, Ethiopia, UAE, Iran.</li>
+          <li>The word 'BRIC' was first used in 2001 by Jim O'Neill of Goldman Sachs.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          BRICS growth timeline: 2001 term coined → 2009 first summit (4 nations) → 2010 South Africa joins (BRICS) → 2024 five new members → 2025 Indonesia joins (11 total).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🌍 G-20</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">1999 (Berlin)</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">19 countries + European Union + African Union</span></div>
+        <div class="info-row"><span class="k">Nature</span><span class="v">Organism of Industrial & Developing Nations</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🌍 G-7</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">1975</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">7 — USA, France, Britain, Italy, Germany, Canada, Japan</span></div>
+        <ul class="arrow-list">
+          <li>Russia joined in 1997 (forming G-8) but was removed in 2014.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌍 European Union (EU)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">1957 (as European Economic Community)</span></div>
+        <div class="info-row"><span class="k">Became EU</span><span class="v">1993</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">27 (England exited in 2020 — Brexit)</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Brussels (Belgium)</span></div>
+        <div class="info-row"><span class="k">Common Currency</span><span class="v">Euro</span></div>
+        <div class="info-row"><span class="k">Eurozone Countries</span><span class="v">20 (adopting Euro)</span></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          EU has 27 members but only 20 use the Euro — total EU members ≠ Eurozone members. A common numeric trap.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTHER BODIES -->
+  <div id="others" class="tab-panel">
+    <div class="card">
+      <div class="card-header orange">🛢 OPEC</div>
+      <div class="card-body">
+        <p class="fullform">Full Form: Organisation of Petroleum Exporting Countries</p>
+        <div class="info-row"><span class="k">Established</span><span class="v">1960 (Baghdad)</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Vienna (Austria)</span></div>
+        <div class="info-row"><span class="k">Objective</span><span class="v">Coordinate petroleum policies among member countries</span></div>
+        <ul class="arrow-list">
+          <li>Angola withdrew from OPEC on 1st January, 2024.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📊 UNCTAD</div>
+      <div class="card-body">
+        <p class="fullform">Full Form: United Nations Conference on Trade and Development</p>
+        <div class="info-row"><span class="k">Established</span><span class="v">1964</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Geneva</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">195</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead>
+            <tr><th>Institution</th><th>Established</th><th>Headquarters</th><th>Key Facts / Members</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>IMF</td><td>1944</td><td>Washington D.C.</td><td>191 members | SDR = Paper Gold | 5 currencies</td></tr>
+            <tr><td>World Bank</td><td>1944</td><td>Washington D.C.</td><td>189 members | Long-term loans | 5 group institutions</td></tr>
+            <tr><td>WTO</td><td>1 Jan 1995</td><td>Geneva</td><td>166 members | Replaced GATT (1948)</td></tr>
+            <tr><td>ADB</td><td>19 Dec 1966</td><td>Manila (Philippines)</td><td>69 members | India founding country</td></tr>
+            <tr><td>WEF</td><td>Jan 1971</td><td>Geneva</td><td>Annual meeting: Davos | Founder: Klaus Schwab</td></tr>
+            <tr><td>BRICS</td><td>2009</td><td>—</td><td>11 members (Indonesia 11th, 2025) | NDB HQ: Shanghai</td></tr>
+            <tr><td>NDB (BRICS Bank)</td><td>2014</td><td>Shanghai (China)</td><td>Infra development in emerging countries</td></tr>
+            <tr><td>ASEAN</td><td>8 Dec 1985</td><td>Jakarta (Indonesia)</td><td>10 members | Southeast Asian Nations</td></tr>
+            <tr><td>SAARC</td><td>8 Dec 1985</td><td>Kathmandu (Nepal)</td><td>8 members | South Asian cooperation</td></tr>
+            <tr><td>BIMSTEC</td><td>1997</td><td>—</td><td>7 members | Bay of Bengal initiative</td></tr>
+            <tr><td>UNCTAD</td><td>1964</td><td>Geneva</td><td>195 members | Trade & development</td></tr>
+            <tr><td>G-20</td><td>1999</td><td>—</td><td>19 countries + EU + African Union</td></tr>
+            <tr><td>G-7</td><td>1975</td><td>—</td><td>7 members | Russia removed 2014</td></tr>
+            <tr><td>EU</td><td>1957 / 1993</td><td>Brussels (Belgium)</td><td>27 members | Euro | 20 Eurozone countries</td></tr>
+            <tr><td>AIIB</td><td>2015</td><td>Beijing</td><td>110 countries | Operations began 2016</td></tr>
+            <tr><td>APEC</td><td>1989</td><td>Singapore</td><td>21 members</td></tr>
+            <tr><td>OPEC</td><td>1960</td><td>Vienna (Austria)</td><td>Angola withdrew Jan 2024</td></tr>
+            <tr><td>NAFTA</td><td>1992–94</td><td>—</td><td>USA, Canada, Mexico</td></tr>
+          </tbody>
+        </table></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Geneva hosts 3 major bodies: WTO, WEF & UNCTAD — a favourite HQ-matching trap in prelims.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · International Financial Institutions · BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

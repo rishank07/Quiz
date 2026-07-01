@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economics Ch01 - Demand, Supply & Market | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:20px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+.formula-box{
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  border-radius:8px;
+  padding:14px 18px;
+  margin:10px 0;
+  font-size:15px;
+  color:var(--gold);
+  font-weight:600;
+  text-align:center;
+}
+h3.sub{color:var(--gold);margin:14px 0 8px;font-size:16px;}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 01 · Economics</span>
+    <h1>Demand, Supply and Nature of Market</h1>
+    <p>Foundations of Micro/Macroeconomics · Demand & Supply Laws · Elasticity · Market Structures — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('intro')">📘 Introduction</button>
+    <button class="tab-btn" onclick="switchTab('demand')">📉 Law of Demand</button>
+    <button class="tab-btn" onclick="switchTab('exceptions')">🔄 Exceptions & Goods</button>
+    <button class="tab-btn" onclick="switchTab('elasticity')">📊 Elasticity of Demand</button>
+    <button class="tab-btn" onclick="switchTab('supply')">📈 Law of Supply</button>
+    <button class="tab-btn" onclick="switchTab('markets')">🏪 Forms of Market</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: INTRODUCTION -->
+  <div class="tab-content active" id="intro">
+    <div class="card">
+      <div class="card-header gold">Introduction to Economics</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Etymology</span><span class="v">Greek word "Oikonomia"</span></div>
+        <ul class="arrow-list">
+          <li>"Oikos" means House / Household</li>
+          <li>"Nomos" means Management</li>
+        </ul>
+        <div class="info-row"><span class="k">Father of Economics</span><span class="v">Adam Smith (Scotland, Britain)</span></div>
+        <div class="info-row"><span class="k">His Book</span><span class="v">"An Inquiry into the Nature and Causes of the Wealth of Nations" (1776)</span></div>
+        <div class="info-row"><span class="k">First Systematic Demand-Supply Theory</span><span class="v">Alfred Marshall (1890)</span></div>
+        <div class="info-row"><span class="k">Marshall's Book</span><span class="v">"Principles of Economics"</span></div>
+        <p class="note">Economics is the Science of Wealth — how society allocates scarce resources (land, labour, capital) to produce output (goods and services).</p>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Adam Smith = Father of Economics (1776 book); Alfred Marshall = Father of Demand-Supply theory (1890 book) — don't mix these two "firsts."
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Branches of Economics</div>
+      <div class="card-body">
+        <h4 class="sub2">1. Microeconomics</h4>
+        <ul class="arrow-list">
+          <li>Study of individual units: individual firm, individual industry, individual market</li>
+          <li>Components: Theory of Demand, Theory of Production, Price Determination, Factor Pricing/Distribution</li>
+        </ul>
+        <h4 class="sub2">2. Macroeconomics</h4>
+        <ul class="arrow-list">
+          <li>Study of the overall economy of a nation or region</li>
+          <li>Components: National Income/Output, Unemployment, Poverty, Fiscal Policy</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Microeconomics = individual unit level; Macroeconomics = aggregate/national level. Questions often swap "firm" and "national income" between the two to test this distinction.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: LAW OF DEMAND -->
+  <div class="tab-content" id="demand">
+    <div class="card">
+      <div class="card-header green">Law of Demand</div>
+      <div class="card-body">
+        <p class="note">Demand for a commodity = Desire + Willingness to buy + Ability to Purchase, for Satisfaction (Utility)</p>
+        <div class="formula-box">Price ↓ → Demand ↑ &nbsp; | &nbsp; Price ↑ → Demand ↓</div>
+        <p class="note">There exists an inverse relationship between price and demand, assuming other factors remain constant.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Demand Curve</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Slope of Demand Curve: Generally downward (negative slope)</li>
+          <li>Price ↑ → Demand ↓ ; Price ↓ → Demand ↑ (due to inverse relationship)</li>
+        </ul>
+        <p class="note">Example: When price is ₹1, quantity demanded is 3 units. When price is ₹3, quantity demanded is 1 unit.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Market Equilibrium</div>
+      <div class="card-body">
+        <div class="formula-box">Market Demand = Market Supply → No Excess Supply</div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          At equilibrium, quantity demanded exactly equals quantity supplied — no shortage, no surplus.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: EXCEPTIONS & GOODS -->
+  <div class="tab-content" id="exceptions">
+    <div class="card">
+      <div class="card-header red">Exceptions to the Law of Demand</div>
+      <div class="card-body">
+        <h4 class="sub2">Giffen Goods</h4>
+        <ul class="arrow-list">
+          <li>Rare goods where demand increases as the price increases</li>
+          <li>Price ∝ Demand → Demand curve shifts upward</li>
+        </ul>
+        <h4 class="sub2">Prestige or Index Items (Veblen Goods)</h4>
+        <ul class="arrow-list">
+          <li>Expensive cars, iPhone, etc. — demand increases with rising prices due to status symbol</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Giffen Goods and Veblen Goods both defy the Law of Demand, but for different reasons — Giffen (necessity/income effect) vs Veblen (status/prestige). Frequently swapped in options.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Income and Price Effects of Goods</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type of Good</th><th>Income Effect</th><th>Price Effect</th></tr>
+          <tr><td>Normal Goods</td><td>Positive (+): As income ↑, demand ↑</td><td>Negative (–): As price ↑, demand ↓</td></tr>
+          <tr><td>Inferior Goods</td><td>Negative (–): As income ↑, demand ↓</td><td>—</td></tr>
+          <tr><td>Giffen Goods</td><td>Negative (–): As income ↑, demand ↓</td><td>Positive (+): As price ↑, demand ↑</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          All Giffen goods are inferior goods, but not all inferior goods are Giffen goods — Giffen goods additionally show a positive price effect.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: ELASTICITY OF DEMAND -->
+  <div class="tab-content" id="elasticity">
+    <div class="card">
+      <div class="card-header gold">Elasticity of Demand — Overview</div>
+      <div class="card-body">
+        <p class="note">Elasticity of Demand: Change in quantity demanded due to change in price (or income, or price of related goods).</p>
+        <ul class="arrow-list">
+          <li>Income Elasticity of Demand</li>
+          <li>Cross Elasticity of Demand</li>
+          <li>Price Elasticity of Demand</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">1. Income Elasticity of Demand (Ey)</div>
+      <div class="card-body">
+        <p class="note">Measures change in quantity demanded of a commodity with respect to changes in buyer's income.</p>
+        <div class="formula-box">Ey = % change in demand ÷ % change in income</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">2. Cross Elasticity of Demand (Ec)</div>
+      <div class="card-body">
+        <p class="note">Measures the percentage change in quantity demanded of one good (A) in response to a percentage change in price of another related good (B).</p>
+        <div class="formula-box">Ec = % change in quantity demanded of A ÷ % change in price of B</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">3. Price Elasticity of Demand (Ep)</div>
+      <div class="card-body">
+        <p class="note">Measures changes in quantity demanded of a commodity with respect to changes in its own price.</p>
+        <div class="formula-box">Ep = % change in demand ÷ % change in price</div>
+        <h4 class="sub2">Types of Price Elasticity of Demand</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Description</th></tr>
+          <tr><td>Perfectly Elastic Demand</td><td>Without any change or little change in price — expansion/contraction of demand to any extent</td></tr>
+          <tr><td>Perfectly Inelastic Demand</td><td>When price changes — no change in demand</td></tr>
+          <tr><td>Unitary Elastic Demand</td><td>% change in price = % change in demand</td></tr>
+          <tr><td>Relatively Elastic Demand</td><td>% change in quantity demanded is greater than % change in price</td></tr>
+          <tr><td>Relatively Inelastic Demand</td><td>% change in demand is less than % change in price</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Perfectly Elastic (infinite response to any price change) vs Perfectly Inelastic (zero response) are opposite extremes — commonly reversed in tricky MCQs.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: LAW OF SUPPLY -->
+  <div class="tab-content" id="supply">
+    <div class="card">
+      <div class="card-header orange">Law of Supply</div>
+      <div class="card-body">
+        <p class="note">Supply: Quantity of goods that a producer is willing to sell at different prices at a given time.</p>
+        <ul class="arrow-list">
+          <li>Law of Supply shows a positive relationship between price and supply, assuming other factors remain constant</li>
+          <li>High Price → More Supply</li>
+          <li>Low Price → Less Supply</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Supply Curve</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Slope of Supply Curve: Generally upward</li>
+          <li>Price of goods has a positive relationship with quantity supplied</li>
+        </ul>
+        <p class="note">An increase in the money supply generally leads to an increase in overall economic activity/value in the economy. There is an inverse relationship between interest rate and demand for money.</p>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Demand curve slopes downward; Supply curve slopes upward — their intersection point gives market equilibrium.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: FORMS OF MARKET -->
+  <div class="tab-content" id="markets">
+    <div class="card">
+      <div class="card-header teal">Forms of Market</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Market Form</th><th>Key Features</th></tr>
+          <tr><td>Perfect Competition</td><td>Large number of buyers and sellers · Free entry and exit of firms · Homogeneous goods · Same price · Price determined by demand and supply (market forces)</td></tr>
+          <tr><td>Monopoly</td><td>Only one seller · No close substitutes · Restrictions on entry of firms · Complete control over price · Demand curve less elastic than monopolistic competition</td></tr>
+          <tr><td>Monopolistic Competition</td><td>Many buyers and sellers · Seller's product differs from others · Product differentiation (colour, design, size, etc.)</td></tr>
+          <tr><td>Oligopoly</td><td>Limited number of firms · Large number of buyers · Barriers to entry (not easy) · Price/output decisions of one firm affect others</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Monopoly has complete price control while Oligopoly has interdependent pricing among a few firms — don't confuse "one seller" with "few sellers."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Reference Summary</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>Father of Economics</td><td>Adam Smith (Scotland, Britain)</td></tr>
+          <tr><td>Economics Etymology</td><td>Greek "Oikonomia" (Oikos = House, Nomos = Management)</td></tr>
+          <tr><td>Adam Smith's Book</td><td>An Inquiry into the Nature and Causes of the Wealth of Nations (1776)</td></tr>
+          <tr><td>First Systematic Demand-Supply Theory</td><td>Alfred Marshall (1890) — Principles of Economics</td></tr>
+          <tr><td>Microeconomics</td><td>Study of individual units (firm, industry, market)</td></tr>
+          <tr><td>Macroeconomics</td><td>Study of overall economy (national income, unemployment, poverty)</td></tr>
+          <tr><td>Law of Demand</td><td>Inverse relationship between price and demand</td></tr>
+          <tr><td>Giffen Goods</td><td>Exception to Law of Demand: demand increases as price increases</td></tr>
+          <tr><td>Veblen Goods</td><td>Prestige/index items — expensive cars, iPhone, etc.</td></tr>
+          <tr><td>Normal Goods</td><td>Income Effect (+), Price Effect (–)</td></tr>
+          <tr><td>Inferior Goods</td><td>Income Effect (–)</td></tr>
+          <tr><td>Giffen Goods (Effects)</td><td>Income Effect (–), Price Effect (+)</td></tr>
+          <tr><td>Income Elasticity</td><td>Ey = % change in demand ÷ % change in income</td></tr>
+          <tr><td>Cross Elasticity</td><td>Ec = % change in qty demanded of A ÷ % change in price of B</td></tr>
+          <tr><td>Price Elasticity</td><td>Ep = % change in demand ÷ % change in price</td></tr>
+          <tr><td>Law of Supply</td><td>Positive relationship between price and supply</td></tr>
+          <tr><td>Supply Curve</td><td>Generally upward sloping</td></tr>
+          <tr><td>Market Equilibrium</td><td>Market Demand = Market Supply (no excess supply)</td></tr>
+          <tr><td>Perfect Competition</td><td>Large buyers/sellers; homogeneous goods; price by market forces</td></tr>
+          <tr><td>Monopoly</td><td>One seller; no close substitutes; complete price control</td></tr>
+          <tr><td>Monopolistic Competition</td><td>Many sellers; differentiated products</td></tr>
+          <tr><td>Oligopoly</td><td>Limited firms; barriers to entry; interdependence of firms</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Economics – Demand, Supply and Nature of Market (Ch01) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

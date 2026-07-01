@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Popular Nicknames of Famous Personalities | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 06</span>
+  <h1>Popular Nicknames of Famous Personalities</h1>
+  <p>Literary Titles · Freedom Fighters · Regional Leaders · Sports & Arts Icons</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">📚 Literary & Historical Titles</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🇮🇳 Freedom Fighters</button>
+  <button class="tab-btn" onclick="switchTab('t3')">🏳 Regional Leaders</button>
+  <button class="tab-btn" onclick="switchTab('t4')">🏆 Sports & Arts Icons</button>
+  <button class="tab-btn" onclick="switchTab('t5')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: LITERARY & HISTORICAL TITLES -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">Literary & Historical Titles</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Nickname / Title</th><th>Person</th><th>Additional Note</th></tr>
+        <tr><td>Shakespeare of India</td><td>Mahakavi Kalidasa</td><td>—</td></tr>
+        <tr><td>Napoleon of India</td><td>Samudra Gupta</td><td>—</td></tr>
+        <tr><td>India's Machiavelli</td><td>Chanakya</td><td>Also called Kautilya; authored Arthashastra</td></tr>
+        <tr><td>Vidyasagar (Ocean of Knowledge)</td><td>Ishwar Chandra Bandyopadhyay</td><td>Renowned scholar and social reformer</td></tr>
+        <tr><td>Mahamana (Great Soul)</td><td>Pt. Madan Mohan Malaviya</td><td>Founder of BHU</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Chanakya's titles pile up in exams: "India's Machiavelli," "Kautilya," and author of "Arthashastra" — all refer to the SAME person, often set as separate options to test if you know they're one.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: FREEDOM FIGHTERS -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header red">Major Freedom Fighter Titles</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Nickname / Title</th><th>Person</th></tr>
+        <tr><td>The Grand Old Man of India</td><td>Dadabhai Naoroji</td></tr>
+        <tr><td>Father of the Nation / Bapu / Mahatma</td><td>Mahatma Gandhi</td></tr>
+        <tr><td>Chacha Nehru / Panditji</td><td>Jawaharlal Nehru</td></tr>
+        <tr><td>Lokmanya</td><td>Bal Gangadhar Tilak</td></tr>
+        <tr><td>Iron Man of India / Sardar</td><td>Sardar Vallabhbhai Patel</td></tr>
+        <tr><td>Netaji</td><td>Subhas Chandra Bose</td></tr>
+        <tr><td>Babasaheb</td><td>B.R. Ambedkar</td></tr>
+        <tr><td>Gurudev</td><td>Rabindranath Tagore</td></tr>
+        <tr><td>Shaheed-e-Azam</td><td>Bhagat Singh</td></tr>
+        <tr><td>Man of Peace</td><td>Lal Bahadur Shastri</td></tr>
+        <tr><td>Frontier Gandhi / Badshah Khan</td><td>Khan Abdul Ghaffar Khan</td></tr>
+        <tr><td>Rajaji</td><td>Chakravarti Rajagopalachari</td></tr>
+        <tr><td>Deshbandhu</td><td>C.R. Das (Chittaranjan Das)</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Khan Abdul Ghaffar Khan = "Frontier Gandhi" (North-West Frontier region) — led the Khudai Khidmatgar movement. Don't confuse with Mahatma Gandhi himself.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: REGIONAL LEADERS -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header purple">Regional Leader Titles</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Nickname / Title</th><th>Person</th><th>Region</th></tr>
+        <tr><td>Andhra Kesari</td><td>T. Prakasam</td><td>Andhra Pradesh</td></tr>
+        <tr><td>Lion of Bengal / Deenbandhu</td><td>C.F. Andrews</td><td>Bengal — "Friend of the Poor"</td></tr>
+        <tr><td>Lion of Bihar / Bihar Kesari / Deenbandhu</td><td>Dr. Shrikrishna Singh</td><td>Bihar</td></tr>
+        <tr><td>Jan Nayak (People's Leader)</td><td>Karpoori Thakur</td><td>49th Bharat Ratna recipient</td></tr>
+        <tr><td>Punjab's Tagore</td><td>Puran Singh</td><td>Punjab</td></tr>
+        <tr><td>Sher-e-Kashmir (Lion of Kashmir)</td><td>Sheikh Abdullah</td><td>Kashmir</td></tr>
+        <tr><td>Babuji</td><td>Jagjivan Ram</td><td>—</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Deenbandhu" is shared by two different people — C.F. Andrews (Lion of Bengal) and Dr. Shrikrishna Singh (Lion of Bihar). Same title, different personalities — check the paired title carefully.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: SPORTS & ARTS -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header blue">Sports Nicknames</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Nickname</th><th>Person</th><th>Additional Note</th></tr>
+        <tr><td>Wizard of Hockey</td><td>Dhyan Chand</td><td>—</td></tr>
+        <tr><td>The Flying Sikh</td><td>Milkha Singh</td><td>—</td></tr>
+        <tr><td>Haryana Hurricane</td><td>Kapil Dev</td><td>—</td></tr>
+        <tr><td>Flicker Singh</td><td>Sandeep Singh</td><td>Former Indian Hockey Captain; known for powerful drag flicks</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Arts, Music & Social Work</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Nickname</th><th>Person</th><th>Additional Note</th></tr>
+        <tr><td>The Nightingale of India / Bharat Kokila</td><td>Sarojini Naidu</td><td>—</td></tr>
+        <tr><td>The Nightingale of Melody</td><td>Lata Mangeshkar</td><td>—</td></tr>
+        <tr><td>Mother Teresa</td><td>Mother Teresa</td><td>Associated with 'Nirmal Hriday' — home for the dying</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Nightingale of India" (Sarojini Naidu, poet-freedom fighter) vs "Nightingale of Melody" (Lata Mangeshkar, playback singer) — similar titles, completely different fields.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: QUICK REFERENCE -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">Shakespeare of India</span><span class="v">Mahakavi Kalidasa</span></div>
+      <div class="info-row"><span class="k">Napoleon of India</span><span class="v">Samudra Gupta</span></div>
+      <div class="info-row"><span class="k">The Grand Old Man of India</span><span class="v">Dadabhai Naoroji</span></div>
+      <div class="info-row"><span class="k">India's Machiavelli</span><span class="v">Chanakya (Kautilya)</span></div>
+      <div class="info-row"><span class="k">Mahamana</span><span class="v">Pt. Madan Mohan Malaviya</span></div>
+      <div class="info-row"><span class="k">The Nightingale of India</span><span class="v">Sarojini Naidu (Bharat Kokila)</span></div>
+      <div class="info-row"><span class="k">Frontier Gandhi</span><span class="v">Khan Abdul Ghaffar Khan (Badshah Khan)</span></div>
+      <div class="info-row"><span class="k">Rajaji</span><span class="v">Chakravarti Rajagopalachari</span></div>
+      <div class="info-row"><span class="k">Deshbandhu</span><span class="v">C.R. Das</span></div>
+      <div class="info-row"><span class="k">Andhra Kesari</span><span class="v">T. Prakasam</span></div>
+      <div class="info-row"><span class="k">Wizard of Hockey</span><span class="v">Dhyan Chand</span></div>
+      <div class="info-row"><span class="k">Lion of Bengal / Deenbandhu</span><span class="v">C.F. Andrews</span></div>
+      <div class="info-row"><span class="k">Lion of Bihar / Bihar Kesari</span><span class="v">Dr. Shrikrishna Singh</span></div>
+      <div class="info-row"><span class="k">Jan Nayak</span><span class="v">Karpoori Thakur (49th Bharat Ratna)</span></div>
+      <div class="info-row"><span class="k">The Flying Sikh</span><span class="v">Milkha Singh</span></div>
+      <div class="info-row"><span class="k">Haryana Hurricane</span><span class="v">Kapil Dev</span></div>
+      <div class="info-row"><span class="k">Punjab's Tagore</span><span class="v">Puran Singh</span></div>
+      <div class="info-row"><span class="k">Sher-e-Kashmir</span><span class="v">Sheikh Abdullah</span></div>
+      <div class="info-row"><span class="k">The Nightingale of Melody</span><span class="v">Lata Mangeshkar</span></div>
+      <div class="info-row"><span class="k">Flicker Singh</span><span class="v">Sandeep Singh</span></div>
+      <div class="info-row"><span class="k">Father of the Nation / Bapu</span><span class="v">Mahatma Gandhi</span></div>
+      <div class="info-row"><span class="k">Chacha Nehru / Panditji</span><span class="v">Jawaharlal Nehru</span></div>
+      <div class="info-row"><span class="k">Lokmanya</span><span class="v">Bal Gangadhar Tilak</span></div>
+      <div class="info-row"><span class="k">Iron Man of India</span><span class="v">Sardar Vallabhbhai Patel</span></div>
+      <div class="info-row"><span class="k">Netaji</span><span class="v">Subhas Chandra Bose</span></div>
+      <div class="info-row"><span class="k">Babasaheb</span><span class="v">B.R. Ambedkar</span></div>
+      <div class="info-row"><span class="k">Gurudev</span><span class="v">Rabindranath Tagore</span></div>
+      <div class="info-row"><span class="k">Shaheed-e-Azam</span><span class="v">Bhagat Singh</span></div>
+      <div class="info-row"><span class="k">Vidyasagar</span><span class="v">Ishwar Chandra Bandyopadhyay</span></div>
+      <div class="info-row"><span class="k">Babuji</span><span class="v">Jagjivan Ram</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · Popular Nicknames of Famous Personalities · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rotation & Revolution | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1020px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.9rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.2rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.92rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.95rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌗 ROTATION & REVOLUTION <span class="art-pill">World Geography · Ch 04</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('rotation')">Rotation</button>
+    <button class="tab-btn" onclick="switchTab('revolution')">Revolution</button>
+    <button class="tab-btn" onclick="switchTab('solstice')">Solstice</button>
+    <button class="tab-btn" onclick="switchTab('equinox')">Equinox</button>
+    <button class="tab-btn" onclick="switchTab('solareclipse')">Solar Eclipse</button>
+    <button class="tab-btn" onclick="switchTab('lunareclipse')">Lunar Eclipse</button>
+    <button class="tab-btn" onclick="switchTab('tides')">Tides</button>
+  </div>
+
+  <!-- TAB 1: ROTATION -->
+  <div id="rotation" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌍 Rotation — Earth's Daily Motion</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Earth's rotation on its axis → Daily Motion</li>
+        </ul>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Key Point</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Rotation Period</td><td>23 hours 56 minutes 6 seconds (Sidereal Day)</td></tr>
+            <tr><td>Direction</td><td>West to East</td></tr>
+            <tr><td>Rotation Speed</td><td>Maximum at Equator • Minimum at poles</td></tr>
+            <tr><td>Tilt of Earth's Axis</td><td>23½°</td></tr>
+            <tr><td>Inclination of Earth's axis relative to orbital plane</td><td>66½°</td></tr>
+            <tr><td>Speed at Equator</td><td>1670 km/hr</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">⚡ Effects of Rotation</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Occurrence of Day and Night</li>
+          <li>Change in direction of winds and ocean currents</li>
+          <li>Tides in oceans</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Axis Tilt = 23½° · Inclination to orbital plane = 66½° → (90° − 23½° = 66½°)
+    </div>
+  </div>
+
+  <!-- TAB 2: REVOLUTION -->
+  <div id="revolution" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🪐 Revolution — Earth's Annual Motion</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Along with rotation, Earth's movement around the Sun → Annual Motion</li>
+        </ul>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Key Point</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Revolution Period</td><td>365 days 6 hours 9 minutes 9 seconds</td></tr>
+            <tr><td>Path of Revolution</td><td>Anticlockwise, Elliptical path</td></tr>
+            <tr><td>Effects</td><td>Change in seasons • 6-month day and 6-month night at poles • Determination of year duration</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">📅 Leap Year</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>At an interval of 4 years</li>
+          <li>Number of days in a year – 366 days</li>
+          <li>February month – 29 days</li>
+          <li>Due to the tilt of Earth's axis, days and nights become longer or shorter</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">📏 Distance between Sun and Earth</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Position</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Minimum – Perihelion</td><td>3 January → 147 million km</td></tr>
+            <tr><td>Maximum – Aphelion</td><td>4 July → 152 million km</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Apside Line</span>
+          <span class="v">Line joining Perihelion and Aphelion</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Perihelion (nearest, 3 Jan) ≠ Aphelion (farthest, 4 July) — counter-intuitively Earth is closest to the Sun during Northern Hemisphere winter.
+    </div>
+  </div>
+
+  <!-- TAB 3: SOLSTICE -->
+  <div id="solstice" class="tab-content">
+    <div class="card">
+      <div class="card-header red">☀️ Solstice (Sankranti / Ayanant)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Limits of Sun's Uttarayan (northward) and Dakshinayan (southward) movement</li>
+          <li>Point of maximum difference in day-night duration</li>
+        </ul>
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Summer Solstice</h4>
+            <div class="founder">Also known as Cancer Sankranti</div>
+            <ul class="arrow-list">
+              <li>Sun's rays fall vertically on Tropic of Cancer</li>
+              <li>Longest day in Northern Hemisphere (21 June)</li>
+              <li>Higher temperature at North Pole</li>
+              <li>6-month long day begins at North Pole</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Winter Solstice</h4>
+            <div class="founder">Also known as Capricorn Sankranti</div>
+            <ul class="arrow-list">
+              <li>Sun's rays fall vertically on Tropic of Capricorn (22 December)</li>
+              <li>Longest day in Southern Hemisphere</li>
+              <li>6-month long day begins at South Pole</li>
+              <li>Maximum temperature at South Pole</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📌 Important Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Midnight Sun in Norway – 21 June</li>
+          <li>Shortest day in Northern Hemisphere – 22 December</li>
+          <li>Summer Solstice in Southern Hemisphere – December</li>
+          <li>21 March and 23 September – Equal day and night globally</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Summer Solstice = 21 June (N. Hemisphere longest day) · Winter Solstice = 22 December (N. Hemisphere shortest day)
+    </div>
+  </div>
+
+  <!-- TAB 4: EQUINOX -->
+  <div id="equinox" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">⚖️ Equinox</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Sun's vertical rays fall on the Equator</li>
+          <li>Equal day and night everywhere</li>
+          <li>No pole tilting towards the Sun</li>
+        </ul>
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Vernal Equinox – 21 March</h4>
+            <ul class="arrow-list">
+              <li>Northern Hemisphere – Spring</li>
+              <li>Southern Hemisphere – Autumn</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Autumnal Equinox – 23 September</h4>
+            <ul class="arrow-list">
+              <li>Northern Hemisphere – Autumn</li>
+              <li>Southern Hemisphere – Spring</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Vernal Equinox brings <b>Spring</b> to the Northern Hemisphere but <b>Autumn</b> to the Southern — the season label flips depending on hemisphere.
+    </div>
+  </div>
+
+  <!-- TAB 5: SOLAR ECLIPSE -->
+  <div id="solareclipse" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">🌑 Solar Eclipse (Surya Grahan)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Condition: Moon comes between Sun and Earth (Conjunction position)</li>
+          <li>Time: New Moon (Amavasya)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🔆 Types of Solar Eclipse</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Total Solar Eclipse</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Full Sun covered</p>
+          </div>
+          <div class="sub-box">
+            <h4>Partial Solar Eclipse</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Partial Sun covered</p>
+          </div>
+          <div class="sub-box">
+            <h4>Annular Solar Eclipse</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Ring of Sun visible around Moon</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">✨ Important Events During Solar Eclipse</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Corona of the Sun (Ultraviolet rays) visible</li>
+          <li>Diamond Ring phenomenon</li>
+          <li>Dark Shadow: Umbra</li>
+          <li>Light Shadow: Penumbra</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Umbra = Dark/Complete shadow · Penumbra = Light/Partial shadow
+    </div>
+  </div>
+
+  <!-- TAB 6: LUNAR ECLIPSE -->
+  <div id="lunareclipse" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌕 Lunar Eclipse (Chandra Grahan)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Condition: Earth comes between Sun and Moon (Opposition position)</li>
+          <li>Time: Full Moon (not on every full moon)</li>
+          <li>Types: 1) Partial &nbsp; 2) Complete</li>
+          <li>Difference in Axis of Moon and Earth – 5°</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🌙 Main Moon Phases</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Super Moon</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Moon closest to Earth</p>
+          </div>
+          <div class="sub-box">
+            <h4>Blue Moon</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Two full moons in one month</p>
+          </div>
+          <div class="sub-box">
+            <h4>Blood Moon</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Tetrad</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📌 Important Moon Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Sun, Moon, and Earth in one line – Syzygy</li>
+          <li>Moon's nearest distance from Earth: Perigee</li>
+          <li>Moon's farthest distance from Earth: Apogee</li>
+          <li>Maximum 7 lunar and solar eclipses possible in a year</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Perigee (nearest) and Apogee (farthest) are often swapped with Perihelion/Aphelion (Sun-Earth distances) — Perigee/Apogee apply to the <b>Moon</b>, Perihelion/Aphelion apply to the <b>Sun</b>.
+    </div>
+  </div>
+
+  <!-- TAB 7: TIDES -->
+  <div id="tides" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🌊 Tides</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Rise of sea water (Tide) and fall of sea water (Ebb)</li>
+        </ul>
+        <div class="founder" style="color:var(--gold);margin:10px 0 6px;font-weight:700;">Cause of Occurrence</div>
+        <ul class="arrow-list">
+          <li>Gravitational pull of the Sun</li>
+          <li>Gravitational pull of the Moon</li>
+          <li>Centrifugal force of Earth</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">Theory</span>
+          <span class="v">Progressive Wave Theory (William Whewell)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌗 Types of Tides</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Spring Tide (High Tide)</h4>
+            <ul class="arrow-list">
+              <li>Sun, Earth, and Moon in a straight line</li>
+              <li>Time – Full Moon and New Moon</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Neap Tide (Low Tide)</h4>
+            <ul class="arrow-list">
+              <li>Sun, Earth and Moon at right angles</li>
+              <li>Time – 7th and 8th day of Krishna and Shukla Paksha</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📌 Important Tide Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Time gap between two tides – 12 hours 26 minutes</li>
+          <li>World's highest tide: Bay of Fundy → Nova Scotia (Canada)</li>
+          <li>Generally 7-day gap between Spring and Neap tides</li>
+          <li>Tidal Energy (in coastal areas), helpful in fisheries</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Spring Tide → Sun+Moon aligned (Full/New Moon) · Neap Tide → Sun+Moon at right angles
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Rotation &amp; Revolution · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

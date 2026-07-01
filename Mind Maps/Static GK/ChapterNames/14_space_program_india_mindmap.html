@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space Program in India | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 14</span>
+  <h1>Space Program in India</h1>
+  <p>ISRO · Space Centres · Satellites · Missions · Launch Vehicles · Astronauts</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">🚀 Overview & Governing Bodies</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🏢 ISRO Space Centres</button>
+  <button class="tab-btn" onclick="switchTab('t3')">🛰 Satellites & Orbits</button>
+  <button class="tab-btn" onclick="switchTab('t4')">🌐 World Space History & Agencies</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🌙 ISRO's Major Missions</button>
+  <button class="tab-btn" onclick="switchTab('t6')">👨‍🚀 Astronauts & Indian Satellites</button>
+  <button class="tab-btn" onclick="switchTab('t7')">🔭 Launch Vehicles & Observatories</button>
+  <button class="tab-btn" onclick="switchTab('t8')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: OVERVIEW & GOVERNING BODIES -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">Overview</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Beginning of Space Program: 1962</li>
+        <li>Indian National Committee for Space Research formed: 1962; First Chairman: Vikram Sarabhai</li>
+        <li>Father of Indian Space Program: Vikram Sarabhai</li>
+        <li>Department of Space & Space Commission formed: 1972</li>
+        <li>National Space Day: 23rd August — marks the success of the Chandrayaan-3 mission</li>
+      </ul>
+      <div class="stat-box"><span class="num">1962</span><span class="label">Space Program Begins</span></div>
+      <div class="stat-box"><span class="num">1969</span><span class="label">ISRO Founded</span></div>
+      <div class="stat-box"><span class="num">23 Aug</span><span class="label">National Space Day</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Governing & Industry Bodies</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Body</th><th>Details</th></tr>
+        <tr><td>Indian Space Research Organisation (ISRO)</td><td>Formed 1969; HQ: Bengaluru; Current Chairman: V. Narayanan</td></tr>
+        <tr><td>Indian Space Association</td><td>Started October 2021; association of space/satellite companies; Tagline: "From Earth to the Universe"; boosts private sector participation</td></tr>
+        <tr><td>New Space India Limited (NSIL)</td><td>Established 2019; commercial arm of ISRO</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: ISRO SPACE CENTRES -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header green">Space Centres and Units</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Centre / Unit</th><th>Established</th><th>Location</th><th>Key Function</th></tr>
+        <tr><td>Vikram Sarabhai Space Centre (VSSC)</td><td>1963</td><td>Thiruvananthapuram</td><td>Develops satellite launch vehicle technology</td></tr>
+        <tr><td>Satish Dhawan Space Centre (SHAR)</td><td>1971</td><td>Sriharikota, Andhra Pradesh</td><td>ISRO's main launch centre</td></tr>
+        <tr><td>Space Applications Centre (SAC)</td><td>1972</td><td>Ahmedabad, Gujarat</td><td>Space applications</td></tr>
+        <tr><td>ISRO Satellite Centre (ISAC)</td><td>1972</td><td>Bengaluru, Karnataka</td><td>Satellite design, manufacturing, testing, management</td></tr>
+        <tr><td>National Remote Sensing Centre (NRSC)</td><td>1974</td><td>Balanagar, Hyderabad, Telangana</td><td>Remote sensing</td></tr>
+        <tr><td>ISTRAC</td><td>1976</td><td>Bengaluru, Karnataka</td><td>Tracking satellites, telemetry, sending commands</td></tr>
+        <tr><td>Master Control Facility (MCF)</td><td>1982; Second unit 2005</td><td>Hassan, Karnataka; Bhopal, MP</td><td>Satellite control</td></tr>
+        <tr><td>Liquid Propulsion Systems Centre (LPSC)</td><td>1987</td><td>Bengaluru, Karnataka</td><td>Design & development of liquid propulsion vehicles</td></tr>
+        <tr><td>ISRO Propulsion Complex (IPRC)</td><td>2014</td><td>Mahendragiri, Tamil Nadu</td><td>Storable liquid propellants; cryogenic engine development</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Most ISRO centres cluster around Bengaluru (ISAC, ISTRAC, LPSC) — remember these three together as the Bengaluru group.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: SATELLITES & ORBITS -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header purple">Satellites — Overview</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Natural Satellite: Moon</li>
+        <li>Artificial Satellite: Man-made satellite placed in space</li>
+        <li>First Artificial Satellite: Sputnik-1 (1957, Soviet Union)</li>
+        <li>First Indian Artificial Satellite: Aryabhata (1975)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Types of Satellites by Orbital Path</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Orbit Type</th><th>Details</th></tr>
+        <tr><td>Low Earth Orbit (LEO)</td><td>Altitude ~200–2000 km; elliptical orbit</td></tr>
+        <tr><td>Solar-Synchronous Orbit</td><td>Altitude 500–1000 km; near-polar orbit, North to South</td></tr>
+        <tr><td>Geosynchronous Orbit</td><td>Altitude 36,000 km; circular equatorial orbit</td></tr>
+        <tr><td>Highly Elliptical Molniya Orbit</td><td>Altitudes 504–39,834 km</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Geosynchronous orbit altitude (36,000 km) is often confused with LEO (200–2000 km) — remember LEO is much closer to Earth, used for remote sensing; Geosynchronous is for communication satellites.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: WORLD SPACE HISTORY & AGENCIES -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header red">Firsts in World Space History</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Year</th><th>Achievement</th></tr>
+        <tr><td>1957</td><td>First artificial satellite — Sputnik-1 (USSR)</td></tr>
+        <tr><td>1958</td><td>First US artificial satellite — Explorer-1</td></tr>
+        <tr><td>1959</td><td>First unmanned spacecraft to land on the Moon — Luna-2 (USSR)</td></tr>
+        <tr><td>1969</td><td>First spacecraft to land humans on the Moon — Apollo-11 (USA)</td></tr>
+        <tr><td>1981</td><td>First space shuttle in space — Columbia (USA)</td></tr>
+        <tr><td>2001</td><td>First space tourist — Dennis Tito; first spacecraft to land on an asteroid — NEAR Shoemaker (NASA), on Eros-433</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Major Space Agencies of the World</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Agency</th><th>Full Name</th><th>Country / Type</th><th>HQ</th></tr>
+        <tr><td>Roscosmos</td><td>Russian Federal Space Agency</td><td>Russia</td><td>Moscow</td></tr>
+        <tr><td>CNES</td><td>Centre National d'Études Spatiales</td><td>France (1961)</td><td>Paris</td></tr>
+        <tr><td>NASA</td><td>National Aeronautics and Space Administration</td><td>USA (est. 1958)</td><td>Washington DC</td></tr>
+        <tr><td>ESA</td><td>European Space Agency</td><td>Intergovernmental; 22 members</td><td>Paris (1975)</td></tr>
+        <tr><td>JAXA</td><td>Japan Aerospace Exploration Agency</td><td>Japan (2003)</td><td>Tokyo</td></tr>
+      </table></div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Country</th><th>First Satellite</th><th>Launch Date</th></tr>
+        <tr><td>Russia</td><td>Sputnik-1</td><td>4 Oct 1957</td></tr>
+        <tr><td>USA</td><td>Explorer-1</td><td>31 Jan 1958</td></tr>
+        <tr><td>France</td><td>Astérix on A-1</td><td>26 Nov 1965</td></tr>
+        <tr><td>Japan</td><td>Ohsumi</td><td>11 Feb 1970</td></tr>
+        <tr><td>China</td><td>Dong Fang Hong-1</td><td>24 Apr 1970</td></tr>
+        <tr><td>UK</td><td>Prospero on X-3</td><td>28 Oct 1971</td></tr>
+        <tr><td>India</td><td>Aryabhata-1</td><td>19 Apr 1975</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: ISRO'S MAJOR MISSIONS -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header gold">Chandrayaan Missions</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Mission</th><th>Details</th></tr>
+        <tr><td>Chandrayaan-1</td><td>Launched 22 Oct 2008; PSLV-C11 from Sriharikota; India's first lunar mission</td></tr>
+        <tr><td>Chandrayaan-2</td><td>Launched 22 Jul 2019; targeted South Pole of Moon; Launch Vehicle: GSLV-MkIII (Bahubali); partially successful; impact point named Tiranga Sthal</td></tr>
+        <tr><td>Chandrayaan-3</td><td>Launched 14 Jul 2023; Lander: Vikram, Rover: Pragyan; Launch Vehicle: LVM3-M4; landing site: Shiv Shakti Sthal</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Other Major Missions</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Mission</th><th>Details</th></tr>
+        <tr><td>Aditya L-1</td><td>Launched 2 Sep 2023; PSLV-C57; India's first mission to study the Sun</td></tr>
+        <tr><td>ISRO's 100th Launch</td><td>29 Jan 2025; Satellite: NVS-02 using GSLV F-15</td></tr>
+        <tr><td>ISRO's First Launch</td><td>SLV-3E1 / Rohini Technology</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Future Missions</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Gaganyaan — manned space mission; demonstrates human spaceflight capability</li>
+        <li>NISAR — joint NASA-ISRO mission focused on Low Earth Orbit (LEO) observatory</li>
+        <li>ISRO Chairman V. Narayanan has announced India's own Space Station by 2035, and an Indian astronaut landing on the Moon and returning independently by 2040.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: ASTRONAUTS & INDIAN SATELLITES -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header purple">Astronauts</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Person</th><th>Details</th></tr>
+        <tr><td>First Indian Astronaut</td><td>Rakesh Sharma</td><td>1984; travelled on Soyuz T-11</td></tr>
+        <tr><td>First Woman of Indian Origin in Space</td><td>Kalpana Chawla</td><td>1997, 2003; travelled on Space Shuttle Columbia</td></tr>
+        <tr><td>Second Woman of Indian Origin in Space</td><td>Sunita Williams</td><td>2006</td></tr>
+        <tr><td>First Indian to reach ISS</td><td>Shubhanshu Shukla</td><td>Axiom Mission 4 (Ax-4)</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Kalpana Chawla and Sunita Williams are Indian-ORIGIN (US citizens); Rakesh Sharma is the first genuinely Indian citizen in space; Shubhanshu Shukla is the first Indian to reach the ISS specifically. Three distinct "firsts."
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Major Indian Satellites</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Satellite</th><th>Launch Year</th><th>Key Details</th></tr>
+        <tr><td>Aryabhata</td><td>19 April 1975</td><td>Launched from Baikonur Cosmodrome, USSR</td></tr>
+        <tr><td>Bhaskara-I</td><td>1979</td><td>Soviet Intercosmos launch vehicle from Volgograd Station, USSR</td></tr>
+        <tr><td>Bhaskara-II</td><td>1981</td><td>Soviet Intercosmos launch vehicle from Volgograd Station, USSR</td></tr>
+        <tr><td>Rohini RS-1</td><td>1980</td><td>Launched from Sriharikota using SLV-3</td></tr>
+        <tr><td>APPLE</td><td>1981</td><td>Launched from Kourou Space Centre, French Guiana, using ESA's Ariane-4</td></tr>
+        <tr><td>Kalpana-1 (METSAT)</td><td>2002</td><td>Launched from Sriharikota using PSLV-C4; India's first dedicated meteorological satellite</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>INSAT System established 1983; multi-purpose operational satellite system; one of the largest domestic communication satellite systems in the Asia-Pacific region.</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Generation</th><th>Satellites</th></tr>
+        <tr><td>First Generation</td><td>INSAT 1A, 1B, 1C, 1D</td></tr>
+        <tr><td>Second Generation</td><td>INSAT 2A, 2B, 2C, 2D, 2E</td></tr>
+        <tr><td>Third Generation</td><td>INSAT 3A, 3B, 3C, 3D, 3E</td></tr>
+        <tr><td>Fourth Generation</td><td>INSAT 4A, 4B, 4C, 4D, 4E</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: LAUNCH VEHICLES & OBSERVATORIES -->
+<div class="tab-content" id="t7">
+  <div class="card">
+    <div class="card-header red">Launch Vehicle Technology</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Vehicle</th><th>Key Details</th></tr>
+        <tr><td>SLV-3</td><td>India's first launch vehicle; launched 18 July 1980; India became the 6th member of the Space Club (after USA, USSR, France, Japan, China)</td></tr>
+        <tr><td>PSLV</td><td>Launched 20 December 1993; ISRO's primary launch vehicle; four-stage rocket; launches to 400–900 km; carries up to 1750 kg</td></tr>
+        <tr><td>GSLV</td><td>Launches to 36,000 km; three-stage rocket; first launch 20 March 2001 (failed); first success 8 May 2003; carries up to 4000 kg; GSLV Mk III known as "Bahubali" for its heavy-lift capability</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        India was the SIXTH country in the Space Club — the order was USA, USSR (Russia), France, Japan, China, then India (1980 with SLV-3). Sequencing this list correctly is a common exam ask.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Space Observatories</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Observatory</th><th>Details</th></tr>
+        <tr><td>Hubble Space Observatory</td><td>Launched 1990</td></tr>
+        <tr><td>Chandra X-ray Observatory</td><td>Launched 1999</td></tr>
+        <tr><td>AstroSat</td><td>India's first space observatory mission, 2015</td></tr>
+        <tr><td>Indian Astronomical Observatory (IAO)</td><td>Hanle, Ladakh (2015)</td></tr>
+        <tr><td>Tokyo Atacama Observatory (TAO)</td><td>World's highest astronomical observatory; Mount Chajnantor, Chile</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: QUICK REFERENCE -->
+<div class="tab-content" id="t8">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">Father of Indian Space Program</span><span class="v">Vikram Sarabhai</span></div>
+      <div class="info-row"><span class="k">ISRO Founded</span><span class="v">1969; HQ: Bengaluru</span></div>
+      <div class="info-row"><span class="k">ISRO Current Chairman</span><span class="v">V. Narayanan</span></div>
+      <div class="info-row"><span class="k">New Space India Limited</span><span class="v">Est. 2019; commercial arm of ISRO</span></div>
+      <div class="info-row"><span class="k">National Space Day</span><span class="v">23 August (Chandrayaan-3 success)</span></div>
+      <div class="info-row"><span class="k">First Indian Artificial Satellite</span><span class="v">Aryabhata (19 April 1975)</span></div>
+      <div class="info-row"><span class="k">First Artificial Satellite (World)</span><span class="v">Sputnik-1 (1957, USSR)</span></div>
+      <div class="info-row"><span class="k">Chandrayaan-1</span><span class="v">22 Oct 2008; PSLV-C11; India's first lunar mission</span></div>
+      <div class="info-row"><span class="k">Chandrayaan-2</span><span class="v">22 Jul 2019; GSLV-MkIII; partially successful</span></div>
+      <div class="info-row"><span class="k">Chandrayaan-3</span><span class="v">14 Jul 2023; landing site: Shiv Shakti Sthal</span></div>
+      <div class="info-row"><span class="k">Aditya L-1</span><span class="v">2 Sep 2023; PSLV-C57; study of the Sun</span></div>
+      <div class="info-row"><span class="k">ISRO 100th Launch</span><span class="v">29 Jan 2025; NVS-02 using GSLV F-15</span></div>
+      <div class="info-row"><span class="k">Gaganyaan</span><span class="v">Future manned space mission</span></div>
+      <div class="info-row"><span class="k">NISAR</span><span class="v">Joint NASA-ISRO LEO observatory mission</span></div>
+      <div class="info-row"><span class="k">First Indian Astronaut</span><span class="v">Rakesh Sharma (1984); Soyuz T-11</span></div>
+      <div class="info-row"><span class="k">First Woman of Indian Origin in Space</span><span class="v">Kalpana Chawla (1997, 2003); Columbia</span></div>
+      <div class="info-row"><span class="k">Kalpana-1 (METSAT)</span><span class="v">2002; India's first dedicated meteorological satellite</span></div>
+      <div class="info-row"><span class="k">INSAT System</span><span class="v">Est. 1983; multi-purpose operational satellite system</span></div>
+      <div class="info-row"><span class="k">SLV-3</span><span class="v">India's first launch vehicle; 18 Jul 1980</span></div>
+      <div class="info-row"><span class="k">PSLV</span><span class="v">Launched 20 Dec 1993; ISRO's primary vehicle; 4-stage</span></div>
+      <div class="info-row"><span class="k">GSLV</span><span class="v">First successful: 8 May 2003; Mk III known as "Bahubali"</span></div>
+      <div class="info-row"><span class="k">AstroSat</span><span class="v">India's first space observatory mission (2015)</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · Space Program in India · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

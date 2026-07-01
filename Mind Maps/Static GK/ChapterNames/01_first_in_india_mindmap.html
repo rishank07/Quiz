@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First in India | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 01</span>
+  <h1>First in India</h1>
+  <p>Top Officials · Firsts by Gender · Awards · Science, Sports & Infrastructure Firsts</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">🏛 Top Officials</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🎖 Military & Viceroys</button>
+  <button class="tab-btn" onclick="switchTab('t3')">👨 Men's Firsts</button>
+  <button class="tab-btn" onclick="switchTab('t4')">👩 Women Officials</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🏅 Women in Sports</button>
+  <button class="tab-btn" onclick="switchTab('t6')">🏆 Major Awards</button>
+  <button class="tab-btn" onclick="switchTab('t7')">🎬 Edu/Cinema/Transport</button>
+  <button class="tab-btn" onclick="switchTab('t8')">🚀 Space/Defence/Misc</button>
+</div>
+
+<!-- TAB 1: TOP OFFICIALS -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">First Top Officials of Independent India</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Position</th><th>First Person</th><th>Tenure</th></tr>
+        <tr><td>President</td><td>Dr. Rajendra Prasad</td><td>1950–61</td></tr>
+        <tr><td>Vice-President</td><td>Dr. S. Radhakrishnan</td><td>1952–62</td></tr>
+        <tr><td>Prime Minister</td><td>Jawaharlal Nehru</td><td>1949–64</td></tr>
+        <tr><td>Deputy PM / Home Minister</td><td>Sardar Vallabhbhai Patel</td><td>1947–50</td></tr>
+        <tr><td>Finance Minister</td><td>R.K. Shanmukham Chetty</td><td>1947–49</td></tr>
+        <tr><td>Chief Justice of India</td><td>Justice Harilal Jekisundas Kania</td><td>1950–51</td></tr>
+        <tr><td>Chief Election Commissioner</td><td>Sukumar Sen</td><td>1950–58</td></tr>
+        <tr><td>Speaker of Lok Sabha</td><td>G.V. Mavalankar</td><td>1952–56</td></tr>
+        <tr><td>Deputy Chairman, Rajya Sabha</td><td>S.V. Krishnamoorthy Rao</td><td>1952–62</td></tr>
+        <tr><td>Chairman, Finance Commission</td><td>K.C. Neogy</td><td>1952–57</td></tr>
+        <tr><td>Lokpal (Ombudsman)</td><td>Pinaki Chandra Ghose</td><td>2019–22</td></tr>
+        <tr><td>President of the World Bank (Indian-origin)</td><td>Ajay Banga</td><td>2023–Present</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        President → PM → Deputy PM order asked frequently. Remember: Prasad (Pres) ≠ Radhakrishnan (VP), don't swap!
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Exam Trap Zone — Officials</div>
+    <div class="card-body">
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Ajay Banga is President of the <strong>World Bank</strong> (a global body), NOT an "Indian government official" — commonly confused in "first Indian to head an international body" questions.
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Sukumar Sen was CEC AND also supervised UN elections in Sudan/Cambodia — questions sometimes wrongly attribute this role to someone else.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: MILITARY & VICEROYS -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header purple">Governor-General & Viceroy of India</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Position</th><th>Name</th><th>Period</th></tr>
+        <tr><td>Governor-General of Bengal</td><td>Warren Hastings</td><td>1773–85</td></tr>
+        <tr><td>Governor-General of India</td><td>Lord William Bentinck</td><td>1833–35</td></tr>
+        <tr><td>First Viceroy of India</td><td>Lord Canning</td><td>1858–62</td></tr>
+        <tr><td>Governor-General of Independent India</td><td>Lord Mountbatten</td><td>1947–48</td></tr>
+        <tr><td>Last Governor-General (Indian)</td><td>C. Rajagopalachari</td><td>1948–50</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Lord Mountbatten was the last British Governor-General and Viceroy of India.</li>
+        <li>C. Rajagopalachari (Rajaji) was the first and last Indian Governor-General.</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Governor-General of India" (Bentinck, 1833) ≠ "Governor-General of Bengal" (Hastings, 1773) — different designations before/after Charter Act 1833. Frequently mixed up.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">First Major Military Officials</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Position</th><th>Name</th><th>Year</th></tr>
+        <tr><td>Commander-in-Chief of Independent India</td><td>General K.M. Cariappa</td><td>1949</td></tr>
+        <tr><td>Chief of Defence Staff (CDS)</td><td>General Bipin Rawat</td><td>2020</td></tr>
+        <tr><td>Field Marshal</td><td>S.H.F. Jamshedji Manekshaw</td><td>1973</td></tr>
+        <tr><td>Chief of the Naval Staff</td><td>Vice Admiral R.D. Katari</td><td>1958–62</td></tr>
+        <tr><td>Chief of the Air Staff</td><td>Air Marshal Subroto Mukherjee</td><td>1954</td></tr>
+      </table></div>
+      <div class="stat-box"><span class="num">1949</span><span class="label">First C-in-C</span></div>
+      <div class="stat-box"><span class="num">1973</span><span class="label">First Field Marshal</span></div>
+      <div class="stat-box"><span class="num">2020</span><span class="label">First CDS</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: MEN'S FIRSTS -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header blue">First Indian Men — Miscellaneous</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Person</th><th>Year</th></tr>
+        <tr><td>President, International Court of Justice</td><td>Dr. Nagendra Singh</td><td>1985–88</td></tr>
+        <tr><td>Education Minister</td><td>Abul Kalam Azad</td><td>1947–58</td></tr>
+        <tr><td>To pass ICS Exam</td><td>Satyendranath Tagore</td><td>1863</td></tr>
+        <tr><td>Pilot</td><td>J.R.D. Tata</td><td>1929</td></tr>
+        <tr><td>CJI appointed as Governor</td><td>P. Sathasivam (Kerala)</td><td>—</td></tr>
+        <tr><td>Squadron Leader to go into space</td><td>Rakesh Sharma</td><td>1984</td></tr>
+        <tr><td>Chief Guest, Republic Day</td><td>Sukarno (President, Indonesia)</td><td>1950</td></tr>
+        <tr><td>Governor of RBI (Indian)</td><td>C.D. Deshmukh</td><td>1943–49</td></tr>
+        <tr><td>Sportsperson to receive Padma Shri</td><td>Balbir Singh Dosanjh</td><td>1957</td></tr>
+        <tr><td>To cross English Channel (swimming)</td><td>Mihir Sen</td><td>1958</td></tr>
+        <tr><td>To reach South Pole</td><td>Colonel J.K. Bajaj</td><td>1989</td></tr>
+        <tr><td>Medal in World Wrestling Championship</td><td>Udaychand</td><td>1961</td></tr>
+        <tr><td>Everest without oxygen</td><td>Sherpa Phu Dorji</td><td>1984</td></tr>
+        <tr><td>ODI double century</td><td>Sachin Tendulkar</td><td>2010</td></tr>
+        <tr><td>Test triple century</td><td>Virender Sehwag</td><td>—</td></tr>
+        <tr><td>Three ODI double centuries</td><td>Rohit Sharma</td><td>—</td></tr>
+        <tr><td>Olympic Gold — Track & Field</td><td>Neeraj Chopra</td><td>Tokyo 2021</td></tr>
+        <tr><td>Individual Olympic Gold (any event)</td><td>Abhinav Bindra</td><td>Beijing 2008</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Bindra (2008) = first individual Olympic Gold. Chopra (2021) = first Track & Field Gold. Both distinct records — don't confuse "first individual gold" with "first athletics gold."
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        C.D. Deshmukh appears twice in GK — first Indian Governor of RBI AND first Indian to receive the Ramon Magsaysay Award in Public Service (1959). Commonly split into two "different" people by mistake.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: WOMEN OFFICIALS -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header teal">First Women (Officials)</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Position</th><th>Name</th><th>Year/Period</th></tr>
+        <tr><td>President</td><td>Pratibha Devi Singh Patil</td><td>2007–12</td></tr>
+        <tr><td>Prime Minister</td><td>Indira Gandhi</td><td>1966–77</td></tr>
+        <tr><td>Judge</td><td>Anna Chandy</td><td>1937</td></tr>
+        <tr><td>Judge, Supreme Court</td><td>Meera Sahib Fathima Beevi</td><td>1989–92</td></tr>
+        <tr><td>Judge, High Court</td><td>Leela Seth (Himachal Pradesh)</td><td>1991</td></tr>
+        <tr><td>Governor</td><td>Sarojini Naidu (Uttar Pradesh)</td><td>1947–49</td></tr>
+        <tr><td>Chief Minister</td><td>Sucheta Kriplani (Uttar Pradesh)</td><td>1963–67</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">First Women in Legislature</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Position</th><th>Name</th></tr>
+        <tr><td>State Assembly Speaker</td><td>Shanno Devi</td></tr>
+        <tr><td>Lok Sabha Speaker</td><td>Meira Kumar</td></tr>
+        <tr><td>Woman MP</td><td>Radhabai Subbarayan</td></tr>
+        <tr><td>Rajya Sabha Deputy Chairman</td><td>Violet Alva</td></tr>
+        <tr><td>Union Minister</td><td>Rajkumari Amrit Kaur</td></tr>
+        <tr><td>Rajya Sabha Secretary General</td><td>V.S. Ramadevi</td></tr>
+        <tr><td>Minister of State, External Affairs</td><td>Lakshmi N. Menon</td></tr>
+        <tr><td>Legislator in British India (MLA)</td><td>S. Muthulakshmi Reddy</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">First Women — Other Fields</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Name</th><th>Year</th></tr>
+        <tr><td>President, UN General Assembly</td><td>Vijaya Lakshmi Pandit</td><td>1953</td></tr>
+        <tr><td>IAS Officer</td><td>Anna Rajam Malhotra (1951 batch)</td><td>1951</td></tr>
+        <tr><td>First Lady of Indian Cinema</td><td>Devika Rani</td><td>1935</td></tr>
+        <tr><td>Graduate (Hons.)</td><td>Kamini Roy</td><td>1886</td></tr>
+        <tr><td>Miss World</td><td>Reita Faria</td><td>1966</td></tr>
+        <tr><td>Candidate for President</td><td>Manohar Holkar</td><td>1967</td></tr>
+        <tr><td>IPS Officer</td><td>Kiran Bedi</td><td>1972</td></tr>
+        <tr><td>Chairperson, National Women's Commission</td><td>Jayanti Patnaik</td><td>1992</td></tr>
+        <tr><td>Miss Universe</td><td>Sushmita Sen</td><td>1994</td></tr>
+        <tr><td>Indian-origin woman in Space</td><td>Kalpana Chawla</td><td>1997</td></tr>
+        <tr><td>Advocate to become SC Judge directly</td><td>Indu Malhotra</td><td>2018</td></tr>
+        <tr><td>Woman Combat Aviator, Indian Army</td><td>Abhilasha Barak</td><td>2022</td></tr>
+        <tr><td>Fighter Pilot to fly a Fighter Jet</td><td>Avani Chaturvedi</td><td>2023</td></tr>
+        <tr><td>Helicopter Pilot, Indian Navy</td><td>Anamika B. Rajeev</td><td>—</td></tr>
+        <tr><td>ADC to President</td><td>Yashaswi Solankee</td><td>—</td></tr>
+        <tr><td>SPG member (PM protection)</td><td>Adaso Kapesa</td><td>—</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Kalpana Chawla was the first <strong>Indian-origin woman</strong> in space (US citizen) — NOT the first Indian woman in space. Sunita Williams is also often wrongly cited here.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: WOMEN IN SPORTS -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header green">First Indian Women in Olympics & Sports</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Name</th><th>Year</th></tr>
+        <tr><td>Participate in Olympic Games</td><td>Nora Margaret Polley (Paris, Tennis)</td><td>1924</td></tr>
+        <tr><td>Gold Medal, Asian Games</td><td>Kamaljit Sandhu (Bangkok)</td><td>1970</td></tr>
+        <tr><td>100 wickets, International Cricket</td><td>Diana Edulji</td><td>1985</td></tr>
+        <tr><td>Olympic Medal — Weightlifting</td><td>Karnam Malleswari (Sydney)</td><td>2000</td></tr>
+        <tr><td>World No.1 Badminton ranking</td><td>Saina Nehwal</td><td>April 2015</td></tr>
+        <tr><td>Gold in Wrestling, Commonwealth Games</td><td>Geeta Phogat (New Delhi)</td><td>2010</td></tr>
+        <tr><td>WTA Tennis Tournament win</td><td>Sania Mirza</td><td>2005</td></tr>
+        <tr><td>Woman Grandmaster (WGM)</td><td>Subbaraman Vijayalakshmi</td><td>2001</td></tr>
+        <tr><td>Olympic Medal — Wrestling</td><td>Sakshi Malik (Rio)</td><td>2016</td></tr>
+        <tr><td>Member, International Olympic Committee</td><td>Nita Ambani</td><td>2016</td></tr>
+        <tr><td>Two Olympic Medals — Badminton</td><td>P.V. Sindhu (Rio 2016, Tokyo 2020)</td><td>2016–2021</td></tr>
+        <tr><td>Two Olympic Medals, single edition</td><td>Manu Bhaker (Paris)</td><td>2024</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Mountaineering & Swimming Firsts</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Achievement</th><th>Name</th><th>Year</th></tr>
+        <tr><td>Swim across English Channel</td><td>Aarti Saha</td><td>1959</td></tr>
+        <tr><td>Reach Antarctica</td><td>Meher Moos</td><td>1976</td></tr>
+        <tr><td>Climb Mount Everest</td><td>Bachendri Pal</td><td>1984</td></tr>
+        <tr><td>Sail around the World</td><td>Ujjwala Patil</td><td>1987</td></tr>
+        <tr><td>International Swimming Marathon Winner</td><td>Archana Bharat Kumar Patel</td><td>1988</td></tr>
+        <tr><td>Climb Mt. Everest twice</td><td>Santosh Yadav</td><td>1992</td></tr>
+        <tr><td>Disabled Woman to climb Everest</td><td>Arunima Sinha</td><td>2013</td></tr>
+        <tr><td>Oldest (55) Woman to climb Everest</td><td>Jyoti Ratra</td><td>2024</td></tr>
+        <tr><td>Cross Strait of Gibraltar</td><td>Sayani Das</td><td>2015</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Bachendri Pal (1984) = Everest. Santosh Yadav (1992) = Everest TWICE. Arunima Sinha (2013) = disabled climber. Keep chronology straight — a common sequencing question.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: MAJOR AWARDS -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header gold">Nobel Prize — First Indians</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Field</th><th>Recipient</th><th>Year</th></tr>
+        <tr><td>Literature (India's First Nobel)</td><td>Rabindranath Tagore</td><td>1913</td></tr>
+        <tr><td>Physics</td><td>C.V. Raman</td><td>1930</td></tr>
+        <tr><td>Medicine</td><td>Dr. Hargobind Khurana</td><td>1968</td></tr>
+        <tr><td>Economics</td><td>Dr. Amartya Sen</td><td>1998</td></tr>
+        <tr><td>Chemistry</td><td>Venkatraman Ramakrishnan</td><td>2009</td></tr>
+        <tr><td>Peace</td><td>Kailash Satyarthi</td><td>2014</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Bharat Ratna, Param Vir Chakra, Jnanpith</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Recipient</th><th>Year</th></tr>
+        <tr><td>First Bharat Ratna</td><td>Dr. S. Radhakrishnan</td><td>1954</td></tr>
+        <tr><td>First Foreign Bharat Ratna</td><td>Abdul Ghaffar Khan</td><td>1987</td></tr>
+        <tr><td>First Posthumous Bharat Ratna</td><td>Lal Bahadur Shastri</td><td>1966</td></tr>
+        <tr><td>First Param Vir Chakra</td><td>Major Somnath Sharma</td><td>1950</td></tr>
+        <tr><td>First Jnanpith Award</td><td>G. Shankar Kurup (Malayalam — Odakuzhal)</td><td>1965</td></tr>
+        <tr><td>First Hindi Jnanpith</td><td>Sumitranandan Pant (Chidambara)</td><td>1968</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Lal Bahadur Shastri = first Bharat Ratna given <em>posthumously</em>, not the first Bharat Ratna overall (that's Radhakrishnan, 1954). This distinction is a favourite trap.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Magsaysay, Grammy & Women's Award Firsts</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Recipient</th><th>Year</th></tr>
+        <tr><td>First Ramon Magsaysay Award</td><td>Acharya Vinoba Bhave</td><td>1958</td></tr>
+        <tr><td>Magsaysay — Public Service</td><td>C.D. Deshmukh</td><td>1959</td></tr>
+        <tr><td>First Grammy Award</td><td>Pt. Ravi Shankar ("West Meets East")</td><td>1967</td></tr>
+      </table></div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Award</th><th>Recipient</th><th>Year</th></tr>
+        <tr><td>Nobel Prize (Peace)</td><td>Mother Teresa</td><td>1979</td></tr>
+        <tr><td>Bharat Ratna</td><td>Indira Gandhi</td><td>1971</td></tr>
+        <tr><td>Ramon Magsaysay</td><td>Mother Teresa</td><td>1962</td></tr>
+        <tr><td>Norman Borlaug Award</td><td>Dr. Amrita Patel</td><td>2005</td></tr>
+        <tr><td>Sahitya Akademi</td><td>Amrita Pritam ("Sunehade")</td><td>1956</td></tr>
+        <tr><td>Booker Prize</td><td>Arundhati Roy ("God of Small Things")</td><td>1997</td></tr>
+        <tr><td>Youngest Booker Prize Winner</td><td>Kiran Desai ("The Inheritance of Loss")</td><td>2006</td></tr>
+        <tr><td>Jnanpith Award (Woman)</td><td>Ashapurna Devi ("Pratishruti")</td><td>1976</td></tr>
+        <tr><td>Army Medal</td><td>Vimla Devi</td><td>1990</td></tr>
+        <tr><td>Ashok Chakra</td><td>Neerja Bhanot</td><td>1987</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: EDU / CINEMA / TRANSPORT / COMMUNICATION -->
+<div class="tab-content" id="t7">
+  <div class="card">
+    <div class="card-header teal">First in Education</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Details</th><th>Year</th></tr>
+        <tr><td>First University</td><td>Nalanda University, Bihar</td><td>427 CE</td></tr>
+        <tr><td>Open University</td><td>Bhimrao Ambedkar Open University, Hyderabad</td><td>1982</td></tr>
+        <tr><td>Central Agricultural University</td><td>Imphal, Manipur</td><td>26 Jan 1993</td></tr>
+        <tr><td>Defence University</td><td>Binola, Gurugram, Haryana</td><td>2013</td></tr>
+        <tr><td>National Rail & Transportation University</td><td>Vadodara, Gujarat</td><td>2018</td></tr>
+        <tr><td>National Sports University</td><td>Imphal, Manipur</td><td>March 2018</td></tr>
+        <tr><td>District with 100% Literacy</td><td>Ernakulam, Kerala</td><td>1990</td></tr>
+        <tr><td>State — 100% Primary Education</td><td>Kerala</td><td>2016</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">First in Cinema</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Details</th><th>Year</th></tr>
+        <tr><td>Silent Film</td><td>Raja Harishchandra (Dada Saheb Phalke)</td><td>1913</td></tr>
+        <tr><td>Talking Film</td><td>Alam Ara (Ardeshir Irani)</td><td>1931</td></tr>
+        <tr><td>Technicolour Film</td><td>Jhansi Ki Rani</td><td>1953</td></tr>
+        <tr><td>3-D Film</td><td>My Dear Kuttichathan</td><td>1984</td></tr>
+        <tr><td>Colour Telecast on Doordarshan</td><td>15 August</td><td>1982</td></tr>
+        <tr><td>Sponsored Serial</td><td>Hum Log</td><td>1984</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">First in Transport</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Details</th><th>Year</th></tr>
+        <tr><td>Passenger Train</td><td>Mumbai–Thane (34 km)</td><td>1853</td></tr>
+        <tr><td>Airline</td><td>Imperial Airways</td><td>1924</td></tr>
+        <tr><td>Metro Train</td><td>Kolkata Metro</td><td>1984</td></tr>
+        <tr><td>Expressway</td><td>Mumbai–Pune Expressway (94.5 km)</td><td>2002</td></tr>
+        <tr><td>Train Running on CNG</td><td>Rewari to Rohtak</td><td>2015</td></tr>
+        <tr><td>Private Train</td><td>Tejas Express (Delhi–Lucknow)</td><td>2019</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">First in Communications</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Details</th><th>Year</th></tr>
+        <tr><td>Newspaper</td><td>Hickey's Bengal Gazette</td><td>1780</td></tr>
+        <tr><td>Indian Linguistic Daily</td><td>Samachar Darpan (Bengali)</td><td>1818</td></tr>
+        <tr><td>Hindi Newspaper</td><td>Udant Martand</td><td>1826</td></tr>
+        <tr><td>International Telecommunications Service</td><td>London to Mumbai</td><td>1870</td></tr>
+        <tr><td>Telegraph Line</td><td>Diamond Harbour to Kolkata</td><td>1851</td></tr>
+        <tr><td>Woman-run Post Office</td><td>Shastri Bhawan, New Delhi</td><td>2013</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Newspaper (1780, English) → Samachar Darpan (1818, Bengali) → Udant Martand (1826, Hindi). Chronology of language firsts is high-yield.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: SPACE / DEFENCE / MISC -->
+<div class="tab-content" id="t8">
+  <div class="card">
+    <div class="card-header red">First in Defence</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Details</th><th>Year</th></tr>
+        <tr><td>Nuclear Reactor</td><td>Apsara</td><td>Aug 1956</td></tr>
+        <tr><td>Atomic Centre</td><td>Tarapur, Maharashtra</td><td>Oct 1969</td></tr>
+        <tr><td>Underground Nuclear Test</td><td>Pokhran, Rajasthan</td><td>18 May 1974</td></tr>
+        <tr><td>Indigenous Missile</td><td>Prithvi</td><td>1988</td></tr>
+        <tr><td>Medium Range Missile</td><td>Agni</td><td>1989</td></tr>
+        <tr><td>Indigenous Nuclear Submarine</td><td>INS Arihant</td><td>2016</td></tr>
+        <tr><td>Aircraft Carrier Warship</td><td>INS Vikrant</td><td>2022</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">First in Space</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Details</th><th>Year</th></tr>
+        <tr><td>Satellite</td><td>Aryabhatta</td><td>1975</td></tr>
+        <tr><td>Indigenously Built Satellite</td><td>INSAT-2A</td><td>1992</td></tr>
+        <tr><td>Lunar Mission</td><td>Chandrayaan-1</td><td>2008</td></tr>
+        <tr><td>Mars Mission</td><td>Mangalyaan</td><td>2013</td></tr>
+        <tr><td>Military Communication Satellite</td><td>Rukmini (GSAT-7)</td><td>2013</td></tr>
+        <tr><td>Mission to Study the Sun</td><td>Aditya-L1</td><td>2023</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Aryabhatta (1975) was India's first satellite but was launched from a <strong>Soviet</strong> cosmodrome (Kapustin Yar), not from Indian soil — a frequently tested nuance.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header gold">Miscellaneous Firsts</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Details</th><th>Year</th></tr>
+        <tr><td>Census</td><td>1872; Regular Decadal Census from 1881</td><td>1872</td></tr>
+        <tr><td>National Park</td><td>Jim Corbett National Park, Uttarakhand</td><td>1936</td></tr>
+        <tr><td>Stock Exchange</td><td>Bombay Stock Exchange</td><td>1875</td></tr>
+        <tr><td>Asian Games Organised</td><td>Delhi</td><td>1951</td></tr>
+        <tr><td>Project Tiger Launched</td><td>Jim Corbett National Park</td><td>1973</td></tr>
+        <tr><td>State to Appoint Lokayukta</td><td>Maharashtra</td><td>1971</td></tr>
+        <tr><td>Marine National Park</td><td>Kutch Region, Gujarat</td><td>1982</td></tr>
+        <tr><td>Biosphere Reserve</td><td>Nilgiri</td><td>1986</td></tr>
+        <tr><td>Commodity Exchange</td><td>Multi Commodity Exchange, India</td><td>2003</td></tr>
+        <tr><td>Solar Sarovar</td><td>Bhuj, Gujarat</td><td>1993</td></tr>
+        <tr><td>E-Court Initiated</td><td>Ahmedabad</td><td>2009</td></tr>
+        <tr><td>Aadhaar Project (UID) Launched</td><td>Tembhali, Maharashtra</td><td>2010</td></tr>
+        <tr><td>Commonwealth Games Organised</td><td>Delhi</td><td>2010</td></tr>
+        <tr><td>Football Club</td><td>Mohun Bagan, Kolkata</td><td>1889</td></tr>
+        <tr><td>Hydroelectric Project</td><td>Shivsamudram</td><td>1902</td></tr>
+        <tr><td>Computer Manufactured in India</td><td>Siddhartha</td><td>1966</td></tr>
+        <tr><td>Antarctic Expedition</td><td>Led by Dr. S.Z. Qasim</td><td>1982</td></tr>
+        <tr><td>State — Public Service Rights Act</td><td>Madhya Pradesh</td><td>2010</td></tr>
+        <tr><td>Women's Court</td><td>Halda, West Bengal</td><td>2013</td></tr>
+        <tr><td>Ultra Mega Power Project</td><td>Mundra, Gujarat</td><td>2001</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">First President</span><span class="v">Dr. Rajendra Prasad (1950–61)</span></div>
+      <div class="info-row"><span class="k">First PM</span><span class="v">Jawaharlal Nehru (1949–64)</span></div>
+      <div class="info-row"><span class="k">First Woman President</span><span class="v">Pratibha Devi Singh Patil (2007–12)</span></div>
+      <div class="info-row"><span class="k">First Woman PM</span><span class="v">Indira Gandhi (1966–77)</span></div>
+      <div class="info-row"><span class="k">First Nobel (Literature)</span><span class="v">Rabindranath Tagore (1913)</span></div>
+      <div class="info-row"><span class="k">First Bharat Ratna</span><span class="v">Dr. S. Radhakrishnan (1954)</span></div>
+      <div class="info-row"><span class="k">First Param Vir Chakra</span><span class="v">Major Somnath Sharma (1950)</span></div>
+      <div class="info-row"><span class="k">First Satellite</span><span class="v">Aryabhatta (1975)</span></div>
+      <div class="info-row"><span class="k">First Nuclear Test</span><span class="v">Pokhran (18 May 1974)</span></div>
+      <div class="info-row"><span class="k">First Indian in Space</span><span class="v">Rakesh Sharma (1984)</span></div>
+      <div class="info-row"><span class="k">Individual Olympic Gold</span><span class="v">Abhinav Bindra, Beijing 2008</span></div>
+      <div class="info-row"><span class="k">Olympic Gold — Track & Field</span><span class="v">Neeraj Chopra, Tokyo 2021</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · First in India · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

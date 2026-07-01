@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Nuclear Program | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 13</span>
+  <h1>Indian Nuclear Program</h1>
+  <p>Governing Bodies · Research Centres · Reactors · Power Plants · Nuclear Tests</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">⚛ Overview & Governing Bodies</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🏛 Atomic Research Centres</button>
+  <button class="tab-btn" onclick="switchTab('t3')">🔬 Nuclear Reactors in India</button>
+  <button class="tab-btn" onclick="switchTab('t4')">🏭 Nuclear Power Plants</button>
+  <button class="tab-btn" onclick="switchTab('t5')">💥 Nuclear Tests & WWII</button>
+  <button class="tab-btn" onclick="switchTab('t6')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: OVERVIEW & GOVERNING BODIES -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">Overview</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Father of Indian Nuclear Program: Dr. Homi J. Bhabha</li>
+      </ul>
+      <div class="stat-box"><span class="num">1948</span><span class="label">Atomic Energy Commission</span></div>
+      <div class="stat-box"><span class="num">1954</span><span class="label">Dept. of Atomic Energy</span></div>
+      <div class="stat-box"><span class="num">1983</span><span class="label">AERB Formed</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Governing Bodies</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Body</th><th>Established</th><th>Key Details</th></tr>
+        <tr><td>Atomic Energy Commission</td><td>10 August 1948</td><td>First Chairman: Dr. Homi J. Bhabha</td></tr>
+        <tr><td>Department of Atomic Energy</td><td>3 August 1954</td><td>HQ: Mumbai; directly under the Prime Minister</td></tr>
+        <tr><td>Atomic Energy Regulatory Board</td><td>15 November 1983</td><td>Ensures safe and environmentally friendly use of atomic energy</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Dr. Homi J. Bhabha wears two "first" hats: Father of the Indian Nuclear Program AND first Chairman of the Atomic Energy Commission (1948).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: ATOMIC RESEARCH CENTRES -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header green">Major Atomic Research Centres</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Centre</th><th>Established</th><th>Location</th><th>Objective</th></tr>
+        <tr><td>Atomic Mineral Directorate (AMD)</td><td>1949</td><td>Hyderabad</td><td>R&D related to radiometric and geo-survey</td></tr>
+        <tr><td>Indian Rare Earths Limited (IREL)</td><td>1950</td><td>Mumbai</td><td>Obtaining monazite commercially through processing</td></tr>
+        <tr><td>Bhabha Atomic Research Centre (BARC)</td><td>1954</td><td>Trombay, Mumbai</td><td>Nuclear research and development; CIRUS Thermal Reactor built with Canada's cooperation</td></tr>
+        <tr><td>Uranium Corporation of India Ltd. (UCIL)</td><td>1969</td><td>Jadugoda, Jharkhand</td><td>Mining and refining of uranium ore</td></tr>
+        <tr><td>Atomic Energy Education Society (AEES)</td><td>1969</td><td>Mumbai</td><td>Education up to 12th standard for DAE employees' children</td></tr>
+        <tr><td>Indira Gandhi Centre for Atomic Research (IGCAR)</td><td>1971</td><td>Kalpakkam, Tamil Nadu</td><td>R&D on Fast Breeder Reactors</td></tr>
+        <tr><td>Variable Energy Cyclotron Centre (VECC)</td><td>1977</td><td>Kolkata</td><td>Fundamental and applied nuclear science research</td></tr>
+        <tr><td>Nuclear Power Corporation of India Ltd. (NPCIL)</td><td>1987</td><td>Mumbai</td><td>Construction and operation of nuclear power plants</td></tr>
+        <tr><td>Raja Ramanna Centre for Advanced Technology (RRCAT)</td><td>1984</td><td>Indore</td><td>Technology development in laser and cryogenics</td></tr>
+        <tr><td>Global Centre for Nuclear Energy Partnership (GCNEP)</td><td>2010</td><td>Bahadurgarh, Haryana</td><td>Safe and clean nuclear energy expansion; reduces proliferation risk</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        The reactor built at BARC with Canadian cooperation is CIRUS (Canada-India Reactor, Utility Services), commonly mistyped as "CYRUS" — the two names are frequently confused in notes and low-quality sources.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: NUCLEAR REACTORS -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header purple">Nuclear Reactors in India</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Reactor</th><th>Established</th><th>Key Details</th></tr>
+        <tr><td>Apsara Reactor</td><td>1956</td><td>First reactor in Asia</td></tr>
+        <tr><td>CIRUS Reactor</td><td>10 July 1960</td><td>Built with Canadian cooperation</td></tr>
+        <tr><td>Zerlina Reactor</td><td>4 January 1961</td><td>—</td></tr>
+        <tr><td>Purnima Reactor</td><td>18 May 1972</td><td>—</td></tr>
+        <tr><td>Purnima II Reactor</td><td>16 May 1984</td><td>—</td></tr>
+        <tr><td>Dhruva Reactor</td><td>8 August 1985</td><td>—</td></tr>
+        <tr><td>Purnima III Reactor</td><td>9 November 1990</td><td>—</td></tr>
+        <tr><td>Kamini Reactor</td><td>29 October 1996</td><td>India's & developing world's first Fast Breeder Neutron; world's first to use Uranium-233 fuel</td></tr>
+        <tr><td>Apsara-U Reactor</td><td>10 September 2018</td><td>Upgraded version of Apsara</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Apsara (1956) = first reactor in ASIA. Kamini (1996) = world's first reactor using Uranium-233 fuel. Two different "firsts" — don't merge them.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: NUCLEAR POWER PLANTS -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header orange">Nuclear Power Plants — World Context</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Country / Location</th><th>Year</th></tr>
+        <tr><td>First in the World</td><td>Russia (Obninsk)</td><td>1954</td></tr>
+        <tr><td>Second in the World</td><td>America</td><td>1958</td></tr>
+        <tr><td>First in India</td><td>Tarapur, Maharashtra (with US cooperation)</td><td>1969</td></tr>
+        <tr><td>Largest in India</td><td>Kudankulam, Tamil Nadu</td><td>2014</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Nuclear Power Plants in India</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Plant</th><th>Location</th><th>Established</th><th>Capacity</th></tr>
+        <tr><td>Tarapur</td><td>Maharashtra</td><td>1969</td><td>1400 MWe</td></tr>
+        <tr><td>Rawatbhata</td><td>Rajasthan</td><td>1973</td><td>1180 MWe</td></tr>
+        <tr><td>Kalpakkam</td><td>Tamil Nadu</td><td>1984</td><td>440 MWe</td></tr>
+        <tr><td>Narora</td><td>Uttar Pradesh</td><td>1991</td><td>440 MWe</td></tr>
+        <tr><td>Kakrapar</td><td>Gujarat</td><td>1993</td><td>440 MWe</td></tr>
+        <tr><td>Kaiga</td><td>Karnataka</td><td>2000</td><td>880 MWe</td></tr>
+        <tr><td>Kudankulam</td><td>Tamil Nadu</td><td>2014</td><td>2000 MWe</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Tarapur is India's FIRST nuclear power plant (1969) by year, but Kudankulam is the LARGEST by capacity (2000 MWe, 2014) — don't confuse "first" with "largest."
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: NUCLEAR TESTS & WWII -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header teal">India's Nuclear Tests</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Test</th><th>Date</th><th>Site</th><th>Code Name</th><th>Capacity</th></tr>
+        <tr><td>First Nuclear Test</td><td>18 May 1974</td><td>Pokhran, Rajasthan</td><td>Smiling Buddha</td><td>12 Kilotonnes</td></tr>
+        <tr><td>Second Nuclear Test</td><td>11 & 13 May 1998</td><td>Pokhran, Rajasthan</td><td>Operation Shakti</td><td>—</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Atomic Bombings on Japan (World War II)</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Order</th><th>Date</th><th>City</th><th>Bomb Name</th></tr>
+        <tr><td>First</td><td>6 August 1945</td><td>Hiroshima</td><td>Little Boy</td></tr>
+        <tr><td>Second</td><td>9 August 1945</td><td>Nagasaki</td><td>Fat Man</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Hiroshima → "Little Boy" (6 Aug); Nagasaki → "Fat Man" (9 Aug) — names and cities are often swapped in exams, so link them by date order.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: QUICK REFERENCE -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">Father of Indian Nuclear Program</span><span class="v">Dr. Homi J. Bhabha</span></div>
+      <div class="info-row"><span class="k">Atomic Energy Commission</span><span class="v">Est. 10 August 1948</span></div>
+      <div class="info-row"><span class="k">Department of Atomic Energy</span><span class="v">Est. 3 August 1954; HQ: Mumbai</span></div>
+      <div class="info-row"><span class="k">Atomic Energy Regulatory Board</span><span class="v">Formed 15 November 1983</span></div>
+      <div class="info-row"><span class="k">BARC</span><span class="v">Trombay, Mumbai; est. 1954; nuclear R&D</span></div>
+      <div class="info-row"><span class="k">UCIL</span><span class="v">Jadugoda, Jharkhand; est. 1969; uranium mining</span></div>
+      <div class="info-row"><span class="k">IGCAR</span><span class="v">Kalpakkam, Tamil Nadu; est. 1971; Fast Breeder Reactors</span></div>
+      <div class="info-row"><span class="k">NPCIL</span><span class="v">Mumbai; est. 1987; nuclear power plants</span></div>
+      <div class="info-row"><span class="k">GCNEP</span><span class="v">Bahadurgarh, Haryana; est. 2010</span></div>
+      <div class="info-row"><span class="k">First Reactor in Asia</span><span class="v">Apsara Reactor, 1956</span></div>
+      <div class="info-row"><span class="k">Kamini Reactor</span><span class="v">First to use Uranium-233 fuel; first Fast Breeder Neutron (1996)</span></div>
+      <div class="info-row"><span class="k">First Nuclear Plant in World</span><span class="v">Russia (Obninsk), 1954</span></div>
+      <div class="info-row"><span class="k">First Nuclear Plant in India</span><span class="v">Tarapur, Maharashtra, 1969</span></div>
+      <div class="info-row"><span class="k">Largest Nuclear Plant in India</span><span class="v">Kudankulam, Tamil Nadu (2000 MWe)</span></div>
+      <div class="info-row"><span class="k">First Nuclear Test (India)</span><span class="v">18 May 1974; Pokhran; Smiling Buddha; 12 kt</span></div>
+      <div class="info-row"><span class="k">Second Nuclear Test (India)</span><span class="v">11–13 May 1998; Pokhran; Operation Shakti</span></div>
+      <div class="info-row"><span class="k">Hiroshima Bombing</span><span class="v">6 August 1945; Bomb: Little Boy</span></div>
+      <div class="info-row"><span class="k">Nagasaki Bombing</span><span class="v">9 August 1945; Bomb: Fat Man</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · Indian Nuclear Program · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

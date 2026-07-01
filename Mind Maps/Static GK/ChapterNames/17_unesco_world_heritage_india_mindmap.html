@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNESCO World Heritage Sites in India | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 17</span>
+  <h1>UNESCO World Heritage Sites in India</h1>
+  <p>Cultural Sites · Natural Sites · Intangible Heritage · Creative Cities Network</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">📌 Overview</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🏛 Cultural Sites — North & East</button>
+  <button class="tab-btn" onclick="switchTab('t3')">🕌 Cultural Sites — South & West</button>
+  <button class="tab-btn" onclick="switchTab('t4')">🌳 Natural Sites</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🎭 Intangible Cultural Heritage</button>
+  <button class="tab-btn" onclick="switchTab('t6')">🎨 UNESCO Creative Cities (UCCN)</button>
+  <button class="tab-btn" onclick="switchTab('t7')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">Overview</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>As of July 2025, UNESCO has declared 44 sites in India as World Heritage Sites — 35 Cultural, 7 Natural, and 1 Mixed category.</li>
+        <li>Latest addition: Maratha Military Landscapes of India, added 11 July 2025 as the 44th site.</li>
+        <li>Kalka-Shimla Railway and Darjeeling Railway are UNESCO sites under India's Mountain Railways.</li>
+      </ul>
+      <div class="stat-box"><span class="num">44</span><span class="label">Total WHS in India</span></div>
+      <div class="stat-box"><span class="num">35</span><span class="label">Cultural Sites</span></div>
+      <div class="stat-box"><span class="num">7</span><span class="label">Natural Sites</span></div>
+      <div class="stat-box"><span class="num">1</span><span class="label">Mixed Site</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: CULTURAL SITES NORTH & EAST -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header blue">Cultural Sites — Northern & Eastern India</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>State</th><th>Cultural Site</th><th>Year</th></tr>
+        <tr><td>Assam</td><td>Ahom Moidams</td><td>2024</td></tr>
+        <tr><td>Bihar</td><td>Mahabodhi Temple Complex</td><td>2002</td></tr>
+        <tr><td>Bihar</td><td>Nalanda Mahavihara Archaeological Site</td><td>2016</td></tr>
+        <tr><td>Delhi</td><td>Humayun's Tomb</td><td>1993</td></tr>
+        <tr><td>Delhi</td><td>Qutub Minar and its Monuments</td><td>1993</td></tr>
+        <tr><td>Delhi</td><td>Red Fort Complex</td><td>2007</td></tr>
+        <tr><td>Himachal Pradesh</td><td>Kalka-Shimla Toy Train</td><td>2008</td></tr>
+        <tr><td>Punjab/Haryana</td><td>The Architectural Work of Le Corbusier</td><td>2016</td></tr>
+        <tr><td>Rajasthan</td><td>Jantar Mantar</td><td>2010</td></tr>
+        <tr><td>Rajasthan</td><td>Hill Forts of Rajasthan</td><td>2013</td></tr>
+        <tr><td>Rajasthan</td><td>Jaipur City</td><td>2019</td></tr>
+        <tr><td>Uttar Pradesh</td><td>Agra Fort</td><td>1983</td></tr>
+        <tr><td>Uttar Pradesh</td><td>Taj Mahal</td><td>1983</td></tr>
+        <tr><td>Uttar Pradesh</td><td>Fatehpur Sikri</td><td>1986</td></tr>
+        <tr><td>West Bengal</td><td>Darjeeling Railway</td><td>1999</td></tr>
+        <tr><td>West Bengal</td><td>Shantiniketan</td><td>2023</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Agra Fort and Taj Mahal were BOTH listed in 1983 (same year, same state) — commonly one is mistaken as earlier than the other.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: CULTURAL SITES SOUTH & WEST -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header green">Cultural Sites — Southern & Western India</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>State</th><th>Cultural Site</th><th>Year</th></tr>
+        <tr><td>Goa</td><td>Churches and Convents of Goa Velha</td><td>1986</td></tr>
+        <tr><td>Gujarat</td><td>Champaner-Pavagadh Archaeological Park</td><td>2004</td></tr>
+        <tr><td>Gujarat</td><td>Rani Ki Vav</td><td>2014</td></tr>
+        <tr><td>Gujarat</td><td>Historic City of Ahmedabad</td><td>2017</td></tr>
+        <tr><td>Gujarat</td><td>Dholavira</td><td>2021</td></tr>
+        <tr><td>Karnataka</td><td>Group of Monuments at Hampi</td><td>1986</td></tr>
+        <tr><td>Karnataka</td><td>Group of Monuments at Pattadakal</td><td>1987</td></tr>
+        <tr><td>Karnataka</td><td>Sacred Ensembles of the Hoysalas</td><td>2023</td></tr>
+        <tr><td>Madhya Pradesh</td><td>Khajuraho Group of Monuments</td><td>1986</td></tr>
+        <tr><td>Madhya Pradesh</td><td>Sanchi Buddhist Monuments</td><td>1989</td></tr>
+        <tr><td>Madhya Pradesh</td><td>Rock Shelters of Bhimbetka</td><td>2003</td></tr>
+        <tr><td>Maharashtra</td><td>Ajanta Caves</td><td>1983</td></tr>
+        <tr><td>Maharashtra</td><td>Ellora Caves</td><td>1983</td></tr>
+        <tr><td>Maharashtra</td><td>Elephanta Caves</td><td>1987</td></tr>
+        <tr><td>Maharashtra</td><td>Chhatrapati Shivaji Terminus</td><td>2004</td></tr>
+        <tr><td>Maharashtra</td><td>Victorian Gothic and Art Deco Ensemble, Mumbai</td><td>2018</td></tr>
+        <tr><td>Maharashtra</td><td>Maratha Military Landscapes of India</td><td>2025</td></tr>
+        <tr><td>Odisha</td><td>Sun Temple, Konark</td><td>1984</td></tr>
+        <tr><td>Tamil Nadu</td><td>Monuments at Mahabalipuram</td><td>1984</td></tr>
+        <tr><td>Tamil Nadu</td><td>Great Living Chola Temples</td><td>1987</td></tr>
+        <tr><td>Telangana</td><td>Kakatiya Rudreshwara (Ramappa) Temple</td><td>2021</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Maharashtra has the MOST cultural sites (6) — Ajanta, Ellora, Elephanta Caves, CST, Victorian Gothic Ensemble, and the newest Maratha Military Landscapes (2025).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: NATURAL SITES -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header purple">Natural Sites Included in UNESCO List</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Natural Site</th><th>Year</th><th>State</th></tr>
+        <tr><td>Kaziranga National Park</td><td>1985</td><td>Assam</td></tr>
+        <tr><td>Manas Wildlife Sanctuary</td><td>1985</td><td>Assam</td></tr>
+        <tr><td>Keoladeo National Park</td><td>1985</td><td>Rajasthan</td></tr>
+        <tr><td>Sundarbans National Park</td><td>1987</td><td>West Bengal</td></tr>
+        <tr><td>Nanda Devi and Valley of Flowers National Parks</td><td>1988–2005</td><td>Uttarakhand</td></tr>
+        <tr><td>Western Ghats</td><td>2012</td><td>Maharashtra, Goa, Karnataka, Tamil Nadu, Kerala</td></tr>
+        <tr><td>Great Himalayan National Park Conservation Area</td><td>2014</td><td>Himachal Pradesh</td></tr>
+        <tr><td>Khangchendzonga National Park</td><td>2016</td><td>Sikkim</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Khangchendzonga National Park (Sikkim) is India's ONLY "Mixed" category UNESCO site — combining both natural and cultural significance, not purely natural.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: INTANGIBLE CULTURAL HERITAGE -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header red">Intangible Cultural Heritage List</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Name</th><th>Included Year</th></tr>
+        <tr><td>Tradition of Vedic Chanting</td><td>2008</td></tr>
+        <tr><td>Ramlila — traditional performance of the Ramayana</td><td>2008</td></tr>
+        <tr><td>Kutiyattam, Sanskrit Theatre</td><td>2008</td></tr>
+        <tr><td>Ramman — religious festival & ritual theatre of Garhwal Himalayas</td><td>2009</td></tr>
+        <tr><td>Mudiyettu</td><td>2010</td></tr>
+        <tr><td>Kalbelia dance</td><td>2010</td></tr>
+        <tr><td>Chhau dance</td><td>2010</td></tr>
+        <tr><td>Buddhist Chanting of Ladakh</td><td>2012</td></tr>
+        <tr><td>Sankirtana</td><td>2013</td></tr>
+        <tr><td>Thatheras of Jandiala Guru</td><td>2014</td></tr>
+        <tr><td>Yoga</td><td>2016</td></tr>
+        <tr><td>Nowruz</td><td>2016</td></tr>
+        <tr><td>Kumbh Mela</td><td>2017</td></tr>
+        <tr><td>Durga Puja</td><td>2021</td></tr>
+        <tr><td>Garba dance</td><td>2023</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        First 3 Intangible Heritage entries (all 2008): Vedic Chanting, Ramlila, Kutiyattam. Latest (2023): Garba dance.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: UCCN -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header teal">UNESCO Creative Cities Network (UCCN)</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Started by UNESCO in 2009.</li>
+        <li>Objective: promotes cooperation among cities that recognise creativity as a strategic factor in urban development.</li>
+        <li>Aims to achieve Sustainable Development Goals through innovative thinking and implementation.</li>
+        <li>Covers seven creative fields: music, arts, folk crafts, design, cinema, literature, digital arts, and culinary arts.</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>City</th><th>Creative Field</th><th>Year</th></tr>
+        <tr><td>Gwalior</td><td>Music</td><td>2023</td></tr>
+        <tr><td>Kozhikode</td><td>Literature</td><td>2023</td></tr>
+        <tr><td>Srinagar</td><td>Folk Arts and Crafts</td><td>2021</td></tr>
+        <tr><td>Mumbai</td><td>Film</td><td>2019</td></tr>
+        <tr><td>Hyderabad</td><td>Gastronomy / Culinary Arts</td><td>2019</td></tr>
+        <tr><td>Chennai</td><td>Music</td><td>2017</td></tr>
+        <tr><td>Jaipur</td><td>Folk Arts and Crafts</td><td>2015</td></tr>
+        <tr><td>Varanasi</td><td>Music</td><td>2015</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Three Indian cities share the "Music" creative field: Gwalior, Chennai, and Varanasi. Two share "Folk Arts and Crafts": Srinagar and Jaipur.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: QUICK REFERENCE -->
+<div class="tab-content" id="t7">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">Total UNESCO WHS in India (2025)</span><span class="v">44 (35 Cultural + 7 Natural + 1 Mixed)</span></div>
+      <div class="info-row"><span class="k">44th Site (Latest)</span><span class="v">Maratha Military Landscapes of India (11 July 2025)</span></div>
+      <div class="info-row"><span class="k">Most Sites — State</span><span class="v">Maharashtra (6 cultural sites)</span></div>
+      <div class="info-row"><span class="k">First Sites Listed (1983)</span><span class="v">Agra Fort, Taj Mahal, Ajanta Caves, Ellora Caves, Mahabalipuram</span></div>
+      <div class="info-row"><span class="k">Newest Cultural Site (2024)</span><span class="v">Ahom Moidams, Assam</span></div>
+      <div class="info-row"><span class="k">Newest Cultural Sites (2023)</span><span class="v">Sacred Ensembles of the Hoysalas; Shantiniketan</span></div>
+      <div class="info-row"><span class="k">Only Mixed Category Site</span><span class="v">Khangchendzonga National Park, Sikkim (2016)</span></div>
+      <div class="info-row"><span class="k">Mountain Railways (UNESCO)</span><span class="v">Darjeeling Railway (1999), Kalka-Shimla Toy Train (2008)</span></div>
+      <div class="info-row"><span class="k">Intangible Heritage — First (2008)</span><span class="v">Vedic Chanting, Ramlila, Kutiyattam</span></div>
+      <div class="info-row"><span class="k">Intangible Heritage — Latest</span><span class="v">Garba dance (2023)</span></div>
+      <div class="info-row"><span class="k">UCCN Started</span><span class="v">2009 by UNESCO</span></div>
+      <div class="info-row"><span class="k">Latest UCCN Cities (India, 2023)</span><span class="v">Gwalior (Music), Kozhikode (Literature)</span></div>
+      <div class="info-row"><span class="k">Dholavira</span><span class="v">Gujarat — Harappan site (2021)</span></div>
+      <div class="info-row"><span class="k">Kakatiya Ramappa Temple</span><span class="v">Telangana (2021)</span></div>
+      <div class="info-row"><span class="k">Sun Temple, Konark</span><span class="v">Odisha (1984)</span></div>
+      <div class="info-row"><span class="k">Shantiniketan</span><span class="v">West Bengal (2023)</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · UNESCO World Heritage Sites in India · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

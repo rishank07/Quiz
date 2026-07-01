@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar System | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1020px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.9rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.2rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.92rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media (max-width:640px){.two-col,.four-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+  @media (max-width:900px){.four-col{grid-template-columns:1fr 1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.95rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .planet-card{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px 16px;margin-bottom:14px;
+  }
+  .planet-card h4{
+    color:var(--gold);font-size:1rem;margin-bottom:8px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .planet-num{
+    background:var(--gold);color:#0f1117;font-weight:800;
+    font-size:0.78rem;width:22px;height:22px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+  }
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>☀️ SOLAR SYSTEM <span class="art-pill">World Geography · Ch 03</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('intro')">Introduction</button>
+    <button class="tab-btn" onclick="switchTab('sun')">The Sun</button>
+    <button class="tab-btn" onclick="switchTab('classify')">Planet Types</button>
+    <button class="tab-btn" onclick="switchTab('inner')">Inner Planets</button>
+    <button class="tab-btn" onclick="switchTab('outer')">Outer Planets</button>
+    <button class="tab-btn" onclick="switchTab('pluto')">Pluto & Dwarf Planets</button>
+    <button class="tab-btn" onclick="switchTab('glance')">At a Glance</button>
+    <button class="tab-btn" onclick="switchTab('moon')">Moon & Small Bodies</button>
+  </div>
+
+  <!-- TAB 1: INTRODUCTION -->
+  <div id="intro" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🪐 Introduction</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Group of celestial bodies like Sun, eight planets, satellites, asteroids, comets, etc.</li>
+          <li>Discoverer (Heliocentric concept): <b>Nicolaus Copernicus</b></li>
+          <li>Origin: <b>4.5 billion years ago</b></li>
+        </ul>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">4.5 Bn yrs</div><div class="lbl">Origin of Solar System</div></div>
+          <div class="stat-box"><div class="num">8</div><div class="lbl">Planets</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌫️ Nebular Theory</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Proposed by <b>Immanuel Kant</b>, 1755 AD</li>
+          <li>Modified in 1796 by <b>Laplace</b></li>
+          <li>H₂ + He → Nuclear Fusion → H + H → He → Sun → H₂ (~70% composition)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Nebular Theory: Kant (1755) → Modified by Laplace (1796)
+    </div>
+  </div>
+
+  <!-- TAB 2: SUN -->
+  <div id="sun" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">☀️ Sun — A Star (Nearest to Earth)</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Key Fact</th><th>Value / Details</th></tr></thead>
+          <tbody>
+            <tr><td>Location</td><td>Centre of solar system</td></tr>
+            <tr><td>Age</td><td>~4.6 billion years</td></tr>
+            <tr><td>Diameter</td><td>13,92,000 km (approximately 110 times of Earth)</td></tr>
+            <tr><td>Volume</td><td>13 lakh times of Earth</td></tr>
+            <tr><td>Mass</td><td>3,32,000 times of Earth</td></tr>
+            <tr><td>Distance from Earth</td><td>14.96 crore km</td></tr>
+            <tr><td>Chemical composition</td><td>Hydrogen (71%), Helium (26.5%), Other Elements (4.5%)</td></tr>
+            <tr><td>Core temperature</td><td>15 million°C (1.5×10⁷°C)</td></tr>
+            <tr><td>Period of rotation</td><td>25 days 9 hrs</td></tr>
+            <tr><td>Source of Energy</td><td>Nuclear Fusion</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🔆 Structure of the Sun</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Layer</th><th>Key Details</th></tr></thead>
+          <tbody>
+            <tr><td>Corona (Upper layer of the Sun)</td><td>Temperature – 6000°C</td></tr>
+            <tr><td>Core (Central part)</td><td>Site of Thermo-Nuclear Fusion</td></tr>
+            <tr><td>Photosphere</td><td>Sphere of Light • Bright part / Radiant</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📌 Important Sun Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Nearest star to solar system: <b>Proxima Centauri</b></li>
+          <li>Speed of Light from Sun: 3×10⁸ m/s (3 lakh km/second) → Time to reach Earth – 8 minutes 16 seconds</li>
+          <li><b>Aditya–L1 Mission:</b> Study of the Sun (Located at Lagrange point – L1) → India's first solar mission</li>
+          <li><b>Midnight Sun:</b> Arctic region • Country of Midnight Sun – Norway</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Aditya-L1 is positioned at <b>Lagrange Point L1</b> (not L5) — a commonly twisted detail in MCQs.
+    </div>
+  </div>
+
+  <!-- TAB 3: PLANET TYPES -->
+  <div id="classify" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌍 Planets of Solar System</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Total Number – 8: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune</li>
+          <li>Shine with sunlight</li>
+          <li>Revolve around the Sun</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🪐 Terrestrial vs Jovian Planets</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Terrestrial / Inner Planets</h4>
+            <div class="founder">Mercury, Venus, Earth, Mars</div>
+            <ul class="arrow-list">
+              <li>Formed from rocky (solid) substances</li>
+              <li>Solid Surface</li>
+              <li>Few satellites</li>
+              <li>Absence of rings</li>
+              <li>Comparatively smaller</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Jovian / Outer / Jupiter-like Planets</h4>
+            <div class="founder">Jupiter, Saturn, Uranus, Neptune</div>
+            <ul class="arrow-list">
+              <li>Gaseous planets</li>
+              <li>More satellites</li>
+              <li>Presence of rings</li>
+              <li>Comparatively larger</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Planets move West → East; only <b>Venus</b> and <b>Uranus</b> move East → West (retrograde rotation).
+    </div>
+  </div>
+
+  <!-- TAB 4: INNER PLANETS -->
+  <div id="inner" class="tab-content">
+    <div class="planet-card">
+      <h4><span class="planet-num">1</span> Mercury</h4>
+      <ul class="arrow-list">
+        <li>Nearest to the Sun • Very hot planet</li>
+        <li>No satellite • Absence of water</li>
+        <li>Smallest planet • Highest orbital speed (fastest planet)</li>
+        <li>Highest temperature difference (600°C)</li>
+      </ul>
+    </div>
+    <div class="planet-card">
+      <h4><span class="planet-num">2</span> Venus</h4>
+      <ul class="arrow-list">
+        <li>Lucifer Planet • Nearest to Earth</li>
+        <li>Brightest and hottest planet of solar system (Surface temperature – 478°C)</li>
+        <li>Composition – Sulphuric acid gas</li>
+        <li>Evening star or Morning star (seen in west in evening and east in morning)</li>
+        <li>Earth's twin / Earth's sister planet (similar in density, size and diameter)</li>
+        <li>Orbits in opposite direction from other planets → Clockwise (East to West)</li>
+        <li>No satellite</li>
+      </ul>
+    </div>
+    <div class="planet-card">
+      <h4><span class="planet-num">3</span> Earth</h4>
+      <ul class="arrow-list">
+        <li>Shape – Geoid • Fifth largest planet of the solar system</li>
+        <li>Densest planet of the solar system</li>
+        <li>Blue Planet (due to presence of water) → Only planet where life is possible</li>
+        <li>Only natural satellite – Moon</li>
+        <li>Nearest star after the Sun – Proxima Centauri</li>
+      </ul>
+    </div>
+    <div class="planet-card">
+      <h4><span class="planet-num">4</span> Mars</h4>
+      <ul class="arrow-list">
+        <li>Red planet (due to iron oxide, red soil)</li>
+        <li>Axis tilt and day-night duration similar to Earth</li>
+        <li>Second smallest planet after Mercury</li>
+        <li>Two major satellites – Phobos and Deimos</li>
+        <li>Largest volcano – Olympus Mons</li>
+        <li>Highest mountain of solar system – Olympus Mons / Nix Olympia (3 times of Everest)</li>
+        <li>Mission – Mangalyaan</li>
+      </ul>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Venus and Uranus are the only two planets with retrograde (East→West) rotation — Venus among the inner planets, Uranus among the outer.
+    </div>
+  </div>
+
+  <!-- TAB 5: OUTER PLANETS -->
+  <div id="outer" class="tab-content">
+    <div class="planet-card">
+      <h4><span class="planet-num">5</span> Jupiter</h4>
+      <ul class="arrow-list">
+        <li>Largest planet of the solar system</li>
+        <li>Yellow colour – due to SO₂</li>
+        <li>Least rotation period (on its axis)</li>
+        <li>Rings made of silicate around</li>
+        <li>Third brightest object after Moon and Venus</li>
+        <li>A massive storm – Great Red Spot present</li>
+        <li>Atmosphere full of Hydrogen, Helium and other gases</li>
+        <li>Satellites discovered by Galileo – 4: Ganymede (largest), Io, Europa, Callisto</li>
+      </ul>
+    </div>
+    <div class="planet-card">
+      <h4><span class="planet-num">6</span> Saturn</h4>
+      <ul class="arrow-list">
+        <li>Second largest planet • Gas giant and massive body (Hydrogen + Helium)</li>
+        <li>Rings made of rocks and ice chunks → discovered by Galileo Galilei</li>
+        <li>Maximum number of satellites (274 confirmed, as of 2023)</li>
+        <li>Density – less than water (can float on water)</li>
+        <li>Yellow colour (Ammonia + Methane)</li>
+        <li>Satellites – Titan (largest, similar to size of Mercury), Mimas, Tethys, Rhea, Phoebe, Enceladus, etc.</li>
+      </ul>
+    </div>
+    <div class="planet-card">
+      <h4><span class="planet-num">7</span> Uranus</h4>
+      <ul class="arrow-list">
+        <li>Discoverer – William Herschel (1781 AD)</li>
+        <li>Third largest planet (by radius) • Fourth largest planet (by mass)</li>
+        <li>Colour – Greenish (due to methane) • Tilted planet, known as Ice giant</li>
+        <li>Coldest planet • Atmosphere made of Hydrogen, Helium</li>
+        <li>Clockwise rotation like Venus (East to West)</li>
+        <li>Satellites – Titania (largest), Ariel, Miranda, etc. (28 known moons)</li>
+      </ul>
+    </div>
+    <div class="planet-card">
+      <h4><span class="planet-num">8</span> Neptune</h4>
+      <ul class="arrow-list">
+        <li>Farthest from the sun • Ice giant</li>
+        <li>Colour – Blue/Green (due to methane)</li>
+        <li>Fourth largest and third heaviest planet of the solar system</li>
+        <li>Atmosphere made of Hydrogen and Helium</li>
+        <li>Discoverers – Johann Galle and Urbain Le Verrier (1846 AD)</li>
+        <li>Satellites – Triton, Nereid</li>
+      </ul>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      <b>Saturn</b> holds the record for the most moons (274) — not Uranus. Uranus has only 28 known moons; this swap is a frequent MCQ trap.
+    </div>
+  </div>
+
+  <!-- TAB 6: PLUTO & DWARF PLANETS -->
+  <div id="pluto" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🪐 Pluto — Dwarf Planet</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>First to be termed as a planet</li>
+          <li>Removed from planet list by International Astronomical Union (IAU), Year 2006</li>
+          <li>Natural Satellites – Charon, Nix, Styx, Kerberos, Hydra</li>
+          <li>Member of Kuiper Belt</li>
+          <li>Kuiper Belt lies beyond Neptune (spherical orbit of asteroids and comets)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">⭐ Other Dwarf Planets</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Pluto, Eris, Ceres, Haumea – Dwarf planets</li>
+          <li><b>Makemake:</b> Third largest and second brightest dwarf planet</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Pluto reclassified as a <b>Dwarf Planet</b> by IAU in <b>2006</b>.
+    </div>
+  </div>
+
+  <!-- TAB 7: AT A GLANCE -->
+  <div id="glance" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">📊 The Solar System: At a Glance</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Planet</th><th>Diameter (km)</th><th>Rotation Time (Around Sun)</th><th>Satellites</th><th>Colour (Reason)</th></tr></thead>
+          <tbody>
+            <tr><td>Mercury</td><td>4,878</td><td>88 days</td><td>0</td><td>—</td></tr>
+            <tr><td>Venus</td><td>12,104</td><td>224 days</td><td>0</td><td>Bright (due to warming)</td></tr>
+            <tr><td>Earth</td><td>12,756–12,714</td><td>365.26 days</td><td>1</td><td>Blue (due to water)</td></tr>
+            <tr><td>Mars</td><td>6,796</td><td>687 days</td><td>2</td><td>Red (due to iron oxide)</td></tr>
+            <tr><td>Jupiter</td><td>1,42,984</td><td>11.86 years</td><td>97</td><td>Yellow (due to SO₂)</td></tr>
+            <tr><td>Saturn</td><td>1,20,536</td><td>29.5 years</td><td>274</td><td>Yellow (due to ammonia)</td></tr>
+            <tr><td>Uranus</td><td>51,118</td><td>84.0 years</td><td>28</td><td>Green (due to methane)</td></tr>
+            <tr><td>Neptune</td><td>49,100</td><td>165 years</td><td>16</td><td>Light blue (due to methane)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🔢 Orders of Planets</div>
+      <div class="card-body">
+        <div class="four-col">
+          <div class="sub-box">
+            <h4>By Distance from Sun</h4>
+            <ul class="arrow-list">
+              <li>Mercury</li><li>Venus</li><li>Earth</li><li>Mars</li><li>Jupiter</li><li>Saturn</li><li>Uranus</li><li>Neptune</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>By Size and Mass</h4>
+            <ul class="arrow-list">
+              <li>Jupiter</li><li>Saturn</li><li>Uranus</li><li>Neptune</li><li>Earth</li><li>Venus</li><li>Mars</li><li>Mercury</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>By Density</h4>
+            <ul class="arrow-list">
+              <li>Earth</li><li>Mercury</li><li>Venus</li><li>Mars</li><li>Neptune</li><li>Jupiter</li><li>Uranus</li><li>Saturn</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>By Revolution Period</h4>
+            <ul class="arrow-list">
+              <li>Mercury</li><li>Venus</li><li>Earth</li><li>Mars</li><li>Jupiter</li><li>Saturn</li><li>Uranus</li><li>Neptune</li>
+            </ul>
+          </div>
+        </div>
+        <div class="sub-box" style="margin-top:14px;">
+          <h4>By Orbital Speed (Highest to Lowest)</h4>
+          <ul class="arrow-list">
+            <li>Mercury</li><li>Venus</li><li>Earth</li><li>Mars</li><li>Jupiter</li><li>Saturn</li><li>Uranus</li><li>Neptune</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      "By Distance," "By Revolution Period," and "By Orbital Speed" all follow the same Mercury→Neptune order, but "By Size/Mass" and "By Density" are entirely different sequences — don't assume one order applies to all.
+    </div>
+  </div>
+
+  <!-- TAB 8: MOON & SMALL BODIES -->
+  <div id="moon" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🌕 The Moon</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Key Fact</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Nature</td><td>Natural satellite, non-luminous • Fossil planet</td></tr>
+            <tr><td>Sea of Tranquility</td><td>First step of Neil Armstrong</td></tr>
+            <tr><td>Distance from Earth</td><td>3,84,400 km</td></tr>
+            <tr><td>Radius / Diameter</td><td>Radius – 1737.5 km • Diameter – 3475 km</td></tr>
+            <tr><td>Rotation + Revolution</td><td>27.3 days (59% part of Moon is visible)</td></tr>
+            <tr><td>Moon's Gravity</td><td>1/6th of Earth</td></tr>
+            <tr><td>Highest Mountain</td><td>Leibnitz (10,668 meters)</td></tr>
+            <tr><td>Moonlight to Earth</td><td>1–3 minutes</td></tr>
+            <tr><td>Scientific Study</td><td>Selenology</td></tr>
+            <tr><td>Mission</td><td>Chandrayaan I, Chandrayaan III</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">☄️ Comet / Asteroids / Meteorites</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Comet / Tail Star</h4>
+            <ul class="arrow-list">
+              <li>Bodies made of stone, dust, ice and gas</li>
+              <li>While approaching the sun, burning of dust and ice forms a bright tail</li>
+              <li>Tail always points away from the sun</li>
+              <li>Halley's Comet: 1986 → 76 years later → visible again in 2061</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Asteroids</h4>
+            <ul class="arrow-list">
+              <li>Big-big rocks</li>
+              <li>Small bodies orbiting the sun between Mars and Jupiter</li>
+              <li>First asteroid discovered – Ceres</li>
+              <li>Visible with naked eye – 4 Vesta</li>
+              <li>Asteroid named after Pt. Jasraj (2019)</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Meteorites</h4>
+            <ul class="arrow-list">
+              <li>Remains of comets and asteroids</li>
+              <li>Revolve around the sun</li>
+              <li>Burn in the mesosphere of the atmosphere</li>
+              <li>Meteor → Shooting star</li>
+              <li>Meteorite – those which fall on Earth without burning completely</li>
+              <li>Meteor showers / sighting month – December, January</li>
+              <li>Lyrid Meteor shower – April</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Asteroid Belt lies between <b>Mars and Jupiter</b> · Kuiper Belt lies <b>beyond Neptune</b>.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Solar System · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

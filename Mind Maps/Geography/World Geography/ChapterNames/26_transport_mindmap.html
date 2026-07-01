@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transport (World) | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 14px;font-size:0.82rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.15rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🚆 TRANSPORT (WORLD) <span class="art-pill">World Geography · Ch 26</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('road')">Road Transport</button>
+    <button class="tab-btn" onclick="switchTab('rail')">Rail Transport</button>
+    <button class="tab-btn" onclick="switchTab('pipeline')">Pipeline Transport</button>
+    <button class="tab-btn" onclick="switchTab('water')">Water Transport</button>
+    <button class="tab-btn" onclick="switchTab('ports')">Major Ports</button>
+    <button class="tab-btn" onclick="switchTab('air')">Air Transport</button>
+    <button class="tab-btn" onclick="switchTab('facts')">Quick Facts</button>
+  </div>
+
+  <!-- TAB 1: ROAD TRANSPORT -->
+  <div id="road" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🛣️ Road Transport</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Longest road network in the world: <b>USA</b></li>
+          <li>Border Roads – constructed along international borders</li>
+          <li>Highways – paved roads connecting distant places</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌍 World Highways</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Highway</th><th>Length / Details</th></tr></thead>
+          <tbody>
+            <tr><td>Pan-American Highway (North–South America)</td><td>World's longest – 30,000 km</td></tr>
+            <tr><td>Australian Highway (Australia)</td><td>Second longest in world – 14,500 km</td></tr>
+            <tr><td>Trans-Siberian Highway (Russia)</td><td>~11,000 km</td></tr>
+            <tr><td>Trans-Canadian Highway (North America)</td><td>Major transcontinental highway</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Pan-American Highway = World's longest highway overall (multi-country) · Australian Highway = World's longest highway within a single country.
+    </div>
+  </div>
+
+  <!-- TAB 2: RAIL TRANSPORT -->
+  <div id="rail" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🚂 Rail Transport</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>First railway operation with a steam engine – 1825, England</li>
+          <li>First railway line construction – 1823, England</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🗺️ Major Rail Routes of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Railway Route</th><th>Key Details</th></tr></thead>
+          <tbody>
+            <tr><td>Trans-Siberian Railway</td><td>World's largest rail route (9,332 km) • From St. Petersburg to Vladivostok</td></tr>
+            <tr><td>Trans-Canadian Railway</td><td>Between Halifax and Vancouver – 7,050 km</td></tr>
+            <tr><td>Australian Trans-Continental Railway</td><td>Largest rail route of the continent</td></tr>
+            <tr><td>European Trans-Continental Railway</td><td>From Warsaw (Poland) to Paris (France)</td></tr>
+            <tr><td>Trans-Asian Railway Network</td><td>Connects Asia with Europe</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Trans-Siberian Railway (Russia) connects St. Petersburg to Vladivostok, spanning almost the entire width of Asia — the world's longest single railway line.
+    </div>
+  </div>
+
+  <!-- TAB 3: PIPELINE TRANSPORT -->
+  <div id="pipeline" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🛢️ Pipeline Transport</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Pipeline</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Big Inch Pipeline</td><td>USA</td></tr>
+            <tr><td>TAPLINE (Trans-Arabian Pipeline)</td><td>Persian Gulf region</td></tr>
+            <tr><td>TAPI Pipeline</td><td>Asia — Turkmenistan-Afghanistan-Pakistan-India</td></tr>
+            <tr><td>India–Nepal Pipeline</td><td>From Motihari (Bihar) to Amlekhganj (Nepal)</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Country with largest number of Internet users</span>
+          <span class="v">China</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      TAPI's route spells out its own name: <b>T</b>urkmenistan → <b>A</b>fghanistan → <b>P</b>akistan → <b>I</b>ndia.
+    </div>
+  </div>
+
+  <!-- TAB 4: WATER TRANSPORT -->
+  <div id="water" class="tab-content">
+    <div class="card">
+      <div class="card-header red">🚢 Marine Waterways</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Route</th><th>Key Details</th></tr></thead>
+          <tbody>
+            <tr><td>North Atlantic Sea Route</td><td>Major trunk route • Carries about one-fourth of world trade</td></tr>
+            <tr><td>South Atlantic Sea Route</td><td>Connects South America and Africa</td></tr>
+            <tr><td>Mediterranean Sea – Indian Ocean Sea Route</td><td>Key connecting route to the heart of the world's trade network</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🌊 Inland Waterways</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Waterway</th><th>Region</th></tr></thead>
+          <tbody>
+            <tr><td>Rhine Waterway</td><td>Busiest waterway (Western Europe)</td></tr>
+            <tr><td>Danube Waterway</td><td>Eastern Europe</td></tr>
+            <tr><td>Volga Waterway</td><td>Russia</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Rhine (Western Europe) = busiest inland waterway in the world · North Atlantic = busiest marine trade route — different transport categories, both "busiest" in their own class.
+    </div>
+  </div>
+
+  <!-- TAB 5: MAJOR PORTS -->
+  <div id="ports" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">⚓ Major Ports of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Region</th><th>Major Ports</th></tr></thead>
+          <tbody>
+            <tr><td>Europe</td><td>Hamburg, Rotterdam, London, Marseille, Glasgow, Amsterdam</td></tr>
+            <tr><td>North America</td><td>New York (busiest port), San Francisco, Boston, Montreal, Vancouver, Quebec</td></tr>
+            <tr><td>South America</td><td>Buenos Aires, Rio de Janeiro, Maracaibo, etc.</td></tr>
+            <tr><td>Asia</td><td>Tokyo, Yokohama, Shanghai (busiest), Singapore, Mumbai, Karachi, Colombo</td></tr>
+            <tr><td>Africa</td><td>Tripoli, Cape Town, Port Suez, Durban</td></tr>
+            <tr><td>Australia</td><td>Sydney, Melbourne, Perth, Adelaide</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      New York = Busiest port in <b>North America</b>; Shanghai = Busiest port in <b>Asia</b> (and currently the world's busiest overall by cargo volume) — two different "busiest" claims for two different scopes.
+    </div>
+  </div>
+
+  <!-- TAB 6: AIR TRANSPORT -->
+  <div id="air" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">✈️ Air Transport — Major International Airports</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Region</th><th>Major International Airports</th></tr></thead>
+          <tbody>
+            <tr><td>Asia</td><td>Tokyo, Hong Kong, Manila, Singapore, Colombo, Delhi, Karachi</td></tr>
+            <tr><td>Africa</td><td>Cairo, Khartoum, Lagos, Addis Ababa, Nairobi, Durban and Cape Town</td></tr>
+            <tr><td>Europe</td><td>London, Rome, Paris, Madrid, Berlin, Moscow, Vienna, Munich, Stockholm, Frankfurt, etc.</td></tr>
+            <tr><td>North America</td><td>New York, Washington DC, Chicago, Los Angeles, San Francisco, Miami, etc.</td></tr>
+            <tr><td>South America</td><td>Rio de Janeiro, Panama, São Paulo, Buenos Aires, Lima, Santiago, etc.</td></tr>
+            <tr><td>Australia</td><td>Sydney, Melbourne, Perth, Wellington (New Zealand), etc.</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Europe has the longest airport list here — reflecting its dense network of major international hubs across many countries in a small area.
+    </div>
+  </div>
+
+  <!-- TAB 7: QUICK FACTS -->
+  <div id="facts" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">📝 Quick Reference — Key Facts</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fact</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Longest road network</td><td>USA</td></tr>
+            <tr><td>World's longest highway</td><td>Pan-American Highway (30,000 km)</td></tr>
+            <tr><td>Second longest highway</td><td>Australian Highway (14,500 km)</td></tr>
+            <tr><td>First steam engine railway</td><td>1825 – England</td></tr>
+            <tr><td>World's largest rail route</td><td>Trans-Siberian Railway (9,332 km) – St. Petersburg to Vladivostok</td></tr>
+            <tr><td>Busiest inland waterway</td><td>Rhine Waterway (Western Europe)</td></tr>
+            <tr><td>Busiest port in world</td><td>New York (North America) • Shanghai (Asia)</td></tr>
+            <tr><td>India–Nepal Pipeline route</td><td>Motihari (Bihar) → Amlekhganj (Nepal)</td></tr>
+            <tr><td>TAPI Pipeline countries</td><td>Turkmenistan – Afghanistan – Pakistan – India</td></tr>
+            <tr><td>Most Internet users</td><td>China</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Motihari (Bihar) → Amlekhganj (Nepal) is a Bihar-specific fact worth remembering directly for BPSC/BSSC exams.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Transport (World) · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

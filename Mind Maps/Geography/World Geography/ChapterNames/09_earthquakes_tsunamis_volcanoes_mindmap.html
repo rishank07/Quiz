@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earthquakes, Tsunamis and Volcanoes | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 14px;font-size:0.82rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.15rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media (max-width:640px){.two-col,.four-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+  @media (max-width:900px){.four-col{grid-template-columns:1fr 1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌋 EARTHQUAKES, TSUNAMIS &amp; VOLCANOES <span class="art-pill">World Geography · Ch 09</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('eqbasics')">Earthquake Basics</button>
+    <button class="tab-btn" onclick="switchTab('measure')">Measurement</button>
+    <button class="tab-btn" onclick="switchTab('typeszones')">Types &amp; India Zones</button>
+    <button class="tab-btn" onclick="switchTab('tsunami')">Tsunami</button>
+    <button class="tab-btn" onclick="switchTab('volcanobasics')">Volcano Basics</button>
+    <button class="tab-btn" onclick="switchTab('volcanotypes')">Volcano Types &amp; Landforms</button>
+    <button class="tab-btn" onclick="switchTab('distribution')">Global Distribution</button>
+    <button class="tab-btn" onclick="switchTab('plates')">Plate Tectonics</button>
+    <button class="tab-btn" onclick="switchTab('majorplates')">Major Plates</button>
+  </div>
+
+  <!-- TAB 1: EARTHQUAKE BASICS -->
+  <div id="eqbasics" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌍 Earthquake</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Vibrations in the Earth's crust • Seismic or elastic waves generated</li>
+          <li>Study of seismic waves → <b>Seismology</b></li>
+          <li><b>Focus:</b> Origin point of earthquake</li>
+          <li><b>Epicentre:</b> Point on the surface directly above the focus</li>
+          <li><b>Isoseismal line:</b> Connects areas of equal seismic intensity</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Earthquake Warning Signs</span>
+          <span class="v">Increased Radon gas in atmosphere • Animal behaviour changes (e.g. dogs)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">〜 Types of Earthquake Waves</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Primary Waves (P-waves)</h4>
+            <ul class="arrow-list">
+              <li>Longitudinal / Sound / Compressional waves</li>
+              <li>Reach the surface first</li>
+              <li>Highest speed (8–13 km/s)</li>
+              <li>Travel through solid, liquid and gas</li>
+              <li>Capable of passing through the central part of Earth</li>
+              <li>Fill and Push</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Secondary Waves (S-waves)</h4>
+            <ul class="arrow-list">
+              <li>Transverse / Perpendicular waves</li>
+              <li>Average speed (4–6 km/s)</li>
+              <li>Travel only through solids</li>
+              <li>Slower than primary waves</li>
+              <li>Less destructive</li>
+              <li>Reach the seismograph after primary waves</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Surface Waves (L-waves)</h4>
+            <ul class="arrow-list">
+              <li>Love / Rayleigh (L / R-waves)</li>
+              <li>Restricted to the surface</li>
+              <li>Slowest speed (1–3 km/s)</li>
+              <li>Most destructive</li>
+              <li>Final waves to reach the surface and seismograph</li>
+              <li>Impact on water and land</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      P-waves are the <b>fastest</b> but <b>least destructive</b>; Surface (L) waves are the <b>slowest</b> but <b>most destructive</b> — speed and destructiveness are inversely related here.
+    </div>
+  </div>
+
+  <!-- TAB 2: MEASUREMENT -->
+  <div id="measure" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">📏 Measurement of Seismic Wave Intensity — Seismograph</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Richter Scale</th><th>Mercalli Scale</th><th>Rossi-Forel Scale</th></tr></thead>
+          <tbody>
+            <tr><td>Intensity / Magnitude – 0–10 • Mathematical scale (Logarithmic) • Each point is 10 times more intense than the previous</td><td>Intensity / Magnitude – 1–12 • Scale of 12 • Reflects the intensity of shaking</td><td>Scale – 1–11</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🚫 Seismic Shadow Zone</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Region where no seismic waves are recorded</li>
+          <li>P-wave shadow zone – Between 105° to 145°</li>
+          <li>S-wave shadow zone – Beyond 105°</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Richter Scale = Logarithmic, measures Magnitude · Mercalli Scale = measures perceived Intensity/shaking
+    </div>
+  </div>
+
+  <!-- TAB 3: TYPES & INDIA ZONES -->
+  <div id="typeszones" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🏗️ Types of Earthquake</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>1. Tectonic Earthquake – Due to collision and slipping of plates</li>
+          <li>2. Collapse Earthquake – Underground collapse of mine or cave</li>
+          <li>3. Volcanic Earthquake – Due to volcanoes</li>
+          <li>4. Reservoir Induced Earthquake – Due to dam construction</li>
+          <li>5. Explosion Earthquake – Due to nuclear tests or bomb explosion</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">💥 Effects of Earthquake</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Tsunami occurrence</li>
+          <li>Landslides / Avalanches</li>
+          <li>Floods / Forest fires</li>
+          <li>Soil liquefaction</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">🇮🇳 Earthquake Zones in India</div>
+      <div class="card-body">
+        <div class="four-col">
+          <div class="sub-box">
+            <h4>Zone-2 (41%)</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">Low Intensity (6) • Peninsular Plateau</p>
+          </div>
+          <div class="sub-box">
+            <h4>Zone-3 (30%)</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">Medium Intensity (7) • Bihar, Jharkhand, UP, Odisha, etc.</p>
+          </div>
+          <div class="sub-box">
+            <h4>Zone-4 (18%)</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">High Intensity (8) • Delhi, Punjab, Jammu &amp; Kashmir, etc.</p>
+          </div>
+          <div class="sub-box">
+            <h4>Zone-5 (11%)</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">Very High Intensity / Most active • Himalayan region, North-east India, Gujarat</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Zone-5 covers the <b>smallest area (11%)</b> but is the <b>most seismically active</b>; Zone-2 covers the <b>largest area (41%)</b> but has the <b>lowest intensity</b> — area share and risk level are inversely related.
+    </div>
+  </div>
+
+  <!-- TAB 4: TSUNAMI -->
+  <div id="tsunami" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">🌊 Tsunami (Japanese word)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><b>Tsu:</b> Harbour • <b>Nami:</b> Wave — "Harbour Wave"</li>
+          <li>Waves generated due to undersea earthquakes or volcanic eruptions</li>
+          <li>Devastating Tsunami of Indian Ocean: <b>26 December, 2004</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Tsunami = "Harbour Wave" (Japanese) → triggered mainly by undersea tectonic earthquakes.
+    </div>
+  </div>
+
+  <!-- TAB 5: VOLCANO BASICS -->
+  <div id="volcanobasics" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌋 Volcano — "Safety Valve of Nature"</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Natural vent or fissure through which molten substances of Earth like lava, ash, steam, etc. emerge</li>
+          <li>Materials emitted: Gases and water vapour (60–90%), Tuff (rock fragments), Lapilli (pea-sized particles), Breccia, Lava, Pyroclasts (solid rock fragments), etc.</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Magma vs Lava</span>
+          <span class="v">Magma (inside crust) → becomes Lava on surface</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🏗️ Volcanic Parts / Activity</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Part</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Volcanic Vent</td><td>Funnel-shaped opening, lava emerges</td></tr>
+            <tr><td>Volcanic Tube</td><td>Thin tube connected to the interior</td></tr>
+            <tr><td>Crater</td><td>Expanded form of volcanic vent (mouth of volcano)</td></tr>
+            <tr><td>Caldera</td><td>Large crater formation due to collapse • e.g. Aso (Japan), Crater Lake (USA)</td></tr>
+            <tr><td>Geyser</td><td>Water and steam emerge from fissures or vents • e.g. Old Faithful Geyser (Yellowstone Park, USA)</td></tr>
+            <tr><td>Fumaroles</td><td>Release of gas and water vapour • Solfatara (Sulphur-rich Fumaroles)</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <ul class="arrow-list">
+          <li>Examples of Fumaroles: Mt. Katmai – Valley of a Thousand Smokes (Alaska, USA), Koh Sultan Fumarole (Iran), White Island Fumaroles (New Zealand)</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Pele's Tears</span>
+          <span class="v">Formed during volcanic eruption</span>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Solidified lava deposits</span>
+          <span class="v">Cinder</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Crater → mouth of the volcano · Caldera → enlarged crater formed by collapse (much bigger than a crater)
+    </div>
+  </div>
+
+  <!-- TAB 6: VOLCANO TYPES & LANDFORMS -->
+  <div id="volcanotypes" class="tab-content">
+    <div class="card">
+      <div class="card-header red">🔥 Types of Volcano based on Eruption Activity</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Active Volcano</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">Constant release of dust, smoke, vapour, etc.</p>
+            <ul class="arrow-list">
+              <li>Kilauea (Hawaiian Islands) — Most active</li>
+              <li>Mt. Etna (Italy)</li>
+              <li>Stromboli (Italy)</li>
+              <li>Mauna Loa (Hawaiian Islands)</li>
+              <li>Cotopaxi (Ecuador)</li>
+              <li>Barren Island (Andaman-Nicobar, India)</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Dormant Volcano</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">No recent eruptions, but eruption is possible</p>
+            <ul class="arrow-list">
+              <li>Vesuvius (Italy)</li>
+              <li>Fujiyama (Japan)</li>
+              <li>Krakatoa (Indonesia)</li>
+              <li>Narcondam Island (Andaman-Nicobar)</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Extinct Volcano</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">No possibility of future eruptions</p>
+            <ul class="arrow-list">
+              <li>Chimborazo (Ecuador)</li>
+              <li>Kilimanjaro (Tanzania)</li>
+              <li>Mount Popa (Myanmar)</li>
+              <li>Demavend and Koh Sultan (Iran)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-row" style="margin-top:12px;">
+          <span class="k">📌 Flood Basalt</span>
+          <span class="v">Large area covered by basaltic lava flow</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🏔️ Volcanic Landforms</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Internal Landforms</h4>
+            <ul class="arrow-list">
+              <li>Dyke, Sill, Laccolith, Phacolith, Lapolith, Batholith</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>External Landforms</h4>
+            <ul class="arrow-list">
+              <li>Cinder or Ash cone</li>
+              <li>Lava cone (Shield – less viscous)</li>
+              <li>Composite Volcanic cone (Viscous lava)</li>
+              <li>Parasitic or dependent cone</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      <b>Dormant</b> ≠ <b>Extinct</b>: Dormant volcanoes (e.g. Vesuvius, Fujiyama) can still erupt again; Extinct volcanoes (e.g. Kilimanjaro) have no eruption potential — Krakatoa is famously "dormant," not extinct, despite long quiet periods.
+    </div>
+  </div>
+
+  <!-- TAB 7: GLOBAL DISTRIBUTION -->
+  <div id="distribution" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🌐 Global Distribution of Earthquakes</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Pacific Ocean Coastal Belt (13+ earthquakes)</li>
+          <li>Mid-Continental Belt (21+ earthquakes)</li>
+          <li>Mid-Atlantic Belt (most earthquakes near equator)</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 'Ring of Fire'</span>
+          <span class="v">~90% of world's earthquakes occur here</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">🌋 Pacific Ocean — Ring of Fire</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Most earthquakes and volcanoes occur in this region</li>
+          <li>Circum-Pacific (Pacific Belt) → ~15% of volcanoes and ~63% of earthquakes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🗺️ Global Distribution of Volcanoes</div>
+      <div class="card-body">
+        <div class="four-col">
+          <div class="sub-box">
+            <h4>Circum-Pacific Zone</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">2/3rd of world's volcanoes • Destructive plate boundaries</p>
+          </div>
+          <div class="sub-box">
+            <h4>Mid-Continental Belt</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">Alpine mountain chains • Destructive plate boundaries</p>
+          </div>
+          <div class="sub-box">
+            <h4>Mid-Atlantic Zone</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">Oceanic ridges • Constructive plate boundaries</p>
+          </div>
+          <div class="sub-box">
+            <h4>Intra-plate Volcanoes</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">Micro-plate activities</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Circum-Pacific Zone alone hosts about <b>2/3rd</b> of all the world's volcanoes.
+    </div>
+  </div>
+
+  <!-- TAB 8: PLATE TECTONICS -->
+  <div id="plates" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">🧩 Plate Tectonic Theory</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Study related to behaviour and movement of plates</li>
+          <li>Earth's rigid lithosphere is broken into Plates</li>
+          <li>Theory proposed by: <b>Harry Hess</b> (1962)</li>
+          <li>Scientific/mathematical explanation: <b>W.J. Morgan</b></li>
+          <li>Other key contributors: McKenzie, Parker, Holmes</li>
+          <li>Driven by heat generated from radioactive substances inside the Earth</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Mechanism</span>
+          <span class="v">Movement of the lithosphere over the asthenosphere</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🔀 Plate Boundaries</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><b>Destructive Plate Boundary</b> – Formation of Rockies, Andes, Himalayas</li>
+          <li><b>Constructive Plate Boundary</b> – Formation of new crust</li>
+          <li><b>Conservative Plate Boundary</b> – Formation of transform faults (e.g. San Andreas Fault, California)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">📜 Other Important Theories</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Precursor Hypothesis: <b>F.B. Taylor</b> (early continental displacement idea)</li>
+          <li><b>Continental Drift Theory:</b> Alfred Wegener (German Scientist) – 1912, based on gravitational force, Guy-Sam-Fit fit of coastlines, buoyancy, and tidal force</li>
+          <li><b>Pangea</b> – the original supercontinent</li>
+          <li><b>Angara Land</b> – North America, Europe, Asia</li>
+          <li><b>Gondwana Land</b> – South America, Africa, India, Madagascar, Australia</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      The widely credited <b>Continental Drift Theory</b> belongs to <b>Alfred Wegener (1912)</b> — F.B. Taylor's idea was an earlier, separate precursor concept, not the main "Continental Drift Theory" itself.
+    </div>
+  </div>
+
+  <!-- TAB 9: MAJOR PLATES -->
+  <div id="majorplates" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🗺️ Major Plates of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Plate</th><th>Included Areas</th></tr></thead>
+          <tbody>
+            <tr><td>Pacific Plate</td><td>Entire Pacific Ocean</td></tr>
+            <tr><td>Indo-Australian Plate</td><td>India + Australia + Indian Ocean</td></tr>
+            <tr><td>African Plate</td><td>African continent + Eastern Atlantic ocean + Western Indian ocean</td></tr>
+            <tr><td>Eurasian Plate</td><td>Europe + Asia + Eastern Atlantic ocean + Antarctic continent</td></tr>
+            <tr><td>Antarctic Plate</td><td>Oceanic plate encircling the Antarctic continent from all sides</td></tr>
+            <tr><td>North American Plate</td><td>North-west Atlantic ocean + North American continent</td></tr>
+            <tr><td>South American Plate</td><td>South-west Atlantic ocean + South American continent</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      The <b>Pacific Plate</b> is the largest tectonic plate, made up almost entirely of oceanic crust.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Earthquakes, Tsunamis and Volcanoes · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

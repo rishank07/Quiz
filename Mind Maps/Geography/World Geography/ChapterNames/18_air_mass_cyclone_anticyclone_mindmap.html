@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Air Mass, Cyclone and Anti-Cyclone | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 14px;font-size:0.82rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.86rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media (max-width:640px){.two-col,.four-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+  @media (max-width:900px){.four-col{grid-template-columns:1fr 1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.9rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌪️ AIR MASS, CYCLONE AND ANTI-CYCLONE <span class="art-pill">World Geography · Ch 18</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('airmass')">Air Mass &amp; Fronts</button>
+    <button class="tab-btn" onclick="switchTab('cyclonebasics')">Cyclone Basics</button>
+    <button class="tab-btn" onclick="switchTab('types')">Types &amp; Regional Names</button>
+    <button class="tab-btn" onclick="switchTab('anticyclone')">Anti-Cyclone &amp; Comparison</button>
+    <button class="tab-btn" onclick="switchTab('indiacyclones')">Recent Indian Cyclones</button>
+    <button class="tab-btn" onclick="switchTab('majorcyclones')">Major Cyclones (2022–24)</button>
+  </div>
+
+  <!-- TAB 1: AIR MASS & FRONTS -->
+  <div id="airmass" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌬️ Air Mass</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>A large body of air uniformly related to temperature and humidity</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌦️ Front</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>The zone between cold and warm air masses</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">📂 Types of Fronts</div>
+      <div class="card-body">
+        <div class="four-col">
+          <div class="sub-box">
+            <h4>Warm Front</h4>
+            <p style="font-size:0.83rem;color:#cfd3e2;">Warm air advances over cold air • Gradual lifting • Steady rainfall</p>
+          </div>
+          <div class="sub-box">
+            <h4>Cold Front</h4>
+            <p style="font-size:0.83rem;color:#cfd3e2;">Cold air advances under warm air • Steep lifting • Heavy rainfall</p>
+          </div>
+          <div class="sub-box">
+            <h4>Stationary Front</h4>
+            <p style="font-size:0.83rem;color:#cfd3e2;">Neither warm nor cold air advances • Boundary remains stationary</p>
+          </div>
+          <div class="sub-box">
+            <h4>Occluded Front</h4>
+            <p style="font-size:0.83rem;color:#cfd3e2;">Cold front catches warm front • Warm air is lifted completely off the ground</p>
+          </div>
+        </div>
+        <div class="info-row" style="margin-top:12px;">
+          <span class="k">📌 Frontogenesis</span>
+          <span class="v">Process of formation of a front</span>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Frontolysis</span>
+          <span class="v">Dissipation of a front, as one air mass overrides the other</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Mid-latitude / Temperate cyclones form due to <b>frontogenesis</b> — front formation is central to their development, unlike tropical cyclones.
+    </div>
+  </div>
+
+  <!-- TAB 2: CYCLONE BASICS -->
+  <div id="cyclonebasics" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌀 Cyclone → A Low Pressure Zone</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Key Feature</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Centre</td><td>Low pressure</td></tr>
+            <tr><td>Periphery</td><td>High pressure • Wind flows from periphery to centre</td></tr>
+            <tr><td>Direction</td><td>Northern Hemisphere → Anti-clockwise • Southern Hemisphere → Clockwise (Coriolis force)</td></tr>
+            <tr><td>Eye of the Cyclone</td><td>Centre – calm zone • No rainfall in the eye</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">✅ Essential Conditions for Tropical Cyclone</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>High sea surface temperature</li>
+          <li>Coriolis force must be present — absent at the equator → no cyclone at the equator</li>
+          <li>Less variation in vertical air movement</li>
+          <li>Low pressure area</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Absence of cyclones on the Equator</span>
+          <span class="v">Coriolis force value is Zero there</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Cyclones need Coriolis force to spin, but Coriolis force is <b>zero at the equator</b> — that's exactly why cyclones never form right on the equator, despite warm ocean waters there.
+    </div>
+  </div>
+
+  <!-- TAB 3: TYPES & REGIONAL NAMES -->
+  <div id="types" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">📂 Types of Cyclones</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Tropical Cyclone</h4>
+            <ul class="arrow-list">
+              <li>Between Tropic of Cancer and Tropic of Capricorn</li>
+              <li>Occurs only over sea surface</li>
+              <li>More destructive</li>
+              <li>Moves East to West</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Temperate / Extra-Tropical Cyclone</h4>
+            <ul class="arrow-list">
+              <li>Between 35°–65° Latitudes (both hemispheres)</li>
+              <li>Occurs on both sea and land surface</li>
+              <li>Less destructive, generally</li>
+              <li>Moves West to East</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🌍 Different Names of Tropical Cyclones</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Region</th><th>Name</th></tr></thead>
+          <tbody>
+            <tr><td>South China Sea / Western Pacific</td><td>Typhoon</td></tr>
+            <tr><td>Indian Ocean</td><td>Cyclone</td></tr>
+            <tr><td>Australia / Madagascar</td><td>Willy-Willy</td></tr>
+            <tr><td>USA, Caribbean Islands / Atlantic Ocean</td><td>Hurricane</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Funnel-shaped destructive storm in USA</span>
+          <span class="v">Tornado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Tropical Cyclones move <b>East to West</b> (driven by Trade Winds); Temperate Cyclones move <b>West to East</b> (driven by Westerlies) — an easily reversed fact.
+    </div>
+  </div>
+
+  <!-- TAB 4: ANTI-CYCLONE & COMPARISON -->
+  <div id="anticyclone" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">☀️ Anti-Cyclone → A High Pressure Zone</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Opposite of a cyclone — a "weather-less" phenomenon</li>
+          <li>Centre: High air pressure • Wind flows from centre to periphery</li>
+          <li>Periphery: Low air pressure</li>
+          <li>Direction – Northern Hemisphere: Clockwise</li>
+          <li>Direction – Southern Hemisphere: Anti-clockwise</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">⚖️ Cyclone vs Anti-Cyclone</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Feature</th><th>Cyclone</th><th>Anti-Cyclone</th></tr></thead>
+          <tbody>
+            <tr><td>Pressure</td><td>Low Pressure (LP)</td><td>High Pressure (HP)</td></tr>
+            <tr><td>Wind direction (NH)</td><td>Anti-clockwise</td><td>Clockwise</td></tr>
+            <tr><td>Wind direction (SH)</td><td>Clockwise</td><td>Anti-clockwise</td></tr>
+            <tr><td>Weather</td><td>Stormy, rainy, destructive</td><td>Clear, calm, fair weather</td></tr>
+            <tr><td>Wind flow</td><td>Periphery → Centre (inward)</td><td>Centre → Periphery (outward)</td></tr>
+            <tr><td>Centre</td><td>Eye – calm zone, no rain</td><td>High pressure core</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Cyclone and Anti-Cyclone have exactly <b>opposite</b> wind rotation in each hemisphere — if a cyclone spins anti-clockwise in the NH, the anti-cyclone spins clockwise there.
+    </div>
+  </div>
+
+  <!-- TAB 5: RECENT INDIAN CYCLONES -->
+  <div id="indiacyclones" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🇮🇳 Cyclones in India — Recent Years</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Year</th><th>Cyclones in India</th></tr></thead>
+          <tbody>
+            <tr><td>2024</td><td>Remal, Asna, Dana, Fengal</td></tr>
+            <tr><td>2023</td><td>Michaung, Tej, Biparjoy</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Cyclone naming rotates among countries in the North Indian Ocean region (India, Pakistan, Bangladesh, Sri Lanka, Myanmar, Thailand, Oman, Iran, UAE, Qatar, Saudi Arabia, Yemen) — that's why names like Biparjoy (Bangladesh) or Remal (Oman) come from different countries.
+    </div>
+  </div>
+
+  <!-- TAB 6: MAJOR CYCLONES TABLE -->
+  <div id="majorcyclones" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🌊 Major Cyclones (2022–2024)</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Time</th><th>Affected Areas</th><th>Origin</th><th>Naming Country</th></tr></thead>
+          <tbody>
+            <tr><td>Cyclone Asna</td><td>27 Aug – 2 Sep, 2024</td><td>Gujarat, Rajasthan, Madhya Pradesh</td><td>Arabian Sea</td><td>Pakistan</td></tr>
+            <tr><td>Cyclone Remal</td><td>24–28 May, 2024</td><td>West Bengal</td><td>Bay of Bengal</td><td>Oman</td></tr>
+            <tr><td>Cyclone Michaung</td><td>1–6 Dec, 2023</td><td>Andhra Pradesh, Tamil Nadu</td><td>Bay of Bengal</td><td>Myanmar</td></tr>
+            <tr><td>Cyclone Biparjoy</td><td>6–9 June, 2023</td><td>Gujarat, Maharashtra</td><td>Arabian Sea</td><td>Bangladesh</td></tr>
+            <tr><td>Cyclone Mocha</td><td>9–15 May, 2023</td><td>Odisha, West Bengal, Myanmar</td><td>Bay of Bengal</td><td>Yemen</td></tr>
+            <tr><td>Cyclone Tej</td><td>21 Oct, 2023</td><td>Mumbai, Pune (Maharashtra)</td><td>Arabian Sea</td><td>India</td></tr>
+            <tr><td>Cyclone Midhili</td><td>17 Nov, 2023</td><td>Odisha, West Bengal</td><td>Bay of Bengal</td><td>India</td></tr>
+            <tr><td>Cyclone Hamoon</td><td>25 Oct, 2023</td><td>Mizoram, Bangladesh</td><td>Bay of Bengal</td><td>Iran</td></tr>
+            <tr><td>Cyclone Asani</td><td>8 May, 2022</td><td>Andhra Pradesh, Odisha</td><td>Bay of Bengal</td><td>Sri Lanka</td></tr>
+            <tr><td>Cyclone Mandous</td><td>6–10 Dec, 2022</td><td>Tamil Nadu, Puducherry</td><td>Bay of Bengal</td><td>United Arab Emirates</td></tr>
+            <tr><td>Cyclone Sitrang</td><td>22–25 Oct, 2022</td><td>West Bengal, Tripura, Assam</td><td>Bay of Bengal</td><td>Thailand</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      All these are <b>Cyclones</b> from the North Indian Ocean basin — none are "Typhoons" (Western Pacific term) or "Hurricanes" (Atlantic term), even though the underlying storm system is the same.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Air Mass, Cyclone and Anti-Cyclone · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

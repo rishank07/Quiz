@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiscal Policy and Budget - Ch10 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:9px 10px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:8px 10px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:130px;
+}
+.stat-box .num{color:var(--gold);font-size:20px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+.formula-box{
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  border-radius:8px;
+  padding:14px 18px;
+  margin:10px 0;
+  font-size:15px;
+  color:var(--gold);
+  font-weight:600;
+  text-align:center;
+}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 10 · Economics</span>
+    <h1>Fiscal Policy and Budget (Public Finance)</h1>
+    <p>Fiscal Policy · Budget History · Types of Budget · Deficits · FRBM Act — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('fiscal')">📘 Public Finance & Fiscal Policy</button>
+    <button class="tab-btn" onclick="switchTab('budget')">📜 Budget Basics & History</button>
+    <button class="tab-btn" onclick="switchTab('types')">🗂 Types of Budget</button>
+    <button class="tab-btn" onclick="switchTab('parts')">📋 Parts of Budget</button>
+    <button class="tab-btn" onclick="switchTab('deficit')">📉 Budget Deficits</button>
+    <button class="tab-btn" onclick="switchTab('frbm')">⚖ FRBM Act</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: PUBLIC FINANCE & FISCAL POLICY -->
+  <div class="tab-content active" id="fiscal">
+    <div class="card">
+      <div class="card-header gold">Public Finance</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Study of all activities related to income and expenditure of the government</li>
+          <li>Includes: Fiscal Policy, Financial Administration, Public Debt, etc.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Fiscal Policy</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Based On</span><span class="v">Ideas of economist John Keynes</span></div>
+        <div class="info-row"><span class="k">Determined By</span><span class="v">Government</span></div>
+        <p class="note">Related to public income, expenditure, debt-related economic matters, and deficit financing.</p>
+        <h4 class="sub2">Objectives</h4>
+        <ul class="arrow-list">
+          <li>Employment Generation</li>
+          <li>Equitable Income Distribution</li>
+          <li>Achieving Financial Stability</li>
+        </ul>
+        <h4 class="sub2">Major Instruments / Tools</h4>
+        <ul class="arrow-list">
+          <li>Taxation</li>
+          <li>Public Expenditure</li>
+          <li>Public Borrowing</li>
+          <li>Transfer Payments</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: BUDGET BASICS & HISTORY -->
+  <div class="tab-content" id="budget">
+    <div class="card">
+      <div class="card-header green">What is a Budget?</div>
+      <div class="card-body">
+        <p class="note">Annual financial statement of the government outlining expenditure and income for a financial year (1st April – 31st March).</p>
+        <ul class="arrow-list">
+          <li>The word 'Budget' is NOT mentioned in the Constitution</li>
+          <li>Article 112 mentions the 'Annual Financial Statement' (Union)</li>
+          <li>Article 202 mentions the Annual Financial Statement of a State</li>
+        </ul>
+        <h4 class="sub2">Numbers in a Budget</h4>
+        <ul class="arrow-list">
+          <li>Final figures of the previous year</li>
+          <li>Provisional figures of the current financial year</li>
+          <li>Estimates proposed for the coming financial year</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Budget History</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Word Origin</span><span class="v">French word 'Bougette' (meaning small bag)</span></div>
+        <div class="info-row"><span class="k">India's First Budget</span><span class="v">18 February 1860, by James Wilson (Pioneer of Indian Budget)</span></div>
+        <div class="info-row"><span class="k">First Budget of Independent India</span><span class="v">R.K. Shanmukham Chetty, 26 November 1947</span></div>
+        <div class="info-row"><span class="k">First Budget of Republic of India</span><span class="v">John Mathai, 1950</span></div>
+        <div class="info-row"><span class="k">First PM to Present Budget</span><span class="v">Jawaharlal Nehru (1958–59)</span></div>
+        <div class="info-row"><span class="k">Most Budgets Presented</span><span class="v">Morarji Desai (10 times)</span></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          "First budget of Independent India" (1947, Shanmukham Chetty) vs "First budget of Republic of India" (1950, John Mathai) — India became a Republic only in 1950, so these are two distinct milestones.
+        </div>
+        <h4 class="sub2">Finance Ministers Who Became Prime Minister</h4>
+        <p class="note">Morarji Desai → Chaudhary Charan Singh → Vishwanath Pratap Singh → Manmohan Singh</p>
+        <h4 class="sub2">Finance Ministers Who Never Presented a Budget</h4>
+        <p class="note">H.N. Bahuguna, K.C. Niyogi, Chaudhary Charan Singh</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Budget Formulation & Approval</div>
+      <div class="card-body">
+        <p class="note">Prepared by the Department of Economic Affairs under the Ministry of Finance, along with other revenue departments and Tax Research Units.</p>
+        <h4 class="sub2">Stages of Budget Formulation</h4>
+        <ul class="arrow-list">
+          <li>Presentation or outline of the budget</li>
+          <li>General discussion</li>
+          <li>Scrutiny by departmental committee</li>
+          <li>Voting on demand for grants</li>
+          <li>Passing of appropriation bill</li>
+          <li>Passing of finance bill</li>
+        </ul>
+        <h4 class="sub2">Budget Approval in Parliament</h4>
+        <ul class="arrow-list">
+          <li>Presented by the Union Finance Minister (with the President's permission)</li>
+          <li>Passed by simple majority in both houses</li>
+          <li>If government fails to pass the budget, it must resign</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Railway Budget</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Separated from General Budget</span><span class="v">1924 (Acworth Committee, 1921)</span></div>
+        <div class="info-row"><span class="k">Merged Back into Union Budget</span><span class="v">2017–18 (Recommended by Bibek Debroy Committee)</span></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Railway Budget existed separately for nearly 93 years (1924 to 2017) before being merged back into the Union Budget.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: TYPES OF BUDGET -->
+  <div class="tab-content" id="types">
+    <div class="card">
+      <div class="card-header red">Types of Budgets</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Key Facts</th></tr>
+          <tr><td>Traditional / General Budget</td><td>Control over government expenditure and development; financial control of legislature over the executive</td></tr>
+          <tr><td>Performance Budget</td><td>Designed with results in mind; originated in USA (1951, Hoover Commission 1949); first used in some areas in India since 1968; introduced in all ministries and departments 1975–76; also called Outcome Budget/Result-based Budget</td></tr>
+          <tr><td>Outcome Budget</td><td>Initiated in India in 2005 by Finance Minister P. Chidambaram</td></tr>
+          <tr><td>Zero-based Budgeting</td><td>Each item considered new (zero) after reconsideration; concept by Peter A. Pyhrr (1970); first used in America (1973); initiated in India by CSIR; applied to general budget for all ministries/departments 1987–88</td></tr>
+          <tr><td>Gender Budget</td><td>Development, welfare, and empowerment of women; first initiated in Australia (1984); initiated in India in 2005–06 by P. Chidambaram</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Outcome Budget (2005) and Gender Budget (2005-06) were BOTH initiated by P. Chidambaram in the same period — easy to confuse the exact years and definitions.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Budget by Revenue/Expenditure Balance</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Condition</th></tr>
+          <tr><td>Balanced Budget</td><td>Budget Revenue = Budget Expenditure</td></tr>
+          <tr><td>Surplus Budget</td><td>Budget Revenue &gt; Budget Expenditure</td></tr>
+          <tr><td>Deficit Budget</td><td>Budget Revenue &lt; Budget Expenditure</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Vote on Account relates ONLY to the expenditure side of the budget, and is NOT the same as an Interim Budget (which covers both revenue and expenditure).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: PARTS OF BUDGET -->
+  <div class="tab-content" id="parts">
+    <div class="card">
+      <div class="card-header blue">Parts of the Budget</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Part</th><th>Key Facts</th></tr>
+          <tr><td>Revenue Receipts</td><td>Neither increases government liability nor decreases assets; Types: Tax Revenue (Direct, Indirect) and Non-Tax Revenue (Fees & Fines, Interest Receipts, Profits & Dividends, External Grants)</td></tr>
+          <tr><td>Revenue Expenditure</td><td>Neither creates any asset nor decreases any liability; related to current account; Types: Interest Payments, Salaries & Pensions, Government Subsidies</td></tr>
+          <tr><td>Capital Receipts</td><td>Increases government liability or decreases assets; Types: Internal Market Loans, Foreign Loans and Aids, Repayment of Loans and Advances, Disinvestment</td></tr>
+          <tr><td>Capital Expenditure</td><td>Leads to creation of assets or decrease in government liability; Types: Construction of infrastructure (schools, hospitals, roads), Repayment of Loans, Investment</td></tr>
+          <tr><td>Planned Expenditure</td><td>Based on priorities of Five-Year Plans; related to creation of assets</td></tr>
+          <tr><td>Non-Plan Expenditure</td><td>Consumption nature / non-developmental</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          From 2017, the division of Planned and Non-Plan Expenditure was officially ended — don't use this classification for post-2017 budgets.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: BUDGET DEFICITS -->
+  <div class="tab-content" id="deficit">
+    <div class="card">
+      <div class="card-header purple">Budget Deficit</div>
+      <div class="card-body">
+        <p class="note">Total Receipts &lt; Total Expenditure in the Budget.</p>
+        <div class="formula-box">Budget Deficit = Total Expenditure − Total Receipts</div>
+        <p class="note">Ended as a separate measure in 1997–98.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Revenue Deficit</div>
+      <div class="card-body">
+        <p class="note">Revenue Receipts &lt; Revenue Expenditure.</p>
+        <div class="formula-box">Revenue Deficit = Revenue Expenditure − Revenue Receipts</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Effective Revenue Deficit (ERD)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Introduced</span><span class="v">2011–12 budget, for the first time</span></div>
+        <div class="info-row"><span class="k">Included in FRBM</span><span class="v">2012–13</span></div>
+        <p class="note">Refers to subtracting grants received for the creation of capital assets from the revenue deficit.</p>
+        <div class="formula-box">ERD = Revenue Deficit − Grants for Capital Assets Creation</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Fiscal Deficit</div>
+      <div class="card-body">
+        <p class="note">Excess of total expenditure over total receipts, excluding borrowings, during a fiscal year. Fiscal Deficit is always higher than Revenue Deficit.</p>
+        <div class="formula-box">Fiscal Deficit = Total Expenditure − Total Receipts (excl. Borrowings)</div>
+        <div class="formula-box">Fiscal Deficit = Total Expenditure (Plan + Non-plan) − [Revenue Receipts (Tax + Non-tax) + Capital Receipts (excl. borrowings)]</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Primary Deficit</div>
+      <div class="card-body">
+        <p class="note">Subtracting interest payments from the fiscal deficit; started in 1997–98.</p>
+        <div class="formula-box">Primary Deficit = Fiscal Deficit − Interest Payments</div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Order of deficit magnitude (typically): Fiscal Deficit &gt; Revenue Deficit; Primary Deficit = Fiscal Deficit minus interest burden, so it's usually smaller than Fiscal Deficit.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: FRBM ACT -->
+  <div class="tab-content" id="frbm">
+    <div class="card">
+      <div class="card-header green">Fiscal Responsibility and Budget Management Act, 2003 (FRBM Act)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Passed</span><span class="v">2003</span></div>
+        <div class="info-row"><span class="k">Implemented</span><span class="v">July 2004</span></div>
+        <p class="note">Objective: Fiscal Consolidation and Public Expenditure Management.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Summary / Reference Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>Fiscal Policy — Based on</td><td>Ideas of economist John Keynes</td></tr>
+          <tr><td>'Budget' word — Origin</td><td>French word 'Bougette' (meaning small bag)</td></tr>
+          <tr><td>'Budget' in Constitution</td><td>Not mentioned; Article 112 mentions 'Annual Financial Statement'</td></tr>
+          <tr><td>State Budget Article</td><td>Article 202</td></tr>
+          <tr><td>India's First Budget</td><td>18 February 1860 by James Wilson</td></tr>
+          <tr><td>First Budget of Independent India</td><td>R.K. Shanmukham Chetty — 26 November 1947</td></tr>
+          <tr><td>First Budget of Republic of India</td><td>John Mathai — 1950</td></tr>
+          <tr><td>First PM to Present Budget</td><td>Jawaharlal Nehru (1958–59)</td></tr>
+          <tr><td>Most Budgets Presented</td><td>Morarji Desai — 10 times</td></tr>
+          <tr><td>Railway Budget Separation</td><td>1924 (Acworth Committee 1921)</td></tr>
+          <tr><td>Railway Budget Merged</td><td>2017–18 (Bibek Debroy Committee recommendation)</td></tr>
+          <tr><td>Performance Budget — Origin</td><td>USA 1951 (Hoover Commission 1949)</td></tr>
+          <tr><td>Performance Budget in India</td><td>Used in some areas since 1968; all ministries from 1975–76</td></tr>
+          <tr><td>Outcome Budget — India</td><td>2005 (P. Chidambaram)</td></tr>
+          <tr><td>Zero-based Budgeting — Concept</td><td>Peter A. Pyhrr (1970)</td></tr>
+          <tr><td>Zero-based Budgeting — First Used</td><td>America (1973)</td></tr>
+          <tr><td>Zero-based Budgeting — India</td><td>Initiated by CSIR; general budget 1987–88</td></tr>
+          <tr><td>Gender Budget — First Initiated</td><td>Australia (1984)</td></tr>
+          <tr><td>Gender Budget — India</td><td>2005–06 (P. Chidambaram)</td></tr>
+          <tr><td>Vote on Account</td><td>Related only to expenditure side; ≠ Interim Budget</td></tr>
+          <tr><td>Budget Deficit Formula</td><td>Total Expenditure − Total Receipts</td></tr>
+          <tr><td>Budget Deficit ended as separate</td><td>1997–98</td></tr>
+          <tr><td>Revenue Deficit Formula</td><td>Revenue Expenditure − Revenue Receipts</td></tr>
+          <tr><td>ERD — Introduced</td><td>2011–12 budget; included in FRBM: 2012–13</td></tr>
+          <tr><td>ERD Formula</td><td>Revenue Deficit − Grants for Capital Assets Creation</td></tr>
+          <tr><td>Fiscal Deficit</td><td>Always higher than Revenue Deficit</td></tr>
+          <tr><td>Fiscal Deficit Formula</td><td>Total Expenditure − Total Receipts (excl. borrowings)</td></tr>
+          <tr><td>Primary Deficit Formula</td><td>Fiscal Deficit − Interest Payments | Started 1997–98</td></tr>
+          <tr><td>FRBM Act</td><td>Passed 2003 | Implemented July 2004</td></tr>
+          <tr><td>Planned Expenditure ended</td><td>From year 2017 (plan/non-plan division abolished)</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Fiscal Policy and Budget (Ch10) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

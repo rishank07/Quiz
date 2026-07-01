@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 16</span>
+  <h1>Computer</h1>
+  <p>Fundamentals · Hardware · Software · Networks · AI · Robotics</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">💻 Introduction & Generations</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🖥 Supercomputers & Components</button>
+  <button class="tab-btn" onclick="switchTab('t3')">💾 Memory & Hardware</button>
+  <button class="tab-btn" onclick="switchTab('t4')">⚙ Software & OS</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🔤 Programming & MS Office</button>
+  <button class="tab-btn" onclick="switchTab('t6')">🌐 Networks & Internet</button>
+  <button class="tab-btn" onclick="switchTab('t7')">📱 Mobile Gen, AI & Security</button>
+  <button class="tab-btn" onclick="switchTab('t8')">🤖 Robotics</button>
+  <button class="tab-btn" onclick="switchTab('t9')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: INTRODUCTION & GENERATIONS -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">Introduction</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Father of Computer: Charles Babbage</li>
+        <li>Father of Modern Computer: Alan Turing</li>
+        <li>First calculating device: Abacus</li>
+        <li>First digital computer: ENIAC</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Generations of Computers</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Generation</th><th>Period</th><th>Technology</th></tr>
+        <tr><td>First</td><td>1940–56</td><td>Vacuum Tube</td></tr>
+        <tr><td>Second</td><td>1956–63</td><td>Transistor (Semiconductor)</td></tr>
+        <tr><td>Third</td><td>1964–71</td><td>Integrated Circuit (Silicon)</td></tr>
+        <tr><td>Fourth</td><td>1971–Present</td><td>Integrated Circuit / Microprocessor</td></tr>
+        <tr><td>Fifth</td><td>Present–Future</td><td>Large Scale Integrated Circuit, Artificial Intelligence</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        The third generation of computers began with the IBM 360 — a key marker question in exams.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Classification of Computers</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>By Size</th><th>By Function</th></tr>
+        <tr><td>Micro Computer</td><td>Analog Computer</td></tr>
+        <tr><td>Mini Computer</td><td>Digital Computer</td></tr>
+        <tr><td>Mainframe Computer</td><td>Hybrid Computer</td></tr>
+        <tr><td>Super Computer</td><td>—</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: SUPERCOMPUTERS & COMPONENTS -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header purple">Supercomputers</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Rank</th><th>Top Indian Supercomputers</th></tr>
+        <tr><td>1</td><td>Airawat (CDAC, Pune)</td></tr>
+        <tr><td>2</td><td>Param Siddhi (CDAC, Pune)</td></tr>
+        <tr><td>3</td><td>Pratyush (IITM, Pune)</td></tr>
+      </table></div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Rank</th><th>Top World Supercomputers</th></tr>
+        <tr><td>1</td><td>El Capitan — California, USA</td></tr>
+        <tr><td>2</td><td>Frontier — USA</td></tr>
+        <tr><td>3</td><td>Aurora System — USA</td></tr>
+        <tr><td>4</td><td>Eagle — USA</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        On 26 September 2024, PM Narendra Modi launched three PARAM Rudra supercomputers and inaugurated two HPC systems — ArKa and Arunika — for weather and climate research.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Components of a Computer</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Input Unit, Output Unit, Central Processing Unit (CPU), Memory Unit</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Input Unit</th><th>Output Unit</th></tr>
+        <tr><td>Keyboard, Mouse, Scanner</td><td>Printer, Monitor, Touch Screen</td></tr>
+        <tr><td>Microphone, OCR</td><td>Plotters, Speaker</td></tr>
+        <tr><td>Trackball, Light Pen, MICR</td><td>Projector</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>CPU is the "Brain of the Computer" — comprises Control Unit (CU), Arithmetic Logic Unit (ALU), and Primary Storage Unit.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: MEMORY & HARDWARE -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header red">Primary & Secondary Storage</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Storage Type</th><th>Details</th></tr>
+        <tr><td>RAM</td><td>Random Access Memory — Temporary, Volatile, Dynamic/Static memory</td></tr>
+        <tr><td>ROM</td><td>Read Only Memory — Permanent, Non-Volatile; types: PROM, EEPROM, EPROM</td></tr>
+        <tr><td>Secondary Storage</td><td>External/auxiliary/backup memory; stores data permanently</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Magnetic Storage: Hard Disk Drive, Floppy Disk, Magnetic Tape</li>
+        <li>Optical Storage: CD-R, DVD, Blu-ray Disc</li>
+        <li>Solid State Storage: Pen Drive, Memory Card</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Memory Units</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Unit</th><th>Equivalent</th></tr>
+        <tr><td>1 Bit</td><td>Binary digit (0 or 1)</td></tr>
+        <tr><td>8 Bits</td><td>1 Byte = 2 Nibbles</td></tr>
+        <tr><td>1024 Bytes</td><td>1 Kilobyte (KB)</td></tr>
+        <tr><td>1024 Kilobytes</td><td>1 Megabyte (MB)</td></tr>
+        <tr><td>1024 Megabytes</td><td>1 Gigabyte (GB)</td></tr>
+        <tr><td>1024 Gigabytes</td><td>1 Terabyte (TB)</td></tr>
+        <tr><td>1024 Terabytes</td><td>1 Petabyte (PB)</td></tr>
+        <tr><td>1024 Petabytes</td><td>1 Exabyte (EB)</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Important Hardware Facts</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Term</th><th>Description</th></tr>
+        <tr><td>Motherboard</td><td>Main/base/system/logic board; central PCB connecting all components</td></tr>
+        <tr><td>DMA</td><td>Direct Memory Access; hardware transfers data to/from memory bypassing CPU</td></tr>
+        <tr><td>Cache Memory</td><td>Fast memory between CPU and main memory; improves data retrieval speed</td></tr>
+        <tr><td>Burning</td><td>Writing data to a CD/DVD using a laser</td></tr>
+        <tr><td>MAR</td><td>Memory Address Register; holds address of memory location to be accessed</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: SOFTWARE & OS -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header blue">System Software & Operating Systems</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>System Software: collection of programs; handles execution of all tasks</li>
+        <li>Single-user OS: MS-DOS and Windows 9x</li>
+        <li>Device drivers: group of directions</li>
+        <li>Booting: starting or restarting a computer</li>
+        <li>Window Task Manager: utility application of MS Windows</li>
+        <li>Standby: power management feature of Windows</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Types of Operating Systems</th></tr>
+        <tr><td>Batch Operating System</td></tr>
+        <tr><td>Time-Sharing Operating System</td></tr>
+        <tr><td>Distributed Operating System</td></tr>
+        <tr><td>Network Operating System</td></tr>
+        <tr><td>Multi-Tasking Operating System</td></tr>
+        <tr><td>Multi-Processing Operating System</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Utility, Application & Open Source Software</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Utility Software</th><th>Function</th></tr>
+        <tr><td>Disk Compression</td><td>Reduces file/folder size on storage</td></tr>
+        <tr><td>Disk Cleaners</td><td>Deletes temporary/junk files</td></tr>
+        <tr><td>Disk Defragmenter</td><td>Rearranges fragmented files</td></tr>
+        <tr><td>Text Editor</td><td>Creating/editing text files (e.g., Notepad)</td></tr>
+        <tr><td>Anti-Virus</td><td>Avira, Kaspersky, AVG, etc. — removes viruses</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Application Software: word processing, presentation, reservation systems, payroll, office management, etc.</li>
+        <li>Open Source Software: Linux, Firefox, Google Chrome, Opera — source code freely available to anyone</li>
+        <li>Shortcut for renaming files/folders in Windows: F2</li>
+        <li>DBMS: manages comprehensive data collection and query execution</li>
+        <li>Spreadsheet Software: used for financial statements</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: PROGRAMMING & MS OFFICE -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header orange">Programming Languages</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Low-Level: Machine Language (0s & 1s), Assembly Language</li>
+        <li>Medium-Level: bridge between low and high-level languages</li>
+        <li>High-Level: uses English words and mathematical symbols</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Language</th><th>Application</th></tr>
+        <tr><td>FORTRAN</td><td>Mathematical applications</td></tr>
+        <tr><td>ALGOL</td><td>Scientific applications</td></tr>
+        <tr><td>LISP</td><td>Artificial intelligence</td></tr>
+        <tr><td>COBOL</td><td>Business applications</td></tr>
+        <tr><td>BASIC / PASCAL</td><td>Teaching programming</td></tr>
+        <tr><td>C</td><td>System programming</td></tr>
+        <tr><td>C++</td><td>System object programming</td></tr>
+        <tr><td>JAVA</td><td>Internet-based programming</td></tr>
+      </table></div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Translator</th><th>Function</th></tr>
+        <tr><td>Assembler</td><td>Translates assembly code to machine code</td></tr>
+        <tr><td>Compiler</td><td>Translates entire high-level code to machine code before execution</td></tr>
+        <tr><td>Interpreter</td><td>Executes high-level code line by line</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Microsoft Office Suite</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Application</th><th>Key Facts</th></tr>
+        <tr><td>MS Word</td><td>Word processing; File format: .doc/.docx; Default font: Aptos (replaced Calibri in early 2024)</td></tr>
+        <tr><td>MS Excel</td><td>Spreadsheet program; File format: .xls/.xlsx; default column width: 8 characters</td></tr>
+        <tr><td>MS PowerPoint</td><td>Presentation software; File format: .ppt/.pptx</td></tr>
+        <tr><td>MS Access</td><td>DBMS; File format: .accdb (.mdb prior to Access 2007)</td></tr>
+      </table></div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Key Shortcut</th><th>Function</th></tr>
+        <tr><td>F1</td><td>Open Help window</td></tr>
+        <tr><td>F5 (Word)</td><td>Open Find & Replace window</td></tr>
+        <tr><td>F5 (PowerPoint)</td><td>Start slide show from beginning</td></tr>
+        <tr><td>Shift+F5</td><td>Start slide show from current slide</td></tr>
+        <tr><td>F12</td><td>Open Save As window</td></tr>
+        <tr><td>Ctrl+M</td><td>Insert new slide (PowerPoint)</td></tr>
+        <tr><td>Ctrl+U</td><td>Underline cell content (Excel)</td></tr>
+        <tr><td>Ctrl+D</td><td>Font dialog box (Word) / Fill Down (Excel)</td></tr>
+        <tr><td>Ctrl+A</td><td>Select all items</td></tr>
+        <tr><td>Ctrl+C / Ctrl+V</td><td>Copy / Paste</td></tr>
+        <tr><td>Ctrl+P</td><td>Print document</td></tr>
+        <tr><td>Ctrl+B</td><td>Bold selected text</td></tr>
+        <tr><td>Ctrl+K</td><td>Insert hyperlink</td></tr>
+        <tr><td>Ctrl+L</td><td>Align text left</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        F5 does DIFFERENT things in Word (opens Find & Replace / Go To) vs PowerPoint (starts slide show) — the same key, different function per application.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: NETWORKS & INTERNET -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header teal">Computer Networks</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Type</th><th>Coverage</th><th>Speed</th><th>Location</th></tr>
+        <tr><td>LAN</td><td>1 Mile</td><td>10 Mbps – 100 Mbps</td><td>School, office, campus</td></tr>
+        <tr><td>MAN</td><td>Up to 50 km</td><td>100 Mbps – 1 Gbps</td><td>City or metropolitan area</td></tr>
+        <tr><td>WAN</td><td>Up to 1000 km</td><td>1 Gbps – 100 Gbps</td><td>Network of networks</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>WAN uses High Level Data Link Control (HDLC) protocol.</li>
+        <li>Network Devices: Repeater, Gateway, Switch, Router, Modem, Hub</li>
+        <li>VPN: creates secure, encrypted connection between device and internet</li>
+        <li>Network Topology: Ring, Bus, Tree, Star, Mesh</li>
+        <li>ISDN: digital/standard telephone service</li>
+        <li>Cloud Computing: connects millions of mobile and personal computers via network</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Internet</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Internet: network of networks connecting computers worldwide</li>
+        <li>Connections: Dial-up; Broadband (cable modem, fiber optic, DSL); Wireless (Wi-Fi, Wi-MAX, satellite)</li>
+        <li>World Wide Web (WWW): created by Tim Berners-Lee in 1989</li>
+        <li>Web Page: documents written in HTML</li>
+        <li>Web Address: URL — indicates internet address of files</li>
+        <li>Domain Name: identifies a website (e.g., www.example.com)</li>
+        <li>Search Engines: Google, Yahoo, AltaVista, Lycos</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Protocol</th><th>Purpose</th></tr>
+        <tr><td>TCP</td><td>Transmission Control Protocol</td></tr>
+        <tr><td>IP</td><td>Internet Protocol</td></tr>
+        <tr><td>FTP</td><td>File Transfer Protocol</td></tr>
+        <tr><td>HTTP</td><td>Hypertext Transfer Protocol</td></tr>
+        <tr><td>SMTP</td><td>Simple Mail Transfer Protocol</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Internet Services: Chatting, Video Conferencing, Social Networking, E-commerce, Blogging, E-mail</li>
+        <li>Gmail: attachments up to 25 MB; sorts emails by date by default; searchable by From, To, Subject, Date</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: MOBILE GEN, AI & SECURITY -->
+<div class="tab-content" id="t7">
+  <div class="card">
+    <div class="card-header gold">Mobile Communication Generations</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Gen</th><th>Year/Country</th><th>Technology</th><th>Key Feature</th></tr>
+        <tr><td>1G</td><td>Japan, 1979</td><td>Analog cellular</td><td>Analog radio signal</td></tr>
+        <tr><td>2G</td><td>Finland, 1991</td><td>Digital networks</td><td>Digital radio signal</td></tr>
+        <tr><td>3G</td><td>Japan, 2001</td><td>High-speed IP data</td><td>High-speed IP data</td></tr>
+        <tr><td>4G</td><td>Norway & Sweden, 2009</td><td>Increased mobile broadband</td><td>Higher communication speeds</td></tr>
+        <tr><td>5G</td><td>South Korea, 2019</td><td>High-frequency speeds</td><td>Download speeds up to 20 Gbps</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Telecom Regulatory Authority of India: TRAI</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Artificial Intelligence</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Origin: 1950s; Founder: John McCarthy</li>
+        <li>Definition: ability of machines to simulate human cognitive functions</li>
+        <li>Related field: Natural Language Processing (NLP)</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>AI Tool</th><th>Launch Year</th><th>Company</th></tr>
+        <tr><td>DeepSeek (AI Chatbot)</td><td>2025</td><td>DeepSeek</td></tr>
+        <tr><td>Qwen 3</td><td>2025</td><td>Alibaba</td></tr>
+        <tr><td>Grok 4</td><td>2025</td><td>xAI</td></tr>
+        <tr><td>Gemini</td><td>2023</td><td>Google DeepMind</td></tr>
+        <tr><td>ChatGPT</td><td>2022</td><td>OpenAI</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Computer Security</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Threat</th><th>Description</th></tr>
+        <tr><td>Malware</td><td>Malicious software</td></tr>
+        <tr><td>Viruses</td><td>Damage computer software</td></tr>
+        <tr><td>Worms</td><td>Hide in invisible files</td></tr>
+        <tr><td>Ransomware</td><td>Malicious software demanding ransom</td></tr>
+        <tr><td>Trojan Horse</td><td>Non-self-replicating malware</td></tr>
+        <tr><td>Spyware</td><td>Secretly monitors activity</td></tr>
+        <tr><td>Hacking / Cracking</td><td>Unauthorized system access</td></tr>
+        <tr><td>Phishing</td><td>Network security threat via deception</td></tr>
+        <tr><td>Firewall</td><td>Filters network traffic and control</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Anti-Virus Software: Norton, McAfee, Kaspersky, Avast, AVG</li>
+        <li>MPEG: Moving Picture Experts Group — compression format</li>
+        <li>Hibernate: power management feature</li>
+        <li>Skype: requires webcam, microphone, speaker</li>
+        <li>Two-Factor Authentication: verifies identity (e.g., fingerprint scan)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: ROBOTICS -->
+<div class="tab-content" id="t8">
+  <div class="card">
+    <div class="card-header green">Important Robots</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Robot</th><th>Key Details</th></tr>
+        <tr><td>Rex</td><td>World's first bionic man</td></tr>
+        <tr><td>Kirobo</td><td>First talking robot in space</td></tr>
+        <tr><td>Snake Robot</td><td>Assists in accidents (DRDO)</td></tr>
+        <tr><td>FemiSapien</td><td>Intelligent robot</td></tr>
+        <tr><td>Sophia</td><td>Communicates with humans (Saudi Arabia)</td></tr>
+        <tr><td>Daksha / Netra</td><td>Defence Forces robots (DRDO)</td></tr>
+        <tr><td>Vyommitra</td><td>Half-humanoid for Gaganyaan Mission, by ISRO</td></tr>
+        <tr><td>FEDOR</td><td>Russian humanoid robot</td></tr>
+        <tr><td>Zhurong</td><td>China's Mars rover, part of Tianwen-1 mission</td></tr>
+        <tr><td>Mitra</td><td>India's first humanoid robot</td></tr>
+        <tr><td>Pioneer</td><td>Assisted in the Chernobyl disaster (NASA)</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Tianwen-1 is the MISSION name; Zhurong is the ROVER that landed as part of that mission — don't treat them as the same entity.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: QUICK REFERENCE -->
+<div class="tab-content" id="t9">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">Father of Computer</span><span class="v">Charles Babbage</span></div>
+      <div class="info-row"><span class="k">Father of Modern Computer</span><span class="v">Alan Turing</span></div>
+      <div class="info-row"><span class="k">First Digital Computer</span><span class="v">ENIAC</span></div>
+      <div class="info-row"><span class="k">First Calculating Device</span><span class="v">Abacus</span></div>
+      <div class="info-row"><span class="k">Top Indian Supercomputer</span><span class="v">Airawat (CDAC, Pune)</span></div>
+      <div class="info-row"><span class="k">Top World Supercomputer</span><span class="v">El Capitan (California, USA)</span></div>
+      <div class="info-row"><span class="k">RAM</span><span class="v">Temporary / Volatile memory</span></div>
+      <div class="info-row"><span class="k">ROM</span><span class="v">Permanent / Non-Volatile memory</span></div>
+      <div class="info-row"><span class="k">CPU</span><span class="v">Brain of computer; CU, ALU, Primary Storage</span></div>
+      <div class="info-row"><span class="k">WWW Creator</span><span class="v">Tim Berners-Lee (1989)</span></div>
+      <div class="info-row"><span class="k">1G Technology</span><span class="v">Japan, 1979; Analog</span></div>
+      <div class="info-row"><span class="k">2G Technology</span><span class="v">Finland, 1991; Digital</span></div>
+      <div class="info-row"><span class="k">5G Technology</span><span class="v">South Korea, 2019; Download 20 Gbps</span></div>
+      <div class="info-row"><span class="k">AI Founder</span><span class="v">John McCarthy; Origin: 1950s</span></div>
+      <div class="info-row"><span class="k">ChatGPT</span><span class="v">Launched 2022; OpenAI</span></div>
+      <div class="info-row"><span class="k">DeepSeek</span><span class="v">Launched 2025; DeepSeek</span></div>
+      <div class="info-row"><span class="k">MS Word Default Font</span><span class="v">Aptos (replaced Calibri, early 2024)</span></div>
+      <div class="info-row"><span class="k">DBMS File Format</span><span class="v">.accdb (.mdb prior to Access 2007)</span></div>
+      <div class="info-row"><span class="k">India's First Humanoid Robot</span><span class="v">Mitra</span></div>
+      <div class="info-row"><span class="k">Vyommitra</span><span class="v">Half-humanoid by ISRO for Gaganyaan Mission</span></div>
+      <div class="info-row"><span class="k">TRAI</span><span class="v">Telecom Regulatory Authority of India</span></div>
+      <div class="info-row"><span class="k">Firewall</span><span class="v">Filters network traffic and control</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · Computer · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

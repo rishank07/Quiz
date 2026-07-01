@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mountains and Plateaus | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media (max-width:640px){.two-col,.four-col{grid-template-columns:1fr;}}
+  @media (max-width:900px){.four-col{grid-template-columns:1fr 1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>⛰️ MOUNTAINS AND PLATEAUS <span class="art-pill">World Geography · Ch 12</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('overview')">Mountains Overview</button>
+    <button class="tab-btn" onclick="switchTab('types')">Types of Mountains</button>
+    <button class="tab-btn" onclick="switchTab('ranges')">Major Ranges</button>
+    <button class="tab-btn" onclick="switchTab('peaks')">Major Peaks</button>
+    <button class="tab-btn" onclick="switchTab('plateaus')">Types of Plateaus</button>
+    <button class="tab-btn" onclick="switchTab('notes')">Important Notes</button>
+  </div>
+
+  <!-- TAB 1: MOUNTAINS OVERVIEW -->
+  <div id="overview" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">⛰️ Mountains</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Study of mountains: <b>Orology</b></li>
+          <li>Organized hills → Mountain ranges</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🧭 Origin Theories</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Geosyncline Theory</li>
+          <li>Thermal Contraction Theory – Jeffreys</li>
+          <li>Plate Tectonics Theory – Harry Hess</li>
+          <li>Himalaya's origin: From the <b>Tethys Geosyncline</b> (Kober)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      The Himalayas formed from sediments of the ancient <b>Tethys Sea</b> (Geosyncline) being uplifted.
+    </div>
+  </div>
+
+  <!-- TAB 2: TYPES OF MOUNTAINS -->
+  <div id="types" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🏔️ Types of Mountains</div>
+      <div class="card-body">
+        <div class="four-col">
+          <div class="sub-box">
+            <h4>Fold Mountains</h4>
+            <ul class="arrow-list">
+              <li>Himalayas (India)</li>
+              <li>Alps (Europe)</li>
+              <li>Rockies (N. America)</li>
+              <li>Andes (S. America) — World's longest mountain range</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Block Mountains</h4>
+            <ul class="arrow-list">
+              <li>Vosges (France)</li>
+              <li>Black Forest (Germany)</li>
+              <li>Satpura (India)</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Volcanic Mountains</h4>
+            <ul class="arrow-list">
+              <li>Mauna Loa (Hawaii Islands)</li>
+              <li>Loihi (Hawaii)</li>
+              <li>Popa (Myanmar)</li>
+              <li>Mount Fuji (Japan)</li>
+              <li>Mount Kilimanjaro (Tanzania)</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Residual Mountains</h4>
+            <ul class="arrow-list">
+              <li>Appalachian (N. America)</li>
+              <li>Aravalli (India) — World's oldest mountains</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Andes = World's <b>longest</b> mountain range; Aravalli = World's <b>oldest</b> mountain range — these two superlatives are often swapped.
+    </div>
+  </div>
+
+  <!-- TAB 3: MAJOR RANGES -->
+  <div id="ranges" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🗺️ Major Mountain Ranges of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Mountain Range</th><th>Location</th></tr></thead>
+          <tbody>
+            <tr><td>Great Dividing Range</td><td>Eastern Australia</td></tr>
+            <tr><td>Ural Mountains / Caucasus</td><td>Russia (divides Asia &amp; Europe)</td></tr>
+            <tr><td>Atlas / Drakensberg</td><td>Africa</td></tr>
+            <tr><td>Apennines</td><td>Italy</td></tr>
+            <tr><td>Pyrenees</td><td>France-Spain Border</td></tr>
+            <tr><td>Scandinavian Range</td><td>Europe – Norway, Finland, Sweden</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Ural Mountains form the conventional boundary between <b>Europe and Asia</b>.
+    </div>
+  </div>
+
+  <!-- TAB 4: MAJOR PEAKS -->
+  <div id="peaks" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">🏔️ Major Mountain Peaks of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Peak / Height</th><th>Location</th><th>Key Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Mount Everest (8848 m)</td><td>Nepal-Tibet Border</td><td>Highest peak in world • Sagarmatha (Nepal) / Chomolungma (Tibet/China)</td></tr>
+            <tr><td>K-2 / Godwin-Austen (8611 m)</td><td>Pakistan (PoK)-China Border</td><td>Second highest peak in world</td></tr>
+            <tr><td>Kangchenjunga (8586 m)</td><td>India-Nepal Border</td><td>Third highest</td></tr>
+            <tr><td>Lhotse (8516 m)</td><td>Nepal-Tibet Border</td><td>Fourth highest</td></tr>
+            <tr><td>Makalu (8485 m)</td><td>Nepal-Tibet Border</td><td>Fifth highest</td></tr>
+            <tr><td>Dhaulagiri (8167 m)</td><td>Nepal</td><td>Seventh highest</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Kangchenjunga is the only Top-5 peak located on the <b>India-Nepal</b> border — and is India's highest peak.
+    </div>
+  </div>
+
+  <!-- TAB 5: TYPES OF PLATEAUS -->
+  <div id="plateaus" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🗻 Major Plateaus of the World — "Roof of the World"</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Type of Plateau</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Intermontane Plateau</td><td>Plateau of Tibet (World's highest, ~5000 m), Pamir, Peru, Bolivia, Asia Minor (Turkey), Colombia</td></tr>
+            <tr><td>Continental Plateau</td><td>Brazilian Plateau, Arabian Plateau, Southern India Plateau, South Africa Plateau</td></tr>
+            <tr><td>Mountainous / Dissected Plateau</td><td>Plateau of Patagonia (Argentina), Malwa Plateau, Shillong Plateau</td></tr>
+            <tr><td>Dome-shaped Plateau</td><td>Chota Nagpur Plateau (India), Ozark Plateau (USA)</td></tr>
+            <tr><td>Rejuvenated Plateau</td><td>Missouri Plateau (America), Ranchi Plateau (India)</td></tr>
+            <tr><td>Arid / Desert Plateau</td><td>Potwar Plateau (Pakistan), Asean Plateau</td></tr>
+            <tr><td>Fluvial Plateau</td><td>Shan Plateau (Myanmar), Cherrapunji Plateau of Meghalaya</td></tr>
+            <tr><td>Loess Plateau</td><td>Loess Plateau (China)</td></tr>
+            <tr><td>Glacial Plateau</td><td>Antarctica and Greenland Plateau (World's second largest)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Plateau of <b>Tibet</b> is the World's highest plateau (~5000 m); don't confuse it with the largest plateau by area (<b>Antarctica's</b> ice plateau ranks among the largest).
+    </div>
+  </div>
+
+  <!-- TAB 6: IMPORTANT NOTES -->
+  <div id="notes" class="tab-content">
+    <div class="card">
+      <div class="card-header red">📌 Important Notes</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Water divide of Asia (often cited in India context) – Turkestan to Karakoram</li>
+          <li>Highest peak of Africa – Mount Kilimanjaro (5895 m), Tanzania</li>
+          <li>Pidurutalagala – Highest peak of Sri Lanka</li>
+          <li>World's longest mountain range on land – Andes (S. America)</li>
+          <li>World's oldest mountain range – Aravalli (India)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Mount Kilimanjaro = Highest peak of Africa (5895 m) and also a Volcanic Mountain — combine both facts when revising.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Mountains and Plateaus · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

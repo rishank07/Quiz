@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Origin and Evolution of the Earth | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1020px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.9rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.2rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.92rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.95rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌍 ORIGIN AND EVOLUTION OF THE EARTH <span class="art-pill">World Geography · Ch 06</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('origin')">Origin Hypothesis</button>
+    <button class="tab-btn" onclick="switchTab('monistic')">Monistic Concept</button>
+    <button class="tab-btn" onclick="switchTab('dualistic')">Dualistic Concept</button>
+    <button class="tab-btn" onclick="switchTab('age')">Age & Dating</button>
+    <button class="tab-btn" onclick="switchTab('shape')">Shape of Earth</button>
+    <button class="tab-btn" onclick="switchTab('life')">Origin of Life</button>
+    <button class="tab-btn" onclick="switchTab('summary')">Quick Summary</button>
+  </div>
+
+  <!-- TAB 1: ORIGIN HYPOTHESIS -->
+  <div id="origin" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌎 Origin of the Earth</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>First Hypothesis: <b>Comte de Buffon</b> (French Scientist) – 1749 AD</li>
+        </ul>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">1749 AD</div><div class="lbl">First Hypothesis (Comte de Buffon)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🧭 Two Concepts on Origin of Earth & Planets</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><b>Monistic Concept / Parental Concept:</b> Earth and planets originated from the Sun itself</li>
+          <li><b>Dualistic Concept (Binary Concept):</b> Earth and planets originated due to interaction between the Sun and another celestial body</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Monistic = one body (Sun alone) involved · Dualistic = two bodies involved
+    </div>
+  </div>
+
+  <!-- TAB 2: MONISTIC -->
+  <div id="monistic" class="tab-content">
+    <div class="card">
+      <div class="card-header green">☀️ Monistic Concept / Parental Concept</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Hypothesis</th><th>Proponent (Year)</th></tr></thead>
+          <tbody>
+            <tr><td>Comet Hypothesis</td><td>Comte de Buffon (1749)</td></tr>
+            <tr><td>Astronomical Hypothesis</td><td>Immanuel Kant (1755)</td></tr>
+            <tr><td>Nebular Hypothesis</td><td>Laplace (1796) — later modified by T.J.J. See</td></tr>
+            <tr><td>Meteoroid Hypothesis</td><td>Lockyer (1890)</td></tr>
+            <tr><td>Planetary Hypothesis</td><td>T.C. Chamberlain (1905)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Laplace's Nebular Hypothesis (1796) was later modified by <b>T.J.J. See</b> — a commonly misremembered name in MCQs.
+    </div>
+  </div>
+
+  <!-- TAB 3: DUALISTIC -->
+  <div id="dualistic" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">✨ Dualistic Concept (Binary Concept)</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Hypothesis</th><th>Proponent (Year)</th></tr></thead>
+          <tbody>
+            <tr><td>Tidal Hypothesis</td><td>James Jeans (1919) — modified by Jeffreys (1929)</td></tr>
+            <tr><td>Double Star Hypothesis</td><td>H.N. Russell (Henry Norris Russell)</td></tr>
+            <tr><td>Theory of Fission</td><td>George Darwin (1879)</td></tr>
+            <tr><td>Supernova Hypothesis</td><td>Prof. Fred Hoyle and Littleton (1939)</td></tr>
+            <tr><td>Interstellar Dust Hypothesis</td><td>Otto Schmidt (1943)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Tidal Hypothesis: Jeans (1919) → Modified by Jeffreys (1929)
+    </div>
+  </div>
+
+  <!-- TAB 4: AGE & DATING -->
+  <div id="age" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">⏳ Age of the Earth</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Age: <b>4.6 billion years</b></li>
+          <li>Method of Determination: Radioactive Dating (1905 AD)</li>
+          <li>Invented by <b>Ernest Rutherford</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🧪 Types of Dating Methods</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Dating Method</th><th>Key Details</th></tr></thead>
+          <tbody>
+            <tr><td>Uranium Dating / Lead Dating / Radiometric Dating</td><td>Oldest rock • Most important in determining Earth's age</td></tr>
+            <tr><td>Potassium-Argon Method</td><td>—</td></tr>
+            <tr><td>Rubidium-Strontium Method</td><td>—</td></tr>
+            <tr><td>Uranium-Thorium Method</td><td>—</td></tr>
+            <tr><td>Radiocarbon Dating Method</td><td>—</td></tr>
+            <tr><td>Chlorine-36 Dating Method</td><td>—</td></tr>
+            <tr><td>Carbon Dating (C-14)</td><td>Latest rocks • Age determination of living beings / organic materials</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Uranium/Lead Dating → used for the <b>oldest rocks</b> (Earth's age); Carbon Dating (C-14) → used for <b>recent/organic</b> material only — frequently interchanged in MCQs.
+    </div>
+  </div>
+
+  <!-- TAB 5: SHAPE OF EARTH -->
+  <div id="shape" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🌐 Shape / Form of the Earth</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Shape: Geoid or Flattened Ellipsoid</li>
+          <li>Slightly flat at top and bottom</li>
+        </ul>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Parameter</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Reason for Geoid Shape</td><td>Greater centrifugal force (at equator) → Bulging at centre • Gravitational force at the poles → Pull surface towards the centre</td></tr>
+            <tr><td>Earth's Mass</td><td>5.97 × 10²⁴ Kg</td></tr>
+            <tr><td>Aquatic Part</td><td>71%</td></tr>
+            <tr><td>Terrestrial Part</td><td>29%</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Earth is wider at the Equator and flatter at the poles — Geoid / Flattened (Oblate) Ellipsoid shape.
+    </div>
+  </div>
+
+  <!-- TAB 6: ORIGIN OF LIFE -->
+  <div id="life" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🧬 Origin of Life on Earth</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Era / Event</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Origin period of Humans</td><td>Pliocene Epoch (First – African continent)</td></tr>
+            <tr><td>Era of Vertebrate Animals</td><td>Silurian Epoch</td></tr>
+            <tr><td>Era of Reptiles</td><td>Mesozoic Era</td></tr>
+            <tr><td>Age of Dinosaurs</td><td>Jurassic Epoch (180 million years ago from today)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Mesozoic Era is broadly known as the "Era of Reptiles," but the Jurassic Epoch within it specifically marks the "Age of Dinosaurs" — both facts get tested together.
+    </div>
+  </div>
+
+  <!-- TAB 7: QUICK SUMMARY -->
+  <div id="summary" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">📝 Quick Summary — Key Facts</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fact</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>First Hypothesis of Earth's Origin</td><td>Comte de Buffon – 1749 AD</td></tr>
+            <tr><td>Age of Earth</td><td>4.6 billion years</td></tr>
+            <tr><td>Radioactive Dating – Invented by</td><td>Ernest Rutherford (1905 AD)</td></tr>
+            <tr><td>Most important dating method for Earth's age</td><td>Uranium / Lead / Radiometric Dating</td></tr>
+            <tr><td>Carbon Dating (C-14) used for</td><td>Latest rocks, living beings / organic materials</td></tr>
+            <tr><td>Shape of Earth</td><td>Geoid / Flattened Ellipsoid</td></tr>
+            <tr><td>Earth's Mass</td><td>5.97 × 10²⁴ Kg</td></tr>
+            <tr><td>Aquatic vs Terrestrial Part</td><td>Aquatic – 71% • Terrestrial – 29%</td></tr>
+            <tr><td>Age of Dinosaurs</td><td>Jurassic Epoch – 180 million years ago</td></tr>
+            <tr><td>First humans appeared</td><td>Pliocene Epoch – African continent</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Age of Earth (4.6 Bn yrs) = Age of Sun (4.6 Bn yrs) ≈ Age of Solar System (4.5 Bn yrs) — all formed together.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Origin and Evolution of the Earth · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Census | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:100;
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.86rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.9rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.82rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:0.92rem;
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:#aab0c6;}
+  .info-row .v{color:var(--text);font-weight:600;}
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+  .scheme-year{
+    display:inline-block;
+    background:var(--surface2);
+    color:var(--gold);
+    font-size:0.78rem;
+    font-weight:700;
+    padding:2px 10px;
+    border-radius:12px;
+    margin-left:8px;
+  }
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+
+<div class="header">
+  <span class="art-pill">Chapter 17</span>
+  <h1>Census</h1>
+  <p>History, administrative framework & Census 2011 key statistics — for BPSC / BSSC preparation</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('history')">History of Census</button>
+  <button onclick="switchTab('admin')">Administrative Aspect</button>
+  <button onclick="switchTab('c2011')">Census 2011 — Basics</button>
+  <button onclick="switchTab('stats')">Key Statistics 2011</button>
+  <button onclick="switchTab('states')">State-wise Highs &amp; Lows</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">15</div><div class="lbl">Censuses in India so far</div></div>
+          <div class="stat-box"><div class="num">1872</div><div class="lbl">First Census (Lord Mayo)</div></div>
+          <div class="stat-box"><div class="num">2011</div><div class="lbl">7th Census post-Independence</div></div>
+          <div class="stat-box"><div class="num">121.08 Cr</div><div class="lbl">Population (2011)</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>Census is a decennial (10-yearly) population count of the country, providing the foundational demographic database for planning and policy.</li>
+          <li>This chapter covers: history of census in India & globally, constitutional/administrative position, and detailed Census 2011 statistics including sex ratio, literacy, density, and state-wise extremes.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Census is a Union List subject (Article 246, 7th Schedule) — conducted by the Registrar General & Census Commissioner of India under the Ministry of Home Affairs.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="history" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🕰 History of Census in India</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">First conducted</span><span class="v">1872 (by Lord Mayo)</span></div>
+        <div class="info-row"><span class="k">First systematic census</span><span class="v">1881 (by Lord Ripon)</span></div>
+        <div class="info-row"><span class="k">Total censuses conducted</span><span class="v">15 so far</span></div>
+        <div class="info-row"><span class="k">Census 2011</span><span class="v">7th census after independence</span></div>
+        <div class="info-row"><span class="k">First post-independence census</span><span class="v">1951</span></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          1872 census (Lord Mayo) was the first attempt but non-synchronous; 1881 (Lord Ripon) was the first synchronous/systematic census — exams often test "first" vs "first systematic" separately.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌍 Global Census History</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>World's first census (modern method) → Sweden, 1749.</li>
+          <li>First decadal census → USA, 1830.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">📉 Malthusian Theory &amp; the "Great Divide"</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Malthusian Theory of Population is closely linked with census-based population studies (checks on population growth).</li>
+          <li>"Year of Great Divide" → 1921 — population grew rapidly after this year, marking a clear demographic turning point in India.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          1911–1921 is the only decade in Indian census history with Negative Population Growth (−0.03%) — right before the "Great Divide" of 1921.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMINISTRATIVE -->
+  <div id="admin" class="tab-panel">
+    <div class="card">
+      <div class="card-header green">⚖ Administrative &amp; Constitutional Aspect</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Subject</span><span class="v">Union List (7th Schedule)</span></div>
+        <div class="info-row"><span class="k">Constitutional Article</span><span class="v">Article 246</span></div>
+        <div class="info-row"><span class="k">Census Department established</span><span class="v">1961</span></div>
+        <div class="info-row"><span class="k">Administering Ministry</span><span class="v">Ministry of Home Affairs</span></div>
+        <div class="info-row"><span class="k">Top Central Official</span><span class="v">Registrar General & Census Commissioner of India</span></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Census is a Union List subject under Article 246 — state governments have no legislative power over it, unlike many other population/welfare-related subjects in the Concurrent List.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENSUS 2011 BASICS -->
+  <div id="c2011" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Census 2011 — Basic Details</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Registrar General & Census Commissioner</span><span class="v">Dr. C. Chandramauli</span></div>
+        <div class="info-row"><span class="k">Home Secretary</span><span class="v">Mr. G.K. Pillai</span></div>
+        <div class="info-row"><span class="k">Motto</span><span class="v">'Our Census, Our Future'</span></div>
+        <div class="info-row"><span class="k">States and UTs</span><span class="v">35</span></div>
+        <div class="info-row"><span class="k">Total Districts</span><span class="v">640</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY STATISTICS -->
+  <div id="stats" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">📊 Key Statistics of Census 2011</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">121.08 Cr</div><div class="lbl">Total Population</div></div>
+          <div class="stat-box"><div class="num">943</div><div class="lbl">Sex Ratio (F/1000 M)</div></div>
+          <div class="stat-box"><div class="num">74.04%</div><div class="lbl">Literacy Rate</div></div>
+          <div class="stat-box"><div class="num">382/km²</div><div class="lbl">Population Density</div></div>
+        </div>
+        <div class="info-row"><span class="k">Total Population</span><span class="v">1,21,08,54,977 (~121.08 crore)</span></div>
+        <div class="info-row"><span class="k">Population aged 0–6 years</span><span class="v">16,44,78,150 (13.60%)</span></div>
+        <div class="info-row"><span class="k">Urban Population</span><span class="v">31.10%</span></div>
+        <div class="info-row"><span class="k">Decadal Growth Rate</span><span class="v">17.64%</span></div>
+        <div class="info-row"><span class="k">Annual Growth Rate</span><span class="v">1.64%</span></div>
+        <div class="info-row"><span class="k">Sex Ratio</span><span class="v">943 females per 1000 males</span></div>
+        <div class="info-row"><span class="k">Literacy Rate (Overall)</span><span class="v">74.04%</span></div>
+        <div class="info-row"><span class="k">Literacy Rate (Male)</span><span class="v">80.9%</span></div>
+        <div class="info-row"><span class="k">Literacy Rate (Female)</span><span class="v">64.6%</span></div>
+        <div class="info-row"><span class="k">Population Density</span><span class="v">382 persons per sq km</span></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Gender literacy gap 2011 = 80.9% (M) − 64.6% (F) ≈ 16.3 percentage points — a commonly asked calculation-based question.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATE-WISE HIGHS & LOWS -->
+  <div id="states" class="tab-panel">
+    <div class="card">
+      <div class="card-header red">🏆 Highest &amp; Lowest States — Census 2011</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead>
+            <tr><th>Metric</th><th>Highest State</th><th>Lowest State</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Population (in millions)</td><td>Uttar Pradesh (~199.8)</td><td>Sikkim (~0.61)</td></tr>
+            <tr><td>Sex Ratio (females/1000 males)</td><td>Kerala (1084)</td><td>Haryana (879)</td></tr>
+            <tr><td>Literacy Rate</td><td>Kerala (~94%)</td><td>Bihar (61.8%)</td></tr>
+            <tr><td>Population Density (persons/sq km)</td><td>Bihar (1,106)</td><td>Arunachal Pradesh (17)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Bihar is highest in Population Density (1,106/km²) but lowest in Literacy Rate (61.8%) among major states — don't mix up these two separate Bihar rankings.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Topic</th><th>Key Fact</th></tr></thead>
+          <tbody>
+            <tr><td>World's First Census</td><td>Sweden, 1749 (Modern method)</td></tr>
+            <tr><td>First Decadal Census</td><td>USA (1830)</td></tr>
+            <tr><td>India's First Census</td><td>1872 (by Lord Mayo)</td></tr>
+            <tr><td>India's First Systematic Census</td><td>1881 (by Lord Ripon)</td></tr>
+            <tr><td>Total Censuses Conducted in India</td><td>15 so far</td></tr>
+            <tr><td>Census 2011 — Number after Independence</td><td>7th Census after independence</td></tr>
+            <tr><td>First Post-Independence Census</td><td>1951</td></tr>
+            <tr><td>Census — Constitutional Article</td><td>Article 246 | Union List (7th Schedule)</td></tr>
+            <tr><td>Census Department Established</td><td>1961 | Under Ministry of Home Affairs</td></tr>
+            <tr><td>Year of Great Divide</td><td>1921 | Rapid population increase after this</td></tr>
+            <tr><td>Census 2011 — Registrar General</td><td>Dr. C. Chandramauli</td></tr>
+            <tr><td>Census 2011 — Motto</td><td>'Our Census, Our Future'</td></tr>
+            <tr><td>States and UTs (2011)</td><td>35 | Total Districts: 640</td></tr>
+            <tr><td>Total Population (2011)</td><td>1,21,08,54,977 (~121.08 crore)</td></tr>
+            <tr><td>Population 0–6 years</td><td>16,44,78,150 (13.60%)</td></tr>
+            <tr><td>Urban Population</td><td>31.10%</td></tr>
+            <tr><td>Decadal Growth Rate</td><td>17.64%</td></tr>
+            <tr><td>Annual Growth Rate</td><td>1.64%</td></tr>
+            <tr><td>Sex Ratio</td><td>943 females per 1000 males</td></tr>
+            <tr><td>Literacy Rate</td><td>74.04% | Male: 80.9% | Female: 64.6%</td></tr>
+            <tr><td>Population Density</td><td>382 persons per sq km</td></tr>
+            <tr><td>Highest Population State</td><td>Uttar Pradesh (~199.8 million)</td></tr>
+            <tr><td>Lowest Population State</td><td>Sikkim (~0.61 million)</td></tr>
+            <tr><td>Highest Sex Ratio</td><td>Kerala (1084)</td></tr>
+            <tr><td>Lowest Sex Ratio</td><td>Haryana (879)</td></tr>
+            <tr><td>Highest Literacy Rate</td><td>Kerala (~94%)</td></tr>
+            <tr><td>Lowest Literacy Rate</td><td>Bihar (61.8%)</td></tr>
+            <tr><td>Highest Population Density</td><td>Bihar — 1,106 persons/sq km</td></tr>
+            <tr><td>Lowest Population Density</td><td>Arunachal Pradesh (17 persons/sq km)</td></tr>
+            <tr><td>Negative Population Growth Period</td><td>1911–1921 | Growth Rate: −0.03%</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Census · BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Humidity, Precipitation and Clouds | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media (max-width:640px){.two-col,.four-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+  @media (max-width:900px){.four-col{grid-template-columns:1fr 1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>☁️ HUMIDITY, PRECIPITATION AND CLOUDS <span class="art-pill">World Geography · Ch 17</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('humidity')">Humidity</button>
+    <button class="tab-btn" onclick="switchTab('condensation')">Condensation</button>
+    <button class="tab-btn" onclick="switchTab('clouds')">Types of Clouds</button>
+    <button class="tab-btn" onclick="switchTab('precipitation')">Precipitation Forms</button>
+    <button class="tab-btn" onclick="switchTab('rainfall')">Types of Rainfall</button>
+    <button class="tab-btn" onclick="switchTab('facts')">Quick Facts</button>
+  </div>
+
+  <!-- TAB 1: HUMIDITY -->
+  <div id="humidity" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">💧 Humidity</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>The amount of moisture in the air</li>
+          <li>Water vapour present in the atmosphere → 0–4%</li>
+          <li>Instrument to measure humidity: <b>Hygrometer</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📊 Types of Humidity</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Absolute Humidity</h4>
+            <ul class="arrow-list">
+              <li>Amount of water present per unit volume of air</li>
+              <li>Measured in grams per cubic metre</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Relative Humidity</h4>
+            <ul class="arrow-list">
+              <li>Ratio of water vapour present to the capacity to hold water vapour, at a given temperature</li>
+              <li>Relative humidity of saturated air = 100%</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Specific Humidity</h4>
+            <ul class="arrow-list">
+              <li>Weight of water vapour per unit weight of air</li>
+              <li>Measured in grams per kilogram</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Absolute Humidity = per unit <b>volume</b> · Specific Humidity = per unit <b>weight</b> — the volume vs. weight distinction is a common exam trap.
+    </div>
+  </div>
+
+  <!-- TAB 2: CONDENSATION -->
+  <div id="condensation" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌫️ Condensation</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>The process of water vapour converting into liquid or solid state</li>
+          <li><b>Dew Point:</b> The lowest temperature at which air gets saturated → Humidity = 100%</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">📂 Forms / Types of Condensation</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Form</th><th>Key Details</th></tr></thead>
+          <tbody>
+            <tr><td>Dew</td><td>Water droplets on surfaces – forms when temperature drops below dew point at night</td></tr>
+            <tr><td>Frost / Hoar Frost</td><td>Ice crystals on surfaces – forms when temperature is below 0°C</td></tr>
+            <tr><td>Fog</td><td>Tiny water droplets suspended near ground – reduces visibility below 1 km</td></tr>
+            <tr><td>Mist</td><td>Lighter than fog – visibility between 1–2 km</td></tr>
+            <tr><td>Smog (Smoke + Fog)</td><td>Smoke and Fog combined → affects visibility; common in industrial areas</td></tr>
+            <tr><td>Clouds</td><td>Condensed water vapour at higher altitudes</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Fog (visibility below <b>1 km</b>) is denser than Mist (visibility <b>1–2 km</b>) — the exact visibility cutoff is a frequently tested number.
+    </div>
+  </div>
+
+  <!-- TAB 3: TYPES OF CLOUDS -->
+  <div id="clouds" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">☁️ Clouds</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Form due to the cooling of air through an adiabatic process and falling below dew point</li>
+          <li>Instrument to measure cloud direction and speed: <b>Nephoscope</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📂 Cloud Classification by Altitude</div>
+      <div class="card-body">
+        <div class="four-col">
+          <div class="sub-box">
+            <h4>Low-Level (Below 2,000 m)</h4>
+            <ul class="arrow-list">
+              <li><b>Nimbostratus:</b> Rain-bearing, dark, thick, grey • blocks sunlight</li>
+              <li><b>Stratus:</b> Continuous rain/drizzle, layered, blue/grey colour</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Middle (2,000–6,000 m)</h4>
+            <ul class="arrow-list">
+              <li><b>Altostratus:</b> Thin, sheet-like • appears before rain/snow</li>
+              <li><b>Altocumulus:</b> Small, round, wavy • indicates instability, potential thunderstorms</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>High-Level (Above 6,000 m)</h4>
+            <ul class="arrow-list">
+              <li><b>Cirrus:</b> Composed of ice crystals • feather-like • no rainfall</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Vertical Development</h4>
+            <ul class="arrow-list">
+              <li><b>Cumulus:</b> Dome-shaped, cauliflower-like • fair-weather cloud</li>
+              <li><b>Cumulonimbus:</b> Massive, towering • thunderstorms, hail, heavy rain</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      <b>Cumulus</b> and <b>Cumulonimbus</b> are "Vertical Development" clouds, not "High-Level" clouds — only <b>Cirrus</b> (ice-crystal, feathery) truly belongs to the High-Level category, since Cumulonimbus can span from low to very high altitudes.
+    </div>
+  </div>
+
+  <!-- TAB 4: PRECIPITATION FORMS -->
+  <div id="precipitation" class="tab-content">
+    <div class="card">
+      <div class="card-header red">🌧️ Precipitation</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Rainfall: Falling of water droplets on Earth's surface</li>
+          <li>Precipitation: Falling of moisture in liquid or solid form</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📂 Forms of Precipitation</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Form</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Drizzle</td><td>Very small, fine water droplets</td></tr>
+            <tr><td>Snowfall</td><td>Precipitation in the form of ice crystals / snowflakes</td></tr>
+            <tr><td>Hail</td><td>Large chunks of ice that fall from cumulonimbus clouds</td></tr>
+            <tr><td>Sleet</td><td>Small drops or pieces of partially melted snow / mix of rain and snow</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Hail always forms in <b>Cumulonimbus</b> clouds — the only cloud type strong enough to keep ice pellets suspended long enough to grow.
+    </div>
+  </div>
+
+  <!-- TAB 5: TYPES OF RAINFALL -->
+  <div id="rainfall" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">☔ Types of Rainfall</div>
+      <div class="card-body">
+        <div class="sub-box" style="margin-bottom:12px;">
+          <h4>1. Convectional Rainfall</h4>
+          <ul class="arrow-list">
+            <li>Sun heats Earth's surface → air near the ground becomes warm and rises</li>
+            <li>Rising air cools, condenses into clouds, and rain falls</li>
+            <li>Occurs in equatorial and temperate regions</li>
+            <li>Thunderstorm with heavy rainfall, mostly after noon</li>
+          </ul>
+        </div>
+        <div class="sub-box" style="margin-bottom:12px;">
+          <h4>2. Mountain / Orographic / Monsoon Rainfall</h4>
+          <ul class="arrow-list">
+            <li>Occurs when moist air is forced to rise over a mountain or elevated landform</li>
+            <li>Windward slope (facing the wind) – Maximum Rainfall</li>
+            <li>Leeward slope (opposite side) – Less rainfall – Rain Shadow region</li>
+          </ul>
+        </div>
+        <div class="sub-box">
+          <h4>3. Cyclonic / Frontal Rainfall</h4>
+          <ul class="arrow-list">
+            <li>Associated with weather systems (cyclones or fronts)</li>
+            <li>Widespread and steady rainfall</li>
+            <li>Turbulence occurs when warm and cold air masses meet</li>
+            <li>At the front, rising air causes clouds and rainfall</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Convectional Rainfall mostly occurs <b>after noon</b> (due to peak surface heating); Orographic Rainfall's timing depends on when moist winds hit the mountain — don't assume all rainfall types follow the same daily pattern.
+    </div>
+  </div>
+
+  <!-- TAB 6: QUICK FACTS -->
+  <div id="facts" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">📝 Quick Reference — Key Facts</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fact</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Instrument for humidity</td><td>Hygrometer</td></tr>
+            <tr><td>Instrument for cloud direction/speed</td><td>Nephoscope</td></tr>
+            <tr><td>Relative humidity of saturated air</td><td>100%</td></tr>
+            <tr><td>Dew Point</td><td>Lowest temperature at which air gets saturated (Humidity = 100%)</td></tr>
+            <tr><td>Smog</td><td>Smoke + Fog – affects visibility, common in industrial areas</td></tr>
+            <tr><td>Rain-bearing cloud</td><td>Nimbostratus / Cumulonimbus clouds</td></tr>
+            <tr><td>Clear weather indicator cloud</td><td>Cumulus clouds</td></tr>
+            <tr><td>Ice crystal cloud / No rainfall</td><td>Cirrus clouds</td></tr>
+            <tr><td>Rainfall after noon – which type?</td><td>Convectional Rainfall</td></tr>
+            <tr><td>Rain shadow region – which rainfall?</td><td>Orographic / Mountain Rainfall – Leeward side gets less rain</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Hygrometer measures humidity · Nephoscope measures cloud direction/speed — two commonly confused meteorological instruments.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Humidity, Precipitation and Clouds · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

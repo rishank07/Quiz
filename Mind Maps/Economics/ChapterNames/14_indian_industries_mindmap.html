@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Industries - Ch14 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:9px 10px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:8px 10px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:120px;
+}
+.stat-box .num{color:var(--gold);font-size:20px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 14 · Economics</span>
+    <h1>Indian Industries</h1>
+    <p>Industrial History · Policies · Ratna Status · IIP · EPZ/SEZ · Schemes — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('intro')">📘 Introduction & Sectors</button>
+    <button class="tab-btn" onclick="switchTab('development')">🏭 Development of Industries</button>
+    <button class="tab-btn" onclick="switchTab('policy')">📜 Industrial Policies</button>
+    <button class="tab-btn" onclick="switchTab('psu')">💎 PSU Ratna Status</button>
+    <button class="tab-btn" onclick="switchTab('iip')">📊 IIP & Core Industries</button>
+    <button class="tab-btn" onclick="switchTab('sez')">🗺 EPZ/SEZ, Privatisation & MSME</button>
+    <button class="tab-btn" onclick="switchTab('centers')">📍 Institutions & Export Centers</button>
+    <button class="tab-btn" onclick="switchTab('schemes')">🏛 Key Institutions & Schemes</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: INTRODUCTION -->
+  <div class="tab-content active" id="intro">
+    <div class="card">
+      <div class="card-header gold">Industry — Introduction</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Conversion of primary products into secondary products</li>
+          <li>Process of production or manufacturing of goods</li>
+        </ul>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">6.2%</span><span class="lbl">Industrial Growth Rate (2024–25)</span></div>
+          <div class="stat-box"><span class="num">27.6%</span><span class="lbl">Industrial Share in GVA (2024)</span></div>
+        </div>
+        <p class="note">Industrial share in GDP was just 13% in 1950–51. Modernisation of the economy and increase in employment come via the industrial sector.</p>
+        <div class="info-row"><span class="k">Consumer Goods</span><span class="v">Clothes, food items, sports goods</span></div>
+        <div class="info-row"><span class="k">Capital Goods</span><span class="v">Machines, equipment, tools</span></div>
+        <div class="info-row"><span class="k">First Industrial Revolution (World)</span><span class="v">England</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Industrial Sectors (By Ownership)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Sector</th><th>Description</th></tr>
+          <tr><td>Public Sector</td><td>Managed, controlled, operated by the government</td></tr>
+          <tr><td>Joint Sector</td><td>Government + Private partnership</td></tr>
+          <tr><td>Private Sector</td><td>Ownership, control, management by a firm/individual/company</td></tr>
+          <tr><td>Cooperative Sector</td><td>Ownership, control, management by state government and individuals/groups</td></tr>
+        </table></div>
+        <p class="note">Suggestions related to industrial licensing policy were first proposed by the Dutt Committee in 1970.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: DEVELOPMENT OF INDUSTRIES -->
+  <div class="tab-content" id="development">
+    <div class="card">
+      <div class="card-header green">Iron and Steel Industry</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Beginning of Production</span><span class="v">1870, by Bengal Iron Works Company (Kulti)</span></div>
+        <div class="info-row"><span class="k">TISCO</span><span class="v">1907, Jamshedpur, Jharkhand</span></div>
+        <div class="info-row"><span class="k">First Public Sector Unit</span><span class="v">Rourkela Steel Plant, 1959 (Odisha)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Aluminium Industry</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">First Aluminium Industry</span><span class="v">J.K. Nagar, 1937 (West Bengal)</span></div>
+        <div class="info-row"><span class="k">Second</span><span class="v">Muri, 1938 (Jharkhand)</span></div>
+        <div class="info-row"><span class="k">NALCO</span><span class="v">Established 1981, Bhubaneswar (Odisha) — country's largest Bauxite-Aluminium project</span></div>
+        <div class="info-row"><span class="k">BALCO</span><span class="v">1965, Korba (Chhattisgarh) — first public sector undertaking in India</span></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          BALCO is often confused for being related to steel due to its name — it is actually India's first PUBLIC SECTOR UNDERTAKING in the Aluminium industry.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Textiles Industry</div>
+      <div class="card-body">
+        <p class="note">India's oldest industry; country's largest organised sector; largest sector providing employment after agriculture.</p>
+        <div class="info-row"><span class="k">First Modern Cotton Textile Mill</span><span class="v">Kolkata (1818)</span></div>
+        <div class="info-row"><span class="k">Second Mill</span><span class="v">Bombay Spinning and Weaving Company, Mumbai (1854), founded by Cowasji Nanabhai Davar</span></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>Nickname</th><th>City</th></tr>
+          <tr><td>India's Cottonopolis / Manchester</td><td>Mumbai</td></tr>
+          <tr><td>East's Boston</td><td>Ahmedabad</td></tr>
+          <tr><td>North India's Manchester</td><td>Kanpur</td></tr>
+          <tr><td>South India's Manchester</td><td>Coimbatore</td></tr>
+        </table></div>
+        <div class="info-row"><span class="k">State with Most Cotton Mills</span><span class="v">Tamil Nadu</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Jute Industry (Golden Fibre)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>India is the largest producer and second-largest exporter of jute goods in the world</li>
+          <li>First jute mill: 1855, Rishra, Kolkata</li>
+          <li>Largest jute producer state: West Bengal</li>
+        </ul>
+        <p class="note">International Jute Organisation: Established 1984, HQ Dhaka.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Silk Textile Industry</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Beginning of Modern Silk Manufacturing</span><span class="v">1832, Howrah (by East India Company)</span></div>
+        <div class="info-row"><span class="k">World Rank</span><span class="v">2nd largest producer (1st: China)</span></div>
+        <div class="info-row"><span class="k">Largest Producer in India</span><span class="v">Karnataka</span></div>
+        <p class="note">Types of Silk: Eri, Mulberry, Muga, Tasar, Oak Tasar.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Other Industries</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Electronic industry: began in the 1980s in radio manufacturing</li>
+          <li>Petrochemical industry: started by private sector in 1961</li>
+          <li>First public sector petrochemical unit: Indian Petro-chemical Limited, 1969 (Vadodara)</li>
+          <li>Country's first super phosphate factory: Ranipet (Tamil Nadu)</li>
+          <li>First modern woollen textile mill: 1876 (Kanpur)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: INDUSTRIAL POLICIES -->
+  <div class="tab-content" id="policy">
+    <div class="card">
+      <div class="card-header blue">Industrial Policy, 1948</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Announced</span><span class="v">6th April, 1948</span></div>
+        <div class="info-row"><span class="k">Minister</span><span class="v">Shyam Prasad Mukherjee (Industry and Commerce)</span></div>
+        <h4 class="sub2">Four Categories</h4>
+        <ul class="arrow-list">
+          <li>Central Government's monopoly</li>
+          <li>New ventures only by state government</li>
+          <li>Industry of foundational importance</li>
+          <li>Small, private, and cooperative industries</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Industrial Policy, 1956</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Announced</span><span class="v">30th April, 1956</span></div>
+        <p class="note">Industries divided into 3 categories: Government sector (17), Government + Private (12), Private.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Industrial Policy, 1970</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Announced</span><span class="v">February, 1970</span></div>
+        <h4 class="sub2">Small-scale sector — Three categories</h4>
+        <ul class="arrow-list">
+          <li>Cottage and household industries</li>
+          <li>Tiny industries</li>
+          <li>Small-scale industries</li>
+        </ul>
+        <p class="note">Special emphasis on small and cottage industries; establishment of District Industries Centre (DIC).</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Industrial Policy, 1980</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Announced</span><span class="v">23rd July, 1980</span></div>
+        <p class="note">Promoted the concept of economic federation; emphasis on solving problems of sick industrial units.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">New Industrial Policy — LPG (1991)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Announced</span><span class="v">24th July, 1991</span></div>
+        <ul class="arrow-list">
+          <li>L — Liberalisation: Abolition of licensing system; less government control</li>
+          <li>P — Privatisation (Nijikaran): Change in ownership/management of PSUs; direct sale of PSU companies</li>
+          <li>G — Globalisation: Integration of country's economy with world economy via trade and commerce</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          MRTP Act (1969) was replaced by the Competition Act, 2002 — not amended, fully replaced. Both dealt with monopolistic/restrictive trade practices but under different frameworks.
+        </div>
+        <p class="note">Industries reserved for Public Sector: Atomic Energy and Rail Transport.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Related Policies & Acts</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">New Manufacturing Policy</span><span class="v">Announced 4 November 2011 — Increase manufacturing GDP share to 25%, create 100 million jobs, double manufactured exports by 2022</span></div>
+        <div class="info-row"><span class="k">MSMED Act</span><span class="v">2006 — promotes and facilitates MSME development</span></div>
+        <h4 class="sub2">Industries Requiring Compulsory Licensing</h4>
+        <ul class="arrow-list">
+          <li>Electronics, Aerospace, Defence equipment</li>
+          <li>Tobacco manufacturing, Hazardous chemicals</li>
+          <li>Distilled alcoholic beverages</li>
+          <li>Industrial explosives (including matchstick)</li>
+          <li>Cigars, cigarettes, other tobacco products</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: PSU RATNA STATUS -->
+  <div class="tab-content" id="psu">
+    <div class="card">
+      <div class="card-header gold">Maharatna</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Started</span><span class="v">2010</span></div>
+        <div class="info-row"><span class="k">Criteria</span><span class="v">Navratna status + foreign business presence + stock exchange listing</span></div>
+        <ul class="arrow-list">
+          <li>Average annual turnover of ₹25,000 crore (3 years)</li>
+          <li>Average net profit of ₹5,000 crore (3 years)</li>
+          <li>Average annual net worth of ₹15,000 crore (3 years)</li>
+        </ul>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">14</span><span class="lbl">Maharatna Companies</span></div>
+        </div>
+        <p class="note">IOC, ONGC, CIL, SAIL, NTPC, BHEL, BPCL, PGCIL, PFC, RECL, OIL, GAIL, HPCL, HAL</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Navratna</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Started</span><span class="v">1997</span></div>
+        <div class="info-row"><span class="k">Score Requirement</span><span class="v">60 out of 100 points</span></div>
+        <div class="info-row"><span class="k">Current Number (May 2025)</span><span class="v">26</span></div>
+        <h4 class="sub2">Scoring Parameters (6)</h4>
+        <ul class="arrow-list">
+          <li>Acquisition per share</li>
+          <li>Net profit vs assets</li>
+          <li>Cost of production/services vs gross turnover</li>
+          <li>Gross profits, interest & tax vs capital planning</li>
+          <li>Gross profits, interest & tax vs turnover</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Miniratna (Category I & II)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Category-I Miniratna</th><th>Category-II Miniratna</th></tr>
+          <tr><td>3 years continuous profit; ₹30 crore profit in the year; capex autonomy up to ₹1500 crore or net worth (whichever lower)</td><td>3 years profit + positive net worth; capex autonomy up to ₹300 crore or 50% of net worth (whichever lower)</td></tr>
+          <tr><td>Current: 49 (March 2025)</td><td>Current: 10 (March 2025)</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Ratna hierarchy from highest to lowest: Maharatna &gt; Navratna &gt; Miniratna Category-I &gt; Miniratna Category-II — don't reverse the sequence.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: IIP & CORE INDUSTRIES -->
+  <div class="tab-content" id="iip">
+    <div class="card">
+      <div class="card-header purple">Index of Industrial Production (IIP)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Estimated By</span><span class="v">National Statistical Office (NSO), monthly</span></div>
+        <div class="info-row"><span class="k">Base Year</span><span class="v">2011–12</span></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>Sector</th><th>Weightage</th></tr>
+          <tr><td>Manufacturing</td><td>77.63%</td></tr>
+          <tr><td>Mining</td><td>14.37%</td></tr>
+          <tr><td>Electricity</td><td>~8% (7.99%)</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Eight Core Industries (Total Weightage: 40.27%)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Core Industry</th><th>Weightage</th></tr>
+          <tr><td>Refinery products</td><td>28.04%</td></tr>
+          <tr><td>Electricity</td><td>19.85%</td></tr>
+          <tr><td>Steel</td><td>17.92%</td></tr>
+          <tr><td>Crude oil</td><td>8.98%</td></tr>
+          <tr><td>Coal</td><td>10.33%</td></tr>
+          <tr><td>Natural gas</td><td>6.88%</td></tr>
+          <tr><td>Cement</td><td>5.37%</td></tr>
+          <tr><td>Fertilisers</td><td>2.63%</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Refinery Products carry the highest weightage (28.04%) among the 8 Core Industries, while Fertilisers carry the lowest (2.63%).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: EPZ/SEZ, PRIVATISATION, MSME -->
+  <div class="tab-content" id="sez">
+    <div class="card">
+      <div class="card-header orange">Export Processing Zone (EPZ) & SEZ</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Asia's First EPZ</span><span class="v">1965, Kandla (Gujarat)</span></div>
+        <p class="note">Objective: To provide a suitable environment for the export of goods from the country.</p>
+        <div class="info-row"><span class="k">Converted EPZ to SEZ</span><span class="v">1st April, 2000</span></div>
+        <div class="info-row"><span class="k">SEZ Act Passed</span><span class="v">2005</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Public Sector Companies That Were Privatised</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Public Sector Company</th><th>Sold to Private Sector Company</th></tr>
+          <tr><td>Modern Food Industries</td><td>Hindustan Lever Limited</td></tr>
+          <tr><td>BALCO</td><td>Sterlite Industries</td></tr>
+          <tr><td>Videsh Sanchar Nigam Limited</td><td>Panatone Finvest Limited (Tata Group)</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">MSME Revised Classification (Budget 2025–26)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Enterprise</th><th>Investment (Current)</th><th>Investment (Revised)</th><th>Turnover (Current/Revised)</th></tr>
+          <tr><td>Micro Enterprise</td><td>₹1 crore</td><td>₹2.5 crore</td><td>₹5 crore / ₹10 crore</td></tr>
+          <tr><td>Small Enterprise</td><td>₹10 crore</td><td>₹25 crore</td><td>₹50 crore / ₹100 crore</td></tr>
+          <tr><td>Medium Enterprise</td><td>₹50 crore</td><td>₹125 crore</td><td>₹250 crore / ₹500 crore</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          The Budget 2025-26 MSME revision roughly 2.5x'd the investment limits and 2x'd the turnover limits across all three categories — remember the pattern, not just isolated numbers.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: INSTITUTIONS & EXPORT CENTERS -->
+  <div class="tab-content" id="centers">
+    <div class="card">
+      <div class="card-header blue">Institutions Related to Small & Cottage Industries</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Institution</th><th>Established</th></tr>
+          <tr><td>Cottage Industries Board</td><td>1948</td></tr>
+          <tr><td>Central Silk Board</td><td>1948</td></tr>
+          <tr><td>All India Handicrafts Board</td><td>1952</td></tr>
+          <tr><td>All India Khadi and Village Board</td><td>1953</td></tr>
+          <tr><td>Small Scale Industries Development Organisation</td><td>1954</td></tr>
+          <tr><td>Khadi and Village Industries Commission</td><td>1957</td></tr>
+          <tr><td>Regional Rural Banks</td><td>1975</td></tr>
+          <tr><td>District Industries Centre</td><td>1978</td></tr>
+          <tr><td>SIDBI</td><td>1990</td></tr>
+          <tr><td>All India Handloom Board</td><td>1992</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Major Export Promotion Centers</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Center</th><th>Industry</th></tr>
+          <tr><td>Kanchipuram</td><td>Silk</td></tr>
+          <tr><td>Salem</td><td>Textiles</td></tr>
+          <tr><td>Sivakasi</td><td>Match Box</td></tr>
+          <tr><td>Ambala</td><td>Scientific Instruments</td></tr>
+          <tr><td>Jamnagar</td><td>Dyes, Petrochemicals</td></tr>
+          <tr><td>Rajkot</td><td>Engine Pump</td></tr>
+          <tr><td>Vapi (Ankleshwar)</td><td>Chemistry</td></tr>
+          <tr><td>Bareilly</td><td>Zari</td></tr>
+          <tr><td>Bhagalpur</td><td>Knitting</td></tr>
+          <tr><td>Tiruppur</td><td>Hosiery and Knitting</td></tr>
+          <tr><td>Moradabad</td><td>Brass Handicrafts, Metallurgy</td></tr>
+          <tr><td>Saharanpur</td><td>Wood Carving</td></tr>
+          <tr><td>Ludhiana</td><td>Heavy Machinery and Hosiery</td></tr>
+          <tr><td>Surat</td><td>Gems and Jewellery</td></tr>
+          <tr><td>Panaji (Goa)</td><td>Rubber Industry</td></tr>
+          <tr><td>Panipat</td><td>Handloom</td></tr>
+          <tr><td>Bhopal</td><td>Pesticide Industry</td></tr>
+          <tr><td>Alleppey</td><td>Coconut Fibre and Products</td></tr>
+          <tr><td>Jalandhar</td><td>Sports Goods</td></tr>
+          <tr><td>Mon (Nagaland)</td><td>Wood Products</td></tr>
+          <tr><td>Nalbari</td><td>Bamboo Products</td></tr>
+          <tr><td>Pinjore</td><td>Machine Tools</td></tr>
+          <tr><td>Nagpur</td><td>Handloom</td></tr>
+          <tr><td>Visakhapatnam</td><td>Fish Products</td></tr>
+          <tr><td>Meerut</td><td>Sports Goods</td></tr>
+          <tr><td>Aligarh</td><td>Brass Locks</td></tr>
+          <tr><td>Agra</td><td>Leather, Footwear</td></tr>
+          <tr><td>Khurja</td><td>Pottery</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Two cities are known for Sports Goods (Jalandhar and Meerut) and two for Handloom (Panipat and Nagpur) — remember there are duplicate industry-city pairs.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: KEY INSTITUTIONS & SCHEMES -->
+  <div class="tab-content" id="schemes">
+    <div class="card">
+      <div class="card-header purple">Key Industrial Institutions</div>
+      <div class="card-body">
+        <h4 class="sub2">National Investment and Infrastructure Fund (NIIF)</h4>
+        <div class="info-row"><span class="k">Established</span><span class="v">2015, with ₹40,000 crore</span></div>
+        <div class="info-row"><span class="k">Contribution</span><span class="v">Central Government 50% + Private Sector 50%</span></div>
+        <p class="note">To expedite infrastructure projects.</p>
+        <h4 class="sub2">National Productivity Council (NPC)</h4>
+        <div class="info-row"><span class="k">Established</span><span class="v">1958</span></div>
+        <p class="note">Objective: To increase productivity in industries.</p>
+        <div class="info-row"><span class="k">National Steel Policy</span><span class="v">2017</span></div>
+        <div class="info-row"><span class="k">MSMED Act</span><span class="v">2006 (passed)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Schemes Related to Industrial Sector</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Scheme</th><th>Started</th><th>Objective</th></tr>
+          <tr><td>Make in India</td><td>25 September 2014</td><td>Promote investment and manufacturing in India</td></tr>
+          <tr><td>Start Up India</td><td>January 2016</td><td>Nurture innovation and startups ecosystem</td></tr>
+          <tr><td>Stand Up India Scheme</td><td>April 2016</td><td>Promote entrepreneurship among SC/ST women</td></tr>
+          <tr><td>Pradhan Mantri Mudra Yojana</td><td>8 April 2015</td><td>Refinancing of microfinance institutions</td></tr>
+          <tr><td>SAATHI Scheme</td><td>October 2017</td><td>Adopt modern, efficient textile technology in small industries</td></tr>
+          <tr><td>Power Tex India Scheme</td><td>April 2017</td><td>Development of the powerloom sector</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Stand Up India (SC/ST women entrepreneurship) vs Start Up India (general innovation ecosystem) — very similar names but different target groups and objectives.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 9: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Summary / Reference Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>Industrial Growth Rate</td><td>6.2% (2024–25)</td></tr>
+          <tr><td>Industrial Share in GVA</td><td>27.6% (2024) | Was 13% in 1950–51</td></tr>
+          <tr><td>First Industrial Revolution</td><td>England</td></tr>
+          <tr><td>Dutt Committee</td><td>First proposed industrial licensing policy — 1970</td></tr>
+          <tr><td>TISCO</td><td>1907 | Jamshedpur, Jharkhand | Tata Iron and Steel Company</td></tr>
+          <tr><td>First Public Sector Steel Plant</td><td>Rourkela Steel Plant, 1959 (Odisha)</td></tr>
+          <tr><td>NALCO</td><td>1981 | Bhubaneswar (Odisha) | Country's largest Bauxite-Aluminium project</td></tr>
+          <tr><td>BALCO</td><td>1965 | Korba, Chhattisgarh | First public sector undertaking in India</td></tr>
+          <tr><td>Textiles — India's oldest industry</td><td>Largest organised sector | Largest employment after agriculture</td></tr>
+          <tr><td>First Cotton Textile Mill</td><td>Kolkata (1818)</td></tr>
+          <tr><td>India's Cottonopolis</td><td>Mumbai</td></tr>
+          <tr><td>East's Boston</td><td>Ahmedabad</td></tr>
+          <tr><td>Most Cotton Mills State</td><td>Tamil Nadu</td></tr>
+          <tr><td>North India's Manchester</td><td>Kanpur</td></tr>
+          <tr><td>South India's Manchester</td><td>Coimbatore</td></tr>
+          <tr><td>Jute — India's position</td><td>Largest producer | Second largest exporter | First mill: 1855, Rishra, Kolkata</td></tr>
+          <tr><td>Largest Jute Producer State</td><td>West Bengal</td></tr>
+          <tr><td>Silk — India's position</td><td>2nd largest producer (1st: China) | Largest producer: Karnataka</td></tr>
+          <tr><td>First Industrial Policy</td><td>1948 | Announced 6 April 1948 | 4 categories</td></tr>
+          <tr><td>Industrial Policy 1956</td><td>3 categories: Govt (17), Govt+Private (12), Private</td></tr>
+          <tr><td>New Industrial Policy LPG</td><td>24 July 1991 | Liberalisation, Privatisation, Globalisation</td></tr>
+          <tr><td>Industries Reserved for Public Sector</td><td>Atomic Energy and Rail Transport</td></tr>
+          <tr><td>MRTP Act</td><td>1969 | Replaced by Competition Act, 2002</td></tr>
+          <tr><td>Navratna — Started</td><td>1997 | Score 60/100 | Current: 26 (May 2025)</td></tr>
+          <tr><td>Maharatna — Started</td><td>2010 | 14 companies</td></tr>
+          <tr><td>Miniratna Category I</td><td>49 (March 2025) | 3 years continuous profit | ₹30 crore in a year</td></tr>
+          <tr><td>Miniratna Category II</td><td>10 (March 2025)</td></tr>
+          <tr><td>IIP Base Year</td><td>2011–12 | Estimated monthly by NSO</td></tr>
+          <tr><td>IIP — Manufacturing Weightage</td><td>77.63%</td></tr>
+          <tr><td>Core Industries</td><td>Eight | Total weightage 40.27%</td></tr>
+          <tr><td>Highest Weightage Core Industry</td><td>Refinery products (28.04%)</td></tr>
+          <tr><td>Asia's First EPZ</td><td>1965 | Kandla (Gujarat)</td></tr>
+          <tr><td>EPZ to SEZ</td><td>1 April 2000 | SEZ Act: 2005</td></tr>
+          <tr><td>NIIF</td><td>Established 2015 | ₹40,000 crore | Centre 50% + Private 50%</td></tr>
+          <tr><td>NPC</td><td>Established 1958 | Increase productivity in industries</td></tr>
+          <tr><td>Make in India</td><td>25 September 2014 | Promote investment and manufacturing</td></tr>
+          <tr><td>Stand Up India</td><td>April 2016 | Entrepreneurship for SC/ST women</td></tr>
+          <tr><td>Start Up India</td><td>January 2016 | Nurture innovation and startups</td></tr>
+          <tr><td>PM Mudra Yojana</td><td>8 April 2015 | Refinancing of microfinance institutions</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Indian Industries (Ch14) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

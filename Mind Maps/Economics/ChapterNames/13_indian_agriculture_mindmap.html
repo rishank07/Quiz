@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Agriculture - Ch13 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:9px 10px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:8px 10px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:120px;
+}
+.stat-box .num{color:var(--gold);font-size:20px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 13 · Economics</span>
+    <h1>Indian Agriculture</h1>
+    <p>Crops · Landholdings · Revolutions · MSP/CACP/FCI · Horticulture · Schemes — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('intro')">📘 Introduction & Contribution</button>
+    <button class="tab-btn" onclick="switchTab('crops')">🌾 Crops, Holdings & Irrigation</button>
+    <button class="tab-btn" onclick="switchTab('reforms')">📜 Land Reforms & Credit</button>
+    <button class="tab-btn" onclick="switchTab('revolutions')">🎨 Revolutions in Agriculture</button>
+    <button class="tab-btn" onclick="switchTab('institutions')">🏛 Institutions, MSP & FCI</button>
+    <button class="tab-btn" onclick="switchTab('sectors')">🌻 Horticulture, Dairy & Fisheries</button>
+    <button class="tab-btn" onclick="switchTab('trade')">🌍 Agri Trade & Schemes</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: INTRODUCTION -->
+  <div class="tab-content active" id="intro">
+    <div class="card">
+      <div class="card-header gold">Agriculture — Introduction</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Agriculture is a subject of the State List</li>
+          <li>Backbone of the Indian economy</li>
+          <li>Falls under the primary sector of the economy</li>
+          <li>Allied sectors: Animal husbandry, fisheries, forestry, mining, etc.</li>
+        </ul>
+        <p class="note">Organic/Natural Agriculture: Environment-friendly, minimal use of synthetic fertilisers and pesticides, uses organic/natural manure. Sikkim is India's first fully organic state.</p>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">3.8%</span><span class="lbl">Agri Growth Rate (2024–25)</span></div>
+          <div class="stat-box"><span class="num">1.4%</span><span class="lbl">Agri Growth Rate (2023–24)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Contribution / Importance of Agricultural Sector</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Population Engaged (Census 2011)</span><span class="v">54.6%</span></div>
+        <div class="info-row"><span class="k">Population Deriving Livelihood (Eco. Survey 2024–25)</span><span class="v">46.1%</span></div>
+        <div class="info-row"><span class="k">Contribution to GDP (1950–51)</span><span class="v">55.4%</span></div>
+        <div class="info-row"><span class="k">Contribution to GDP (2024–25)</span><span class="v">16%</span></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          GDP share of agriculture fell from 55.4% (1950-51) to 16% (2024-25), but the workforce engaged (54.6%, Census 2011) remains high — this mismatch between GDP share and employment share is a classic exam point.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: CROPS, HOLDINGS, IRRIGATION -->
+  <div class="tab-content" id="crops">
+    <div class="card">
+      <div class="card-header green">Major Crops (Seasonal Classification)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Rabi (Winter)</th><th>Kharif (Monsoon)</th><th>Zaid (Summer)</th></tr>
+          <tr><td>Wheat, Chickpea, Barley, Mustard, Pea</td><td>Paddy, Jowar (Sorghum), Bajra, Maize, Cotton, Sugarcane, Sesame, Soybean, Pigeon Pea (Arhar), Groundnut, Moong, Urad</td><td>Watermelon, Cucumber, Muskmelon, Sunflower</td></tr>
+        </table></div>
+        <p class="note">Commercial Crops: Groundnut, Mustard, Sesame, Sugarcane, Jute, Mesta, Tea, Coffee. Cash Crops: Jute, Sugarcane, Cotton, Tobacco. GM Crop: Bt-Cotton (only approved GM crop in India).</p>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Sugarcane, Groundnut, Mustard, and Sesame appear in BOTH the "Commercial Crops" AND "Cash Crops" lists — the two categories overlap significantly and are often used interchangeably in questions.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Size of Agricultural Holdings</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Size</th></tr>
+          <tr><td>Marginal holdings</td><td>Less than 1 hectare</td></tr>
+          <tr><td>Small holdings</td><td>1–2 hectares</td></tr>
+          <tr><td>Semi-medium holdings</td><td>2–4 hectares</td></tr>
+          <tr><td>Medium holdings</td><td>4–10 hectares</td></tr>
+          <tr><td>Large holdings</td><td>More than 10 hectares</td></tr>
+        </table></div>
+        <p class="note">India has the highest number of marginal holdings. Type of agriculture practiced in India: Subsistence farming.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Irrigation</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Gross Cropped Area Irrigated</span><span class="v">55%</span></div>
+        <div class="info-row"><span class="k">States with Most Irrigated Area</span><span class="v">Uttar Pradesh, Punjab, Madhya Pradesh</span></div>
+        <div class="info-row"><span class="k">Most Irrigated State (by % of total area)</span><span class="v">Punjab</span></div>
+        <div class="info-row"><span class="k">Least Irrigated State (by %)</span><span class="v">Mizoram</span></div>
+        <div class="info-row"><span class="k">Largest Unirrigated Area</span><span class="v">Maharashtra</span></div>
+        <h4 class="sub2">Major Irrigation Sources</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Source</th><th>Share</th></tr>
+          <tr><td>Tube Wells</td><td>57% (most in Uttar Pradesh)</td></tr>
+          <tr><td>Canals</td><td>32%</td></tr>
+          <tr><td>Wells</td><td>16%</td></tr>
+        </table></div>
+        <p class="note">State with most irrigation by ponds: Tamil Nadu.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Agricultural Growth — Five-Year Plans</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Plan</th><th>Actual Growth (%)</th></tr>
+          <tr><td>Second Plan</td><td>3.17%</td></tr>
+          <tr><td>Fifth Plan</td><td>3.28%</td></tr>
+          <tr><td>Seventh Plan</td><td>3.41%</td></tr>
+          <tr><td>Eighth Plan</td><td>4.68%</td></tr>
+          <tr><td>Eleventh Plan</td><td>3.6%</td></tr>
+          <tr><td>Twelfth Plan</td><td>4.0%</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          8th Plan (4.68%) recorded the highest agricultural growth among these — consistent with the 8th Plan being the "most successful" plan overall.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: LAND REFORMS & CREDIT -->
+  <div class="tab-content" id="reforms">
+    <div class="card">
+      <div class="card-header teal">Land Reforms in India</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Tenancy Reforms</li>
+          <li>Abolition of Intermediaries</li>
+          <li>Land Ceiling (limit on land holding)</li>
+          <li>Abolition of Zamindari System — Uttar Pradesh</li>
+          <li>System of cooperative farming</li>
+        </ul>
+        <div class="info-row"><span class="k">Land Reform Successful States</span><span class="v">Kerala, West Bengal</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Agricultural Credit</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Institutional Sources</span><span class="v">More than 65% — Government, Cooperative Societies, Commercial Banks</span></div>
+        <div class="info-row"><span class="k">Non-Institutional Sources</span><span class="v">Money Lenders, Mahajans, Landlords, Relatives</span></div>
+        <h4 class="sub2">Types of Agricultural Credit</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Duration</th></tr>
+          <tr><td>Short-term</td><td>Less than 15 months</td></tr>
+          <tr><td>Medium-term</td><td>15 months to 5 years</td></tr>
+          <tr><td>Long-term</td><td>More than 15 years</td></tr>
+        </table></div>
+        <p class="note">Land Development Bank: Provides long-term credit to the agricultural sector. Commercialisation of Agriculture: Leads to a crisis of marketable surplus.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: REVOLUTIONS -->
+  <div class="tab-content" id="revolutions">
+    <div class="card">
+      <div class="card-header green">Green Revolution (1965)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Father (World)</span><span class="v">Norman Borlaug (Mexico)</span></div>
+        <div class="info-row"><span class="k">Father (India)</span><span class="v">Dr. M.S. Swaminathan</span></div>
+        <div class="info-row"><span class="k">Birthplace</span><span class="v">Pantnagar (Uttarakhand)</span></div>
+        <div class="info-row"><span class="k">Affected Areas</span><span class="v">Punjab, Haryana, Western Uttar Pradesh</span></div>
+        <ul class="arrow-list">
+          <li>Development of new, high-yielding varieties of seeds (HYV)</li>
+          <li>Key factors: HYV seeds, irrigation, chemical fertilisers</li>
+          <li>Maximum impact on wheat production; paddy to some extent</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">White Revolution & Second Phase of Green Revolution</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">White Revolution (Operation Flood)</span><span class="v">1970, started by Dr. Verghese Kurien — increase in milk production</span></div>
+        <div class="info-row"><span class="k">Second Phase of Green Revolution</span><span class="v">Mid-1970s–80s — expanded HYV seeds/fertilisers/irrigation to more crops and regions</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Rainbow Revolution & Colour-coded Revolutions</div>
+      <div class="card-body">
+        <p class="note">Rainbow Revolution: A holistic mix of all revolutions.</p>
+        <div class="tbl-wrap"><table>
+          <tr><th>Revolution</th><th>Sector / Product</th></tr>
+          <tr><td>White</td><td>Milk Production</td></tr>
+          <tr><td>Yellow</td><td>Oilseed Production</td></tr>
+          <tr><td>Round</td><td>Potato</td></tr>
+          <tr><td>Blue</td><td>Fish</td></tr>
+          <tr><td>Red</td><td>Meat / Tomato</td></tr>
+          <tr><td>Pink</td><td>Prawn / Onion</td></tr>
+          <tr><td>Black</td><td>Petroleum</td></tr>
+          <tr><td>Grey</td><td>Fertiliser</td></tr>
+          <tr><td>Silver</td><td>Egg</td></tr>
+          <tr><td>Golden</td><td>Horticulture</td></tr>
+          <tr><td>Saffron</td><td>Solar Energy</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          "Silver Revolution" has two meanings in different contexts: Animal Welfare/Grains (per Rainbow Revolution classification) vs Egg Production (in the general colour-coded list) — check the question context carefully.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: INSTITUTIONS, MSP, FCI -->
+  <div class="tab-content" id="institutions">
+    <div class="card">
+      <div class="card-header orange">NABARD</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">1982</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Mumbai</span></div>
+        <div class="info-row"><span class="k">Recommended By</span><span class="v">Shivraman Committee</span></div>
+        <div class="info-row"><span class="k">Kisan Credit Card Scheme</span><span class="v">1998–99</span></div>
+        <p class="note">Apex institution for providing finance for agriculture and rural development.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">CACP & MSP</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">CACP Established</span><span class="v">1965, as Agricultural Prices Commission (APC)</span></div>
+        <div class="info-row"><span class="k">Renamed</span><span class="v">1985 → Commission for Agricultural Costs and Prices</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">New Delhi</span></div>
+        <p class="note">Advises the government on fixing agricultural product prices; mandated to recommend MSPs.</p>
+        <h4 class="sub2">Minimum Support Price (MSP)</h4>
+        <div class="info-row"><span class="k">Started</span><span class="v">1966–67</span></div>
+        <p class="note">Announced by government on CACP's recommendation, for 22 mandated crops + FRP for sugarcane (14 Kharif, 6 Rabi, 2 other commercial crops):</p>
+        <ul class="arrow-list">
+          <li>7 Cereals: Paddy, Wheat, Barley, Jowar, Bajra, Maize, Ragi</li>
+          <li>4 Commercial Crops: Copra, Sugarcane, Cotton, Raw Jute</li>
+          <li>5 Pulses: Gram, Arhar/Tur, Moong, Urad, Lentil</li>
+          <li>7 Oil Seeds: Groundnut, Rapeseed/Mustard, Soybean, Sunflower, Sesamum, Nigerseed</li>
+        </ul>
+        <p class="note">FRP (Fair and Remunerative Price) is specific to sugarcane pricing.</p>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Sugarcane price is fixed via FRP (Fair and Remunerative Price), NOT MSP — a commonly confused exception among the 22+ mandated crops.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">FCI, TPDS & National Food Security Act</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">FCI Established</span><span class="v">1965 — Purchase, Storage, Transportation, Distribution, Sale of food grains</span></div>
+        <div class="info-row"><span class="k">TPDS Established</span><span class="v">1997 — affordable grains to people</span></div>
+        <div class="info-row"><span class="k">National Agriculture Commission</span><span class="v">Formed 2004; Chairman: M.S. Swaminathan; Report 2006</span></div>
+        <h4 class="sub2">National Food Security Act, 2013</h4>
+        <ul class="arrow-list">
+          <li>Started: 10th November 2013</li>
+          <li>Implemented in all 29 states/UTs from November 2016</li>
+          <li>Rural: 75% population; Urban: 50% population — food grains at subsidised rates</li>
+        </ul>
+        <p class="note">CAPART: Formed in 1986 by merging PADI (People's Action for Development India) and CART (Council for Advancement of Rural Technology) — supports voluntary action and technological innovation in rural development.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: HORTICULTURE, DAIRY, FISHERIES -->
+  <div class="tab-content" id="sectors">
+    <div class="card">
+      <div class="card-header gold">Horticulture Sector</div>
+      <div class="card-body">
+        <p class="note">Includes flowers, vegetables, root crops, fruits, spices, medicinal plants.</p>
+        <div class="info-row"><span class="k">India's Share in World Fruit Production</span><span class="v">~11%</span></div>
+        <div class="info-row"><span class="k">World Rank in Fruit Production</span><span class="v">2nd</span></div>
+        <div class="info-row"><span class="k">Top Fruit Producing State</span><span class="v">Andhra Pradesh</span></div>
+        <div class="info-row"><span class="k">Spices Production</span><span class="v">India is the largest producer</span></div>
+        <div class="info-row"><span class="k">National Horticulture Mission</span><span class="v">Started 2005–06</span></div>
+        <div class="info-row"><span class="k">National Horticulture Board</span><span class="v">Established 1984; HQ: Gurugram, Haryana</span></div>
+        <p class="note">India is known as the "Land of Spices"; Kerala is the "Spice Garden of India."</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Dairy Sector</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>India ranks 1st in livestock population in the world</li>
+          <li>India ranks 1st in milk production in the world</li>
+          <li>Largest milk producing state: Uttar Pradesh</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Fisheries</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">World Rank</span><span class="v">3rd-largest producer</span></div>
+        <h4 class="sub2">Top Fish-Producing States</h4>
+        <ul class="arrow-list">
+          <li>1. Andhra Pradesh</li>
+          <li>2. West Bengal</li>
+          <li>3. Karnataka</li>
+        </ul>
+        <p class="note">National Fisheries Development Board: Established 2006, HQ Hyderabad.</p>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          International Year of Millets was declared for 2023 by the United Nations — India led this global initiative given its status as a major millet producer.
+        </div>
+        <p class="note">First state to give agriculture the status of industry: Maharashtra.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: AGRI TRADE & SCHEMES -->
+  <div class="tab-content" id="trade">
+    <div class="card">
+      <div class="card-header purple">Agricultural Trade</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Share of Agriculture in India's Total Exports</span><span class="v">11.8%</span></div>
+        <div class="info-row"><span class="k">India's Share in Global Agricultural Exports</span><span class="v">1.7%</span></div>
+        <p class="note">Top items under Agri Exports: Cereals, Spices, Marine Products.</p>
+        <div class="tbl-wrap"><table>
+          <tr><th>Product</th><th>Export Areas</th></tr>
+          <tr><td>Basmati Rice</td><td>Uttarakhand, Punjab</td></tr>
+          <tr><td>Spices</td><td>Kerala</td></tr>
+          <tr><td>Mango</td><td>Uttar Pradesh, Maharashtra</td></tr>
+          <tr><td>Vegetables</td><td>Uttar Pradesh, West Bengal</td></tr>
+          <tr><td>Onion</td><td>Maharashtra</td></tr>
+        </table></div>
+        <h4 class="sub2">Agricultural Export Policy — 2018</h4>
+        <ul class="arrow-list">
+          <li>Aims to double agricultural exports, diversify destinations, promote high-value exports</li>
+          <li>Target: $100 billion in coming years</li>
+          <li>Promotes indigenous, innovative, organic, local, traditional and non-traditional agri exports</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Related Bodies</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">APEDA</span><span class="v">Established 1986 — top agency for agricultural export areas</span></div>
+        <div class="info-row"><span class="k">NAFED</span><span class="v">Established 1958 — National Agriculture Cooperative Marketing Federation of India</span></div>
+        <div class="info-row"><span class="k">TRIFED</span><span class="v">Established 1987, functioning 1988 — Tribal Cooperative Marketing Development Federation of India</span></div>
+        <div class="info-row"><span class="k">Price Stabilisation Fund</span><span class="v">For onion, potato, pulses</span></div>
+        <div class="info-row"><span class="k">ATMA</span><span class="v">Established 2005 — provides new technologies and information to farmers</span></div>
+        <h4 class="sub2">National Agriculture Policy</h4>
+        <p class="note">2007 was the Third policy of independent India (First: 1992, Second: 2000).</p>
+        <div class="info-row"><span class="k">FSSAI</span><span class="v">Act 2006; Established 2008 — science-based food safety standards</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Major Schemes Related to Agriculture</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Scheme</th><th>Started</th><th>Objective</th></tr>
+          <tr><td>National Food Security Mission (NFSM)</td><td>2007</td><td>Increase rice, wheat, pulses production by 10, 8, 2 MT respectively</td></tr>
+          <tr><td>Rashtriya Krishi Vikas Yojana</td><td>2007–08</td><td>Encourage states for comprehensive agricultural/allied sector development</td></tr>
+          <tr><td>National Mission Food Processing</td><td>2012</td><td>Increase farmers' income; store food items longer</td></tr>
+          <tr><td>National Sustainable Agriculture Scheme</td><td>2014</td><td>Sustainable agricultural development</td></tr>
+          <tr><td>National Program for Dairy Development</td><td>February 2014</td><td>Improve breed of animals</td></tr>
+          <tr><td>Soil Health Card Scheme</td><td>February 2015</td><td>Provide soil health cards to farmers</td></tr>
+          <tr><td>Pradhan Mantri Krishi Sinchai Yojana</td><td>1st July 2015</td><td>Enhance irrigation access ("more crop per drop"); expand cultivable land</td></tr>
+          <tr><td>Pradhan Mantri Fasal Bima Yojana</td><td>18th February 2016</td><td>Compensation for crop loss due to natural calamities</td></tr>
+          <tr><td>e-NAM Scheme</td><td>2016</td><td>Provide fair price for farmers' produce</td></tr>
+          <tr><td>Pradhan Mantri Kisan Sampada Yojana</td><td>April 2017</td><td>Reduce food wastage, increase farmers' income</td></tr>
+          <tr><td>Pradhan Mantri Kisan Samman Nidhi</td><td>2019</td><td>Income support of ₹6000 annually in 3 instalments</td></tr>
+          <tr><td>Pradhan Mantri Kisan Maan-Dhan Yojana</td><td>12 September 2019</td><td>₹3000/month pension after 60 years for small/marginal farmers (aged 18–40)</td></tr>
+          <tr><td>Pradhan Mantri Matsya Sampada Yojana</td><td>10 September 2020</td><td>Self-reliant villages; double income of fishermen and allied farmers</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Pradhan Mantri Kisan Samman Nidhi (₹6000/year income support) and Pradhan Mantri Kisan Maan-Dhan Yojana (₹3000/month PENSION) are both "PM Kisan" schemes but serve very different purposes — frequently confused.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Summary / Reference Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>Agriculture — List</td><td>Subject of State list | Backbone of Indian economy | Primary sector</td></tr>
+          <tr><td>Sikkim</td><td>India's first fully organic state</td></tr>
+          <tr><td>Agriculture GDP share</td><td>55.4% in 1950–51 | 16% in 2024–25</td></tr>
+          <tr><td>Population in Agriculture</td><td>54.6% (Census 2011) | 46.1% livelihood (Economic Survey 2024–25)</td></tr>
+          <tr><td>India's Farming Type</td><td>Subsistence farming</td></tr>
+          <tr><td>GM Crop in India</td><td>Bt-Cotton (only approved GM crop)</td></tr>
+          <tr><td>Marginal Holdings</td><td>Less than 1 hectare | India has highest number</td></tr>
+          <tr><td>Gross Irrigated Area</td><td>55% of gross cropped area</td></tr>
+          <tr><td>Most Irrigated State (%)</td><td>Punjab</td></tr>
+          <tr><td>Least Irrigated State (%)</td><td>Mizoram</td></tr>
+          <tr><td>Largest Unirrigated Area</td><td>Maharashtra</td></tr>
+          <tr><td>Major Irrigation Source</td><td>Tube Wells 57% | Canals 32% | Wells 16%</td></tr>
+          <tr><td>Most Irrigation by Ponds</td><td>Tamil Nadu</td></tr>
+          <tr><td>Land Reform Successful States</td><td>Kerala and West Bengal</td></tr>
+          <tr><td>Abolition of Zamindari</td><td>Uttar Pradesh</td></tr>
+          <tr><td>Green Revolution — Started</td><td>1965</td></tr>
+          <tr><td>Father of Green Revolution (World)</td><td>Norman Borlaug (Mexico)</td></tr>
+          <tr><td>Father of Green Revolution (India)</td><td>Dr. M.S. Swaminathan</td></tr>
+          <tr><td>Green Revolution — Birth Place</td><td>Pantnagar (Uttarakhand)</td></tr>
+          <tr><td>White Revolution (Operation Flood)</td><td>1970 | Dr. Verghese Kurien</td></tr>
+          <tr><td>NABARD</td><td>1982 | HQ: Mumbai | Shivraman Committee | Kisan Credit Card: 1998–99</td></tr>
+          <tr><td>CACP</td><td>Established 1965 as APC | Renamed 1985 | HQ: New Delhi</td></tr>
+          <tr><td>MSP — Started</td><td>1966–67 | 22 mandated crops</td></tr>
+          <tr><td>FCI</td><td>Established 1965 | Purchase, Storage, Transport, Distribution, Sale of food grains</td></tr>
+          <tr><td>TPDS</td><td>Established 1997 | Affordable grains to people</td></tr>
+          <tr><td>National Food Security Act</td><td>2013 | Started 10 Nov 2013 | Rural 75%, Urban 50%</td></tr>
+          <tr><td>National Agriculture Commission</td><td>Formed 2004 | Chairman: M.S. Swaminathan | Report 2006</td></tr>
+          <tr><td>National Horticulture Board</td><td>Established 1984 | HQ: Gurugram (Haryana)</td></tr>
+          <tr><td>National Horticulture Mission</td><td>Started 2005–06</td></tr>
+          <tr><td>India — Dairy</td><td>1st in livestock population | 1st in milk production | Largest state: UP</td></tr>
+          <tr><td>India — Fisheries</td><td>3rd-largest producer | Top state: Andhra Pradesh</td></tr>
+          <tr><td>International Year of Millets</td><td>2023 (declared by UN)</td></tr>
+          <tr><td>First State — Agriculture as Industry</td><td>Maharashtra</td></tr>
+          <tr><td>APEDA</td><td>Established 1986 | Top agency for agri export areas</td></tr>
+          <tr><td>NAFED</td><td>Established 1958 | National Agri Cooperative Marketing Federation of India</td></tr>
+          <tr><td>TRIFED</td><td>Established 1987 | Functioning 1988 | Tribal Cooperative Marketing</td></tr>
+          <tr><td>Agricultural Export Policy</td><td>2018 | Target: $100 billion exports</td></tr>
+          <tr><td>ATMA</td><td>Established 2005 | New technologies for farmers</td></tr>
+          <tr><td>National Agriculture Policy</td><td>2007 | Third policy | First: 1992, Second: 2000</td></tr>
+          <tr><td>FSSAI</td><td>Act 2006 | Established 2008 | Science-based food standards</td></tr>
+          <tr><td>India — Spices</td><td>Largest producer | Kerala → Spice Garden of India</td></tr>
+          <tr><td>Agriculture share in exports</td><td>11.8%</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Indian Agriculture (Ch13) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Other Major Schemes | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+    position:relative;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:100;
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.88rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.92rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.85rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:0.92rem;
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:#aab0c6;}
+  .info-row .v{color:var(--text);font-weight:600;}
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+  .scheme-year{
+    display:inline-block;
+    background:var(--surface2);
+    color:var(--gold);
+    font-size:0.78rem;
+    font-weight:700;
+    padding:2px 10px;
+    border-radius:12px;
+    margin-left:8px;
+  }
+  h3.sub-heading{
+    color:var(--gold);
+    font-size:1rem;
+    margin:16px 0 8px;
+  }
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+
+<div class="header">
+  <span class="art-pill">Chapter 15</span>
+  <h1>Other Major Schemes</h1>
+  <p>Comprehensive coverage of major Government of India schemes — start dates, full forms &amp; objectives — for BPSC / BSSC preparation</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('recent')">Recent (2023–24)</button>
+  <button onclick="switchTab('welfare')">Social Welfare</button>
+  <button onclick="switchTab('financial')">Financial &amp; Insurance</button>
+  <button onclick="switchTab('skill')">Skill &amp; Youth</button>
+  <button onclick="switchTab('agri')">Agri, Energy &amp; Rural Infra</button>
+  <button onclick="switchTab('health')">Health, Edu &amp; Transport</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">23</div><div class="lbl">Schemes Covered</div></div>
+          <div class="stat-box"><div class="num">2015–24</div><div class="lbl">Year Range</div></div>
+          <div class="stat-box"><div class="num">7</div><div class="lbl">Thematic Categories</div></div>
+          <div class="stat-box"><div class="num">6</div><div class="lbl">Newest Schemes (2023–24)</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>This chapter compiles major Central Government schemes frequently asked in BPSC/BSSC Prelims & Mains as one-liner / matching-type questions.</li>
+          <li>Focus areas: exact launch year/month, full forms of acronyms, and the core objective of each scheme.</li>
+          <li>Schemes are grouped thematically (Social Welfare, Financial Security, Skill Development, Agriculture & Infra, Health & Education) for logical revision — followed by a Master Table for rapid final revision.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Chronology trick — remember by "newest first": Vidyalaxmi & Bima Sakhi (2024) → Surya Ghar (Feb 2024) → PVTG Mission & PRANAM (2023) → Adi Adarsh Gram & SHRESTHA & Agnipath & SMILE (2021–22).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECENT -->
+  <div id="recent" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🆕 PM Vidyalaxmi Yojana <span class="scheme-year">Nov 2024</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Provides financial assistance to students belonging to backward classes and weaker sections for higher education.</li>
+          <li>Aimed at reducing dropout due to financial constraints among disadvantaged student groups.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🆕 Bima Sakhi Yojana <span class="scheme-year">Dec 2024</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Provides special training and financial assistance to women to help them manage a work-based (insurance-linked) programme.</li>
+          <li>Aimed at women's economic empowerment through skill-linked livelihood support.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🆕 PM Surya Ghar: Muft Bijli Yojana <span class="scheme-year">Feb 2024</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Free electricity scheme for one crore families through installation of rooftop solar panels.</li>
+          <li>Part of India's clean/renewable energy and household savings push.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Don't confuse with PM-KUSUM (2019) — KUSUM is for farmers' solar pumps, while Surya Ghar is for household rooftop solar & free electricity.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🆕 Pradhan Mantri PVTG Vikas Mission <span class="scheme-year">Nov 2023</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Aims at improvement in the social and economic status of Particularly Vulnerable Tribal Groups (PVTGs).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🆕 PM PRANAM Yojana <span class="scheme-year">June 2023</span></div>
+      <div class="card-body">
+        <p style="color:#aab0c6;font-size:0.85rem;margin-bottom:8px;">Full Form: PM Programme for Restoration, Awareness, Nourishment and Amelioration of Mother Earth</p>
+        <ul class="arrow-list">
+          <li>Encourages balanced use of chemical fertilisers along with organic and bio-fertilisers.</li>
+          <li>Aims to reduce over-dependence on chemical fertiliser subsidy and promote sustainable farming.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOCIAL WELFARE -->
+  <div id="welfare" class="tab-panel">
+    <div class="card">
+      <div class="card-header green">PM Adi Adarsh Gram Yojana <span class="scheme-year">2021–22</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Focuses on all-round development of tribal villages.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">SHRESTHA Yojana <span class="scheme-year">June 2022</span></div>
+      <div class="card-body">
+        <p style="color:#aab0c6;font-size:0.85rem;margin-bottom:8px;">Full Form: Scheme for Residential Education for Students in High Schools in Targeted Areas</p>
+        <ul class="arrow-list">
+          <li>Provides quality residential education from Class 9 to 12 to meritorious students of the SC community in targeted areas.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">SMILE <span class="scheme-year">Feb 2022</span></div>
+      <div class="card-body">
+        <p style="color:#aab0c6;font-size:0.85rem;margin-bottom:8px;">Full Form: Support for Marginalised Individuals for Livelihood and Enterprise</p>
+        <ul class="arrow-list">
+          <li>Aims to create an inclusive society for transgenders, beggars, and other marginalised individuals so they can participate in the mainstream and live a dignified life.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">One Nation One Ration Card Scheme <span class="scheme-year">Aug 2019</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Enables ration card holders to get food grains at a reduced price from any government ration shop anywhere in the country.</li>
+          <li>Ensures portability of food security benefits, especially for migrant workers.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          One Nation One Ration Card = portability of PDS benefits across states — launched August 2019.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINANCIAL & INSURANCE -->
+  <div id="financial" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">PM Jeevan Jyoti Bima Yojana <span class="scheme-year">2015</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Provides simple term insurance of ₹2 lakh to the poor.</li>
+          <li>Gives financial assistance to the family in case of the insured person's death (including accidental death).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Sukanya Samriddhi Yojana <span class="scheme-year">22 Jan 2015</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Encourages parents to save for the future of their daughters — covering education and marriage expenses.</li>
+          <li>Small savings scheme offering a high, government-backed interest rate exclusively for the girl child.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Exact launch date is frequently tested: 22 January 2015 — the same date as the "Beti Bachao, Beti Padhao" campaign launch.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILL & YOUTH -->
+  <div id="skill" class="tab-panel">
+    <div class="card">
+      <div class="card-header red">Agnipath Yojana <span class="scheme-year">2022</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Allows youth ("Agniveers") to serve in the armed forces for a 4-year tenure.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">PM Kaushal Vikas Yojana <span class="scheme-year">July 2015</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Provides skill training to youth to improve employability and productivity.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">USTAAD Yojana <span class="scheme-year">May 2015</span></div>
+      <div class="card-body">
+        <p style="color:#aab0c6;font-size:0.85rem;margin-bottom:8px;">Full Form: Upgrading the Skills and Training in Traditional Arts / Crafts for Development</p>
+        <ul class="arrow-list">
+          <li>Recognises and upgrades the talent of artisans, sculptors, and traditional artists.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Atal Innovation Mission <span class="scheme-year">2016</span></div>
+      <div class="card-body">
+        <p style="color:#aab0c6;font-size:0.85rem;margin-bottom:8px;">Also known as: Atal New Pravartana Mission</p>
+        <ul class="arrow-list">
+          <li>Promotes innovation through Atal Tinkering Labs in schools and Incubation Centres in universities.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Atal Tinkering Labs → school level | Atal Incubation Centres → university/institute level.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGRI, ENERGY & RURAL INFRA -->
+  <div id="agri" class="tab-panel">
+    <div class="card">
+      <div class="card-header green">PM-KUSUM Yojana <span class="scheme-year">2019</span></div>
+      <div class="card-body">
+        <p style="color:#aab0c6;font-size:0.85rem;margin-bottom:8px;">Full Form: PM Kisan Urja Suraksha evam Utthan Mahabhiyan</p>
+        <ul class="arrow-list">
+          <li>Provides financial support to farmers for setting up solar pumps.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">SVAMITVA Scheme <span class="scheme-year">2020</span></div>
+      <div class="card-body">
+        <p style="color:#aab0c6;font-size:0.85rem;margin-bottom:8px;">Full Form: Survey of Villages and Mapping with Improvised Technology in Village Areas</p>
+        <ul class="arrow-list">
+          <li>Provides a unified residential property ownership solution (property cards) for rural India using drone technology.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Jal Jeevan Mission <span class="scheme-year">2019</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Aims to provide clean drinking water and piped water connections (Har Ghar Jal) to all households by 2024.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">PM Gatishakti Yojana <span class="scheme-year">2021</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>National Master Plan to develop basic infrastructure and promote integrated, multi-modal economic development.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          PM Gatishakti (infrastructure master plan, 2021) is often confused with PM PRANAM (fertiliser scheme, 2023) — different sectors entirely.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEALTH, EDU & TRANSPORT -->
+  <div id="health" class="tab-panel">
+    <div class="card">
+      <div class="card-header orange">PM Poshan Shakti Nirman Yojana <span class="scheme-year">Sept 2021</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>New name given to the Mid-Day Meal Scheme.</li>
+          <li>Provides one-time cooked meal to all children studying in government and government-aided schools.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          PM Poshan Shakti Nirman = renamed Mid-Day Meal Scheme (Sept 2021) — do not confuse with POSHAN Abhiyaan (2018, nutrition mission for women & children).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Safe Motherhood Assurance (SUMAN) Yojana <span class="scheme-year">Oct 2019</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Aims to reduce maternal, infant, and child mortality by ensuring free and dignified quality healthcare.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">UDAN Yojana <span class="scheme-year">Oct 2016</span></div>
+      <div class="card-body">
+        <p style="color:#aab0c6;font-size:0.85rem;margin-bottom:8px;">Full Form: Ude Desh Ka Aam Nagrik</p>
+        <ul class="arrow-list">
+          <li>Provides convenient and affordable air travel connectivity from/to smaller cities.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Setu Bharatam Yojana <span class="scheme-year">2016</span></div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Aims to build bridges on national highways to ensure safe and smooth (railway-crossing-free) travel.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table (Chronological — Latest First)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead>
+            <tr><th>Scheme</th><th>Started</th><th>Key Fact</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Bima Sakhi Yojana</td><td>Dec 2024</td><td>Training & financial assistance for women</td></tr>
+            <tr><td>PM Vidyalaxmi Yojana</td><td>Nov 2024</td><td>Financial assistance to backward class students</td></tr>
+            <tr><td>PM Surya Ghar: Muft Bijli Yojana</td><td>Feb 2024</td><td>Free electricity via rooftop solar for 1 crore families</td></tr>
+            <tr><td>PM PVTG Vikas Mission</td><td>Nov 2023</td><td>Social & economic upliftment of PVTGs</td></tr>
+            <tr><td>PM PRANAM Yojana</td><td>June 2023</td><td>Balanced use of chemical + organic fertilisers</td></tr>
+            <tr><td>Agnipath Yojana</td><td>2022</td><td>Youth serve armed forces for 4 years</td></tr>
+            <tr><td>SHRESTHA Yojana</td><td>June 2022</td><td>Residential education for SC students (Class 9–12)</td></tr>
+            <tr><td>PM Adi Adarsh Gram Yojana</td><td>2021–22</td><td>All-round development of tribal villages</td></tr>
+            <tr><td>SMILE</td><td>Feb 2022</td><td>Inclusive society for transgenders, beggars</td></tr>
+            <tr><td>PM Poshan Shakti Nirman Yojana</td><td>Sept 2021</td><td>Renamed Mid-Day Meal Scheme</td></tr>
+            <tr><td>PM Gatishakti Yojana</td><td>2021</td><td>National infra master plan</td></tr>
+            <tr><td>SVAMITVA Scheme</td><td>2020</td><td>Rural property ownership cards</td></tr>
+            <tr><td>One Nation One Ration Card</td><td>Aug 2019</td><td>Food grains from any ration shop nationwide</td></tr>
+            <tr><td>SUMAN Yojana</td><td>Oct 2019</td><td>Reduce maternal, infant & child mortality</td></tr>
+            <tr><td>PM-KUSUM Yojana</td><td>2019</td><td>Solar pumps for farmers</td></tr>
+            <tr><td>Jal Jeevan Mission</td><td>2019</td><td>Piped drinking water to all households by 2024</td></tr>
+            <tr><td>Atal Innovation Mission</td><td>2016</td><td>Tinkering Labs & Incubation Centres</td></tr>
+            <tr><td>UDAN Yojana</td><td>Oct 2016</td><td>Affordable air travel connectivity</td></tr>
+            <tr><td>Setu Bharatam Yojana</td><td>2016</td><td>Bridges on national highways</td></tr>
+            <tr><td>PM Jeevan Jyoti Bima Yojana</td><td>2015</td><td>₹2 lakh term insurance for the poor</td></tr>
+            <tr><td>Sukanya Samriddhi Yojana</td><td>22 Jan 2015</td><td>Savings for daughter's education & marriage</td></tr>
+            <tr><td>PM Kaushal Vikas Yojana</td><td>July 2015</td><td>Skill training to youth</td></tr>
+            <tr><td>USTAAD Yojana</td><td>May 2015</td><td>Recognise artisans & traditional artists</td></tr>
+          </tbody>
+        </table></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Group by year for MCQ speed: 2015 (4 schemes) → 2016 (3) → 2019 (4) → 2020–22 (5) → 2023–24 (5).
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Other Major Schemes · BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

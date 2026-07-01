@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Awards | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 10</span>
+  <h1>Awards</h1>
+  <p>Nobel · Pulitzer · Booker · National Honours · Gallantry · Science & Sports Awards</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">🏅 Nobel Prize</button>
+  <button class="tab-btn" onclick="switchTab('t2')">📰 Pulitzer & Booker Prizes</button>
+  <button class="tab-btn" onclick="switchTab('t3')">🎬 Magsaysay, Oscar & Grammy</button>
+  <button class="tab-btn" onclick="switchTab('t4')">🇮🇳 Bharat Ratna & Padma</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🎖 Gallantry & Film Awards</button>
+  <button class="tab-btn" onclick="switchTab('t6')">📚 Literary & Cultural Awards</button>
+  <button class="tab-btn" onclick="switchTab('t7')">🔬 Science & Sports Awards</button>
+  <button class="tab-btn" onclick="switchTab('t8')">🎨 Art & Other Awards</button>
+  <button class="tab-btn" onclick="switchTab('t9')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: NOBEL PRIZE -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">Nobel Prize — Overview</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Foundation: Nobel Foundation (1900)</li>
+        <li>Awarded annually on 10th December — Alfred Nobel's death anniversary (Stockholm, Sweden)</li>
+        <li>Fields since 1901: Physics, Chemistry, Medicine, Peace and Literature</li>
+        <li>Since 1969: Economics (by Sveriges Riksbank)</li>
+        <li>Prize Amount: 11 Million Swedish Kronor (approx. ₹8–10 crore)</li>
+      </ul>
+      <div class="stat-box"><span class="num">1900</span><span class="label">Nobel Foundation Est.</span></div>
+      <div class="stat-box"><span class="num">10 Dec</span><span class="label">Award Ceremony Date</span></div>
+      <div class="stat-box"><span class="num">1969</span><span class="label">Economics Added</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Awarding Bodies of Nobel Prize</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Awarding Body</th><th>Prize(s) Awarded</th></tr>
+        <tr><td>Royal Swedish Academy of Sciences</td><td>Physics, Chemistry, Economic Sciences</td></tr>
+        <tr><td>Karolinska Institute</td><td>Physiology or Medicine</td></tr>
+        <tr><td>Swedish Academy</td><td>Literature</td></tr>
+        <tr><td>Norwegian Nobel Committee</td><td>Peace</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        The Peace Prize is the ONLY Nobel Prize awarded by a Norwegian body (Norwegian Nobel Committee) — all others are Swedish institutions. This is asked very frequently.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Nobel Prize Winners 2024</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Field</th><th>Winner(s)</th><th>Contribution</th></tr>
+        <tr><td>Peace</td><td>Nihon Hidankyo (Japanese Organisation)</td><td>Efforts toward a world free of nuclear weapons</td></tr>
+        <tr><td>Physics</td><td>John J. Hopfield and Geoffrey Hinton</td><td>Foundational discoveries enabling machine learning</td></tr>
+        <tr><td>Chemistry</td><td>David Baker, Demis Hassabis, John Jumper</td><td>Protein structure prediction and design</td></tr>
+        <tr><td>Physiology/Medicine</td><td>Gary Ruvkun and Victor Ambros</td><td>Discovery of microRNA and its role in gene regulation</td></tr>
+        <tr><td>Literature</td><td>Han Kang</td><td>Intense poetic prose confronting historical trauma</td></tr>
+        <tr><td>Economic Sciences</td><td>Daron Acemoglu, Simon Johnson, James A. Robinson</td><td>Impact of institutions on economic development</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Indian Citizens — Nobel Prize Winners</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Name (Year)</th><th>Field</th></tr>
+        <tr><td>Rabindranath Tagore (1913)</td><td>Literature — for 'Gitanjali'</td></tr>
+        <tr><td>C.V. Raman (1930)</td><td>Physics — for the Raman Effect</td></tr>
+        <tr><td>Har Gobind Khorana (1968)</td><td>Medicine — genetic code and protein synthesis</td></tr>
+        <tr><td>Mother Teresa (1979)</td><td>Peace</td></tr>
+        <tr><td>Subrahmanyam Chandrasekhar (1983)</td><td>Physics — Chandrasekhar Limit for black holes</td></tr>
+        <tr><td>Amartya Sen (1998)</td><td>Economics — welfare economics</td></tr>
+        <tr><td>Venkatraman Ramakrishnan (2009)</td><td>Chemistry — 3D structure of ribosome</td></tr>
+        <tr><td>Kailash Satyarthi (2014)</td><td>Peace — child rights, Bachpan Bachao Andolan</td></tr>
+        <tr><td>Abhijit Banerjee (2019)</td><td>Economics</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Chandrasekhar and Raman both won for PHYSICS but different discoveries — Raman Effect (1930) vs Chandrasekhar Limit (1983). Don't merge them.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: PULITZER & BOOKER -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header red">Pulitzer Prize</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Institution: Columbia University, USA (1917) — in memory of Joseph Pulitzer</li>
+        <li>23 Categories — Journalism, Literature and Music</li>
+        <li>Award: Certificate + $15,000 cash</li>
+        <li>First Indian Recipient: Gobind Behari Lal (1937)</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Pulitzer Prize 2025 — Indian photojournalists Danish Siddiqui, Amit Dave, Adnan Abidi, and Sana Irshad Mattoo were honoured (Photography, 2022 work). New York Times won the most categories (4) in 2025.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Booker Prize & International Booker Prize</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Organisation: Booker Prize Foundation</li>
+        <li>Earlier known as 'Man Booker Award' — Britain's highest literary award</li>
+        <li>Considered second only to the Nobel Prize in Literature</li>
+        <li>Field: English Literature (Novel)</li>
+        <li>2024 Winner: Samantha Harvey (British) — 'Orbital'</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Author (Year)</th><th>Work</th></tr>
+        <tr><td>V.S. Naipaul (1971)</td><td>In a Free State</td></tr>
+        <tr><td>Salman Rushdie (1981)</td><td>Midnight's Children</td></tr>
+        <tr><td>Arundhati Roy (1997)</td><td>The God of Small Things</td></tr>
+        <tr><td>Kiran Desai (2006)</td><td>The Inheritance of Loss</td></tr>
+        <tr><td>Aravind Adiga (2008)</td><td>The White Tiger</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>International Booker Prize: Organised by Booker Prize Foundation and Crankstart (since 2019); for Translated English Literature.</li>
+        <li>2025 Winner: Banu Mushtaq (Indian writer) with Deepa Bhasthi (Indian translator) — 'Heart Lamp' (Story Collection)</li>
+        <li>2022 Indian Winner: Geetanjali Shree — 'Tomb of Sand' (Ret Samadhi); translated by Daisy Rockwell</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        International Booker Prize is for TRANSLATED fiction (author + translator both credited); the regular Booker Prize is for English-original novels only. Don't confuse the two categories.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: MAGSAYSAY, OSCAR, GRAMMY -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header teal">Ramon Magsaysay Award</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Organisation: Ramon Magsaysay Award Foundation (1957) — in memory of Ramon Magsaysay, former President of the Philippines</li>
+        <li>Called the 'Nobel Prize of Asia'</li>
+        <li>Fields: Public Service, Government Service, Community Leadership, Mass Communication, Journalism, International Community</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Year</th><th>Notable Indian Winner</th></tr>
+        <tr><td>1958</td><td>Vinoba Bhave (First recipient)</td></tr>
+        <tr><td>1959</td><td>C.D. Deshmukh</td></tr>
+        <tr><td>1961 & 1962</td><td>Mother Teresa</td></tr>
+        <tr><td>1963</td><td>Verghese Kurien</td></tr>
+        <tr><td>1966</td><td>Kamladevi Chattopadhyay</td></tr>
+        <tr><td>1967</td><td>Satyajit Ray</td></tr>
+        <tr><td>1971</td><td>M.S. Swaminathan</td></tr>
+        <tr><td>2000</td><td>Aruna Roy</td></tr>
+        <tr><td>2006</td><td>Arvind Kejriwal</td></tr>
+        <tr><td>2015</td><td>Anshu Gupta</td></tr>
+        <tr><td>2016</td><td>Bezwada Wilson</td></tr>
+        <tr><td>2019</td><td>Ravish Kumar</td></tr>
+        <tr><td>2023</td><td>Dr. Ravi Kannan R.</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Oscar Award (Academy Award)</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Organisation: National Academy of Motion Pictures, USA — Established 1929</li>
+        <li>2025 Best Film Winner: Anora</li>
+        <li>First Indian Winner: Bhanu Athaiya (Costume Design for "Gandhi," directed by Richard Attenborough)</li>
+        <li>Lifetime Achievement Award: Satyajit Ray (1992)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Grammy Awards</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Organisation: National Academy of Recording Arts and Sciences, USA — Founded 1958</li>
+        <li>For outstanding contributions to Western music</li>
+        <li>67th Grammy Awards (2025) — Best Global Music Album: 'Not Like Us' (Kendrick Lamar)</li>
+        <li>Indian Winners: Pt. Ravi Shankar (5 times), Zakir Hussain (4 times), Vishwa Mohan Bhatt, Rakesh Chaurasia, Shankar Mahadevan, Ganesh Rajagopalan, Selvaganesh Vinayakram, Ricky Kej (3 times)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: BHARAT RATNA & PADMA -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header gold">Bharat Ratna (National Award)</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Established: 1954, started by Dr. Rajendra Prasad (India's First President)</li>
+        <li>Field: Highest Civilian Award of India — Art, Literature, Science, Public Service</li>
+        <li>Shape: Peepal Leaf, made of Bronze; inscribed "Satyameva Jayate"</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Recipient(s)</th></tr>
+        <tr><td>First Recipients (1954)</td><td>Chakravarti Rajagopalachari, Dr. Sarvepalli Radhakrishnan, Dr. C.V. Raman</td></tr>
+        <tr><td>First Posthumous Recipient</td><td>Lal Bahadur Shastri (1966)</td></tr>
+        <tr><td>Foreign Recipients</td><td>Khan Abdul Ghaffar Khan; Nelson Mandela</td></tr>
+        <tr><td>Youngest Recipient</td><td>Sachin Tendulkar (2014)</td></tr>
+      </table></div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Bharat Ratna 2024</th><th>Note</th></tr>
+        <tr><td>Karpoori Thakur</td><td>Posthumously</td></tr>
+        <tr><td>Chaudhary Charan Singh</td><td>Posthumously</td></tr>
+        <tr><td>P.V. Narasimha Rao</td><td>Posthumously</td></tr>
+        <tr><td>Lal Krishna Advani</td><td>—</td></tr>
+        <tr><td>Dr. M.S. Swaminathan</td><td>Posthumously</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Of the five 2024 Bharat Ratna recipients, ONLY L.K. Advani received it while alive — the other four were posthumous. A common detail-check trap.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Padma Awards</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Established: 1954</li>
+        <li>Categories: Padma Vibhushan &gt; Padma Bhushan &gt; Padma Shri</li>
+        <li>Not conferred during 1978–79 and again 1993–97</li>
+        <li>2025: 139 Padma Awards (13 Posthumous, 10 Foreigners/NRI/PIO/OCI, 23 Women)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: GALLANTRY & FILM AWARDS -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header red">Gallantry Awards</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Award</th><th>Rank</th><th>Description</th></tr>
+        <tr><td>Param Vir Chakra (PVC)</td><td>Highest Military Award</td><td>Best performance / self-sacrifice; First: Major Somnath Sharma (1949)</td></tr>
+        <tr><td>Mahavir Chakra (MVC)</td><td>Second Highest</td><td>Extraordinary valour in suppressing the enemy</td></tr>
+        <tr><td>Vir Chakra</td><td>Third Highest</td><td>—</td></tr>
+      </table></div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Peacetime Award</th><th>Description</th></tr>
+        <tr><td>Ashoka Chakra</td><td>Courage, valour or self-sacrifice on land, water, sky</td></tr>
+        <tr><td>Kirti Chakra</td><td>Exceptional courage in the face of the enemy</td></tr>
+        <tr><td>Shaurya Chakra</td><td>Exceptional bravery during war conditions</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Order of precedence: Param Vir Chakra → Ashoka Chakra → Mahavir Chakra → Kirti Chakra → Vir Chakra → Shaurya Chakra. 2025: 93 gallantry awards, including 11 posthumous.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">National Film Awards & Dadasaheb Phalke Award</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>National Film Awards established 1954; under Ministry of Information and Broadcasting</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Category (71st, 2025)</th><th>Winner</th><th>Film</th></tr>
+        <tr><td>Best Actor</td><td>Shah Rukh Khan / Vikrant Massey</td><td>Jawan / 12th Fail</td></tr>
+        <tr><td>Best Actress</td><td>Rani Mukerji</td><td>Mrs. Chatterjee vs Norway</td></tr>
+        <tr><td>Best Feature Film</td><td>—</td><td>12th Fail</td></tr>
+        <tr><td>Best Film in Hindi</td><td>—</td><td>Kathal: A Jackfruit Mystery</td></tr>
+        <tr><td>Best Direction</td><td>Sudipto Sen</td><td>The Kerala Story</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Dadasaheb Phalke Award established 1969, in memory of Dadasaheb Phalke, given by Ministry of Information and Broadcasting.</li>
+        <li>First Recipient: Devika Rani (1969)</li>
+        <li>2021 Achiever: Waheeda Rehman; 2022 (70th) Achiever: Mithun Chakraborty</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: LITERARY & CULTURAL AWARDS -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header purple">Jnanpith, Moortidevi & Sahitya Akademi</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Bharatiya Jnanpith Award established 1965; presented by Bharatiya Jnanpith Trust; for works in any of the 22 Scheduled languages.</li>
+        <li>First Recipient: G. Shankar Kurup (1965 — Malayalam, 'Odakuzhal')</li>
+        <li>59th (2024): Vinod Kumar Shukla (Hindi); 58th (2023): Gulzar (Urdu) & Jagadguru Rambhadracharya (Sanskrit)</li>
+        <li>Moortidevi Award established 1983, presented by Bharatiya Jnanpith Trust, for Indian language or English literature. 33rd (2019): Vishwanath Prasad Tiwari.</li>
+        <li>Sahitya Akademi Award established 1954, by Government of India, for the best composition of the last 5 years, awarded in 24 languages.</li>
+        <li>2025 Winners: Parwati Tirkey (Hindi, Poetry); Advait Kattory (English) — 'Siddhartha: The Boy who Became the Buddha' (Novel)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Saraswati Samman & Vyas Samman</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Saraswati Samman established 1991 by K.K. Birla Foundation; for outstanding literary work in any language in the 8th Schedule, published within the last 10 years.</li>
+        <li>First Recipient: Harivansh Rai Bachchan</li>
+        <li>34th (2024): Mahamahopadhyay Sadhu Bhadreshdas — 'Swaminarayan Siddhant Sudha'</li>
+        <li>33rd (2023): Prabha Varma (Malayalam) — 'Rudra Satvikam'</li>
+        <li>Vyas Samman established 1991 by K.K. Birla Foundation; for Hindi writing.</li>
+        <li>34th Vyas Samman (2024): Suryabala — 'Kaun Desh Ko Vasi: Venu Ki Diary'</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Both Saraswati Samman and Vyas Samman were established in 1991 by the SAME foundation (K.K. Birla) — but Saraswati Samman covers any Indian language, while Vyas Samman is Hindi-only.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: SCIENCE & SPORTS AWARDS -->
+<div class="tab-content" id="t7">
+  <div class="card">
+    <div class="card-header blue">Science Awards</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Award</th><th>Established</th><th>Purpose</th></tr>
+        <tr><td>Borlaug Award</td><td>1972</td><td>Outstanding contributions in agriculture</td></tr>
+        <tr><td>Rashtriya Vigyan Puraskar (RVP)</td><td>—</td><td>National Science Award; 4 categories: Vigyan Ratna, Vigyan Shri, Vigyan Yuva, Vigyan Team</td></tr>
+        <tr><td>Dhanwantri Award</td><td>1972</td><td>Lifelong service in medicine; awarded on Dhanwantri Jayanti</td></tr>
+        <tr><td>Homi Bhabha Award</td><td>1990</td><td>Contributions to nuclear energy (DAE)</td></tr>
+        <tr><td>Vikram Sarabhai Award</td><td>1990</td><td>Outstanding contributions in space research</td></tr>
+        <tr><td>G.D. Birla Award</td><td>1991</td><td>High-level research; Indian scientists below 50 years</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Sports Awards</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Major Dhyan Chand Khel Ratna Award (1991–92) — formerly Rajiv Gandhi Khel Ratna Award; India's highest sporting honour; for most outstanding performance over 4 years; Prize: ₹25 lakh + Citation.</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Khel Ratna 2024</th><th>Sport</th></tr>
+        <tr><td>Gukesh D</td><td>Chess</td></tr>
+        <tr><td>Praveen Kumar</td><td>Para-Athletics</td></tr>
+        <tr><td>Harmanpreet Singh</td><td>Hockey</td></tr>
+        <tr><td>Manu Bhaker</td><td>Shooting</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Arjuna Award (1961) — consistent good performance over 4 years; Prize: ₹15 lakh + statue + certificate; 2024: 32 athletes (17 Para-athletes).</li>
+        <li>Dronacharya Award (1985) — for outstanding coaches; Regular: ₹10 lakh, Lifetime: ₹15 lakh + statue.</li>
+      </ul>
+      <div class="tbl-wrap"><table>
+        <tr><th>Dronacharya 2024</th><th>Sport</th></tr>
+        <tr><td>Subhash Rana</td><td>Para-Shooting</td></tr>
+        <tr><td>Deepali Desh Pandey</td><td>Shooting</td></tr>
+        <tr><td>Sandeep Sangwan</td><td>Hockey</td></tr>
+        <tr><td>S. Muralidharan</td><td>Badminton</td></tr>
+        <tr><td>Armando Colaco</td><td>Football</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: ART & OTHER AWARDS -->
+<div class="tab-content" id="t8">
+  <div class="card">
+    <div class="card-header teal">Art Awards</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Sangeet Natak Akademi Awards — given by Sangeet Natak Akademi (under Ministry of Culture); First award 1952; for excellence in Music, Dance, Theatre, Folk/Tribal Arts.</li>
+        <li>Akademi Fellow: ₹3 lakh; Akademi Award: ₹1 lakh; conferred by the President of India. 94 awards for 2022 & 2023.</li>
+        <li>Ustad Bismillah Khan Yuva Puraskar — given by Sangeet Natak Akademi; for outstanding young artists below age 40. 92 awards for 2022 & 2023.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Rajiv Gandhi & Indira Gandhi Award Series</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Award</th><th>Purpose</th></tr>
+        <tr><td>Rajiv Gandhi Environment Award</td><td>Adoption of clean technology by industrial institutions</td></tr>
+        <tr><td>Indira Gandhi National Integrity Award</td><td>Maintaining national unity and integrity</td></tr>
+        <tr><td>Indira Gandhi Paryavaran Puraskar</td><td>Outstanding contribution to environment</td></tr>
+        <tr><td>Rajiv Gandhi Quality Improvement Award</td><td>Given by Bureau of Indian Standards to Indian organisations</td></tr>
+        <tr><td>Rajiv Gandhi National Goodwill Award</td><td>Promoting peace and communal harmony</td></tr>
+        <tr><td>Indira Priyadarshini Vriksha Mitra Award</td><td>Tree plantation and wasteland development</td></tr>
+      </table></div>
+      <ul class="arrow-list">
+        <li>Indira Gandhi International Prize for Peace, Disarmament and Development — established 1986; for contributions to international peace, disarmament and development.</li>
+        <li>2024 Winner: Michelle Bachelet (Former President of Chile)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: QUICK REFERENCE -->
+<div class="tab-content" id="t9">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">Nobel Prize</span><span class="v">Nobel Foundation (1900); 10 Dec; 11M SEK</span></div>
+      <div class="info-row"><span class="k">Nobel 2024 — Peace</span><span class="v">Nihon Hidankyo (Japan)</span></div>
+      <div class="info-row"><span class="k">Nobel 2024 — Physics</span><span class="v">Hopfield & Hinton — machine learning</span></div>
+      <div class="info-row"><span class="k">Nobel 2024 — Chemistry</span><span class="v">Baker, Hassabis, Jumper — protein structure</span></div>
+      <div class="info-row"><span class="k">Nobel 2024 — Literature</span><span class="v">Han Kang</span></div>
+      <div class="info-row"><span class="k">Pulitzer Prize</span><span class="v">Columbia University (1917); First Indian: Gobind Behari Lal (1937)</span></div>
+      <div class="info-row"><span class="k">Booker Prize 2024</span><span class="v">Samantha Harvey — 'Orbital'</span></div>
+      <div class="info-row"><span class="k">Booker — Indian Origin</span><span class="v">Naipaul, Rushdie, Roy, K. Desai, Adiga</span></div>
+      <div class="info-row"><span class="k">Intl. Booker 2022</span><span class="v">Geetanjali Shree — 'Tomb of Sand'</span></div>
+      <div class="info-row"><span class="k">Intl. Booker 2025</span><span class="v">Banu Mushtaq — 'Heart Lamp'</span></div>
+      <div class="info-row"><span class="k">Ramon Magsaysay</span><span class="v">'Nobel Prize of Asia'; First Indian: Vinoba Bhave (1958)</span></div>
+      <div class="info-row"><span class="k">Oscar 2025</span><span class="v">Best Film: Anora; First Indian: Bhanu Athaiya</span></div>
+      <div class="info-row"><span class="k">Grammy</span><span class="v">Founded 1958; Ravi Shankar (5×), Zakir Hussain (4×)</span></div>
+      <div class="info-row"><span class="k">Bharat Ratna</span><span class="v">1954; First: Rajagopalachari, Radhakrishnan, C.V. Raman</span></div>
+      <div class="info-row"><span class="k">Bharat Ratna 2024</span><span class="v">Karpoori Thakur, Charan Singh, Narasimha Rao, Advani, Swaminathan</span></div>
+      <div class="info-row"><span class="k">Youngest Bharat Ratna</span><span class="v">Sachin Tendulkar (2014)</span></div>
+      <div class="info-row"><span class="k">First Posthumous Bharat Ratna</span><span class="v">Lal Bahadur Shastri (1966)</span></div>
+      <div class="info-row"><span class="k">Padma Awards</span><span class="v">1954; Vibhushan &gt; Bhushan &gt; Shri</span></div>
+      <div class="info-row"><span class="k">Param Vir Chakra</span><span class="v">Highest Military Award; First: Major Somnath Sharma (1949)</span></div>
+      <div class="info-row"><span class="k">National Film Award</span><span class="v">Established 1954; Ministry of I&B</span></div>
+      <div class="info-row"><span class="k">Dadasaheb Phalke</span><span class="v">1969; First: Devika Rani; 2022: Mithun Chakraborty</span></div>
+      <div class="info-row"><span class="k">Jnanpith Award</span><span class="v">1965; First: G. Shankar Kurup; 2024: Vinod Kumar Shukla</span></div>
+      <div class="info-row"><span class="k">Sahitya Akademi</span><span class="v">1954; 24 languages</span></div>
+      <div class="info-row"><span class="k">Saraswati Samman</span><span class="v">1991; First: Harivansh Rai Bachchan</span></div>
+      <div class="info-row"><span class="k">Khel Ratna 2024</span><span class="v">Gukesh D, Praveen Kumar, Harmanpreet Singh, Manu Bhaker</span></div>
+      <div class="info-row"><span class="k">Arjuna Award</span><span class="v">1961; ₹15 lakh</span></div>
+      <div class="info-row"><span class="k">Dronacharya Award</span><span class="v">1985; Regular ₹10 lakh, Lifetime ₹15 lakh</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · Awards · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

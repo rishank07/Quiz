@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Population and Urbanization (World) | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 14px;font-size:0.82rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.15rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌍 POPULATION AND URBANIZATION (WORLD) <span class="art-pill">World Geography · Ch 27</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('overview')">Population Overview</button>
+    <button class="tab-btn" onclick="switchTab('density')">Population Density</button>
+    <button class="tab-btn" onclick="switchTab('sexratio')">Sex Ratio</button>
+    <button class="tab-btn" onclick="switchTab('theories')">Population Theories</button>
+    <button class="tab-btn" onclick="switchTab('settlements')">Human Settlements</button>
+    <button class="tab-btn" onclick="switchTab('urbanization')">Urbanization</button>
+    <button class="tab-btn" onclick="switchTab('facts')">Quick Facts</button>
+  </div>
+
+  <!-- TAB 1: POPULATION OVERVIEW -->
+  <div id="overview" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌎 World Population (2024)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>8.2 billion (more than 8 billion)</li>
+          <li>90% of population lives in the Northern Hemisphere</li>
+          <li>80% of population lives between 20°N to 60°N latitudes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🏆 Top 10 Most Populous Countries</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>S. No.</th><th>Country</th><th>Population (Million)</th><th>%</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>India</td><td>1463</td><td>17.38%</td></tr>
+            <tr><td>2</td><td>China</td><td>1416</td><td>17.08%</td></tr>
+            <tr><td>3</td><td>USA</td><td>347</td><td>4.23%</td></tr>
+            <tr><td>4</td><td>Indonesia</td><td>285</td><td>3.49%</td></tr>
+            <tr><td>5</td><td>Pakistan</td><td>253</td><td>3.10%</td></tr>
+            <tr><td>6</td><td>Nigeria</td><td>237</td><td>2.85%</td></tr>
+            <tr><td>7</td><td>Brazil</td><td>216</td><td>2.62%</td></tr>
+            <tr><td>8</td><td>Bangladesh</td><td>175</td><td>2.15%</td></tr>
+            <tr><td>9</td><td>Russia</td><td>143</td><td>1.75%</td></tr>
+            <tr><td>10</td><td>Ethiopia</td><td>135</td><td>~1.65%</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      India overtook China as the world's most populous country — together they account for over one-third (~34%) of the entire world's population.
+    </div>
+  </div>
+
+  <!-- TAB 2: POPULATION DENSITY -->
+  <div id="density" class="tab-content">
+    <div class="card">
+      <div class="card-header green">📊 Population Density</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Category</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>World Average</td><td>53 persons / sq. km</td></tr>
+            <tr><td>Highest — Asia</td><td>156 persons / sq. km</td></tr>
+            <tr><td>Lowest — Australia / Oceania</td><td>5 persons / sq. km</td></tr>
+            <tr><td>Maximum Population Density (place)</td><td>Macau – 21,403 persons / sq. km</td></tr>
+            <tr><td>Minimum Population Density (place)</td><td>Greenland – 0.19 persons / sq. km</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Macau (highest density place) and Greenland (lowest density place) are near-opposite extremes — Macau is tiny and urban, Greenland is vast and mostly ice-covered.
+    </div>
+  </div>
+
+  <!-- TAB 3: SEX RATIO -->
+  <div id="sexratio" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">⚖️ Sex Ratio (Males per 100 Females)</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">102</div><div class="lbl">World Average (101:01)</div></div>
+          <div class="stat-box"><div class="num">311</div><div class="lbl">Highest — UAE (male-skewed)</div></div>
+          <div class="stat-box"><div class="num">85</div><div class="lbl">Lowest — Latvia (female-skewed)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      UAE's sex ratio (<b>311</b> males per 100 females) is the <b>highest</b> — driven by a huge male migrant workforce — while Latvia's (<b>85</b>) is the <b>lowest</b>, since it has more women than men. Don't swap these two.
+    </div>
+  </div>
+
+  <!-- TAB 4: POPULATION THEORIES -->
+  <div id="theories" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">📚 Population Theories</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Theory</th><th>Key Details</th></tr></thead>
+          <tbody>
+            <tr><td>Malthusian Theory of Population</td><td>Population grows geometrically while food supply grows arithmetically — leading to eventual scarcity</td></tr>
+            <tr><td>Optimum Theory of Population</td><td>Edwin Cannan — there exists an "optimum" population size for a given resource base, beyond which living standards fall</td></tr>
+            <tr><td>Karl Marx's Population Theory</td><td>A social/economic critique — argues that overpopulation is caused by the unequal distribution of resources under capitalism, not biology</td></tr>
+            <tr><td>Demographic Transition Theory</td><td>W.S. Thomson &amp; F. Notestein</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Karl Marx's population theory is a <b>social/economic</b> critique of capitalism — not a "biological" theory. Don't confuse it with Malthus's more mechanical, resource-based model.
+    </div>
+  </div>
+
+  <!-- TAB 5: HUMAN SETTLEMENTS -->
+  <div id="settlements" class="tab-content">
+    <div class="card">
+      <div class="card-header red">🏘️ Human Settlements</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Rural Settlement Patterns</h4>
+            <ul class="arrow-list">
+              <li>Linear pattern</li>
+              <li>Rectangular pattern</li>
+              <li>Circular pattern</li>
+              <li>Star-shaped</li>
+              <li>T-shaped, Y-shaped</li>
+              <li>Cross-shaped</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Urban Settlement Hierarchy</h4>
+            <ul class="arrow-list">
+              <li>Major City (Primate City — Mark Jefferson's concept)</li>
+              <li>City (larger than towns)</li>
+              <li>Million City (population over 1 million)</li>
+              <li>Conurbation (a large developed urban area)</li>
+              <li>World City (large metropolitan area with global influence)</li>
+              <li>Megacity (population over 10 million)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Urban hierarchy (smallest to largest): City → Million City → Conurbation → Megacity → World City — each step up represents scale and global significance.
+    </div>
+  </div>
+
+  <!-- TAB 6: URBANIZATION -->
+  <div id="urbanization" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🏙️ Important Facts — Urbanization</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fact</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Most urbanized country</td><td>Singapore (100% Urbanization)</td></tr>
+            <tr><td>Most urbanized country in West Asia</td><td>Kuwait (100% Urbanization)</td></tr>
+            <tr><td>Most urbanized region in the world</td><td>Tokyo – Yokohama</td></tr>
+            <tr><td>Most urbanized country in South America</td><td>Uruguay (95.8%)</td></tr>
+            <tr><td>Most urbanized country in South Asia</td><td>Bhutan (40.3%)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">📈 Urbanization Trend in the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Year</th><th>Urban Population</th></tr></thead>
+          <tbody>
+            <tr><td>2023</td><td>4.6 billion (56.1%)</td></tr>
+            <tr><td>2030 (projected)</td><td>5167 million (60.4%)</td></tr>
+            <tr><td>2035 (projected)</td><td>5553 million (60.5%)</td></tr>
+            <tr><td>2050 (projected)</td><td>68.4%, nearly 70%</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      By 2050, nearly 70% of the world's population is projected to live in urban areas — a steady rise from just over half in 2023.
+    </div>
+  </div>
+
+  <!-- TAB 7: QUICK FACTS -->
+  <div id="facts" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">📝 Quick Reference — Key Facts</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fact</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>World population (2024)</td><td>8.2 billion</td></tr>
+            <tr><td>Most populous country</td><td>India (1463 million, 17.38%)</td></tr>
+            <tr><td>2nd most populous</td><td>China (1416 million, 17.08%)</td></tr>
+            <tr><td>Max population density (place)</td><td>Macau – 21,403 persons/sq. km</td></tr>
+            <tr><td>Min population density (place)</td><td>Greenland – 0.19 persons/sq. km</td></tr>
+            <tr><td>Highest continent density</td><td>Asia – 156 persons/sq. km</td></tr>
+            <tr><td>Lowest continent density</td><td>Australia/Oceania – 5 persons/sq. km</td></tr>
+            <tr><td>Highest sex ratio</td><td>UAE – 311 (males per 100 females)</td></tr>
+            <tr><td>Lowest sex ratio</td><td>Latvia – 85 (males per 100 females)</td></tr>
+            <tr><td>Megacity threshold</td><td>Population over 10 million</td></tr>
+            <tr><td>Most urbanized country</td><td>Singapore (100%)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      India + China together = the two most populous countries, but Singapore + Kuwait = the two most fully urbanized (100%) countries — population size and urbanization rate are unrelated metrics.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Population and Urbanization (World) · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

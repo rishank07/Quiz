@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax System - Ch11 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:9px 10px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:8px 10px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:120px;
+}
+.stat-box .num{color:var(--gold);font-size:20px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 11 · Economics</span>
+    <h1>Tax System</h1>
+    <p>Progressive/Regressive/Proportional · Direct & Indirect Taxes · GST · GST Council — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('intro')">📘 Tax Basics & Types</button>
+    <button class="tab-btn" onclick="switchTab('central')">🏛 Central Government Taxes</button>
+    <button class="tab-btn" onclick="switchTab('state')">🗺 State Government Taxes</button>
+    <button class="tab-btn" onclick="switchTab('gst')">🧾 GST Basics</button>
+    <button class="tab-btn" onclick="switchTab('gstcouncil')">⚖ GST Types & Council</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: TAX BASICS -->
+  <div class="tab-content active" id="intro">
+    <div class="card">
+      <div class="card-header gold">Tax — Introduction</div>
+      <div class="card-body">
+        <p class="note">Tax: Compulsory payment made to the government.</p>
+        <h4 class="sub2">Purposes</h4>
+        <ul class="arrow-list">
+          <li>Economic regulation</li>
+          <li>Revenue generation</li>
+          <li>Fair distribution of wealth</li>
+          <li>Promotion of price stability</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Tax System — By Rate Structure</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Description</th></tr>
+          <tr><td>Progressive</td><td>As income increases, tax also increases; e.g., India's Income Tax slabs (₹4–8 lakh: 5%, ₹8–12 lakh: 10%)</td></tr>
+          <tr><td>Regressive</td><td>Tax burden decreases as income increases; e.g., Sales Tax, GST; prevalent in most developed countries</td></tr>
+          <tr><td>Proportional</td><td>Everyone pays tax at the same rate on total income; reduces disposable income</td></tr>
+        </table></div>
+        <p class="note">Angel Tax: Income tax levied on capital raised by unlisted companies issuing shares to investors above the fair market value.</p>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          GST is often mistakenly thought of as "fair for all," but structurally it's a Regressive tax — burden effectively decreases as income rises, since everyone pays the same rate regardless of income.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Direct vs Indirect Tax</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Description</th></tr>
+          <tr><td>Direct Tax</td><td>Tax burden borne by the person on whom it is levied; no shifting of burden</td></tr>
+          <tr><td>Indirect Tax</td><td>Imposed on goods and services; burden shifted to another person; taxpayer and tax bearer are different individuals</td></tr>
+        </table></div>
+        <div class="info-row"><span class="k">Tax Burden</span><span class="v">Tax levied on a person but finally paid by another — e.g., GST</span></div>
+        <div class="info-row"><span class="k">Tax Incidence</span><span class="v">Person legally taxed also bears the burden</span></div>
+        <div class="info-row"><span class="k">Service Tax</span><span class="v">Started 1994, on recommendation of Raja Chelliah Committee</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Related Terms</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>CESS: Based on tax; for a specific purpose only</li>
+          <li>Surcharge: Imposed on tax payable — "tax on tax"; no specific purpose required</li>
+          <li>Pigouvian Tax: Imposed on market transactions (buying/selling); creates negative externalities/additional costs</li>
+        </ul>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          CESS is earmarked for a specific purpose (e.g., education cess); Surcharge has no such restriction — it just adds to the tax burden generally.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: CENTRAL TAXES -->
+  <div class="tab-content" id="central">
+    <div class="card">
+      <div class="card-header orange">Direct Taxes (Central)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Income Tax</li>
+          <li>Corporate Tax</li>
+          <li>Expenditure Tax</li>
+          <li>Wealth Tax</li>
+          <li>Capital Gains Tax</li>
+          <li>Interest Tax</li>
+          <li>Gift Tax</li>
+          <li>Distribution of Profit Tax</li>
+          <li>Estate Duty (Inheritance Tax)</li>
+          <li>Securities Trading Tax</li>
+          <li>Fringe Benefit Tax</li>
+          <li>Banking Transaction Tax</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Indirect Taxes (Central)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Service Tax</li>
+          <li>Custom Duty</li>
+          <li>Central Excise Duty</li>
+          <li>Central Sales Tax</li>
+          <li>Central Trade Tax</li>
+        </ul>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="lbl">Main Revenue Sources — Centre</span></div>
+        </div>
+        <p class="note">Income Tax, GST, and Corporate Tax are the main sources of revenue for the Central Government.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: STATE TAXES -->
+  <div class="tab-content" id="state">
+    <div class="card">
+      <div class="card-header teal">Direct Taxes (State)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Tax on Agricultural Income</li>
+          <li>Land Revenue</li>
+          <li>Professional Tax</li>
+          <li>Tax on Hotel Receipts</li>
+          <li>Business Tax</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Indirect Taxes (State)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Sales Tax / Purchase Tax</li>
+          <li>State Excise Fees</li>
+          <li>Stamp Duty and Registration Fees</li>
+          <li>Tax on Vehicles</li>
+          <li>Tax on Transportation</li>
+          <li>Tax on Advertising</li>
+          <li>Taxes and Duties on Electricity</li>
+          <li>Tax on Gambling</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Tax on Agricultural Income is a STATE subject, not Central — a frequently tested Centre-State tax division question.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: GST BASICS -->
+  <div class="tab-content" id="gst">
+    <div class="card">
+      <div class="card-header blue">Goods and Services Tax (GST)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Indirect Tax</li>
+          <li>Imposed on goods and services</li>
+          <li>A single destination-based tax</li>
+        </ul>
+        <div class="info-row"><span class="k">GST Rates</span><span class="v">0%, 5%, 12%, 18%, 28%</span></div>
+        <div class="info-row"><span class="k">Constitutional Provision</span><span class="v">101st Constitutional Amendment, 2016</span></div>
+        <div class="info-row"><span class="k">Implemented From</span><span class="v">1st July, 2017</span></div>
+        <div class="info-row"><span class="k">First State to Pass GST</span><span class="v">Assam</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Commodities Out of GST Scope</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Alcohol</li>
+          <li>Real Estate, Aviation</li>
+          <li>Crude Oil, Petrol, Turbine Fuel</li>
+        </ul>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Petroleum products and alcohol remain outside GST — a high-frequency BPSC question since these generate major state revenue.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: GST TYPES & COUNCIL -->
+  <div class="tab-content" id="gstcouncil">
+    <div class="card">
+      <div class="card-header green">Types of GST</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Full Form / Scope</th></tr>
+          <tr><td>IGST</td><td>Integrated GST — Inter-state transactions</td></tr>
+          <tr><td>SGST</td><td>State GST — Intra-state transactions</td></tr>
+          <tr><td>CGST</td><td>Central GST — Intra-state transactions</td></tr>
+          <tr><td>UTGST</td><td>Union Territory GST — UT transactions</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          For intra-state sales, BOTH CGST and SGST apply together; for inter-state sales, only IGST applies — a very common numerical/conceptual GST question.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Taxes Subsumed into GST</div>
+      <div class="card-body">
+        <h4 class="sub2">Central Taxes Subsumed</h4>
+        <ul class="arrow-list">
+          <li>Central Excise Duty</li>
+          <li>Excise Duty (Medicinal and Toilet Preparations)</li>
+          <li>Additional Excise Duty (Goods of Special Importance)</li>
+          <li>Countervailing Duty</li>
+          <li>Surcharge</li>
+          <li>Additional Excise Duty (Goods of Cotton and Fabrics)</li>
+          <li>Central Surcharge / Cess</li>
+          <li>Additional Special Customs Duty (SAD)</li>
+        </ul>
+        <h4 class="sub2">State Taxes Subsumed</h4>
+        <ul class="arrow-list">
+          <li>State VAT, Sales Taxes, Luxury Tax</li>
+          <li>Entry Tax, Purchase Tax, Entertainment, Advertisement</li>
+          <li>Lottery, Betting, Gambling Tax</li>
+          <li>State Surcharge and Cess</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">GST Council</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Total Members</span><span class="v">33 (31 voting members)</span></div>
+        <div class="info-row"><span class="k">Chairpersons</span><span class="v">2 (non-voting): Union Finance Minister, Union State Finance Minister</span></div>
+        <div class="info-row"><span class="k">Voting Right of Chair</span><span class="v">33.3%</span></div>
+        <div class="info-row"><span class="k">Remaining 31 Members</span><span class="v">All States' Finance Ministers or nominated ministers</span></div>
+        <div class="info-row"><span class="k">Voting Right of States</span><span class="v">66.6%</span></div>
+        <div class="info-row"><span class="k">Decision Threshold</span><span class="v">3/4 (75%) Majority</span></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          GST Council voting: Centre = 1/3 (33.3%) weightage, States collectively = 2/3 (66.6%) weightage — decisions need a 75% majority of votes cast.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Non-Tax Revenue</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Fees and Fines</li>
+          <li>Profits from Public Enterprises</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Summary / Reference Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>Tax — Definition</td><td>Compulsory payment made to the government</td></tr>
+          <tr><td>Progressive Tax</td><td>Tax increases as income increases | India's Income Tax</td></tr>
+          <tr><td>Regressive Tax</td><td>Tax burden decreases as income increases | e.g., GST, Sales Tax | Prevalent in developed countries</td></tr>
+          <tr><td>Proportional Tax</td><td>Same rate on total income at every level | Reduces disposable income</td></tr>
+          <tr><td>Direct Tax</td><td>Levied and borne by same person | No shifting of burden</td></tr>
+          <tr><td>Indirect Tax</td><td>Imposed on goods & services | Burden shifted | Taxpayer ≠ Tax bearer</td></tr>
+          <tr><td>Service Tax</td><td>Started 1994 | On recommendation of Raja Chelliah Committee</td></tr>
+          <tr><td>Angel Tax</td><td>Income tax on unlisted companies issuing shares above fair market value</td></tr>
+          <tr><td>CESS</td><td>Based on tax | For a specific purpose only</td></tr>
+          <tr><td>Surcharge</td><td>Tax on tax | No specific purpose required</td></tr>
+          <tr><td>Pigouvian Tax</td><td>Imposed on market transactions | Creates negative externalities</td></tr>
+          <tr><td>GST — Type</td><td>Indirect Tax | Single destination-based tax</td></tr>
+          <tr><td>GST Rates</td><td>0%, 5%, 12%, 18%, 28%</td></tr>
+          <tr><td>GST — Constitutional Amendment</td><td>101st Constitutional Amendment, 2016</td></tr>
+          <tr><td>GST — Implemented</td><td>1st July, 2017</td></tr>
+          <tr><td>First State to Pass GST</td><td>Assam</td></tr>
+          <tr><td>Items Out of GST Scope</td><td>Alcohol, Real Estate, Aviation, Crude Oil, Petrol, Turbine Fuel</td></tr>
+          <tr><td>IGST</td><td>Integrated GST — Inter-state transactions</td></tr>
+          <tr><td>SGST</td><td>State GST — Intra-state transactions</td></tr>
+          <tr><td>CGST</td><td>Central GST — Intra-state transactions</td></tr>
+          <tr><td>UTGST</td><td>Union Territory GST — UT transactions</td></tr>
+          <tr><td>GST Council Members</td><td>33 total (31 voting) | Chair: Union FM + Union State FM (non-voting)</td></tr>
+          <tr><td>GST Council — Chair Voting Right</td><td>33.3%</td></tr>
+          <tr><td>GST Council — States Voting Right</td><td>66.6%</td></tr>
+          <tr><td>GST Council — Decision</td><td>3/4 (75%) Majority</td></tr>
+          <tr><td>Main Revenue Sources — Centre</td><td>Income Tax | GST | Corporate Tax</td></tr>
+          <tr><td>Non-Tax Revenue</td><td>Fees and Fines | Profits from Public Enterprises</td></tr>
+          <tr><td>Tax Burden</td><td>Tax levied on one person but paid by another | e.g., GST</td></tr>
+          <tr><td>Tax Incidence</td><td>Person on whom tax is legally imposed also bears the burden</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Tax System (Ch11) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

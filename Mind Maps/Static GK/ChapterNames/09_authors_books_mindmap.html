@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Authors and Their Books | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 09</span>
+  <h1>Authors and Their Books</h1>
+  <p>Ancient Sanskrit Scholars · National Leaders · Sports Icons · International Authors · Autobiographies</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">📜 Ancient & Classical Authors</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🇮🇳 National Leaders & Politicians</button>
+  <button class="tab-btn" onclick="switchTab('t3')">✍ Modern Indian Authors</button>
+  <button class="tab-btn" onclick="switchTab('t4')">🏅 Sports Related Books</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🌍 International Authors</button>
+  <button class="tab-btn" onclick="switchTab('t6')">📖 Major Autobiographies</button>
+  <button class="tab-btn" onclick="switchTab('t7')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: ANCIENT & CLASSICAL -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header gold">Ancient & Classical Sanskrit Authors</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Author</th><th>Books / Works</th></tr>
+        <tr><td>Aryabhatta</td><td>Aryabhatiyam, Surya Siddhanta</td></tr>
+        <tr><td>Ashvaghosha</td><td>Buddhacharita</td></tr>
+        <tr><td>Banabhatta</td><td>Harshacharita, Kadambari</td></tr>
+        <tr><td>Bharatamuni</td><td>Natya Shastra</td></tr>
+        <tr><td>Bhavabhuti</td><td>Mahavira Charita, Malati Madhava, Uttara Ramacharita</td></tr>
+        <tr><td>Bhasa</td><td>Svapnavasavadattam, Madhyamavyayoga, Pratima Natakam</td></tr>
+        <tr><td>Bhaskara II</td><td>Siddhanta Shiromani, Lilavati</td></tr>
+        <tr><td>Charak</td><td>Charaka Samhita</td></tr>
+        <tr><td>Dandin</td><td>Dashakumaracharita, Kavyadarsha</td></tr>
+        <tr><td>Harshavardhana</td><td>Priyadarshika, Nagananda, Ratnavali</td></tr>
+        <tr><td>Jayadeva</td><td>Geet Govindam</td></tr>
+        <tr><td>Kautilya</td><td>Arthashastra</td></tr>
+        <tr><td>Kalidasa</td><td>Abhijnana Shakuntalam, Vikramorvasiyam, Raghuvansham, Ritusamhara, Meghasandesam, Kumarasambhavam, Malavikagnimitram</td></tr>
+        <tr><td>Kalhana</td><td>Rajatarangini</td></tr>
+        <tr><td>Kshemendra</td><td>Brihatkathamanjari, Ramayanamanjari</td></tr>
+        <tr><td>Megasthenes</td><td>Indica</td></tr>
+        <tr><td>Panini</td><td>Ashtadhyayi</td></tr>
+        <tr><td>Patanjali</td><td>Mahabhashya</td></tr>
+        <tr><td>Varahamihira</td><td>Panchasiddhantika, Brihat Samhita, Brihat Jataka, Anga Vidya</td></tr>
+        <tr><td>Vagbhata</td><td>Ashtanga Sangraha, Ashtanga Hridayam</td></tr>
+        <tr><td>Vishakhadatta</td><td>Mudrarakshasa</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Kalidasa has the most works listed — remember him via his "big 3": Abhijnana Shakuntalam (drama), Raghuvansham (epic), Meghasandesam (lyric poem).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: NATIONAL LEADERS & POLITICIANS -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header red">Freedom Fighters & Political Leaders</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Author</th><th>Books / Works</th></tr>
+        <tr><td>Aurobindo Ghosh</td><td>Life Divine, Essays on the Gita, Savitri: A Legend and a Symbol</td></tr>
+        <tr><td>Bankim Chandra Chatterjee</td><td>Anandamath, Durgesh Nandini, Kapalkundala, Vande Mataram, Devi Chaudharani, Vishabriksha, Mrinalini</td></tr>
+        <tr><td>Bhagat Singh</td><td>Why I am an Atheist, Bhagat Singh Jail Diary</td></tr>
+        <tr><td>Dr. B.R. Ambedkar</td><td>The Annihilation of Caste, Waiting for a Visa, The Buddha and His Dhamma, Who Were the Shudras?, Pakistan and Partition of India</td></tr>
+        <tr><td>Indira Gandhi</td><td>My Truth, Peoples and Problems</td></tr>
+        <tr><td>Jawaharlal Nehru</td><td>Discovery of India, Glimpses of World History</td></tr>
+        <tr><td>K.M. Munshi</td><td>The Glory of Patan, Rajadhroj</td></tr>
+        <tr><td>L.K. Advani</td><td>My Country My Life</td></tr>
+        <tr><td>Lala Lajpat Rai</td><td>Unhappy India, The Political Future of India, Young India, Call to the Young India, England's Debt to India</td></tr>
+        <tr><td>Maulana Abul Kalam Azad</td><td>India Wins Freedom</td></tr>
+        <tr><td>Mahatma Gandhi</td><td>Hind Swaraj, Sarvodaya, My Life is My Message, Satyagraha in South Africa, My Experiments with Truth</td></tr>
+        <tr><td>Dr. Rajendra Prasad</td><td>India Divided, At the Feet of Mahatma Gandhi, Mahatma Gandhi and Bihar, Satyagraha in Champaran</td></tr>
+        <tr><td>Raja Rammohan Roy</td><td>The Precepts of Jesus, Vedanta Grantha, Tuhfat-ul-Muwahhidin</td></tr>
+        <tr><td>S. Jaishankar</td><td>Why Bharat Matters, The India Way</td></tr>
+        <tr><td>Narendra Modi</td><td>Exam Warriors, Jyotipunj, Abode of Love</td></tr>
+        <tr><td>Draupadi Murmu</td><td>Wings to Our Hopes</td></tr>
+        <tr><td>Arvind Kejriwal</td><td>Swaraj</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Vande Mataram" is embedded within Bankim Chandra Chatterjee's novel "Anandamath" — it's not a separate standalone book, a common misconception in exams.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: MODERN INDIAN AUTHORS -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header purple">Modern & Contemporary Indian Authors</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Author</th><th>Books / Works</th></tr>
+        <tr><td>Anita Desai</td><td>In Custody</td></tr>
+        <tr><td>Arundhati Roy</td><td>The God of Small Things, The End of Imagination, Azadi: Freedom, Fascism, Fiction</td></tr>
+        <tr><td>Chetan Bhagat</td><td>Half Girlfriend, Two States, 400 Days, One Arranged Murder, One Indian Girl</td></tr>
+        <tr><td>Sarojini Naidu</td><td>Golden Threshold, Broken Wing</td></tr>
+        <tr><td>Shashi Tharoor</td><td>The Great Indian Novel, Ambedkar: A Life, The Paradoxical Prime Minister, Why I am a Hindu, An Era of Darkness (UK) / Inglorious Empire (India)</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Shashi Tharoor's book has TWO titles for two markets: "An Era of Darkness" (India) and "Inglorious Empire" (UK) — same book, different title by region.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: SPORTS RELATED BOOKS -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header orange">Sports Related Books (National)</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Author</th><th>Book</th></tr>
+        <tr><td>Abhinav Bindra</td><td>A Shot at History</td></tr>
+        <tr><td>Adarsh Sharma</td><td>M.S. Dhoni – The Untold Story</td></tr>
+        <tr><td>Dipa Karmakar (with Vishwaswari Nandi)</td><td>The Small Wonder</td></tr>
+        <tr><td>Gundappa Viswanath</td><td>Wrist Assured</td></tr>
+        <tr><td>Kapil Dev</td><td>Straight from the Heart</td></tr>
+        <tr><td>Mary Kom</td><td>Unbreakable</td></tr>
+        <tr><td>Milkha Singh</td><td>The Race of My Life</td></tr>
+        <tr><td>Pullela Gopichand (with Priya Kumar)</td><td>Shuttler's Flick</td></tr>
+        <tr><td>P.T. Usha</td><td>Golden Girl: An Autobiography</td></tr>
+        <tr><td>Ravichandran Ashwin & Sidharth Monga</td><td>I Have the Streets: A Kutty Cricket Story</td></tr>
+        <tr><td>Ravi Shastri</td><td>Stargazing – The Players in My Life</td></tr>
+        <tr><td>Sourav Ganguly</td><td>A Century is Not Enough</td></tr>
+        <tr><td>Syed Kirmani</td><td>Stumped</td></tr>
+        <tr><td>Sanjay Manjrekar</td><td>Imperfect</td></tr>
+        <tr><td>Sunil Gavaskar</td><td>Sunny Days</td></tr>
+        <tr><td>Saina Nehwal</td><td>Playing to Win</td></tr>
+        <tr><td>Sania Mirza</td><td>Ace Against Odds</td></tr>
+        <tr><td>Sachin Tendulkar</td><td>Playing it My Way</td></tr>
+        <tr><td>VVS Laxman</td><td>281 and Beyond</td></tr>
+        <tr><td>Vijay Lokapally</td><td>Driven: The Virat Kohli Story</td></tr>
+        <tr><td>Yuvraj Singh</td><td>The Test of My Life</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: INTERNATIONAL AUTHORS -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header blue">International Authors and Their Books</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Author</th><th>Books / Works</th></tr>
+        <tr><td>Aristophanes</td><td>Lysistrata, Plutus, The Clouds</td></tr>
+        <tr><td>Barack Obama</td><td>A Promised Land, Yes We Can, The Audacity of Hope, Dreams from My Father</td></tr>
+        <tr><td>Charles Dickens</td><td>Great Expectations, Bleak House</td></tr>
+        <tr><td>E.M. Forster</td><td>A Passage to India, Howards End</td></tr>
+        <tr><td>Euripides</td><td>Medea, Hippolytus</td></tr>
+        <tr><td>Erasmus</td><td>Praise of Folly</td></tr>
+        <tr><td>George Orwell</td><td>Animal Farm, 1984, Burmese Days</td></tr>
+        <tr><td>Hitler</td><td>Mein Kampf</td></tr>
+        <tr><td>Jane Austen</td><td>Pride and Prejudice, Persuasion</td></tr>
+        <tr><td>Jhumpa Lahiri</td><td>The Lowland</td></tr>
+        <tr><td>Karl Marx</td><td>Das Kapital, The Communist Manifesto, The German Ideology, The Poverty of Philosophy</td></tr>
+        <tr><td>Leo Tolstoy</td><td>War and Peace, Anna Karenina</td></tr>
+        <tr><td>Machiavelli</td><td>The Prince</td></tr>
+        <tr><td>Milton</td><td>Paradise Lost</td></tr>
+        <tr><td>Ovid</td><td>Metamorphoses, Amores</td></tr>
+        <tr><td>Petronius</td><td>Satyricon</td></tr>
+        <tr><td>Rousseau</td><td>The Social Contract</td></tr>
+        <tr><td>Salman Rushdie</td><td>The Satanic Verses, Midnight's Children, Knife: Meditations After an Attempted Murder, Victory City, The Golden House</td></tr>
+        <tr><td>Toni Morrison</td><td>Beloved, The Bluest Eye</td></tr>
+        <tr><td>Thomas More</td><td>Utopia</td></tr>
+        <tr><td>Vladimir Nabokov</td><td>Lolita, Pale Fire</td></tr>
+        <tr><td>William Shakespeare</td><td>Hamlet, Romeo and Juliet, Macbeth, A Midsummer Night's Dream, The Tempest, Othello, Merchant of Venice, Julius Caesar, As You Like It</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Lysistrata," "Plutus," and "The Clouds" are plays by ARISTOPHANES, not Aristotle the philosopher — the two are frequently confused due to similar-sounding names.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: AUTOBIOGRAPHIES -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header teal">Major Autobiographies</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Author</th><th>Autobiography / Book</th></tr>
+        <tr><td>APJ Abdul Kalam</td><td>Wings of Fire</td></tr>
+        <tr><td>Anne Frank</td><td>Diary of a Young Girl</td></tr>
+        <tr><td>Angela Merkel</td><td>Freedom</td></tr>
+        <tr><td>Dr. B.R. Ambedkar</td><td>Waiting for a Visa</td></tr>
+        <tr><td>Dr. Rajendra Prasad</td><td>Autobiography</td></tr>
+        <tr><td>Dalai Lama</td><td>Freedom in Exile</td></tr>
+        <tr><td>George Orwell</td><td>Such, Such Were the Joys</td></tr>
+        <tr><td>I.K. Gujral</td><td>Matters of Discretion</td></tr>
+        <tr><td>Jawaharlal Nehru</td><td>An Autobiography</td></tr>
+        <tr><td>J.B. Kripalani</td><td>My Times: An Autobiography</td></tr>
+        <tr><td>J.D. Vance</td><td>Hillbilly Elegy</td></tr>
+        <tr><td>K. Natwar Singh</td><td>One Life is Not Enough</td></tr>
+        <tr><td>Leo Tolstoy</td><td>Childhood, Boyhood and Youth; A Confession</td></tr>
+        <tr><td>Maxim Gorky</td><td>My Childhood</td></tr>
+        <tr><td>Mahatma Gandhi</td><td>The Story of My Experiments with Truth</td></tr>
+        <tr><td>Melinda Gates</td><td>The Next Day</td></tr>
+        <tr><td>Michelle Obama</td><td>Becoming</td></tr>
+        <tr><td>Malala Yousafzai</td><td>I am Malala</td></tr>
+        <tr><td>Nelson Mandela</td><td>Long Walk to Freedom</td></tr>
+        <tr><td>Nirad C. Chaudhuri</td><td>The Autobiography of an Unknown Indian</td></tr>
+        <tr><td>Ravi Shankar</td><td>My Music My Life</td></tr>
+        <tr><td>Satyajit Ray</td><td>Jakhan Chhoto Chilam (Bengali) — When I was a Kid</td></tr>
+        <tr><td>Sharad Pawar</td><td>On My Terms: From the Grassroots to the Corridors of Power</td></tr>
+        <tr><td>Sonu Sood</td><td>I Am No Messiah</td></tr>
+        <tr><td>Verghese Kurien</td><td>I Too Had a Dream</td></tr>
+        <tr><td>V.K. Singh</td><td>Courage and Conviction</td></tr>
+        <tr><td>Walter Isaacson</td><td>Steve Jobs (Biography — not autobiography)</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Steve Jobs" by Walter Isaacson is a BIOGRAPHY (written by someone else), not an autobiography — commonly listed alongside true autobiographies but technically a different genre.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: QUICK REFERENCE -->
+<div class="tab-content" id="t7">
+  <div class="card">
+    <div class="card-header gold">Quick Reference — Important Books and Authors</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">Arthashastra</span><span class="v">Kautilya (Chanakya)</span></div>
+      <div class="info-row"><span class="k">Natya Shastra</span><span class="v">Bharatamuni</span></div>
+      <div class="info-row"><span class="k">Ashtadhyayi</span><span class="v">Panini</span></div>
+      <div class="info-row"><span class="k">Charaka Samhita</span><span class="v">Charak</span></div>
+      <div class="info-row"><span class="k">Buddhacharita</span><span class="v">Ashvaghosha</span></div>
+      <div class="info-row"><span class="k">Geet Govindam</span><span class="v">Jayadeva</span></div>
+      <div class="info-row"><span class="k">Harshacharita</span><span class="v">Banabhatta</span></div>
+      <div class="info-row"><span class="k">Rajatarangini</span><span class="v">Kalhana</span></div>
+      <div class="info-row"><span class="k">Abhijnana Shakuntalam</span><span class="v">Kalidasa</span></div>
+      <div class="info-row"><span class="k">Raghuvansham</span><span class="v">Kalidasa</span></div>
+      <div class="info-row"><span class="k">Indica</span><span class="v">Megasthenes</span></div>
+      <div class="info-row"><span class="k">Anandamath / Vande Mataram</span><span class="v">Bankim Chandra Chatterjee</span></div>
+      <div class="info-row"><span class="k">Discovery of India</span><span class="v">Jawaharlal Nehru</span></div>
+      <div class="info-row"><span class="k">Glimpses of World History</span><span class="v">Jawaharlal Nehru</span></div>
+      <div class="info-row"><span class="k">The God of Small Things</span><span class="v">Arundhati Roy</span></div>
+      <div class="info-row"><span class="k">The Annihilation of Caste</span><span class="v">Dr. B.R. Ambedkar</span></div>
+      <div class="info-row"><span class="k">India Wins Freedom</span><span class="v">Maulana Abul Kalam Azad</span></div>
+      <div class="info-row"><span class="k">My Experiments with Truth</span><span class="v">Mahatma Gandhi</span></div>
+      <div class="info-row"><span class="k">Hind Swaraj</span><span class="v">Mahatma Gandhi</span></div>
+      <div class="info-row"><span class="k">Why Bharat Matters / The India Way</span><span class="v">S. Jaishankar</span></div>
+      <div class="info-row"><span class="k">The Great Indian Novel</span><span class="v">Shashi Tharoor</span></div>
+      <div class="info-row"><span class="k">An Era of Darkness</span><span class="v">Shashi Tharoor</span></div>
+      <div class="info-row"><span class="k">Wings of Fire (Autobiography)</span><span class="v">APJ Abdul Kalam</span></div>
+      <div class="info-row"><span class="k">An Autobiography</span><span class="v">Jawaharlal Nehru</span></div>
+      <div class="info-row"><span class="k">Long Walk to Freedom</span><span class="v">Nelson Mandela</span></div>
+      <div class="info-row"><span class="k">I am Malala</span><span class="v">Malala Yousafzai</span></div>
+      <div class="info-row"><span class="k">Becoming</span><span class="v">Michelle Obama</span></div>
+      <div class="info-row"><span class="k">A Promised Land</span><span class="v">Barack Obama</span></div>
+      <div class="info-row"><span class="k">Playing it My Way</span><span class="v">Sachin Tendulkar</span></div>
+      <div class="info-row"><span class="k">A Shot at History</span><span class="v">Abhinav Bindra</span></div>
+      <div class="info-row"><span class="k">Sunny Days</span><span class="v">Sunil Gavaskar</span></div>
+      <div class="info-row"><span class="k">The Race of My Life</span><span class="v">Milkha Singh</span></div>
+      <div class="info-row"><span class="k">Unbreakable</span><span class="v">Mary Kom</span></div>
+      <div class="info-row"><span class="k">Playing to Win</span><span class="v">Saina Nehwal</span></div>
+      <div class="info-row"><span class="k">Mein Kampf</span><span class="v">Hitler</span></div>
+      <div class="info-row"><span class="k">The Prince</span><span class="v">Machiavelli</span></div>
+      <div class="info-row"><span class="k">Das Kapital</span><span class="v">Karl Marx</span></div>
+      <div class="info-row"><span class="k">The Communist Manifesto</span><span class="v">Karl Marx</span></div>
+      <div class="info-row"><span class="k">Animal Farm / 1984</span><span class="v">George Orwell</span></div>
+      <div class="info-row"><span class="k">War and Peace / Anna Karenina</span><span class="v">Leo Tolstoy</span></div>
+      <div class="info-row"><span class="k">Pride and Prejudice</span><span class="v">Jane Austen</span></div>
+      <div class="info-row"><span class="k">The Satanic Verses</span><span class="v">Salman Rushdie</span></div>
+      <div class="info-row"><span class="k">Midnight's Children</span><span class="v">Salman Rushdie</span></div>
+      <div class="info-row"><span class="k">Hamlet / Macbeth</span><span class="v">William Shakespeare</span></div>
+      <div class="info-row"><span class="k">Romeo and Juliet</span><span class="v">William Shakespeare</span></div>
+      <div class="info-row"><span class="k">Paradise Lost</span><span class="v">Milton</span></div>
+      <div class="info-row"><span class="k">Utopia</span><span class="v">Thomas More</span></div>
+      <div class="info-row"><span class="k">The Social Contract</span><span class="v">Rousseau</span></div>
+      <div class="info-row"><span class="k">Beloved</span><span class="v">Toni Morrison</span></div>
+      <div class="info-row"><span class="k">Steve Jobs</span><span class="v">Walter Isaacson (Biography)</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · Authors and Their Books · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

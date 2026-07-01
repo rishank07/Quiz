@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Largest, Tallest and Smallest in the World | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+.container{max-width:1100px;margin:0 auto;padding:20px;}
+
+header{
+  text-align:center;
+  padding:30px 20px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
+}
+header h1{
+  color:var(--gold);
+  font-size:2rem;
+  margin-bottom:8px;
+}
+header p{color:#a9adc1;font-size:0.95rem;}
+
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:4px 16px;
+  border-radius:20px;
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:25px;
+  padding:10px;
+  background:var(--surface);
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.tab-btn{
+  background:transparent;
+  border:2px solid transparent;
+  color:#a9adc1;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom:3px solid var(--gold);
+  background:var(--surface2);
+}
+
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.card-header{
+  padding:14px 20px;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(135deg,var(--gold),#c9a227);color:#0f1117;}
+.card-header.green{background:linear-gradient(135deg,var(--accent3),#1d9e57);color:#08160e;}
+.card-header.blue{background:linear-gradient(135deg,var(--accent2),#2574a9);color:#081420;}
+.card-header.purple{background:linear-gradient(135deg,var(--accent4),#7a3f9d);color:#150a1c;}
+.card-header.orange{background:linear-gradient(135deg,var(--accent5),#b8631a);color:#1c0f04;}
+.card-header.red{background:linear-gradient(135deg,var(--accent1),#b93425);color:#1c0806;}
+.card-header.teal{background:linear-gradient(135deg,var(--accent6),#149279);color:#04140f;}
+
+.card-body{padding:20px;}
+
+.arrow-list{list-style:none;}
+.arrow-list li{
+  padding:6px 0 6px 22px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{
+  content:"▸";
+  color:var(--gold);
+  position:absolute;
+  left:0;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:0.92rem;
+}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+  font-size:0.88rem;
+}
+td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+tr:hover td{background:var(--surface2);}
+
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:700;margin-bottom:6px;display:block;}
+
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:14px 18px;
+  border-radius:6px;
+  margin:16px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:700;margin-bottom:6px;display:block;}
+
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px 8px 6px 0;
+  text-align:center;
+  min-width:140px;
+}
+.stat-box .num{color:var(--gold);font-size:1.3rem;font-weight:700;display:block;}
+.stat-box .label{color:#a9adc1;font-size:0.8rem;}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.92rem;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{color:#a9adc1;}
+.info-row .v{color:var(--text);font-weight:600;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#6b6f85;
+  font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  header h1{font-size:1.4rem;}
+  .tab-btn{font-size:0.8rem;padding:8px 10px;}
+  table{font-size:0.8rem;}
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+<header>
+  <span class="art-pill">GK · Chapter 04</span>
+  <h1>Largest, Tallest and Smallest in the World</h1>
+  <p>Geography · Structures · Nature · Superlative Records Worldwide</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('t1')">🌍 Largest — Geography</button>
+  <button class="tab-btn" onclick="switchTab('t2')">🏟 Largest — Structures & Nature</button>
+  <button class="tab-btn" onclick="switchTab('t3')">🛤 World's Longest</button>
+  <button class="tab-btn" onclick="switchTab('t4')">⛰ World's Highest</button>
+  <button class="tab-btn" onclick="switchTab('t5')">🔎 World's Smallest</button>
+  <button class="tab-btn" onclick="switchTab('t6')">📋 Quick Reference</button>
+</div>
+
+<!-- TAB 1: LARGEST GEOGRAPHY -->
+<div class="tab-content active" id="t1">
+  <div class="card">
+    <div class="card-header blue">Largest — Continents, Countries & Water Bodies</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Largest</th><th>Details / Location</th></tr>
+        <tr><td>Continent</td><td>Asia</td><td>44.58 million sq. km</td></tr>
+        <tr><td>Country (by area)</td><td>Russia</td><td>17.1 million sq. km</td></tr>
+        <tr><td>Ocean</td><td>Pacific Ocean</td><td>—</td></tr>
+        <tr><td>Sea</td><td>South China Sea</td><td>—</td></tr>
+        <tr><td>Island</td><td>Greenland</td><td>Denmark</td></tr>
+        <tr><td>Archipelago</td><td>Indonesia</td><td>13,500+ islands</td></tr>
+        <tr><td>Delta</td><td>Sundarbans Delta</td><td>West Bengal, India</td></tr>
+        <tr><td>River Island</td><td>Majuli</td><td>Brahmaputra River, Assam, India</td></tr>
+        <tr><td>Lake (saltwater)</td><td>Caspian Sea</td><td>Russia</td></tr>
+        <tr><td>Freshwater Lake</td><td>Lake Superior</td><td>USA</td></tr>
+        <tr><td>Strait</td><td>Strait of Malacca</td><td>—</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Caspian Sea = world's largest LAKE (it's a saltwater lake, not a true sea); Lake Superior = largest FRESHWATER lake. Both are commonly confused since "Caspian Sea" has "Sea" in its name.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Largest Deserts</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Largest</th><th>Details</th></tr>
+        <tr><td>Desert (by area)</td><td>Antarctica Polar Desert</td><td>Largest overall — coldest desert</td></tr>
+        <tr><td>Hottest Desert</td><td>Sahara</td><td>Africa</td></tr>
+        <tr><td>Driest Desert</td><td>Atacama Desert</td><td>Chile</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Three separate desert records: Antarctica = largest overall (cold desert), Sahara = largest hot desert, Atacama = driest. All three get tested as if they were one — keep them separate.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: LARGEST STRUCTURES & NATURE -->
+<div class="tab-content" id="t2">
+  <div class="card">
+    <div class="card-header purple">Largest Man-made Structures</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Largest</th><th>Details / Location</th></tr>
+        <tr><td>Stadium</td><td>Narendra Modi Stadium</td><td>Ahmedabad, India</td></tr>
+        <tr><td>Port</td><td>Shanghai</td><td>China</td></tr>
+        <tr><td>Airport</td><td>King Fahd International Airport</td><td>Dammam, Saudi Arabia</td></tr>
+        <tr><td>Railway Station</td><td>Grand Central Terminal</td><td>New York, USA</td></tr>
+        <tr><td>National Highway</td><td>Trans-Canadian Highway</td><td>Canada</td></tr>
+        <tr><td>Statue</td><td>Statue of Unity</td><td>India, Height: 182 m</td></tr>
+        <tr><td>Solar Power Park</td><td>Bhadla Solar Park</td><td>Rajasthan, India — 2,245 MW; 5,703 hectares</td></tr>
+        <tr><td>Museum</td><td>British Museum</td><td>—</td></tr>
+        <tr><td>Official Building</td><td>Pentagon</td><td>America</td></tr>
+        <tr><td>Temple</td><td>Angkor Wat Temple</td><td>Cambodia</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Largest — Living World</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Largest</th><th>Details</th></tr>
+        <tr><td>Animal</td><td>Blue Whale</td><td>Approx. 30 m long, ~100 tonnes</td></tr>
+        <tr><td>Bird</td><td>Ostrich</td><td>—</td></tr>
+      </table></div>
+      <div class="stat-box"><span class="num">182 m</span><span class="label">Statue of Unity Height</span></div>
+      <div class="stat-box"><span class="num">2,245 MW</span><span class="label">Bhadla Solar Park Capacity</span></div>
+      <div class="stat-box"><span class="num">30 m</span><span class="label">Blue Whale Length</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: LONGEST -->
+<div class="tab-content" id="t3">
+  <div class="card">
+    <div class="card-header teal">World's Longest</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Longest</th><th>Details</th></tr>
+        <tr><td>River</td><td>Nile River</td><td>Passes through 11 countries in Africa</td></tr>
+        <tr><td>Mountain Range</td><td>Andes</td><td>South America</td></tr>
+        <tr><td>Epic</td><td>Mahabharata</td><td>—</td></tr>
+        <tr><td>Wall</td><td>Great Wall of China</td><td>China</td></tr>
+        <tr><td>Tunnel</td><td>Gotthard Base Tunnel</td><td>Switzerland</td></tr>
+        <tr><td>Railway Bridge</td><td>Danyang–Kunshan Grand Bridge</td><td>China</td></tr>
+        <tr><td>Railway Route</td><td>Trans-Siberian Railway</td><td>Russia</td></tr>
+        <tr><td>Railway Platform</td><td>Hubli Railway Platform</td><td>1,507 m, Karnataka, India</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Hubli Railway Platform (India) holds BOTH the world's longest and India's longest railway platform record — same answer works for both scopes.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: HIGHEST -->
+<div class="tab-content" id="t4">
+  <div class="card">
+    <div class="card-header red">World's Highest</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Highest</th><th>Details</th></tr>
+        <tr><td>Motorable Pass</td><td>Umling La Pass</td><td>Leh-Ladakh, India — Altitude: ~5,083 m</td></tr>
+        <tr><td>Mountain Peak</td><td>Mount Everest</td><td>Nepal — Height: 8,849 m</td></tr>
+        <tr><td>Minaret</td><td>Djamaa el Djazair</td><td>Algeria — Height: ~265 m</td></tr>
+        <tr><td>Waterfall</td><td>Angel Falls</td><td>Venezuela — Height: ~979 m</td></tr>
+        <tr><td>Volcano</td><td>Ojos del Salado</td><td>Argentina–Chile border — Avg. Height: ~6,893 m</td></tr>
+        <tr><td>Plateau</td><td>Tibetan Plateau</td><td>Asia — Average Height: ~4,500 m</td></tr>
+        <tr><td>Navigable Lake</td><td>Lake Titicaca</td><td>South America — Altitude: 3,812 m</td></tr>
+        <tr><td>Dam</td><td>Jinping-I Dam</td><td>China — Height: ~305 m</td></tr>
+        <tr><td>Building</td><td>Burj Khalifa</td><td>Dubai, UAE — Height: ~828 m</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Ojos del Salado's peak elevation is about 6,893 m (not its "average height" of 3,500 m as sometimes miswritten in notes) — it's the world's highest active volcano. Don't confuse elevation with base-to-summit relief.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: SMALLEST -->
+<div class="tab-content" id="t5">
+  <div class="card">
+    <div class="card-header gold">World's Smallest</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Category</th><th>Smallest</th><th>Details</th></tr>
+        <tr><td>Country</td><td>Vatican City</td><td>Europe — Area: 0.49 sq. km</td></tr>
+        <tr><td>Continent</td><td>Australia</td><td>~3 million sq. km</td></tr>
+        <tr><td>River</td><td>Roe River</td><td>Montana, USA — Length: ~61 metres</td></tr>
+        <tr><td>Bird</td><td>Bee Hummingbird</td><td>Cuba — Length: ~5.5 cm; Weight: ~1.6 g</td></tr>
+        <tr><td>Countries with shortest border</td><td>Spain and Morocco</td><td>85 m</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Vatican City = smallest COUNTRY. Australia = smallest CONTINENT. Two different scales — don't mix them in "smallest landmass" questions.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: QUICK REFERENCE -->
+<div class="tab-content" id="t6">
+  <div class="card">
+    <div class="card-header gold">Quick Reference Summary</div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">Largest Continent</span><span class="v">Asia (44.58 million sq. km)</span></div>
+      <div class="info-row"><span class="k">Largest Country (area)</span><span class="v">Russia (17.1 million sq. km)</span></div>
+      <div class="info-row"><span class="k">Largest Ocean</span><span class="v">Pacific Ocean</span></div>
+      <div class="info-row"><span class="k">Largest Island</span><span class="v">Greenland (Denmark)</span></div>
+      <div class="info-row"><span class="k">Largest Archipelago</span><span class="v">Indonesia (13,500+ islands)</span></div>
+      <div class="info-row"><span class="k">Largest Delta</span><span class="v">Sundarbans Delta (WB, India)</span></div>
+      <div class="info-row"><span class="k">Largest Sea</span><span class="v">South China Sea</span></div>
+      <div class="info-row"><span class="k">Largest Lake</span><span class="v">Caspian Sea (Russia)</span></div>
+      <div class="info-row"><span class="k">Largest Freshwater Lake</span><span class="v">Lake Superior (USA)</span></div>
+      <div class="info-row"><span class="k">Largest Strait</span><span class="v">Strait of Malacca</span></div>
+      <div class="info-row"><span class="k">Largest Desert (area)</span><span class="v">Antarctica Polar Desert</span></div>
+      <div class="info-row"><span class="k">Largest Hot Desert</span><span class="v">Sahara (Africa)</span></div>
+      <div class="info-row"><span class="k">Driest Desert</span><span class="v">Atacama Desert (Chile)</span></div>
+      <div class="info-row"><span class="k">Largest Stadium</span><span class="v">Narendra Modi Stadium, Ahmedabad</span></div>
+      <div class="info-row"><span class="k">Largest Port</span><span class="v">Shanghai (China)</span></div>
+      <div class="info-row"><span class="k">Largest Airport</span><span class="v">King Fahd Intl. Airport, Dammam</span></div>
+      <div class="info-row"><span class="k">Largest Statue</span><span class="v">Statue of Unity (India, 182 m)</span></div>
+      <div class="info-row"><span class="k">Largest Animal</span><span class="v">Blue Whale</span></div>
+      <div class="info-row"><span class="k">Largest Bird</span><span class="v">Ostrich</span></div>
+      <div class="info-row"><span class="k">Largest Museum</span><span class="v">British Museum</span></div>
+      <div class="info-row"><span class="k">Largest Official Building</span><span class="v">Pentagon (America)</span></div>
+      <div class="info-row"><span class="k">Largest Temple</span><span class="v">Angkor Wat Temple (Cambodia)</span></div>
+      <div class="info-row"><span class="k">Largest Solar Park</span><span class="v">Bhadla Solar Park, Rajasthan</span></div>
+      <div class="info-row"><span class="k">Longest River</span><span class="v">Nile River (11 African countries)</span></div>
+      <div class="info-row"><span class="k">Longest Mountain Range</span><span class="v">Andes (South America)</span></div>
+      <div class="info-row"><span class="k">Longest Wall</span><span class="v">Great Wall of China</span></div>
+      <div class="info-row"><span class="k">Longest Tunnel</span><span class="v">Gotthard Base Tunnel (Switzerland)</span></div>
+      <div class="info-row"><span class="k">Longest Railway Bridge</span><span class="v">Danyang–Kunshan Grand Bridge</span></div>
+      <div class="info-row"><span class="k">Longest Railway Route</span><span class="v">Trans-Siberian Railway (Russia)</span></div>
+      <div class="info-row"><span class="k">Longest Railway Platform</span><span class="v">Hubli Railway Platform (1,507 m)</span></div>
+      <div class="info-row"><span class="k">Longest Epic</span><span class="v">Mahabharata</span></div>
+      <div class="info-row"><span class="k">Highest Motorable Pass</span><span class="v">Umling La Pass, Ladakh (~5,083 m)</span></div>
+      <div class="info-row"><span class="k">Highest Mountain Peak</span><span class="v">Mount Everest (8,849 m)</span></div>
+      <div class="info-row"><span class="k">Highest Waterfall</span><span class="v">Angel Falls, Venezuela (~979 m)</span></div>
+      <div class="info-row"><span class="k">Highest Volcano</span><span class="v">Ojos del Salado (Argentina–Chile)</span></div>
+      <div class="info-row"><span class="k">Highest Plateau</span><span class="v">Tibetan Plateau (~4,500 m avg)</span></div>
+      <div class="info-row"><span class="k">Highest Navigable Lake</span><span class="v">Lake Titicaca (3,812 m)</span></div>
+      <div class="info-row"><span class="k">Highest Dam</span><span class="v">Jinping-I Dam, China (~305 m)</span></div>
+      <div class="info-row"><span class="k">Highest Building</span><span class="v">Burj Khalifa, Dubai (~828 m)</span></div>
+      <div class="info-row"><span class="k">Highest Minaret</span><span class="v">Djamaa el Djazair, Algeria (~265 m)</span></div>
+      <div class="info-row"><span class="k">Smallest Country</span><span class="v">Vatican City (0.49 sq. km)</span></div>
+      <div class="info-row"><span class="k">Smallest Continent</span><span class="v">Australia (~3 million sq. km)</span></div>
+      <div class="info-row"><span class="k">Smallest River</span><span class="v">Roe River, Montana (~61 m)</span></div>
+      <div class="info-row"><span class="k">Smallest Bird</span><span class="v">Bee Hummingbird, Cuba</span></div>
+      <div class="info-row"><span class="k">Shortest Border (countries)</span><span class="v">Spain and Morocco (85 m)</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com · Largest, Tallest and Smallest in the World · BPSC / BSSC</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

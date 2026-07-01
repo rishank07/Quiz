@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ocean Currents and Waves | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 14px;font-size:0.82rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.86rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .current-tag{
+    display:inline-block;padding:2px 10px;border-radius:999px;
+    font-size:0.75rem;font-weight:700;margin-left:6px;
+  }
+  .current-tag.warm{background:#3a1f14;color:var(--accent5);}
+  .current-tag.cold{background:#0e2233;color:var(--accent2);}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌊 OCEAN CURRENTS AND WAVES <span class="art-pill">World Geography · Ch 21</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('basics')">Currents Basics</button>
+    <button class="tab-btn" onclick="switchTab('causes')">Causes &amp; Gyre</button>
+    <button class="tab-btn" onclick="switchTab('pacific')">Pacific Currents</button>
+    <button class="tab-btn" onclick="switchTab('atlantic')">Atlantic Currents</button>
+    <button class="tab-btn" onclick="switchTab('indian')">Indian Ocean Currents</button>
+    <button class="tab-btn" onclick="switchTab('effects')">Effects of Currents</button>
+    <button class="tab-btn" onclick="switchTab('waves')">Waves &amp; Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: BASICS -->
+  <div id="basics" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌊 Ocean Currents</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Long-distance water flow in a fixed direction</li>
+          <li>Two types: Warm and Cold currents</li>
+          <li>Meeting region of cold + warm currents → Rich fishing area (development of plankton)</li>
+          <li>Cold current region → Contributes to formation of coastal deserts</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌡️ Warm Air vs Cold Air — Water-holding Capacity</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Warm Air</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Higher water-holding capacity</p>
+          </div>
+          <div class="sub-box">
+            <h4>Cold Air</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Lower water-holding capacity</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Wherever warm and cold currents meet, nutrient-rich upwelling creates some of the world's best fishing grounds (e.g. off Newfoundland, Japan).
+    </div>
+  </div>
+
+  <!-- TAB 2: CAUSES & GYRE -->
+  <div id="causes" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌀 Gyre</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Rotating water flow in oceanic/marine regions (whirlpool-like circulation)</li>
+          <li>Part of the oceanic water cycle</li>
+          <li>Driven by global wind patterns, the Coriolis effect (Earth's rotation), and the presence of continents</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🧭 Causes of Origin of Ocean Currents</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Physical Causes</h4>
+            <ul class="arrow-list">
+              <li>Earth's rotational speed</li>
+              <li>Difference in density</li>
+              <li>Difference in ocean salinity</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Atmospheric Causes</h4>
+            <ul class="arrow-list">
+              <li>Temperature difference</li>
+              <li>Air pressure and winds</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Other Causes</h4>
+            <ul class="arrow-list">
+              <li>Shape of coastline</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Gyres form due to the combined effect of wind patterns + Coriolis force + continental barriers — no single factor alone explains them.
+    </div>
+  </div>
+
+  <!-- TAB 3: PACIFIC CURRENTS -->
+  <div id="pacific" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🌊 Pacific Ocean Currents</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>North Pacific Ocean Currents</h4>
+            <ul class="arrow-list">
+              <li>North Equatorial Current <span class="current-tag warm">Warm</span></li>
+              <li>Kuroshio Current <span class="current-tag warm">Warm</span></li>
+              <li>North Pacific Current <span class="current-tag warm">Warm</span></li>
+              <li>Alaska Current <span class="current-tag warm">Warm</span></li>
+              <li>California Current <span class="current-tag cold">Cold</span></li>
+              <li>Oyashio Current <span class="current-tag cold">Cold</span></li>
+              <li>Aleutian Current <span class="current-tag warm">Warm</span></li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>South Pacific Ocean Currents</h4>
+            <ul class="arrow-list">
+              <li>South Equatorial Current <span class="current-tag warm">Warm</span></li>
+              <li>East Australian Current <span class="current-tag warm">Warm</span></li>
+              <li>Peru / Humboldt Current <span class="current-tag cold">Cold</span></li>
+              <li>El-Niño Current <span class="current-tag warm">Warm</span></li>
+              <li>La Niña <span class="current-tag cold">Cold</span></li>
+              <li>Counter Equatorial Current <span class="current-tag warm">Warm</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      El-Niño (warm phase) and La Niña (cold phase) are opposite ends of the same Pacific climate cycle (ENSO) — not two unrelated currents.
+    </div>
+  </div>
+
+  <!-- TAB 4: ATLANTIC CURRENTS -->
+  <div id="atlantic" class="tab-content">
+    <div class="card">
+      <div class="card-header red">🌊 Atlantic Ocean Currents</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>North Atlantic Ocean Currents</h4>
+            <ul class="arrow-list">
+              <li>North Equatorial Current <span class="current-tag warm">Warm</span></li>
+              <li>Caribbean Current <span class="current-tag warm">Warm</span></li>
+              <li>Florida Current <span class="current-tag warm">Warm</span></li>
+              <li>Gulf Stream <span class="current-tag warm">Warm</span></li>
+              <li>North Atlantic Drift <span class="current-tag warm">Warm</span></li>
+              <li>Norwegian Current <span class="current-tag warm">Warm</span></li>
+              <li>Labrador Current <span class="current-tag cold">Cold</span></li>
+              <li>Canary Current <span class="current-tag cold">Cold</span></li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>South Atlantic Ocean Currents</h4>
+            <ul class="arrow-list">
+              <li>South Equatorial Current <span class="current-tag warm">Warm</span></li>
+              <li>Brazil Current <span class="current-tag warm">Warm</span></li>
+              <li>Falkland Current <span class="current-tag cold">Cold</span></li>
+              <li>South Atlantic Drift <span class="current-tag cold">Cold</span></li>
+              <li>Benguela Current <span class="current-tag cold">Cold</span></li>
+              <li>Guinea Coast Current <span class="current-tag warm">Warm</span></li>
+              <li>Counter Equatorial Current <span class="current-tag warm">Warm</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Gulf Stream (warm, US East Coast → Europe) and Labrador Current (cold, Canada) are the two most exam-favourite Atlantic currents — they meet near Newfoundland's famous fishing grounds.
+    </div>
+  </div>
+
+  <!-- TAB 5: INDIAN OCEAN CURRENTS -->
+  <div id="indian" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🌊 Indian Ocean Currents</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>North Indian Ocean (Monsoon-driven, reverses seasonally)</h4>
+            <ul class="arrow-list">
+              <li>Summer: North Equatorial Current, South-west Monsoon Current, Counter Equatorial Current <span class="current-tag warm">Warm</span></li>
+              <li>Winter: North-East Monsoon Current, Counter Equatorial Current <span class="current-tag warm">Warm</span></li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>South Indian Ocean</h4>
+            <ul class="arrow-list">
+              <li>South Equatorial Current <span class="current-tag warm">Warm</span></li>
+              <li>Mozambique Current <span class="current-tag warm">Warm</span></li>
+              <li>Agulhas Current <span class="current-tag warm">Warm</span></li>
+              <li>Madagascar Current <span class="current-tag warm">Warm</span></li>
+              <li>West Wind Drift <span class="current-tag cold">Cold</span></li>
+              <li>West Australian Current <span class="current-tag cold">Cold</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Unlike the Pacific and Atlantic, the North Indian Ocean's currents completely <b>reverse direction</b> between summer and winter, driven by the monsoon winds — a uniquely Indian-Ocean phenomenon.
+    </div>
+  </div>
+
+  <!-- TAB 6: EFFECTS OF CURRENTS -->
+  <div id="effects" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🌦️ Effects of Ocean Currents</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Effect</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Rainfall</td><td>Warm currents bring rain • Example: Summer rainfall in China Type Climate regions • Warm currents flow parallel to east coasts of continents</td></tr>
+            <tr><td>Tropical Cyclones</td><td>Warm currents help in the formation of tropical cyclones</td></tr>
+            <tr><td>Desert Formation</td><td>Cold currents flow parallel to west coasts → cause aridity and desert formation</td></tr>
+            <tr><td>Effect on Navigation</td><td>Currents assist or hinder ship navigation • Icebergs carried by the Labrador Current affect shipping routes</td></tr>
+            <tr><td>Fishing</td><td>Meeting of cold and warm currents → development of plankton → rich fishing grounds</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Warm currents → east coasts, more rain, cyclone-friendly · Cold currents → west coasts, aridity, coastal deserts.
+    </div>
+  </div>
+
+  <!-- TAB 7: WAVES & QUICK REFERENCE -->
+  <div id="waves" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">🌊 Oceanic Waves</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Upper part of a wave is called the <b>Crest</b>; lower part is called the <b>Trough</b></li>
+          <li><b>Longshore Current:</b> Flows parallel to the coast</li>
+          <li><b>Tsunami Waves:</b> Extremely destructive – caused by undersea earthquakes/volcanic eruptions</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">📝 Quick Reference — Key Currents</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Current</th><th>Ocean</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>Gulf Stream</td><td>Atlantic</td><td>Warm</td></tr>
+            <tr><td>Labrador Current</td><td>North Atlantic</td><td>Cold</td></tr>
+            <tr><td>Canary Current</td><td>North Atlantic</td><td>Cold</td></tr>
+            <tr><td>Norwegian Current</td><td>North Atlantic</td><td>Warm</td></tr>
+            <tr><td>Benguela Current</td><td>South Atlantic</td><td>Cold</td></tr>
+            <tr><td>Brazil Current</td><td>South Atlantic</td><td>Warm</td></tr>
+            <tr><td>Kuroshio Current</td><td>North Pacific</td><td>Warm</td></tr>
+            <tr><td>California Current</td><td>North Pacific</td><td>Cold</td></tr>
+            <tr><td>Oyashio Current</td><td>North Pacific</td><td>Cold</td></tr>
+            <tr><td>Peru / Humboldt Current</td><td>South Pacific</td><td>Cold</td></tr>
+            <tr><td>East Australian Current</td><td>South Pacific</td><td>Warm</td></tr>
+            <tr><td>El-Niño Current</td><td>South Pacific</td><td>Warm – causes drought/flood</td></tr>
+            <tr><td>Agulhas Current</td><td>South Indian Ocean</td><td>Warm</td></tr>
+            <tr><td>Mozambique Current</td><td>South Indian Ocean</td><td>Warm</td></tr>
+            <tr><td>West Australian Current</td><td>South Indian Ocean</td><td>Cold</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Every ocean pairs one major warm current with one major cold current on opposite coasts — e.g. Atlantic: Gulf Stream (warm) vs Canary/Labrador (cold).
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Ocean Currents and Waves · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

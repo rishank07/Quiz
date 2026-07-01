@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soils and Natural Vegetation of the World | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .layer-diagram{
+    display:flex;flex-direction:column;border-radius:10px;overflow:hidden;
+    margin:14px 0;border:1px solid var(--border);
+  }
+  .layer-band{
+    padding:14px 18px;display:flex;justify-content:space-between;align-items:center;
+    font-weight:700;font-size:0.9rem;
+  }
+  .layer-band .tag{font-size:0.75rem;font-weight:600;opacity:0.85;}
+  .layer-band.o{background:linear-gradient(90deg,#2ecc71,#23a05a);color:#08130c;}
+  .layer-band.a{background:linear-gradient(90deg,#e67e22,#c2670f);color:#1a0d00;}
+  .layer-band.b{background:linear-gradient(90deg,#3498db,#2477b3);color:#fff;}
+  .layer-band.c{background:linear-gradient(90deg,#9b59b6,#7d3f99);color:#fff;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🌱 SOILS AND NATURAL VEGETATION OF THE WORLD <span class="art-pill">World Geography · Ch 22</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('soilclass')">Soil Classification &amp; Horizons</button>
+    <button class="tab-btn" onclick="switchTab('erosion')">Erosion &amp; Conservation</button>
+    <button class="tab-btn" onclick="switchTab('forests')">Forests</button>
+    <button class="tab-btn" onclick="switchTab('vegetation')">Vegetation Types</button>
+    <button class="tab-btn" onclick="switchTab('grasslands')">Grasslands</button>
+    <button class="tab-btn" onclick="switchTab('facts')">Quick Facts</button>
+  </div>
+
+  <!-- TAB 1: SOIL CLASSIFICATION & HORIZONS -->
+  <div id="soilclass" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🧪 Soil Science — Pedology</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Pedalfer Soil</h4>
+            <ul class="arrow-list">
+              <li>Rich in Aluminium (Al) and Iron (Fe)</li>
+              <li>Very fertile, dark brown or black soil</li>
+              <li>Common in temperate, eastern parts of USA</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Pedocal Soil</h4>
+            <ul class="arrow-list">
+              <li>Rich in Calcium (Ca)</li>
+              <li>Forms in drier, temperate areas — grasslands and bushes are the usual vegetation</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-row" style="margin-top:10px;">
+          <span class="k">📌 Leaching process</span>
+          <span class="v">Occurs in low-latitude regions (high rainfall areas)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🪨 Soil Strata (Horizons)</div>
+      <div class="card-body">
+        <div class="layer-diagram">
+          <div class="layer-band o"><span>O Horizon</span><span class="tag">Organic layer (humus, decomposed matter)</span></div>
+          <div class="layer-band a"><span>A Horizon</span><span class="tag">Topsoil (mineral + organic mix)</span></div>
+          <div class="layer-band b"><span>B Horizon</span><span class="tag">Subsoil (mineral accumulation / illuviation)</span></div>
+          <div class="layer-band c"><span>C Horizon</span><span class="tag">Weathered parent rock (regolith)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      The <b>A Horizon</b> is the true <b>Topsoil</b> (not "subsoil"); the <b>B Horizon</b> is the actual Subsoil where leached minerals accumulate — these two are frequently swapped.
+    </div>
+  </div>
+
+  <!-- TAB 2: EROSION & CONSERVATION -->
+  <div id="erosion" class="tab-content">
+    <div class="card">
+      <div class="card-header green">📉 Soil Erosion / Degradation / Deterioration</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Transfer of Fertile Elements</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Loss of topsoil by wind, water, or human activity leading to reduced agricultural productivity</p>
+          </div>
+          <div class="sub-box">
+            <h4>Decrease in Soil Quality</h4>
+            <p style="font-size:0.88rem;color:#cfd3e2;">Salinity of soil due to excessive irrigation • Loss of nutrients</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🛡️ Soil Conservation Methods</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Method</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Mulching</td><td>Laying organic layers like straw on the ground between crops</td></tr>
+            <tr><td>Crop Rotation</td><td>Alternating different crops in the same field each season to maintain soil fertility</td></tr>
+            <tr><td>Contour Ploughing</td><td>Ploughing along the contour lines of the slope to reduce water runoff</td></tr>
+            <tr><td>Shelter Belt</td><td>Rows of trees planted to protect soil from wind erosion</td></tr>
+            <tr><td>Rock Dam</td><td>Protecting drains with heaps of rocks • Preventing soil erosion</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Azolla</span>
+          <span class="v">Increases soil fertility in paddy cultivation</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Shelter Belts guard against <b>wind</b> erosion; Contour Ploughing guards against <b>water</b> runoff erosion — different methods target different erosion agents.
+    </div>
+  </div>
+
+  <!-- TAB 3: FORESTS -->
+  <div id="forests" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🌳 Major Types of Forests</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Forest Type</th><th>Key Features</th></tr></thead>
+          <tbody>
+            <tr><td>Tropical Evergreen Rainforest</td><td>Green throughout the year, broad leaves • Rainfall more than 200 cm • Equatorial/tropical regions – Indonesia, Brazil, etc. • Amazon Rainforest ("Lungs of the Earth") • Home to the Anaconda, world's largest snake</td></tr>
+            <tr><td>Tropical Deciduous Forest (Monsoon Forest)</td><td>Trees shed leaves in a specific season • Major trees: Sal, Teak, Neem, Shisham</td></tr>
+            <tr><td>Temperate Deciduous Forest</td><td>Major trees: Maple, Elm, Ash • Home to Pheasant and Monal birds</td></tr>
+            <tr><td>Temperate Evergreen Forest</td><td>Coastal regions of middle latitudes • Bamboo, Pine and Eucalyptus trees • Commonly used in social forestry</td></tr>
+            <tr><td>Coniferous Forest / Taiga Forest</td><td>Evergreen trees with soft wood • Pine, Deodar trees • Home to animals like the Polar bear</td></tr>
+            <tr><td>Tundra Forest</td><td>Covered with snow • Vegetation limited to mosses, lichens and algae (no large trees)</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Mountain forests</span>
+          <span class="v">Broad-leaved coniferous trees found here</span>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Herbicide</span>
+          <span class="v">A weedkiller, used to destroy unwanted plants</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Amazon Rainforest = "Lungs of the Earth" (Tropical Evergreen); Taiga = Coniferous, softwood forest with Pine/Deodar — two very different forest biomes, don't mix their signature facts.
+    </div>
+  </div>
+
+  <!-- TAB 4: VEGETATION TYPES -->
+  <div id="vegetation" class="tab-content">
+    <div class="card">
+      <div class="card-header red">🌿 Natural Vegetation</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Natural Vegetation depends on temperature and humidity</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📂 Major Vegetation Types of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Vegetation Type</th><th>Region / Details</th></tr></thead>
+          <tbody>
+            <tr><td>Tropophyte</td><td>Tropical climatic region vegetation</td></tr>
+            <tr><td>Hygrophyte</td><td>Equatorial tropical humid (marshy) region vegetation</td></tr>
+            <tr><td>Xerophyte</td><td>Desert region vegetation</td></tr>
+            <tr><td>Hydrophyte</td><td>Waterlogged region vegetation</td></tr>
+            <tr><td>Halophyte</td><td>Vegetation of saline regions</td></tr>
+            <tr><td>Lithophyte</td><td>Vegetation growing on hard rocks</td></tr>
+            <tr><td>Mesophyte</td><td>Vegetation of temperate region</td></tr>
+            <tr><td>Cryophyte</td><td>Vegetation of tundra and cold region</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Xerophyte (desert, dry) and Hydrophyte (waterlogged, wet) are opposite extremes on the moisture spectrum of vegetation types.
+    </div>
+  </div>
+
+  <!-- TAB 5: GRASSLANDS -->
+  <div id="grasslands" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🌾 Grasslands</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Tropical Grasslands</h4>
+            <ul class="arrow-list">
+              <li>Savanna (Africa)</li>
+              <li>Campos (Brazil)</li>
+              <li>Parkland (South Africa)</li>
+              <li>Llanos (Venezuela and Colombia)</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Temperate Grasslands</h4>
+            <ul class="arrow-list">
+              <li>Prairies (USA and Canada)</li>
+              <li>Pampas (Argentina)</li>
+              <li>Veld (South Africa)</li>
+              <li>Downs (Australia)</li>
+              <li>Steppe (Asia — Manchuria region of China and Russia)</li>
+              <li>Pustaz (Hungary)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      "Selvas" refers to the dense <b>Amazon rainforest</b> region, not a grassland — don't confuse it with Llanos or Campos, which are the true South American grasslands.
+    </div>
+  </div>
+
+  <!-- TAB 6: QUICK FACTS -->
+  <div id="facts" class="tab-content">
+    <div class="card">
+      <div class="card-header blue">📝 Quick Reference — Key Facts</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fact</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Soil Science</td><td>Pedology</td></tr>
+            <tr><td>Pedalfer Soil</td><td>Rich in Aluminium (Al) and Iron (Fe)</td></tr>
+            <tr><td>Pedocal Soil</td><td>Rich in Calcium (Ca)</td></tr>
+            <tr><td>Lungs of the Earth</td><td>Amazon Rainforest</td></tr>
+            <tr><td>World's largest snake</td><td>Anaconda (Tropical Rainforest)</td></tr>
+            <tr><td>Taiga = Coniferous Forest</td><td>Evergreen, soft wood, Pine, Deodar, Polar bear</td></tr>
+            <tr><td>Tundra vegetation</td><td>Mosses, lichens and algae (no large trees)</td></tr>
+            <tr><td>Savanna</td><td>Tropical grassland – Africa</td></tr>
+            <tr><td>Prairies</td><td>Temperate grassland – USA and Canada</td></tr>
+            <tr><td>Pampas</td><td>Temperate grassland – Argentina</td></tr>
+            <tr><td>Steppe</td><td>Temperate grassland – Asia, Manchuria (China and Russia)</td></tr>
+            <tr><td>Pustaz</td><td>Temperate grassland – Hungary</td></tr>
+            <tr><td>Veld</td><td>Temperate grassland – South Africa</td></tr>
+            <tr><td>Downs</td><td>Temperate grassland – Australia</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Each continent has its own name for temperate grassland: Prairies (N. America), Pampas (S. America), Steppe (Asia), Veld (Africa), Downs (Australia), Pustaz (Europe/Hungary).
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Soils and Natural Vegetation of the World · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

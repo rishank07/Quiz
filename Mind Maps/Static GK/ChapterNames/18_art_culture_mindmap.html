@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Art and Culture - Ch18 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:120px;
+}
+.stat-box .num{color:var(--gold);font-size:22px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+h3.sub{color:var(--gold);margin:14px 0 8px;font-size:16px;}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 18</span>
+    <h1>Art and Culture</h1>
+    <p>Musical Instruments · Dance Forms · Folk Traditions · Festivals & Fairs — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('music')">🎵 Musical Instruments</button>
+    <button class="tab-btn" onclick="switchTab('classical1')">💃 Classical Dance I</button>
+    <button class="tab-btn" onclick="switchTab('classical2')">🩰 Classical Dance II</button>
+    <button class="tab-btn" onclick="switchTab('folkdance')">🪘 Folk & Tribal Dances</button>
+    <button class="tab-btn" onclick="switchTab('folksong')">🎶 Folk Songs</button>
+    <button class="tab-btn" onclick="switchTab('festivals')">🪔 Religious Festivals</button>
+    <button class="tab-btn" onclick="switchTab('national')">🇮🇳 National & Regional</button>
+    <button class="tab-btn" onclick="switchTab('fairs')">🎪 Fairs & Melas</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: MUSICAL INSTRUMENTS -->
+  <div class="tab-content active" id="music">
+
+    <div class="card">
+      <div class="card-header gold">Classification of Musical Instruments (By Bharat Muni)</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">4</span><span class="lbl">Types</span></div>
+        </div>
+        <div class="tbl-wrap"><table>
+          <tr><th>Category</th><th>Description</th><th>Examples</th></tr>
+          <tr><td>Tantu Vadya (String)</td><td>Use of strings</td><td>Veena, Tanpura, Sitar, Sarod, Violin, Santoor, Rudra Veena, Sarangi, Jantar</td></tr>
+          <tr><td>Sushir Vadya (Wind)</td><td>Use of air</td><td>Flute (Bansuri), Shehnai, Conch (Shankh), Organ, Mouth Organ, Accordion</td></tr>
+          <tr><td>Ghan Vadya (Solid)</td><td>Solid; no strings, air or membrane</td><td>Dandiya sticks, Manjira, Khartal, Bell (Ghanta)</td></tr>
+          <tr><td>Avanaddha Vadya (Percussion)</td><td>Stretched membrane (often leather)</td><td>Dhol, Nagara, Tabla, Pakhawaj, Duff, Edakka</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Shehnai has <strong>seven holes</strong> and is considered an auspicious instrument — often confused with flute in MCQs.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Famous Instruments & Renowned Players</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Instrument</th><th>Renowned Players</th></tr>
+          <tr><td>Sitar</td><td>Pandit Ravi Shankar (Bharat Ratna 1999; autobiography: Raga Mala), Ustad Vilayat Khan, Nikhil Banerjee, Shahid Parvez, Buddhaditya Mukherjee, Arvind Parikh</td></tr>
+          <tr><td>Sarod</td><td>Ustad Ali Akbar Khan, Ustad Amjad Ali Khan, Rajeev Taranath, Ustad Allauddin Khan, Hafiz Ali Khan, Buddhadev Das Gupta, Vikashjit Roy Choudhary</td></tr>
+          <tr><td>Shehnai</td><td>Ustad Bismillah Khan (Bharat Ratna 2001, alongside Lata Mangeshkar), Dayashankar Jagannath, Prasanna, Hari Singh, Bageshwari Kumar</td></tr>
+          <tr><td>Tabla</td><td>Pandit Anand Gopal Bandopadhyay, Ustad Alla Rakha, Ustad Zakir Hussain (Padma Bhushan 2002), Ustad Kaayaz Khan (Padma Vibhushan 2023), Gudai Maharaj, Kisan Maharaj, Pandit Swapan Choudhary</td></tr>
+          <tr><td>Flute (Bansuri)</td><td>Pandit Hariprasad Chaurasia, Prabhat Sharma, Pannalal Ghosh, Raghunath Seth, Rajendra Prasanna</td></tr>
+          <tr><td>Sarangi</td><td>Pandit Ram Narayan, Bundu Khan, Ustad Sabri Khan, Dhruv Ghosh, Asif Ali Khan</td></tr>
+          <tr><td>Veena</td><td>Ustad Bahauddin Dagar, S. Balachandran, B. Doreswamy Iyengar, Dr. A.P.J. Abdul Kalam</td></tr>
+          <tr><td>Mridangam</td><td>Ramanath V. Radhavan, V.K. Sivaraman, Dr. Jagdish Singh, T.V. Gopalakrishnan, Anant R. Krishnan</td></tr>
+          <tr><td>Violin</td><td>Vishnu Govind Jog, Lalgudi Jayaraman, T.N. Krishnan, Dwaram Venkataswamy Naidu, Ragini Shankar</td></tr>
+          <tr><td>Santoor</td><td>Pandit Shivkumar Sharma (Sangeet Natak Akademi Award 1986), Bhajan Sopori, Rahul Sharma</td></tr>
+          <tr><td>Guitar</td><td>Brij Bhushan Kabra</td></tr>
+          <tr><td>Mandolin</td><td>U. Srinivas</td></tr>
+          <tr><td>Nadaswaram</td><td>Sheikh Hassan, Nirruswami Pillai, Rajarathnam Pillai</td></tr>
+          <tr><td>Drums</td><td>Shivamani</td></tr>
+          <tr><td>Surbahar</td><td>Annapurna Devi, Ustad Imrat Khan</td></tr>
+          <tr><td>Rudra Veena</td><td>Ustad Asad Ali Khan</td></tr>
+          <tr><td>Pakhawaj</td><td>Mohan Shyam Sharma, Tantarama Sharma</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Bismillah Khan (Shehnai) played at the Red Fort on Independence Day — a classic BPSC one-liner.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Important Facts About Indian Musical Instruments</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Ponu Yoksy: A sword-shaped musical instrument from Arunachal Pradesh</li>
+          <li>Saraswati Veena: Made using jackfruit wood, popular in Karnataka</li>
+          <li>Chinkara: A string instrument popular in Madhya Pradesh</li>
+          <li>Tansen: Expert in playing the Rabab, a string instrument</li>
+          <li>Pena: A traditional bowed instrument from Manipur</li>
+          <li>R.K. Bijapure: Known for mastery in Harmonium</li>
+          <li>Pt. Vishwa Mohan Bhatt: Inventor of the Mohan Veena</li>
+          <li>Kartal: Traditional instrument from Rajasthan, an idiophone</li>
+          <li>Dhrupad style: Associated with the Vishnupur Gharana</li>
+          <li>Ektara: A single-string instrument common in Maharashtra</li>
+          <li>T.H. Vinayakram: Known as the "God of Ghatam" in Carnatic music</li>
+          <li>Khuang: A traditional instrument from Mizoram</li>
+          <li>Purandara Dasa: Revered as the Father of Carnatic Music</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Instrumental Music Gharanas</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Gharana</th><th>Associated Instrument</th></tr>
+          <tr><td>Banaras Baaj Gharana</td><td>Tabla</td></tr>
+          <tr><td>Delhi Gharana</td><td>Tabla</td></tr>
+          <tr><td>Lucknow Gharana</td><td>Tabla</td></tr>
+          <tr><td>Farrukhabad Gharana</td><td>Tabla</td></tr>
+          <tr><td>Jaipur Gharana</td><td>Sitar</td></tr>
+          <tr><td>Maihar Gharana</td><td>Sitar</td></tr>
+          <tr><td>Imdad Khan Gharana</td><td>Sitar</td></tr>
+          <tr><td>Bulandshahr Gharana</td><td>Sarod</td></tr>
+          <tr><td>Niyamatullah Gharana</td><td>Sarod</td></tr>
+          <tr><td>Gaya Gharana</td><td>Esraj</td></tr>
+          <tr><td>Nana Saheb Panse Gharana</td><td>Pakhawaj</td></tr>
+          <tr><td>Kudau Singh Gharana</td><td>Pakhawaj</td></tr>
+          <tr><td>Nathdwara Gharana</td><td>Pakhawaj</td></tr>
+          <tr><td>Ghulam Ali Gharana</td><td>Pakhawaj</td></tr>
+          <tr><td>Indore Beenkar Gharana</td><td>Veena</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: CLASSICAL DANCE I -->
+  <div class="tab-content" id="classical1">
+
+    <div class="card">
+      <div class="card-header gold">Sources & Classification of Indian Dance</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Bharata Muni's Natyashastra — primary source of Indian classical dance</li>
+          <li>Nandikeshwara's Abhinaya Darpana — key treatise on expression & gestures</li>
+          <li>Dance is known as the "5th Veda" (Nat) — a synthesis of the four Vedas</li>
+        </ul>
+        <h3 class="sub">Types of Dance</h3>
+        <ul class="arrow-list">
+          <li><strong>Shastriya Nritya (Classical):</strong> Bharatanatyam, Kathak, Odissi, Kathakali, Kuchipudi, Manipuri, Mohiniyattam, Sattriya</li>
+          <li><strong>Lok Nritya (Folk):</strong> Bhangra (Punjab), Garba (Gujarat), Ghoomar (Rajasthan), Lavani (Maharashtra)</li>
+        </ul>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">8</span><span class="lbl">Classical Dances (Sangeet Natak Akademi)</span></div>
+          <div class="stat-box"><span class="num">9</span><span class="lbl">With Chhau (Govt. of India)</span></div>
+        </div>
+        <div class="tbl-wrap"><table>
+          <tr><th>Classical Dance</th><th>State/Region</th></tr>
+          <tr><td>Bharatanatyam</td><td>Tamil Nadu</td></tr>
+          <tr><td>Kuchipudi</td><td>Andhra Pradesh</td></tr>
+          <tr><td>Kathakali</td><td>Kerala</td></tr>
+          <tr><td>Mohiniyattam</td><td>Kerala</td></tr>
+          <tr><td>Kathak</td><td>Uttar Pradesh</td></tr>
+          <tr><td>Manipuri</td><td>Manipur</td></tr>
+          <tr><td>Odissi</td><td>Odisha</td></tr>
+          <tr><td>Sattriya</td><td>Assam</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Officially SNA recognizes 8 classical dances; Chhau is separately recognized by the Ministry of Culture, taking the govt. total to 9 — questions often test this distinction.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">1. Bharatanatyam (Tamil Nadu)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Origin</span><span class="v">Temple dance by Devadasis; last Devadasi: Muthukannammal</span></div>
+        <div class="info-row"><span class="k">Other Names</span><span class="v">Sadir, Dasiattam, Agni Nritya, Ekarthya</span></div>
+        <div class="info-row"><span class="k">Special Feature</span><span class="v">Solo storytelling — multiple roles by one performer</span></div>
+        <h4 class="sub2">Two Aspects</h4>
+        <ul class="arrow-list">
+          <li>Tandava: Powerful, vigorous male energy (Shiva's cosmic dance)</li>
+          <li>Lasya: Graceful, delicate feminine expression (Parvati's dance)</li>
+        </ul>
+        <h4 class="sub2">Performance Elements</h4>
+        <ul class="arrow-list">
+          <li>Alarippu: Invocatory piece for guru & deities</li>
+          <li>Jatiswaram: Pure dance with melodic swaras</li>
+          <li>Shabdam: Combines music and expression</li>
+          <li>Varnam: Blend of pure dance and storytelling</li>
+          <li>Tillana: Concludes with pure rhythmic dance</li>
+        </ul>
+        <p class="note">Mudras depicted on Chidambaram Temple's Gopuram · Banned by British in 1910, later revived · Rooted in Shaivism & South Indian tradition · Vazhuvoor is a notable bani (style)</p>
+        <h4 class="sub2">Renowned Dancers</h4>
+        <ul class="arrow-list">
+          <li>Rukmini Devi Arundale — revived Bharatanatyam, founded Kalakshetra, Chennai</li>
+          <li>E. Krishna Iyer — pivotal in reviving the form in early 20th century</li>
+          <li>Padma Subrahmanyam — reconstructed karanas from Natya Shastra</li>
+          <li>Alarmel Valli — Chevalier of Arts and Letters (France, 2004)</li>
+          <li>Yamini Krishnamurthy — Asthana Nartaki of Tirumala Tirupati Devasthanam</li>
+          <li>Vyjayanthimala Bali, Leela Samson, Mrinalini Sarabhai, Mallika Sarabhai, Lakshmi Viswanathan</li>
+        </ul>
+        <p class="note">Musical Instruments: Mridangam, Veena, Flute, Sarangi, Manjira</p>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Rukmini Devi Arundale = Bharatanatyam + Kalakshetra, Chennai — one of the most repeated BPSC facts.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">2. Kuchipudi (Andhra Pradesh)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Origin</span><span class="v">Village of Kuchelapuram, Andhra Pradesh</span></div>
+        <div class="info-row"><span class="k">Systematized by</span><span class="v">Siddhendra Yogi</span></div>
+        <div class="info-row"><span class="k">Themes</span><span class="v">Stories from Bhagavata Purana</span></div>
+        <div class="info-row"><span class="k">Unique Feature</span><span class="v">Tarangam — dancer balances on a brass plate</span></div>
+        <p class="note">Originally performed only by men (even female roles); later women joined · Combines Nritta, Natya, and Nritya · Instruments: Violin, Mridangam · Costumes: Bagalbandi (men), Banarasi/Kanchipuram silk saree (women) · Vempati Chinna Satyam founded Kuchipudi Art Academy in Chennai (1963)</p>
+        <h4 class="sub2">Renowned Dancers</h4>
+        <ul class="arrow-list">
+          <li>Lakshminarayana Shastri — "Father of solo Kuchipudi" (Eka Vyakti Vidya)</li>
+          <li>Radha Reddy, Raja Reddy, Vempati Satyanarayana, Yamini Krishnamurthy, Indrani Rahman, Swapna Sundari</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">3. Kathakali (Kerala)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Development</span><span class="v">Credited to a hero of the Zamorin rulers of Calicut</span></div>
+        <div class="info-row"><span class="k">Popularized by</span><span class="v">Kalamandalam Narayana Menon</span></div>
+        <div class="info-row"><span class="k">Institution</span><span class="v">Kerala Kalamandalam, est. 1930 by Vallathol Narayana Menon</span></div>
+        <ul class="arrow-list">
+          <li>Begins with Kettikottu — a specific drum recital</li>
+          <li>One of the oldest theatrical dance styles in the world</li>
+          <li>Male-dominated form — even female roles played by men</li>
+          <li>Themes from Mahabharata, Ramayana, and Puranas</li>
+          <li>Face makeup symbolizes the character's nature</li>
+        </ul>
+        <h4 class="sub2">Five Types of Makeup (Vesham)</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Vesham</th><th>Represents</th></tr>
+          <tr><td>Pacha (Green)</td><td>Noble heroes and divine characters</td></tr>
+          <tr><td>Kathi (Knife)</td><td>Arrogant and evil characters</td></tr>
+          <tr><td>Thadi (Beard)</td><td>Red: Demons · White: Divine beings · Black: Hunters/forest dwellers</td></tr>
+          <tr><td>Minukku</td><td>Gentle female or saintly characters</td></tr>
+          <tr><td>Kari (Black)</td><td>Witches or evil female figures</td></tr>
+        </table></div>
+        <p class="note">Sevakali: preparatory practice session · Kalasham: a dance sequence · "Nalacharitham" is an important Kathakali play</p>
+        <h4 class="sub2">Renowned Dancers</h4>
+        <ul class="arrow-list">
+          <li>Ram Gopal, Krishna Nair, Madhavan, Anand Shivraman, Mrinalini Sarabhai, Krishnan Kutty</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Kathakali makeup colors are a favorite MCQ trap — remember Red beard = Demons, White beard = Divine, Black beard = Hunters.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">4. Mohiniyattam (Kerala)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">First mentioned in</span><span class="v">Works of Bhasmangalam Narayana Namboodiri</span></div>
+        <div class="info-row"><span class="k">Promoted by</span><span class="v">Swathi Thirunal, ruler of Travancore</span></div>
+        <div class="info-row"><span class="k">Style</span><span class="v">Solo dance, based on Lasya (graceful/feminine)</span></div>
+        <p class="note">Also referenced in "Vyavaharamala" (16th century) · Related forms: Tevittichiyattam, Nangiar Koothu, Hasyaabhinaya · Songs traditionally in Manipravalam (Malayalam + Sanskrit) · Themes: love, devotion, surrender to God · Shares similarities with Bharatanatyam and Kathakali</p>
+        <h4 class="sub2">Renowned Dancers</h4>
+        <ul class="arrow-list">
+          <li>Bharati Shivaji, Jayaprabha Menon, Madhuri Amma, K. Kalyani, Shantarav, Ragini Devi, Thankamony, Sunanda Nair, Tara Nidugodi, Hema Malini</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: CLASSICAL DANCE II -->
+  <div class="tab-content" id="classical2">
+
+    <div class="card">
+      <div class="card-header gold">5. Kathak (Uttar Pradesh)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Etymology</span><span class="v">From "Katha" meaning story</span></div>
+        <div class="info-row"><span class="k">Modern Revival</span><span class="v">Leila Sokhey (Menaka)</span></div>
+        <div class="info-row"><span class="k">Associated Forms</span><span class="v">Thumri music, Natvari Nritya (dance of Krishna)</span></div>
+        <p class="note">A Kathak training center was established in Khandala in 1955</p>
+        <h4 class="sub2">4 Major Kathak Gharanas</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Gharana</th><th>Key Facts</th></tr>
+          <tr><td>Lucknow Gharana</td><td>Peaked during Nawab Wajid Ali Shah's reign</td></tr>
+          <tr><td>Jaipur Gharana</td><td>Founded by Manuji</td></tr>
+          <tr><td>Varanasi Gharana</td><td>Founded by Janaki Prasad</td></tr>
+          <tr><td>Raigarh Gharana</td><td>Also linked to Kathak</td></tr>
+        </table></div>
+        <h4 class="sub2">Renowned Dancers</h4>
+        <ul class="arrow-list">
+          <li>Birju Maharaj, Lachhu Maharaj, Shambhu Maharaj, Shobhana Narayan, Sitara Devi, Kalka Prasad, Damayanti Joshi</li>
+          <li>Sangeet Majumdar — honoured with Casa de la India Award by Spain</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">6. Manipuri (Manipur)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Origins</span><span class="v">Meitei language; influenced by Vaishnavism (Raasleela of Radha-Krishna)</span></div>
+        <div class="info-row"><span class="k">Golden Era</span><span class="v">Reign of Bhagyachandra and Keerti Chandra</span></div>
+        <div class="info-row"><span class="k">Oldest Style</span><span class="v">Lai Haraoba (ritualistic/folk tradition)</span></div>
+        <div class="info-row"><span class="k">Style Name</span><span class="v">Cholam Jagoi</span></div>
+        <p class="note">Forms: Pung Cholom (Drum Dance), Kartal Cholom (Cymbals Dance), Dhol Cholom · Popularized outside Manipur by Rabindranath Tagore at Santiniketan · Traditional singing style: "Nata"</p>
+        <h4 class="sub2">Renowned Dancers</h4>
+        <ul class="arrow-list">
+          <li>Charu Mathur, Sadhona Bose</li>
+          <li>Jhaveri Sisters — Darshana, Ranjana, Nayana, Suvarna</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">7. Odissi (Odisha)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Origin</span><span class="v">Maharis (temple dancers) / Devadasis</span></div>
+        <div class="info-row"><span class="k">Historical Evidence</span><span class="v">Udayagiri & Khandagiri caves (2nd century BCE)</span></div>
+        <div class="info-row"><span class="k">Patron</span><span class="v">Jain King Kharavela</span></div>
+        <div class="info-row"><span class="k">Themes</span><span class="v">Stories of Lord Vishnu's Krishna avatar</span></div>
+        <p class="note">Pakhawaj syllables used in performances · Central spiritual concept: Moksha</p>
+        <h4 class="sub2">Prominent Gurus</h4>
+        <ul class="arrow-list">
+          <li>Kelucharan Mohapatra — Padma Vibhushan 2000, first dancer from Odisha to receive it</li>
+          <li>Mohan Mahapatra, Pankaj Charan Das, Mayadhar Raut</li>
+        </ul>
+        <h4 class="sub2">Renowned Female Dancers</h4>
+        <ul class="arrow-list">
+          <li>Sanjukta Panigrahi, Sonal Mansingh, Priyamboda Mohanty, Madhavi Mudgal, Indrani Rahman</li>
+          <li>Sharon Lowen (USA), Myrta Barvie (Argentina)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">8. Sattriya (Assam)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Origin</span><span class="v">Vaishnavite monasteries (Sattras)</span></div>
+        <div class="info-row"><span class="k">Recognized as Classical</span><span class="v">2000, by Government of India</span></div>
+        <div class="info-row"><span class="k">Popularized by</span><span class="v">Srimanta Sankardeva, 15th century</span></div>
+        <ul class="arrow-list">
+          <li>Incorporates "Mati Akhara" — basic exercise patterns</li>
+          <li>One-act play form: "Ankiya Naat"</li>
+          <li>Related elements: Chali, Sumura, Nadubhangi</li>
+        </ul>
+        <h4 class="sub2">Important Forms within Sattriya</h4>
+        <ul class="arrow-list">
+          <li>Dashavatar Nritya, Chali Nritya, Behar Nritya, Apsara Nritya</li>
+        </ul>
+        <h4 class="sub2">Renowned Dancers</h4>
+        <ul class="arrow-list">
+          <li>Manik Barbayan, Bopuram Barbayan, Guru Ghano Kanta Bora, Jatin Goswami</li>
+        </ul>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Sattriya is the most recently recognized classical dance (2000) — commonly tested with Chhau's 9th slot.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: FOLK & TRIBAL DANCES -->
+  <div class="tab-content" id="folkdance">
+
+    <div class="card">
+      <div class="card-header gold">Folk Dances of India (State-wise)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>State</th><th>Folk Dances</th></tr>
+          <tr><td>Andhra Pradesh</td><td>Ghanta Mardala, Veeranatyam, Dhimsa, Butta Bommalu, Lambadi, Kolattam</td></tr>
+          <tr><td>Assam</td><td>Jhumur/Jhumura, Bihu, Bichhua, Bagurumba, Tawlang Changli</td></tr>
+          <tr><td>Bihar</td><td>Kamla, Chhau, Birha, Jat-Jatin, Soharai, Jijhiya/Jhijhiya, Sama-Chakeva, Videsiya (Bhikhari Thakur)</td></tr>
+          <tr><td>Chhattisgarh</td><td>Pandwani, Sua Karma, Gaur Maria, Raut Nacha, Saila, Sarhul Bar, Nacha</td></tr>
+          <tr><td>Goa</td><td>Fugdi, Ghode Madni, Mando, Tarang Mel</td></tr>
+          <tr><td>Gujarat</td><td>Garba, Dandiya Raas, Tippani, Rathwa, Dhamal, Gof, Hallisaka</td></tr>
+          <tr><td>Himachal Pradesh</td><td>Noti (Guinness World Record), Dhurehi, Jhora, Charba, Kulvi Nati, Shon</td></tr>
+          <tr><td>Jammu & Kashmir</td><td>Rauf, Hikat, Bhairava Geet, Chakri, Tamali</td></tr>
+          <tr><td>Jharkhand</td><td>Chhau (UNESCO), Kadsa</td></tr>
+          <tr><td>Karnataka</td><td>Bhoota Kola, Yakshagana, Veeragase, Kamsale, Karga, Pata Kunitha, Dollu Kunitha</td></tr>
+          <tr><td>Kerala</td><td>Koikottikali, Kaliyattam, Thappattikkali, Chavittunatakam, Mudiyettu, Chakyar Koothu (UNESCO 2010)</td></tr>
+          <tr><td>Madhya Pradesh</td><td>Karma Dance, Rai Dance, Jawara Dance, Matki Dance</td></tr>
+          <tr><td>Maharashtra</td><td>Tamasha, Lavani, Dhangari Gaja, Lezim, Gafa, Dashavatar</td></tr>
+          <tr><td>Manipur</td><td>Thabal Chongba, Basanta Ras, Lai Haraoba, Natras, Nupa Pala</td></tr>
+          <tr><td>Meghalaya</td><td>Pomblang Nongkrem, Shad Suk Mynsiem, Wangala, Laho</td></tr>
+          <tr><td>Mizoram</td><td>Cheraw (bamboo dance), Par Lam, Chheihlam, Khuallam</td></tr>
+          <tr><td>Nagaland</td><td>Zeliang, Rangma, Aaluyattu, Chang Lo, Kuki Dance</td></tr>
+          <tr><td>Odisha</td><td>Rasa Leela, Paika, Goti Pua, Danda Nrutya, Mahari, Danda Yatra, Dalkhai</td></tr>
+          <tr><td>Puducherry</td><td>Garodi</td></tr>
+          <tr><td>Punjab</td><td>Giddha, Bhangra, Dhaman, Gatka</td></tr>
+          <tr><td>Rajasthan</td><td>Rauf, Ghoomar, Gair, Bhavai, Chari, Kathputli, Kalbelia (UNESCO 2010), Kachhi Ghodi, Gangaur, Terah Tali</td></tr>
+          <tr><td>Sikkim</td><td>Chu-Faat, Bhutia Dance</td></tr>
+          <tr><td>Tamil Nadu</td><td>Kummi, Kavadi, Kolattam, Karagam</td></tr>
+          <tr><td>Telangana</td><td>Madhuri (Lambadi/Banjara tribe)</td></tr>
+          <tr><td>Tripura</td><td>Hojagiri, Mamita, Lebang Boomani, Sangrai</td></tr>
+          <tr><td>Uttarakhand</td><td>Kumaoni, Chhopula, Langvir, Jagar, Bhotiya, Chanchari</td></tr>
+          <tr><td>West Bengal</td><td>Kathi, Brita, Chhau, Baul, Alkap, Kirtan, Jatra, Gambhira</td></tr>
+          <tr><td>Haryana</td><td>Jhumar, Phag, Dhamal, Luru, Gugga, Khoria, Gagor</td></tr>
+          <tr><td>Ladakh</td><td>Balti, Shondol</td></tr>
+          <tr><td>Andaman & Nicobar</td><td>Lava Dance</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Chhau appears under Bihar, Jharkhand AND West Bengal — a multi-state overlap frequently tested.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Major Tribal Dances</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Dance</th><th>Tribe</th><th>Region</th></tr>
+          <tr><td>Chaad Laho Dance</td><td>Jaintia Tribe</td><td>Meghalaya (Chaad Lah Festival)</td></tr>
+          <tr><td>Dhimsa Dance</td><td>—</td><td>Visakhapatnam, Araku Valley (AP)</td></tr>
+          <tr><td>Jhika Dasain Dance</td><td>Santhal Tribe</td><td>Meghalaya</td></tr>
+          <tr><td>Zo Mal Lok Dance</td><td>Lepcha Community</td><td>Sikkim</td></tr>
+          <tr><td>Rangma (War Dance)</td><td>Tribes of Nagaland</td><td>Nagaland</td></tr>
+          <tr><td>Tambadi Dance</td><td>Banjara Tribe</td><td>Andhra Pradesh</td></tr>
+          <tr><td>Sangphoo Dance</td><td>Naga Tribe</td><td>Nagaland</td></tr>
+          <tr><td>Chakri Dance</td><td>Women of Kanjar Tribe</td><td>Rajasthan</td></tr>
+          <tr><td>Mundari Dance</td><td>Munda Tribe</td><td>Jharkhand</td></tr>
+          <tr><td>Adi Dance</td><td>Adi Tribe</td><td>Arunachal Pradesh</td></tr>
+          <tr><td>Ghumar Dance</td><td>Bhil Tribe</td><td>Gujarat, Maharashtra, Chhattisgarh, MP</td></tr>
+          <tr><td>Karma Dance</td><td>Karma Tribe</td><td>Chhattisgarh</td></tr>
+          <tr><td>Tapu Dance</td><td>—</td><td>Arunachal Pradesh</td></tr>
+          <tr><td>Jhumar Dance</td><td>Kurmi Community</td><td>Jharkhand</td></tr>
+          <tr><td>Sarhul Dance</td><td>Oraon Tribe</td><td>Jharkhand & Chhattisgarh</td></tr>
+          <tr><td>Elelakkarodi Dance</td><td>—</td><td>Kerala</td></tr>
+          <tr><td>Ratwai Dance</td><td>Mewati Tribe</td><td>Rajasthan</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Other Important Cultural Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Ahārya Abhinaya: Use of costume, ornaments, makeup, decorative elements in acting</li>
+          <li>Siddis of Gujarat: Cultural heritage nearly 300 years old</li>
+          <li>Kandyan Dance: Traditional dance form of Sri Lanka</li>
+          <li>Zonpa Legso: Traditional welcome dance of Bhutan</li>
+          <li>Kavadi Aattam (Karnataka): Ritual dance worshipping Lord Murugan</li>
+          <li>Ummatt Aat: Folk dance performed in Coorg (Karnataka)</li>
+          <li>Kummottikali: Popular mask dance of South Malabar (Kerala)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: FOLK SONGS -->
+  <div class="tab-content" id="folksong">
+    <div class="card">
+      <div class="card-header blue">Folk Songs of Major States</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>State</th><th>Folk Songs</th></tr>
+          <tr><td>Uttar Pradesh</td><td>Kalgiturra, Phaag, Goulan Geet, Hid Gayan, Alha Gayan, Deori Geet, Bambuliya Geet, Vasdev, Birha, Videsiya</td></tr>
+          <tr><td>Chhattisgarh</td><td>Sohar, Kaherva, Chanaini, Nouwa Jhokkad, Banjarwa-Nayakwa, Kajli/Kajri, Jarewa-Parewa, Sadavraj Saranga</td></tr>
+          <tr><td>Uttarakhand</td><td>Jhora, Chanchari, Bhagnaul, Bair, Rituren, Handukiya Bol, Malusahi, Jagar, Bhadoun, Shakunakshar (Fag)</td></tr>
+          <tr><td>Chhattisgarh / MP</td><td>Bhojali, Pandavani, Jas, Bharthari, Bans geet, Gaura-Gauri song, Dewar song, Karma song</td></tr>
+          <tr><td>Bihar / Jharkhand</td><td>Nanchari, Samdani, Jhumar, Tirhuti, Syam Chakeva, Chhath Songs, Jat-Jatin, Bargamani, Sohar</td></tr>
+          <tr><td>Rajasthan</td><td>Halra, Kaman, Aalun-Jalo songs, Gangaur, Pankhida, Maud</td></tr>
+          <tr><td>Assam</td><td>Bihu song, Lokgeet song, Tokari geet</td></tr>
+          <tr><td>Andhra Pradesh</td><td>Madiga Dappu, Mala Jammikunta Burrakatha</td></tr>
+          <tr><td>Karnataka</td><td>Bhavageet, Dollukumitha, Veeraga</td></tr>
+          <tr><td>Maharashtra</td><td>Lavani, Powada, Ovi, Bhaleri</td></tr>
+          <tr><td>Tamil Nadu</td><td>Nattupura Pattu</td></tr>
+          <tr><td>West Bengal</td><td>Baul, Bhatiyali, Bhadugan, Bhawayya</td></tr>
+          <tr><td>Punjab</td><td>Tappa</td></tr>
+          <tr><td>Kerala</td><td>Pulaya, Paraiya, Bhoot geet</td></tr>
+          <tr><td>Manipur</td><td>Baul, Phungawari, Khubak Eroi</td></tr>
+          <tr><td>Tripura</td><td>Rauchambung, Jadooni, Reshkhagara</td></tr>
+          <tr><td>Arunachal Pradesh</td><td>Ja-jin-ja, Barayi, Niyoga</td></tr>
+          <tr><td>Nagaland</td><td>Hiliyinlu, Nyulyei, Hireiliu</td></tr>
+          <tr><td>Goa</td><td>Mando</td></tr>
+          <tr><td>Jammu & Kashmir</td><td>Vanabun</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Bihar/Jharkhand folk songs include Chhath Songs — directly connects to Bihar's most important festival, Chhath Puja.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: RELIGIOUS FESTIVALS -->
+  <div class="tab-content" id="festivals">
+
+    <div class="card">
+      <div class="card-header gold">Major Festivals of Hinduism</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Festival</th><th>Description</th></tr>
+          <tr><td>Holi</td><td>Full moon day of Falgun (Spring); Lathmar Holi next day after Holika Dahan</td></tr>
+          <tr><td>Diwali</td><td>New moon day of Kartik; commemorates Lord Rama's return from exile</td></tr>
+          <tr><td>Vijayadashami</td><td>10th day of Shukla Paksha, Ashwin; symbol of Rama's victory over Ravana</td></tr>
+          <tr><td>Janmashtami</td><td>Ashtami of Krishna Paksha, Bhadrapada; birthday of Lord Krishna</td></tr>
+          <tr><td>Ramnavami</td><td>9th day of Shukla Paksha, Chaitra; birthday of Lord Rama</td></tr>
+          <tr><td>Basant Panchami</td><td>5th day of Shukla Paksha, Magh; worship of Goddess Saraswati</td></tr>
+          <tr><td>Raksha Bandhan</td><td>Full moon of Shravan; bond between brother and sister</td></tr>
+          <tr><td>Ganesh Chaturthi</td><td>Chaturthi of Shukla Paksha, Bhadrapada; started by Balgangadhar Tilak</td></tr>
+          <tr><td>Makar Sankranti</td><td>Dedicated to the Sun</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Muslim, Sikh, Christian, Buddhist, Jain, Parsi Festivals</div>
+      <div class="card-body">
+        <h4 class="sub2">Islam</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Festival</th><th>Description</th></tr>
+          <tr><td>Eid-ul-Fitr</td><td>First day of Shawwal, after Ramadan ends</td></tr>
+          <tr><td>Eid-ul-Adha (Bakrid)</td><td>10th of Hajj month; memory of Prophet Ibrahim's sacrifice</td></tr>
+          <tr><td>Muharram</td><td>Festival of mourning; first holy month of Islamic calendar</td></tr>
+          <tr><td>Shab-e-Barat</td><td>15th night of Shaban; night of forgiveness and prayer</td></tr>
+        </table></div>
+        <h4 class="sub2">Sikhism</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Festival</th><th>Description</th></tr>
+          <tr><td>Vaisakhi</td><td>1st Vaishakh (April-May); founding of Khalsa Panth by Guru Gobind Singh</td></tr>
+          <tr><td>Lohri</td><td>13th January; bonfire and circling ritual</td></tr>
+          <tr><td>Hola Mohalla</td><td>Day after Holi; started by Guru Gobind Singh</td></tr>
+        </table></div>
+        <h4 class="sub2">Christianity</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Festival</th><th>Description</th></tr>
+          <tr><td>Christmas</td><td>25 December; birth of Jesus Christ</td></tr>
+          <tr><td>Good Friday</td><td>Before Easter; crucifixion of Jesus</td></tr>
+          <tr><td>Easter</td><td>Resurrection of Jesus Christ</td></tr>
+        </table></div>
+        <h4 class="sub2">Buddhism</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Festival</th><th>Description</th></tr>
+          <tr><td>Buddha Purnima</td><td>Full moon, Vaisakha; birth, enlightenment & Mahaparinirvana of Buddha</td></tr>
+          <tr><td>Tseshu Festival</td><td>Sikkim & Ladakh; commemorates Padmasambhava's birth</td></tr>
+          <tr><td>Sangken</td><td>Arunachal Pradesh</td></tr>
+        </table></div>
+        <h4 class="sub2">Jainism</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Festival</th><th>Description</th></tr>
+          <tr><td>Mahavir Jayanti</td><td>13th of Shukla Paksha, Chaitra; birthday of Lord Mahavir</td></tr>
+          <tr><td>Gyan Panchami</td><td>Jyeshtha Shukla Panchami; Jain scriptures written & worshipped</td></tr>
+          <tr><td>Paryushan</td><td>August or September</td></tr>
+        </table></div>
+        <h4 class="sub2">Parsi</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Festival</th><th>Description</th></tr>
+          <tr><td>Navroz</td><td>21st March; also called Jamshed Navroz</td></tr>
+          <tr><td>Zarathustno Deeso</td><td>Death anniversary of Zarathust</td></tr>
+          <tr><td>Khordad Sal</td><td>Birthday of Zarathust, founder of Parsis</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Do not confuse Navroz (Parsi New Year, 21 March) with Vaisakhi (Sikh, April) — commonly mixed up in date-based MCQs.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: NATIONAL & REGIONAL -->
+  <div class="tab-content" id="national">
+
+    <div class="card">
+      <div class="card-header gold">National Festivals</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Festival</th><th>Date</th><th>Description</th></tr>
+          <tr><td>Republic Day</td><td>26 January</td><td>Constitution came into force, 1950</td></tr>
+          <tr><td>Gandhi Jayanti</td><td>2 October</td><td>Gandhi's birthday; International Non-Violence Day</td></tr>
+          <tr><td>Independence Day</td><td>15 August</td><td>Symbol of India's independence</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Major Regional Festivals</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Festival</th><th>State/Region</th><th>Description</th></tr>
+          <tr><td>Pongal</td><td>Tamil Nadu</td><td>Starts 14 Jan, 4 days: Bhai/Surya/Maatu/Kaanum Pongal</td></tr>
+          <tr><td>Onam</td><td>Kerala</td><td>Harvest festival; boat race; started by Chera king Mahabali</td></tr>
+          <tr><td>Bihu</td><td>Assam</td><td>3 times a year: Rangali/Bohag, Bhogali, Kangali Bihu</td></tr>
+          <tr><td>Durga Puja</td><td>West Bengal</td><td>Ashwin Navratri month; worship of Shakti</td></tr>
+          <tr><td>Vidhava</td><td>Maharashtra</td><td>Twice a year; worship of Lord Vithoba (Vishnu)</td></tr>
+          <tr><td>Jagannath Rath Yatra</td><td>Odisha (Puri)</td><td>June-July; famous Vaishnava festival</td></tr>
+          <tr><td>Rajim Kumbh</td><td>Chhattisgarh</td><td>Rajim, Raipur; on banks of Mahanadi</td></tr>
+          <tr><td>Chhath</td><td>Bihar (most famous), Eastern UP</td><td>Shashthi of Shukla Paksha, Kartik; worship of the Sun</td></tr>
+          <tr><td>Khan Festival</td><td>Arunachal Pradesh</td><td>By Miji tribe; secular festival</td></tr>
+          <tr><td>Masassu Festival</td><td>Nagaland</td><td>By Ao tribe, first week of May</td></tr>
+          <tr><td>Emro Festival</td><td>Nagaland</td><td>By Pachuri tribe, October; harvest arrival</td></tr>
+          <tr><td>Dasmoche Festival</td><td>Leh (Ladakh)</td><td>Second week of Feb; organised by Buddhist monks</td></tr>
+          <tr><td>Mysore Dussehra</td><td>Karnataka</td><td>600+ year old tradition</td></tr>
+          <tr><td>Mahamastakabhisheka</td><td>Shravanabelagola (Karnataka)</td><td>Jain festival; Bahubali statue, every 12 years</td></tr>
+          <tr><td>Nanda Devi Raj Jat</td><td>Uttarakhand</td><td>Religious pilgrimage, every 12 years</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Chhath Puja = Bihar's most important festival, dedicated to the Sun God and his wife Usha — high-priority for BPSC.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Other Notable Festivals</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Festival</th><th>State/Description</th></tr>
+          <tr><td>Cheti Chand</td><td>God of Sindhi community (Jhulelal); Hindu Moon celebration</td></tr>
+          <tr><td>Kharchi Puja</td><td>Tripura; July-August</td></tr>
+          <tr><td>Kala Ghoda Festival</td><td>Annual, Mumbai (since 1999)</td></tr>
+          <tr><td>Losung Festival</td><td>Sikkim; by Bhutia tribe</td></tr>
+          <tr><td>Harai and Tihar</td><td>Nepal; by Hindus</td></tr>
+          <tr><td>Wangpui Kut Festival</td><td>Mizoram, since 1984; 2 days</td></tr>
+          <tr><td>Attolu Idu</td><td>Lakshadweep</td></tr>
+          <tr><td>Nuakhai</td><td>Odisha; harvest festival, Aug-Sep</td></tr>
+          <tr><td>Lokranjan Festival</td><td>Khajuraho (MP); live tribal dance</td></tr>
+          <tr><td>Rohela Panduga/Roti Mahatsav</td><td>Andhra Pradesh; 3 days, Chara Shaheed Dargah</td></tr>
+          <tr><td>Vishu Utsav</td><td>Kerala/Maharashtra; Malayalam New Year</td></tr>
+          <tr><td>Harela Festival</td><td>Uttarakhand; symbol of new harvest</td></tr>
+          <tr><td>Hemis Festival</td><td>Ladakh; birth anniversary of Guru Padmasambhava</td></tr>
+          <tr><td>Thrissurpuram</td><td>Kerala; April-May</td></tr>
+          <tr><td>Khajuraho Dance Festival</td><td>MP; 7 days, started 1975</td></tr>
+          <tr><td>Kajri Festival</td><td>Mirzapur (UP); honours Kajali</td></tr>
+          <tr><td>Me-Dum-Me-Phi Festival</td><td>Assam; by Ahom people</td></tr>
+          <tr><td>Atla Taddi</td><td>Andhra Pradesh, Sept-Oct</td></tr>
+          <tr><td>Raj Parv</td><td>Odisha; June, 3 days</td></tr>
+          <tr><td>Doljatra Festival</td><td>Bengal, Odisha, Manipur, Assam; by Vaishnavites</td></tr>
+          <tr><td>Bali Yatra</td><td>Cuttack, Odisha; Kartik Purnima</td></tr>
+          <tr><td>Braj Utsav</td><td>Dedicated to Lord Krishna, before Holi, Rajasthan</td></tr>
+          <tr><td>Sakewa</td><td>Sikkim; tribute to Mother Nature by Kirat Khambu Rai</td></tr>
+          <tr><td>Hampi Utsav</td><td>Karnataka; celebrates Vijayanagara Empire</td></tr>
+          <tr><td>Mewar Festival</td><td>Udaipur (Rajasthan); Gangaur, dedicated to Parvati</td></tr>
+          <tr><td>Pinjore Heritage Festival</td><td>Panchkula, Haryana; December</td></tr>
+          <tr><td>Uttarayan</td><td>Gujarat; International Kite Festival</td></tr>
+          <tr><td>Kutch Festival</td><td>Bhuj, Gujarat</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: FAIRS & MELAS -->
+  <div class="tab-content" id="fairs">
+    <div class="card">
+      <div class="card-header orange">Fairs / Melas of India</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Fair / Mela</th><th>Location / Description</th></tr>
+          <tr><td>Bhavnath Mahadev Fair</td><td>Junagadh, Gujarat; during Mahashivratri</td></tr>
+          <tr><td>Madhavrai Poonam Fair</td><td>Gujarat; Neelkanth Mahadev Complex, Babra</td></tr>
+          <tr><td>Madhovpur Fair</td><td>Gujarat; marriage of Krishna and Rukmini, 5 days</td></tr>
+          <tr><td>Groundnut Fair</td><td>Karnataka; last Monday of Kartik month</td></tr>
+          <tr><td>Paush Fair</td><td>West Bengal; on occasion of harvest</td></tr>
+          <tr><td>Surajkund Fair</td><td>Faridabad (Haryana); International Crafts Mela</td></tr>
+          <tr><td>Shri Jagannath Fair</td><td>Alwar (Rajasthan); Lord Jagannath procession</td></tr>
+          <tr><td>Pushkar Camel Fair</td><td>Rajasthan; world's largest camel fair</td></tr>
+          <tr><td>Simhastha Fair</td><td>Ujjain, MP; Shipra River</td></tr>
+          <tr><td>Gangaur Festival</td><td>Pushkar, Nagaur & Ursa Fair, Rajasthan</td></tr>
+          <tr><td>Sardhana Christian Fair</td><td>Uttar Pradesh; first Sunday of November</td></tr>
+          <tr><td>Ambubachi Fair</td><td>Assam; Kamakhya Temple</td></tr>
+          <tr><td>Bahu Fair</td><td>Jammu; one of biggest Hindu festivals</td></tr>
+          <tr><td>Dogdarbar Fair</td><td>Gujarat; during Holi</td></tr>
+          <tr><td>Kumbh Fair</td><td>Every 12 years; Haridwar (Ganga), Prayagraj (Sangam), Nasik (Godavari), Ujjain (Kshipra)</td></tr>
+          <tr><td>Sonpur Cattle Fair</td><td>Sonpur (Bihar); Asia's largest, at Ganga-Gandak confluence</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Kumbh Mela's 4 locations & rivers are frequently mismatched in options — Haridwar (Ganga), Prayagraj (Sangam), Nasik (Godavari), Ujjain (Kshipra/Shipra).
+        </div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Sonpur Cattle Fair (Bihar) = Asia's largest cattle fair — a Bihar-specific fact commonly asked in BPSC/BSSC.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 9: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Reference Summary</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>Musical Instrument Classification</td><td>By Bharat Muni; 4 types: Tantu, Sushir, Ghan, Avanaddha Vadya</td></tr>
+          <tr><td>Father of Carnatic Music</td><td>Purandara Dasa</td></tr>
+          <tr><td>Inventor of Mohan Veena</td><td>Pt. Vishwa Mohan Bhatt</td></tr>
+          <tr><td>God of Ghatam</td><td>T.H. Vinayakram</td></tr>
+          <tr><td>Shehnai – Bharat Ratna</td><td>Ustad Bismillah Khan (2001)</td></tr>
+          <tr><td>Total Classical Dances</td><td>8 (officially); 9 (with Chhau, Govt. recognition)</td></tr>
+          <tr><td>Bharatanatyam</td><td>"5th Veda"; Tamil Nadu; banned 1910, later revived</td></tr>
+          <tr><td>Kuchipudi</td><td>Andhra Pradesh; founded by Siddhendra Yogi; concludes with Tarangam</td></tr>
+          <tr><td>Kathakali</td><td>Kerala; oldest theatrical dance style; Kalamandalam est. 1930</td></tr>
+          <tr><td>Sattriya</td><td>Assam; recognized as classical dance in 2000</td></tr>
+          <tr><td>Manipuri</td><td>Manipur; based on Raasleela of Radha and Krishna</td></tr>
+          <tr><td>Odissi</td><td>Odisha; evidence in Udayagiri caves (2nd century BCE)</td></tr>
+          <tr><td>Kathak</td><td>UP; derived from "Katha" (story)</td></tr>
+          <tr><td>Kalbelia</td><td>Rajasthan; UNESCO Intangible Cultural Heritage 2010</td></tr>
+          <tr><td>Chhau (UNESCO)</td><td>Jharkhand; recognized as Intangible Cultural Heritage</td></tr>
+          <tr><td>Kumbh Mela</td><td>Every 12 years; 4 locations: Haridwar, Prayagraj, Nasik, Ujjain</td></tr>
+          <tr><td>Pushkar Camel Fair</td><td>Rajasthan; world's largest camel fair</td></tr>
+          <tr><td>Sonpur Cattle Fair</td><td>Bihar; Asia's largest</td></tr>
+          <tr><td>Onam</td><td>Kerala; harvest festival; boat race; by Chera king Mahabali</td></tr>
+          <tr><td>Pongal</td><td>Tamil Nadu; starts 14 January; 4-day festival</td></tr>
+          <tr><td>Bihu</td><td>Assam; 3 times a year (Rangali, Bhogali, Kangali)</td></tr>
+          <tr><td>Chhath Puja</td><td>Bihar; worship of Sun god</td></tr>
+          <tr><td>Republic Day</td><td>26 January</td></tr>
+          <tr><td>Gandhi Jayanti</td><td>2 October; International Non-Violence Day</td></tr>
+          <tr><td>Independence Day</td><td>15 August</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Art and Culture (Ch18) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

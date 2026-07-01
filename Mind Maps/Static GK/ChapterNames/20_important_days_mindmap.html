@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Important Days - Ch20 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+td.date{color:var(--gold);font-weight:bold;white-space:nowrap;width:70px;}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:120px;
+}
+.stat-box .num{color:var(--gold);font-size:22px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+h3.sub{color:var(--gold);margin:14px 0 8px;font-size:16px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+  .tbl-wrap{border:1px solid var(--border);border-radius:8px}
+}</style>
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script></head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 20</span>
+    <h1>Important Days</h1>
+    <p>National & International Observances (Month-wise) — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('jf')">Jan–Feb</button>
+    <button class="tab-btn" onclick="switchTab('ma')">Mar–Apr</button>
+    <button class="tab-btn" onclick="switchTab('mj')">May–Jun</button>
+    <button class="tab-btn" onclick="switchTab('ja')">Jul–Aug</button>
+    <button class="tab-btn" onclick="switchTab('so')">Sep–Oct</button>
+    <button class="tab-btn" onclick="switchTab('nd')">Nov–Dec</button>
+    <button class="tab-btn" onclick="switchTab('un')">UN Decades & Years</button>
+    <button class="tab-btn" onclick="switchTab('quick')">Quick Reference</button>
+  </div>
+
+  <!-- JAN-FEB -->
+  <div class="tab-content active" id="jf">
+    <div class="card">
+      <div class="card-header gold">January</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">9</td><td>Pravasi Bharatiya Divas (since 2003) — marks Gandhiji's return to India from South Africa in 1915</td></tr>
+          <tr><td class="date">10</td><td>World Hindi Day</td></tr>
+          <tr><td class="date">12</td><td>National Youth Day (Swami Vivekananda's Birthday)</td></tr>
+          <tr><td class="date">15</td><td>Indian Army Day</td></tr>
+          <tr><td class="date">16</td><td>Startup Day (since 2022)</td></tr>
+          <tr><td class="date">23</td><td>Parakram Diwas (since 2021) — Subhas Chandra Bose's Birthday</td></tr>
+          <tr><td class="date">24</td><td>National Girl Child Day</td></tr>
+          <tr><td class="date">25</td><td>Indian Tourism Day / National Voters' Day</td></tr>
+          <tr><td class="date">26</td><td>Republic Day / International Customs and Excise Day</td></tr>
+          <tr><td class="date">30</td><td>Martyrs' Day</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Two "Martyrs' Day" dates exist — 30 January (Gandhi's assassination) and 23 March (Bhagat Singh, Rajguru, Sukhdev). Don't confuse the two.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">February</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">1</td><td>Indian Coast Guard Day</td></tr>
+          <tr><td class="date">2</td><td>World Wetlands Day</td></tr>
+          <tr><td class="date">4</td><td>World Cancer Day</td></tr>
+          <tr><td class="date">13</td><td>World Radio Day</td></tr>
+          <tr><td class="date">20</td><td>World Social Justice Day</td></tr>
+          <tr><td class="date">23</td><td>World Peace and Understanding Day</td></tr>
+          <tr><td class="date">28</td><td>National Science Day</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAR-APR -->
+  <div class="tab-content" id="ma">
+    <div class="card">
+      <div class="card-header green">March</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">1</td><td>Zero Discrimination Day</td></tr>
+          <tr><td class="date">3</td><td>World Wildlife Day</td></tr>
+          <tr><td class="date">4</td><td>National Safety Day</td></tr>
+          <tr><td class="date">8</td><td>International Women's Day</td></tr>
+          <tr><td class="date">15</td><td>World Consumer Rights Day</td></tr>
+          <tr><td class="date">21</td><td>International Day of Forests</td></tr>
+          <tr><td class="date">22</td><td>World Water Day</td></tr>
+          <tr><td class="date">23</td><td>Martyrs' Day (Bhagat Singh) / World Meteorological Day</td></tr>
+          <tr><td class="date">24</td><td>World Tuberculosis Day</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">April</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">2</td><td>World Autism Awareness Day</td></tr>
+          <tr><td class="date">7</td><td>World Health Day</td></tr>
+          <tr><td class="date">14</td><td>B.R. Ambedkar Jayanti</td></tr>
+          <tr><td class="date">18</td><td>World Heritage Day</td></tr>
+          <tr><td class="date">20</td><td>"Amjad Ali Khan Day" (declared by US state of Massachusetts)</td></tr>
+          <tr><td class="date">21</td><td>National Civil Services Day</td></tr>
+          <tr><td class="date">22</td><td>World Earth Day</td></tr>
+          <tr><td class="date">24</td><td>National Panchayati Raj Day</td></tr>
+          <tr><td class="date">25</td><td>World Malaria Day</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Sarod maestro Ustad Amjad Ali Khan has 20 April officially declared "Amjad Ali Khan Day" by Massachusetts, USA — a unique cross-topic fact linking Art & Culture with Important Days.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAY-JUN -->
+  <div class="tab-content" id="mj">
+    <div class="card">
+      <div class="card-header orange">May</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">1</td><td>International Labour Day</td></tr>
+          <tr><td class="date">5</td><td>World Hand Hygiene Day</td></tr>
+          <tr><td class="date">8</td><td>World Red Cross Day</td></tr>
+          <tr><td class="date">12</td><td>International Nurses Day (Florence Nightingale)</td></tr>
+          <tr><td class="date">21</td><td>Anti-Terrorism Day</td></tr>
+          <tr><td class="date">22</td><td>International Day for Biological Diversity</td></tr>
+          <tr><td class="date">24</td><td>Commonwealth Day</td></tr>
+          <tr><td class="date">25</td><td>World Thyroid Day</td></tr>
+          <tr><td class="date">31</td><td>World No Tobacco Day</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">June</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">5</td><td>World Environment Day</td></tr>
+          <tr><td class="date">12</td><td>World Day Against Child Labour</td></tr>
+          <tr><td class="date">14</td><td>World Blood Donor Day</td></tr>
+          <tr><td class="date">17</td><td>World Day to Combat Desertification and Drought</td></tr>
+          <tr><td class="date">20</td><td>World Refugee Day</td></tr>
+          <tr><td class="date">21</td><td>International Yoga Day</td></tr>
+          <tr><td class="date">23</td><td>International Olympic Day</td></tr>
+          <tr><td class="date">29</td><td>National Statistics Day</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JUL-AUG -->
+  <div class="tab-content" id="ja">
+    <div class="card">
+      <div class="card-header red">July</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">1</td><td>National Doctors' Day (Dr. Bidhan Chandra Roy's Birthday)</td></tr>
+          <tr><td class="date">4</td><td>Death Anniversary of Swami Vivekananda</td></tr>
+          <tr><td class="date">11</td><td>World Population Day</td></tr>
+          <tr><td class="date">18</td><td>International Nelson Mandela Day</td></tr>
+          <tr><td class="date">20</td><td>International Chess Day</td></tr>
+          <tr><td class="date">26</td><td>Kargil Vijay Diwas</td></tr>
+          <tr><td class="date">28</td><td>World Nature Conservation Day</td></tr>
+          <tr><td class="date">29</td><td>International Tiger Day</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">August</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">1</td><td>World Breastfeeding Day</td></tr>
+          <tr><td class="date">6</td><td>Hiroshima Day (US dropped atomic bomb, 1945)</td></tr>
+          <tr><td class="date">7</td><td>National Handloom Day / National Javelin Day (since 2021)</td></tr>
+          <tr><td class="date">12</td><td>International Youth Day</td></tr>
+          <tr><td class="date">14</td><td>Partition Horrors Remembrance Day (since 2021) / Pakistan Independence Day</td></tr>
+          <tr><td class="date">15</td><td>Independence Day</td></tr>
+          <tr><td class="date">20</td><td>Sadbhavana Diwas</td></tr>
+          <tr><td class="date">29</td><td>National Sports Day (Major Dhyan Chand's Birthday)</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          National Javelin Day (7 August, since 2021) was introduced after Neeraj Chopra's Olympic gold — easy to confuse with National Sports Day (29 August).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEP-OCT -->
+  <div class="tab-content" id="so">
+    <div class="card">
+      <div class="card-header blue">September</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">1–7</td><td>National Nutrition Week</td></tr>
+          <tr><td class="date">5</td><td>National Teachers' Day (Dr. S. Radhakrishnan's Birthday)</td></tr>
+          <tr><td class="date">8</td><td>International Literacy Day</td></tr>
+          <tr><td class="date">14</td><td>National Hindi Day</td></tr>
+          <tr><td class="date">15</td><td>National Engineers' Day</td></tr>
+          <tr><td class="date">16</td><td>International Day for the Preservation of the Ozone Layer</td></tr>
+          <tr><td class="date">21</td><td>International Peace Day / World Alzheimer's Day</td></tr>
+          <tr><td class="date">27</td><td>World Tourism Day</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">October</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">1</td><td>International Day of Older Persons / World Vegetarian Day</td></tr>
+          <tr><td class="date">2</td><td>Gandhi Jayanti / Lal Bahadur Shastri Jayanti / International Day of Non-Violence</td></tr>
+          <tr><td class="date">5</td><td>World Teachers' Day</td></tr>
+          <tr><td class="date">8</td><td>Indian Air Force Day</td></tr>
+          <tr><td class="date">9</td><td>World Post Day</td></tr>
+          <tr><td class="date">11</td><td>International Girl Child Day</td></tr>
+          <tr><td class="date">16</td><td>World Food Day</td></tr>
+          <tr><td class="date">20</td><td>World Statistics Day (every 5 years)</td></tr>
+          <tr><td class="date">24</td><td>United Nations Foundation Day</td></tr>
+          <tr><td class="date">31</td><td>National Unity Day</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          2 October is a double/triple observance — Gandhi Jayanti, Lal Bahadur Shastri Jayanti, and International Day of Non-Violence, all on the same date.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOV-DEC -->
+  <div class="tab-content" id="nd">
+    <div class="card">
+      <div class="card-header purple">November</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">1</td><td>World Vegan Day</td></tr>
+          <tr><td class="date">10</td><td>World Science Day for Peace & Development</td></tr>
+          <tr><td class="date">11</td><td>National Education Day</td></tr>
+          <tr><td class="date">14</td><td>National Children's Day / World Diabetes Day</td></tr>
+          <tr><td class="date">15</td><td>Tribal Pride Day (Birsa Munda Jayanti)</td></tr>
+          <tr><td class="date">16</td><td>National Press Day</td></tr>
+          <tr><td class="date">25</td><td>International Day for the Elimination of Violence against Women</td></tr>
+          <tr><td class="date">26</td><td>National Law Day / Constitution Day / Guru Nanak Dev Jayanti</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">December</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day / Observance</th></tr>
+          <tr><td class="date">1</td><td>World AIDS Day</td></tr>
+          <tr><td class="date">2</td><td>Computer Literacy Day / International Day for the Abolition of Slavery</td></tr>
+          <tr><td class="date">4</td><td>Indian Navy Day</td></tr>
+          <tr><td class="date">5</td><td>World Soil Day</td></tr>
+          <tr><td class="date">7</td><td>Armed Forces Flag Day</td></tr>
+          <tr><td class="date">10</td><td>International Human Rights Day</td></tr>
+          <tr><td class="date">18</td><td>International Migrants Day</td></tr>
+          <tr><td class="date">22</td><td>National Mathematics Day</td></tr>
+          <tr><td class="date">23</td><td>Farmers' Day</td></tr>
+          <tr><td class="date">24</td><td>National Consumer Rights Day</td></tr>
+          <tr><td class="date">25</td><td>National Good Governance Day (Birth Anniversary of Atal Bihari Vajpayee)</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          National Consumer Rights Day (24 Dec) is separate from World Consumer Rights Day (15 March) — both exist, don't merge them.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UN DECADES & YEARS -->
+  <div class="tab-content" id="un">
+    <div class="card">
+      <div class="card-header teal">International Decades Declared by the UN</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>2025–2034: International Decade of Action for Cryospheric Science</li>
+          <li>2024–2033: International Decade of Sciences for Sustainable Development</li>
+          <li>2021–2032: International Decade of Indigenous Languages</li>
+          <li>2019–2028: Nelson Mandela Decade of Peace</li>
+          <li>2016–2025: International Decade of Action on Nutrition</li>
+          <li>2005–2015: International Decade for Action on "Water for Life"</li>
+          <li>Third UN Decade for the Eradication of Poverty</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">International Years Declared by the UN</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Year</th><th>Theme</th></tr>
+          <tr><td>2023</td><td>International Year of Millets</td></tr>
+          <tr><td>2024</td><td>International Year of Camelids</td></tr>
+          <tr><td>2025</td><td>International Year of Glaciers' Preservation / Quantum Science and Technology</td></tr>
+          <tr><td>2026</td><td>International Year of Women Farmers</td></tr>
+          <tr><td>2027</td><td>International Year of Sustainable and Resilient Tourism</td></tr>
+          <tr><td>2029</td><td>International Year of Asteroid Awareness and Planetary Defence</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          2025 has a dual theme — Glaciers' Preservation AND Quantum Science and Technology — both declared for the same year.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Reference Summary</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Date</th><th>Day</th></tr>
+          <tr><td>9 January</td><td>Pravasi Bharatiya Divas</td></tr>
+          <tr><td>12 January</td><td>National Youth Day (Swami Vivekananda's Birthday)</td></tr>
+          <tr><td>15 January</td><td>Indian Army Day</td></tr>
+          <tr><td>23 January</td><td>Parakram Diwas (Subhas Chandra Bose's Birthday)</td></tr>
+          <tr><td>26 January</td><td>Republic Day</td></tr>
+          <tr><td>28 February</td><td>National Science Day</td></tr>
+          <tr><td>8 March</td><td>International Women's Day</td></tr>
+          <tr><td>22 March</td><td>World Water Day</td></tr>
+          <tr><td>7 April</td><td>World Health Day</td></tr>
+          <tr><td>14 April</td><td>B.R. Ambedkar Jayanti</td></tr>
+          <tr><td>22 April</td><td>World Earth Day</td></tr>
+          <tr><td>1 May</td><td>International Labour Day</td></tr>
+          <tr><td>12 May</td><td>International Nurses Day (Florence Nightingale)</td></tr>
+          <tr><td>5 June</td><td>World Environment Day</td></tr>
+          <tr><td>21 June</td><td>International Yoga Day</td></tr>
+          <tr><td>1 July</td><td>National Doctors' Day (Dr. B.C. Roy's Birthday)</td></tr>
+          <tr><td>11 July</td><td>World Population Day</td></tr>
+          <tr><td>26 July</td><td>Kargil Vijay Diwas</td></tr>
+          <tr><td>6 August</td><td>Hiroshima Day</td></tr>
+          <tr><td>15 August</td><td>Independence Day</td></tr>
+          <tr><td>29 August</td><td>National Sports Day (Major Dhyan Chand's Birthday)</td></tr>
+          <tr><td>5 September</td><td>National Teachers' Day (Dr. Radhakrishnan's Birthday)</td></tr>
+          <tr><td>27 September</td><td>World Tourism Day</td></tr>
+          <tr><td>2 October</td><td>Gandhi Jayanti / International Day of Non-Violence</td></tr>
+          <tr><td>24 October</td><td>United Nations Foundation Day</td></tr>
+          <tr><td>31 October</td><td>National Unity Day</td></tr>
+          <tr><td>14 November</td><td>National Children's Day / World Diabetes Day</td></tr>
+          <tr><td>15 November</td><td>Tribal Pride Day (Birsa Munda Jayanti)</td></tr>
+          <tr><td>26 November</td><td>National Law Day / Constitution Day</td></tr>
+          <tr><td>1 December</td><td>World AIDS Day</td></tr>
+          <tr><td>10 December</td><td>International Human Rights Day</td></tr>
+          <tr><td>22 December</td><td>National Mathematics Day</td></tr>
+          <tr><td>25 December</td><td>National Good Governance Day</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Important Days (Ch20) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

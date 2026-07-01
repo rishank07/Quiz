@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foreign Trade, BOP & Foreign Investment - Ch12 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:9px 10px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:8px 10px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:120px;
+}
+.stat-box .num{color:var(--gold);font-size:20px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 12 · Economics</span>
+    <h1>Foreign Trade, Balance of Payments and Foreign Investment</h1>
+    <p>BOT · BOP · Exchange Rate · FEMA · FDI/FPI/FII — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('trade')">📘 Foreign Trade & BOT</button>
+    <button class="tab-btn" onclick="switchTab('policy')">📜 Foreign Trade Policy 2023</button>
+    <button class="tab-btn" onclick="switchTab('bop')">⚖ Balance of Payments</button>
+    <button class="tab-btn" onclick="switchTab('exchange')">💱 Exchange Rate & FEMA</button>
+    <button class="tab-btn" onclick="switchTab('investment')">💰 Foreign Investment (FDI/FPI/FII)</button>
+    <button class="tab-btn" onclick="switchTab('fdilimits')">📊 FDI Sector Limits</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: FOREIGN TRADE & BOT -->
+  <div class="tab-content active" id="trade">
+    <div class="card">
+      <div class="card-header gold">Foreign Trade — Overview</div>
+      <div class="card-body">
+        <p class="note">Foreign Trade: Exchange of goods and services between two or more countries.</p>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">2.4%</span><span class="lbl">India's Share in Global Exports (2022)</span></div>
+          <div class="stat-box"><span class="num">3.0%</span><span class="lbl">India's Share in Global Imports (2022)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Balance of Trade (BOT)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Difference between monetary value of a country's exports and imports of goods during a specific period</li>
+          <li>Only related to tangible goods (goods that can be touched or seen)</li>
+          <li>Traditional means of entering foreign exchange: Exports</li>
+        </ul>
+        <div class="tbl-wrap"><table>
+          <tr><th>Term</th><th>Condition</th></tr>
+          <tr><td>Trade Surplus</td><td>Exports &gt; Imports</td></tr>
+          <tr><td>Trade Deficit</td><td>Exports &lt; Imports</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          BOT covers ONLY tangible goods, while BOP's Current Account covers both goods AND services — don't treat BOT and Current Account as identical.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">India's Trade Partners & Goods (2024–25)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Top Trading Partners</span><span class="v">China, USA, UAE</span></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>Top Export Destinations</th><th>Top Import Sources</th></tr>
+          <tr><td>1. United States of America</td><td>1. China</td></tr>
+          <tr><td>2. United Arab Emirates</td><td>2. Russia</td></tr>
+          <tr><td>3. Netherlands</td><td>3. United Arab Emirates</td></tr>
+        </table></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>Top Exported Goods</th><th>Top Imported Goods</th></tr>
+          <tr><td>Petroleum Products</td><td>Gems and Jewellery</td></tr>
+          <tr><td>Pharmaceuticals</td><td>Petroleum Oil and Mineral Fuels</td></tr>
+          <tr><td>—</td><td>Gold, Electrical Machinery and Equipment</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          India exports Petroleum Products but ALSO imports Petroleum Oil — this is because India imports crude oil and exports refined petroleum products.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: FOREIGN TRADE POLICY -->
+  <div class="tab-content" id="policy">
+    <div class="card">
+      <div class="card-header purple">Foreign Trade Policy, 2023</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Issued By</span><span class="v">Union Ministry of Commerce and Industry</span></div>
+        <div class="info-row"><span class="k">Effective From</span><span class="v">1st April, 2023</span></div>
+        <div class="info-row"><span class="k">Target</span><span class="v">Increase overall exports to 2 Trillion USD by 2030</span></div>
+        <h4 class="sub2">Four Pillars</h4>
+        <ul class="arrow-list">
+          <li>Promotion of exports through alliances with exporters, states, districts, and Indian missions</li>
+          <li>Exemption in value-add items</li>
+          <li>Facilitating e-commerce in emerging sectors, retail infrastructure development, and SCOMET policy</li>
+          <li>Improving ease of doing business, reducing cost of business, and promoting e-portals</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Related Trade Concepts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Import Substitution Policy: An "Inward-looking Trade Strategy"</li>
+          <li>Dumping: Selling goods in another country at a price lower than their cost or domestic price</li>
+          <li>Quota: Determination of import and export limits</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: BOP -->
+  <div class="tab-content" id="bop">
+    <div class="card">
+      <div class="card-header red">Balance of Payments (BOP)</div>
+      <div class="card-body">
+        <p class="note">A systematic record of all economic transactions between residents of a country and the rest of the world during a given period.</p>
+        <div class="tbl-wrap"><table>
+          <tr><th>Component</th><th>Details</th></tr>
+          <tr><td>Current Account</td><td>Import-export of tangible (goods) and intangible (services) items; unilateral transfers (gifts, donations, remittances); direct impact on income, production, and employment</td></tr>
+          <tr><td>Capital Account</td><td>Financial transactions — FDI, FII, External Commercial Borrowings, Foreign Aid, NRI Deposits, Banking Capital, short-term trade deposits; no direct impact on income, production, employment</td></tr>
+        </table></div>
+        <div class="info-row"><span class="k">Current Account Deficit</span><span class="v">Value of imports &gt; Value of exports</span></div>
+        <div class="info-row"><span class="k">Twin Deficits</span><span class="v">Current Account Deficit + Fiscal Deficit</span></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Current Account directly affects income/production/employment; Capital Account does NOT — a key conceptual distinction tested repeatedly.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: EXCHANGE RATE & FEMA -->
+  <div class="tab-content" id="exchange">
+    <div class="card">
+      <div class="card-header teal">Foreign Exchange Rate</div>
+      <div class="card-body">
+        <p class="note">Foreign Exchange Rate: The rate at which one country's currency is exchanged for another's. E.g., $1 = ₹87.</p>
+        <h4 class="sub2">Fixed Exchange Rate System</h4>
+        <ul class="arrow-list">
+          <li>Controlled by government intervention using government reserves</li>
+        </ul>
+        <p class="note">Convertible/Floating Exchange Rate: Free from government interventions.</p>
+        <h4 class="sub2">Exchange Rate System in India</h4>
+        <ul class="arrow-list">
+          <li>Managed exchange rate system since 1993</li>
+          <li>Based on market demand and supply</li>
+          <li>RBI intervenes when necessary</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Currency Devaluation</div>
+      <div class="card-body">
+        <p class="note">Deliberately reducing the value of one's own currency in terms of foreign currencies.</p>
+        <ul class="arrow-list">
+          <li>Decrease in imports (become costlier)</li>
+          <li>Increase in exports (become cheaper)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Foreign Exchange Reserve</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Foreign assets</li>
+          <li>Gold reserves</li>
+          <li>Reserve Fund with IMF</li>
+          <li>Special Drawing Rights (SDR)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Rupee Convertibility (Capital Account)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">S.S. Tarapore Committee (I)</span><span class="v">1997</span></div>
+        <div class="info-row"><span class="k">S.S. Tarapore Committee (II)</span><span class="v">2006</span></div>
+        <p class="note">Liberal policy in relation to this, but rupee is not fully convertible on the capital account.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">FEMA, 1999</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Replaced</span><span class="v">FERA, 1973</span></div>
+        <div class="info-row"><span class="k">Effective From</span><span class="v">1st June, 2000</span></div>
+        <p class="note">Facilitates foreign trade and payments.</p>
+        <p class="note">Debt Trap: Taking another loan to pay off current debt obligations.</p>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          FERA (1973, restrictive/regulatory) was replaced by FEMA (1999, facilitative) — reflecting India's shift toward economic liberalization.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: FOREIGN INVESTMENT -->
+  <div class="tab-content" id="investment">
+    <div class="card">
+      <div class="card-header orange">Foreign Direct Investment (FDI)</div>
+      <div class="card-body">
+        <p class="note">Investment made by a company or individual of one country into business interests located in another country — involves capital goods.</p>
+        <div class="info-row"><span class="k">Greenfield Investment</span><span class="v">Development of a new unit/infrastructure</span></div>
+        <div class="info-row"><span class="k">Brownfield Investment</span><span class="v">Investment in an already existing unit</span></div>
+        <h4 class="sub2">FDI Restrictions (Sectors Where FDI Not Allowed)</h4>
+        <ul class="arrow-list">
+          <li>Lottery business</li>
+          <li>Betting</li>
+          <li>Chit funds</li>
+          <li>Real Estate</li>
+          <li>Railway Operations</li>
+          <li>Nidhi Company</li>
+          <li>Gambling</li>
+          <li>Tobacco, Cigarettes</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          FDI is restricted in "Railway Operations" but Railway-RELATED PROJECTS (infrastructure like tracks, stations) allow 100% FDI — a subtle but important distinction.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Foreign Portfolio Investment (FPI)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Purchase of less than 10% shares of a company by a foreign investor</li>
+          <li>Highly volatile in nature</li>
+          <li>Unsafe/insecure investment</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Foreign Institutional Investment (FII)</div>
+      <div class="card-body">
+        <p class="note">Investments through shares and mutual funds, etc.</p>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          FDI (control, long-term) vs FPI/FII (no control, short-term, volatile "hot money") — remember the ownership stake threshold of 10% distinguishes FDI from FPI.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: FDI SECTOR LIMITS -->
+  <div class="tab-content" id="fdilimits">
+    <div class="card">
+      <div class="card-header gold">FDI Limits in Various Sectors</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Sector</th><th>FDI Limit</th></tr>
+          <tr><td>Multi-brand retail</td><td>100%</td></tr>
+          <tr><td>Single-brand retail</td><td>100%</td></tr>
+          <tr><td>Telecom, Defence Products</td><td>100%</td></tr>
+          <tr><td>Petroleum refinery</td><td>49%</td></tr>
+          <tr><td>Civil aviation</td><td>49%</td></tr>
+          <tr><td>Railway-related projects</td><td>100%</td></tr>
+          <tr><td>Courier services and Insurance</td><td>100%</td></tr>
+          <tr><td>Power exchange</td><td>49%</td></tr>
+          <tr><td>Public sector banks</td><td>20%</td></tr>
+          <tr><td>Private sector banks</td><td>74%</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Public Sector Banks (20% FDI limit) vs Private Sector Banks (74% FDI limit) — a heavily tested contrast given the large gap between the two.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Summary / Reference Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>Foreign Trade</td><td>Exchange of goods and services between two or more countries</td></tr>
+          <tr><td>Balance of Trade (BOT)</td><td>Only tangible goods | Trade Surplus: Exports &gt; Imports | Trade Deficit: Exports &lt; Imports</td></tr>
+          <tr><td>India's Top Trading Partners (2024–25)</td><td>China, USA, UAE</td></tr>
+          <tr><td>Top Export Destinations</td><td>USA, UAE, Netherlands</td></tr>
+          <tr><td>Top Import Sources</td><td>China, Russia, UAE</td></tr>
+          <tr><td>Top Exported Goods</td><td>Petroleum Products, Gems & Jewellery, Pharmaceuticals</td></tr>
+          <tr><td>Top Imported Goods</td><td>Petroleum Oil & Mineral Fuels, Gold, Electrical Machinery</td></tr>
+          <tr><td>Foreign Trade Policy 2023</td><td>Issued by Ministry of Commerce & Industry | Effective: 1 April 2023</td></tr>
+          <tr><td>FTP 2023 Target</td><td>Exports of 2 Trillion USD by 2030</td></tr>
+          <tr><td>Import Substitution Policy</td><td>Inward-looking Trade Strategy</td></tr>
+          <tr><td>Dumping</td><td>Selling goods abroad below cost/domestic price</td></tr>
+          <tr><td>BOP — Definition</td><td>Systematic record of all economic transactions between residents and rest of world</td></tr>
+          <tr><td>BOP Current Account</td><td>Goods + Services + Unilateral transfers | Direct impact on income/employment</td></tr>
+          <tr><td>BOP Capital Account</td><td>Financial transactions | FDI, FII, ECB, Foreign Aid, NRI Deposits</td></tr>
+          <tr><td>Current Account Deficit</td><td>Value of imports &gt; Value of exports</td></tr>
+          <tr><td>Twin Deficits</td><td>Current Account Deficit + Fiscal Deficit</td></tr>
+          <tr><td>Exchange Rate System in India</td><td>Managed exchange rate since 1993 | Based on market demand & supply | RBI intervenes</td></tr>
+          <tr><td>Currency Devaluation</td><td>Deliberately reducing own currency value | Imports costlier, Exports cheaper</td></tr>
+          <tr><td>Foreign Exchange Reserve Components</td><td>Foreign assets, Gold reserves, IMF Reserve Fund, SDR</td></tr>
+          <tr><td>Rupee Convertibility — Tarapore I</td><td>S.S. Tarapore Committee (I) — 1997</td></tr>
+          <tr><td>Rupee Convertibility — Tarapore II</td><td>S.S. Tarapore Committee (II) — 2006 | Not fully convertible</td></tr>
+          <tr><td>FEMA</td><td>1999 | Replaced FERA (1973) | Effective: 1 June 2000</td></tr>
+          <tr><td>FDI — Greenfield</td><td>Development of new unit / infrastructure</td></tr>
+          <tr><td>FDI — Brownfield</td><td>Investment in an already existing unit</td></tr>
+          <tr><td>FDI Restrictions</td><td>Lottery, Betting, Chit funds, Real Estate, Railway Ops, Nidhi Co., Gambling, Tobacco</td></tr>
+          <tr><td>FPI</td><td>Less than 10% shares | Highly volatile | Unsafe investment</td></tr>
+          <tr><td>FII</td><td>Investments through shares and mutual funds</td></tr>
+          <tr><td>Debt Trap</td><td>Taking another loan to pay off current debt obligations</td></tr>
+          <tr><td>Public Sector Banks FDI Limit</td><td>20%</td></tr>
+          <tr><td>Private Sector Banks FDI Limit</td><td>74%</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Foreign Trade, BOP and Foreign Investment (Ch12) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

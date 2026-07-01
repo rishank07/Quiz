@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Major Committees | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:100;
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.84rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.9rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.82rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+
+<div class="header">
+  <span class="art-pill">Chapter 18</span>
+  <h1>Major Committees</h1>
+  <p>Key government & RBI committees — banking, taxation, poverty, agriculture, monetary policy, capital markets & digital finance — for BPSC / BSSC preparation</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('banking')">Banking Reform</button>
+  <button onclick="switchTab('tax')">Taxation &amp; Fiscal</button>
+  <button onclick="switchTab('social')">Social Sector &amp; Poverty</button>
+  <button onclick="switchTab('agri')">Agriculture &amp; Rural Economy</button>
+  <button onclick="switchTab('monetary')">Monetary Policy</button>
+  <button onclick="switchTab('capital')">Capital Market</button>
+  <button onclick="switchTab('digital')">Financial Inclusion &amp; Digital</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">36+</div><div class="lbl">Committees Covered</div></div>
+          <div class="stat-box"><div class="num">7</div><div class="lbl">Thematic Categories</div></div>
+          <div class="stat-box"><div class="num">1973–2017</div><div class="lbl">Time Span</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>This chapter compiles major Government of India & RBI committees frequently asked as "committee-recommendation" matching questions in BPSC/BSSC.</li>
+          <li>Grouped thematically: Banking Reform, Taxation & Fiscal Reforms, Social Sector & Poverty, Agriculture & Rural Economy, Monetary Policy & Inflation, Capital Market & Investments, and Financial Inclusion & Digital.</li>
+          <li>Focus on matching the committee name → chairperson-linked scheme/recommendation, since dates and names are commonly swapped in MCQs.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Many committees share chairpersons across years — e.g. Urjit Patel (2013) appears under both Banking Reform & Monetary Policy for the CPI-based monetary policy framework.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BANKING REFORM -->
+  <div id="banking" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🏦 Banking Reform Committees</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Committee</th><th>Purpose / Objective</th></tr></thead>
+          <tbody>
+            <tr><td>Goiporia (1990)</td><td>Improved customer service — led to Banking Ombudsman Scheme (1995)</td></tr>
+            <tr><td>Narasimhan Committee I (1991)</td><td>4-tier banking structure, quasi-autonomous supervisory body, asset classification, Asset Reconstruction Fund</td></tr>
+            <tr><td>Narasimhan Committee II (1998)</td><td>Bank mergers for strength, narrow banking for weak banks, review of banking laws</td></tr>
+            <tr><td>Khan (2005)</td><td>Financial inclusion & Lead Bank Scheme</td></tr>
+            <tr><td>Damodaran (2010)</td><td>Customer service and grievance redressal mechanisms</td></tr>
+            <tr><td>Usha Thorat (2011)</td><td>Higher capital norms (12%) for NBFCs, asset classification and provisioning</td></tr>
+            <tr><td>MV Nair (2011)</td><td>Priority sector lending guidelines</td></tr>
+            <tr><td>Urjit Patel (2013)</td><td>CPI-based monetary policy framework</td></tr>
+            <tr><td>Bimal Jalan (2013)</td><td>Recommended banking licenses for Bandhan Microfinance and IDFC</td></tr>
+            <tr><td>PJ Nayak (2014)</td><td>Repeal Bank Nationalisation Act & SBI Acts, set up Bank Investment Company (BIC)</td></tr>
+            <tr><td>Arun Jaitley (2017)</td><td>Merger of public sector banks</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Narasimhan I (1991) recommended a 4-tier banking structure; Narasimhan II (1998) focused on bank mergers & narrow banking — exams frequently swap which committee did what.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAXATION -->
+  <div id="tax" class="tab-panel">
+    <div class="card">
+      <div class="card-header green">💰 Taxation &amp; Fiscal Reforms Committees</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Committee</th><th>Purpose / Objective</th></tr></thead>
+          <tbody>
+            <tr><td>Raja Chelliah (1991)</td><td>Comprehensive tax reforms</td></tr>
+            <tr><td>Rekhi (1991)</td><td>Indirect tax reforms</td></tr>
+            <tr><td>L. K. Jha (1997)</td><td>Indirect tax reforms</td></tr>
+            <tr><td>Rakesh Mohan (2001)</td><td>Financial sector & infrastructure reforms</td></tr>
+            <tr><td>Vijay Kelkar (III) (2003)</td><td>Review of economy under FRBM Act</td></tr>
+            <tr><td>Shome (2012)</td><td>GAAR (General Anti-Avoidance Rules)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Both Rekhi (1991) and L.K. Jha (1997) worked on indirect tax reforms — six years apart. Don't confuse which year belongs to which committee.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOCIAL SECTOR -->
+  <div id="social" class="tab-panel">
+    <div class="card">
+      <div class="card-header purple">👥 Social Sector &amp; Poverty Committees</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Committee</th><th>Purpose / Objective</th></tr></thead>
+          <tbody>
+            <tr><td>Bhagwati (1973)</td><td>Unemployment estimation</td></tr>
+            <tr><td>YK Alagh (1979)</td><td>Formula to measure poverty (based on calorie consumption)</td></tr>
+            <tr><td>DT Lakdawala (1993)</td><td>State-specific poverty line (CPI-AL for Rural and CPI-IW for Urban)</td></tr>
+            <tr><td>Prof. C. P. Chandrashekar (2007)</td><td>Construction of service price index</td></tr>
+            <tr><td>Tendulkar (2009)</td><td>Shifted calorie-based poverty line to nutrition-based poverty basket</td></tr>
+            <tr><td>Rangarajan (2014)</td><td>Revised poverty base year (2011–12)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Poverty-line evolution: YK Alagh (calorie formula) → Lakdawala (state-specific CPI) → Tendulkar (nutrition basket) → Rangarajan (2011–12 base year revision).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGRICULTURE -->
+  <div id="agri" class="tab-panel">
+    <div class="card">
+      <div class="card-header teal">🌾 Agriculture &amp; Rural Economy Committees</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Committee</th><th>Purpose / Objective</th></tr></thead>
+          <tbody>
+            <tr><td>Dr. Mehta (1978)</td><td>Review of IRDP (Integrated Rural Development Programme)</td></tr>
+            <tr><td>Sushil Kumar (1980s)</td><td>Review of cotton cultivation in India</td></tr>
+            <tr><td>R. V. Gupta (1997)</td><td>Suggestions regarding agricultural credit</td></tr>
+            <tr><td>Abhijit Sen (2004)</td><td>Futures trading of agricultural commodities</td></tr>
+            <tr><td>V. S. Vyas (2004)</td><td>Expansion of credit in agriculture and rural areas</td></tr>
+            <tr><td>Swaminathan (2004–06)</td><td>Agricultural reforms & sustainability</td></tr>
+            <tr><td>Radhakrishna (2005)</td><td>Credit-related issues of farmers</td></tr>
+            <tr><td>Ashok Dalwai (2016)</td><td>Doubling farmers' income by 2022</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONETARY POLICY -->
+  <div id="monetary" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">📈 Monetary Policy &amp; Inflation Committees</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Committee</th><th>Purpose / Objective</th></tr></thead>
+          <tbody>
+            <tr><td>Chakravarti I (1985)</td><td>Review of monetary system</td></tr>
+            <tr><td>Chakravarti II (1985)</td><td>Reconsideration of monetary system</td></tr>
+            <tr><td>S. S. Tarapore (I) (1997)</td><td>Capital account convertibility</td></tr>
+            <tr><td>S. S. Tarapore (II) (2007)</td><td>Second review of capital account convertibility</td></tr>
+            <tr><td>Urjit Patel (2013)</td><td>CPI-based monetary policy framework</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Tarapore I (1997) and Tarapore II (2007) — both by the same person, ten years apart, both on Capital Account Convertibility. Exam may ask "which came first" or "which year".
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAPITAL MARKET -->
+  <div id="capital" class="tab-panel">
+    <div class="card">
+      <div class="card-header orange">📊 Capital Market &amp; Investment Committees</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Committee</th><th>Purpose / Objective</th></tr></thead>
+          <tbody>
+            <tr><td>C. D. Parekh (1992)</td><td>Financing of infrastructure projects</td></tr>
+            <tr><td>Malhotra (1994)</td><td>Insurance sector reforms</td></tr>
+            <tr><td>Bimal Jalan (2013)</td><td>Capital market infrastructure, guidelines on stock exchanges</td></tr>
+            <tr><td>Arvind Mayaram (2014)</td><td>FDI classification</td></tr>
+            <tr><td>FPI Regulations Committee (2014)</td><td>Merged FII, QFI, and Sub-accounts into a single FPI category</td></tr>
+          </tbody>
+        </table></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Bimal Jalan headed TWO different 2013 committees — one on banking licenses (Bandhan, IDFC) and one on capital market infra/stock exchange guidelines.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINANCIAL INCLUSION -->
+  <div id="digital" class="tab-panel">
+    <div class="card">
+      <div class="card-header red">💳 Financial Inclusion &amp; Digital Payments Committees</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Committee</th><th>Purpose / Objective</th></tr></thead>
+          <tbody>
+            <tr><td>Nandan Nilekani Task Force (2009)</td><td>Unique Identification Number (UID/Aadhaar) allocation</td></tr>
+            <tr><td>Nachiket Mor Committee (2013)</td><td>Financial inclusion & small banks</td></tr>
+            <tr><td>Nandan Nilekani (Digital) (2015)</td><td>Strengthening digital payments</td></tr>
+            <tr><td>Ratan Watal (2016)</td><td>Promote digital payments</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Nandan Nilekani chaired two different committees six years apart: 2009 (UID/Aadhaar) and 2015 (Digital Payments) — don't merge them into one.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Committee</th><th>Purpose / Key Recommendation</th></tr></thead>
+          <tbody>
+            <tr><td>Goiporia (1990)</td><td>Banking Ombudsman Scheme (1995)</td></tr>
+            <tr><td>Narasimhan I (1991)</td><td>4-tier banking, Asset Reconstruction Fund</td></tr>
+            <tr><td>Narasimhan II (1998)</td><td>Bank mergers, narrow banking for weak banks</td></tr>
+            <tr><td>Raja Chelliah (1991)</td><td>Comprehensive tax reforms</td></tr>
+            <tr><td>Rekhi (1991)</td><td>Indirect tax reforms</td></tr>
+            <tr><td>Bhagwati (1973)</td><td>Unemployment estimation</td></tr>
+            <tr><td>YK Alagh (1979)</td><td>Poverty measurement by calorie consumed</td></tr>
+            <tr><td>DT Lakdawala (1993)</td><td>State-specific poverty line (CPI-AL/CPI-IW)</td></tr>
+            <tr><td>Tendulkar (2009)</td><td>Calorie → Nutritional based poverty basket</td></tr>
+            <tr><td>Rangarajan (2014)</td><td>Base year revised to 2011–12</td></tr>
+            <tr><td>R. V. Gupta (1997)</td><td>Agricultural credit suggestions</td></tr>
+            <tr><td>Swaminathan (2004–06)</td><td>Agricultural reforms & sustainability</td></tr>
+            <tr><td>Ashok Dalwai (2016)</td><td>Doubling farmers' income by 2022</td></tr>
+            <tr><td>S. S. Tarapore I (1997)</td><td>Capital account convertibility</td></tr>
+            <tr><td>S. S. Tarapore II (2007)</td><td>Second review of capital account convertibility</td></tr>
+            <tr><td>Urjit Patel (2013)</td><td>CPI-based monetary policy framework</td></tr>
+            <tr><td>Malhotra (1994)</td><td>Insurance sector reforms</td></tr>
+            <tr><td>Bimal Jalan (2013)</td><td>Capital market infra, stock exchange guidelines / banking licenses</td></tr>
+            <tr><td>Arvind Mayaram (2014)</td><td>FDI classification</td></tr>
+            <tr><td>FPI Regulations (2014)</td><td>Merged FII, QFI, Sub-accounts into FPI</td></tr>
+            <tr><td>Nachiket Mor (2013)</td><td>Financial inclusion & small banks</td></tr>
+            <tr><td>Nandan Nilekani TF (2009)</td><td>UID (Aadhaar) allocation</td></tr>
+            <tr><td>Nandan Nilekani Digital (2015)</td><td>Digital payments strengthening</td></tr>
+            <tr><td>Ratan Watal (2016)</td><td>Promote digital payments</td></tr>
+            <tr><td>PJ Nayak (2014)</td><td>Repeal Bank Nationalisation & SBI Acts, set up BIC</td></tr>
+            <tr><td>Khan (2005)</td><td>Financial inclusion & Lead Bank Scheme</td></tr>
+            <tr><td>Shome (2012)</td><td>GAAR — General Anti-Avoidance Rules</td></tr>
+            <tr><td>C. D. Parekh (1992)</td><td>Financing of infrastructure projects</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Major Committees · BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

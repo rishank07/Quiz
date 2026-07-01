@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banking in India - Ch08 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:9px 10px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:8px 10px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:120px;
+}
+.stat-box .num{color:var(--gold);font-size:20px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 08 · Economics</span>
+    <h1>Banking in India</h1>
+    <p>History · Structure · RBI · Monetary Policy · NBFC · Financial Institutions — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('history')">📜 History & Nationalisation</button>
+    <button class="tab-btn" onclick="switchTab('psb')">🏦 Public Sector Banks</button>
+    <button class="tab-btn" onclick="switchTab('rrb')">🌾 RRB & Co-operative Banks</button>
+    <button class="tab-btn" onclick="switchTab('rbi')">🏛 RBI & Private/Foreign Banks</button>
+    <button class="tab-btn" onclick="switchTab('monetary')">📊 Monetary Policy & Tools</button>
+    <button class="tab-btn" onclick="switchTab('basel')">⚖ Basel Norms & NPA</button>
+    <button class="tab-btn" onclick="switchTab('micro')">💳 Micro Finance & NBFC</button>
+    <button class="tab-btn" onclick="switchTab('institutions')">🏢 Financial Institutions</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: HISTORY -->
+  <div class="tab-content active" id="history">
+    <div class="card">
+      <div class="card-header gold">Development of Banking in India</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>First Bank in India: Bank of Hindustan, Calcutta (1770) — on European Banking pattern</li>
+          <li>Three Presidency Banks: Bank of Bengal (1806), Bank of Bombay (1840), Bank of Madras (1843)</li>
+          <li>Combining all three → Imperial Bank of India (1921)</li>
+          <li>Nationalised on 1st July 1955, renamed State Bank of India (SBI)</li>
+          <li>First Indian-owned and established bank: Awadh Commercial Bank (1881)</li>
+          <li>First fully Indian-owned and established bank: Punjab National Bank (1894)</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Awadh Commercial Bank (1881, first Indian-owned) vs Punjab National Bank (1894, first FULLY Indian-owned) — the distinction "fully" is key and frequently tested.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Banking Structure: Organised vs Unorganised</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Organised</th><th>Unorganised</th></tr>
+          <tr><td>Reserve Bank of India</td><td>Native Banker</td></tr>
+          <tr><td>Commercial Bank</td><td>Money Lender</td></tr>
+          <tr><td>Financial Institution</td><td>Private Person — deals on own terms</td></tr>
+          <tr><td>Follows Banking Rules</td><td>Does not follow banking rules</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Nationalisation of Banks</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">1st Round</span><span class="v">19th July 1969 — 14 commercial banks nationalised</span></div>
+        <ul class="arrow-list">
+          <li>Indian Overseas Bank, Dena Bank, Indian Bank, Canara Bank, Syndicate Bank</li>
+          <li>Allahabad Bank, Punjab National Bank, Union Bank, United Commercial Bank</li>
+          <li>Bank of Baroda, Bank of India, United Bank of India, Central Bank of India, Bank of Maharashtra</li>
+        </ul>
+        <div class="info-row"><span class="k">2nd Round</span><span class="v">15th April 1980 — 6 banks (deposits ≥ ₹200 crore)</span></div>
+        <ul class="arrow-list">
+          <li>New Bank of India, Vijaya Bank, Corporation Bank</li>
+          <li>Andhra Bank, Punjab and Sind Bank, Oriental Bank of Commerce</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Merger of Banks (Timeline)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>4 September 1993: New Bank of India merged with PNB</li>
+          <li>2017: SBI merged with 5 associate banks and Indian Mahila Bank (State Bank of Mysore, Hyderabad, Patiala, Travancore, Bikaner & Jaipur)</li>
+          <li>April 2019: Vijaya Bank and Dena Bank merged into Bank of Baroda</li>
+          <li>April 2020: Oriental Bank of Commerce + United Bank of India merged into PNB (2nd largest PSB)</li>
+          <li>April 2020: Syndicate Bank subsumed into Canara Bank</li>
+          <li>April 2020: Andhra Bank + Corporation Bank merged into Union Bank of India</li>
+          <li>April 2020: Allahabad Bank merged into Indian Bank</li>
+        </ul>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          The 2020 mega-merger reduced PSBs significantly — remember which bank absorbed which (PNB absorbed OBC+UBI; Canara absorbed Syndicate; Union absorbed Andhra+Corporation; Indian Bank absorbed Allahabad).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: PUBLIC SECTOR BANKS -->
+  <div class="tab-content" id="psb">
+    <div class="card">
+      <div class="card-header orange">Public Sector Banks in India</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">11 + 1</span><span class="lbl">Nationalised Banks + SBI = 12 PSBs</span></div>
+        </div>
+        <p class="note">SBI is the largest commercial bank of India. Bank Sakhi: Women SHG members appointed as banking agents.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">11 Nationalised Banks — Founders & Headquarters</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Bank</th><th>Founded / Founder</th><th>HQ</th><th>Branches</th></tr>
+          <tr><td>Punjab National Bank</td><td>19 May 1894, Lahore, as Dayal Singh Bank; public sector status by Majithia & Lala Lajpat Rai, 12 April 1895</td><td>New Delhi</td><td>12,248 India, 1 Abroad</td></tr>
+          <tr><td>Canara Bank</td><td>1 July 1906, Mangalore, by Ammembal Subba Rao Pai</td><td>Bengaluru</td><td>9,877 India, 6 Abroad</td></tr>
+          <tr><td>Bank of India</td><td>7 September 1906, by Ramnarayen Rujhyo</td><td>Mumbai</td><td>5,089 India, 23 Abroad</td></tr>
+          <tr><td>Indian Bank</td><td>5 March 1907 (opened 15 Aug 1907), Founder: M.S. Ramaswami Chettiar</td><td>Chennai</td><td>5,770 India, 3 Abroad</td></tr>
+          <tr><td>Punjab & Sind Bank</td><td>29 June 1908, by Bhai Veer Singh, Sundar Singh Majithia, Sardar Trilochan Singh</td><td>New Delhi</td><td>1,526 India</td></tr>
+          <tr><td>Bank of Baroda</td><td>20 July 1908, by Maharaja Sayajirao Gaikwad III</td><td>Vadodara (Corp. Office: Mumbai)</td><td>3,454 India, 82 Abroad</td></tr>
+          <tr><td>Central Bank of India</td><td>21 December 1911, by Sir Sorabji Pochkhanwala</td><td>Mumbai</td><td>4,695 India</td></tr>
+          <tr><td>Union Bank of India</td><td>11 November 1919, by Seth Sitaram Poddar; formally opened by Mahatma Gandhi (1921)</td><td>Mumbai</td><td>8,700 India, 3 Abroad</td></tr>
+          <tr><td>Bank of Maharashtra</td><td>16 September 1935, by V.G. Kale and V.K. Sathe</td><td>Pune</td><td>2,641 India</td></tr>
+          <tr><td>Indian Overseas Bank</td><td>10 February 1937, by M. Ct. M. Chidambaram Chettiar</td><td>Chennai</td><td>3,219 India, 4 Abroad</td></tr>
+          <tr><td>UCO Bank</td><td>6 January 1943, by Ghanshyam Das Birla</td><td>Kolkata</td><td>230 India, 2 Abroad</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Union Bank of India was formally opened by Mahatma Gandhi himself in 1921 — a unique founder-related fact often tested.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: RRB & CO-OPERATIVE -->
+  <div class="tab-content" id="rrb">
+    <div class="card">
+      <div class="card-header teal">Regional Rural Bank (RRB)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">2nd October, 1975</span></div>
+        <div class="info-row"><span class="k">Recommended By</span><span class="v">M. Narasimhan Committee</span></div>
+        <h4 class="sub2">First 5 RRBs</h4>
+        <ul class="arrow-list">
+          <li>Muradabad (Uttar Pradesh)</li>
+          <li>Bhiwani (Haryana)</li>
+          <li>Malda (West Bengal)</li>
+          <li>Jaipur (Rajasthan)</li>
+          <li>Gorakhpur (Uttar Pradesh)</li>
+        </ul>
+        <div class="info-row"><span class="k">Current Number (May 2025)</span><span class="v">28</span></div>
+        <div class="info-row"><span class="k">Coverage</span><span class="v">All states except Goa and Sikkim</span></div>
+        <div class="info-row"><span class="k">Shareholding</span><span class="v">Centre 50%, State 15%, Promoter Bank 35%</span></div>
+        <p class="note">Work: Provide loans to weaker sections at low interest rates; promote savings in rural areas.</p>
+        <p class="note">Shree Mahila Seva Cooperative Bank: Established 1974, Founder Elaben Bhatt, HQ Ahmedabad.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Co-operative Banks</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>State Co-operative Bank</li>
+          <li>District / Central Co-operative Bank</li>
+          <li>Primary Credit Societies</li>
+        </ul>
+        <h4 class="sub2">State Co-operative Banks (SCBs)</h4>
+        <p class="note">Provide loans to Central/District Co-operative Banks.</p>
+        <h4 class="sub2">Central Co-operative Bank</h4>
+        <p class="note">Area of work limited to one district; acts as a bridge between State Co-operative Banks and Co-operative Credit Societies.</p>
+        <h4 class="sub2">Primary Credit Societies</h4>
+        <p class="note">A group of at least 10 persons in a village/area formed to fulfill short-term loan requirements of the agriculture sector.</p>
+        <h4 class="sub2">Urban Co-operative Banks (UCB)</h4>
+        <p class="note">Scope limited to metros, semi-urban, urban centres; provides loans to micro/small/medium industries, small entrepreneurs, retail traders. Number of UCBs in India: ~1500.</p>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Lead Bank Scheme (1969, Gadgil Committee) requires a lead bank to prepare a District Credit Plan for identified districts under the service area approach.
+        </div>
+        <p class="note">Multi-State Co-operative Society: Registered under the Multi-State Co-operative Societies Act, 2002.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: RBI & PRIVATE/FOREIGN -->
+  <div class="tab-content" id="rbi">
+    <div class="card">
+      <div class="card-header purple">Private Banks</div>
+      <div class="card-body">
+        <p class="note">Major banks: ICICI Bank, Axis Bank, HDFC Bank, Kotak Mahindra Bank, Yes Bank</p>
+        <div class="info-row"><span class="k">Foreign Investment Allowed</span><span class="v">Up to 74%</span></div>
+        <div class="info-row"><span class="k">No. of Private Sector Banks</span><span class="v">21 + 4 local area banks</span></div>
+        <p class="note">Self Help Group (SHG): Main contribution in improving the economic condition of poor women in rural areas; loans given by the bank to individual members of the community.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Foreign Commercial Banks</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">44</span><span class="lbl">Foreign Banks (May 2025)</span></div>
+        </div>
+        <div class="tbl-wrap"><table>
+          <tr><th>Bank</th><th>Country</th></tr>
+          <tr><td>Standard Chartered Bank</td><td>Britain</td></tr>
+          <tr><td>HSBC</td><td>Hong Kong</td></tr>
+          <tr><td>Deutsche Bank</td><td>Germany</td></tr>
+          <tr><td>American Express Bank Limited</td><td>America</td></tr>
+          <tr><td>Bank of Nova Scotia</td><td>Canada</td></tr>
+        </table></div>
+        <p class="note">RBI played the role of the central bank for Burma until 1947.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Reserve Bank of India (RBI)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Established</span><span class="v">1 April, 1935 under RBI Act, 1934</span></div>
+        <div class="info-row"><span class="k">Recommended By</span><span class="v">Banking Enquiry Committee (1932)</span></div>
+        <div class="info-row"><span class="k">Naming Recommendation</span><span class="v">Hilton Young Commission (1926)</span></div>
+        <div class="info-row"><span class="k">Nationalised</span><span class="v">1st January 1949</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Mumbai (formerly Calcutta, before 1937)</span></div>
+        <div class="info-row"><span class="k">Local Board Offices</span><span class="v">Mumbai, Calcutta, Chennai, New Delhi</span></div>
+        <div class="info-row"><span class="k">Regional Offices</span><span class="v">33</span></div>
+        <h4 class="sub2">Structure — Central Board of Directors (21 Members)</h4>
+        <ul class="arrow-list">
+          <li>1 Governor</li>
+          <li>4 Deputy Governors</li>
+          <li>Finance Minister representative</li>
+          <li>10 directors appointed by Government</li>
+          <li>4 directors representing local boards</li>
+        </ul>
+        <h4 class="sub2">Governors of RBI</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Position</th><th>Name</th><th>Tenure</th></tr>
+          <tr><td>First Governor</td><td>Sir Osborne Smith</td><td>1 April 1935 – 30 June 1937</td></tr>
+          <tr><td>First Indian Governor (3rd Governor)</td><td>C.D. Deshmukh</td><td>—</td></tr>
+          <tr><td>Current Governor (26th)</td><td>Sanjay Malhotra</td><td>From 11 December 2024</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Sir Osborne Smith (1st Governor, British) vs C.D. Deshmukh (1st INDIAN Governor, but 3rd overall) — the "first Indian" ≠ "first overall" distinction is heavily tested.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Functions of RBI</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Regulation and control of the banking system (Banking Regulation Act, 1949)</li>
+          <li>Issuance of notes (except ₹1 note — signed by Finance Secretary; and coins — by Finance Minister)</li>
+          <li>Regulate the banking and financial system</li>
+          <li>Lead the government in institutions like IMF, World Bank</li>
+          <li>Working as banker to the government</li>
+          <li>Controlling credit</li>
+          <li>Act as a bank of banks</li>
+          <li>Conservation of foreign exchange reserves</li>
+          <li>Regulation of foreign exchange rates</li>
+          <li>Conduct of monetary policy</li>
+          <li>Developmental work</li>
+          <li>Compilation and publication of data</li>
+        </ul>
+        <p class="note">Minimum Fund System (1957): ₹200 crore (Gold worth ₹115 crore + Foreign securities worth ₹85 crore). Clear Note Policy (1999): providing good quality currency notes and coins.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Institutes of Securities Printing in India</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Institute</th><th>Place</th><th>Material</th></tr>
+          <tr><td>Currency Notes Press (1928)</td><td>Nashik (Maharashtra)</td><td>Bank notes ₹1 to ₹100</td></tr>
+          <tr><td>Security Paper Mill (1967–68)</td><td>Hoshangabad (Madhya Pradesh)</td><td>Bank and currency note paper</td></tr>
+          <tr><td>Banknote Press (1974)</td><td>Dewas (Madhya Pradesh)</td><td>Bank notes ₹20, ₹50, ₹100, ₹200, ₹500</td></tr>
+          <tr><td>Security Printing Press (1982)</td><td>Hyderabad (Telangana)</td><td>Central excise stamp</td></tr>
+          <tr><td>India Security Press (1992)</td><td>Nashik (Maharashtra)</td><td>Postage stamps, postal orders</td></tr>
+          <tr><td>Modern Currency Note Press (1995)</td><td>Mysore (Karnataka) & Shalbani (West Bengal)</td><td>Modern currency notes</td></tr>
+        </table></div>
+        <p class="note">Indian coins are minted in Mumbai, Kolkata, Hyderabad, and Noida.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: MONETARY POLICY -->
+  <div class="tab-content" id="monetary">
+    <div class="card">
+      <div class="card-header blue">Monetary Policy & MPC</div>
+      <div class="card-body">
+        <p class="note">Monetary Policy is formulated by RBI in consultation with the MPC; works to control money and credit in the economy; target is price stability in the economy.</p>
+        <h4 class="sub2">Monetary Policy Committee (MPC)</h4>
+        <div class="info-row"><span class="k">Formed On Recommendation Of</span><span class="v">Urjit Patel Committee, 24 September 2016</span></div>
+        <div class="info-row"><span class="k">Chairman</span><span class="v">Governor of RBI</span></div>
+        <div class="info-row"><span class="k">Members</span><span class="v">6 (3 from RBI: Governor, Deputy Governor, an Officer + 3 nominated by Ministry of Finance)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Quantitative Monetary Instruments</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Tool</th><th>Key Facts</th></tr>
+          <tr><td>Bank Rate</td><td>RBI provides long-term loans on first-class securities of banks; decrease in bank rate during monetary contraction</td></tr>
+          <tr><td>Repo Rate</td><td>Rate at which RBI lends short-term loans to banks; increase → decreases bank liquidity; decrease → increases liquidity</td></tr>
+          <tr><td>Reverse Repo Rate</td><td>Opposite of repo rate; rate at which banks deposit excess money with RBI; increase → reduces liquidity; decrease → increases liquidity</td></tr>
+          <tr><td>SLR</td><td>Retention of NDTL by banks (min 0%, max 40%); minimum limit abolished in 2007; currently 18%; increase → decreases liquidity</td></tr>
+          <tr><td>CRR</td><td>Banks keep a portion of total deposits (NDTL) in cash with RBI; ranges 3–15%</td></tr>
+          <tr><td>Open Market Operations (OMO)</td><td>RBI buys/sells securities; selling absorbs excess liquidity, buying injects liquidity</td></tr>
+          <tr><td>Marginal Standing Facility</td><td>Short-term lending to banks by RBI</td></tr>
+          <tr><td>Standing Deposit Facility</td><td>Effective from 8 April 2022; short-term deposits by banks in RBI; rate 0.25% less than Repo</td></tr>
+          <tr><td>Liquidity Management Framework (LMF)</td><td>Commenced 2014, amended 2020; bank borrowing capped at 1% of NDTL per day</td></tr>
+          <tr><td>Liquidity Adjustment Facility (LAF)</td><td>Includes repo and reverse repo; adopted in 2000</td></tr>
+          <tr><td>Base Rate</td><td>Implemented 2010 by RBI; banks cannot lend below this rate</td></tr>
+          <tr><td>External Benchmark Based Lending Rate (EBLR)</td><td>RBI mandated use of EBLR for bank lending rates in 2018; 4 benchmark options including Repo rate</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Repo Rate (RBI lends to banks) vs Reverse Repo Rate (banks lend/deposit with RBI) are opposite directions of the same tool — commonly reversed in questions.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Selective / Qualitative Instruments</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Do not affect overall creditworthiness</li>
+          <li>Liberal in some sectors based on credit policy needs</li>
+          <li>Purpose: Prevent gambling/hoarding; prevent unreasonable price increases</li>
+        </ul>
+        <h4 class="sub2">Instruments Used</h4>
+        <ul class="arrow-list">
+          <li>Limit — Regulation of needs</li>
+          <li>Regulation of consumer credit</li>
+          <li>Rationing of credit</li>
+          <li>Direct action</li>
+          <li>Use of ethical advice and propaganda (moral suasion)</li>
+        </ul>
+        <p class="note">NDTL = Net Demand and Time Liabilities. Demand Liabilities: Savings account, Current account. Time Liabilities: Fixed deposit, Recurring deposit.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Priority Sector Lending</div>
+      <div class="card-body">
+        <p class="note">Sectors covered: Agriculture, Education, Housing, Micro and Small Enterprises, Export Credit, Social Infrastructure, Renewable Energy, etc.</p>
+        <div class="info-row"><span class="k">Minimum Lending Requirement</span><span class="v">40% (75% since 31 March 2024)</span></div>
+        <div class="info-row"><span class="k">Agriculture</span><span class="v">18%</span></div>
+        <div class="info-row"><span class="k">Micro Enterprises</span><span class="v">7.5%</span></div>
+        <div class="info-row"><span class="k">Weaker Sections</span><span class="v">10%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: BASEL & NPA -->
+  <div class="tab-content" id="basel">
+    <div class="card">
+      <div class="card-header teal">Basel Norms</div>
+      <div class="card-body">
+        <p class="note">Basel is a city in Switzerland; Basel Committee formed in 1974 with 10 member countries; joined by Bank for International Settlements (BIS) in 1930; objective is to give international character to banking and financial institutions.</p>
+        <div class="tbl-wrap"><table>
+          <tr><th>Norms</th><th>Details</th></tr>
+          <tr><td>Basel-I</td><td>Issued 1988; India adopted in 1999; CAR requirement 8%</td></tr>
+          <tr><td>Basel-II</td><td>Released in 2004</td></tr>
+          <tr><td>Basel-III</td><td>Proposed 2009, implemented from 2010; Capital divided into Tier-1, Tier-2, Tier-3; CAR maintained at 8%</td></tr>
+        </table></div>
+        <p class="note">Capital Adequacy Ratio (CAR), also known as Capital-to-Risk Weighted Assets Ratio (CRAR): measurement of a bank's available capital as a % of risk-weighted credit exposure.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Non-Performing Assets (NPA)</div>
+      <div class="card-body">
+        <p class="note">All loans on which interest and principal have not been paid within 90 days.</p>
+        <h4 class="sub2">Categories</h4>
+        <ul class="arrow-list">
+          <li>Sub-standard Properties</li>
+          <li>Doubtful Assets</li>
+          <li>Loss-making Assets</li>
+        </ul>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">2.6%</span><span class="lbl">NPA Rate (2024)</span></div>
+        </div>
+        <p class="note">Wilful Defaulter: Deliberately not repaying a loan despite being capable of doing so.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Related Laws & Bodies</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Insolvency and Bankruptcy Code, 2016</span><span class="v">Insolvency cases settled within 180 days</span></div>
+        <div class="info-row"><span class="k">SARFAESI Act, 2002</span><span class="v">Deals with wilful defaulters</span></div>
+        <div class="info-row"><span class="k">Financial Services Institutions Bureau (FSIB)</span><span class="v">Founded July 2022; replaced Banks Board Bureau (2016); selects banks & insurance company heads</span></div>
+        <div class="info-row"><span class="k">Banking Ombudsman</span><span class="v">Established 14 June 1995; under RBI; quick dispute resolution</span></div>
+        <p class="note">Indradhanush Yojana (2015): Improve functioning of public sector banks. Components: Appointment, Capitalisation, De-stressing, Empowerment, Framework of accountability, Governance.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: MICRO FINANCE & NBFC -->
+  <div class="tab-content" id="micro">
+    <div class="card">
+      <div class="card-header purple">Small Finance Banks</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Approved By RBI</span><span class="v">August 2015</span></div>
+        <div class="info-row"><span class="k">Committee</span><span class="v">Nachiket Mor</span></div>
+        <p class="note">Accept deposits, offer loans, no deposit limits.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Payments Bank</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Approved By RBI</span><span class="v">July 2014</span></div>
+        <div class="info-row"><span class="k">Recommended By</span><span class="v">Nachiket Mor Committee</span></div>
+        <p class="note">Only accepts deposits (up to ₹2 lakh per customer); issues only debit cards.</p>
+        <p class="note">Bandhan Financial Services: Established 2001, HQ Kolkata. India Post Payments Bank: Started 1 September 2018.</p>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Small Finance Banks AND Payments Banks were both recommended by the Nachiket Mor Committee but approved in different years (2015 vs 2014) — don't mix up the sequence.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">MUDRA Bank</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Commencement</span><span class="v">2015</span></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>Category</th><th>Loan Range</th></tr>
+          <tr><td>Shishu</td><td>Up to ₹50,000</td></tr>
+          <tr><td>Kishor</td><td>Above ₹50,000 up to ₹5 lakh</td></tr>
+          <tr><td>Tarun</td><td>₹5 lakh to ₹10 lakh</td></tr>
+          <tr><td>Tarun (Plus)</td><td>Valid for loans up to ₹20 lakh after previous payment</td></tr>
+        </table></div>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          MUDRA loan tiers in order: Shishu < Kishor < Tarun < Tarun Plus — remember the increasing loan amounts.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Non-Banking Financial Companies (NBFC)</div>
+      <div class="card-body">
+        <p class="note">Registered under the Companies Act, 1956 or 2013; main function is providing loans.</p>
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Key Facts</th></tr>
+          <tr><td>NBFC-D</td><td>Accepts deposits; requires registration with RBI; demand deposit not accepted</td></tr>
+          <tr><td>NBFC-ND</td><td>Does not accept deposits; regulated by RBI; registration in RBI not required</td></tr>
+        </table></div>
+        <p class="note">NBFCs need not maintain SLR/CRR; do not form part of the payment and settlement system; no insurance facility by DICGC for depositors.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Microfinance</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Establishment</span><span class="v">Microfinance Institutions Network</span></div>
+        <div class="info-row"><span class="k">Term First Used By</span><span class="v">Muhammad Yunus (1977)</span></div>
+        <div class="info-row"><span class="k">Duration</span><span class="v">36 months</span></div>
+        <div class="info-row"><span class="k">Typical Amount</span><span class="v">Less than ₹1 lakh</span></div>
+        <p class="note">Dependence on donor funds; provides banking services to unemployed/low-income individuals or groups without access to financial services.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: FINANCIAL INSTITUTIONS -->
+  <div class="tab-content" id="institutions">
+    <div class="card">
+      <div class="card-header teal">Major Financial Institutions</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Corporation</th><th>HQ</th><th>Objective</th></tr>
+          <tr><td>IFCI (1948)</td><td>New Delhi</td><td>Medium/long-term finance for industrial establishments</td></tr>
+          <tr><td>State Finance Corporation (1951)</td><td>—</td><td>Upgrade small and medium enterprises</td></tr>
+          <tr><td>ICICI (1955)</td><td>Mumbai</td><td>Development of small/medium industries in private sector</td></tr>
+          <tr><td>LIC (1956)</td><td>Mumbai</td><td>Providing insurance facility</td></tr>
+          <tr><td>IDBI (1964)</td><td>Mumbai</td><td>Financial assistance to industrial enterprises</td></tr>
+          <tr><td>Union Bank of India (1964) (Axis Bank)</td><td>—</td><td>Investment in small and medium industries</td></tr>
+          <tr><td>EXIM Bank (1982)</td><td>Mumbai</td><td>Financial needs of import-export</td></tr>
+          <tr><td>NABARD (1982)</td><td>Mumbai</td><td>Finance for agriculture and rural development; microfinance fund of ₹100 crore</td></tr>
+          <tr><td>NHB (1988)</td><td>New Delhi</td><td>Arranging housing-related finance</td></tr>
+          <tr><td>SIDBI (1990)</td><td>Lucknow</td><td>Facilities for small-scale industries</td></tr>
+          <tr><td>IRDA</td><td>Hyderabad</td><td>Regulating and licensing insurance industries</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Banks — Assets & Liabilities</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Assets</th><th>Liabilities</th></tr>
+          <tr><td>Bank's deposit with RBI</td><td>Demand Deposits (Savings account, Current account)</td></tr>
+          <tr><td>Loans given to people</td><td>Fixed Deposit (Fixed, Recurring)</td></tr>
+          <tr><td>Investment in government securities</td><td>Loan taken from RBI</td></tr>
+          <tr><td>Investment in share capital</td><td>—</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 9: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Summary / Reference Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>First Bank in India</td><td>Bank of Hindustan, Calcutta (1770)</td></tr>
+          <tr><td>First Indian-owned Bank</td><td>Awadh Commercial Bank (1881)</td></tr>
+          <tr><td>First fully Indian-owned Bank</td><td>Punjab National Bank (1894)</td></tr>
+          <tr><td>Imperial Bank of India</td><td>1921 → Nationalised 1955 → SBI</td></tr>
+          <tr><td>14 Banks Nationalised</td><td>19th July 1969</td></tr>
+          <tr><td>6 Banks Nationalised</td><td>15th April 1980 (deposits ≥ ₹200 crore)</td></tr>
+          <tr><td>Public Sector Banks</td><td>12 (11 Nationalised + 1 SBI)</td></tr>
+          <tr><td>RBI Established</td><td>1 April 1935 (RBI Act 1934)</td></tr>
+          <tr><td>RBI Nationalised</td><td>1st January 1949</td></tr>
+          <tr><td>RBI HQ</td><td>Mumbai (formerly Calcutta before 1937)</td></tr>
+          <tr><td>First Governor of RBI</td><td>Sir Osborne Smith</td></tr>
+          <tr><td>First Indian Governor</td><td>C.D. Deshmukh (3rd Governor)</td></tr>
+          <tr><td>Current Governor (26th)</td><td>Sanjay Malhotra (from 11 Dec 2024)</td></tr>
+          <tr><td>RRBs Established</td><td>2nd October 1975 (M. Narasimhan Committee)</td></tr>
+          <tr><td>Current RRBs</td><td>28 (May 2025) — works in all states except Goa & Sikkim</td></tr>
+          <tr><td>Total Foreign Banks</td><td>44 (May 2025)</td></tr>
+          <tr><td>Banking Ombudsman</td><td>Established 14th June 1995</td></tr>
+          <tr><td>MUDRA Bank</td><td>Commencement 2015 | Shishu/Kishor/Tarun categories</td></tr>
+          <tr><td>SARFAESI Act</td><td>2002 — To deal with wilful defaulters</td></tr>
+          <tr><td>Insolvency & Bankruptcy Code</td><td>2016 — Cases settled within 180 days</td></tr>
+          <tr><td>SLR (Current)</td><td>18%</td></tr>
+          <tr><td>CRR Range</td><td>3–15%</td></tr>
+          <tr><td>Monetary Policy Committee</td><td>Formed 24 Sep 2016 (Urjit Patel Committee) | 6 members + 1 Governor</td></tr>
+          <tr><td>Basel Committee</td><td>Formed 1974 (10 member countries)</td></tr>
+          <tr><td>NPA (2024)</td><td>2.6%</td></tr>
+          <tr><td>India Post Payments Bank</td><td>Started 1 September 2018</td></tr>
+          <tr><td>Payments Bank — Deposit Limit</td><td>₹2 lakh per customer</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Banking in India (Ch08) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

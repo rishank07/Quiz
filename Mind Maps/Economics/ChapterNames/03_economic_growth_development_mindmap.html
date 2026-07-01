@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economic Growth and Development - Ch03 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:130px;
+}
+.stat-box .num{color:var(--gold);font-size:20px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+.formula-box{
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  border-radius:8px;
+  padding:14px 18px;
+  margin:10px 0;
+  font-size:15px;
+  color:var(--gold);
+  font-weight:600;
+  text-align:center;
+}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 03 · Economics</span>
+    <h1>Economic Growth and Development</h1>
+    <p>Growth vs Development · HDI, PQLI, NEW, PPP, GNH · Measurement Indices — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('concepts')">📘 Growth vs Development</button>
+    <button class="tab-btn" onclick="switchTab('hdi')">🌍 HDI & PQLI</button>
+    <button class="tab-btn" onclick="switchTab('other')">📊 NEW, PPP & GNH</button>
+    <button class="tab-btn" onclick="switchTab('compare')">⚖ Growth vs Development Table</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: CONCEPTS -->
+  <div class="tab-content active" id="concepts">
+    <div class="card">
+      <div class="card-header gold">Economic Growth</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Related to continuous increase in Gross Domestic Product (GDP), Gross National Product (GNP), and Per Capita Income (PCI)</li>
+          <li>Related to quantitative change</li>
+          <li>Most appropriate measure of economic growth: Real Per Capita Income</li>
+        </ul>
+        <div class="formula-box">Per Capita Income = National Income ÷ Total Population</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Economic Development</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Efficient utilization of all factors of production</li>
+          <li>With continuous and long-term growth in national income and per capita income, there is improvement in people's standard of living</li>
+          <li>Related to both quantitative and qualitative change</li>
+          <li>Depends on Natural Resources, Capital Formation, and Size of Market</li>
+        </ul>
+        <div class="info-row"><span class="k">Prof. Amartya Sen's Definition</span><span class="v">Empowerment and expansion of capabilities</span></div>
+        <div class="info-row"><span class="k">Amartya Sen — Nobel Prize</span><span class="v">1998</span></div>
+        <p class="note">Environment Kuznets Curve: Shows the relationship between environmental quality and economic development (Per Capita Income).</p>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Growth = quantitative only; Development = quantitative + qualitative — the single biggest exam distinction in this topic.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Measurement of Economic Development</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Human Development Index (HDI)</li>
+          <li>Basic Needs Approach — propounded by World Bank</li>
+          <li>Physical Quality of Life Index (PQLI)</li>
+          <li>Net Economic Welfare (NEW)</li>
+          <li>Purchasing Power Parity Method (PPP)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: HDI & PQLI -->
+  <div class="tab-content" id="hdi">
+    <div class="card">
+      <div class="card-header purple">Human Development Index (HDI)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Propounded</span><span class="v">1990, by Mahbub ul Haq, Amartya Sen, and others</span></div>
+        <div class="info-row"><span class="k">Related To</span><span class="v">United Nations Development Programme (UNDP)</span></div>
+        <div class="info-row"><span class="k">Published Since</span><span class="v">1990, by UNDP</span></div>
+        <div class="info-row"><span class="k">Indicators</span><span class="v">Life Expectancy at Birth, Education, Per Capita Income</span></div>
+        <div class="info-row"><span class="k">Score Scale</span><span class="v">Max: 1, Min: 0</span></div>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">130</span><span class="lbl">India's HDI Rank (2025), out of 193</span></div>
+        </div>
+        <p class="note">Iceland topped the HDI Report (2025), while South Sudan ranked last.</p>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Don't confuse HDI's score scale (0 to 1) with PQLI's scale (1 to 100) — a very common mix-up in options.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Physical Quality of Life Index (PQLI)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Propounded By</span><span class="v">Morris D. Morris</span></div>
+        <div class="info-row"><span class="k">Score Scale</span><span class="v">Max: 100, Min: 1</span></div>
+        <h4 class="sub2">Indicators</h4>
+        <ul class="arrow-list">
+          <li>Life expectancy at age one</li>
+          <li>Infant Mortality Rate</li>
+          <li>Basic Literacy Rate</li>
+        </ul>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          First state to publish HDI in India: Madhya Pradesh (1995) — a Bihar-relevant BPSC comparison fact.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: NEW, PPP & GNH -->
+  <div class="tab-content" id="other">
+    <div class="card">
+      <div class="card-header teal">Net Economic Welfare (NEW)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Modified form of MEW (Measure of Economic Welfare)</li>
+          <li>Propounded by: Samuelson</li>
+        </ul>
+        <div class="info-row"><span class="k">ISEW (Index of Sustainable Economic Well-being)</span><span class="v">First issued by Daly and Cobb (1989)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Purchasing Power Parity Method (PPP)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Currently used by the World Bank</li>
+          <li>Used for comparative analysis of standard of living across countries</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Gross National Happiness (GNH)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Coined By</span><span class="v">4th King of Bhutan, Jigme Singye Wangchuck</span></div>
+        <div class="info-row"><span class="k">Decade</span><span class="v">1970s</span></div>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">33</span><span class="lbl">Indicators</span></div>
+          <div class="stat-box"><span class="num">9</span><span class="lbl">Domains</span></div>
+        </div>
+        <p class="note">The concept implies that sustainable development should take a holistic approach towards national progress, giving equal importance to non-economic aspects of well-being and happiness.</p>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          GNH = Bhutan's original contribution to development economics — 33 indicators across 9 domains, prioritizing happiness over pure GDP.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: GROWTH VS DEVELOPMENT TABLE -->
+  <div class="tab-content" id="compare">
+    <div class="card">
+      <div class="card-header blue">Economic Development vs Economic Growth</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Economic Development</th><th>Economic Growth</th></tr>
+          <tr><td>Qualitative Concept</td><td>Quantitative Concept</td></tr>
+          <tr><td>Along with increase in production, technological and institutional changes are also important</td><td>A steady process; does not involve any kind of innovation</td></tr>
+          <tr><td>Requires structural transformation</td><td>Structural change already completed; only production can be increased</td></tr>
+          <tr><td>Result of creative forces generated through proper control, direction, and guidance</td><td>Outcome of planned processes</td></tr>
+          <tr><td>Involves social, cultural, economic, qualitative, and quantitative changes</td><td>Related only to the increase in production</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Growth is a subset within Development — every instance of development involves some growth, but growth alone (without qualitative change) does not amount to development.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Reference Summary</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>Economic Growth</td><td>Continuous increase in GDP, GNP, PCI; Quantitative change</td></tr>
+          <tr><td>Per Capita Income Formula</td><td>National Income ÷ Total Population</td></tr>
+          <tr><td>Most Appropriate Measure of Growth</td><td>Real Per Capita Income</td></tr>
+          <tr><td>Economic Development</td><td>Qualitative + Quantitative change; efficient utilization of production factors</td></tr>
+          <tr><td>Amartya Sen on Development</td><td>Empowerment and expansion of capabilities; Nobel Prize 1998</td></tr>
+          <tr><td>Environment Kuznets Curve</td><td>Shows relationship between environmental quality and per capita income</td></tr>
+          <tr><td>HDI Propounded</td><td>1990 by Mahbub ul Haq, Amartya Sen; Published by UNDP</td></tr>
+          <tr><td>HDI Indicators</td><td>Life Expectancy, Education, Per Capita Income</td></tr>
+          <tr><td>HDI Score Range</td><td>Max 1, Min 0</td></tr>
+          <tr><td>India's HDI Rank (2025)</td><td>130 out of 193 countries</td></tr>
+          <tr><td>HDI Topper (2025)</td><td>Iceland</td></tr>
+          <tr><td>HDI Bottom (2025)</td><td>South Sudan</td></tr>
+          <tr><td>First State to Publish HDI in India</td><td>Madhya Pradesh (1995)</td></tr>
+          <tr><td>PQLI Propounded by</td><td>Morris D. Morris; Scale: Max 100, Min 1</td></tr>
+          <tr><td>PQLI Indicators</td><td>Life expectancy at age one, Infant Mortality Rate, Basic Literacy Rate</td></tr>
+          <tr><td>NEW</td><td>Net Economic Welfare; Propounded by Samuelson; Modified form of MEW</td></tr>
+          <tr><td>ISEW</td><td>Index of Sustainable Economic Well-being; first issued by Daly and Cobb (1989)</td></tr>
+          <tr><td>PPP</td><td>Used by World Bank; comparative living standard analysis</td></tr>
+          <tr><td>GNH</td><td>Coined by 4th King of Bhutan, Jigme Singye Wangchuck, 1970s; 33 indicators, 9 domains</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Economic Growth and Development (Ch03) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

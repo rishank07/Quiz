@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Money and Inflation - Ch07 | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:#e7e9f0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  line-height:1.6;
+  padding:20px;
+}
+.container{max-width:1100px;margin:0 auto;}
+.header{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  position:relative;
+}
+.header h1{color:var(--gold);font-size:28px;margin-bottom:6px;}
+.header p{color:#a9adc4;font-size:14px;}
+.art-pill{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-weight:bold;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.tab-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:20px;
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+.tab-btn{
+  background:transparent;
+  border:none;
+  color:#a9adc4;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+}
+.tab-btn:hover{background:var(--surface2);color:#e7e9f0;}
+.tab-btn.active{color:var(--gold);border-bottom:3px solid var(--gold);background:var(--surface2);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:12px 18px;
+  font-weight:bold;
+  font-size:16px;
+  color:#0f1117;
+}
+.card-header.gold{background:linear-gradient(90deg,var(--gold),#d4a017);}
+.card-header.green{background:linear-gradient(90deg,var(--accent3),#219150);color:#0f1117;}
+.card-header.blue{background:linear-gradient(90deg,var(--accent2),#2471a3);color:#fff;}
+.card-header.purple{background:linear-gradient(90deg,var(--accent4),#7d3c98);color:#fff;}
+.card-header.orange{background:linear-gradient(90deg,var(--accent5),#ba6018);color:#fff;}
+.card-header.red{background:linear-gradient(90deg,var(--accent1),#b93225);color:#fff;}
+.card-header.teal{background:linear-gradient(90deg,var(--accent6),#159b82);color:#0f1117;}
+.card-body{padding:18px;}
+.arrow-list{list-style:none;}
+.arrow-list li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--border);}
+.arrow-list li:last-child{border-bottom:none;}
+.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+th{
+  background:#2a2200;
+  color:var(--gold);
+  padding:10px 12px;
+  text-align:left;
+  border-bottom:2px solid var(--gold);
+}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:#e7e9f0;vertical-align:top;}
+tr:hover td{background:var(--surface2);}
+.exam-trap{
+  background:#1a0909;
+  border-left:4px solid var(--accent1);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.exam-trap .label{color:var(--accent1);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.quick-recall{
+  background:#091524;
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:6px;
+  margin:14px 0;
+}
+.quick-recall .label{color:var(--accent2);font-weight:bold;font-size:13px;margin-bottom:6px;}
+.stat-box{
+  display:inline-block;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 18px;
+  margin:6px;
+  text-align:center;
+  min-width:130px;
+}
+.stat-box .num{color:var(--gold);font-size:20px;font-weight:bold;display:block;}
+.stat-box .lbl{color:#a9adc4;font-size:12px;}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:var(--surface2);
+  border-radius:6px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.info-row .k{color:#a9adc4;}
+.info-row .v{color:var(--gold);font-weight:600;}
+.formula-box{
+  background:var(--surface2);
+  border:1px solid var(--gold);
+  border-radius:8px;
+  padding:14px 18px;
+  margin:10px 0;
+  font-size:15px;
+  color:var(--gold);
+  font-weight:600;
+  text-align:center;
+}
+h4.sub2{color:var(--accent2);margin:10px 0 6px;font-size:14px;}
+p.note{color:#c9cdda;margin-bottom:8px;}
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#6b708a;
+  font-size:13px;
+  border-top:1px solid var(--border);
+  margin-top:30px;
+}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="art-pill">Chapter 07 · Economics</span>
+    <h1>Money and Inflation</h1>
+    <p>Evolution of Money · Money Supply · Currency Facts · Inflation Types · WPI/CPI — BPSC / BSSC</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('money')">💰 Money & Evolution</button>
+    <button class="tab-btn" onclick="switchTab('types')">🏷 Types & Liquidity</button>
+    <button class="tab-btn" onclick="switchTab('supply')">🏦 Money Supply (M0–M4)</button>
+    <button class="tab-btn" onclick="switchTab('currency')">💵 Currency Facts</button>
+    <button class="tab-btn" onclick="switchTab('inflation')">📈 Inflation Basics & Types</button>
+    <button class="tab-btn" onclick="switchTab('measurement')">📊 WPI & CPI</button>
+    <button class="tab-btn" onclick="switchTab('control')">🛠 Controlling Inflation</button>
+    <button class="tab-btn" onclick="switchTab('quick')">⚡ Quick Reference</button>
+  </div>
+
+  <!-- TAB 1: MONEY & EVOLUTION -->
+  <div class="tab-content active" id="money">
+    <div class="card">
+      <div class="card-header gold">What is Money?</div>
+      <div class="card-body">
+        <p class="note">Money: Anything that serves as a medium of exchange or payment for all goods and services.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Evolution of Money</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Stage</th><th>Form</th></tr>
+          <tr><td>Barter System (before money)</td><td>Exchange of goods for goods</td></tr>
+          <tr><td>Commodity Money</td><td>Animals, Shells</td></tr>
+          <tr><td>Metallic Money</td><td>Coins of Gold, Silver, etc.</td></tr>
+          <tr><td>Paper Money</td><td>Bank Notes</td></tr>
+          <tr><td>Credit Money</td><td>Bank Cheques, Credit/Debit Cards, Drafts</td></tr>
+          <tr><td>Plastic Money</td><td>Cards</td></tr>
+          <tr><td>Crypto Currency</td><td>Bitcoin, Dogecoin, etc.</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Functions of Money</div>
+      <div class="card-body">
+        <h4 class="sub2">Primary Functions</h4>
+        <ul class="arrow-list">
+          <li>Medium of Exchange</li>
+          <li>Measure / Unit of Value</li>
+        </ul>
+        <h4 class="sub2">Secondary Functions</h4>
+        <ul class="arrow-list">
+          <li>Store of Value</li>
+          <li>Standard of Deferred Payments</li>
+        </ul>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          "Medium of Exchange" and "Measure of Value" are Primary functions; "Store of Value" and "Deferred Payments" are Secondary — a common swap in MCQs.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: TYPES & LIQUIDITY -->
+  <div class="tab-content" id="types">
+    <div class="card">
+      <div class="card-header purple">Types of Money</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Description</th></tr>
+          <tr><td>Legal Tender</td><td>Issued by government/central bank; obligatory for persons to accept</td></tr>
+          <tr><td>Token Money</td><td>Intrinsic value less than face value; current ₹1 coin</td></tr>
+          <tr><td>Scarce Money</td><td>More demand than supply in international market ($)</td></tr>
+          <tr><td>Credit Money</td><td>Not compulsory to accept; promissory note, cheque, bill of exchange, bank drafts</td></tr>
+          <tr><td>Hot Money</td><td>Quickly moves in financial markets; e.g. foreign currency in stock market</td></tr>
+          <tr><td>Standard Money</td><td>Value of goods and money considered the same</td></tr>
+          <tr><td>Near Money</td><td>Quick and easily convertible to cash — gold, silver, savings accounts</td></tr>
+          <tr><td>Surplus Money</td><td>Excessive supply than demand in international market (Indian rupee)</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Liquidity of Money</div>
+      <div class="card-body">
+        <p class="note">Liquidity: Ability to convert assets into cash quickly without loss or delay.</p>
+        <div class="formula-box">Cash &gt; Bank Demand Deposits &gt; Bank Savings &gt; Bank Fixed Deposits</div>
+        <p class="note">Most liquid asset: Cash</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Velocity of Money</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Number of times a unit of money circulates in an economy within a specific period</li>
+          <li>Demand for Money is based on daily or future emergency needs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: MONEY SUPPLY -->
+  <div class="tab-content" id="supply">
+    <div class="card">
+      <div class="card-header red">Money Supply Measures</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Measure</th><th>Definition</th><th>Type</th><th>Liquidity</th></tr>
+          <tr><td>M₀</td><td>Currency in circulation + Bankers deposits with RBI + Other deposits with RBI</td><td>Reserve Money</td><td>—</td></tr>
+          <tr><td>M₁</td><td>Currency with Public + Net Demand deposits with commercial banks</td><td>Narrow Money</td><td>Highest</td></tr>
+          <tr><td>M₂</td><td>M₁ + Savings deposits with Post-office</td><td>Narrow Money</td><td>Less than M₁</td></tr>
+          <tr><td>M₃</td><td>M₂ + Net time deposits with commercial banks</td><td>Broad Money</td><td>Less than M₂</td></tr>
+          <tr><td>M₄</td><td>M₃ + Total post office deposits (excluding National Savings Certificates)</td><td>Broad Money</td><td>Lowest</td></tr>
+        </table></div>
+        <p class="note">Un-declared income / Black Money is part of the parallel economy.</p>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Liquidity decreases from M₁ to M₄ (M₁ = highest liquidity, M₄ = lowest) — the reverse order is a common trap in ranking-based questions.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Fisher's Exchange Equation</div>
+      <div class="card-body">
+        <div class="formula-box">MV = PT</div>
+        <p class="note">M = Money Supply, V = Velocity of Circulation, P = Price Level, T = Transactions</p>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Fisher's equation (MV=PT) is also the basis for the Money Illusion concept — perceiving nominal income without accounting for inflation.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: CURRENCY FACTS -->
+  <div class="tab-content" id="currency">
+    <div class="card">
+      <div class="card-header blue">Important Facts Related to Currency</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Issuance of paper currency under the monopoly of the Government of India after 1861</li>
+          <li>First note with Mahatma Gandhi's image: ₹100 in 1969; ₹500 in 1987; on all notes from 1996</li>
+          <li>All notes feature 17 languages (Hindi, English + 15 others)</li>
+          <li>Decimal system of currency adopted in 1957</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">₹ Symbol</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Designed By</span><span class="v">Uday Kumar (IIT Guwahati)</span></div>
+        <div class="info-row"><span class="k">Design Concept</span><span class="v">Combination of "₹" of Devanagari and Roman "R"</span></div>
+        <div class="info-row"><span class="k">Accepted</span><span class="v">2020</span></div>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">5th</span><span class="lbl">Country with own currency symbol</span></div>
+        </div>
+        <p class="note">Other 4 countries: USA (Dollar $), Japan (Yen ¥), European Union (Euro €), UK (Pound Sterling £)</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Devaluation of Currency</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Compared to foreign currency — decrease in the external value of currency</li>
+          <li>No effect on intrinsic value</li>
+        </ul>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="num">1949</span><span class="lbl">First Devaluation</span></div>
+          <div class="stat-box"><span class="num">1966</span><span class="lbl">Second Devaluation</span></div>
+          <div class="stat-box"><span class="num">1991</span><span class="lbl">Third Devaluation</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: INFLATION BASICS & TYPES -->
+  <div class="tab-content" id="inflation">
+    <div class="card">
+      <div class="card-header orange">Inflation — Meaning</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Continuous rise in the general price level</li>
+          <li>Decrease in currency price causes decrease in purchasing power</li>
+          <li>Money Illusion (Irving Fisher, MV=PT): Perceiving nominal income without accounting for inflation</li>
+        </ul>
+        <div class="info-row"><span class="k">Inflation Target in India</span><span class="v">4% ± 2%</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Causes of Inflation</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Demand Pull: Due to rise in demand</li>
+          <li>Cost Push: Due to rise in production cost</li>
+        </ul>
+        <p class="note">According to Keynes, actual inflation begins after the full employment point.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Types of Inflation</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Type</th><th>Description</th></tr>
+          <tr><td>Creeping Inflation</td><td>Inflation rate in single digits (3% or less)</td></tr>
+          <tr><td>Walking Inflation</td><td>3% to 6%, or less than 10% per annum</td></tr>
+          <tr><td>Running Inflation</td><td>Prices rise rapidly at 20–30% per annum</td></tr>
+          <tr><td>Galloping Inflation</td><td>Annual rate in two/three digits (20–100%)</td></tr>
+          <tr><td>Hyper Inflation</td><td>Inflation rate above triple digits</td></tr>
+          <tr><td>Open Inflation</td><td>Prices free to rise without government intervention</td></tr>
+          <tr><td>Imported Inflation</td><td>Due to rising prices of imported raw products (e.g., petroleum)</td></tr>
+        </table></div>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          Running Inflation (20–30%) and Galloping Inflation (20–100%) overlap in range but Galloping is the broader/more severe category — often confused as identical.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Other Inflation-Related Terms</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Disinflation: Slowdown in the rate of inflation (prices still rising, but slower)</li>
+          <li>Deflation: Fall in general price level (negative inflation)</li>
+          <li>Reflation: Deliberately raising prices by increasing money and credit</li>
+          <li>Stagflation: Both inflation and unemployment are high simultaneously</li>
+          <li>Headline Inflation: Total inflation including food and energy; measured by CPI-C</li>
+          <li>Core Inflation: First used in India (2000–01); excludes food and fuel; related to non-food manufactured goods</li>
+        </ul>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          Disinflation ≠ Deflation — Disinflation means prices are still rising but slower; Deflation means prices are actually falling.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: WPI & CPI -->
+  <div class="tab-content" id="measurement">
+    <div class="card">
+      <div class="card-header purple">Wholesale Price Index (WPI)</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">First Published</span><span class="v">January 1942</span></div>
+        <div class="info-row"><span class="k">Compiled By</span><span class="v">Office of Economic Advisor, Ministry of Commerce and Industry</span></div>
+        <div class="info-row"><span class="k">Frequency</span><span class="v">Monthly (earlier weekly)</span></div>
+        <div class="info-row"><span class="k">Base Year</span><span class="v">2011–12 (since 2017) — Committee: Saumitra Choudhuri</span></div>
+        <div class="info-row"><span class="k">New Proposed Base Year</span><span class="v">2022–23</span></div>
+        <h4 class="sub2">Major Groups (WPI) — Weightage</h4>
+        <div class="tbl-wrap"><table>
+          <tr><th>Group</th><th>Weight</th></tr>
+          <tr><td>Primary Articles</td><td>22.62%</td></tr>
+          <tr><td>Fuel and Power</td><td>13.15%</td></tr>
+          <tr><td>Manufactured Products</td><td>64.23%</td></tr>
+        </table></div>
+        <p class="note">PPI (Producer Price Index): Considered better than WPI and CPI; measures inflation from the producer's perspective.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Consumer Price Index (CPI)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Category</th><th>Full Form</th><th>Base Year</th><th>Compiled By</th><th>Key Use</th></tr>
+          <tr><td>CPI-IW</td><td>CPI – Industrial Workers</td><td>2016</td><td>Labour Bureau</td><td>Determining dearness allowance of employees</td></tr>
+          <tr><td>CPI-AL</td><td>CPI – Agricultural Labourers</td><td>2012</td><td>Labour Bureau</td><td>—</td></tr>
+          <tr><td>CPI-RL</td><td>CPI – Rural Labourers</td><td>2012</td><td>Labour Bureau</td><td>—</td></tr>
+          <tr><td>CPI-R</td><td>CPI – Rural</td><td>2012</td><td>—</td><td>—</td></tr>
+          <tr><td>CPI-U</td><td>CPI – Urban</td><td>2012</td><td>—</td><td>—</td></tr>
+          <tr><td>CPI-C</td><td>CPI – Combined (R + U)</td><td>2012</td><td>CSO (now NSO)</td><td>Used by RBI</td></tr>
+        </table></div>
+        <p class="note">CPI-C is used by RBI, published by the Central Statistics Office (now National Statistical Office).</p>
+        <div class="exam-trap">
+          <div class="label">⚠ EXAM TRAP</div>
+          CPI-IW has a different base year (2016) than all other CPI categories (2012) — a frequently tested exception.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Phillips Curve</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Proposed By</span><span class="v">A.W. Phillips</span></div>
+        <div class="info-row"><span class="k">Shows</span><span class="v">Inverse relationship between Inflation and Unemployment rates</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: CONTROLLING INFLATION -->
+  <div class="tab-content" id="control">
+    <div class="card">
+      <div class="card-header orange">Fiscal Measures (by Government)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Increase in direct taxes</li>
+          <li>Reduction in fiscal deficit — cut unnecessary expenditure, avoid deficit financing</li>
+          <li>Reduction in subsidies</li>
+          <li>Borrow money from public — reduces cash with people</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Monetary Measures (by RBI)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Increase in Repo Rate / Bank Rate — discourages borrowing</li>
+          <li>Increase in CRR and SLR — reduces banks' lending capacity</li>
+          <li>Sell government securities</li>
+          <li>Tight credit policy</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Measures to Tackle Monetary Contraction</div>
+      <div class="card-body">
+        <h4 class="sub2">Fiscal</h4>
+        <ul class="arrow-list">
+          <li>Increase public expenditure</li>
+          <li>Reduce taxes</li>
+          <li>Payment of loans</li>
+        </ul>
+        <h4 class="sub2">Monetary</h4>
+        <ul class="arrow-list">
+          <li>Circulation of currency</li>
+          <li>Accommodative monetary policy</li>
+        </ul>
+        <div class="quick-recall">
+          <div class="label">⚡ QUICK RECALL</div>
+          To FIGHT inflation: raise rates/taxes, cut spending. To fight monetary CONTRACTION (deflationary pressure): opposite — raise spending, cut taxes, ease money supply.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: QUICK REFERENCE -->
+  <div class="tab-content" id="quick">
+    <div class="card">
+      <div class="card-header gold">Quick Reference Summary</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <tr><th>Topic</th><th>Key Fact</th></tr>
+          <tr><td>Money Definition</td><td>Medium of exchange or payment for all goods and services</td></tr>
+          <tr><td>Most Liquid Asset</td><td>Cash</td></tr>
+          <tr><td>Legal Tender</td><td>Issued by government/central bank; must accept</td></tr>
+          <tr><td>Token Money</td><td>Intrinsic value &lt; Face value; Current ₹1 coin</td></tr>
+          <tr><td>Near Money</td><td>Easily convertible to cash — gold, silver, savings accounts</td></tr>
+          <tr><td>Fisher's Exchange Equation</td><td>MV = PT</td></tr>
+          <tr><td>M₁</td><td>Narrow Money; Highest Liquidity</td></tr>
+          <tr><td>M₄</td><td>Broad Money; Lowest Liquidity</td></tr>
+          <tr><td>M₀</td><td>Reserve Money</td></tr>
+          <tr><td>₹ Symbol Designed By</td><td>Uday Kumar (IIT Guwahati); accepted 2020</td></tr>
+          <tr><td>India</td><td>5th country to have its own currency symbol</td></tr>
+          <tr><td>Decimal Currency Adopted</td><td>1957</td></tr>
+          <tr><td>Devaluation in India</td><td>1949, 1966, 1991</td></tr>
+          <tr><td>Inflation</td><td>Continuous rise in general price level</td></tr>
+          <tr><td>Inflation Target (India)</td><td>4% ± 2%</td></tr>
+          <tr><td>Demand Pull Inflation</td><td>Rise in demand</td></tr>
+          <tr><td>Cost Push Inflation</td><td>Rise in production cost</td></tr>
+          <tr><td>Keynes on Inflation</td><td>Actual inflation begins after full employment point</td></tr>
+          <tr><td>Stagflation</td><td>High inflation + High unemployment simultaneously</td></tr>
+          <tr><td>Deflation</td><td>Fall in general price level (negative inflation)</td></tr>
+          <tr><td>Reflation</td><td>Deliberately raising prices by increasing money and credit</td></tr>
+          <tr><td>Headline Inflation</td><td>Measured by CPI-C; includes food and energy</td></tr>
+          <tr><td>Core Inflation</td><td>Excludes food and fuel; related to non-food manufactured goods</td></tr>
+          <tr><td>WPI First Published</td><td>January 1942; Base year: 2011–12; New proposed: 2022–23</td></tr>
+          <tr><td>WPI Compiled By</td><td>Office of Economic Advisor, Ministry of Commerce and Industry</td></tr>
+          <tr><td>PPI</td><td>Producer Price Index; better than WPI and CPI</td></tr>
+          <tr><td>CPI-IW Base Year</td><td>2016; compiled by Labour Bureau</td></tr>
+          <tr><td>CPI-C Used By</td><td>RBI; Base year 2012; published by NSO</td></tr>
+          <tr><td>Phillips Curve</td><td>Inverse relationship between inflation and unemployment</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Money and Inflation (Ch07) · BPSC / BSSC
+  </div>
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

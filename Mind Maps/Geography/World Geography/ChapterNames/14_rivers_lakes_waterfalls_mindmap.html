@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rivers, Lakes and Waterfalls | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 16px;font-size:0.85rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.95rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🏞️ RIVERS, LAKES AND WATERFALLS <span class="art-pill">World Geography · Ch 14</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('riversoverview')">Rivers Overview</button>
+    <button class="tab-btn" onclick="switchTab('toprivers')">Top 10 Rivers</button>
+    <button class="tab-btn" onclick="switchTab('lakes')">Major Lakes</button>
+    <button class="tab-btn" onclick="switchTab('waterfalls')">Major Waterfalls</button>
+    <button class="tab-btn" onclick="switchTab('facts')">Important Facts</button>
+  </div>
+
+  <!-- TAB 1: RIVERS OVERVIEW -->
+  <div id="riversoverview" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🏞️ Rivers — Key Concepts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Indus → Longest river of Pakistan</li>
+          <li>Brahmaputra (Tributary – Wang Chu river) → an Antecedent river</li>
+          <li><b>Volga River</b> (Russia) → Longest river of Europe</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌿 Drainage Patterns</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Dendritic Pattern</h4>
+            <ul class="arrow-list">
+              <li>Tree-branch-like shape — the most common drainage pattern</li>
+              <li>Tributaries join the main river at an acute angle</li>
+              <li>Forms on uniformly resistant rock</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Trellis Pattern</h4>
+            <ul class="arrow-list">
+              <li>Tributaries join the main river at a perpendicular (right) angle</li>
+              <li>Common in folded mountain/foothill regions, e.g. Bhutan/Himalayan foothills</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🇪🇺 Danube River</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Flows through 10 European countries: Germany, Austria, Slovakia, Croatia, Serbia, Hungary, Bulgaria, Romania, Moldova, Ukraine</li>
+          <li>Length – 2860 km</li>
+          <li>Origin – Black Forest (Germany)</li>
+          <li>Mouth – Black Sea</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Yangtze</span>
+          <span class="v">Longest river in Asia • Shanghai is situated on it</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Don't mix up <b>Dendritic</b> (acute-angle tributaries, most common) with <b>Trellis</b> (perpendicular tributaries, found in folded terrain like Bhutan) — these two drainage patterns are frequently swapped in MCQs.
+    </div>
+  </div>
+
+  <!-- TAB 2: TOP 10 RIVERS -->
+  <div id="toprivers" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌍 Major Rivers of the World (Top 10)</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name of River</th><th>Source</th><th>Falls Into</th><th>Length (km)</th></tr></thead>
+          <tbody>
+            <tr><td>Nile (Longest)</td><td>Ethiopian Highlands</td><td>Mediterranean Sea</td><td>6,650</td></tr>
+            <tr><td>Amazon (Largest by Volume)</td><td>Andes Mountains, Peru</td><td>Atlantic Ocean</td><td>6,400</td></tr>
+            <tr><td>Yangtze (Chang Jiang)</td><td>Tibetan Plateau</td><td>East China Sea</td><td>6,300</td></tr>
+            <tr><td>Mississippi-Missouri (World's largest river system)</td><td>Red Rock (Montana)</td><td>Gulf of Mexico</td><td>6,275</td></tr>
+            <tr><td>Yenisei</td><td>Tuva Mountains</td><td>Arctic Ocean</td><td>5,539</td></tr>
+            <tr><td>Huang He / Yellow River (China's Sorrow)</td><td>Kunlun Mountains</td><td>Bohai Sea</td><td>5,464</td></tr>
+            <tr><td>Ob</td><td>Altai Mountains</td><td>Gulf of Ob</td><td>5,410</td></tr>
+            <tr><td>Congo / Zaire</td><td>Confluence of Lualaba and Luapula</td><td>Atlantic Ocean</td><td>4,700</td></tr>
+            <tr><td>Amur</td><td>Northeast China</td><td>Sea of Okhotsk</td><td>4,444</td></tr>
+            <tr><td>Lena (Russia)</td><td>Lake Baikal</td><td>Arctic Ocean</td><td>4,400</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <ul class="arrow-list" style="margin-top:10px;">
+          <li>Congo / Zaire River – crosses the equator twice</li>
+          <li>Limpopo River (South Africa) – crosses the Tropic of Capricorn twice</li>
+          <li>Aswan Dam (Nile River)</li>
+          <li>Kariba Dam (Zambezi River)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Nile = Longest river (length) · Amazon = Largest river (volume/discharge) — two different superlatives, easily confused.
+    </div>
+  </div>
+
+  <!-- TAB 3: LAKES -->
+  <div id="lakes" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">🌊 Major Lakes of the World</div>
+      <div class="card-body">
+        <div class="info-row">
+          <span class="k">📌 Study of Inland Waters (Lakes, Rivers)</span>
+          <span class="v">Limnology</span>
+        </div>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name of Lake</th><th>Related Region</th><th>Area (sq. km)</th></tr></thead>
+          <tbody>
+            <tr><td>Caspian Sea (Largest saline water lake)</td><td>Kazakhstan, Turkmenistan, Azerbaijan, Russia and Iran</td><td>3,71,000</td></tr>
+            <tr><td>Lake Superior (Largest freshwater lake)</td><td>Canada and USA</td><td>82,100</td></tr>
+            <tr><td>Lake Victoria (Largest in Africa)</td><td>Uganda, Tanzania and Kenya</td><td>68,870</td></tr>
+            <tr><td>Lake Huron</td><td>Canada and USA</td><td>59,570</td></tr>
+            <tr><td>Lake Michigan</td><td>USA</td><td>58,030</td></tr>
+            <tr><td>Lake Tanganyika (Longest)</td><td>Congo, Tanzania, Zambia and Burundi</td><td>32,900</td></tr>
+            <tr><td>Lake Baikal (Deepest – 1642 m)</td><td>Russia</td><td>31,722</td></tr>
+            <tr><td>Great Bear Lake</td><td>Canada</td><td>31,153</td></tr>
+            <tr><td>Great Slave Lake</td><td>Canada</td><td>27,200</td></tr>
+            <tr><td>Lake Erie</td><td>Canada and USA</td><td>25,744</td></tr>
+            <tr><td>Lake Winnipeg</td><td>Canada</td><td>24,514</td></tr>
+            <tr><td>Lake Ontario</td><td>Canada and USA</td><td>18,960</td></tr>
+            <tr><td>Lake Ladoga</td><td>Russia</td><td>17,700</td></tr>
+            <tr><td>Lake Titicaca (Honeymoon Lake – Highest navigable lake)</td><td>Peru and Bolivia</td><td>8,372</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Caspian Sea = Largest <b>saline</b> lake; Lake Superior = Largest <b>freshwater</b> lake — both are "largest lake" answers but for different categories.
+    </div>
+  </div>
+
+  <!-- TAB 4: WATERFALLS -->
+  <div id="waterfalls" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">💦 Major Waterfalls of the World</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Location</th><th>Height (m)</th></tr></thead>
+          <tbody>
+            <tr><td>Angel Falls / Kerepakupai Merú (Highest)</td><td>Canaima, Venezuela (Carrao River)</td><td>979</td></tr>
+            <tr><td>Tugela Falls</td><td>South Africa</td><td>948</td></tr>
+            <tr><td>Yosemite Falls</td><td>California, USA</td><td>739</td></tr>
+            <tr><td>Mardalsfossen</td><td>Norway</td><td>655</td></tr>
+            <tr><td>Rjukan Falls</td><td>Norway</td><td>610</td></tr>
+            <tr><td>Ribbon Falls</td><td>California, USA</td><td>491</td></tr>
+            <tr><td>Jog Waterfall / Gersoppa (Sharavathi River)</td><td>Karnataka, India</td><td>253</td></tr>
+            <tr><td>Niagara Falls</td><td>USA-Canada Border</td><td>57</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-row">
+          <span class="k">📌 Jog (Gersoppa) Waterfall</span>
+          <span class="v">Also famous as Mahatma Gandhi Waterfall (Sharavathi River, Karnataka, India)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Niagara Falls is famous for water <b>volume</b>, not height — at only 57 m, it's far shorter than Angel Falls (979 m).
+    </div>
+  </div>
+
+  <!-- TAB 5: IMPORTANT FACTS -->
+  <div id="facts" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">📝 Important Facts — Rivers, Lakes &amp; Waterfalls</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fact</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Longest river in the world</td><td>Nile (6,650 km) – Ethiopian Highlands → Mediterranean Sea</td></tr>
+            <tr><td>Largest river by volume / discharge</td><td>Amazon (Atlantic Ocean)</td></tr>
+            <tr><td>Longest river in Asia</td><td>Yangtze (Chang Jiang) – 6,300 km (China)</td></tr>
+            <tr><td>Longest river in Europe</td><td>Volga (Russia)</td></tr>
+            <tr><td>World's largest river system</td><td>Mississippi-Missouri (USA)</td></tr>
+            <tr><td>Largest saline water lake</td><td>Caspian Sea (3,71,000 sq. km)</td></tr>
+            <tr><td>Largest freshwater lake</td><td>Lake Superior (Canada-USA)</td></tr>
+            <tr><td>Largest lake in Africa</td><td>Lake Victoria (Uganda, Tanzania, Kenya)</td></tr>
+            <tr><td>Deepest lake in the world</td><td>Lake Baikal (1,642 m deep) – Russia</td></tr>
+            <tr><td>Longest lake</td><td>Lake Tanganyika</td></tr>
+            <tr><td>Highest navigable lake</td><td>Lake Titicaca (Peru-Bolivia) – Honeymoon Lake</td></tr>
+            <tr><td>Highest waterfall</td><td>Angel Falls (979 m) – Venezuela</td></tr>
+            <tr><td>India's highest waterfall</td><td>Jog / Gersoppa Falls (253 m) – Karnataka (Sharavathi River)</td></tr>
+            <tr><td>Study of inland waters</td><td>Limnology</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Lake Baikal holds two records: <b>Deepest</b> lake AND source of the <b>Lena</b> River.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Rivers, Lakes and Waterfalls · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

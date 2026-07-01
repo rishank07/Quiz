@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Continents of the World | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1060px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 14px;font-size:0.82rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.85rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:9px 11px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:8px 11px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:10px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:12px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.05rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.75rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:9px 13px;margin:7px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.85rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.87rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:11px 13px;
+  }
+  .sub-box h4{color:#fff;font-size:0.88rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.83rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>🗺️ CONTINENTS OF THE WORLD <span class="art-pill">World Geography · Ch 29</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('asia')">Asia</button>
+    <button class="tab-btn" onclick="switchTab('africa')">Africa</button>
+    <button class="tab-btn" onclick="switchTab('namerica')">North America</button>
+    <button class="tab-btn" onclick="switchTab('samerica')">South America</button>
+    <button class="tab-btn" onclick="switchTab('europe')">Europe</button>
+    <button class="tab-btn" onclick="switchTab('ausant')">Australia &amp; Antarctica</button>
+    <button class="tab-btn" onclick="switchTab('summary')">Quick Reference Summary</button>
+  </div>
+
+  <!-- TAB 1: ASIA -->
+  <div id="asia" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌏 Asia — General Information</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">1st (23.8%)</div><div class="lbl">Largest by Area &amp; Population</div></div>
+          <div class="stat-box"><div class="num">48</div><div class="lbl">Countries</div></div>
+          <div class="stat-box"><div class="num">Everest</div><div class="lbl">Highest Point (8850 m)</div></div>
+          <div class="stat-box"><div class="num">Dead Sea</div><div class="lbl">Lowest Point (−400 m)</div></div>
+        </div>
+        <div class="info-row"><span class="k">Longest river</span><span class="v">Yangtze Kiang (Yangtze)</span></div>
+        <div class="info-row"><span class="k">Largest country</span><span class="v">Russia (area), India (population)</span></div>
+        <div class="info-row"><span class="k">Smallest country</span><span class="v">Maldives (population)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">⛰️ Plateaus &amp; Major Mountains</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Plateaus</h4>
+            <ul class="arrow-list">
+              <li>Tibet / Pamir Plateau ("Roof of the World")</li>
+              <li>Loess Plateau</li>
+              <li>Anatolian Plateau</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Major Mountains</h4>
+            <ul class="arrow-list">
+              <li>Hindu Kush, Himalayas, Elburz Mountains</li>
+              <li>Makran Mountains</li>
+              <li>Kunlun Mountains</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🏞️ Rivers, Lakes, Seas &amp; Islands</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Major Rivers</span><span class="v">Huang Ho, Amur, Lena, Mekong, Yenisei, Ob, Indus, Brahmaputra, Salween, Irrawaddy, Tarim, Tigris</span></div>
+        <div class="info-row"><span class="k">Major Lakes</span><span class="v">Caspian Sea, Baikal (deepest), Balkhash, Tonle, Issyk</span></div>
+        <div class="info-row"><span class="k">Major Seas</span><span class="v">Japan Sea, Yellow Sea, Arabian Sea, Red Sea (linked to Mediterranean via Suez Canal), Timor Sea</span></div>
+        <div class="info-row"><span class="k">Major Islands</span><span class="v">Borneo (largest), Sumatra, Java, Celebes/Sulawesi, Honshu</span></div>
+        <div class="info-row"><span class="k">Japan's Major Islands</span><span class="v">Honshu (251,132 km²), Hokkaido (83,941 km²), Kyushu (42,151 km²), Shikoku (18,787 km²)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🏷️ Country Nicknames &amp; Landlocked Countries</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Land of Golden Pagoda — Myanmar</li>
+          <li>Land of Canals — Pakistan</li>
+          <li>Pearl of the East — Sri Lanka</li>
+          <li>Land of the Thunderbolt — Bhutan</li>
+          <li>Land of the Rising Sun — Japan</li>
+          <li>Land between two rivers (Mesopotamia, Tigris &amp; Euphrates) — Iraq</li>
+          <li>Located in both Asia &amp; Europe — Russia and Turkey</li>
+        </ul>
+        <div class="info-row" style="margin-top:8px;">
+          <span class="k">Landlocked Countries</span>
+          <span class="v">Mongolia, Afghanistan, Kazakhstan, Laos, Kyrgyzstan, Tajikistan, Bhutan, Nepal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🏜️ Plains, Deserts &amp; Straits</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Major Plains</span><span class="v">Ganga-Brahmaputra (world's largest), Mekong (Myanmar), Si-Kiang (S. China), Meenam (Thailand)</span></div>
+        <div class="info-row"><span class="k">Major Deserts</span><span class="v">Arabia, Gobi, Rub' al Khali (Arabian Peninsula, SW Asia), Karakum, Kavir</span></div>
+        <div class="info-row"><span class="k">Malacca Strait</span><span class="v">Andaman Sea and South China Sea</span></div>
+        <div class="info-row"><span class="k">Hormuz Strait</span><span class="v">Persian Gulf and Gulf of Oman</span></div>
+        <div class="info-row"><span class="k">Bab-el-Mandeb Strait</span><span class="v">Red Sea and Gulf of Aden ("Gate of Tears")</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📌 Important Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Cradle of Civilization — Asia (river plains)</li>
+          <li>Hottest City — Jacobabad (58°C), Pakistan</li>
+          <li>Coldest Inhabited place — Verkhoyansk (Siberia)</li>
+          <li>Highest Rainfall area — Mawsynram (India)</li>
+          <li>Island between Asia and Australia — New Guinea</li>
+          <li>17°N latitude — Border of North and South Vietnam (historical)</li>
+          <li>38°N latitude — Border between North and South Korea</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Rub' al Khali lies in the <b>Southwest/West Asia</b> region (Arabian Peninsula) — not Southeast Asia, a mislabel commonly seen in study material.
+    </div>
+  </div>
+
+  <!-- TAB 2: AFRICA -->
+  <div id="africa" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🌍 Africa — General Information</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">2nd (20.3%)</div><div class="lbl">By Area &amp; Population</div></div>
+          <div class="stat-box"><div class="num">54</div><div class="lbl">Countries (maximum)</div></div>
+          <div class="stat-box"><div class="num">Kilimanjaro</div><div class="lbl">Highest Point (5895 m)</div></div>
+          <div class="stat-box"><div class="num">Lake Assal</div><div class="lbl">Lowest Point (−157 m)</div></div>
+        </div>
+        <div class="info-row"><span class="k">Largest country</span><span class="v">Algeria</span></div>
+        <div class="info-row"><span class="k">Smallest country</span><span class="v">Seychelles</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🏷️ Nicknames / Features</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Dark / Dense / Black Continent</li>
+          <li>Plateau Continent</li>
+          <li>Divided into two nearly equal halves by the Equator</li>
+          <li>Tropic of Cancer, Tropic of Capricorn, and the Equator all pass through it</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🏞️ Rivers &amp; Lakes</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Nile</span><span class="v">World's longest river • Origin: Lake Victoria (White Nile) • Mouth: Mediterranean Sea</span></div>
+        <div class="info-row"><span class="k">Congo (Zaire)</span><span class="v">Africa's 2nd largest river</span></div>
+        <div class="info-row"><span class="k">Niger</span><span class="v">3rd largest river</span></div>
+        <div class="info-row"><span class="k">Orange</span><span class="v">Largest river of South Africa</span></div>
+        <div class="info-row"><span class="k">Zambezi</span><span class="v">Home to Victoria Falls</span></div>
+        <div class="info-row"><span class="k">Major Lakes</span><span class="v">Victoria (Uganda-Kenya-Tanzania), Tanganyika (Congo-Tanzania), Nyasa (Mozambique-Tanzania), Chad (Nigeria-Cameroon), Nasser (Egypt-Sudan)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🏝️ Islands, Deserts, Peaks &amp; Plateaus</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Major Islands</span><span class="v">Madagascar (Africa's largest island), Socotra, Reunion, Bioko</span></div>
+        <div class="info-row"><span class="k">Major Deserts</span><span class="v">Sahara (world's largest &amp; hottest), Kalahari, Nubian, Namib</span></div>
+        <div class="info-row"><span class="k">Mountain Peaks</span><span class="v">Mount Kenya, Ras Dashen, Mount Meru</span></div>
+        <div class="info-row"><span class="k">Plateaus</span><span class="v">Katanga, Ahaggar (Algeria), Tibesti (Chad), Ethiopian (Abyssinia)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🌊 Seas, Straits &amp; Nicknames</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Mediterranean Sea</span><span class="v">Morocco, Algeria, Tunisia, Libya, Egypt</span></div>
+        <div class="info-row"><span class="k">Red Sea</span><span class="v">Separates Africa from Asia • Egypt, Sudan, Eritrea, Djibouti, Saudi Arabia, Yemen</span></div>
+        <div class="info-row"><span class="k">Mozambique Channel</span><span class="v">Between Mozambique and Madagascar</span></div>
+        <ul class="arrow-list" style="margin-top:8px;">
+          <li>Country of Forests — Zaire / DR Congo</li>
+          <li>Country of Palm Oil — Nigeria</li>
+          <li>Country of Gold &amp; Diamonds — South Africa</li>
+          <li>Malawi (old name) — Nyasaland</li>
+          <li>Zimbabwe + Zambia (old name) — Rhodesia</li>
+          <li>Horn of Africa — Ethiopia, Somalia, Djibouti, Eritrea</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📌 Important Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Major Dams: Aswan, Owen &amp; Sennar (Nile), Kariba (Zambezi), Kainji (Niger)</li>
+          <li>Egyptian cotton farmers — Fellah</li>
+          <li>Pretoria — Administrative capital of South Africa</li>
+          <li>Cape to Cairo Railway — Longest railway route in Africa</li>
+          <li>World-famous diamond mines — Kimberley (South Africa)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Lake Assal (Djibouti) is Africa's lowest point at about <b>157 m below sea level</b> — it's a below-sea-level depression, not an elevation, so remember the negative sign.
+    </div>
+  </div>
+
+  <!-- TAB 3: NORTH AMERICA -->
+  <div id="namerica" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🌎 North America — General Information</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">3rd (16.2%)</div><div class="lbl">By Area</div></div>
+          <div class="stat-box"><div class="num">23</div><div class="lbl">Countries</div></div>
+          <div class="stat-box"><div class="num">McKinley</div><div class="lbl">Highest Point (6193 m)</div></div>
+          <div class="stat-box"><div class="num">Death Valley</div><div class="lbl">Lowest Point (−86 m)</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>Twice the size of Europe</li>
+          <li>Discovered by Columbus in 1492 AD ("New World")</li>
+          <li>Named after Amerigo Vespucci</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🏔️ Mountains, Plateaus &amp; Deserts</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Mountain Ranges</span><span class="v">Rocky Mountains (Mount Elbert – highest peak), Alaska Range (Denali/McKinley), Cascade Range (Mount Rainier)</span></div>
+        <div class="info-row"><span class="k">Plateaus</span><span class="v">Columbia, Colorado, Labrador (Canada)</span></div>
+        <div class="info-row"><span class="k">Deserts</span><span class="v">Mojave, Sonoran, Arizona, Colorado</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🏞️ Rivers, Lakes &amp; Gulfs</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Missouri</span><span class="v">Longest river of North America</span></div>
+        <div class="info-row"><span class="k">Other Rivers</span><span class="v">Potomac (Washington D.C.), Saint Lawrence, Mackenzie, Colorado, Red, Rio Grande</span></div>
+        <div class="info-row"><span class="k">Great Lakes</span><span class="v">Superior (largest freshwater), Michigan, Huron, Erie (most polluted), Ontario</span></div>
+        <div class="info-row"><span class="k">Other Lakes</span><span class="v">Reindeer, Winnipeg, Great Salt Lake (USA)</span></div>
+        <div class="info-row"><span class="k">Major Gulfs</span><span class="v">Gulf of Mexico, Hudson Bay, Baffin Bay</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🌐 Straits &amp; Countries</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Davis Strait</span><span class="v">Baffin Bay and Labrador Sea</span></div>
+        <div class="info-row"><span class="k">Florida Strait</span><span class="v">Gulf of Mexico and Atlantic Ocean</span></div>
+        <div class="info-row"><span class="k">Bering Strait</span><span class="v">Separates Alaska (USA) from Russia</span></div>
+        <div class="info-row"><span class="k">Yucatan Strait</span><span class="v">Gulf of Mexico and Caribbean Sea</span></div>
+        <div class="info-row"><span class="k">Largest / Smallest country</span><span class="v">Canada (largest) / Saint Kitts and Nevis (smallest)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📌 Important Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>49° Parallel — Border between USA and Canada</li>
+          <li>141° West Longitude — Border between Alaska (USA) and Canada</li>
+          <li>Panama Canal — Connects North and South America</li>
+          <li>New York — One of the world's largest natural ports</li>
+          <li>Natives — Red Indians</li>
+          <li>Prairie grasslands — Known as the "Bread Basket"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: SOUTH AMERICA -->
+  <div id="samerica" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🌎 South America — General Information</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">4th (11.9%)</div><div class="lbl">By Area</div></div>
+          <div class="stat-box"><div class="num">12</div><div class="lbl">Countries</div></div>
+          <div class="stat-box"><div class="num">Aconcagua</div><div class="lbl">Highest Point (6962 m)</div></div>
+          <div class="stat-box"><div class="num">Valdés Pen.</div><div class="lbl">Lowest Point (−40 m)</div></div>
+        </div>
+        <div class="info-row"><span class="k">Shape</span><span class="v">Triangular</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">⛰️ Mountains, Gulfs &amp; Straits</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Andes</span><span class="v">World's longest mountain range (Fold Mountain) • Highest peak: Aconcagua</span></div>
+        <div class="info-row"><span class="k">Ojos del Salado</span><span class="v">Highest active volcanic mountain</span></div>
+        <div class="info-row"><span class="k">Gulf of Peñas</span><span class="v">Southern Chile (Pacific Ocean)</span></div>
+        <div class="info-row"><span class="k">Gulf of San Jorge</span><span class="v">Atlantic Ocean, East of Argentina</span></div>
+        <div class="info-row"><span class="k">Magellan Strait</span><span class="v">Separates Southern South America from Tierra del Fuego</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🏞️ Rivers, Lakes &amp; Islands</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Amazon</span><span class="v">World's longest river</span></div>
+        <div class="info-row"><span class="k">Other Rivers</span><span class="v">Orinoco, Rio Negro, Parana-Paraguay</span></div>
+        <div class="info-row"><span class="k">Titicaca Lake</span><span class="v">Highest navigable lake (Peru-Bolivia)</span></div>
+        <div class="info-row"><span class="k">Maracaibo Lake</span><span class="v">Largest lake in South America</span></div>
+        <div class="info-row"><span class="k">Galapagos Islands</span><span class="v">Belongs to Ecuador</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🏜️ Plateaus, Plains &amp; Deserts</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Plateaus</span><span class="v">Ecuador, Peru, Bolivia, Despoblado</span></div>
+        <div class="info-row"><span class="k">Plains</span><span class="v">Amazon, Parana-Paraguay, Llanos/Campos, Orinoco</span></div>
+        <div class="info-row"><span class="k">Deserts</span><span class="v">Atacama (hottest, nitrate reserves), Arica (driest), Patagonia (temperate desert)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📌 Important Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Largest/Smallest country: Brazil / Suriname</li>
+          <li>Equator passes through Ecuador, Colombia and Brazil</li>
+          <li>Both Tropic of Capricorn and the Equator pass through Brazil</li>
+          <li>Most Urbanized country — Uruguay</li>
+          <li>Largest city — São Paulo (Brazil)</li>
+          <li>Capital of Argentina — Buenos Aires</li>
+          <li>Latin America — includes South America, Central America and Western Islands</li>
+          <li>Coffee plantation (Brazil) — Fazenda • Coffee market — São Paulo</li>
+          <li>Pampas Grassland (Argentina) — "Wheat Crescent Belt"</li>
+          <li>Highest mineral reserves — Minas Gerais state (Brazil)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      South America's lowest point (near the Valdés Peninsula, Argentina) is <b>below sea level</b> — remember the negative sign, just like the Dead Sea or Death Valley.
+    </div>
+  </div>
+
+  <!-- TAB 5: EUROPE -->
+  <div id="europe" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🌍 Europe — General Information</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">6th (6.8%)</div><div class="lbl">By Area</div></div>
+          <div class="stat-box"><div class="num">44</div><div class="lbl">Countries</div></div>
+          <div class="stat-box"><div class="num">Elbrus</div><div class="lbl">Highest Point (5642 m)</div></div>
+          <div class="stat-box"><div class="num">Caspian Sea</div><div class="lbl">Lowest Point (−28 m)</div></div>
+        </div>
+        <div class="info-row"><span class="k">Largest / Smallest country</span><span class="v">Russia / Vatican City</span></div>
+        <ul class="arrow-list" style="margin-top:8px;">
+          <li>Smallest continent in the Northern Hemisphere</li>
+          <li>"Peninsula of Peninsulas"</li>
+          <li>Desert-free continent</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🏞️ Rivers, Seas &amp; Lakes</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Volga</span><span class="v">Longest river in Europe</span></div>
+        <div class="info-row"><span class="k">Rhine</span><span class="v">Europe's busiest inland waterway</span></div>
+        <div class="info-row"><span class="k">Other Rivers</span><span class="v">Seine (Paris), Elbe (Germany), Tiber (Rome), Thames (London), Spree (Berlin)</span></div>
+        <div class="info-row"><span class="k">Mediterranean Sea</span><span class="v">Separates Europe and Africa</span></div>
+        <div class="info-row"><span class="k">Black Sea</span><span class="v">Between Europe and Asia • Deltas of Danube, Dniester, Dnieper • Bordered by Romania, Bulgaria, Russia, Georgia, Ukraine, Turkey</span></div>
+        <div class="info-row"><span class="k">Other Seas</span><span class="v">White Sea (Northern Russia), Sea of Marmara, Azov Sea, Adriatic Sea</span></div>
+        <div class="info-row"><span class="k">Ladoga Lake</span><span class="v">Europe's largest lake (Russia)</span></div>
+        <div class="info-row"><span class="k">Other Lakes</span><span class="v">Balaton (Hungary), Vänern &amp; Vättern (Sweden)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">⛰️ Peninsulas, Mountains &amp; Gulfs</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Peninsulas</span><span class="v">Iberian (Portugal-Spain), Balkan, Kola, Crimea</span></div>
+        <div class="info-row"><span class="k">Mountains</span><span class="v">Caucasus (Elbrus – highest peak, Russia), Pennine (N. England), Jura (France), Black Forest (Germany), Alps (Young Fold Mountains), Vosges (France), Ural (boundary of Europe-Asia)</span></div>
+        <div class="info-row"><span class="k">Gulfs / Channels</span><span class="v">Bay of Biscay (Atlantic), Gulf of Bothnia (Baltic), English Channel (separates Britain and France)</span></div>
+        <div class="info-row"><span class="k">📌 First Indian woman to cross English Channel</span><span class="v">Arati Saha</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🌐 Straits, Regions &amp; Border Lines</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Gibraltar Strait</span><span class="v">Mediterranean Sea and Atlantic Ocean</span></div>
+        <div class="info-row"><span class="k">Kerch Strait</span><span class="v">Azov Sea and Black Sea</span></div>
+        <div class="info-row"><span class="k">Bosporus Strait</span><span class="v">Black Sea and Sea of Marmara</span></div>
+        <ul class="arrow-list" style="margin-top:8px;">
+          <li>Scandinavian Countries — Norway, Sweden, Denmark</li>
+          <li>Nordic Countries — Norway, Sweden, Denmark, Finland, Iceland</li>
+          <li>Baltic States — Estonia, Latvia, Lithuania</li>
+          <li>Great Britain — Scotland, Wales, England</li>
+          <li>United Kingdom — Great Britain and Northern Ireland</li>
+          <li>Balkan Countries — Serbia, Bulgaria, Romania, Albania, Montenegro, Greece, Slovenia, Croatia, Kosovo, Bosnia-Herzegovina, Macedonia</li>
+        </ul>
+        <div class="info-row" style="margin-top:8px;"><span class="k">Hindenburg Line</span><span class="v">Between Germany and Poland</span></div>
+        <div class="info-row"><span class="k">Mannerheim Line</span><span class="v">Between Soviet Russia and Finland</span></div>
+        <div class="info-row"><span class="k">Maginot Line</span><span class="v">French defensive line facing Germany</span></div>
+        <div class="info-row"><span class="k">Oder-Neisse Line</span><span class="v">Between East Germany and Poland</span></div>
+        <div class="info-row"><span class="k">Siegfried Line</span><span class="v">German defensive line facing France (WWII)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📌 Important Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Brenner Pass — Between Italy and Austria</li>
+          <li>Famous Wine — Champagne</li>
+          <li>World's Granary / Breadbasket — Steppe region</li>
+          <li>Italy and Greece — Famous for ancient civilizations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: AUSTRALIA & ANTARCTICA -->
+  <div id="ausant" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🇦🇺 Australia — General Information</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">7th (5.9%)</div><div class="lbl">Smallest continent by Area</div></div>
+          <div class="stat-box"><div class="num">14</div><div class="lbl">Countries (Oceania region)</div></div>
+          <div class="stat-box"><div class="num">Kosciuszko</div><div class="lbl">Highest Point (2228 m)</div></div>
+          <div class="stat-box"><div class="num">Lake Eyre</div><div class="lbl">Lowest Point (−15 m)</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>Country of Thirsty Lands — limited water availability</li>
+          <li>Island continent, spread across the entire continent</li>
+          <li>Australia, New Zealand, Tasmania, and island groups together form Oceania</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">⛰️ Mountains, Plateaus, Deserts &amp; Rivers</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Mountains</span><span class="v">Great Dividing Range, Broken Hills, Macdonnell Range, Mount Grey Range, Blue Mountains, Darling Range</span></div>
+        <div class="info-row"><span class="k">Plateaus / Deserts</span><span class="v">Kimberley Plateau • Great Sandy, Simpson, Great Victoria, Gibson Deserts</span></div>
+        <div class="info-row"><span class="k">Murray River</span><span class="v">Longest river in Australia</span></div>
+        <div class="info-row"><span class="k">Other Rivers</span><span class="v">Victoria, Darling, Murrumbidgee</span></div>
+        <div class="info-row"><span class="k">Cook Strait</span><span class="v">South Pacific Ocean and Tasman Sea</span></div>
+        <div class="info-row"><span class="k">Bass Strait</span><span class="v">Tasman Sea and Southern Ocean</span></div>
+        <div class="info-row"><span class="k">Great Barrier Reef</span><span class="v">World's largest coral reef (~1900 km), eastern coastal region</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">📌 Australia — Important Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Canberra — Capital of Australia</li>
+          <li>Wellington — Capital of New Zealand</li>
+          <li>Brisbane — Capital of Queensland</li>
+          <li>Kalgoorlie and Coolgardie — Famous gold mines</li>
+          <li>Maori — Natives of New Zealand</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🧊 Antarctica — General Information</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">5th (9.2%)</div><div class="lbl">By Area</div></div>
+          <div class="stat-box"><div class="num">Vinson Massif</div><div class="lbl">Highest Point (4892 m)</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>Ice-covered, white continent</li>
+          <li>Coldest and most desolate continent</li>
+          <li>Highest average elevation of any continent</li>
+          <li>World's largest desert (by area — a cold/polar desert)</li>
+          <li>Global centre for scientific research and observation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🏔️ Mountains, Glaciers, Valleys &amp; Research Centres</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Mountains/Glaciers</span><span class="v">Queen Maud Mountains, Mount Erebus (volcanic peak), Lambert Glacier (world's largest glacier)</span></div>
+        <div class="info-row"><span class="k">Valleys/Peninsulas</span><span class="v">Taylor Valley (Dry Valley), Palmer Peninsula (ice-free)</span></div>
+        <div class="info-row"><span class="k">India's Research Centres</span><span class="v">Dakshin Gangotri (1983), Maitri (1988-89), Bharati (2012)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📌 Important Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>World's lowest recorded temperature — Vostok Station, Antarctica (−89.2°C)</li>
+          <li>Himadri — India's first permanent research centre (in the Arctic, not Antarctica)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Himadri is India's first <b>Arctic</b> research station, while Dakshin Gangotri, Maitri, and Bharati are India's <b>Antarctic</b> stations — don't mix up the two polar regions.
+    </div>
+  </div>
+
+  <!-- TAB 7: QUICK REFERENCE SUMMARY -->
+  <div id="summary" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🗺️ Quick Reference Summary — All Continents</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Continent</th><th>Rank (Area)</th><th>Countries</th><th>Highest Point</th><th>Lowest Point</th><th>Largest Country</th><th>Smallest Country</th></tr></thead>
+          <tbody>
+            <tr><td>Asia</td><td>1st (23.8%)</td><td>48</td><td>Everest (8850 m)</td><td>Dead Sea (−400 m)</td><td>Russia (area), India (pop.)</td><td>Maldives (pop.)</td></tr>
+            <tr><td>Africa</td><td>2nd (20.3%)</td><td>54</td><td>Kilimanjaro (5895 m)</td><td>Lake Assal (−157 m)</td><td>Algeria</td><td>Seychelles</td></tr>
+            <tr><td>North America</td><td>3rd (16.2%)</td><td>23</td><td>Mt. McKinley (6193 m)</td><td>Death Valley (−86 m)</td><td>Canada</td><td>St. Kitts &amp; Nevis</td></tr>
+            <tr><td>South America</td><td>4th (11.9%)</td><td>12</td><td>Aconcagua (6962 m)</td><td>Valdés Peninsula (−40 m)</td><td>Brazil</td><td>Suriname</td></tr>
+            <tr><td>Antarctica</td><td>5th (9.2%)</td><td>0</td><td>Vinson Massif (4892 m)</td><td>Bentley Trench</td><td>—</td><td>—</td></tr>
+            <tr><td>Europe</td><td>6th (6.8%)</td><td>44</td><td>Elbrus (5642 m)</td><td>Caspian Sea (−28 m)</td><td>Russia</td><td>Vatican City</td></tr>
+            <tr><td>Australia</td><td>7th (5.9%)</td><td>14</td><td>Kosciuszko (2228 m)</td><td>Lake Eyre (−15 m)</td><td>Australia</td><td>Nauru</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Area ranking (largest to smallest): Asia &gt; Africa &gt; North America &gt; South America &gt; Antarctica &gt; Europe &gt; Australia — a sequence worth memorizing directly.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Continents of the World · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>

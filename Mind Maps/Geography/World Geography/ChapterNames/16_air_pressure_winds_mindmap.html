@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Air Pressure and Winds | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:60px;
+  }
+  .header{
+    text-align:center;
+    padding:22px 16px 14px;
+    border-bottom:2px solid var(--border);
+    background:linear-gradient(180deg, #161925 0%, var(--bg) 100%);
+  }
+  .header h1{color:var(--gold);font-size:1.5rem;letter-spacing:0.5px;}
+  .header p{color:#9aa0b4;font-size:0.9rem;margin-top:6px;}
+  .container{max-width:1040px;margin:0 auto;padding:18px 16px;}
+
+  .tab-nav{
+    display:flex;flex-wrap:wrap;gap:6px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  .tab-nav button{
+    background:var(--surface);color:#aab0c4;
+    border:1px solid var(--border);border-bottom:none;
+    padding:10px 14px;font-size:0.82rem;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer;transition:all 0.2s ease;
+  }
+  .tab-nav button:hover{background:var(--surface2);color:#fff;}
+  .tab-nav button.active{
+    background:var(--surface2);color:var(--gold);
+    border-color:var(--gold);box-shadow: inset 0 -3px 0 var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:18px;overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;font-weight:700;font-size:1rem;color:#0f1117;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#f5c842,#caa42e);}
+  .card-header.green{background:linear-gradient(90deg,#2ecc71,#23a05a); color:#08130c;}
+  .card-header.blue{background:linear-gradient(90deg,#3498db,#2477b3); color:#fff;}
+  .card-header.purple{background:linear-gradient(90deg,#9b59b6,#7d3f99); color:#fff;}
+  .card-header.orange{background:linear-gradient(90deg,#e67e22,#c2670f); color:#1a0d00;}
+  .card-header.red{background:linear-gradient(90deg,#e74c3c,#c0392b); color:#fff;}
+  .card-header.teal{background:linear-gradient(90deg,#1abc9c,#149b80); color:#06211c;}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 4px;border-bottom:1px dashed #2a2d3d;
+    display:flex;gap:8px;
+  }
+  .arrow-list li:last-child{border-bottom:none;}
+  .arrow-list li::before{content:"▸";color:var(--gold);font-weight:700;flex-shrink:0;}
+
+  .exam-trap{
+    background:#1a0909;border-left:4px solid var(--accent1);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .quick-recall{
+    background:#091524;border-left:4px solid var(--accent2);
+    border-radius:6px;padding:12px 16px;margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);font-weight:700;font-size:0.85rem;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88rem;}
+  thead th{
+    background:#2a2200;color:var(--gold);text-align:left;
+    padding:10px 12px;border-bottom:2px solid var(--gold);
+  }
+  tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:#dfe2ee;}
+  tbody tr:hover{background:var(--surface2);}
+  .tbl-wrap{overflow-x:auto;}
+
+  .art-pill{
+    display:inline-block;background:var(--surface2);
+    border:1px solid var(--gold);color:var(--gold);
+    font-size:0.75rem;font-weight:700;padding:2px 10px;
+    border-radius:999px;margin-left:8px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;margin:14px 0;
+  }
+  .stat-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+  }
+  .stat-box .num{color:var(--gold);font-size:1.15rem;font-weight:800;}
+  .stat-box .lbl{color:#9aa0b4;font-size:0.78rem;margin-top:4px;}
+
+  .info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;margin:8px 0;
+  }
+  .info-row .k{color:#aab0c4;font-size:0.88rem;}
+  .info-row .v{color:var(--gold);font-weight:700;font-size:0.9rem;text-align:right;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.two-col{grid-template-columns:1fr;}}
+  @media (max-width:760px){.three-col{grid-template-columns:1fr;}}
+
+  .sub-box{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:12px 14px;
+  }
+  .sub-box h4{color:#fff;font-size:0.92rem;margin-bottom:6px;}
+  .sub-box .founder{color:var(--gold);font-size:0.85rem;margin-bottom:8px;}
+
+  .footer{
+    text-align:center;color:#6c7286;font-size:0.8rem;
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  .footer .gold-txt{color:var(--gold);}
+
+/* ==== Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+
+/* ==== Mobile Responsive Patch ==== */
+html,body{overflow-x:hidden;}
+.card,.card-body,.sub-box,.container{min-width:0;}
+.arrow-list li{align-items:flex-start;word-break:break-word;overflow-wrap:anywhere;}
+@media(max-width:768px){
+*{max-width:100%;}
+.container{padding:10px;}
+.header h1{font-size:1.1rem;line-height:1.4;}
+.header p{font-size:.8rem;}
+.art-pill{display:block;width:max-content;margin:8px auto 0;}
+.tab-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav button{flex:0 0 auto;white-space:nowrap;}
+.card-body{padding:12px;}
+.arrow-list li{display:block;padding-left:18px;position:relative;}
+.arrow-list li::before{position:absolute;left:0;top:6px;}
+table{display:block;width:100%;overflow-x:auto;white-space:nowrap;}
+.info-row{display:block;}
+.info-row .v{display:block;margin-top:4px;}
+}
+
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-Q1WNRY8ECV');
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>💨 AIR PRESSURE AND WINDS <span class="art-pill">World Geography · Ch 16</span></h1>
+  <p>BPSC / BSSC — World Geography Mind Map Series</p>
+</div>
+
+<div class="container">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('pressure')">Air Pressure</button>
+    <button class="tab-btn" onclick="switchTab('belts')">Pressure Belts</button>
+    <button class="tab-btn" onclick="switchTab('coriolis')">Winds &amp; Coriolis</button>
+    <button class="tab-btn" onclick="switchTab('itcz')">ITCZ</button>
+    <button class="tab-btn" onclick="switchTab('permanent')">Permanent Winds</button>
+    <button class="tab-btn" onclick="switchTab('seasonal')">Seasonal Winds &amp; Breezes</button>
+    <button class="tab-btn" onclick="switchTab('local')">Local Winds</button>
+    <button class="tab-btn" onclick="switchTab('jetstream')">Jet Stream &amp; Facts</button>
+  </div>
+
+  <!-- TAB 1: AIR PRESSURE -->
+  <div id="pressure" class="tab-content active">
+    <div class="card">
+      <div class="card-header gold">🌡️ Air Pressure</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>The weight of an air column exerted per unit area</li>
+          <li>Pressure created by a mercury column 76 cm or 760 mm high</li>
+          <li>Unit: Millibar (mb) or Pascal (Pa)</li>
+          <li>Instrument: <b>Barometer</b> – weather indicator</li>
+          <li>Maximum air pressure: <b>1013.2 millibar</b> (at sea level)</li>
+          <li><b>Isobar:</b> A line connecting areas of equal atmospheric pressure</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">📊 Barometer Readings</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Stormy</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">Rapidly falls in reading</p>
+          </div>
+          <div class="sub-box">
+            <h4>Rain</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">Initially falls, then gradually rises</p>
+          </div>
+          <div class="sub-box">
+            <h4>Anticyclone / Clear Weather</h4>
+            <p style="font-size:0.85rem;color:#cfd3e2;">Continuous rise in reading</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      A rapidly falling barometer reading warns of an incoming storm.
+    </div>
+  </div>
+
+  <!-- TAB 2: PRESSURE BELTS -->
+  <div id="belts" class="tab-content">
+    <div class="card">
+      <div class="card-header green">🌍 Pressure Belts (Latitudinal)</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Belt</th><th>Location &amp; Key Feature</th></tr></thead>
+          <tbody>
+            <tr><td>Polar High Pressure</td><td>90°N and 90°S – Cold, descending air</td></tr>
+            <tr><td>Subpolar Low Pressure</td><td>60°–65°N and S – Rising air, cyclones</td></tr>
+            <tr><td>Subtropical High Pressure (Horse Latitudes)</td><td>30°–35°N and S – Descending air, dry regions, calm winds</td></tr>
+            <tr><td>Equatorial Low Pressure (Doldrums)</td><td>0°–5°N and S – Rising air, calm winds, heavy rainfall</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Both the <b>Horse Latitudes</b> (30–35°) and the <b>Doldrums</b> (0–5°) have calm winds, but for opposite reasons — Horse Latitudes = descending dry air; Doldrums = rising moist air. Don't mix them up.
+    </div>
+  </div>
+
+  <!-- TAB 3: WINDS & CORIOLIS -->
+  <div id="coriolis" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🌬️ Winds</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Horizontal air flow: High Pressure → Low Pressure (Pressure Gradient)</li>
+          <li>Warm air (low pressure) → Rises upward</li>
+          <li>Cold air (high pressure) → Sinks downward</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">🌀 Coriolis Force</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Wind deflects – Right in Northern Hemisphere, Left in Southern Hemisphere (Ferrel's Law)</li>
+          <li>Magnitude: Zero at the Equator, Maximum at the Poles</li>
+          <li>Proportional to angle of latitude</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Geostrophic Winds</span>
+          <span class="v">Flow parallel to Isobars</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      NHern → deflect Right · SHern → deflect Left (Ferrel's Law) — Coriolis Force is zero at the Equator.
+    </div>
+  </div>
+
+  <!-- TAB 4: ITCZ -->
+  <div id="itcz" class="tab-content">
+    <div class="card">
+      <div class="card-header red">🌦️ Inter Tropical Convergence Zone (ITCZ)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Zone where NE Trade Winds and SE Trade Winds converge</li>
+          <li>Shifts to 20°N–25°N latitude in July (Northern Hemisphere summer)</li>
+          <li>Forms a low pressure trough in equatorial latitudes</li>
+          <li>Region of calm winds (Doldrums), flanked by Northeastern and Southeastern Trade Winds</li>
+        </ul>
+        <div class="info-row">
+          <span class="k">📌 Naming Winds</span>
+          <span class="v">Based on the direction they blow FROM (direction of origin)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      ITCZ's seasonal shift towards 20–25°N in July is a key driver of the Indian Monsoon.
+    </div>
+  </div>
+
+  <!-- TAB 5: PERMANENT WINDS -->
+  <div id="permanent" class="tab-content">
+    <div class="card">
+      <div class="card-header teal">🌐 1. Global / Permanent Winds (Prevailing, Constant, Planetary)</div>
+      <div class="card-body">
+        <div class="three-col">
+          <div class="sub-box">
+            <h4>Trade Winds (Easterlies)</h4>
+            <ul class="arrow-list">
+              <li>Converging winds</li>
+              <li>Flow from subtropical high pressure zones towards the equatorial low pressure belt</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Westerlies</h4>
+            <ul class="arrow-list">
+              <li>Flow from subtropical high pressure zones towards subpolar low pressure areas</li>
+              <li>Southern Hemisphere: 40° – Roaring Forties, 50° – Furious Fifties, 60° – Shrieking Sixties</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Polar Winds</h4>
+            <ul class="arrow-list">
+              <li>Flow from Polar High Pressure to Subpolar Low Pressure</li>
+              <li>Dry, cold, prevailing winds (Polar Easterlies)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-row" style="margin-top:12px;">
+          <span class="k">📌 Horse Latitudes (30–35°N/S)</span>
+          <span class="v">Boundary separating Trade Winds and Westerlies</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      The Southern Hemisphere Westerlies naming sequence — <b>Roaring Forties (40°) → Furious Fifties (50°) → Shrieking Sixties (60°)</b> — increases in intensity as latitude increases; a commonly tested sequence.
+    </div>
+  </div>
+
+  <!-- TAB 6: SEASONAL WINDS & BREEZES -->
+  <div id="seasonal" class="tab-content">
+    <div class="card">
+      <div class="card-header gold">🍂 2. Seasonal Winds</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Change in wind direction according to season and time</li>
+          <li><b>Monsoon Winds</b> – seasonal change according to weather</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌅 Land Breeze and Sea Breeze</div>
+      <div class="card-body">
+        <div class="two-col">
+          <div class="sub-box">
+            <h4>Sea Breeze (Day)</h4>
+            <ul class="arrow-list">
+              <li>Flows from Sea → Land</li>
+              <li>Sea – High Pressure</li>
+              <li>Land – Low Pressure</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h4>Land Breeze (Night)</h4>
+            <ul class="arrow-list">
+              <li>Flows from Land → Sea</li>
+              <li>Land – High Pressure</li>
+              <li>Sea – Low Pressure</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-row" style="margin-top:10px;">
+          <span class="k">📌 Land vs Water heating</span>
+          <span class="v">Land heats &amp; cools quickly • Water heats &amp; cools slowly</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Sea Breeze blows during the <b>day</b> (land is hotter, low pressure); Land Breeze blows at <b>night</b> (sea is warmer, low pressure).
+    </div>
+  </div>
+
+  <!-- TAB 7: LOCAL WINDS -->
+  <div id="local" class="tab-content">
+    <div class="card">
+      <div class="card-header orange">🔥 Local Winds — Hot Winds</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Hot Wind</th><th>Region of Flow</th></tr></thead>
+          <tbody>
+            <tr><td>Chinook</td><td>Rocky Mountains, USA (Snow Eater)</td></tr>
+            <tr><td>Foehn (Föhn)</td><td>Alps – France, Italy</td></tr>
+            <tr><td>Simoom</td><td>Sahara, Jordan, Iraq, Syria</td></tr>
+            <tr><td>Khamsin</td><td>Egypt</td></tr>
+            <tr><td>Harmattan</td><td>Sahara region – West Africa ("Doctor Wind" on Guinea coast)</td></tr>
+            <tr><td>Sirocco</td><td>Northern Africa</td></tr>
+            <tr><td>Zonda</td><td>Argentina</td></tr>
+            <tr><td>Norwester</td><td>New Zealand, India</td></tr>
+            <tr><td>Brick Fielder</td><td>Australia (Desert Region)</td></tr>
+            <tr><td>Terral</td><td>Chile</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">❄️ Local Winds — Cold Winds</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Cold Wind</th><th>Region of Flow</th></tr></thead>
+          <tbody>
+            <tr><td>Mistral</td><td>France and Rhine River Valley</td></tr>
+            <tr><td>Bora</td><td>Adriatic Sea</td></tr>
+            <tr><td>Blizzard</td><td>Polar Regions</td></tr>
+            <tr><td>Levanter</td><td>Spain</td></tr>
+            <tr><td>Papagayo</td><td>Coast of Mexico</td></tr>
+            <tr><td>Pampero</td><td>Argentina, Uruguay, Chile</td></tr>
+            <tr><td>Purga</td><td>Russian Tundra Region</td></tr>
+            <tr><td>Buran</td><td>Russia and Central Asia</td></tr>
+            <tr><td>Joran</td><td>Switzerland (Jura mountains)</td></tr>
+            <tr><td>Nevadas</td><td>Ecuador</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-trap">
+      <div class="label">⚠ Exam Trap</div>
+      Chinook (Hot, Rocky Mountains) and Bora (Cold, Adriatic Sea) are frequently confused with each other in region-matching MCQs — remember Chinook = "Snow Eater," a warming wind.
+    </div>
+  </div>
+
+  <!-- TAB 8: JET STREAM & FACTS -->
+  <div id="jetstream" class="tab-content">
+    <div class="card">
+      <div class="card-header purple">🌪️ Jet Stream</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Found in Upper Troposphere / Tropopause – 9–13 km</li>
+          <li>In winter, the subtropical westerly Jet Stream flows over the Western Indian region</li>
+          <li>This causes <b>Western Disturbances</b> – affecting Punjab, Haryana, Western Uttar Pradesh</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">📝 Quick Reference — Key Facts</div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fact</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Standard air pressure at sea level</td><td>1013.2 millibar</td></tr>
+            <tr><td>Instrument to measure air pressure</td><td>Barometer</td></tr>
+            <tr><td>Calmest wind zone</td><td>Doldrums (Equatorial Low Pressure belt – 0°–5°)</td></tr>
+            <tr><td>Horse Latitudes</td><td>30°–35° N and S – Subtropical High Pressure belt</td></tr>
+            <tr><td>Roaring Forties / Furious Fifties / Shrieking Sixties</td><td>Westerlies in Southern Hemisphere (40°, 50°, 60°)</td></tr>
+            <tr><td>Chinook</td><td>Hot wind – Rocky Mountains USA (Snow Eater)</td></tr>
+            <tr><td>Foehn</td><td>Hot wind – Alps (France, Italy)</td></tr>
+            <tr><td>Mistral</td><td>Cold wind – France and Rhine River Valley</td></tr>
+            <tr><td>Blizzard</td><td>Cold wind – Polar Regions</td></tr>
+            <tr><td>Harmattan</td><td>Hot dry wind – Sahara region (West Africa) – "Doctor Wind" on Guinea coast</td></tr>
+            <tr><td>Jet Stream location</td><td>9–13 km (Upper Troposphere / Tropopause)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-recall">
+      <div class="label">⚡ Quick Recall</div>
+      Winter Western Disturbances over North-west India are caused by the subtropical <b>Jet Stream</b> — a frequently tested India-specific weather fact.
+    </div>
+  </div>
+
+  <div class="footer">
+    Exam Fusion Prep | examfusionprep.com · Air Pressure and Winds · BPSC / BSSC
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+document.getElementById(tabId).classList.add('active');
+const b=document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+if(b)b.classList.add('active');
+}
+</script>
+
+</body>
+</html>
