@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disaster and Disaster Management | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.84rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.88rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.8rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:0.92rem;
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:#aab0c6;}
+  .info-row .v{color:var(--text);font-weight:600;}
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+
+<div class="header">
+  <span class="art-pill">Environment & Ecology · Chapter 8</span>
+  <h1>Disaster and Disaster Management</h1>
+  <p>Earthquake zones, tsunami, landslide, flood, drought, cyclone & disaster management framework — for BPSC / BSSC preparation</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('earthquake')">Earthquake</button>
+  <button onclick="switchTab('tsunami')">Tsunami &amp; Landslide</button>
+  <button onclick="switchTab('flood')">Flood &amp; Drought</button>
+  <button onclick="switchTab('cyclone')">Cyclone &amp; Disaster Mgmt</button>
+  <button onclick="switchTab('other')">Other Disasters</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">4</div><div class="lbl">Earthquake Zones in India</div></div>
+          <div class="stat-box"><div class="num">2005</div><div class="lbl">Disaster Management Act</div></div>
+          <div class="stat-box"><div class="num">2007</div><div class="lbl">Indian Tsunami Early Warning System</div></div>
+          <div class="stat-box"><div class="num">1984</div><div class="lbl">Bhopal Gas Tragedy</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>This chapter covers major natural & man-made disasters — Earthquake, Tsunami, Landslide, Flood, Drought, Cyclone — along with India's institutional disaster management framework.</li>
+          <li>Also includes other notable disaster events: Cloudburst, Bhopal Gas Tragedy, and Chernobyl Disaster.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Disaster Management Act, 2005 established the three-tier structure: National, State, and District Disaster Management Authorities.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EARTHQUAKE -->
+  <div id="earthquake" class="tab-panel">
+    <div class="card">
+      <div class="card-header red">🌍 Earthquake</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Tectonic vibrations of the Earth's crust — result of instability in the fundamental rocks.</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Causes</h3>
+        <ul class="arrow-list">
+          <li>Movement of plate tectonics</li>
+          <li>Earth's rotation</li>
+          <li>Volcanic activity</li>
+          <li>Aquatic load, etc.</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Earthquake Zones of India</h3>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Zone</th><th>Risk Level</th><th>States / Regions</th></tr></thead>
+          <tbody>
+            <tr><td>Zone-2</td><td>Minimum impact (Intensity 6 or less)</td><td>Northern & eastern Rajasthan, Tamil Nadu, Northern Andhra Pradesh, Chhattisgarh, etc.</td></tr>
+            <tr><td>Zone-3</td><td>Moderate impact (Intensity VII)</td><td>Kerala, Goa, Gujarat, Uttar Pradesh, West Bengal, Odisha, etc.</td></tr>
+            <tr><td>Zone-4</td><td>High impact (Intensity VIII)</td><td>Jammu & Kashmir, Himachal Pradesh, Delhi, Sikkim, etc.</td></tr>
+            <tr><td>Zone-5</td><td>Very high impact (Intensity IX and above)</td><td>North-Eastern India, Uttarakhand, Western Himachal Pradesh, Andaman Islands, etc.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Delhi falls in Zone-4 (High impact) despite being a plains capital city — often wrongly assumed to be in a lower-risk zone.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TSUNAMI & LANDSLIDE -->
+  <div id="tsunami" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">🌊 Tsunami</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Tsunami is a Japanese word.</li>
+        </ul>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Causes</th><th>Effects</th></tr></thead>
+          <tbody>
+            <tr><td>Earthquake, volcanic eruption, submarine landslide</td><td>Coastal ecosystem affected, spread of toxic waste in coastal areas, migration of exotic species, damage to infrastructure, etc.</td></tr>
+          </tbody>
+        </table></div>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Tsunami Management</h3>
+        <ul class="arrow-list">
+          <li>Construction of sea walls.</li>
+          <li>Coastal plantation of mangrove vegetation, etc.</li>
+          <li>Establishment of Indian Tsunami Early Warning System (2007) — to give information and warning about tsunami effects.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">⛰ Landslide</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Downward falling of rocks along the slope due to gravity.</li>
+          <li>Common occurrence in Himalayan regions/states of India.</li>
+        </ul>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Causes</th><th>Effects</th><th>Management</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Rainfall and snowfall, mining and excavation, deforestation, infrastructure development</td>
+              <td>Damage to infrastructure, obstruction in river flow, hindrance in grazing, etc.</td>
+              <td>Afforestation, ban on mining, control over construction, contour farming, etc.</td>
+            </tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOOD & DROUGHT -->
+  <div id="flood" class="tab-panel">
+    <div class="card">
+      <div class="card-header teal">🌊 Flood</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Sudden rise in water in rivers, lakes, etc.</li>
+        </ul>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Causes</th><th>Effects</th><th>Management</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Heavy rainfall, change in river course, increase in siltation, faulty agricultural practices, faulty agriculture irrigation, etc.</td>
+              <td>Destruction of basic infrastructure, spread of water-borne diseases, soil erosion, soil salinisation, etc.</td>
+              <td>Construction of embankments, cleaning of river beds, development of flood warning systems, etc.</td>
+            </tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">☀ Drought (Atmospheric Disaster)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Causes</th><th>Effects</th></tr></thead>
+          <tbody>
+            <tr><td>Low rainfall for a long time, decrease in reservoir and groundwater level, water scarcity</td><td>Agriculture and animal husbandry affected, human & animal migration, famine, etc.</td></tr>
+          </tbody>
+        </table></div>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Major Programmes for Drought Management</h3>
+        <ul class="arrow-list">
+          <li>Desert Development Programme — 1977–78</li>
+          <li>National Watershed Development Project — 1990–91, etc.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Desert Development Programme (1977–78) predates the National Watershed Development Project (1990–91) by over a decade — don't swap the order.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CYCLONE & DISASTER MANAGEMENT -->
+  <div id="cyclone" class="tab-panel">
+    <div class="card">
+      <div class="card-header purple">🌀 Cyclone</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>A low pressure centre — occurs in both Temperate and Tropical regions (Tropical cyclones are more destructive).</li>
+          <li>Effects → Floods, coastal areas affected, etc.</li>
+          <li>Protection → Promoting mangrove vegetation in coastal areas.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">🏛 Disaster Management</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Formation of National, State and District Disaster (Management) Authorities.</li>
+          <li>Established under the Disaster Management Act, 2005.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTHER DISASTERS -->
+  <div id="other" class="tab-panel">
+    <div class="card">
+      <div class="card-header red">⚠ Other Disasters</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Disaster</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Cloudburst</td><td>Sudden heavy rainfall, especially in hilly areas | Causes flood problems</td></tr>
+            <tr><td>Bhopal Gas Tragedy</td><td>Bhopal, 3rd December 1984 | Leakage of methyl isocyanate poisonous gas</td></tr>
+            <tr><td>Chernobyl Disaster (Ukraine)</td><td>Industrial nuclear incident, 26th April 1986</td></tr>
+          </tbody>
+        </table></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Bhopal Gas Tragedy (1984, India) and Chernobyl Disaster (1986, Ukraine) occurred just 2 years apart — both are landmark man-made industrial disasters in world history.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Topic</th><th>Key Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Earthquake</td><td>Tectonic vibrations of Earth's crust | Causes: plate tectonics, volcanic activity</td></tr>
+            <tr><td>Zone-2</td><td>Minimum impact | Intensity 6 or less | Rajasthan, TN, N. AP, Chhattisgarh</td></tr>
+            <tr><td>Zone-3</td><td>Moderate | Intensity VII | Kerala, Goa, Gujarat, UP, West Bengal, Odisha</td></tr>
+            <tr><td>Zone-4</td><td>High | Intensity VIII | J&K, HP, Delhi, Sikkim</td></tr>
+            <tr><td>Zone-5</td><td>Very High | Intensity IX+ | North-East India, Uttarakhand, W. HP, Andaman Islands</td></tr>
+            <tr><td>Tsunami</td><td>Japanese word | Causes: Earthquake, volcanic eruption, submarine landslide</td></tr>
+            <tr><td>Indian Tsunami Early Warning System</td><td>Established 2007 | Warning about tsunami effects</td></tr>
+            <tr><td>Landslide</td><td>Downward falling of rocks due to gravity | Common in Himalayan states</td></tr>
+            <tr><td>Flood</td><td>Sudden rise in water | Causes: heavy rainfall, river course change, siltation</td></tr>
+            <tr><td>Drought</td><td>Atmospheric Disaster | Low rainfall, groundwater decline, water scarcity</td></tr>
+            <tr><td>Desert Development Programme</td><td>1977–78</td></tr>
+            <tr><td>National Watershed Development Project</td><td>1990–91</td></tr>
+            <tr><td>Cyclone Protection</td><td>Promoting mangrove vegetation in coastal areas</td></tr>
+            <tr><td>Disaster Management Act</td><td>2005 | Formation of National, State & District Disaster Authorities</td></tr>
+            <tr><td>Cloudburst</td><td>Sudden heavy rainfall in hilly areas | Causes flood problem</td></tr>
+            <tr><td>Bhopal Gas Tragedy</td><td>3 December 1984 | Methyl isocyanate gas leak</td></tr>
+            <tr><td>Chernobyl Disaster</td><td>Ukraine | 26 April 1986 | Industrial nuclear incident</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Disaster and Disaster Management · BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -1,11 +1,500 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>04 Wildlife Conservation Mindmap</title>
+<title>Wildlife Conservation | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.84rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.88rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.8rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:0.92rem;
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:#aab0c6;}
+  .info-row .v{color:var(--text);font-weight:600;}
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
 </head>
 <body>
+
+<div class="header">
+  <span class="art-pill">Environment & Ecology · Chapter 4</span>
+  <h1>Wildlife Conservation</h1>
+  <p>Biosphere reserves, tiger census, conservation projects & tiger reserves state-wise — for BPSC / BSSC preparation</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('biosphere')">Biosphere Reserves</button>
+  <button onclick="switchTab('facts')">Important Facts</button>
+  <button onclick="switchTab('tiger')">Tiger Census</button>
+  <button onclick="switchTab('projects')">Conservation Projects</button>
+  <button onclick="switchTab('reserves')">Tiger Reserves — State-wise</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">18</div><div class="lbl">Biosphere Reserves of India</div></div>
+          <div class="stat-box"><div class="num">58</div><div class="lbl">Tiger Reserves (2025)</div></div>
+          <div class="stat-box"><div class="num">3,682</div><div class="lbl">Total Tiger Population</div></div>
+          <div class="stat-box"><div class="num">75%</div><div class="lbl">India's Share of World Tigers</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>This chapter covers India's Biosphere Reserves under UNESCO's Man and Biosphere Programme, important wildlife facts, Tiger Census data, timeline of major wildlife conservation projects, and a complete state-wise list of India's 58 Tiger Reserves.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Project Tiger (1973) was launched from Jim Corbett National Park — the same park that was India's first National Park (as Hailey NP, 1936).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIOSPHERE RESERVES -->
+  <div id="biosphere" class="tab-panel">
+    <div class="card">
+      <div class="card-header green">🌳 Biosphere Reserve / Reserved Area</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Started under UNESCO's Man and Biosphere Programme (1971).</li>
+          <li>Purpose: conservation of ecosystems and their genetic materials.</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Biosphere Reserves of India</h3>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Biosphere Reserve</th><th>State / Location</th></tr></thead>
+          <tbody>
+            <tr><td>Cold Desert</td><td>Himachal Pradesh</td></tr>
+            <tr><td>Nanda Devi</td><td>Uttarakhand</td></tr>
+            <tr><td>Khangchendzonga</td><td>Sikkim</td></tr>
+            <tr><td>Dehang-Debang</td><td>Arunachal Pradesh</td></tr>
+            <tr><td>Manas</td><td>Assam</td></tr>
+            <tr><td>Dibru Saikhowa (Smallest)</td><td>Assam</td></tr>
+            <tr><td>Nokrek</td><td>Meghalaya</td></tr>
+            <tr><td>Sundarbans</td><td>West Bengal</td></tr>
+            <tr><td>Simlipal</td><td>Odisha</td></tr>
+            <tr><td>Pachmarhi</td><td>Madhya Pradesh</td></tr>
+            <tr><td>Panna</td><td>Madhya Pradesh</td></tr>
+            <tr><td>Achanakmar-Amarkantak</td><td>Madhya Pradesh & Chhattisgarh</td></tr>
+            <tr><td>Seshachalam Hills</td><td>Andhra Pradesh</td></tr>
+            <tr><td>Nilgiri (First, 1986)</td><td>Karnataka, Kerala</td></tr>
+            <tr><td>Agasthyamalai</td><td>Kerala & Tamil Nadu</td></tr>
+            <tr><td>Gulf of Mannar</td><td>Tamil Nadu</td></tr>
+            <tr><td>Great Rann of Kutch (Largest)</td><td>Gujarat</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Nilgiri was India's FIRST Biosphere Reserve (1986), while Great Rann of Kutch is the LARGEST — don't confuse "first" with "largest".
+        </div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Nagarhole National Park is part of the Nilgiri Biosphere Reserve — a commonly tested linkage.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMPORTANT FACTS -->
+  <div id="facts" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">📌 Important Facts</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Asian Black Bear and Snow Leopard are found in Nanda Devi and Valley of Flowers National Parks.</li>
+          <li>Estuarine Crocodile Conservation is carried out at Bhitarkanika Wildlife Sanctuary (Odisha).</li>
+          <li>First National Park of India (1936 AD) → Hailey National Park → later known as Jim Corbett National Park → renamed Ramganga National Park in 2021.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIGER CENSUS -->
+  <div id="tiger" class="tab-panel">
+    <div class="card">
+      <div class="card-header orange">🐅 Tiger Census</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">3,682</div><div class="lbl">Total Tiger Population</div></div>
+          <div class="stat-box"><div class="num">58</div><div class="lbl">Total Tiger Reserves (2025)</div></div>
+          <div class="stat-box"><div class="num">75%</div><div class="lbl">India's Share of World Tigers</div></div>
+          <div class="stat-box"><div class="num">75,769.83 km²</div><div class="lbl">Total Area Covered</div></div>
+        </div>
+        <div class="info-row"><span class="k">Highest Tiger Population (order)</span><span class="v">Madhya Pradesh > Karnataka > Uttarakhand</span></div>
+        <div class="info-row"><span class="k">"Tiger State"</span><span class="v">Madhya Pradesh</span></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Project Tiger was launched in 1973 from Jim Corbett National Park — Madhya Pradesh today holds the highest tiger population and is called the "Tiger State".
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div id="projects" class="tab-panel">
+    <div class="card">
+      <div class="card-header purple">🚀 Wildlife Conservation Projects — Timeline</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Project Name</th><th>Year</th></tr></thead>
+          <tbody>
+            <tr><td>Hangul Project</td><td>1970</td></tr>
+            <tr><td>Project Lion</td><td>1972</td></tr>
+            <tr><td>Project Tiger</td><td>1973</td></tr>
+            <tr><td>Crocodile Conservation</td><td>1975</td></tr>
+            <tr><td>Manipur Thamin Project</td><td>1977</td></tr>
+            <tr><td>Project Rhino</td><td>1987</td></tr>
+            <tr><td>Project Elephant</td><td>1992</td></tr>
+            <tr><td>Project Red Panda</td><td>1994</td></tr>
+            <tr><td>Project Turtle</td><td>1999</td></tr>
+            <tr><td>Project Snow Leopard</td><td>2009</td></tr>
+            <tr><td>Project Great Indian Bustard</td><td>2013</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Hangul Project (1970) predates Project Tiger (1973) by 3 years — a common "which came first" trap since Project Tiger is far more famous.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIGER RESERVES STATE-WISE -->
+  <div id="reserves" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🗺 Tiger Reserves in India — State-wise (58 Total, 2025)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>State</th><th>Tiger Reserves</th></tr></thead>
+          <tbody>
+            <tr><td>Rajasthan</td><td>Ranthambore National Park, Sariska National Park, Mukundra Hills Tiger Reserve, Ramgarh Vishdhari Tiger Reserve, Dholpur-Karauli</td></tr>
+            <tr><td>Uttarakhand</td><td>Kalagarh-Corbett, Rajaji Tiger Reserve</td></tr>
+            <tr><td>Uttar Pradesh</td><td>Dudhwa Tiger Reserve, Pilibhit Tiger Reserve, Ranipur Tiger Reserve</td></tr>
+            <tr><td>Bihar</td><td>Valmiki Tiger Reserve</td></tr>
+            <tr><td>Jharkhand</td><td>Palamau Tiger Reserve</td></tr>
+            <tr><td>West Bengal</td><td>Sundarbans National Park, Buxa Tiger Reserve</td></tr>
+            <tr><td>Assam</td><td>Manas National Park, Nameri National Park, Kaziranga National Park, Orang National Park</td></tr>
+            <tr><td>Arunachal Pradesh</td><td>Namdapha National Park, Pakke Tiger Reserve, Kamlang Tiger Reserve</td></tr>
+            <tr><td>Mizoram</td><td>Dampa Tiger Reserve</td></tr>
+            <tr><td>Odisha</td><td>Simlipal National Park, Satkosia Tiger Reserve</td></tr>
+            <tr><td>Madhya Pradesh</td><td>Kanha National Park, Bandhavgarh National Park, Panna National Park, Sanjay-Dubri Tiger Reserve, Satpura Tiger Reserve, Pench Tiger Reserve, Veerangana Durgavati Tiger Reserve, Ratapani Tiger Reserve, Madhav National Park</td></tr>
+            <tr><td>Chhattisgarh</td><td>Indravati National Park, Udanti-Sitanadi Tiger Reserve, Achanakmar Tiger Reserve, Guru Ghasidas-Sanjay Tiger Reserve (Tamor Pingla)</td></tr>
+            <tr><td>Telangana</td><td>Kawal Tiger Reserve, Amrabad Tiger Reserve (Biggest Tiger Reserve)</td></tr>
+            <tr><td>Andhra Pradesh</td><td>Nagarjunasagar-Srisailam Tiger Reserve</td></tr>
+            <tr><td>Maharashtra</td><td>Melghat Tiger Reserve, Tadoba-Andhari Tiger Reserve (oldest in Maharashtra), Pench National Park, Sahyadri Tiger Reserve, Navegaon-Nagzira Tiger Reserve, Bor Tiger Reserve (Smallest Tiger Reserve)</td></tr>
+            <tr><td>Karnataka</td><td>Bandipur National Park, Bhadra Tiger Reserve, Kali Tiger Reserve (Dandeli-Anshi), Nagarhole Tiger Reserve, Biligiri Ranganatha Tiger Reserve</td></tr>
+            <tr><td>Kerala</td><td>Periyar Tiger Reserve, Parambikulam Tiger Reserve</td></tr>
+            <tr><td>Tamil Nadu</td><td>Kalakad-Mundanthurai Tiger Reserve, Annamalai (Indira Gandhi) Tiger Reserve, Mudumalai Tiger Reserve, Sathyamangalam Tiger Reserve, Srivilliputhur-Megamalai Tiger Reserve</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Amrabad (Telangana) is the Biggest Tiger Reserve while Bor (Maharashtra) is the Smallest — a very commonly asked pair; don't mix up which state has which.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Topic</th><th>Key Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Biosphere Reserve — Programme</td><td>UNESCO's Man and Biosphere Programme (1971)</td></tr>
+            <tr><td>First Biosphere Reserve of India</td><td>Nilgiri (1986) | Karnataka, Kerala</td></tr>
+            <tr><td>Largest Biosphere Reserve</td><td>Great Rann of Kutch (Gujarat)</td></tr>
+            <tr><td>Smallest Biosphere Reserve</td><td>Dibru Saikhowa (Assam)</td></tr>
+            <tr><td>Nagarhole National Park</td><td>Part of Nilgiri Biosphere Reserve</td></tr>
+            <tr><td>First National Park of India</td><td>Hailey National Park (1936) → Jim Corbett → Renamed Ramganga NP in 2021</td></tr>
+            <tr><td>Estuarine Crocodile Conservation</td><td>Bhitarkanika Wildlife Sanctuary (Odisha)</td></tr>
+            <tr><td>Project Tiger — Launched</td><td>1973 | Jim Corbett National Park</td></tr>
+            <tr><td>Total Tiger Reserves</td><td>58 (as of 2025)</td></tr>
+            <tr><td>Total Tiger Population</td><td>3,682</td></tr>
+            <tr><td>India's share of world tigers</td><td>75%</td></tr>
+            <tr><td>Tiger Reserves — Total Area</td><td>75,769.83 sq km</td></tr>
+            <tr><td>Highest Tiger Population — State</td><td>Madhya Pradesh > Karnataka > Uttarakhand</td></tr>
+            <tr><td>Biggest Tiger Reserve</td><td>Amrabad Tiger Reserve (Telangana)</td></tr>
+            <tr><td>Smallest Tiger Reserve</td><td>Bor Tiger Reserve (Maharashtra)</td></tr>
+            <tr><td>Oldest Tiger Reserve in Maharashtra</td><td>Tadoba-Andhari Tiger Reserve</td></tr>
+            <tr><td>Hangul Project</td><td>1970</td></tr>
+            <tr><td>Project Lion</td><td>1972</td></tr>
+            <tr><td>Project Tiger</td><td>1973</td></tr>
+            <tr><td>Crocodile Conservation</td><td>1975</td></tr>
+            <tr><td>Project Rhino</td><td>1987</td></tr>
+            <tr><td>Project Elephant</td><td>1992</td></tr>
+            <tr><td>Project Red Panda</td><td>1994</td></tr>
+            <tr><td>Project Snow Leopard</td><td>2009</td></tr>
+            <tr><td>Project Great Indian Bustard</td><td>2013</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Wildlife Conservation · BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
 
 </body>
 </html>

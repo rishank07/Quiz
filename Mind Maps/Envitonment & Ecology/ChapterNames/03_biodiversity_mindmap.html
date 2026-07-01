@@ -1,11 +1,549 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>03 Biodiversity Mindmap</title>
+<title>Biodiversity | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.84rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.88rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.8rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:0.92rem;
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:#aab0c6;}
+  .info-row .v{color:var(--text);font-weight:600;}
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+  .pyramid-flow{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    margin:12px 0;
+    font-size:0.85rem;
+  }
+  .pyramid-flow span{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    padding:6px 12px;
+    border-radius:6px;
+    color:var(--text);
+  }
+  .pyramid-flow .arrow{
+    color:var(--gold);
+    background:none;
+    border:none;
+    padding:0;
+  }
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
 </head>
 <body>
+
+<div class="header">
+  <span class="art-pill">Environment & Ecology · Chapter 3</span>
+  <h1>Biodiversity</h1>
+  <p>Levels of biodiversity, hotspots, conservation, IUCN Red List & Ramsar Wetlands — for BPSC / BSSC preparation</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('levels')">Levels of Biodiversity</button>
+  <button onclick="switchTab('hotspots')">Biodiversity Hotspots</button>
+  <button onclick="switchTab('conservation')">Conservation Methods</button>
+  <button onclick="switchTab('redlist')">Red Data Book &amp; IUCN</button>
+  <button onclick="switchTab('ramsar')">Ramsar Convention</button>
+  <button onclick="switchTab('ramsarstates')">Ramsar Sites — State-wise</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">3</div><div class="lbl">Levels of Biodiversity</div></div>
+          <div class="stat-box"><div class="num">4</div><div class="lbl">India's Biodiversity Hotspots</div></div>
+          <div class="stat-box"><div class="num">91</div><div class="lbl">Ramsar Sites in India (Jun 2025)</div></div>
+          <div class="stat-box"><div class="num">1948</div><div class="lbl">IUCN Established</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>Biodiversity is the variety of life on Earth at all levels — from genes and species to entire ecosystems.</li>
+          <li>This chapter covers levels of biodiversity (Alpha/Beta/Gamma), biodiversity hotspots, in-situ & ex-situ conservation methods, IUCN Red List categories, and the Ramsar Convention with India's 91 wetland sites (state-wise).</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Biodiversity decreases from equator to poles — tropical regions (rainforests, coral reefs, islands) hold the highest biodiversity on Earth.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVELS -->
+  <div id="levels" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🧬 Types / Levels of Biodiversity</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Type</th><th>Measurement</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Genetic Diversity</td><td>Alpha (α) Diversity — Numerical diversity</td><td>Variation within organisms/species</td></tr>
+            <tr><td>Species Diversity</td><td>Beta (β) Diversity — Structural diversity</td><td>Diversity among species/communities</td></tr>
+            <tr><td>Community Diversity</td><td>Gamma (γ) Diversity — Diversity of inter-relationships (Proposed by Whittaker)</td><td>Diversity among communities/landscapes</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Gamma diversity concept was proposed by Whittaker — often wrongly attributed to other ecologists in MCQs.
+        </div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Highest Biodiversity zones: Tropical Rainforests, Coral Reefs, Islands, Tropical Marine Zones. Largest Coral Reef → Great Barrier Reef (Australia), nicknamed "Rainforest of the Ocean".
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOTSPOTS -->
+  <div id="hotspots" class="tab-panel">
+    <div class="card">
+      <div class="card-header green">🔥 Biodiversity Hotspots</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Concept: areas with more diversity + more threat to that diversity.</li>
+          <li>Given by → Norman Myers (1988 AD).</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">India's Biodiversity Hotspots (4)</h3>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Hotspot</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Western Ghats, Sri Lanka region</td></tr>
+            <tr><td>2</td><td>Eastern Himalaya region</td></tr>
+            <tr><td>3</td><td>Indo-Burma region</td></tr>
+            <tr><td>4</td><td>Sundaland, Nicobar Island group</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONSERVATION -->
+  <div id="conservation" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">🏞 In-situ Conservation (On-site)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>National Parks</li>
+          <li>Wildlife Sanctuaries</li>
+          <li>Sacred Groves</li>
+          <li>Lakes, etc.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🧪 Ex-situ Conservation (Off-site)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Biological Parks</li>
+          <li>Zoos</li>
+          <li>DNA Banks</li>
+          <li>Conservation Sites</li>
+          <li>Seed Banks, etc.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          In-situ = conservation "in the natural habitat" | Ex-situ = conservation "outside the natural habitat" — the Latin roots (in vs ex) directly hint at the meaning.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RED LIST -->
+  <div id="redlist" class="tab-panel">
+    <div class="card">
+      <div class="card-header red">📕 Red Data Book / Endangered Species — IUCN</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Full Form</span><span class="v">International Union for Conservation of Nature (IUCN)</span></div>
+        <div class="info-row"><span class="k">Established</span><span class="v">1948</span></div>
+        <div class="info-row"><span class="k">Headquarters</span><span class="v">Gland, Switzerland</span></div>
+        <div class="info-row"><span class="k">Objective</span><span class="v">Conservation of rare species, nature and natural resources</span></div>
+        <div class="info-row"><span class="k">Red List Publication — Plants</span><span class="v">1978</span></div>
+        <div class="info-row"><span class="k">Red List Publication — Animals</span><span class="v">1988</span></div>
+
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Categories of Endangered Species (decreasing severity)</h3>
+        <div class="pyramid-flow">
+          <span>Extinct</span><span class="arrow">→</span>
+          <span>Critically Endangered</span><span class="arrow">→</span>
+          <span>Endangered</span><span class="arrow">→</span>
+          <span>Vulnerable</span><span class="arrow">→</span>
+          <span>Near Threatened</span>
+        </div>
+
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Examples of Endangered Animals</h3>
+        <ul class="arrow-list">
+          <li>Asiatic Cheetah, Pink-headed Duck, Indian Cheetah, Vultures, Nilgai, Golden Langur, Great Indian Bustard, etc.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          IUCN Red List publication dates differ by species type — Plants (1978) came a decade before Animals (1988). Don't swap these two years.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAMSAR -->
+  <div id="ramsar" class="tab-panel">
+    <div class="card">
+      <div class="card-header teal">💧 Ramsar Convention — Conservation of Wetlands</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Purpose</span><span class="v">Conservation of Wetlands on Marshy Lands</span></div>
+        <div class="info-row"><span class="k">Ramsar Convention signed</span><span class="v">2nd February, 1971 — Ramsar, Iran</span></div>
+        <div class="info-row"><span class="k">Related observance</span><span class="v">World Wetland Day (2nd February)</span></div>
+        <div class="info-row"><span class="k">India joined</span><span class="v">1982</span></div>
+        <div class="info-row"><span class="k">Total Ramsar Sites in India</span><span class="v">91 (as per June, 2025)</span></div>
+        <div class="info-row"><span class="k">Highest Ramsar Sites — State</span><span class="v">Tamil Nadu (20)</span></div>
+        <div class="info-row"><span class="k">Largest Ramsar Site</span><span class="v">Sundarbans (West Bengal)</span></div>
+        <div class="info-row"><span class="k">Smallest Ramsar Site</span><span class="v">Renuka (Himachal Pradesh)</span></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Ramsar Convention was signed in 1971 but India only joined in 1982 — an 11-year gap frequently tested as a standalone MCQ.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAMSAR STATES -->
+  <div id="ramsarstates" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🗺 Ramsar Wetland Sites in India — State-wise (91 Sites, June 2025)</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>State / UT</th><th>Ramsar Sites</th></tr></thead>
+          <tbody>
+            <tr><td>Jammu & Kashmir</td><td>Hokesar, Surinsar-Mansar Lakes, Wular Lake, Haigam Wetland Conservation Reserve, Shallabugh Wetland Conservation Reserve</td></tr>
+            <tr><td>Ladakh</td><td>Tso Kar Wetland Complex, Tsomoriri Lake</td></tr>
+            <tr><td>Himachal Pradesh</td><td>Chanderal Wetland, Pong Dam Lake, Renuka Wetland</td></tr>
+            <tr><td>Punjab</td><td>Beas Conservation Reserve, Harike Wetland, Kanjli Wetland, Ropar Wetland, Keshopur-Miani Community Reserve, Nangal Wildlife Sanctuary</td></tr>
+            <tr><td>Haryana</td><td>Bhindawas Wildlife Sanctuary, Sultanpur National Park</td></tr>
+            <tr><td>Uttarakhand</td><td>Asan Conservation Reserve</td></tr>
+            <tr><td>Uttar Pradesh</td><td>Nawabganj Bird Sanctuary, Parvati Arga Bird Sanctuary, Saman Bird Sanctuary, Samaspur Bird Sanctuary, Sandi Bird Sanctuary, Sarsai Nawar Jheel, Sur Sarovar, Upper Ganga River, Haiderpur Wetland, Bakhira Bird Sanctuary</td></tr>
+            <tr><td>Sikkim</td><td>Khecheopalri Wetland</td></tr>
+            <tr><td>Assam</td><td>Deepor Beel</td></tr>
+            <tr><td>Manipur</td><td>Loktak Lake</td></tr>
+            <tr><td>Tripura</td><td>Rudrasagar Lake</td></tr>
+            <tr><td>Mizoram</td><td>Pala Wetland</td></tr>
+            <tr><td>Rajasthan</td><td>Keoladeo National Park, Sambhar Lake, Kichan, Menar</td></tr>
+            <tr><td>Gujarat</td><td>Nalsarovar Bird Sanctuary, Thol Lake Wildlife Sanctuary, Wadhwana Wetland, Khijadia Wildlife Sanctuary</td></tr>
+            <tr><td>Madhya Pradesh</td><td>Bhoj Wetland, Sakhya Sagar, Sirpur Wetland, Yashwant Sagar, New Reservoir</td></tr>
+            <tr><td>Maharashtra</td><td>Lonar Lake, Nandur Madhameshwar, Thane Creek</td></tr>
+            <tr><td>Goa</td><td>Nanda Lake</td></tr>
+            <tr><td>Karnataka</td><td>Ranganathittu Bird Sanctuary, Ankasamudra, Asanasanini, Magadikere</td></tr>
+            <tr><td>Kerala</td><td>Ashtamudi Wetland, Sasthamkotta Lake, Vembanad-Kol Wetland</td></tr>
+            <tr><td>Jharkhand</td><td>Udhwa Lake</td></tr>
+            <tr><td>Bihar</td><td>Kabar Tal Wetland, Nagi Bird Sanctuary, Nakti Bird Sanctuary</td></tr>
+            <tr><td>West Bengal</td><td>East Kolkata Wetlands, Sundarbans Wetland</td></tr>
+            <tr><td>Odisha</td><td>Bhitarkanika Mangroves, Chilika Lake, Sakoshia, Tampura Lake, Hirakud Reservoir, Ansupa Lake</td></tr>
+            <tr><td>Andhra Pradesh</td><td>Kolleru Lake</td></tr>
+            <tr><td>Tamil Nadu</td><td>Point Calimere Wildlife and Bird Sanctuary, Karikili Bird Sanctuary, Pallikaranai Marsh Reserve Forest, Pichavaram Mangrove, Gulf of Mannar Marine Biosphere Reserve, Vembannur Wetland Complex, Chitrangudi Bird Sanctuary, Suchindram Theroor Wetland Complex, Vaduvur Bird Sanctuary, Kanjirankulam Bird Sanctuary, Velode Bird Sanctuary, Udayamarthandapuram Bird Sanctuary, Kuthankulum Bird Sanctuary, Vedanthangal Bird Sanctuary, Karaivetti Bird Sanctuary, Long Shola Reserve Forest, Nanjarayan Bird Sanctuary, Kazhuveli Bird Sanctuary, Sakkarakottai Bird Sanctuary, Therthangal Bird Sanctuary</td></tr>
+          </tbody>
+        </table></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Tamil Nadu alone has 20 Ramsar sites — the highest of any state — mostly bird sanctuaries clustered in the state's wetland belt.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Topic</th><th>Key Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Biodiversity — Definition</td><td>Variety of life at all levels from genes to ecosystem</td></tr>
+            <tr><td>Alpha (α) Diversity</td><td>Numerical diversity | Genetic diversity</td></tr>
+            <tr><td>Beta (β) Diversity</td><td>Structural diversity | Species diversity</td></tr>
+            <tr><td>Gamma (γ) Diversity</td><td>Diversity of inter-relationships | Proposed by Whittaker</td></tr>
+            <tr><td>Highest Biodiversity</td><td>Tropical Rainforests, Coral reefs, Islands, Tropical marine zones</td></tr>
+            <tr><td>Largest Coral Reef</td><td>Great Barrier Reef (Australia)</td></tr>
+            <tr><td>Biodiversity Hotspots — Concept</td><td>Norman Myers (1988 AD)</td></tr>
+            <tr><td>India's Hotspots (4)</td><td>Western Ghats+Sri Lanka | Eastern Himalaya | Indo-Burma | Sundaland+Nicobar</td></tr>
+            <tr><td>In-situ Conservation</td><td>National parks, Wildlife sanctuaries, Sacred groves, Lakes</td></tr>
+            <tr><td>Ex-situ Conservation</td><td>Biological parks, Zoos, DNA banks, Seed banks</td></tr>
+            <tr><td>IUCN</td><td>1948 | Headquarters: Gland, Switzerland | Red List: Plants 1978, Animals 1988</td></tr>
+            <tr><td>Endangered Categories</td><td>Extinct → Critically Endangered → Endangered → Vulnerable → Near Threatened</td></tr>
+            <tr><td>Ramsar Convention</td><td>2 February 1971 | Ramsar, Iran | World Wetland Day</td></tr>
+            <tr><td>India joined Ramsar</td><td>1982</td></tr>
+            <tr><td>Ramsar Sites in India</td><td>91 (as per June, 2025)</td></tr>
+            <tr><td>Most Ramsar Sites — State</td><td>Tamil Nadu — 20</td></tr>
+            <tr><td>Largest Ramsar Site</td><td>Sundarbans (West Bengal)</td></tr>
+            <tr><td>Smallest Ramsar Site</td><td>Renuka (Himachal Pradesh)</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Biodiversity · BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
 
 </body>
 </html>

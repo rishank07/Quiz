@@ -1,11 +1,539 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>06 Environmental Pollution Mindmap</title>
+<title>Environmental Pollution | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.84rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.88rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.8rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:0.92rem;
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:#aab0c6;}
+  .info-row .v{color:var(--text);font-weight:600;}
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
 </head>
 <body>
+
+<div class="header">
+  <span class="art-pill">Environment & Ecology · Chapter 6</span>
+  <h1>Environmental Pollution</h1>
+  <p>Air, water, soil, noise, radioactive & solid waste pollution — causes, impacts & government efforts — for BPSC / BSSC preparation</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('pollutants')">Pollutants</button>
+  <button onclick="switchTab('air')">Air Pollution</button>
+  <button onclick="switchTab('water')">Water Pollution</button>
+  <button onclick="switchTab('soil')">Soil Pollution</button>
+  <button onclick="switchTab('noise')">Noise Pollution</button>
+  <button onclick="switchTab('radioactive')">Radioactive &amp; Solid Waste</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">6</div><div class="lbl">Types of Pollution</div></div>
+          <div class="stat-box"><div class="num">6</div><div class="lbl">Water-borne Diseases</div></div>
+          <div class="stat-box"><div class="num">65 dB</div><div class="lbl">Noise Pollution Threshold</div></div>
+          <div class="stat-box"><div class="num">1981</div><div class="lbl">Air Pollution Act</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>This chapter covers all major types of environmental pollution — Air, Water, Soil, Noise, Radioactive, and Solid Waste — with their causes, impacts, and government control measures.</li>
+          <li>Special focus on disease-pollutant matching (Minamata–Mercury, Itai-Itai–Cadmium, etc.) which is a very common BPSC/BSSC MCQ pattern.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Disease-Cause matching: Minamata → Mercury | Itai-Itai → Cadmium | Black Foot → Arsenic | Blue-baby Syndrome → Nitrates.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POLLUTANTS -->
+  <div id="pollutants" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🧪 Pollutants — Primary &amp; Secondary</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Primary Pollutants</th><th>Secondary Pollutants</th></tr></thead>
+          <tbody>
+            <tr><td>DDT, plastic, CO, CO₂, NO₂, SO₂, particulate matter, etc.</td><td>O₃, NH₃, HNO₃, H₂SO₄, SO₃, etc. (formed via reactions like Acid Rain)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Primary pollutants are emitted directly (CO, SO₂); secondary pollutants (O₃, Acid Rain components) FORM in the atmosphere from reactions between primary pollutants — don't classify Ozone or Acid Rain as primary.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AIR POLLUTION -->
+  <div id="air" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">💨 Air Pollution</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Causes</th><th>Pollutants</th><th>Impacts</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Fossil fuels (incomplete combustion of coal, petrol), industrial waste, harmful gases from vehicles, fine particulate matter, etc.</td>
+              <td>Gaseous: CO, CO₂, SO₂, NO₂, etc. | Particulate: Aerosols, smoke, soot, smog, suspended particles, etc.</td>
+              <td>Asthma, eye irritation, respiratory diseases, brain and kidney disorders, lung cancer, etc.</td>
+            </tr>
+          </tbody>
+        </table></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Government efforts against air pollution: Air (Prevention and Control of Pollution) Act, 1981 & National Air Quality Monitoring Programme.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WATER POLLUTION -->
+  <div id="water" class="tab-panel">
+    <div class="card">
+      <div class="card-header teal">💧 Water Pollution</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Undesirable gases, liquids, and solids getting mixed into water.</li>
+        </ul>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Human Induced Causes</th><th>Natural Causes</th></tr></thead>
+          <tbody>
+            <tr><td>Domestic/Industrial waste, use of chemicals & pesticides in agriculture, oil spills, nuclear waste, etc.</td><td>Volcanic ash, dust, organic waste from forests, etc.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Water-borne Diseases & Their Cause/Agent</h3>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Disease</th><th>Cause / Agent</th></tr></thead>
+          <tbody>
+            <tr><td>Jaundice</td><td>Virus</td></tr>
+            <tr><td>Minamata Disease</td><td>Mercury</td></tr>
+            <tr><td>Blue-baby Syndrome</td><td>Nitrates</td></tr>
+            <tr><td>Cholera, Typhoid, Dysentery</td><td>Bacterial</td></tr>
+            <tr><td>Itai-Itai Disease</td><td>Cadmium</td></tr>
+            <tr><td>Black Foot Disease</td><td>Arsenic</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          BOD (Biochemical Oxygen Demand) = amount of oxygen required for decomposition by microorganisms — higher BOD means more organic pollution (increase in bacteria/fungi in reservoirs).
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Government efforts: Ganga Action Plan (older) vs Namami Gange Programme (current, comprehensive) — both target Ganga river conservation, but are different schemes from different eras.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOIL POLLUTION -->
+  <div id="soil" class="tab-panel">
+    <div class="card">
+      <div class="card-header orange">🌍 Soil Pollution</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Soil Pollution → Degradation of soil quality.</li>
+        </ul>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Causes</th><th>Measures</th><th>Impacts</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Use of chemicals, soil erosion, overuse of fertilisers, industrial/urban waste, etc.</td>
+              <td>Control on chemical fertilisers, disposal of solid waste, use of bioremediation techniques, ban on nuclear explosions, etc.</td>
+              <td>Loss of essential soil properties, decline in fertility, spread of diseases through soil</td>
+            </tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOISE POLLUTION -->
+  <div id="noise" class="tab-panel">
+    <div class="card">
+      <div class="card-header purple">🔊 Noise Pollution</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Noise Pollution = sound intensity above 65 decibels (dB).</li>
+        </ul>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Natural Causes</th><th>Human-Induced Causes</th></tr></thead>
+          <tbody>
+            <tr><td>Thunder of clouds, earthquake sounds, thunder & lightning</td><td>Industrial units, vehicle noise, use of entertainment devices (loudspeakers, radios), etc.</td></tr>
+          </tbody>
+        </table></div>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Impacts</h3>
+        <ul class="arrow-list">
+          <li>High blood pressure, migraine, stomach ulcer, irritability, insomnia, etc.</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Measures to Control Noise Pollution</h3>
+        <ul class="arrow-list">
+          <li>Use of noise barrier materials</li>
+          <li>Tree plantation (along transport routes)</li>
+          <li>Regulation of loudspeakers, horns, etc.</li>
+          <li>Use of sound absorbers</li>
+          <li>Town planning arrangements</li>
+          <li>Awareness and education, etc.</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Permissible Noise Levels (Decibels)</h3>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Area Type</th><th>Day Time (dB)</th><th>Night Time (dB)</th></tr></thead>
+          <tbody>
+            <tr><td>Industrial area</td><td>75</td><td>70</td></tr>
+            <tr><td>Commercial area</td><td>65</td><td>55</td></tr>
+            <tr><td>Residential area</td><td>55</td><td>45</td></tr>
+            <tr><td>Silent zone</td><td>50</td><td>40</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Silent zone has the LOWEST permissible noise limits (50 dB day / 40 dB night) — even lower than residential areas. Frequently swapped in MCQs.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RADIOACTIVE & SOLID WASTE -->
+  <div id="radioactive" class="tab-panel">
+    <div class="card">
+      <div class="card-header red">☢ Radioactive Pollution</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Pollution caused by radiation from radioactive substances (Uranium, Thorium, Plutonium, etc.).</li>
+        </ul>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Natural Sources</th><th>Man-made Sources</th></tr></thead>
+          <tbody>
+            <tr><td>Solar, cosmic, terrestrial (rock, soil, etc.)</td><td>Nuclear testing, nuclear weapons, nuclear reactors, uranium mining, etc.</td></tr>
+          </tbody>
+        </table></div>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Impacts</h3>
+        <ul class="arrow-list">
+          <li>Long-term consequences: genetic mutations, cancer, tumor and infertility.</li>
+          <li>Affects structure of DNA, RNA and protein.</li>
+          <li>Bone cancer → caused by Strontium-90.</li>
+          <li>Red Blood Cell (RBC) damage → caused by Iodine-131.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🗑 Solid Waste Pollution</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Sources</span><span class="v">Urban/Rural/Domestic/Industrial Waste, Nuclear Plant Waste, Organic Waste</span></div>
+        <div class="info-row"><span class="k">Disposal Methods</span><span class="v">Landfill, composting, vermiculture, pyrolysis, etc.</span></div>
+        <ul class="arrow-list">
+          <li>E-Waste (Electronic Waste) → waste from TV, fridge, computer, mobile, etc.</li>
+          <li>Incinerators → modern process of burning garbage.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Topic</th><th>Key Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Primary Pollutants</td><td>DDT, plastic, CO, CO₂, NO₂, SO₂, particulate matter → Acid rain</td></tr>
+            <tr><td>Secondary Pollutants</td><td>O₃, NH₃, HNO₃, H₂SO₄, SO₃, etc.</td></tr>
+            <tr><td>Air Pollution Act</td><td>1981</td></tr>
+            <tr><td>Jaundice</td><td>Virus (water-borne)</td></tr>
+            <tr><td>Minamata Disease</td><td>Mercury poisoning</td></tr>
+            <tr><td>Blue-baby Syndrome</td><td>Nitrates in water</td></tr>
+            <tr><td>Itai-Itai Disease</td><td>Cadmium</td></tr>
+            <tr><td>Black Foot Disease</td><td>Arsenic</td></tr>
+            <tr><td>BOD</td><td>Biochemical Oxygen Demand | O₂ for decomposition by microorganisms</td></tr>
+            <tr><td>Namami Gange Programme</td><td>Ganga river conservation effort</td></tr>
+            <tr><td>Noise Pollution</td><td>Sound intensity above 65 dB</td></tr>
+            <tr><td>Industrial area noise limit</td><td>Day: 75 dB | Night: 70 dB</td></tr>
+            <tr><td>Residential area noise limit</td><td>Day: 55 dB | Night: 45 dB</td></tr>
+            <tr><td>Silent zone noise limit</td><td>Day: 50 dB | Night: 40 dB</td></tr>
+            <tr><td>Radioactive Pollution cause</td><td>Radiation from Uranium, Thorium, Plutonium, etc.</td></tr>
+            <tr><td>Bone cancer — element</td><td>Strontium-90</td></tr>
+            <tr><td>RBC damage — element</td><td>Iodine-131</td></tr>
+            <tr><td>E-Waste</td><td>Waste from TV, fridge, computer, mobile, etc.</td></tr>
+            <tr><td>Incinerators</td><td>Modern process of burning garbage</td></tr>
+            <tr><td>Solid Waste disposal</td><td>Landfill, composting, vermiculture, pyrolysis</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Environmental Pollution · BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
 
 </body>
 </html>

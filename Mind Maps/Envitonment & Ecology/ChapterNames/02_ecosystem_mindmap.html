@@ -1,11 +1,523 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>02 Ecosystem Mindmap</title>
+<title>Ecosystem | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.86rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.9rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.82rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:0.92rem;
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:#aab0c6;}
+  .info-row .v{color:var(--text);font-weight:600;}
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
 </head>
 <body>
+
+<div class="header">
+  <span class="art-pill">Environment & Ecology · Chapter 2</span>
+  <h1>Ecosystem</h1>
+  <p>Components, food chain, ecological pyramids, niche, biogeochemical cycles & biomes — for BPSC / BSSC preparation</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('intro')">Introduction &amp; Components</button>
+  <button onclick="switchTab('food')">Food Chain &amp; Trophic Levels</button>
+  <button onclick="switchTab('pyramid')">Ecological Pyramid</button>
+  <button onclick="switchTab('niche')">Niche &amp; Imbalance</button>
+  <button onclick="switchTab('cycles')">Cycles &amp; Biomes</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">1869</div><div class="lbl">Term 'Ecology' Coined</div></div>
+          <div class="stat-box"><div class="num">1935</div><div class="lbl">Term 'Ecosystem' Coined</div></div>
+          <div class="stat-box"><div class="num">10%</div><div class="lbl">Energy Transfer Rate</div></div>
+          <div class="stat-box"><div class="num">3</div><div class="lbl">Types of Ecological Pyramids</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>Ecosystem is the study of natural relationships between the environment and biotic community.</li>
+          <li>This chapter covers: ecosystem components & types, food chain & trophic levels, ecological pyramids, ecological niche, ecological imbalance, biogeochemical cycles, and biomes.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Ecology (1869, Ernst Haeckel) came before Ecosystem (1935, A.G. Tansley) — a 66-year gap between the two foundational terms.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRODUCTION -->
+  <div id="intro" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🌿 Ecosystem — Introduction</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Ecosystem = study of natural relationships between environment and biotic community.</li>
+          <li>Term 'Ecology' first used → Ernst Haeckel (1869 AD).</li>
+          <li>Term 'Ecosystem' first used → A.G. Tansley (1935 AD).</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Don't mix up who coined which term — Haeckel gave "Ecology" (1869), Tansley gave "Ecosystem" (1935). Different people, different decades.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🧩 Components of Ecosystem</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Biotic Components</th><th>Abiotic Components</th></tr></thead>
+          <tbody>
+            <tr><td>Producers, Consumers (Primary/Secondary/Tertiary), Decomposers (Bacteria & Fungi), Reducers</td><td>Organic, Inorganic, Climatic</td></tr>
+          </tbody>
+        </table></div>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Types of Ecosystem</h3>
+        <ul class="arrow-list">
+          <li><strong>Terrestrial Ecosystem</strong> → Forest, Grassland, Desert Ecosystem (has most biomass).</li>
+          <li><strong>Aquatic Ecosystem</strong> → Marine (Permanent), River/Lake, Wetlands.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOD CHAIN -->
+  <div id="food" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">🔗 Food Chain</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Food chain = transfer of energy from one organism to another, from lower to higher trophic level.</li>
+          <li>Energy transfer rate: only 10% (Lindeman's Law) — unidirectional flow.</li>
+          <li>Humans act as Primary and Secondary Consumers.</li>
+          <li>Types of Food Chain: (1) Grazing Food Chain, (2) Decomposer Food Chain.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Only 10% of energy passes to the next trophic level (Lindeman's Law) — the remaining 90% is lost as heat/respiration. A very common numeric MCQ.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🔺 Trophic Level / Food Chain Pyramid</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Trophic Level</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Producer</td><td>Green plants, algae, photosynthetic organisms, etc.</td></tr>
+            <tr><td>Primary Consumer (Herbivore)</td><td>Herbivores — cow, goat, etc.</td></tr>
+            <tr><td>Secondary Consumer</td><td>Small carnivores — snake, cat, etc.</td></tr>
+            <tr><td>Tertiary Consumer</td><td>Eats primary and secondary consumers</td></tr>
+            <tr><td>Quaternary Consumer</td><td>Top Carnivores — lion, tiger, vulture, etc.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Food Web = network of interconnected food chains within an ecosystem — not a single linear chain.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">☠ Biomagnification</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Excessive concentration of toxic substances in higher trophic levels of the food chain.</li>
+          <li>Examples: DDT, BHC, 2-4D, Mercury, etc.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ECOLOGICAL PYRAMID -->
+  <div id="pyramid" class="tab-panel">
+    <div class="card">
+      <div class="card-header teal">🔻 Ecological Pyramid</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Concept given by</span><span class="v">Charles Elton (1933 AD)</span></div>
+        <ul class="arrow-list">
+          <li>A pyramid diagram showing the number, biomass, or accumulated energy of producers and consumers at each trophic level.</li>
+        </ul>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Type</th><th>Shape</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Pyramid of Number</td><td>Upright (Aquatic) / Inverted (Terrestrial)</td><td>Shows number of organisms at each trophic level</td></tr>
+            <tr><td>Pyramid of Biomass</td><td>Upright (Terrestrial) / Inverted (Aquatic)</td><td>Shows total biomass at each trophic level</td></tr>
+            <tr><td>Pyramid of Energy</td><td>Always Upright</td><td>Shows energy at each trophic level</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Pyramid of Energy is ALWAYS upright — no exceptions — because energy always decreases at higher trophic levels. Number & Biomass pyramids CAN be inverted depending on ecosystem type.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NICHE & IMBALANCE -->
+  <div id="niche" class="tab-panel">
+    <div class="card">
+      <div class="card-header orange">🏠 Ecological Niche</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Concept given by</span><span class="v">Charles Elton (1927) & G.E. Hutchinson</span></div>
+        <ul class="arrow-list">
+          <li>The local habitat region of various species of organisms/plants.</li>
+          <li>Shows the structural and functional role of the organism in its ecosystem.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">⚖ Ecological Imbalance</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Increase or decrease in the population of a particular species weakens adaptive capacity.</li>
+          <li>Examples: Deforestation, Cyclone, Drought.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Highest productivity — Terrestrial: Tropical Rainforest | Aquatic: Estuaries.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CYCLES & BIOMES -->
+  <div id="cycles" class="tab-panel">
+    <div class="card">
+      <div class="card-header green">🔄 Biogeochemical Cycles</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Movement of nutrients through various components of the ecosystem.</li>
+          <li><strong>Gaseous Cycles</strong> → Nitrogen Cycle, Carbon Cycle, Oxygen Cycle, Water Cycle.</li>
+          <li><strong>Sedimentary Cycles</strong> → Phosphorus Cycle, Sulphur Cycle.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Water Cycle is classified as a Gaseous Cycle here (along with N, C, O) — Phosphorus & Sulphur are the only Sedimentary Cycles. Don't misclassify Phosphorus as gaseous.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌎 BIOME — Major Types</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Tropical Evergreen Forest</li>
+          <li>Monsoon Forest</li>
+          <li>Savanna</li>
+          <li>Mediterranean</li>
+          <li>Temperate Grassland</li>
+          <li>Temperate Coniferous Forest</li>
+          <li>Tundra</li>
+          <li>Marine Pelagic</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Topic</th><th>Key Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Term 'Ecology' — First used</td><td>Ernst Haeckel (1869 AD)</td></tr>
+            <tr><td>Term 'Ecosystem' — First used</td><td>A.G. Tansley (1935 AD)</td></tr>
+            <tr><td>Biotic Components</td><td>Producers, Consumers (Primary/Secondary/Tertiary), Decomposers (Bacteria & Fungi), Reducers</td></tr>
+            <tr><td>Abiotic Components</td><td>Organic, Inorganic, Climatic</td></tr>
+            <tr><td>Terrestrial Ecosystem</td><td>Forest, Grassland, Desert | Most biomass</td></tr>
+            <tr><td>Aquatic Ecosystem</td><td>Marine (Permanent), River/Lake, Wetlands</td></tr>
+            <tr><td>Energy Transfer in Food Chain</td><td>10% (Lindeman's Law) | Unidirectional flow</td></tr>
+            <tr><td>Types of Food Chain</td><td>1. Grazing Food Chain | 2. Decomposer Food Chain</td></tr>
+            <tr><td>Food Web</td><td>Network of interconnected food chains within an ecosystem</td></tr>
+            <tr><td>Biomagnification</td><td>Excessive toxic concentration in higher trophic levels | Eg: DDT, BHC, Mercury</td></tr>
+            <tr><td>Ecological Pyramid — Concept</td><td>Charles Elton (1933 AD)</td></tr>
+            <tr><td>Pyramid of Energy</td><td>Always Upright</td></tr>
+            <tr><td>Pyramid of Number</td><td>Upright: Aquatic | Inverted: Terrestrial</td></tr>
+            <tr><td>Pyramid of Biomass</td><td>Upright: Terrestrial | Inverted: Aquatic</td></tr>
+            <tr><td>Ecological Niche</td><td>Charles Elton (1927) & G.E. Hutchinson | Structural & functional role of organisms</td></tr>
+            <tr><td>Highest Terrestrial Productivity</td><td>Tropical Rainforest</td></tr>
+            <tr><td>Highest Aquatic Productivity</td><td>Estuaries</td></tr>
+            <tr><td>Gaseous Cycles</td><td>Nitrogen, Carbon, Oxygen, Water Cycle</td></tr>
+            <tr><td>Sedimentary Cycles</td><td>Phosphorus Cycle, Sulphur Cycle</td></tr>
+            <tr><td>Types of Biomes</td><td>Tropical Evergreen, Monsoon Forest, Savanna, Mediterranean, Temperate Grassland, Temperate Coniferous, Tundra, Marine Pelagic</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Ecosystem · BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
 
 </body>
 </html>

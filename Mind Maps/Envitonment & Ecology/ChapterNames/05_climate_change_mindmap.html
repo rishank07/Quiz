@@ -1,11 +1,548 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>05 Climate Change Mindmap</title>
+<title>Climate Change | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.82rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.88rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.8rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:0.92rem;
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:#aab0c6;}
+  .info-row .v{color:var(--text);font-weight:600;}
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap;margin:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+@media(max-width:768px){
+  table{display:table!important;min-width:700px!important;width:max-content!important;white-space:nowrap}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
 </head>
 <body>
+
+<div class="header">
+  <span class="art-pill">Environment & Ecology · Chapter 5</span>
+  <h1>Climate Change</h1>
+  <p>Causes, greenhouse effect, ozone depletion, national missions & global climate conferences — for BPSC / BSSC preparation</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('causes')">Causes &amp; Mitigation</button>
+  <button onclick="switchTab('greenhouse')">Greenhouse Effect &amp; Warming</button>
+  <button onclick="switchTab('ozone')">Ozone Layer</button>
+  <button onclick="switchTab('missions')">National Missions</button>
+  <button onclick="switchTab('cop')">CoP Series (Recent)</button>
+  <button onclick="switchTab('conferences')">All Conferences — Complete List</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">1987</div><div class="lbl">Montreal Protocol</div></div>
+          <div class="stat-box"><div class="num">1992</div><div class="lbl">Rio Earth Summit / UNFCCC Birth</div></div>
+          <div class="stat-box"><div class="num">7</div><div class="lbl">National Missions Covered</div></div>
+          <div class="stat-box"><div class="num">CoP-29</div><div class="lbl">Latest (Baku, 2024)</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>Climate Change refers to historical changes in the pattern of weather conditions, driven by both natural and man-made causes.</li>
+          <li>This chapter covers causes & mitigation, the Greenhouse Effect, Global Warming, Ozone Layer depletion, India's national missions, and the complete history of global climate conferences from Stockholm (1972) to Baku (2024).</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Stockholm Conference (1972) → led to UNEP | Rio Summit (1992) → birth of UNFCCC | Kyoto Protocol (1997) → first binding emission targets | Paris Agreement (2015) → 2°C target | Glasgow (2021) → tightened to 1.5°C.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAUSES -->
+  <div id="causes" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🌡 Climate Change — Causes</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Natural Causes</th><th>Man-made Causes</th></tr></thead>
+          <tbody>
+            <tr><td>Solar flares, volcanic eruptions, changes in gaseous composition of the atmosphere</td><td>Industrialization, deforestation, incomplete combustion of fossil fuels, urbanization, current agricultural practices, etc.</td></tr>
+          </tbody>
+        </table></div>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Measures to Mitigate Climate Change Effects</h3>
+        <ul class="arrow-list">
+          <li>Carbon Tax</li>
+          <li>Carbon Separation</li>
+          <li>Carbon Sink</li>
+          <li>Carbon Label</li>
+          <li>Promote Earth Hour</li>
+          <li>Carbon Offset</li>
+          <li>Carbon Credit, etc.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- GREENHOUSE EFFECT & WARMING -->
+  <div id="greenhouse" class="tab-panel">
+    <div class="card">
+      <div class="card-header green">🏠 Greenhouse Effect</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>A natural phenomenon — warming of the lower atmosphere due to concentration of CO₂ and other gases.</li>
+        </ul>
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Greenhouse Gas</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Carbon Dioxide (CO₂)</td><td>Major greenhouse gas</td></tr>
+            <tr><td>Ozone (O₃)</td><td>—</td></tr>
+            <tr><td>Chlorofluorocarbons (CFCs)</td><td>—</td></tr>
+            <tr><td>Water Vapour</td><td>—</td></tr>
+            <tr><td>Nitrous Oxide (N₂O)</td><td>—</td></tr>
+            <tr><td>Carbon Monoxide (CO)</td><td>—</td></tr>
+            <tr><td>Sulphur Dioxide (SO₂)</td><td>—</td></tr>
+            <tr><td>Methane (CH₄)</td><td>From paddy fields, marshy areas</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">🔥 Global Warming</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Continuous rise in Earth's temperature.</li>
+          <li>Impacts: melting of glaciers, rise in sea level, impact on biodiversity, impact on human health, impact on climate, impact on vegetation, etc.</li>
+          <li>Increase in global temperature → decrease in the rate of photosynthesis.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Greenhouse Effect is a natural, necessary phenomenon (keeps Earth warm enough for life) — Global Warming is the harmful excess of this effect caused by rising GHG concentrations. Don't treat them as synonyms.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OZONE -->
+  <div id="ozone" class="tab-panel">
+    <div class="card">
+      <div class="card-header blue">🛡 Ozone Layer</div>
+      <div class="card-body">
+        <div class="info-row"><span class="k">Location</span><span class="v">Up to 50 km above Earth's surface (stratosphere)</span></div>
+        <div class="info-row"><span class="k">Maximum concentration</span><span class="v">Between 15–35 km altitude</span></div>
+        <div class="info-row"><span class="k">Function</span><span class="v">Protects living beings from ultraviolet rays</span></div>
+        <div class="info-row"><span class="k">Measured in</span><span class="v">Dobson Units</span></div>
+
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Impacts of Ozone Depletion</h3>
+        <ul class="arrow-list">
+          <li>Human health issues (e.g. skin cancer)</li>
+          <li>Food production affected</li>
+          <li>Aquatic ecosystem disruption</li>
+        </ul>
+
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Causes of Ozone Depletion</h3>
+        <ul class="arrow-list">
+          <li>Chlorofluorocarbons (CFCs)</li>
+          <li>Halons</li>
+          <li>Nitrous Oxide</li>
+          <li>Trichloromethane</li>
+          <li>Halogens</li>
+        </ul>
+
+        <div class="info-row"><span class="k">Ozone hole discovered</span><span class="v">Antarctica — 1985</span></div>
+        <div class="info-row"><span class="k">Ozone Layer Protection</span><span class="v">Montreal Protocol (1987)</span></div>
+        <div class="info-row"><span class="k">Ozone Protection Day</span><span class="v">16th September</span></div>
+
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Ozone hole was discovered in Antarctica in 1985, but the Montreal Protocol to protect the ozone layer was signed 2 years later, in 1987. Don't confuse discovery year with protocol year.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NATIONAL MISSIONS -->
+  <div id="missions" class="tab-panel">
+    <div class="card">
+      <div class="card-header purple">🇮🇳 Missions / Schemes Related to Climate Change</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Mission</th><th>Year</th></tr></thead>
+          <tbody>
+            <tr><td>National Mission on Enhanced Energy Efficiency</td><td>2008</td></tr>
+            <tr><td>National Solar Mission</td><td>2010</td></tr>
+            <tr><td>National Mission on Strategic Knowledge for Climate Change</td><td>2010</td></tr>
+            <tr><td>National Sustainable Agriculture Mission</td><td>2010</td></tr>
+            <tr><td>National Mission on Sustainable Habitat</td><td>2010</td></tr>
+            <tr><td>National Water Mission</td><td>2011</td></tr>
+            <tr><td>National Green India Mission</td><td>2014</td></tr>
+            <tr><td>National Mission for Sustaining the Himalayan Ecosystem (NMSHE)</td><td>2014</td></tr>
+          </tbody>
+        </table></div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Four of these eight missions were all launched in the same year — 2010 (Solar, Strategic Knowledge, Sustainable Agriculture, Sustainable Habitat).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COP SERIES -->
+  <div id="cop" class="tab-panel">
+    <div class="card">
+      <div class="card-header teal">🌐 Climate Change Related Conferences — Recent CoP Series</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Conference</th><th>Year</th><th>Key Points</th></tr></thead>
+          <tbody>
+            <tr><td>Katowice Conference (CoP-24)</td><td>2018</td><td>Implementation of Paris Climate Agreement by 2020</td></tr>
+            <tr><td>Madrid Conference (CoP-25)</td><td>2019</td><td>Discussion on reducing greenhouse gas emissions</td></tr>
+            <tr><td>Glasgow Conference (CoP-26)</td><td>2021</td><td>Limit global warming to not more than 1.5°C</td></tr>
+            <tr><td>Sharm El-Sheikh Conference (CoP-27)</td><td>2022</td><td>Reduce greenhouse gases</td></tr>
+            <tr><td>Abu Dhabi Conference (CoP-28)</td><td>2023</td><td>Maintain annual funding of $100 billion</td></tr>
+            <tr><td>Baku Conference (CoP-29)</td><td>2024</td><td>Carbon market agreement, reduce methane, etc.</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALL CONFERENCES COMPLETE LIST -->
+  <div id="conferences" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📜 Major International Conferences on Climate Change — Complete List</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Conference</th><th>Year</th><th>Key Points</th></tr></thead>
+          <tbody>
+            <tr><td>Stockholm Conference on Human Environment</td><td>1972</td><td>Led to establishment of UNEP</td></tr>
+            <tr><td>Vienna Conference</td><td>1985</td><td>Ozone Layer Protection</td></tr>
+            <tr><td>Montreal Conference</td><td>1987</td><td>Declaration of Ozone Protection Day (16 September)</td></tr>
+            <tr><td>Rio Conference (Earth Summit – I)</td><td>1992</td><td>Approved Agenda-21; birth of UNFCCC</td></tr>
+            <tr><td>Kyoto Conference (Kyoto Protocol)</td><td>1997</td><td>Reduce GHG emissions by 5% (from 1990 levels)</td></tr>
+            <tr><td>Johannesburg Conference (Rio+10)</td><td>2002</td><td>Emphasis on sustainable development; World Solidarity Fund established</td></tr>
+            <tr><td>Montreal Conference</td><td>2005</td><td>Developed countries to reduce GHG emissions</td></tr>
+            <tr><td>Bali Conference</td><td>2007</td><td>Bring GHG emissions back to year 2000 levels by 2050</td></tr>
+            <tr><td>Copenhagen Conference</td><td>2009</td><td>Concept of a low-carbon economy</td></tr>
+            <tr><td>Cancun Conference</td><td>2010</td><td>Establishment of the Green Climate Fund</td></tr>
+            <tr><td>Durban Conference (CoP-17)</td><td>2011</td><td>Strengthening the Green Climate Fund concept</td></tr>
+            <tr><td>Doha Conference (CoP-18)</td><td>2012</td><td>Reduce pollution under Clean Development Mechanism (CDM)</td></tr>
+            <tr><td>Warsaw Conference (CoP-19)</td><td>2013</td><td>Agreement to create the Green Climate Fund</td></tr>
+            <tr><td>Lima Conference (CoP-20)</td><td>2014</td><td>Plan to reduce GHG emissions by 2070</td></tr>
+            <tr><td>Paris Conference (CoP-21)</td><td>2015</td><td>Keep global warming below 2°C by 2100</td></tr>
+            <tr><td>Marrakesh Conference (CoP-22)</td><td>2016</td><td>Focus on clean water, sustainable water management</td></tr>
+            <tr><td>Bonn Conference (CoP-23)</td><td>2017</td><td>Financial assistance, mitigation action, etc.</td></tr>
+            <tr><td>Katowice Conference (CoP-24)</td><td>2018</td><td>Implementation of Paris Climate Agreement in 2020</td></tr>
+            <tr><td>Madrid Conference (CoP-25)</td><td>2019</td><td>Deliberation on reducing GHG emissions</td></tr>
+            <tr><td>Glasgow Conference (CoP-26)</td><td>2021</td><td>Ensure global warming does not increase by more than 1.5°C</td></tr>
+            <tr><td>Sharm El-Sheikh Conference (CoP-27)</td><td>2022</td><td>Reduction in greenhouse gases</td></tr>
+            <tr><td>Abu Dhabi Conference (CoP-28)</td><td>2023</td><td>Maintaining conditions of annual funding of $100 billion</td></tr>
+            <tr><td>Baku Conference (CoP-29)</td><td>2024</td><td>Carbon market agreement, reducing methane, etc.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          There were TWO separate "Montreal Conferences" — 1987 (Montreal Protocol, ozone) and 2005 (developed countries' GHG reduction) — don't merge these into one event.
+        </div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          CoP numbering starts clearly from Durban (CoP-17, 2011) onward in most references — conferences before that (Rio, Kyoto, Bali, Copenhagen, Cancun) are usually referred to by city name rather than CoP number.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table</div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table class="data-table">
+          <thead><tr><th>Topic</th><th>Key Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Climate Change</td><td>Historical changes in the pattern of weather conditions</td></tr>
+            <tr><td>Greenhouse Effect</td><td>Natural phenomenon | Warming of lower atmosphere by CO₂ concentration</td></tr>
+            <tr><td>Methane source</td><td>Paddy fields, marshy areas</td></tr>
+            <tr><td>Global warming impact</td><td>Glacier melting, sea level rise, biodiversity impact, health impact</td></tr>
+            <tr><td>Global Temp ↑</td><td>Decrease in rate of photosynthesis</td></tr>
+            <tr><td>Ozone layer location</td><td>Stratosphere | Up to 50 km | Max: 15–35 km altitude</td></tr>
+            <tr><td>Ozone measured in</td><td>Dobson Units</td></tr>
+            <tr><td>Ozone hole discovered</td><td>Antarctica — 1985</td></tr>
+            <tr><td>Montreal Protocol</td><td>1987 | Ozone layer protection</td></tr>
+            <tr><td>Ozone Protection Day</td><td>16th September</td></tr>
+            <tr><td>Main cause of ozone depletion</td><td>Chlorofluorocarbons (CFCs)</td></tr>
+            <tr><td>Stockholm Conference</td><td>1972 | Led to establishment of UNEP</td></tr>
+            <tr><td>Rio Conference (Earth Summit I)</td><td>1992 | Agenda-21 | Birth of UNFCCC</td></tr>
+            <tr><td>Kyoto Protocol</td><td>1997 | Reduce GHG by 5% from 1990 levels</td></tr>
+            <tr><td>Cancun Conference</td><td>2010 | Green Climate Fund established</td></tr>
+            <tr><td>Paris Conference (CoP-21)</td><td>2015 | Keep global warming below 2°C by 2100</td></tr>
+            <tr><td>Glasgow (CoP-26)</td><td>2021 | Limit warming to 1.5°C</td></tr>
+            <tr><td>Baku (CoP-29)</td><td>2024 | Carbon market agreement, reduce methane</td></tr>
+            <tr><td>National Solar Mission</td><td>2010</td></tr>
+            <tr><td>National Water Mission</td><td>2011</td></tr>
+            <tr><td>NMSHE</td><td>2014 | Himalayan Ecosystem</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Climate Change · BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
 
 </body>
 </html>
