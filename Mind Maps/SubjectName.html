@@ -4,7 +4,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mind Maps Dashboard</title>
+  <title>Mind Maps Dashboard | ExamFusion Prep — BPSC, BSSC, SSC, Railway</title>
+  <meta name="description"
+    content="Free interactive mind maps for BPSC, BSSC, SSC & Railway exams — History, Geography, Polity, Economics, Science, Static GK, Environment & English Grammar in Hindi + English.">
+  <meta name="theme-color" content="#0f2027">
+  <meta property="og:title" content="Mind Maps Dashboard | ExamFusion Prep">
+  <meta property="og:description"
+    content="Chapter-wise interactive mind maps for BPSC, BSSC, SSC & Railway exam preparation — bilingual (Hindi + English).">
+  <meta property="og:type" content="website">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
 
   <!-- ============================= -->
   <!-- Google Analytics -->
@@ -403,6 +412,168 @@
       opacity: 0.65;
     }
 
+    /*============================*/
+    /* OVERALL PROGRESS (NEW)     */
+    /*============================*/
+    .progress-wrap {
+      margin: -15px 0 30px;
+      text-align: center;
+    }
+
+    .progress-label {
+      font-size: 13px;
+      opacity: .85;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .progress-label strong {
+      color: #ffb347;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, .1);
+      border-radius: 30px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
+      border-radius: 30px;
+      transition: width .8s ease;
+    }
+
+    /* Per-subject count badge */
+    .count-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(0, 0, 0, .3);
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-left: 10px;
+      white-space: nowrap;
+      letter-spacing: .3px;
+    }
+
+    .count-badge.done {
+      background: rgba(255, 255, 255, .25);
+    }
+
+    /*============================*/
+    /* RESUME BANNER (NEW)        */
+    /*============================*/
+    .resume-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 25px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      background: rgba(255, 179, 71, .12);
+      border: 1px solid rgba(255, 179, 71, .35);
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
+
+    .resume-banner.show {
+      display: flex;
+    }
+
+    .resume-banner .resume-title {
+      color: #ffb347;
+      font-weight: 600;
+    }
+
+    .resume-banner a {
+      color: white;
+      text-decoration: none;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: .3s;
+      white-space: nowrap;
+    }
+
+    .resume-banner a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(238, 9, 121, .4);
+    }
+
+    /*============================*/
+    /* SEARCH NO-RESULTS (NEW)    */
+    /*============================*/
+    .no-results {
+      display: none;
+      text-align: center;
+      padding: 30px 15px;
+      font-size: 15px;
+      opacity: .8;
+      background: rgba(255, 255, 255, .05);
+      border-radius: 14px;
+      border: 1px dashed rgba(255, 255, 255, .2);
+    }
+
+    .no-results.show {
+      display: block;
+    }
+
+    /*============================*/
+    /* BACK TO TOP (NEW)          */
+    /*============================*/
+    .back-to-top {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(15px);
+      transition: .35s;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, .4);
+      z-index: 99;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-4px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
     @media(max-width:900px) {
       .container {
         padding: 28px;
@@ -455,10 +626,28 @@
       <h1>📚 Mind Maps Dashboard</h1>
       <p class="subtitle">Select any subject to begin your preparation</p>
 
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>📈 Your Progress / आपकी प्रगति</span>
+          <strong id="progressText">0 / 0 Chapters</strong>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="resume-banner" id="resumeBanner">
+        <span><span class="resume-title">⏯️ Continue where you left off:</span> <span id="resumeName"></span></span>
+        <a href="#" id="resumeLink" onclick="openPage(event)">Resume →</a>
+      </div>
+
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="searchInput" placeholder="Search Subject or Chapter...">
+        <input type="text" id="searchInput" placeholder="Search Subject or Chapter..."
+          aria-label="Search subject or chapter">
       </div>
+
+      <div class="no-results" id="noResults">🔎 No chapter found. Try a different keyword / कोई अध्याय नहीं मिला।</div>
 
       <div class="accordion">
 
@@ -1105,7 +1294,7 @@
                     <a href="./Economics/ChapterNames/09_money_capital_markets_mindmap.html"
                       onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Money & Capital Markets
                         / मुद्रा एवं पूंजी बाजार</span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Economics/Economics/ChapterNames/10_fiscal_policy_budget_mindmap.html"
+                    <a href="./Economics/ChapterNames/10_fiscal_policy_budget_mindmap.html"
                       onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 10. Fiscal Policy & Budget
                         / राजकोषीय नीति एवं बजट</span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/11_tax_system_mindmap.html" onclick="openPage(event)"><span><i
@@ -1331,6 +1520,10 @@
     </div>
   </div>
 
+  <button class="back-to-top" id="backToTop" aria-label="Back to top" title="Back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
   <script>
     // =======================================
     // Accordion Control
@@ -1375,6 +1568,7 @@
         document.querySelectorAll(".sub-nested, .nested").forEach(folder => {
           folder.style.display = "block";
         });
+        document.getElementById("noResults").classList.remove("show");
         return;
       }
 
@@ -1403,6 +1597,10 @@
         const visibleLinks = nested.querySelectorAll(".nested-links a:not([style*='display: none'])");
         nested.style.display = (visibleLinks.length === 0) ? "none" : "block";
       });
+
+      // कोई रिजल्ट नहीं मिला तो मैसेज दिखाओ
+      const anyVisible = document.querySelectorAll(".submenu a:not([style*='display: none'])").length > 0;
+      document.getElementById("noResults").classList.toggle("show", !anyVisible);
     });
 
     // ESC बटन दबाने पर सर्च क्लियर
@@ -1435,6 +1633,14 @@
       if (!visited.includes(relativePath)) {
         visited.push(relativePath);
         localStorage.setItem('visitedChapters', JSON.stringify(visited));
+      }
+
+      // 1b. Remember last opened chapter for "Continue where you left off"
+      if (linkEl.id !== "resumeLink") {
+        localStorage.setItem('lastChapter', JSON.stringify({
+          path: relativePath,
+          name: linkEl.innerText.replace(/\s+/g, " ").trim()
+        }));
       }
 
       // 2. Instantly make it look "Visited"
@@ -1474,15 +1680,85 @@
           a.classList.add("visited-link");
         }
       });
+      updateProgress();
+      showResumeBanner();
+    }
+
+    // =======================================
+    // Progress Counter + Subject Badges (NEW)
+    // =======================================
+    function chapterLinks(scope) {
+      // Only real chapter links (exclude resume button)
+      return (scope || document).querySelectorAll(".submenu a[href], .nested-links a[href]");
+    }
+
+    function updateProgress() {
+      const visited = JSON.parse(localStorage.getItem('visitedChapters')) || [];
+      const all = chapterLinks();
+      let done = 0;
+      all.forEach(a => { if (visited.includes(a.getAttribute("href"))) done++; });
+
+      const pct = all.length ? Math.round((done / all.length) * 100) : 0;
+      document.getElementById("progressText").innerText = done + " / " + all.length + " Chapters (" + pct + "%)";
+      document.getElementById("progressFill").style.width = pct + "%";
+
+      // Per-subject badges on every card / nested / sub-nested header
+      document.querySelectorAll(".card, .nested, .sub-nested").forEach(function (section) {
+        const header = section.querySelector(":scope > .card-header, :scope > .nested-header, :scope > .sub-nested-header");
+        if (!header) return;
+        const links = section.querySelectorAll("a[href]");
+        if (!links.length) return;
+        let v = 0;
+        links.forEach(a => { if (visited.includes(a.getAttribute("href"))) v++; });
+
+        let badge = header.querySelector(".count-badge");
+        if (!badge) {
+          badge = document.createElement("span");
+          badge.className = "count-badge";
+          header.querySelector("span").appendChild(badge);
+        }
+        badge.innerText = v + "/" + links.length;
+        badge.classList.toggle("done", v === links.length);
+      });
+    }
+
+    // =======================================
+    // Continue Where You Left Off (NEW)
+    // =======================================
+    function showResumeBanner() {
+      const banner = document.getElementById("resumeBanner");
+      let last = null;
+      try { last = JSON.parse(localStorage.getItem('lastChapter')); } catch (e) { }
+      if (last && last.path) {
+        document.getElementById("resumeName").innerText = last.name || "Last chapter";
+        document.getElementById("resumeLink").setAttribute("href", last.path);
+        banner.classList.add("show");
+      } else {
+        banner.classList.remove("show");
+      }
     }
 
     // Reset Progress Function
     function clearProgress() {
       if (confirm("Are you sure you want to clear your reading progress?")) {
         localStorage.removeItem('visitedChapters');
+        localStorage.removeItem('lastChapter');
         document.querySelectorAll('.visited-link').forEach(a => a.classList.remove('visited-link'));
+        updateProgress();
+        showResumeBanner();
       }
     }
+
+    // =======================================
+    // Back To Top Button (NEW)
+    // =======================================
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", function () {
+      backToTop.classList.toggle("show", window.scrollY > 400);
+    }, { passive: true });
+    backToTop.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 
     // =======================================
     // Radial Gradient Hover Effect
