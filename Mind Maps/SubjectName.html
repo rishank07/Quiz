@@ -4,9 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mind Maps</title>
+  <title>Mind Maps Dashboard</title>
 
-  <!-- ✅ Google Analytics -->
+  <!-- ============================= -->
+  <!-- Google Analytics -->
+  <!-- ============================= -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -17,11 +19,23 @@
     gtag("config", "G-Q1WNRY8ECV");
   </script>
 
+  <!-- ============================= -->
   <!-- Google Fonts -->
+  <!-- ============================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap"
-    rel="stylesheet" />
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 
+  <!-- ============================= -->
+  <!-- Font Awesome -->
+  <!-- ============================= -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <!-- ============================= -->
+  <!-- CSS -->
+  <!-- ============================= -->
   <style>
     * {
       margin: 0;
@@ -29,182 +43,1375 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: "Poppins", "Noto Sans Devanagari", sans-serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #141e30, #243b55);
+      background:
+        radial-gradient(circle at top left, #243b55 0%, transparent 40%),
+        radial-gradient(circle at bottom right, #1b2735 0%, transparent 40%),
+        linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background-attachment: fixed;
       color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: #ff6a00;
+      color: white;
+    }
+
+    ::-webkit-scrollbar {
+      width: 11px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, .05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(#ff6a00, #ee0979);
+      border-radius: 30px;
+    }
+
+    /*============================*/
+    .youtube-banner {
+      width: 100%;
+      display: block;
+      text-decoration: none;
+      text-align: center;
+      padding: 15px;
+      background: linear-gradient(135deg, #ff0000, #cc0000);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: .3px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+      transition: .35s;
+    }
+
+    .youtube-banner:hover {
+      background: linear-gradient(135deg, #ff1c1c, #d40000);
+    }
+
+    /*============================*/
+    .wrapper {
+      width: 100%;
+      padding: 45px 20px 80px;
     }
 
     .container {
-      width: 100%;
-      max-width: 550px;
-      padding: 40px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(18px);
-      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
-      text-align: center;
-      animation: fadeIn 1s ease;
+      max-width: 980px;
+      margin: auto;
+      background: rgba(255, 255, 255, .08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 26px;
+      padding: 45px;
+      box-shadow:
+        0 25px 60px rgba(0, 0, 0, .45),
+        inset 0 1px rgba(255, 255, 255, .08);
     }
 
     h1 {
-      font-size: 30px;
-      font-weight: 700;
-      margin-bottom: 10px;
+      font-size: 38px;
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 800;
     }
 
-    p {
-      opacity: 0.8;
-      margin-bottom: 30px;
+    .subtitle {
+      text-align: center;
+      opacity: .8;
+      font-size: 15px;
+      margin-bottom: 35px;
     }
 
-    .menu {
-      list-style: none;
+    /*============================*/
+    .search-box {
+      position: relative;
+      margin-bottom: 35px;
     }
 
-    .menu li {
-      margin: 20px 0;
-    }
-
-    .menu a {
-      display: block;
-      text-decoration: none;
-      padding: 18px;
-      border-radius: 15px;
-      font-size: 18px;
-      color: white;
-      background: linear-gradient(135deg, #ff6a00, #ee0979);
-      transition: 0.3s;
-    }
-
-    .menu a:hover {
-      transform: translateY(-5px);
-    }
-
-    /* ✅ YouTube button style */
-    .youtube-btn {
-      display: block;
-      text-decoration: none;
-      padding: 14px;
-      border-radius: 12px;
+    .search-box input {
+      width: 100%;
+      padding: 18px 55px;
+      border: none;
+      outline: none;
+      border-radius: 18px;
       font-size: 16px;
+      font-family: inherit;
       color: white;
-      background: linear-gradient(135deg, #ff0000, #cc0000);
-      margin-bottom: 20px;
+      background: rgba(255, 255, 255, .08);
+      backdrop-filter: blur(10px);
+      transition: .35s;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+    }
+
+    .search-box input::placeholder {
+      color: #d8d8d8;
+    }
+
+    .search-box input:focus {
+      box-shadow: 0 0 0 3px rgba(255, 106, 0, .35);
+      background: rgba(255, 255, 255, .12);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ffb347;
+      font-size: 18px;
+    }
+
+    /*============================*/
+    .accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, .07);
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .07);
+      transition: .35s;
+    }
+
+    .card:hover {
+      box-shadow: 0 18px 35px rgba(0, 0, 0, .28);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      cursor: pointer;
+      user-select: none;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      font-size: 18px;
       font-weight: 600;
-      transition: 0.3s;
     }
 
-    .youtube-btn:hover {
-      transform: translateY(-3px);
+    .card-header i {
+      transition: .35s;
+      font-size: 18px;
     }
 
+    .card.active .card-header i {
+      transform: rotate(180deg);
+    }
+
+    .card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .5s ease;
+      background: rgba(255, 255, 255, .04);
+    }
+
+    .card.active .card-body {
+      max-height: 20000px;
+    }
+
+    .submenu {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /*============================*/
+    /* Level 2: Nested */
+    /*============================*/
+    .nested {
+      margin-top: 12px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .05);
+    }
+
+    .nested-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .nested-header i {
+      transition: .35s;
+    }
+
+    .nested.active .nested-header i {
+      transform: rotate(180deg);
+    }
+
+    .nested-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .4s ease;
+      background: rgba(255, 255, 255, .03);
+    }
+
+    .nested.active .nested-body {
+      max-height: 15000px;
+    }
+
+    .nested-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 15px;
+    }
+
+    /*============================*/
+    /* Level 3: Sub-Nested        */
+    /*============================*/
+    .sub-nested {
+      margin-bottom: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sub-nested-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #11998e, #38ef7d);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .sub-nested-header i {
+      transition: .35s;
+    }
+
+    .sub-nested.active .sub-nested-header i {
+      transform: rotate(180deg);
+    }
+
+    .sub-nested-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .4s ease;
+    }
+
+    .sub-nested.active .sub-nested-body {
+      max-height: 5000px;
+    }
+
+    /*============================*/
+    /* Links Design               */
+    /*============================*/
+    .submenu a,
+    .nested-links a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: white;
+      font-size: 14px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4facfe, #00c6fb);
+      transition: .3s;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
+    }
+
+    .submenu a:hover,
+    .nested-links a:hover {
+      transform: translateX(8px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, .3);
+    }
+
+    .submenu a span,
+    .nested-links a span {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /*============================*/
     .footer {
-      margin-top: 30px;
+      margin-top: 45px;
+      text-align: center;
       font-size: 13px;
-      opacity: 0.6;
+      opacity: .65;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(25px);
+    @media(max-width:900px) {
+      .container {
+        padding: 28px;
       }
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
+      h1 {
+        font-size: 30px;
+      }
+
+      .card-header {
+        font-size: 16px;
+        padding: 18px;
+      }
+    }
+
+    @media(max-width:600px) {
+      .wrapper {
+        padding: 20px 12px 60px;
+      }
+
+      .container {
+        padding: 20px;
+        border-radius: 18px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .search-box input {
+        font-size: 15px;
+        padding: 16px 50px;
+      }
+
+      .card-header {
+        padding: 16px;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <!-- ✅ YouTube Channel Button Added at Top -->
-    <a href="https://youtube.com/@examfusionprep?si=Kahv2KpUaT31Wv37" target="_blank" class="youtube-btn">
-      ▶ Visit Our YouTube Channel
-    </a>
 
-    <h1>📘Mind Maps</h1>
-    <p>Select a subject to begin your preparation</p>
+  <a href="https://youtube.com/@examfusionprep?si=Kahv2KpUaT31Wv37" target="_blank" class="youtube-banner">
+    <i class="fa-brands fa-youtube"></i> Visit our YouTube Channel @ExamFusionPrep
+  </a>
 
-    <ul class="menu">
-      <li>
-        <a href="./History/HistoryParts.html" onclick="openPage(event)" data-original=" History / इतिहास">
-          History / इतिहास
-        </a>
-      </li>
+  <div class="wrapper">
+    <div class="container">
+      <h1>📚 Mind Maps Dashboard</h1>
+      <p class="subtitle">Select any subject to begin your preparation</p>
 
-      <li>
-        <a href="./Science/ScienceParts.html" onclick="openPage(event)" data-original="SCIENCE / विज्ञान">
-          SCIENCE / विज्ञान
-        </a>
-      </li>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search Subject or Chapter...">
+      </div>
 
-      <li>
-        <a href="./Polity/ChapterName.html" onclick="openPage(event)" data-original="POLITY / राजनीति विज्ञान">
-          POLITY / राजनीति विज्ञान
-        </a>
-      </li>
+      <div class="accordion">
 
-      <li>
-        <a href="./Geography/GeographyParts.html" onclick="openPage(event)" data-original="GEOGRAPHY / भूगोल">
-          GEOGRAPHY / भूगोल
-        </a>
-      </li>
+        <!-- ========================================================= -->
+        <!-- GENERAL KNOWLEDGE -->
+        <!-- ========================================================= -->
+        <div class="card">
+          <div class="card-header">
+            <span>📚 General Knowledge / सामान्य ज्ञान</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="card-body">
+            <div class="submenu">
 
-      <li>
-        <a href="./Economics/ChapterName.html" onclick="openPage(event)" data-original="Economics / अर्थशास्त्र">
-          Economics / अर्थशास्त्र
-        </a>
-      </li>
+              <!-- ====================== -->
+              <!-- HISTORY -->
+              <!-- ====================== -->
+              <div class="nested">
+                <div class="nested-header">
+                  <span>📜 History / इतिहास</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nested-body">
+                  <div class="nested-links">
 
-      <li>
-        <a href="./Static GK/ChapterName.html" onclick="openPage(event)" data-original="Static G.K. / सामान्य ज्ञान">
-          Static G.K. / सामान्य ज्ञान
-        </a>
-      </li>
+                    <!-- Ancient History -->
+                    <div class="sub-nested">
+                      <div class="sub-nested-header">
+                        <span>🏛️ Ancient History / प्राचीन इतिहास</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div class="sub-nested-body">
+                        <div class="nested-links">
+                          <a href="./History/Ancient History/ChapterNames/01_sources_of_ancient_history_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. Sources of Ancient
+                              History / प्राचीन इतिहास के स्रोत</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/02_pre_historic_age_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Pre Historic Age /
+                              प्रागैतिहासिक काल</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/03_indus_valley_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 3. Indus Valley /
+                              सिंधु घाटी सभ्यता</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/04_vedic_age_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Vedic Age / वैदिक
+                              काल</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/05_jainism_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Jainism / जैन
+                              धर्म</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/06_buddhism_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Buddhism / बौद्ध
+                              धर्म</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/07_mahajanapadas_magadha_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Mahajanapadas &
+                              Magadha / महाजनपद एवं मगध</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/08_mauryan_empire_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Mauryan Empire /
+                              मौर्य साम्राज्य</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/09_post_mauryan_empire_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Post Mauryan
+                              Empire / मौर्योत्तर साम्राज्य</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/10_gupta_empire_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 10. Gupta Empire /
+                              गुप्त साम्राज्य</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/11_post_gupta_empire_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 11. Post Gupta Empire
+                              / गुप्तोत्तर साम्राज्य</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/12_history_of_south_india_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 12. History of South
+                              India / दक्षिण भारत का इतिहास</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Ancient History/ChapterNames/13_early_medieval_period_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 13. Early Medieval
+                              Period / पूर्व मध्यकालीन काल</span><i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                      </div>
+                    </div>
 
-      <li>
-        <a href="./Envitonment & Ecology/ChapterName.html" onclick="openPage(event)"
-          data-original="Environment and Ecology / पर्यावरण एवं पारिस्थितिकी">
-          Environment and Ecology / पर्यावरण एवं पारिस्थितिकी
-        </a>
-      </li>
+                    <!-- Medieval History -->
+                    <div class="sub-nested">
+                      <div class="sub-nested-header">
+                        <span>⚔️ Medieval History / मध्यकालीन इतिहास</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div class="sub-nested-body">
+                        <div class="nested-links">
+                          <a href="./History/Medieval History/ChapterNames/14_arab_and_turk_invasions_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. Arab & Turk
+                              Invasions / अरब और तुर्क आक्रमण</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Medieval History/ChapterNames/15_delhi_sultanate_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Delhi Sultanate /
+                              दिल्ली सल्तनत</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Medieval History/ChapterNames/16_vijayanagara_bahmani_empire_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 3. Vijayanagara &
+                              Bahmani Empire / विजयनगर एवं बहमनी साम्राज्य</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Medieval History/ChapterNames/17_bhakti_sufi_movement_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Bhakti & Sufi
+                              Movement / भक्ति एवं सूफी आंदोलन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Medieval History/ChapterNames/18_mughal_empire_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Mughal Empire /
+                              मुगल साम्राज्य</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Medieval History/ChapterNames/19_provincial_dynasties_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Provincial
+                              Dynasties / प्रांतीय राजवंश</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Medieval History/ChapterNames/20_later_mughal_period_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Later Mughal
+                              Period / उत्तर मुगल काल</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Medieval History/ChapterNames/21_rise_of_maratha_power_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Rise of Maratha
+                              Power / मराठा शक्ति का उदय</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Medieval History/ChapterNames/22_rise_of_the_sikhs_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Rise of the Sikhs
+                              / सिखों का उदय</span><i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                      </div>
+                    </div>
 
+                    <!-- Modern History -->
+                    <div class="sub-nested">
+                      <div class="sub-nested-header">
+                        <span>🔥 Modern History / आधुनिक इतिहास</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div class="sub-nested-body">
+                        <div class="nested-links">
+                          <a href="./History/Modern History/ChapterNames/european_companies_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. Arrival of
+                              European Companies / यूरोपीय कंपनियों का आगमन</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/british_expansion_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. British Expansion
+                              in Indian Territories / भारतीय क्षेत्रों में ब्रिटिश विस्तार</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/revolt_of_1857_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 3. The Revolt of 1857
+                              / 1857 की क्रांति</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/peasant_tribal_movements_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Peasant Movements
+                              & Tribal Revolt / किसान आंदोलन और जनजातीय विद्रोह</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/socio_religious_reform_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Socio-Religious
+                              Reform Movement / सामाजिक-धार्मिक सुधार आंदोलन</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/press_education_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Development of
+                              Press & Education / प्रेस और शिक्षा का विकास</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/INC_formation_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Formation of
+                              Indian National Congress / भारतीय राष्ट्रीय कांग्रेस की स्थापना</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/indian_national_movement_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Indian National
+                              Movement / भारतीय राष्ट्रीय आंदोलन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/gandhian_era_first_phase_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Gandhian Era:
+                              First Phase / गांधीवादी युग: प्रथम चरण</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/national_politics_1922_29_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 10. Phase of National
+                              Politics (1922-29) / राष्ट्रीय राजनीति का चरण (1922-29)</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/gandhian_era_second_phase_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 11. Gandhian Era:
+                              Second Phase / गांधीवादी युग: द्वितीय चरण</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/towards_independence_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 12. Towards
+                              Independence / स्वतंत्रता की ओर</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./History/Modern History/ChapterNames/governor_gg_viceroy_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 13. Governor,
+                              Governor-General & Viceroy / गवर्नर, गवर्नर-जनरल और वायसराय</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                      </div>
+                    </div>
 
-    </ul>
+                  </div>
+                </div>
+              </div>
 
-    <div class="footer">© 2026 ExamFusion Prep. All Rights Reserved.</div>
+              <!-- ====================== -->
+              <!-- GEOGRAPHY -->
+              <!-- ====================== -->
+              <div class="nested">
+                <div class="nested-header">
+                  <span>🌍 Geography / भूगोल</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nested-body">
+                  <div class="nested-links">
+
+                    <!-- Indian Geography -->
+                    <div class="sub-nested">
+                      <div class="sub-nested-header">
+                        <span>🇮🇳 Indian Geography / भारत का भूगोल</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div class="sub-nested-body">
+                        <div class="nested-links">
+                          <a href="./Geography/Indian Geography/ChapterNames/01_general_introduction_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. General
+                              Introduction / सामान्य परिचय</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/02_geological_structure_of_india_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Geological
+                              Structure of India / भारत की भूगर्भीय संरचना</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/03_physical_divisions_of_india_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 3. Physical Divisions
+                              of India / भारत के भौतिक विभाजन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/04_rivers_of_india_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Rivers of India /
+                              भारत की नदियाँ</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/05_lakes_waterfalls_of_india_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Lakes & Waterfalls
+                              of India / भारत की झीलें और जलप्रपात</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/06_multipurpose_project_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Multipurpose
+                              Projects / बहुउद्देशीय परियोजनाएं</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/07_climate_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Climate /
+                              जलवायु</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/08_soils_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Soils /
+                              मिट्टियाँ</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/09_natural_vegetation_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Natural Vegetation
+                              / प्राकृतिक वनस्पति</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/10_agriculture_animal_husbandry_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 10. Agriculture &
+                              Animal Husbandry / कृषि एवं पशुपालन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/11_mineral_resources_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 11. Mineral Resources
+                              / खनिज संसाधन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/12_energy_resources_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 12. Energy Resources
+                              / ऊर्जा संसाधन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/13_industries_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 13. Industries /
+                              उद्योग</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/14_transport_communication_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 14. Transport &
+                              Communication / परिवहन एवं संचार</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/15_population_urbanization_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 15. Population &
+                              Urbanization / जनसंख्या एवं नगरीकरण</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/16_races_tribes_of_india_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 16. Races & Tribes of
+                              India / भारत की प्रजातियां एवं जनजातियां</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/Indian Geography/ChapterNames/17_states_union_territories_of_india_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 17. States & Union
+                              Territories / राज्य और केंद्र शासित प्रदेश</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- World Geography -->
+                    <div class="sub-nested">
+                      <div class="sub-nested-header">
+                        <span>🌎 World Geography / विश्व का भूगोल</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div class="sub-nested-body">
+                        <div class="nested-links">
+                          <a href="./Geography/World Geography/ChapterNames/01_geography_introduction_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. Geography
+                              Introduction / भूगोल एक परिचय</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/02_universe_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Universe /
+                              ब्रह्मांड</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/03_solar_system_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 3. Solar System /
+                              सौरमंडल</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/04_rotation_revolution_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Rotation &
+                              Revolution / घूर्णन एवं परिक्रमण</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/05_latitude_longitude_standard_time_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Latitude,
+                              Longitude & Time / अक्षांश, देशांतर एवं समय</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/06_origin_evolution_earth_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Origin & Evolution
+                              of Earth / पृथ्वी की उत्पत्ति एवं विकास</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/07_internal_structure_earth_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Internal Structure
+                              of Earth / पृथ्वी की आंतरिक संरचना</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/08_rocks_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Rocks /
+                              चट्टानें</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/09_earthquakes_tsunamis_volcanoes_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Earthquakes,
+                              Tsunamis & Volcanoes / भूकंप, सूनामी एवं ज्वालामुखी</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/10_geomorphic_processes_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 10. Geomorphic
+                              Processes / भू-आकृतिक प्रक्रियाएं</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/11_landforms_relief_features_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 11. Landforms &
+                              Relief Features / स्थलाकृतियां एवं उच्चावच विशेषताएँ</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/12_mountains_plateaus_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 12. Mountains &
+                              Plateaus / पर्वत एवं पठार</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/13_plains_islands_deserts_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 13. Plains, Islands &
+                              Deserts / मैदान, द्वीप एवं मरुस्थल</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/14_rivers_lakes_waterfalls_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 14. Rivers, Lakes &
+                              Waterfalls / नदियाँ, झीलें एवं जलप्रपात</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/15_atmosphere_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 15. Atmosphere /
+                              वायुमंडल</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/16_air_pressure_winds_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 16. Air Pressure &
+                              Winds / वायुदाब एवं पवनें</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/17_humidity_precipitation_clouds_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 17. Humidity,
+                              Precipitation & Clouds / आर्द्रता, वर्षण एवं बादल</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/18_air_mass_cyclone_anticyclone_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 18. Air Mass, Cyclone
+                              & Anticyclone / वायुराशि, चक्रवात एवं प्रतिचक्रवात</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/19_major_climatic_regions_world_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 19. Major Climatic
+                              Regions of the World / विश्व के प्रमुख जलवायु प्रदेश</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/20_hydrosphere_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 20. Hydrosphere /
+                              जलमंडल</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/21_ocean_currents_waves_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 21. Ocean Currents &
+                              Waves / महासागरीय धाराएँ एवं लहरें</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/22_soils_natural_vegetation_world_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 22. Soils & Natural
+                              Vegetation of the World / विश्व की मिट्टियाँ एवं प्राकृतिक वनस्पति</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/23_agriculture_animal_husbandry_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 23. Agriculture &
+                              Animal Husbandry / कृषि एवं पशुपालन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/24_minerals_energy_resources_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 24. Minerals & Energy
+                              Resources / खनिज एवं ऊर्जा संसाधन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/25_major_industries_world_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 25. Major Industries
+                              of the World / विश्व के प्रमुख उद्योग</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/26_transport_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 26. Transport /
+                              परिवहन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/27_population_urbanization_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 27. Population &
+                              Urbanization / जनसंख्या एवं नगरीकरण</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/28_human_races_tribes_languages_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 28. Human Races,
+                              Tribes & Languages / मानव प्रजातियां, जनजातियां एवं भाषाएं</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Geography/World Geography/ChapterNames/29_continents_world_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 29. Continents of the
+                              World / विश्व के महाद्वीप</span><i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- ====================== -->
+              <!-- SCIENCE -->
+              <!-- ====================== -->
+              <div class="nested">
+                <div class="nested-header">
+                  <span>🔬 Science / विज्ञान</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nested-body">
+                  <div class="nested-links">
+
+                    <!-- Biology -->
+                    <div class="sub-nested">
+                      <div class="sub-nested-header">
+                        <span>🧬 Biology / जीव विज्ञान</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div class="sub-nested-body">
+                        <div class="nested-links">
+                          <a href="./Science/BioLogy/ChapterNames/01_introduction_to_biology_living_world_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. Introduction to
+                              Biology & Living World / जीव विज्ञान का परिचय एवं सजीव जगत</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/BioLogy/ChapterNames/02_plant_kingdom_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Plant Kingdom /
+                              पादप जगत</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/BioLogy/ChapterNames/03_animal_world_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 3. Animal World /
+                              जंतु जगत</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/BioLogy/ChapterNames/04_cell_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Cell /
+                              कोशिका</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/BioLogy/ChapterNames/05_tissue_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Tissue /
+                              ऊतक</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/BioLogy/ChapterNames/06_biological_process_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Biological Process
+                              / जैविक प्रक्रियाएं</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/BioLogy/ChapterNames/07_control_coordination_movement_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Control,
+                              Coordination & Movement / नियंत्रण, समन्वय एवं गति</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/BioLogy/ChapterNames/08_reproduction_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Reproduction /
+                              प्रजनन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/BioLogy/ChapterNames/09_heredity_evolution_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Heredity &
+                              Evolution / आनुवंशिकता एवं विकास</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/BioLogy/ChapterNames/10_human_disease_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 10. Human Disease /
+                              मानव रोग</span><i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Chemistry -->
+                    <div class="sub-nested">
+                      <div class="sub-nested-header">
+                        <span>🧪 Chemistry / रसायन विज्ञान</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div class="sub-nested-body">
+                        <div class="nested-links">
+                          <a href="./Science/Chemistry/ChapterNames/01_matter_states_of_matter_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. Matter & States of
+                              Matter / पदार्थ एवं पदार्थ की अवस्थाएँ</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Chemistry/ChapterNames/02_atomic_structure_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Atomic Structure /
+                              परमाणु संरचना</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Chemistry/ChapterNames/03_periodic_classification_of_elements_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 3. Periodic
+                              Classification of Elements / तत्वों का आवर्ती वर्गीकरण</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Chemistry/ChapterNames/04_chemical_bonds_reactions_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Chemical Bonds &
+                              Reactions / रासायनिक बंधन एवं अभिक्रियाएँ</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Chemistry/ChapterNames/05_solution_colloid_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Solution & Colloid
+                              / विलयन एवं कोलॉइड</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Chemistry/ChapterNames/06_acid_base_salt_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Acid, Base & Salt
+                              / अम्ल, क्षार एवं लवण</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Chemistry/ChapterNames/07_metals_nonmetals_metallurgy_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Metals, Nonmetals
+                              & Metallurgy / धातु, अधातु एवं धातुकर्म</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Chemistry/ChapterNames/08_organic_chemistry_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Organic Chemistry
+                              / कार्बनिक रसायन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Chemistry/ChapterNames/09_chemistry_in_everyday_life_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Chemistry in
+                              Everyday Life / दैनिक जीवन में रसायन</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Chemistry/ChapterNames/10_environmental_chemicals_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 10. Environmental
+                              Chemistry / पर्यावरणीय रसायन</span><i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Physics -->
+                    <div class="sub-nested">
+                      <div class="sub-nested-header">
+                        <span>⚡ Physics / भौतिक विज्ञान</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div class="sub-nested-body">
+                        <div class="nested-links">
+                          <a href="./Science/Physics/ChapterNames/01_physical_quantities_units_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. Physical
+                              Quantities & Units / भौतिक राशियाँ एवं मात्रक</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/02_motion_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Motion /
+                              गति</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/03_laws_of_force_motion_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 3. Laws of Force &
+                              Motion / बल एवं गति के नियम</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/04_work_power_energy_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Work, Power &
+                              Energy / कार्य, शक्ति एवं ऊर्जा</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/05_gravitation_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Gravitation /
+                              गुरुत्वाकर्षण</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/06_mechanical_properties_of_matter_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Mechanical
+                              Properties of Matter / पदार्थ के यांत्रिक गुण</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/07_temperature_heat_thermodynamics_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Temperature, Heat
+                              & Thermodynamics / तापमान, ऊष्मा एवं उष्मागतिकी</span><i
+                              class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/08_periodic_wave_motion_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Periodic & Wave
+                              Motion / आवधिक एवं तरंग गति</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/09_electrostatics_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Electrostatics /
+                              स्थिर वैद्युतिकी</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/10_magnetism_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 10. Magnetism /
+                              चुंबकत्व</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/11_light_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 11. Light /
+                              प्रकाश</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/12_semiconductor_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 12. Semiconductor /
+                              अर्धचालक</span><i class="fa-solid fa-arrow-right"></i></a>
+                          <a href="./Science/Physics/ChapterNames/13_our_universe_mindmap.html"
+                            onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 13. Our Universe /
+                              हमारा ब्रह्मांड</span><i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- ====================== -->
+              <!-- POLITY -->
+              <!-- ====================== -->
+              <div class="nested">
+                <div class="nested-header">
+                  <span>⚖️ Polity / राजनीति विज्ञान</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nested-body">
+                  <div class="nested-links">
+                    <a href="./Polity/ChapterNames/01_constitutional_development_of_india_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. Constitutional
+                        Development of India / भारत का संवैधानिक विकास</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/02_making_of_constitution_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Making of Constitution /
+                        संविधान का निर्माण</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/03_preamble_features_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 3. Preamble & Features / प्रस्तावना एवं विशेषताएँ</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/04_sources_parts_articles_schedules_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Sources, Parts, Articles
+                        & Schedules / स्रोत, भाग, अनुच्छेद एवं अनुसूचियां</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/05_union_territories_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 5. Union & its Territories / संघ एवं इसके
+                        राज्यक्षेत्र</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/06_citizenship_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 6. Citizenship / नागरिकता</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/07_fundamental_rights_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Fundamental Rights /
+                        मौलिक अधिकार</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/08_directive_principles_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Directive Principles /
+                        नीति निर्देशक तत्व</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/09_fundamental_duties_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Fundamental Duties /
+                        मौलिक कर्तव्य</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/10_president_of_india_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 10. President of India /
+                        भारत के राष्ट्रपति</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/11_prime_minister_council_of_ministers_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 11. Prime Minister &
+                        Council of Ministers / प्रधानमंत्री एवं मंत्रिपरिषद</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/12_parliament_of_india_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 12. Parliament of India /
+                        भारत की संसद</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/13_state_executive_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 13. State Executive / राज्य कार्यपालिका</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/14_state_legislature_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 14. State Legislature / राज्य विधानमंडल</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/15_supreme_court_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 15. Supreme Court / सर्वोच्च न्यायालय</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/16_high_courts_subordinate_courts_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 16. High Courts &
+                        Subordinate Courts / उच्च न्यायालय एवं अधीनस्थ न्यायालय</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/17_centre_state_relations_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 17. Centre-State Relations
+                        / केंद्र-राज्य संबंध</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/18_emergency_provisions_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 18. Emergency Provisions /
+                        आपातकालीन प्रावधान</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/19_local_self_government_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 19. Local Self Government /
+                        स्थानीय स्वशासन</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/20_official_language_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 20. Official Language / राजभाषा</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/21_constitutional_amendment_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 21. Constitutional
+                        Amendment / संविधान संशोधन</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/22_constitutional_non_constitutional_bodies_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 22. Constitutional &
+                        Non-Constitutional Bodies / संवैधानिक एवं गैर-संवैधानिक निकाय</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ====================== -->
+              <!-- ECONOMICS -->
+              <!-- ====================== -->
+              <div class="nested">
+                <div class="nested-header">
+                  <span>💰 Economics / अर्थशास्त्र</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nested-body">
+                  <div class="nested-links">
+                    <a href="./Economics/ChapterNames/01_economics_demand_supply_market_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. Economics, Demand,
+                        Supply & Market / अर्थशास्त्र, मांग, आपूर्ति एवं बाजार</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/02_economy_introduction_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Economy Introduction /
+                        अर्थव्यवस्था एक परिचय</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/03_economic_growth_development_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 3. Economic Growth &
+                        Development / आर्थिक समृद्धि एवं विकास</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/04_national_income_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. National Income /
+                        राष्ट्रीय आय</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/05_economic_planning_india_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Economic Planning in
+                        India / भारत में आर्थिक नियोजन</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/06_poverty_unemployment_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Poverty & Unemployment /
+                        गरीबी एवं बेरोजगारी</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/07_money_inflation_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Money & Inflation /
+                        मुद्रा एवं मुद्रास्फीति</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/08_banking_india_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 8. Banking in India / भारत में बैंकिंग</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/09_money_capital_markets_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 9. Money & Capital Markets
+                        / मुद्रा एवं पूंजी बाजार</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/Economics/ChapterNames/10_fiscal_policy_budget_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 10. Fiscal Policy & Budget
+                        / राजकोषीय नीति एवं बजट</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/11_tax_system_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 11. Tax System / कर प्रणाली</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/12_foreign_trade_balance_payments_investment_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 12. Foreign Trade & Balance
+                        of Payments / विदेशी व्यापार एवं भुगतान संतुलन</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/13_indian_agriculture_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 13. Indian Agriculture /
+                        भारतीय कृषि</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/14_indian_industries_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 14. Indian Industries /
+                        भारतीय उद्योग</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/15_other_major_schemes_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 15. Other Major Schemes /
+                        अन्य प्रमुख योजनाएं</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/16_international_financial_institutions_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 16. International Financial
+                        Institutions / अंतर्राष्ट्रीय वित्तीय संस्थान</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/17_census_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 17. Census / जनगणना</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/18_major_committees_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 18. Major Committees /
+                        प्रमुख समितियां</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/19_miscellaneous_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 19. Miscellaneous / विविध</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ====================== -->
+              <!-- ENVIRONMENT -->
+              <!-- ====================== -->
+              <div class="nested">
+                <div class="nested-header">
+                  <span>🌿 Environment & Ecology / पर्यावरण एवं पारिस्थितिकी</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nested-body">
+                  <div class="nested-links">
+                    <a href="./Envitonment & Ecology/ChapterNames/01_environment_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 1. Environment /
+                        पर्यावरण</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Envitonment & Ecology/ChapterNames/02_ecosystem_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Ecosystem / पारिस्थितिकी
+                        तंत्र</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Envitonment & Ecology/ChapterNames/03_biodiversity_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 3. Biodiversity / जैव
+                        विविधता</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Envitonment & Ecology/ChapterNames/04_wildlife_conservation_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Wildlife Conservation /
+                        वन्यजीव संरक्षण</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Envitonment & Ecology/ChapterNames/05_climate_change_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Climate Change / जलवायु
+                        परिवर्तन</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Envitonment & Ecology/ChapterNames/06_environmental_pollution_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Environmental Pollution
+                        / पर्यावरणीय प्रदूषण</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Envitonment & Ecology/ChapterNames/07_sustainable_development_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Sustainable Development
+                        / सतत विकास</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Envitonment & Ecology/ChapterNames/08_disaster_management_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Disaster Management /
+                        आपदा प्रबंधन</span><i class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ====================== -->
+              <!-- STATIC GK -->
+              <!-- ====================== -->
+              <div class="nested">
+                <div class="nested-header">
+                  <span>📘 Static G.K. / स्थैतिक सामान्य ज्ञान</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nested-body">
+                  <div class="nested-links">
+                    <a href="./Static GK/ChapterNames/01_first_in_india_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 1. First in India / भारत में प्रथम</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/02_largest_highest_longest_india_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 2. Largest, Highest &
+                        Longest in India / भारत में सबसे बड़ा, ऊँचा एवं लंबा</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/03_first_in_world_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 3. First in World / विश्व में प्रथम</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/04_largest_tallest_smallest_world_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 4. Largest, Tallest &
+                        Smallest in World / विश्व में सबसे बड़ा, ऊँचा एवं छोटा</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/05_places_related_prominent_people_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 5. Places Related to
+                        Prominent People / प्रमुख व्यक्तियों से संबंधित स्थान</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/06_popular_nicknames_personalities_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 6. Popular Nicknames of
+                        Personalities / व्यक्तियों के लोकप्रिय उपनाम</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/07_facts_major_countries_world_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 7. Facts of Major Countries
+                        / प्रमुख देशों के तथ्य</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/08_capitals_currencies_languages_world_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 8. Capitals, Currencies &
+                        Languages / राजधानियां, मुद्राएं एवं भाषाएं</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/09_authors_books_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 9. Authors & Books / लेखक एवं पुस्तकें</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/10_awards_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 10. Awards / पुरस्कार</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/11_sports_panorama_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 11. Sports Panorama / खेल
+                        परिदृश्य</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/12_indian_defence_security_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 12. Indian Defence &
+                        Security / भारतीय रक्षा एवं सुरक्षा</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/13_indian_nuclear_program_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 13. Indian Nuclear Program
+                        / भारतीय परमाणु कार्यक्रम</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/14_space_program_india_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 14. Space Program of India
+                        / भारत का अंतरिक्ष कार्यक्रम</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/15_international_organization_institution_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 15. International
+                        Organizations & Institutions / अंतर्राष्ट्रीय संगठन एवं संस्थान</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/16_computer_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 16. Computer / कंप्यूटर</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/17_unesco_world_heritage_india_mindmap.html"
+                      onclick="openPage(event)"><span><i class="fa-solid fa-file-lines"></i> 17. UNESCO World Heritage
+                        in India / भारत में यूनेस्को विश्व धरोहर</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/18_art_culture_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 18. Art & Culture / कला एवं संस्कृति</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/19_abbreviation_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 19. Abbreviations / शब्द संक्षेप</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Static GK/ChapterNames/20_important_days_mindmap.html" onclick="openPage(event)"><span><i
+                          class="fa-solid fa-file-lines"></i> 20. Important Days / महत्वपूर्ण दिवस</span><i
+                        class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- ENGLISH GRAMMAR -->
+        <!-- ========================================================= -->
+        <div class="card">
+          <div class="card-header">
+            <span>📖 English Grammar / अंग्रेज़ी व्याकरण</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="card-body">
+            <div class="submenu">
+              <a href="./English Grammar/ChapterNames/01_basics_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-book"></i> 1. Basics / मूल बातें</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/02_tenses_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-clock"></i> 2. Tenses / काल</span><i class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/03_conditionals_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-code-branch"></i> 3. Conditionals / शर्तवाचक वाक्य</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/04_nouns_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-font"></i> 4. Nouns / संज्ञा</span><i class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/05_pronouns_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-user"></i> 5. Pronouns / सर्वनाम</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/06_adjectives_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-star"></i> 6. Adjectives / विशेषण</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/07_subject_verb_agreement_mindmap.html"
+                onclick="openPage(event)"><span><i class="fa-solid fa-check-double"></i> 7. Subject Verb Agreement /
+                  कर्ता क्रिया सहमति</span><i class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/08_prepositions_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-location-dot"></i> 8. Prepositions / संबंधबोधक</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/09_verbs_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-person-running"></i> 9. Verbs / क्रिया</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/10_modals_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-circle-check"></i> 10. Modals / सहायक क्रियाएँ</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/11_adverbs_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-gauge-high"></i> 11. Adverbs / क्रिया विशेषण</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/12_conjunctions_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-link"></i> 12. Conjunctions / समुच्चयबोधक</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/13_articles_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-newspaper"></i> 13. Articles / आर्टिकल्स</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/14_question_tags_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-question"></i> 14. Question Tags / प्रश्न टैग</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/15_voice_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-microphone"></i> 15. Voice / वाच्य</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/16_narration_mindmap.html" onclick="openPage(event)"><span><i
+                    class="fa-solid fa-comments"></i> 16. Narration / प्रत्यक्ष एवं परोक्ष कथन</span><i
+                  class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer">
+        © <span id="year"></span> ExamFusion Prep. All Rights Reserved.
+      </div>
+    </div>
   </div>
 
-  <!-- ✅ Your JS Function -->
   <script>
+    // =======================================
+    // Accordion Control
+    // =======================================
+    document.querySelectorAll(".card-header").forEach(function (header) {
+      header.addEventListener("click", function () {
+        this.parentElement.classList.toggle("active");
+      });
+    });
+
+    document.querySelectorAll(".nested-header").forEach(function (header) {
+      header.addEventListener("click", function (e) {
+        e.stopPropagation();
+        this.parentElement.classList.toggle("active");
+      });
+    });
+
+    document.querySelectorAll(".sub-nested-header").forEach(function (header) {
+      header.addEventListener("click", function (e) {
+        e.stopPropagation();
+        this.parentElement.classList.toggle("active");
+      });
+    });
+
+    // =======================================
+    // Smart Search Engine (Fixed Issue)
+    // =======================================
+    const searchInput = document.getElementById("searchInput");
+
+    searchInput.addEventListener("input", function () {
+      const keyword = this.value.trim().toLowerCase();
+
+      // अगर सर्च बॉक्स खाली हो गया है, तो सब कुछ क्लोज कर दो
+      if (keyword === "") {
+        document.querySelectorAll(".card, .nested, .sub-nested").forEach(item => {
+          item.classList.remove("active");
+        });
+
+        document.querySelectorAll(".submenu a").forEach(link => {
+          link.style.display = "flex";
+        });
+        document.querySelectorAll(".sub-nested, .nested").forEach(folder => {
+          folder.style.display = "block";
+        });
+        return;
+      }
+
+      // सर्च करने पर सब ओपन करो
+      document.querySelectorAll(".card, .nested, .sub-nested").forEach(item => {
+        item.classList.add("active");
+      });
+
+      // लिंक को फ़िल्टर करो
+      document.querySelectorAll(".submenu a").forEach(link => {
+        if (link.innerText.toLowerCase().indexOf(keyword) > -1) {
+          link.style.display = "flex";
+        } else {
+          link.style.display = "none";
+        }
+      });
+
+      // खाली सब-फोल्डर्स (Level 3) को छिपाओ
+      document.querySelectorAll(".sub-nested").forEach(sub => {
+        const visibleLinks = sub.querySelectorAll(".nested-links a:not([style*='display: none'])");
+        sub.style.display = (visibleLinks.length === 0) ? "none" : "block";
+      });
+
+      // खाली फोल्डर्स (Level 2) को छिपाओ
+      document.querySelectorAll(".nested").forEach(nested => {
+        const visibleLinks = nested.querySelectorAll(".nested-links a:not([style*='display: none'])");
+        nested.style.display = (visibleLinks.length === 0) ? "none" : "block";
+      });
+    });
+
+    // ESC बटन दबाने पर सर्च क्लियर
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        searchInput.value = "";
+        searchInput.dispatchEvent(new Event("input"));
+      }
+    });
+
+    // Enter बटन दबाने पर पहला रिजल्ट ओपन हो 
+    searchInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        const first = document.querySelector(".submenu a:not([style*='display: none'])");
+        if (first) first.click();
+      }
+    });
+
+    // =======================================
+    // Loading Animation
+    // =======================================
     function openPage(event) {
       event.preventDefault();
-
       const linkEl = event.currentTarget;
       const link = linkEl.href;
 
-      linkEl.innerText = "✨ Loading...";
-      linkEl.style.opacity = "0.7";
+      if (!linkEl.dataset.original) {
+        linkEl.dataset.original = linkEl.innerHTML;
+      }
+
+      linkEl.innerHTML = '<span>⏳ Loading...</span>';
+      linkEl.style.opacity = ".65";
+      linkEl.style.pointerEvents = "none";
 
       setTimeout(function () {
         window.location.href = link;
-      }, 600);
+      }, 500);
     }
 
+    // पेज वापस आने पर ओरिजिनल टेक्स्ट रिस्टोर करें
     window.addEventListener("pageshow", function () {
       document.querySelectorAll("a[data-original]").forEach(function (a) {
-        a.innerText = a.dataset.original;
+        a.innerHTML = a.dataset.original;
         a.style.opacity = "1";
+        a.style.pointerEvents = "auto";
       });
     });
+
+    // =======================================
+    // Radial Gradient Hover Effect
+    // =======================================
+    document.querySelectorAll(".submenu a, .nested-links a").forEach(function (link) {
+      link.addEventListener("mousemove", function (e) {
+        this.style.background = `radial-gradient(circle at ${e.offsetX}px ${e.offsetY}px, rgba(255,255,255,0.2), transparent)`;
+      });
+      link.addEventListener("mouseleave", function () {
+        this.style.background = "";
+      });
+    });
+
+    // Footer में आटोमैटिक साल सेट करें
+    document.getElementById("year").innerText = new Date().getFullYear();
   </script>
 </body>
 

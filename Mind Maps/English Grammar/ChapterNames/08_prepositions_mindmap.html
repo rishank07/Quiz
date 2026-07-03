@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Prepositions | Exam Fusion Prep</title>
+<style>
+:root {
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+* { box-sizing: border-box; margin:0; padding:0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  line-height: 1.6;
+  padding-bottom: 40px;
+}
+.header {
+  background: linear-gradient(135deg, var(--surface2), var(--surface));
+  padding: 24px 20px;
+  text-align: center;
+  border-bottom: 3px solid var(--gold);
+}
+.header h1 {
+  color: var(--gold);
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+.header p {
+  color: var(--text);
+  opacity: 0.8;
+  margin-top: 6px;
+  font-size: 0.95rem;
+}
+.tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: static;
+  
+  z-index: 100;
+  overflow-x: auto;
+}
+.tab-nav button {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 9px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab-nav button:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.tab-nav button.active {
+  background: var(--surface2);
+  border-bottom: 3px solid var(--gold);
+  color: var(--gold);
+}
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
+.tab-content { display: none; animation: fadeIn 0.3s; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.card-header {
+  padding: 12px 18px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #0f1117;
+}
+.card-header.gold { background: linear-gradient(90deg, var(--gold), #d4a82f); color:#1a1400; }
+.card-header.green { background: linear-gradient(90deg, var(--accent3), #229954); }
+.card-header.blue { background: linear-gradient(90deg, var(--accent2), #2874a6); }
+.card-header.purple { background: linear-gradient(90deg, var(--accent4), #7d3c98); color:#fff; }
+.card-header.orange { background: linear-gradient(90deg, var(--accent5), #ba5f13); }
+.card-header.red { background: linear-gradient(90deg, var(--accent1), #b03a2e); color:#fff; }
+.card-header.teal { background: linear-gradient(90deg, var(--accent6), #148f77); }
+
+.card-body { padding: 18px; }
+
+.arrow-list { list-style: none; }
+.arrow-list li {
+  padding: 6px 0 6px 22px;
+  position: relative;
+}
+.arrow-list li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-weight: bold;
+}
+
+.exam-trap {
+  background: #1a0909;
+  border-left: 4px solid var(--accent1);
+  padding: 12px 16px;
+  margin: 14px 0;
+  border-radius: 4px;
+}
+.exam-trap .label { color: var(--accent1); font-weight: 700; margin-bottom: 6px; display:block; }
+
+.quick-recall {
+  background: #091524;
+  border-left: 4px solid var(--accent2);
+  padding: 12px 16px;
+  margin: 14px 0;
+  border-radius: 4px;
+}
+.quick-recall .label { color: var(--accent2); font-weight: 700; margin-bottom: 6px; display:block; }
+
+.rule-box {
+  border: 1.5px solid var(--gold);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 14px 0;
+  color: var(--gold);
+  font-weight: 700;
+  background: rgba(245,200,66,0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 0.92rem;
+}
+thead th {
+  background: #2a2200;
+  color: var(--gold);
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 2px solid var(--gold);
+}
+tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+}
+tbody tr:hover { background: rgba(255,255,255,0.03); }
+.table-scroll { overflow-x: auto; }
+
+.pos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 10px;
+}
+.pos-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.pos-card h4 { color: var(--gold); margin-bottom: 6px; font-size: 1rem; }
+.pos-card p { font-size: 0.9rem; opacity: 0.9; }
+.pos-card .ex { color: var(--accent3); font-size: 0.85rem; margin-top: 6px; font-style: italic; }
+
+.wrong { color: var(--accent1); text-decoration: line-through; }
+.right { color: var(--accent3); }
+.correction { color: var(--gold); font-weight: 700; }
+
+.sub-heading {
+  color: var(--gold);
+  font-size: 1.1rem;
+  margin: 18px 0 8px 0;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+.q-block {
+  background: var(--surface2);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 8px 0;
+  font-size: 0.92rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--gold);
+  opacity: 0.7;
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.3rem; }
+  .tab-nav button { font-size: 0.78rem; padding: 8px 12px; }
+}
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>PREPOSITIONS</h1>
+  <p>English Grammar | SSC / BPSC / BSSC Exam Prep</p>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="switchTab('no-prep')">No Preposition</button>
+  <button class="tab-btn" onclick="switchTab('diff-prep')">Different Prepositions</button>
+  <button class="tab-btn" onclick="switchTab('academic1')">Academic: Motion/Position</button>
+  <button class="tab-btn" onclick="switchTab('academic2')">Academic: Time & Place</button>
+  <button class="tab-btn" onclick="switchTab('academic3')">Academic: Direction Pairs</button>
+  <button class="tab-btn" onclick="switchTab('practice')">Practice Examples</button>
+  <button class="tab-btn" onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="container">
+
+  <!-- TAB 1: OVERVIEW -->
+  <div class="tab-content active" id="overview">
+    <div class="card">
+      <div class="card-header gold">Prepositions — Exam Weightage Split</div>
+      <div class="card-body">
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>Academic (≈40%)</h4>
+            <p>Basic positional/directional prepositions used in normal sentence construction — in, into, on, onto, etc.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Competitive (≈60%)</h4>
+            <p>Error-spotting focused: (1) Verbs that take NO preposition, (2) Verbs with a FIXED preposition, (3) Verbs that take DIFFERENT prepositions depending on meaning/object.</p>
+          </div>
+        </div>
+        <div class="rule-box">Competitive Prepositions = No Preposition + Fixed Preposition + Different Preposition</div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          For SSC/BPSC/BSSC error-spotting questions, the trap is almost always an <strong>extra unnecessary preposition</strong> added after certain verbs (enter into, discuss about, attack on, etc.) — these verbs are already complete without a preposition.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: NO PREPOSITION VERBS -->
+  <div class="tab-content" id="no-prep">
+    <div class="card">
+      <div class="card-header red">Words That Take NO Preposition</div>
+      <div class="card-body">
+        <p style="margin-bottom:10px; opacity:0.85;">These verbs are transitive and already carry the meaning of the preposition inside them — adding a preposition after them is a common error.</p>
+
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>1. Enter (NOT enter into) = come into</h4>
+            <p><span class="wrong">She entered into my room quietly.</span></p>
+            <p class="ex">✔ She entered my room quietly. / She came into my room quietly.</p>
+          </div>
+          <div class="pos-card">
+            <h4>2. Return (NOT return back) = come back</h4>
+            <p><span class="wrong">My beloved friend returned back from U.S.A.</span></p>
+            <p class="ex">✔ My beloved friend returned from U.S.A. / came back from U.S.A.</p>
+          </div>
+          <div class="pos-card">
+            <h4>3. Investigate (NOT investigate into) = enquire into</h4>
+            <p><span class="wrong">The detective investigated into the murder case.</span></p>
+            <p class="ex">✔ The detective investigated the murder case. / enquired into the murder case.</p>
+          </div>
+          <div class="pos-card">
+            <h4>4. Despite (NOT despite of) = in spite of</h4>
+            <p><span class="wrong">Despite of being well-off, she is greedy.</span></p>
+            <p class="ex">✔ Despite being well-off, she is greedy. / In spite of being well-off, she is greedy.</p>
+          </div>
+          <div class="pos-card">
+            <h4>5. Comprise (NOT comprise of) = consist of</h4>
+            <p><span class="wrong">This class comprises of 50 students.</span></p>
+            <p class="ex">✔ This class comprises 50 students. / consists of 50 students.</p>
+          </div>
+          <div class="pos-card">
+            <h4>6. Describe (NOT describe about)</h4>
+            <p><span class="wrong">The poet described about the beauty of the landscape.</span></p>
+            <p class="ex">✔ The poet described the beauty of the landscape.</p>
+          </div>
+          <div class="pos-card">
+            <h4>7. Discuss (NOT discuss about)</h4>
+            <p><span class="wrong">The students discussed about the problem with their teacher.</span></p>
+            <p class="ex">✔ The students discussed the problem with their teacher.</p>
+          </div>
+          <div class="pos-card">
+            <h4>8. Explain (NOT explain of/about)</h4>
+            <p><span class="wrong">The teacher explained about the question.</span></p>
+            <p class="ex">✔ The teacher explained the question.</p>
+          </div>
+          <div class="pos-card">
+            <h4>9. Attack (NOT attack on/upon)</h4>
+            <p><span class="wrong">The tiger attacked on me.</span></p>
+            <p class="ex">✔ The tiger attacked me.</p>
+          </div>
+          <div class="pos-card">
+            <h4>10. Emphasize (NOT emphasize on)</h4>
+            <p><span class="wrong">Our mathematics teacher emphasizes on the need for a lot of practice.</span></p>
+            <p class="ex">✔ Our mathematics teacher emphasizes the need for a lot of practice.</p>
+          </div>
+          <div class="pos-card">
+            <h4>11. Cope (NOT cope up) with = to manage</h4>
+            <p><span class="wrong">Will you be able to cope up with the new job?</span></p>
+            <p class="ex">✔ Will you be able to cope with the new job?</p>
+          </div>
+          <div class="pos-card">
+            <h4>12. Order (NOT order for) = ask for</h4>
+            <p><span class="wrong">He ordered for a cup of tea.</span></p>
+            <p class="ex">✔ He ordered a cup of tea. / He asked for a cup of tea.</p>
+          </div>
+          <div class="pos-card">
+            <h4>13. Resemble (NOT resemble with/to)</h4>
+            <p><span class="wrong">She resembles with her mother.</span></p>
+            <p class="ex">✔ She resembles her mother.</p>
+          </div>
+          <div class="pos-card">
+            <h4>14. Ridicule (NOT ridicule to/with)</h4>
+            <p>Structure: Ridicule + somebody/something</p>
+            <p class="ex">✔ Some girls ridiculed him. / He ridiculed her wife.</p>
+          </div>
+          <div class="pos-card">
+            <h4>15. Approach (NOT approach to)</h4>
+            <p><span class="wrong">The train is approaching to Delhi.</span></p>
+            <p class="ex">✔ The train is approaching Delhi.</p>
+          </div>
+          <div class="pos-card">
+            <h4>16. Marry (NOT marry with/to in Active)</h4>
+            <p>Active: Marry + [no preposition]. Passive: Be + V3 + married + to.</p>
+            <p class="ex">✔ Rahul married Pooja. / Pooja was married to Rahul.</p>
+          </div>
+        </div>
+
+        <div class="sub-heading">Verbs Needing "TO" Before the Object (a related trap)</div>
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>Advise / Ask / Beg / Encourage / Invite / Tell</h4>
+            <p>Structure: verb + somebody + to do something (NO "to" before "somebody")</p>
+            <p><span class="wrong">I advised to him to give up smoking.</span></p>
+            <p class="ex">✔ I advised him to give up smoking. / I told you to do it.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Propose / Report / Say / Suggest + to + somebody</h4>
+            <p>Structure: verb + to + somebody + that-clause (here "to" IS required)</p>
+            <p><span class="wrong">He proposed us that we should go to the cinema.</span></p>
+            <p class="ex">✔ He proposed to us that we should go to the cinema. / She reported to me that two files were missing.</p>
+          </div>
+        </div>
+
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Advise/Ask/Tell + somebody" never takes "to" before the person, but "Propose/Report/Say/Suggest + to + somebody" ALWAYS needs "to". Examiners flip these two groups against each other to test if you've memorized the difference.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: DIFFERENT PREPOSITION VERBS -->
+  <div class="tab-content" id="diff-prep">
+    <div class="card">
+      <div class="card-header purple">Words With Different Prepositions (Meaning-Based)</div>
+      <div class="card-body">
+        <p style="margin-bottom:10px; opacity:0.85;">These verbs/adjectives change preposition depending on whether the object is a person, thing, place, or abstract idea.</p>
+
+        <div class="pos-grid">
+          <div class="pos-card"><h4>1. Argue</h4><p>with a person / over some matter</p><p class="ex">Don't argue with your seniors over this simple matter.</p></div>
+          <div class="pos-card"><h4>2. Attend</h4><p>on someone = take care / to a thing = take care</p><p class="ex">You must attend on your old parents. Could you please attend to my bike for a minute?</p></div>
+          <div class="pos-card"><h4>3. Apologise</h4><p>to a person / for something</p><p class="ex">The actor must apologize to his fans for his rude behaviour.</p></div>
+          <div class="pos-card"><h4>4. Accountable</h4><p>to a person / for something</p><p class="ex">I am not accountable to you for my coming late.</p></div>
+          <div class="pos-card"><h4>5. Angry</h4><p>at a thing / with a person</p><p class="ex">My mom is not angry with me but at my mobile.</p></div>
+          <div class="pos-card"><h4>6. Anxious</h4><p>for one's safety / about the result</p><p class="ex">My father is anxious for me about the result of my exam.</p></div>
+          <div class="pos-card"><h4>7. Burst</h4><p>into laughter/tears / upon a city (= to attack)</p><p class="ex">She burst into laughter at my joke. The American air forces burst upon the cities of Syria.</p></div>
+          <div class="pos-card"><h4>8. Blind</h4><p>in one/left/right eye / with both eyes / to somebody's faults</p><p class="ex">She is blind in one eye. I am not blind to your faults.</p></div>
+          <div class="pos-card"><h4>9. Care</h4><p>of a thing / for someone</p><p class="ex">You must care for your old parents. Will you take care of my bag for a minute?</p></div>
+          <div class="pos-card"><h4>10. Complain</h4><p>to somebody / against somebody / of-about something</p><p class="ex">She complained to the principal against the peon about his carelessness.</p></div>
+          <div class="pos-card"><h4>11. Concur</h4><p>with a person / in opinion</p><p class="ex">She concurred with me in my opinion.</p></div>
+          <div class="pos-card"><h4>12. Congratulate</h4><p>a person (no prep.) / on success-achievement</p><p class="ex">I congratulated him on his success.</p></div>
+          <div class="pos-card"><h4>13. Call</h4><p>on a person / at a place</p><p class="ex">I call on the doctor at the hospital every month.</p></div>
+          <div class="pos-card"><h4>14. Dash</h4><p>against a wall/something / over anything</p><p class="ex">The truck dashed over a running dog and a little later dashed against the wall.</p></div>
+          <div class="pos-card"><h4>15. Deal</h4><p>with a problem/person / in something</p><p class="ex">I don't know how to deal with this problem. My father deals in drugs.</p></div>
+          <div class="pos-card"><h4>16. Die</h4><p>of a disease / from a wound-overeating-food poisoning / in battle-accident / for country-belief</p><p class="ex">She died of cancer but her friend died from overeating. The soldier died in the battlefield for his country.</p></div>
+          <div class="pos-card"><h4>17. Differ</h4><p>with a person / from something</p><p class="ex">He differs with you in this opinion. This book is different from that book.</p></div>
+          <div class="pos-card"><h4>18. Enter</h4><p>into a new business/relationship/agreement/era / [a place — no preposition]</p><p class="ex">She entered the room. My younger brother has entered into a new business this year.</p></div>
+          <div class="pos-card"><h4>19. Engaged</h4><p>in some work / to a person</p><p class="ex">Lately, I have been engaged in this new project. They got engaged to each other pretty fast.</p></div>
+          <div class="pos-card"><h4>20. Familiar</h4><p>with somebody/facts / to a language</p><p class="ex">I am familiar with Madhuri Dixit. I am familiar to Urdu language.</p></div>
+          <div class="pos-card"><h4>21. Fall</h4><p>among robbers / in love with a person / on the enemy</p><p class="ex">Razia fell among robbers on the way back home. Tarun sir has fallen in love with his students.</p></div>
+          <div class="pos-card"><h4>22. Gratitude</h4><p>for a thing / to a person</p><p class="ex">I have shown gratitude to him for his kind work.</p></div>
+          <div class="pos-card"><h4>23. Jump</h4><p>at an offer / to a conclusion</p><p class="ex">She jumped at this lucrative offer. Don't jump to any conclusion without observing the facts.</p></div>
+          <div class="pos-card"><h4>24. Lead</h4><p>to some place / into something</p><p class="ex">This path will lead to success. These habits will lead us into a good personality.</p></div>
+          <div class="pos-card"><h4>25. Lean</h4><p>against the wall / on someone / to a certain opinion</p><p class="ex">Don't lean against the wall. We are not leaning on you for this big project.</p></div>
+          <div class="pos-card"><h4>26. Live</h4><p>for something / by sincere labour / on water-bread-fruit-vegetable / within one's means</p><p class="ex">We should live for country and die for country. In Navratras, people live on fruit and vegetables.</p></div>
+          <div class="pos-card"><h4>27. Meet</h4><p>a person [no preposition] / with an accident</p><p class="ex">He met with an accident on his way back home. I am going to meet my best friend today.</p></div>
+          <div class="pos-card"><h4>28. Part</h4><p>with something / from someone</p><p class="ex">I can part from my girlfriend but not with my phone.</p></div>
+          <div class="pos-card"><h4>29. Proceed</h4><p>with a business / on a principle</p><p class="ex">If I don't get the job in govt sector, I will proceed with my family business.</p></div>
+          <div class="pos-card"><h4>30. Reconcile</h4><p>to a situation / with an opponent</p><p class="ex">I have reconciled with my opponent. He reconciled to his loss-making investments.</p></div>
+          <div class="pos-card"><h4>31. Talk</h4><p>to/with a person / of-about an event/something</p><p class="ex">The teacher is talking to my mother about my future.</p></div>
+          <div class="pos-card"><h4>32. Thankful</h4><p>to a person / for something</p><p class="ex">The state is thankful to the government for new reforms.</p></div>
+          <div class="pos-card"><h4>33. Trade</h4><p>with a person / in something</p><p class="ex">I will not trade with you in gold anymore.</p></div>
+          <div class="pos-card"><h4>34. Wait</h4><p>at a bus stop/place/table / for a person/thing</p><p class="ex">She is waiting at the platform for the train.</p></div>
+        </div>
+
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Same verb + different preposition = completely different meaning: "die <em>of</em> a disease" vs "die <em>from</em> a wound" vs "die <em>for</em> country" — mixing these up is a top error-spotting trap. Also: "Meet a person" takes NO preposition, but "meet WITH an accident" always needs "with".
+        </div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Angry <strong>AT</strong> a thing, Angry <strong>WITH</strong> a person. Blind <strong>IN</strong> one eye, Blind <strong>WITH</strong> both eyes, Blind <strong>TO</strong> faults. Die <strong>OF</strong> disease, <strong>FROM</strong> wound/overeating, <strong>IN</strong> battle, <strong>FOR</strong> country.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: ACADEMIC - MOTION/POSITION -->
+  <div class="tab-content" id="academic1">
+    <div class="card">
+      <div class="card-header blue">To / Towards</div>
+      <div class="card-body">
+        <div class="rule-box">To = denotes destination | Towards = denotes direction of</div>
+        <ul class="arrow-list">
+          <li>They are going to the station. (destination)</li>
+          <li>They are going towards the station. (direction)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">To / For (Motion Verbs)</div>
+      <div class="card-body">
+        <div class="rule-box">Go / Get / Come / Return + TO a place &nbsp;|&nbsp; Send somebody / Send something + TO &nbsp;|&nbsp; Leave / Start + FOR a place</div>
+        <ul class="arrow-list">
+          <li>I am going to the post office to send this parcel to the city municipal corporation.</li>
+          <li>I think it will be better if we organize the party tonight because she is going to Paris tomorrow.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Home — Noun vs Adverb</div>
+      <div class="card-body">
+        <div class="rule-box">"To" is NEVER used directly before "home" &nbsp;→&nbsp; ✘ to home</div>
+        <p style="margin:10px 0;">Exception: if a possessive adjective (my, our, your, his, her, its, their) comes before "home", "to" CAN be used → To + Poss. Adj + home ✔</p>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Use of "Home"</th><th>Function</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Home alone (bare)</td><td>Adverb — no preposition</td><td>She is walking home slowly.</td></tr>
+            <tr><td>Home as noun (needs prep. before it)</td><td>Noun</td><td>Poss. Adj + home; also "homes" as plural noun</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "I went <span class="wrong">to</span> home" is always wrong. "I went home" (adverb) is correct. But "The teacher came to my home" is correct because "my" (possessive adjective) precedes "home", making it a noun object of the preposition "to".
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">In / Into (Position vs Motion)</div>
+      <div class="card-body">
+        <div class="rule-box">In = position (state of rest) | Into = motion (movement from outside to inside)</div>
+        <ul class="arrow-list">
+          <li>There is another plate in the kitchen. (position)</li>
+          <li>I ran into the drawing room when I heard the baby cry. (motion)</li>
+          <li>I do not have a penny in my pocket. (position)</li>
+          <li>The frustrated lover jumped into the river. (motion)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">On / Onto (Position vs Motion)</div>
+      <div class="card-body">
+        <div class="rule-box">On = position (state of rest, surface contact) | Onto = motion (movement onto a surface)</div>
+        <ul class="arrow-list">
+          <li>There is a first aid kit on top of the shelf. (position)</li>
+          <li>I have kept a book onto the shelf. (motion)</li>
+          <li>The dog is sitting on the sofa. (position)</li>
+          <li>The cat climbed onto the pillow. (motion)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: ACADEMIC - TIME & PLACE -->
+  <div class="tab-content" id="academic2">
+    <div class="card">
+      <div class="card-header teal">At / In = Time</div>
+      <div class="card-body">
+        <div class="rule-box">At = the smallest / a fixed point of the day (dawn, dusk, twilight, sunrise, sunset, midnight) | In = used before named parts of the day (morning, evening, afternoon)</div>
+        <ul class="arrow-list">
+          <li>I love taking a walk at dawn.</li>
+          <li>The meeting starts at 7 in the morning.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">At Night / In the Night</div>
+      <div class="card-body">
+        <div class="rule-box">At night = during any/every night (general) | In the night = during one particular night (specific)</div>
+        <ul class="arrow-list">
+          <li>I often work late at night. / I love eating ice cream at night. (general)</li>
+          <li>I had to get up to receive my parents in the night. / He could not sleep in the night because of pressure of the match. (specific night)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">At / In = Place</div>
+      <div class="card-body">
+        <div class="rule-box">At = small places | In = large places</div>
+        <ul class="arrow-list">
+          <li>I live at Rohini in Delhi.</li>
+          <li>She lives at Bapu Nagar in Jaipur.</li>
+        </ul>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>AT (small)</th><th>IN (large)</th></tr></thead>
+          <tbody>
+            <tr><td>Village, town, sector, colony</td><td>City, state, country, continent</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <ul class="arrow-list">
+          <li>The museum is in the city.</li>
+          <li>They live at 10 Park Road.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Numbered street addresses ("10 Park Road") take "AT" even though a street/road name is involved — treated as a small/specific point, not a large area.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: ACADEMIC - DIRECTION PAIRS -->
+  <div class="tab-content" id="academic3">
+    <div class="card">
+      <div class="card-header purple">Up / Down, Above / Below, Over / Under</div>
+      <div class="card-body">
+        <div class="rule-box">Up/Down = to/at the higher or lower level</div>
+        <ul class="arrow-list">
+          <li>He went up the stairs to see his new room.</li>
+          <li>The kids ran down the footpath along the park.</li>
+        </ul>
+
+        <div class="rule-box" style="margin-top:16px;">Above/Below = to/at a higher or lower level THAN something (comparison)</div>
+        <ul class="arrow-list">
+          <li>His monthly income is above 10k. / below 10k.</li>
+          <li>This work is below my dignity.</li>
+          <li>The temperature has been above normal for the past couple of weeks.</li>
+        </ul>
+
+        <div class="rule-box" style="margin-top:16px;">Over/Under = to/at a higher or lower level than something, but implying surface-touching, vertical relationship, or nearness (also used for motion)</div>
+        <ul class="arrow-list">
+          <li>Please put the blanket over the baby.</li>
+          <li>She is sitting under the tree.</li>
+          <li>You are under the CCTV surveillance.</li>
+          <li>The plane flew over the clouds. (motion)</li>
+          <li>She drove her car over the hill. (motion)</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Above/Below" = pure comparison of level, no contact implied. "Over/Under" = implies contact, covering, or vertical proximity, and can also show motion. "The Simpsons live on the first floor <span class="wrong">above</span> the shop" is wrong — should be "<span class="right">over</span> the shop" since it's directly above with contact/proximity.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Before / In Front Of</div>
+      <div class="card-body">
+        <div class="rule-box">Before = used for a PERSON | In front of = used for a THING</div>
+        <ul class="arrow-list">
+          <li>I was standing before him in the queue.</li>
+          <li>She appeared before the magistrate.</li>
+          <li>All this happened before my eyes. (fixed phrase with "eyes")</li>
+          <li>There is a park in front of my office.</li>
+          <li>I have parked my car in front of the house.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          When the sense is "queue/position order", BOTH "before" and "in front of" can be used for a person: "Rahul was behind Kiran but in front of (before) Raj."
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Between / Among / Amid</div>
+      <div class="card-body">
+        <div class="rule-box">Between = used for only TWO persons or things | Among = used for MORE THAN TWO persons/things | Amid = used for UNCOUNTABLE nouns</div>
+        <ul class="arrow-list">
+          <li>There are no similarities between you and me.</li>
+          <li>The property was divided among the three sisters.</li>
+          <li>I am looking for an important document amid trash.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Between" CAN also be used for more than two persons/things when expressing a RECIPROCAL relationship (mutual, one-to-one connection among all parties) — e.g. "There is a multilateral agreement between the three countries." This is an exception that examiners frequently test.
+        </div>
+        <div class="rule-box">"And" is the conjunction used with Between → Between ___ and ___</div>
+        <ul class="arrow-list">
+          <li>I am available between 12pm and 4pm for consultations and visits.</li>
+          <li>Weight of the baby is between 10kg and 15kg.</li>
+        </ul>
+        <div class="sub-heading">Among / Amongst</div>
+        <p style="margin-bottom:8px;">Generally no difference between "among" and "amongst". But: Amongst + word beginning with a vowel sound.</p>
+        <ul class="arrow-list">
+          <li>Among/amongst the college girls. / Among/amongst the schools.</li>
+          <li>Amongst us, amongst our friends. (vowel sound follows)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Along / Across / Against</div>
+      <div class="card-body">
+        <div class="rule-box">Along = in the same line of</div>
+        <ul class="arrow-list">
+          <li>There is a park along the road.</li>
+          <li>Go along this path and you will reach the place.</li>
+        </ul>
+
+        <div class="rule-box" style="margin-top:16px;">Across = on the opposite side / from one side to another</div>
+        <ul class="arrow-list">
+          <li>There is an old fort across the river.</li>
+          <li>She lives one block away across the street.</li>
+          <li>There is a bridge across the River. / Let us swim across the river.</li>
+          <li>He ran across the road when he saw a dog.</li>
+        </ul>
+
+        <div class="rule-box" style="margin-top:16px;">Against = opposing something/somebody / in the opposite direction / pressing on</div>
+        <ul class="arrow-list">
+          <li>The rebels protested against the new act promulgated by the government.</li>
+          <li>One should not go against one's ethics and morals.</li>
+          <li>He challenged her to swim against the current.</li>
+          <li>The airplane flew against the wind and crashed.</li>
+          <li>You can lean against the wall if you don't feel like standing.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Across / Through, Beside / Besides, Round / Around / About</div>
+      <div class="card-body">
+        <div class="rule-box">Across = movement over a surface, side to side | Through = movement from one end to the other, passing inside/within something</div>
+        <ul class="arrow-list">
+          <li>Nobody has swam across this river. / He went across the road to talk to his friend.</li>
+          <li>The train passes through a dense forest. / The thief came into the room through the window.</li>
+        </ul>
+
+        <div class="rule-box" style="margin-top:16px;">Beside = at the side of | Besides = in addition to something</div>
+        <ul class="arrow-list">
+          <li>She came and sat beside me. (at the side of)</li>
+          <li>Besides the Gita, I have read the Bible. (in addition to)</li>
+        </ul>
+
+        <div class="rule-box" style="margin-top:16px;">Round / Around / About</div>
+        <ul class="arrow-list">
+          <li>Round → The Earth moves round the sun. / They are sitting round the table. / He walked round the bus and looked at the damaged parts.</li>
+          <li>Around/About = approximately → There are around/about fifty girls in the class. / Please come here around/about four o'clock.</li>
+          <li>Around/About = here and there, in different parts of → Why are those people running around/about? / Stop going around/about and start some work.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: PRACTICE EXAMPLES -->
+  <div class="tab-content" id="practice">
+    <div class="card">
+      <div class="card-header gold">Practice — Correct the Preposition Error</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Can you please return this book <span class="wrong">in</span> the library?</td><td class="correction">to</td></tr>
+            <tr><td>2</td><td>I was not invited to the inaugural party.</td><td class="correction">No Error</td></tr>
+            <tr><td>3</td><td>You will come <span class="wrong">at</span> the station to receive you.</td><td class="correction">to</td></tr>
+            <tr><td>4</td><td>I am sending the remaining amount <span class="wrong">at</span> your office.</td><td class="correction">to</td></tr>
+            <tr><td>5</td><td>He has gone <span class="wrong">in</span> the town to run some errands for me.</td><td class="correction">to</td></tr>
+            <tr><td>6</td><td>Send the peon to the bank for submitting the documents.</td><td class="correction">No Error</td></tr>
+            <tr><td>7</td><td>We shall start <span class="wrong">on</span> the journey tomorrow.</td><td class="correction">for</td></tr>
+            <tr><td>8</td><td>I will leave for work tomorrow morning.</td><td class="correction">No Error</td></tr>
+            <tr><td>9</td><td>I went <span class="wrong">to</span> home after the class.</td><td class="correction">(remove "to" — adverb)</td></tr>
+            <tr><td>10</td><td>The kids should go <span class="wrong">to</span> home after the lunch.</td><td class="correction">(remove "to" — adverb)</td></tr>
+            <tr><td>11</td><td>The teacher came to my home yesterday.</td><td class="correction">No Error (possessive adj. + home)</td></tr>
+            <tr><td>12</td><td>It's getting late, you should go to your home.</td><td class="correction">No Error (possessive adj. + home)</td></tr>
+            <tr><td>13</td><td>I think everyone had come <span class="wrong">[missing "to"]</span> their home for the pre-party rituals...</td><td class="correction">insert "to" before "their home"</td></tr>
+            <tr><td>14</td><td>The office party was so boring last night that I decided to skip it and went <span class="wrong">to homo</span> to spend time with my cat.</td><td class="correction">home</td></tr>
+            <tr><td>15</td><td>While I was waiting for the mailman to arrive with my joining letter, my mother drove the car <span class="wrong">in</span> the garage.</td><td class="correction">into (motion)</td></tr>
+            <tr><td>16</td><td>The neighbours came to see what's going on into the house because the sound of the explosion was so loud.</td><td class="correction">No Error</td></tr>
+            <tr><td>17</td><td>The book is <span class="wrong">onto</span> the table. Just go straight and turn left, you will find the owner of the bookshop, ask him to wrap it for you.</td><td class="correction">on (position)</td></tr>
+            <tr><td>18</td><td>The host walked on the stage and welcomed us. He was very polite and generous. He also organised the function pretty well.</td><td class="correction">No Error</td></tr>
+            <tr><td>19</td><td>They left the camp early <span class="wrong">at</span> the morning, to have a peaceful hike and enjoy the solitude.</td><td class="correction">in</td></tr>
+            <tr><td>20</td><td>They attacked the enemy positions <span class="wrong">in</span> down.</td><td class="correction">at</td></tr>
+            <tr><td>21</td><td>If you want to cook pasta tonight we have to shop <span class="wrong">in</span> the supermarket on the way home to get some ingredients.</td><td class="correction">at</td></tr>
+            <tr><td>22</td><td>I have to take an afternoon nap today because I have to receive some relatives <span class="wrong">at</span> the night.</td><td class="correction">in</td></tr>
+            <tr><td>23</td><td>Holidaying <span class="wrong">at</span> France is easy if you speak French. So it is better if you learn some basic phrases for an eventful trip.</td><td class="correction">in</td></tr>
+            <tr><td>24</td><td>The plan was hastily devised after the collapse of an agreement <span class="wrong">among</span> the White House and the pharmaceutical industry to lower Medicare drug costs.</td><td class="correction">between (only two parties)</td></tr>
+            <tr><td>25</td><td>There was already a sizable gap <span class="wrong">amongst</span> her wagon and the one in front of her yet the other driver accused her of scratching his car.</td><td class="correction">between (only two things)</td></tr>
+            <tr><td>26</td><td>The cost should be shared equally <span class="wrong">between</span> the three of you.</td><td class="correction">among (more than two)</td></tr>
+            <tr><td>27</td><td>An agreement was reached between the five companies.</td><td class="correction">No Error (reciprocal relationship exception)</td></tr>
+            <tr><td>28</td><td>The college will not accept candidates with test scores <span class="wrong">over</span> 60. It is better that you have a backup option so that you don't have a drop year.</td><td class="correction">below</td></tr>
+            <tr><td>29</td><td>The Simpsons live on the first floor <span class="wrong">above</span> the shop. They are very friendly people with a great sense of humour, you should meet them.</td><td class="correction">over</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          "N.E." (No Error) sentences are deliberately mixed into error-spotting sets — don't assume every sentence has a mistake. Learn the correct forms so well that a correct sentence "sounds right" without needing to force a correction.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: MASTER TABLE -->
+  <div class="tab-content" id="master">
+    <div class="card">
+      <div class="card-header gold">Master Table — Prepositions (Quick Revision)</div>
+      <div class="card-body">
+
+        <div class="sub-heading">A. No Preposition Verbs</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Verb</th><th>Correct Meaning/Use</th></tr></thead>
+          <tbody>
+            <tr><td>Enter</td><td>= come into (no "into" after enter)</td></tr>
+            <tr><td>Return</td><td>= come back (no "back" after return)</td></tr>
+            <tr><td>Investigate</td><td>= enquire into (no "into" after investigate)</td></tr>
+            <tr><td>Despite</td><td>= in spite of (no "of" after despite)</td></tr>
+            <tr><td>Comprise</td><td>= consist of (no "of" after comprise)</td></tr>
+            <tr><td>Describe</td><td>no "about"; Structure: Describe + something + to/for + somebody</td></tr>
+            <tr><td>Discuss</td><td>no "about"; Structure: Discuss + something + with + somebody</td></tr>
+            <tr><td>Explain</td><td>no "of/about"; Structure: Explain + something + to + somebody</td></tr>
+            <tr><td>Attack</td><td>no "on/upon"; Structure: Attack + somebody/something + with + something</td></tr>
+            <tr><td>Emphasize</td><td>no "on"</td></tr>
+            <tr><td>Cope with</td><td>no "up"; = to manage</td></tr>
+            <tr><td>Order</td><td>no "for"; = ask for; Structure: Order + somebody + to do something</td></tr>
+            <tr><td>Resemble</td><td>no "with/to"; Structure: Resemble + somebody/something</td></tr>
+            <tr><td>Ridicule</td><td>no "to/with"; Structure: Ridicule + somebody/something</td></tr>
+            <tr><td>Approach</td><td>no "to"; Structure: Approach + place/something</td></tr>
+            <tr><td>Advise/Ask/Beg/Encourage/Invite/Tell</td><td>no "to" before object; + somebody + to do something</td></tr>
+            <tr><td>Propose/Report/Say/Suggest</td><td>needs "to" before somebody + that-clause</td></tr>
+            <tr><td>Marry</td><td>Active: no preposition; Passive: be + V3 + married + to</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">B. Different Preposition Verbs (Key Set)</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Word</th><th>Prepositions & Use</th></tr></thead>
+          <tbody>
+            <tr><td>Argue</td><td>with a person / over a matter</td></tr>
+            <tr><td>Attend</td><td>on someone (take care) / to a thing (take care)</td></tr>
+            <tr><td>Apologise</td><td>to a person / for something</td></tr>
+            <tr><td>Accountable</td><td>to a person / for something</td></tr>
+            <tr><td>Angry</td><td>at a thing / with a person</td></tr>
+            <tr><td>Anxious</td><td>for one's safety / about the result</td></tr>
+            <tr><td>Burst</td><td>into laughter/tears / upon a city (attack)</td></tr>
+            <tr><td>Blind</td><td>in one eye / with both eyes / to faults</td></tr>
+            <tr><td>Care</td><td>of a thing / for someone</td></tr>
+            <tr><td>Complain</td><td>to somebody / against somebody / of-about something</td></tr>
+            <tr><td>Concur</td><td>with a person / in opinion</td></tr>
+            <tr><td>Congratulate</td><td>(no prep. before person) / on success</td></tr>
+            <tr><td>Call</td><td>on a person / at a place</td></tr>
+            <tr><td>Dash</td><td>against a wall / over anything</td></tr>
+            <tr><td>Deal</td><td>with a problem/person / in something</td></tr>
+            <tr><td>Die</td><td>of disease / from wound-overeating / in battle-accident / for country-belief</td></tr>
+            <tr><td>Differ</td><td>with a person / from something</td></tr>
+            <tr><td>Enter</td><td>into a business/relationship/era / [place – no prep.]</td></tr>
+            <tr><td>Engaged</td><td>in work / to a person</td></tr>
+            <tr><td>Familiar</td><td>with somebody/facts / to a language</td></tr>
+            <tr><td>Fall</td><td>among robbers / in love with / on the enemy</td></tr>
+            <tr><td>Gratitude</td><td>for a thing / to a person</td></tr>
+            <tr><td>Jump</td><td>at an offer / to a conclusion</td></tr>
+            <tr><td>Lead</td><td>to a place / into something</td></tr>
+            <tr><td>Lean</td><td>against the wall / on someone / to an opinion</td></tr>
+            <tr><td>Live</td><td>for something / by labour / on food / within means</td></tr>
+            <tr><td>Meet</td><td>(person – no prep.) / with an accident</td></tr>
+            <tr><td>Part</td><td>with something / from someone</td></tr>
+            <tr><td>Proceed</td><td>with a business / on a principle</td></tr>
+            <tr><td>Reconcile</td><td>to a situation / with an opponent</td></tr>
+            <tr><td>Talk</td><td>to/with a person / of-about something</td></tr>
+            <tr><td>Thankful</td><td>to a person / for something</td></tr>
+            <tr><td>Trade</td><td>with a person / in something</td></tr>
+            <tr><td>Wait</td><td>at a place / for a person/thing</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">C. Academic Prepositions (Key Pairs)</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Pair</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr><td>To / Towards</td><td>To = destination; Towards = direction of</td></tr>
+            <tr><td>To / For</td><td>Go/Get/Come/Return + to a place; Leave/Start + for a place</td></tr>
+            <tr><td>Home</td><td>No "to" before home (adverb); "to" allowed if possessive adjective precedes home</td></tr>
+            <tr><td>In / Into</td><td>In = position; Into = motion</td></tr>
+            <tr><td>On / Onto</td><td>On = position; Onto = motion</td></tr>
+            <tr><td>At / In (time)</td><td>At = fixed point (dawn, midnight); In = named part of day (morning, evening)</td></tr>
+            <tr><td>At night / In the night</td><td>At night = general/every night; In the night = one specific night</td></tr>
+            <tr><td>At / In (place)</td><td>At = small places (village, town, colony); In = large places (city, state, country)</td></tr>
+            <tr><td>Up / Down</td><td>To/at higher or lower level</td></tr>
+            <tr><td>Above / Below</td><td>To/at higher/lower level THAN something (comparison, no contact)</td></tr>
+            <tr><td>Over / Under</td><td>Higher/lower level with surface-touch/vertical proximity; also used for motion</td></tr>
+            <tr><td>Before / In front of</td><td>Before = for a person; In front of = for a thing (both usable for queue/order sense)</td></tr>
+            <tr><td>Between / Among / Amid</td><td>Between = 2 (or reciprocal relation among more); Among = more than 2; Amid = uncountable nouns</td></tr>
+            <tr><td>Among / Amongst</td><td>No real difference; Amongst preferred before vowel sound</td></tr>
+            <tr><td>Along</td><td>In the same line of</td></tr>
+            <tr><td>Across</td><td>On the opposite side / from one side to another</td></tr>
+            <tr><td>Against</td><td>Opposing / opposite direction / pressing on</td></tr>
+            <tr><td>Across / Through</td><td>Across = side to side over a surface; Through = end to end, passing within</td></tr>
+            <tr><td>Beside / Besides</td><td>Beside = at the side of; Besides = in addition to</td></tr>
+            <tr><td>Round / Around / About</td><td>Round = circular movement; Around/About = approximately, or here-and-there</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Prepositions · SSC / BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-btn').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

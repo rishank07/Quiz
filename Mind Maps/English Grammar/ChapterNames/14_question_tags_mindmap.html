@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Question Tags | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  header{
+    background:linear-gradient(135deg, var(--surface2), var(--surface));
+    border-bottom:2px solid var(--gold);
+    padding:22px 16px;
+    text-align:center;
+  }
+  header h1{
+    color:var(--gold);
+    font-size:1.9rem;
+    letter-spacing:1px;
+  }
+  header p{
+    color:#aab0c6;
+    margin-top:6px;
+    font-size:0.95rem;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    position: static;
+    
+    z-index:100;
+  }
+  .tab-nav button{
+    background:var(--surface2);
+    color:#c7cbe0;
+    border:1px solid var(--border);
+    padding:9px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:0.85rem;
+    font-weight:600;
+    transition:all 0.2s ease;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+  }
+  .tab-nav button.active{
+    background:#2a2200;
+    color:var(--gold);
+    border-color:var(--gold);
+    border-bottom:3px solid var(--gold);
+  }
+  .tab-content{display:none; padding:20px 16px; max-width:1000px; margin:0 auto;}
+  .tab-content.active{display:block; animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:0.3px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#2a2200,#1a1d27); color:var(--gold);}
+  .card-header.green{background:linear-gradient(90deg,#0d2b1a,#1a1d27); color:var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg,#0d1f33,#1a1d27); color:var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg,#24123a,#1a1d27); color:var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg,#3a1f0a,#1a1d27); color:var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg,#33110d,#1a1d27); color:var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg,#0a2e29,#1a1d27); color:var(--accent6);}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:bold;
+  }
+
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{color:var(--accent1); font-weight:700; margin-bottom:6px; display:block;}
+
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{color:var(--accent2); font-weight:700; margin-bottom:6px; display:block;}
+
+  .rule-box{
+    border:1.5px solid var(--gold);
+    border-radius:8px;
+    padding:14px 18px;
+    margin:14px 0;
+    background:rgba(245,200,66,0.04);
+    color:var(--gold);
+    font-weight:700;
+    text-align:center;
+    font-size:1.05rem;
+  }
+  .rule-box .hindi{display:block; color:#e7e9f0; font-weight:400; font-size:0.9rem; margin-top:6px;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0;
+    font-size:0.92rem;
+  }
+  thead th{
+    background:#2a2200;
+    color:var(--gold);
+    border-bottom:2px solid var(--gold);
+    padding:10px;
+    text-align:left;
+  }
+  tbody td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  tbody tr:hover{background:var(--surface2);}
+  .table-wrap{overflow-x:auto;}
+
+  .pos-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:14px;
+    margin:14px 0;
+  }
+  .pos-card{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+  }
+  .pos-card h4{color:var(--gold); margin-bottom:6px; font-size:1rem;}
+  .pos-card p{color:#c7cbe0; font-size:0.88rem; margin-bottom:6px;}
+  .pos-card .example{color:var(--accent3); font-size:0.85rem; font-style:italic;}
+
+  .correct{color:var(--accent3); font-weight:700;}
+  .wrong{color:var(--accent1); text-decoration:line-through; font-weight:700;}
+  .hindi-note{color:#aab0c6; font-size:0.85rem; font-style:italic;}
+  strong.hl{color:var(--gold);}
+  .tag{color:var(--accent2); font-weight:700;}
+
+  footer{
+    text-align:center;
+    padding:20px;
+    color:#6b7089;
+    font-size:0.85rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+  @media(max-width:600px){
+    header h1{font-size:1.4rem;}
+    .tab-nav button{font-size:0.78rem; padding:8px 12px;}
+    .pos-grid{grid-template-columns:1fr;}
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<header>
+  <h1>QUESTION TAGS</h1>
+  <p>English Grammar Mind Map · SSC / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tablink active" onclick="switchTab('overview')">Overview & Basic Rule</button>
+  <button class="tablink" onclick="switchTab('contracted')">Contracted Forms</button>
+  <button class="tablink" onclick="switchTab('helping-verb')">No Helping Verb & Nouns Rule</button>
+  <button class="tablink" onclick="switchTab('negative-words')">Negative Words Rule</button>
+  <button class="tablink" onclick="switchTab('indefinite-pronouns')">Indefinite Pronouns (They)</button>
+  <button class="tablink" onclick="switchTab('imperative')">Imperative Sentences</button>
+  <button class="tablink" onclick="switchTab('demonstrative')">There/One/This-That/These-Those</button>
+  <button class="tablink" onclick="switchTab('practice')">Practice Examples</button>
+  <button class="tablink" onclick="switchTab('master')">Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW & BASIC RULE -->
+<div id="overview" class="tab-content active">
+  <div class="card">
+    <div class="card-header gold">Definition</div>
+    <div class="card-body">
+      <p>Question tags, also known as tag questions or question tails, are short phrases added to the end of a sentence to turn it into a question or to seek confirmation or agreement from the listener.</p>
+      <ul class="arrow-list">
+        <li>He is going to the party, <span class="tag">isn't he</span>?</li>
+        <li>He is not going to the party, <span class="tag">is he</span>?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">The Basic Rule — Opposite Polarity</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Positive Statement + Negative Question Tag
+      </div>
+      <ul class="arrow-list">
+        <li>You are coming to the party, <span class="tag">aren't you</span>?</li>
+        <li>They have finished their homework, <span class="tag">haven't they</span>?</li>
+      </ul>
+      <div class="rule-box">
+        Negative Statement + Positive Question Tag
+      </div>
+      <ul class="arrow-list">
+        <li>She isn't feeling well, <span class="tag">is she</span>?</li>
+        <li>John didn't eat lunch, <span class="tag">did he</span>?</li>
+      </ul>
+      <p style="margin-top:10px;">I am writing a letter, <span class="tag">aren't I</span>?</p>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        The special irregular tag for "I am" is <strong class="hl">aren't I?</strong> — not "amn't I" or "am not I". This is the single most tested irregular tag form.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: CONTRACTED FORMS -->
+<div id="contracted" class="tab-content">
+  <div class="card">
+    <div class="card-header blue">Contracted Forms — Full Reference List</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Full Form</th><th>Contracted</th></tr></thead>
+          <tbody>
+            <tr><td>Do + not</td><td>don't</td></tr>
+            <tr><td>Does + not</td><td>doesn't</td></tr>
+            <tr><td>Did + not</td><td>didn't</td></tr>
+            <tr><td>Is + not</td><td>isn't</td></tr>
+            <tr><td>Am + not</td><td>aren't</td></tr>
+            <tr><td>Are + not</td><td>aren't</td></tr>
+            <tr><td>Has + not</td><td>hasn't</td></tr>
+            <tr><td>Have + not</td><td>haven't</td></tr>
+            <tr><td>Had + not</td><td>hadn't</td></tr>
+            <tr><td>Was + not</td><td>wasn't</td></tr>
+            <tr><td>Were + not</td><td>weren't</td></tr>
+            <tr><td>Shall + not</td><td>shan't</td></tr>
+            <tr><td>Will + not</td><td>won't</td></tr>
+            <tr><td>Should + not</td><td>shouldn't</td></tr>
+            <tr><td>Would + not</td><td>wouldn't</td></tr>
+            <tr><td>Could + not</td><td>couldn't</td></tr>
+            <tr><td>May + not</td><td>mayn't</td></tr>
+            <tr><td>Might + not</td><td>mightn't</td></tr>
+            <tr><td>Must + not</td><td>mustn't</td></tr>
+            <tr><td>Need + not</td><td>needn't</td></tr>
+            <tr><td>Dare + not</td><td>daren't</td></tr>
+            <tr><td>Ought + not</td><td>oughtn't</td></tr>
+            <tr><td>Used + not</td><td>usedn't</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Will" contracts irregularly to <strong class="hl">won't</strong> (not "willn't") and "Shall" to <strong class="hl">shan't</strong> — these two don't follow the simple "verb + n't" pattern the rest do.
+      </div>
+      <ul class="arrow-list">
+        <li>I am writing a letter, aren't I?</li>
+        <li>I am not writing a letter, am I?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: NO HELPING VERB & NOUNS RULE -->
+<div id="helping-verb" class="tab-content">
+  <div class="card">
+    <div class="card-header purple">Rule 1: No Helping Verb → Use Do/Does/Did</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If a helping verb is NOT used in a sentence, use "do, does, did" in the question tag as needed
+      </div>
+      <ul class="arrow-list">
+        <li>He writes a letter, <span class="tag">doesn't he</span>?</li>
+        <li>They write a letter, <span class="tag">don't they</span>?</li>
+        <li>He wrote a letter, <span class="tag">didn't he</span>?</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Choose Do/Does/Did based on the main verb's tense in the statement: present simple → do/does; past simple → did — matching subject-verb agreement of the main sentence.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Rule 2: Nouns Not Used in Question Tags — Only Pronouns</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Nouns are NOT used in the question tag — only pronouns are used
+      </div>
+      <ul class="arrow-list">
+        <li>Rahul has completed the work, <span class="tag">hasn't he</span>?</li>
+        <li>Rakhi was dancing in the room, <span class="tag">wasn't she</span>?</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Students often mistakenly repeat the proper noun in the tag ("Rahul has completed the work, hasn't Rahul?"). The tag must always use the matching <strong class="hl">pronoun</strong>, never the noun itself.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: NEGATIVE WORDS RULE -->
+<div id="negative-words" class="tab-content">
+  <div class="card">
+    <div class="card-header red">Rule 3: Negative Words → Positive Question Tag</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Neither, No, Not, Never, Seldom, Nobody, Nothing, No one, None, Hardly, Rarely, Scarcely, Few, Little — these words make the sentence NEGATIVE, so the question tag is POSITIVE
+      </div>
+      <ul class="arrow-list">
+        <li>They hardly talk to each other, <span class="tag">do they</span>?</li>
+        <li>She has seldom eaten chicken, <span class="tag">has she</span>?</li>
+        <li>A barking dog seldom bites, <span class="tag">does it</span>?</li>
+        <li>I know little about you, <span class="tag">do I</span>?</li>
+        <li>I have spent a little money, <span class="tag">haven't I</span>?</li>
+        <li>I know a few answers, <span class="tag">don't I</span>?</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "A few" and "A little" have a <strong class="hl">POSITIVE</strong> meaning (unlike bare "few" and "little," which are negative) — so their question tags are <strong class="hl">NEGATIVE</strong>. This is the exact opposite of the main rule and a very common trap: compare "I know little about you, do I?" (negative "little" → positive tag) vs "I know a few answers, don't I?" (positive "a few" → negative tag).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: INDEFINITE PRONOUNS -->
+<div id="indefinite-pronouns" class="tab-content">
+  <div class="card">
+    <div class="card-header teal">Rule 4: Indefinite Pronoun Subjects → "They" in Tag</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Everybody, Everyone, Somebody, Someone, Nobody, No one, Anybody, Anyone — as subject → use "they" in the question tag
+      </div>
+      <ul class="arrow-list">
+        <li>Someone called me last night, <span class="tag">didn't they</span>?</li>
+        <li>Anyone can do this question, <span class="tag">can't they</span>?</li>
+        <li>Everybody loves me, <span class="tag">don't they</span>?</li>
+        <li>Nobody has seen God, <span class="tag">have they</span>?</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        These indefinite pronouns are grammatically singular for verb agreement in the main clause, but the question tag pronoun is always the plural "<strong class="hl">they</strong>" — a mismatch that's easy to forget under exam pressure.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: IMPERATIVE SENTENCES -->
+<div id="imperative" class="tab-content">
+  <div class="card">
+    <div class="card-header green">Rule 5: Positive Imperative → Will you / Won't you</div>
+    <div class="card-body">
+      <div class="rule-box">
+        The question tag of a positive Imperative sentence is BOTH "will you" AND "won't you"
+      </div>
+      <ul class="arrow-list">
+        <li>Switch off the lights, <span class="tag">will you</span>?</li>
+        <li>Switch off the lights, <span class="tag">won't you</span>?</li>
+        <li>Please help me, <span class="tag">will you</span>?</li>
+        <li>Please help me, <span class="tag">won't you</span>?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Rule 5 (Note): Negative Imperative → Only Will you</div>
+    <div class="card-body">
+      <div class="rule-box">
+        The question tag of a negative Imperative sentence is ONLY "will you"
+      </div>
+      <ul class="arrow-list">
+        <li>Don't go there, <span class="tag">will you</span>?</li>
+        <li>Don't make a noise, <span class="tag">will you</span>?</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Positive imperatives allow BOTH "will you" and "won't you" — but negative imperatives allow ONLY "will you", never "won't you". Using "won't you" after a negative imperative ("Don't go there, won't you?") is incorrect.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Rule 6: "Let's" → Shall we</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If the Imperative sentence begins with "Let's," the question tag is "Shall we"
+      </div>
+      <ul class="arrow-list">
+        <li>Let's party, <span class="tag">shall we</span>?</li>
+        <li>Let's play Holi, <span class="tag">shall we</span>?</li>
+      </ul>
+      <div class="rule-box">
+        Note: If the Imperative sentence begins with "Let him, Let her, Let them," the question tag is "Will you"
+      </div>
+      <ul class="arrow-list">
+        <li>Let me talk to her, <span class="tag">will you</span>?</li>
+        <li>Let her dance, <span class="tag">will you</span>?</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Don't confuse "Let's" (= let us, inviting shared action) with "Let him/her/them/me" (requesting permission from the listener for a third party or oneself). Only "Let's" specifically takes "shall we" — every other "Let + person" form takes "will you".
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: DEMONSTRATIVE/OTHER SUBJECTS -->
+<div id="demonstrative" class="tab-content">
+  <div class="card">
+    <div class="card-header orange">Rule 7: There/One/This-That/These-Those as Subject</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If "there, one, this/that, these/those" are used AS THE SUBJECT of a sentence, use "there, one, it, they" respectively in the question tag
+      </div>
+      <ul class="arrow-list">
+        <li>There is a pen on the table, <span class="tag">isn't there</span>?</li>
+        <li>One cannot solve this question, <span class="tag">can one</span>?</li>
+        <li>This is your bag, <span class="tag">isn't it</span>?</li>
+        <li>These are your books, <span class="tag">aren't they</span>?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Note: When Used as Adjectives Before Nouns</div>
+    <div class="card-body">
+      <div class="rule-box">
+        When "one, this/that, these/those" are used as ADJECTIVES before a noun, the question tag follows the number, person, and gender of that noun instead
+      </div>
+      <ul class="arrow-list">
+        <li>One boy can solve this question, <span class="tag">can't he</span>?</li>
+        <li>This girl always loves me, <span class="tag">doesn't she</span>?</li>
+        <li>These bags are yours, <span class="tag">aren't they</span>?</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Compare: "This is your bag, isn't it?" (this = subject/pronoun → "it") vs. "This girl always loves me, doesn't she?" (this = adjective before "girl" → tag matches "girl", i.e. "she"). Same word "this," completely different tag depending on its grammatical role.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Quantifier Subjects</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>All of us can solve this question, <span class="tag">can't we</span>?</li>
+        <li>Either of you is guilty, <span class="tag">aren't you</span>?</li>
+        <li>Neither of them is cool, <span class="tag">are they</span>?</li>
+        <li>Some of us are intelligent, <span class="tag">aren't we</span>?</li>
+        <li>None of them has seen London, <span class="tag">have they</span>?</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        With "Neither of..." and "None of...", the subject is treated as negative for the tag rule (positive tag follows), even though the main verb may appear singular ("is cool," "has seen") — the tag pronoun corresponds to "them"/"us"/"you" from the "of" phrase.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: PRACTICE EXAMPLES -->
+<div id="practice" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Consolidated Practice — Fill in the Correct Question Tag</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Statement</th><th>Correct Question Tag</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>He is going to the party, ___?</td><td class="correct">isn't he</td></tr>
+            <tr><td>2</td><td>You are coming to the party, ___?</td><td class="correct">aren't you</td></tr>
+            <tr><td>3</td><td>She isn't feeling well, ___?</td><td class="correct">is she</td></tr>
+            <tr><td>4</td><td>I am writing a letter, ___?</td><td class="correct">aren't I</td></tr>
+            <tr><td>5</td><td>He writes a letter, ___?</td><td class="correct">doesn't he</td></tr>
+            <tr><td>6</td><td>Rahul has completed the work, ___?</td><td class="correct">hasn't he</td></tr>
+            <tr><td>7</td><td>They hardly talk to each other, ___?</td><td class="correct">do they</td></tr>
+            <tr><td>8</td><td>A barking dog seldom bites, ___?</td><td class="correct">does it</td></tr>
+            <tr><td>9</td><td>I know little about you, ___?</td><td class="correct">do I</td></tr>
+            <tr><td>10</td><td>I know a few answers, ___?</td><td class="correct">don't I (positive "a few" → negative tag)</td></tr>
+            <tr><td>11</td><td>Someone called me last night, ___?</td><td class="correct">didn't they</td></tr>
+            <tr><td>12</td><td>Nobody has seen God, ___?</td><td class="correct">have they</td></tr>
+            <tr><td>13</td><td>Switch off the lights, ___?</td><td class="correct">will you / won't you (both valid)</td></tr>
+            <tr><td>14</td><td>Don't go there, ___?</td><td class="correct">will you (only)</td></tr>
+            <tr><td>15</td><td>Let's play Holi, ___?</td><td class="correct">shall we</td></tr>
+            <tr><td>16</td><td>Let her dance, ___?</td><td class="correct">will you</td></tr>
+            <tr><td>17</td><td>There is a pen on the table, ___?</td><td class="correct">isn't there</td></tr>
+            <tr><td>18</td><td>This is your bag, ___?</td><td class="correct">isn't it</td></tr>
+            <tr><td>19</td><td>This girl always loves me, ___?</td><td class="correct">doesn't she</td></tr>
+            <tr><td>20</td><td>Neither of them is cool, ___?</td><td class="correct">are they</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: MASTER TABLE -->
+<div id="master" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Master Table — Complete Chapter Revision</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Topic</th><th>Key Rule / Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Definition</td><td>Short phrase at the end of a sentence, turning it into a question / seeking confirmation</td></tr>
+            <tr><td>Basic Rule</td><td>Positive statement → Negative tag; Negative statement → Positive tag</td></tr>
+            <tr><td>I am → tag</td><td>Irregular: "aren't I?" (not "amn't I")</td></tr>
+            <tr><td>Contracted forms — irregular</td><td>Will+not = won't; Shall+not = shan't (don't follow standard "+n't" pattern)</td></tr>
+            <tr><td>No helping verb in sentence</td><td>Use Do/Does/Did in the tag, matching tense and subject</td></tr>
+            <tr><td>Nouns in tags</td><td>Never repeat the noun — always use the matching pronoun</td></tr>
+            <tr><td>Negative words → positive tag</td><td>Neither, No, Not, Never, Seldom, Nobody, Nothing, No one, None, Hardly, Rarely, Scarcely, Few, Little</td></tr>
+            <tr><td>A few / A little exception</td><td>These have POSITIVE meaning (opposite of bare few/little) → take NEGATIVE tag</td></tr>
+            <tr><td>Indefinite pronoun subjects</td><td>Everybody, Everyone, Somebody, Someone, Nobody, No one, Anybody, Anyone → "they" in tag</td></tr>
+            <tr><td>Positive Imperative</td><td>Tag can be BOTH "will you" and "won't you"</td></tr>
+            <tr><td>Negative Imperative</td><td>Tag is ONLY "will you" (never "won't you")</td></tr>
+            <tr><td>"Let's" imperative</td><td>Tag is "shall we"</td></tr>
+            <tr><td>"Let him/her/them/me" imperative</td><td>Tag is "will you"</td></tr>
+            <tr><td>There/One/This-That/These-Those as SUBJECT</td><td>Tag uses "there/one/it/they" respectively</td></tr>
+            <tr><td>One/This/That/These/Those as ADJECTIVE before noun</td><td>Tag follows the number/person/gender of that noun, not a fixed pronoun</td></tr>
+            <tr><td>Quantifier subjects (All/Either/Neither/Some/None + of)</td><td>Tag pronoun corresponds to the "of" phrase (we/you/they), following standard positive/negative-flip logic</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Exam Fusion Prep | examfusionprep.com · Question Tags · SSC / BPSC / BSSC
+</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tablink').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

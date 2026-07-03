@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verb & Tenses | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117; --surface:#1a1d27; --surface2:#22263a; --border:#2e3250;
+    --gold:#f5c842; --accent1:#e74c3c; --accent2:#3498db; --accent3:#2ecc71;
+    --accent4:#9b59b6; --accent5:#e67e22; --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--text); font-family:'Segoe UI',Arial,sans-serif;
+    margin:0; padding:0; -webkit-overflow-scrolling:touch;
+  }
+  header{
+    padding:24px 20px 16px; text-align:center; border-bottom:1px solid var(--border);
+  }
+  header h1{
+    color:var(--gold); margin:0 0 6px; font-size:1.7rem; letter-spacing:.5px;
+  }
+  header p{ margin:0; color:#a9adc4; font-size:.95rem; }
+
+  .tab-nav{
+    display:flex; flex-wrap:wrap; gap:6px; padding:14px 16px; justify-content:center;
+    background:var(--surface); border-bottom:1px solid var(--border); position: static;  z-index:10;
+  }
+  .tab-nav button{
+    background:var(--surface2); color:var(--text); border:1px solid var(--border);
+    padding:9px 16px; border-radius:6px; cursor:pointer; font-size:.85rem; font-weight:600;
+    transition:all .2s;
+  }
+  .tab-nav button:hover{ border-color:var(--gold); }
+  .tab-nav button.active{
+    color:var(--gold); border-bottom:3px solid var(--gold); background:#26293c;
+  }
+
+  .tab-content{ display:none; padding:20px 16px 50px; max-width:1000px; margin:0 auto; }
+  .tab-content.active{ display:block; animation:fadein .25s ease; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    margin-bottom:18px; overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px; font-weight:700; font-size:1.05rem; color:#0f1117;
+  }
+  .card-header.gold{ background:linear-gradient(135deg,#f5c842,#d9a91f); color:#241d00; }
+  .card-header.green{ background:linear-gradient(135deg,#2ecc71,#25a35a); color:#03210e; }
+  .card-header.blue{ background:linear-gradient(135deg,#3498db,#2678b0); color:#031824; }
+  .card-header.purple{ background:linear-gradient(135deg,#9b59b6,#7c3f97); color:#1c0824; }
+  .card-header.orange{ background:linear-gradient(135deg,#e67e22,#c0630f); color:#2a1300; }
+  .card-header.red{ background:linear-gradient(135deg,#e74c3c,#c0301f); color:#2a0300; }
+  .card-header.teal{ background:linear-gradient(135deg,#1abc9c,#0f9a7d); color:#01251d; }
+  .card-body{ padding:16px 18px; }
+
+  .arrow-list{ list-style:none; padding:0; margin:0; }
+  .arrow-list li{ padding:6px 0 6px 22px; position:relative; line-height:1.5; }
+  .arrow-list li::before{ content:"▸"; position:absolute; left:0; color:var(--gold); font-weight:700; }
+
+  .exam-trap{
+    background:#1a0909; border-left:4px solid var(--accent1); border-radius:6px;
+    padding:14px 16px; margin:14px 0;
+  }
+  .exam-trap .label{ color:var(--accent1); font-weight:700; margin-bottom:8px; display:block; }
+
+  .quick-recall{
+    background:#091524; border-left:4px solid var(--accent2); border-radius:6px;
+    padding:14px 16px; margin:14px 0;
+  }
+  .quick-recall .label{ color:var(--accent2); font-weight:700; margin-bottom:8px; display:block; }
+
+  .rule-box{
+    border:2px solid var(--gold); border-radius:8px; padding:14px 18px; margin:14px 0;
+    background:#1a1704; color:var(--gold); font-weight:700; text-align:center; font-size:1.05rem;
+  }
+  .rule-box small{ display:block; color:#c9b364; font-weight:500; margin-top:6px; font-size:.85rem; }
+
+  table{ width:100%; border-collapse:collapse; margin:10px 0; font-size:.9rem; }
+  thead th{
+    background:#2a2200; color:var(--gold); padding:10px 12px; text-align:left;
+    border-bottom:2px solid var(--gold); white-space:nowrap;
+  }
+  tbody td{ padding:9px 12px; border-bottom:1px solid var(--border); }
+  tbody tr:hover{ background:#20233a; }
+  .table-scroll{ overflow-x:auto; }
+
+  .pos-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .pos-card{
+    background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:14px;
+  }
+  .pos-card h4{ margin:0 0 8px; color:var(--gold); font-size:.95rem; }
+  .pos-card p{ margin:4px 0; font-size:.87rem; color:#c7c9db; }
+  .pos-card .ex{ color:var(--accent3); font-style:italic; }
+
+  .practice-q{
+    background:var(--surface2); border-radius:8px; padding:14px; margin-bottom:12px; border:1px solid var(--border);
+  }
+  .practice-q .q{ margin:0 0 8px; font-weight:600; }
+  .practice-q .ans{ color:var(--accent3); font-weight:600; }
+  .practice-q .opt-x{ color:var(--accent1); }
+  .practice-q .opt-ok{ color:var(--accent3); }
+
+  footer{
+    text-align:center; padding:22px 16px 40px; color:#7a7e96; font-size:.8rem; border-top:1px solid var(--border);
+  }
+
+  ::-webkit-scrollbar{ height:8px; width:8px; }
+  ::-webkit-scrollbar-track{ background:var(--surface); }
+  ::-webkit-scrollbar-thumb{ background:var(--border); border-radius:4px; }
+
+  @media (max-width:600px){
+    header h1{ font-size:1.3rem; }
+    .tab-nav button{ padding:8px 12px; font-size:.78rem; }
+    .card-header{ font-size:.95rem; }
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<header>
+  <h1>VERB &amp; TENSES</h1>
+  <p>Complete Mind Map — Finite/Non-Finite Verbs, All 12 Tenses, Rules &amp; Practice</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('present')">Present Tenses</button>
+  <button onclick="switchTab('past')">Past Tenses</button>
+  <button onclick="switchTab('future')">Future Tenses</button>
+  <button onclick="switchTab('perfect-rules')">Perfect Tense Rules</button>
+  <button onclick="switchTab('condition')">Time &amp; Condition</button>
+  <button onclick="switchTab('practice')">Practice Examples</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="overview" class="tab-content active">
+  <div class="card">
+    <div class="card-header gold">Verb — Classification</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li><b>Verb</b> splits into <b>H.V. (Helping Verb)</b> and <b>M.V. (Main Verb)</b></li>
+        <li><b>H.V.</b> → Primary (Be, Have, Do) + Modals</li>
+        <li><b>M.V.</b> → Finite (Transitive / Intransitive) and Non-Finite (Infinitive, Gerund, Participle)</li>
+      </ul>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Primary H.V.</th><th>Forms</th></tr></thead>
+        <tbody>
+          <tr><td>Be</td><td>is, am, are, was, were, be, been, being</td></tr>
+          <tr><td>Have</td><td>has, have, had</td></tr>
+          <tr><td>Do</td><td>do, does, did</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Modals</th></tr></thead>
+        <tbody>
+          <tr><td>can, could, may, might, will, would, shall, should, must, need, used to, ought to</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    Primary Verb + Main Verb = Tenses
+    <small>Modals + Main Verb = Modals (a separate grammar category)</small>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Tenses — The Big Picture</div>
+    <div class="card-body">
+      <p>Tenses → A set of <b>verb forms</b> showing Past, Present, and Future.</p>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>V1</th><th>V2</th><th>V3</th><th>V4 (ing)</th><th>V5 (s/es)</th></tr></thead>
+        <tbody>
+          <tr><td>Play</td><td>Played</td><td>Played</td><td>Playing</td><td>Plays</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <ul class="arrow-list">
+        <li>Karan <b>plays</b> cricket. [Present]</li>
+        <li>Karan <b>played</b> cricket. [Past]</li>
+        <li>Karan <b>will play</b> cricket. [Future]</li>
+      </ul>
+      <p>Each of Present / Past / Future further divides into 4 forms: <b>Indefinite, Continuous, Perfect, Perfect Continuous</b> — giving 12 tenses in total.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PRESENT TENSES -->
+<div id="present" class="tab-content">
+  <div class="card">
+    <div class="card-header green">Simple Present Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + V1 + s/es</div>
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>Singular Sub → Singular Verb</h4>
+          <p>(He / She / It) + walks, talks, etc.</p>
+        </div>
+        <div class="pos-card">
+          <h4>Plural Sub → Plural Verb</h4>
+          <p>(I / We / You / They) + walk, talk, etc.</p>
+        </div>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "I" is a first-person singular pronoun but always takes the <b>plural verb form</b>:<br>
+        I am ✔ / I was ✔ / I have ✔ (not "I has") / I do ✔ (not "I does") / I write ✔ (not "I writes")
+      </div>
+      <div class="card-header gold" style="margin:14px -18px -18px; border-radius:0 0 10px 10px;">Uses of Simple Present</div>
+      <div class="card-body" style="padding-left:0;padding-right:0;">
+        <p><b>1. Habitual / Repeated actions of present</b></p>
+        <ul class="arrow-list">
+          <li>The newspaper boy comes daily at 6 am.</li>
+          <li>She usually sleeps late at night.</li>
+          <li>They go to Chicago every summer.</li>
+        </ul>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th colspan="3">Time Expressions of Habitual Actions</th></tr></thead>
+          <tbody>
+            <tr><td>Every day/night/week/month/year/evening/morning, Daily</td><td>Seldom, Never, Occasionally, Frequently, Often, Usually, Generally</td><td>Hardly, Rarely, Scarcely, Sometimes, Once/Twice a day/week/month/year</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="rule-box" style="margin-top:16px;">
+          "Always" — Habit vs Invitation (Complaint)
+          <small>Habit → Sub + V1 + s/es   |   Invitation/Irritation → Sub + is/am/are + V1 + ing</small>
+        </div>
+        <ul class="arrow-list">
+          <li>She always speaks the truth. ✔ (habit)</li>
+          <li>He is always babbling about trifle things. ✔ (irritating repeated habit)</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Always/Usually" doesn't always mean simple present — when it expresses annoyance at a repeated behaviour, continuous tense is correct: "You always disturb me" → "You are always disturbing me."
+        </div>
+        <p><b>2. Universal Truth / Facts</b></p>
+        <ul class="arrow-list">
+          <li>The moon orbits the Earth.</li>
+          <li>Our planet Earth rotates around its axis from west to east.</li>
+          <li>Plants give us oxygen.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Universal truths/scientific facts always take Simple Present, even inside a past-tense sentence: "The scientist believed that gravity <b>pulls</b> down everything" — no change needed.
+        </div>
+        <p><b>3. Fixed Actions in Future</b> (timetables, schedules)</p>
+        <div class="rule-box">Sub + will/shall + V1  =  Sub + V1 + s/es</div>
+        <ul class="arrow-list">
+          <li>The P.M. will give a speech tomorrow. = The P.M. gives a speech tomorrow.</li>
+          <li>The match will start at 7 in the evening. = The match starts at 7 in the evening.</li>
+          <li>The train leaves at 6:30 in the evening. (F)</li>
+          <li>My grandfather retires on 28th November. (F)</li>
+          <li>The school reopens in October. (F)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Simple Present — Interrogative / Negative</div>
+    <div class="card-body">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Interrogative</th><th>Negative</th></tr></thead>
+        <tbody>
+          <tr><td>Do/Does + Sub + V1?</td><td>Sub + do/does + not + V1</td></tr>
+          <tr><td>Does she go to the mall?</td><td>She does not go to the mall.</td></tr>
+          <tr><td>Do you read novels?</td><td>You do not read novels.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "How often <u>is</u> he <u>visiting</u> this place?" ✘ → "How often <b>does</b> he <b>visit</b> this place?" ✔ — question words like "how often" signal Simple Present, not Continuous.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Present Continuous Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + is/am/are + V1 + ing</div>
+      <p><b>Use:</b> Actions continuing at the moment.</p>
+      <ul class="arrow-list">
+        <li>I am teaching.</li>
+        <li>We are studying.</li>
+        <li>The boys are playing hockey in the field.</li>
+      </ul>
+      <div class="rule-box">Verb splits into: Information (State) → ✘ in P.C.T. / Physical Activity (Action) → ✔ in P.C.T.</div>
+      <ul class="arrow-list">
+        <li>She is owning a Scooty ✘ → She owns a Scooty ✔</li>
+        <li>He is knowing me ✘ → He knows me ✔</li>
+        <li>They are going to Manali tonight ✔ (physical action)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">State Verbs — Never Used in Continuous Tense</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Love, Hate, Like, Remember, Forget, Notice, Recognise, Prefer, Wish, Want, Desire, Believe, Belong, Know, Agree, Own, Contain, Consist</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Same word acting differently depending on meaning — exceptions <b>See, Hear, Taste, Smell, Appear, Think, Have</b> are normally state verbs but turn into action verbs (and CAN take continuous form) with a different meaning:
+      </div>
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>1. See</h4>
+          <p>Perceive with eyes (देखना) → State → No continuous.<br>My father sees that you are not doing the work properly. ✔</p>
+          <p class="ex">is/am/are + seeing = to meet (मिलना) → action, continuous allowed<br>I am seeing the Chief Minister tomorrow. ✔</p>
+        </div>
+        <div class="pos-card">
+          <h4>2. Hear</h4>
+          <p>Perceive with ears (सुनना) → State → No continuous.<br>She hears a noise. ✔</p>
+          <p class="ex">is/am/are + hearing = सुनवाई करना (in court) → action<br>The judge is hearing a case today. ✔</p>
+        </div>
+        <div class="pos-card">
+          <h4>3. Taste</h4>
+          <p>The flavour of something (स्वाद) → State.<br>This stew tastes fantastic. ✔</p>
+          <p class="ex">is/am/are + tasting = to taste something intentionally (चखना) → action<br>He is tasting the food to see if it's okay. ✔</p>
+        </div>
+        <div class="pos-card">
+          <h4>4. Smell</h4>
+          <p>महकना (give off smell) → State.<br>You smell nice. ✔</p>
+          <p class="ex">is/am/are + smelling = सूंघना (to sniff) → action<br>The dog was smelling the pillow. ✔</p>
+        </div>
+        <div class="pos-card">
+          <h4>5. Appear</h4>
+          <p>to seem (प्रतीत होना) → State.<br>The exam appears to be difficult. ✔</p>
+          <p class="ex">is/am/are + appearing = to come out/be published → action<br>My new book is appearing next month. ✔</p>
+        </div>
+        <div class="pos-card">
+          <h4>6. Think</h4>
+          <p>to give opinion (विचार करना) → State.<br>I think that coffee is great. ✔</p>
+          <p class="ex">is/am/are + thinking = to consider possibilities (सोचना) → action<br>I am thinking of opening a new business. ✔</p>
+        </div>
+        <div class="pos-card">
+          <h4>7. Have</h4>
+          <p>own/possess (रखना/होना) → State.<br>He has a great family. ✔</p>
+          <p class="ex">is/am/are + having = eat, drink, spend time → action<br>I am having lunch. ✔ / He is having a good time these days. ✔</p>
+        </div>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Rule of thumb: pure state verbs used in continuous form are almost always WRONG in exams unless the sentence's meaning genuinely shifts to a physical/deliberate action (meet, sniff, chew, court hearing, publish, brainstorm, consume).
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header gold">Present Perfect Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + has/have + V3</div>
+      <p>V2 = Has/have + V3 = Had + V3 → all represent increasing "distance into the past," but Present Perfect links a past action to the present moment.</p>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Simple Past — Finished (V2)</th><th>Present Perfect — Unfinished/Linked to Present (Has/Have + V3)</th></tr></thead>
+        <tbody>
+          <tr><td>Yesterday, the day before yesterday, ago, last night/week/year, in 1990, in July</td><td>So far, Already, Just, Till now, Yet, Never, Ever, For, Since, This is the first time, Two/three times, Up to now, Several times</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <ul class="arrow-list">
+        <li>I ate lunch an hour ago. ✔ (not "have eaten")</li>
+        <li>Man reached the moon in 1969. ✔ (not "has reached")</li>
+        <li>I have asked this question from management three times. ✔ (not "asked")</li>
+        <li>She has read four chapters of this book so far. ✔</li>
+        <li>This is the first time I have seen this movie. ✔</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Have you heard the news? ... I knew it for ages" ✘ → "I <b>have known</b> it for ages" ✔. A duration word like "for ages" pulls the verb into Present Perfect even mid-conversation.
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "No rock-solid actions <u>had been</u> taken so far" ✘ → "have been taken" ✔ — "so far" always demands Present Perfect, never Past Perfect.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Present Perfect Continuous Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + has/have + been + V1 + ing + for/since</div>
+      <p><b>Use:</b> Actions that started in the past but continue up to the present.</p>
+      <ul class="arrow-list">
+        <li>Rahul has been working here for three years.</li>
+        <li>I have been teaching English since 2015.</li>
+      </ul>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>For — Period of time / Duration</th><th>Since — Point of time / Exact time</th></tr></thead>
+        <tbody>
+          <tr><td>for a second/minute/hour, for a day/week/month/year, for a long time, for years</td><td>since 5:30pm, since morning, since June, since 1990, since Monday, since childhood, since last night/week/month</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Since a long time" is always WRONG — Since only pairs with a fixed point in time, never a duration. Use "for a long time."
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        State verbs used with "has/have been + V-ing + since/for" are wrong even though the sentence looks like Present Perfect Continuous — because state verbs never take -ing:
+        <ul class="arrow-list">
+          <li>She has been knowing me since 2005 ✘ → has known ✔</li>
+          <li>I have been loving her since we met ✘ → have loved ✔</li>
+          <li>She has been hating me since I broke her heart ✘ → has hated ✔</li>
+          <li>He has been owing this car for a year ✘ → has owned ✔</li>
+          <li>He has been adoring her for more than six years ✘ → has adored ✔</li>
+        </ul>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Sub + has/have + been + V1 + ing + for/since  =  Sub + has/have + V3 + for/since (both forms can be used interchangeably for many verbs): "She has been living in London for a month." = "She has lived in London for a month."
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAST TENSES -->
+<div id="past" class="tab-content">
+  <div class="card">
+    <div class="card-header red">Simple Past Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + V2</div>
+      <p><b>Use:</b> Actions finished/completed in the past.</p>
+      <ul class="arrow-list">
+        <li>I met your father yesterday.</li>
+        <li>My father went to Manali last year.</li>
+        <li>I bought this pen in U.K.</li>
+      </ul>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th colspan="2">Time Expressions of Finished Actions in Past</th></tr></thead>
+        <tbody>
+          <tr><td>Yesterday, yesterday morning/evening</td><td>The day before yesterday</td></tr>
+          <tr><td>Ago, the other day</td><td>Last night/week/month/year</td></tr>
+          <tr><td>In 1991</td><td>In July / In July 1990</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Interrogative</th><th>Negative</th></tr></thead>
+        <tbody>
+          <tr><td>Did + Sub + V1?</td><td>Sub + did + not + V1</td></tr>
+          <tr><td>Did she eat food?</td><td>She did not eat food.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        In interrogative/negative Simple Past, "did" already carries the past — the main verb must stay in V1, not V2 or V3: "had not arrived on time" ✘ (Did context) → "did not arrive" ✔.
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Reported past-belief sentences: when the belief itself was true only in the past (not universal), the embedded verb must also shift to past: "believed that the sun <u>moves</u>" ✘ → "moves" → "moved" ✔. But if the embedded clause is a Universal Truth ("gravity pulls down everything"), no change is needed — compare carefully.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Habit of Past</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + used to + V1 <small>(would can also be used)</small></div>
+      <ul class="arrow-list">
+        <li>I used to eat sand in childhood. ✔ (not "used to ate")</li>
+        <li>He used to play football for the local team. ✔ (not "used to played")</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Habit of Present (a habit that continues today, phrased with "used to"): Sub + (be) + used to + V1 + ing — different structure, different meaning from Habit of Past ("used to + V1").
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "We used to <u>going</u> to the seaside" ✘ → "used to <b>go</b> to the seaside" ✔ — used to is always followed by bare V1, never V1+ing.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Past Continuous Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + was/were + V1 + ing</div>
+      <p><b>Use 1 — Actions continuing in the past:</b></p>
+      <ul class="arrow-list">
+        <li>I was teaching.</li>
+        <li>We were writing.</li>
+        <li>The boys were playing cricket.</li>
+      </ul>
+      <p><b>Use 2 — Parallel actions continuing in the past (both long, both Past Continuous):</b></p>
+      <ul class="arrow-list">
+        <li>While my sister was singing, I was sleeping. ✔ (not "had been sleeping")</li>
+        <li>While I was writing this chapter, my friend was watching T.V. ✔</li>
+      </ul>
+      <div class="rule-box">Long Action (was/were + V1+ing) + Short Action (V2)</div>
+      <ul class="arrow-list">
+        <li>I was reading a book (long) when the delivery boy arrived (short). ✔</li>
+        <li>When the storm hit, they were sleeping. ✔ (not "had been sleeping")</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        A long, ongoing background action must be Past Continuous, not Simple Past or Past Perfect Continuous: "he cleans the floor" ✘ (long action) → "he was cleaning the floor" ✔.
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        A momentary/short action interrupting a long one must be Simple Past, not Past Continuous: "the film was beginning" ✘ → "began" ✔; "Radhika was hurried" ✘ (momentary-sounding but should be long/background) → "was hurrying" ✔ (she was in the process of hurrying when she crashed).
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Past Perfect Tense — "Past of the Past"</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + had + V3</div>
+      <p>Used for the earlier of two past actions (Action-1), while the later action stays in Simple Past (Action-2, V2).</p>
+      <ul class="arrow-list">
+        <li>When I went to meet Jatin, he had gone to Gym. (he went first, then I went — Action-1: had gone; Action-2: went)</li>
+      </ul>
+
+      <div class="rule-box">Case 1: Had + V3 (Action-1) + Before + V2 (Action-2)</div>
+      <ul class="arrow-list">
+        <li>I had gone before he went. (I went first)</li>
+        <li>The culprit had run away from the house before the police came.</li>
+        <li>She had submitted her papers to the faculty before the college fair started.</li>
+      </ul>
+
+      <div class="rule-box">Case 2: V2 (Action-2) + After + Had + V3 (Action-1)</div>
+      <ul class="arrow-list">
+        <li>I reached the examination hall after the exam had begun.</li>
+        <li>The chief guest reached the function after the inaugural dance had started.</li>
+      </ul>
+
+      <div class="rule-box">Case 3: By the time + Action-2 (V2) ... Action-1 (had + V3)</div>
+      <ul class="arrow-list">
+        <li>By the time Manoj received the award, he had worked with many famous actors.</li>
+        <li>By the time Harvard sent its admission letter, she had joined Cambridge University.</li>
+      </ul>
+
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Before" and "after" flip which action gets Past Perfect — this is the most confused rule in the chapter:
+        <ul class="arrow-list">
+          <li>Had + V3 + <b>Before</b> + V2 → the "had" action happened FIRST</li>
+          <li>V2 + <b>After</b> + Had + V3 → the "had" action still happened FIRST (it's just written after "after")</li>
+        </ul>
+        Always identify which event truly happened earlier — that one gets "had + V3," regardless of its position in the sentence.
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Two verbs both wrongly marked Past Perfect, or both wrongly left in Simple Past, is a common trap — only the EARLIER action takes "had + V3":<br>
+        "Rahul has succeed in catching the ball before it had reached the boundary" → "had succeeded ... reached" (succeed happened later, reached the boundary would've happened first if not caught — so "reached" stays simple past, "succeed" becomes "had succeeded" since it's being compared against a would-have-happened event).
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Past Perfect Continuous Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + had + been + V1 + ing + for/since</div>
+      <p><b>Use:</b> A long action continuing up to a point in the past, when another past action occurred.</p>
+      <ul class="arrow-list">
+        <li>When the dance teacher came, he had been dancing for three hours.</li>
+        <li>I had been sleeping for six hours when my mother arrived.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- FUTURE TENSES -->
+<div id="future" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Simple Future Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + will/shall + V1
+        <small>I, We → Shall  |  He, She, It, You, They → Will</small>
+      </div>
+      <p><b>Use:</b> Actions that will happen in the future.</p>
+      <ul class="arrow-list">
+        <li>She will arrive at 6 o'clock.</li>
+        <li>You will go to college tomorrow.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Time &amp; Condition Rule</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If two future situations appear in one sentence, and one part has a time/condition word — will/shall is dropped in that part, and Simple Present is used instead.
+        <small>Sub + V1 + s/es</small>
+      </div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th colspan="99">Time &amp; Condition Denoting Words</th></tr></thead>
+        <tbody>
+          <tr><td colspan="99">If, When, Till, Until, Unless, As soon as, As long as, In case, Provided that, Before, After</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <ul class="arrow-list">
+        <li>If you will call me ✘ → If you call me, I will give you the address. ✔</li>
+        <li>When it will rain ✘ → When it rains, the plant will grow. ✔</li>
+        <li>Unless you will work hard ✘ → Unless you work hard, you will not succeed. ✔</li>
+        <li>provided that he will give ✘ → provided that he gives me 60k. ✔</li>
+        <li>before the rain will fall ✘ → before the rain falls. ✔</li>
+        <li>as soon as the price will come down ✘ → as soon as the price comes down. ✔</li>
+        <li>Unless I am having enough time ✘ (state verb + condition word) → Unless I have enough time, I'll not watch the film. ✔</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        This rule applies ONLY when both clauses describe future events and a time/condition word links them. "goes for the training when she receives the call letter" — here the main clause is actually future ("she goes" describes something that will happen), so it must become "will go": goes ✘ → will go ✔. Always check which clause is the true future action.
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Test: spot the time/condition word (if/when/unless/before/after/as soon as/provided that/till/until/in case/as long as) → the clause containing it drops will/shall and uses Simple Present. The OTHER clause keeps will/shall.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Future Continuous Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + will/shall + be + V1 + ing</div>
+      <ul class="arrow-list">
+        <li>He will be playing cricket tomorrow morning.</li>
+        <li>At this time tomorrow, I shall be watching a film.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Future Perfect Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + will/shall + have + V3</div>
+      <p><b>Use:</b> Actions that will have completed before a certain time in the future.</p>
+      <ul class="arrow-list">
+        <li>We shall have completed our coaching by August.</li>
+        <li>By 2050, the robots will have taken control all over the world.</li>
+        <li>By the end of this century, scientists surely will have discovered a cure for AIDS. (not "must discover")</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        A "by [future time]" phrase always signals Future Perfect (will/shall + have + V3) — a plain Present Perfect ("has read four plays ... by the end of his vacations") is wrong: "has read" ✘ → "will have read" ✔.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Future Perfect Continuous Tense</div>
+    <div class="card-body">
+      <div class="rule-box">Sub + will/shall + have + been + V1 + ing + for/since</div>
+      <ul class="arrow-list">
+        <li>By this time next year, I shall have been working here for three years.</li>
+        <li>By this time tomorrow, she will have been doing this work for three days.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- PERFECT TENSE RULES -->
+<div id="perfect-rules" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">"It is time" / "It is high time" Structures</div>
+    <div class="card-body">
+      <div class="rule-box">
+        It is time / It is high time / It is about time / It is opportune time + Sub + V2
+        <small>"It is time" → implies "a little late" | "It is high time" → implies "should" (urgent)</small>
+      </div>
+      <p>This is the <b>right time</b> to do something — but grammatically the verb goes into <b>Simple Past (V2)</b>, NOT present or infinitive.</p>
+      <ul class="arrow-list">
+        <li>It is time we work hard ✘ → It is time we worked hard. ✔</li>
+        <li>It is high time she leaves for the station ✘ → It is high time she left for the station. ✔</li>
+        <li>It is high time we should prepare for competitive exams ✘ → It is high time we prepared for competitive exams. ✔ ("should" is dropped)</li>
+        <li>It is time you eat food ✘ → It is time you ate food. ✔</li>
+        <li>It is an opportune time the state government had taken some strict actions ✘ → took some ✔</li>
+        <li>It is time you studies well ✘ → It is time you studied well. ✔</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Every tense OTHER than Simple Past looks tempting here but is wrong: present ("study"), continuous ("are studying"), present perfect ("have study") — ALL incorrect. Only V2 (Simple Past) is correct after "It is (high) time."
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        "It is (high) time" + Sub + V2 is a fixed, memorizable structure — it looks like it should demand present/future because it talks about NOW, but it always takes the past form.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Present Perfect vs Past Perfect vs Simple Past — Quick Differentiator</div>
+    <div class="card-body">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Tense</th><th>Structure</th><th>When to use</th></tr></thead>
+        <tbody>
+          <tr><td>Simple Past</td><td>Sub + V2</td><td>Finished action, specific past time given (yesterday, last week, in 1990)</td></tr>
+          <tr><td>Present Perfect</td><td>Sub + has/have + V3</td><td>Unfinished or unspecified-time past action, linked to present (so far, already, since, for, yet)</td></tr>
+          <tr><td>Past Perfect</td><td>Sub + had + V3</td><td>The EARLIER of two past actions (before/after another V2 action)</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "He had come after he went" ✘ — mixing up which action is earlier: "he came ... after he had gone" ✔ (he went first).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TIME & CONDITION (dedicated recap tab, since it repeats across tenses) -->
+<div id="condition" class="tab-content">
+  <div class="card">
+    <div class="card-header red">Time &amp; Condition — Full Recap</div>
+    <div class="card-body">
+      <div class="rule-box">In the time/condition clause: use Simple Present (never will/shall). In the main/result clause: use will/shall + V1.</div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Time/Condition Word</th><th>Example (corrected)</th></tr></thead>
+        <tbody>
+          <tr><td>If</td><td>If you call me, I will give you the address.</td></tr>
+          <tr><td>When</td><td>When it rains, the plant will grow.</td></tr>
+          <tr><td>Unless</td><td>Unless you work hard, you will not succeed.</td></tr>
+          <tr><td>Provided that</td><td>I shall help him to get the job provided that he gives me 60k.</td></tr>
+          <tr><td>Before</td><td>All the flowers in his garden will die before the rain falls.</td></tr>
+          <tr><td>As soon as</td><td>He shall buy a motorcycle as soon as the price comes down.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Spot the trigger word → present tense in that clause → will/shall stays only in the OTHER clause. This single rule is tested repeatedly in error-spotting questions.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRACTICE EXAMPLES -->
+<div id="practice" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Practice: Error Spotting &amp; Sentence Improvement</div>
+    <div class="card-body">
+      <div class="practice-q">
+        <p class="q">Q. The downhearted mother is praying for the well-being of her son every day, since no news of the war has come yet.</p>
+        <p class="ans">Ans → is praying → prays</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. Books are her best friends. She is generally carrying them around even when she goes to party or cafe.</p>
+        <p class="ans">Ans → is carrying → carries</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. The typical design of books for readers <u>is often include</u> engaging and colourful illustrations to help define the characters and setting of the story.</p>
+        <p>(a) is often including <span class="opt-x">✘</span> (b) often includes <span class="opt-ok">✔</span> (c) often including <span class="opt-x">✘</span> (d) is often include <span class="opt-x">✘</span> (e) No improvement <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. Tony is always making offensive jokes even in inappropriate situations. This is the reason why his friends didn't invite him to the funeral.</p>
+        <p class="ans">Ans → No Error (habit/irritation use of "always making" is correct here)</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. The good and reverent shepherd is always going through the valley of flowers and spend some time in the meadow.</p>
+        <p class="ans">Ans → is going → goes, spend → spends</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. I don't understand how Nick can't be there. He is always talking the same road to reach the university.</p>
+        <p class="ans">Ans → is talking → takes</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. Global warming ... It caused the sea level to rise due to the expansion of warmer seas and melting of ice sheets and glaciers.</p>
+        <p>(a) It caused the sea level rising <span class="opt-x">✘</span> (b) It cause the sea level to raise <span class="opt-x">✘</span> (c) It causes the sea level to rise <span class="opt-ok">✔</span> (d) It is causing sea level rise <span class="opt-x">✘</span> (e) No connection required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. Many ancient cultures believed that the Earth resembles a flat disc. Many of these early beliefs had their roots in Greek mythology.</p>
+        <p class="ans">Ans → resembles → resembled</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. Her brother returned tomorrow after 3 years, so she instructed the house staff to make the home in apple-pie order.</p>
+        <p>(a) will returning tomorrow <span class="opt-x">✘</span> (b) returns tomorrow <span class="opt-ok">✔</span> (c) returned tomorrow <span class="opt-x">✘</span> (d) has returned tomorrow <span class="opt-x">✘</span> (e) No improvement required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. A few years ago an accident destroy her family but she survived the pain and rose like a phoenix from the ashes.</p>
+        <p>(a) An accident destroyed her family <span class="opt-ok">✔</span> (b) destroy <span class="opt-x">✘</span> (c) has destroyed <span class="opt-x">✘</span> (d) had destroyed <span class="opt-x">✘</span> (e) No connection required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. Science has given us many new inventions in the 19th century that included Typewriter, aspirin, camera, sewing machine. It was indeed a golden era of science.</p>
+        <p class="ans">Ans → has given → gave</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. On October 12 2006, the Indian Super League (ISL) has gotten off to a splendid start in Kolkata, where there was no lack of fans. Over 60,000 turned up to watch the game.</p>
+        <p class="ans">Ans → has gotten → got</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. The whole neighborhood was in shock after they were hearing a piece of terrifying news about the cold-blooded murder that took place last night.</p>
+        <p>(a) They have heard a piece of <span class="opt-x">✘</span> (b) They heard a terrifying <span class="opt-x">✘</span> (c) They heard a piece of <span class="opt-ok">✔</span> (d) They had heard a piece of <span class="opt-x">✘</span> (e) No connection required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. According to the National Crimes Record Bureau, Uttar Pradesh tops the list in crimes against women. It is an opportune time the state government had taken some strict actions.</p>
+        <p>(a) had taken some <span class="opt-x">✘</span> (b) take some <span class="opt-x">✘</span> (c) is taking some <span class="opt-x">✘</span> (d) took some <span class="opt-ok">✔</span> (e) No connection required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. He is gambling a lot. But when his wife and children left him for this iniquity he realized his mistake and became a whole new person with healthy habits.</p>
+        <p class="ans">Ans → is gambling → used to gamble</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. Being born and raised in Hawaii, I have always loved being near nature. We used to going to the seaside every summer when I was a kid.</p>
+        <p>(a) go to seaside <span class="opt-x">✘</span> (b) gone to the seaside <span class="opt-x">✘</span> (c) used to go the seaside <span class="opt-ok">✔</span> (d) are used to going the seaside <span class="opt-x">✘</span> (e) No connection required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. He was late for his presentation because the train had not arrived on time yesterday and that's the reason he lost his chance of getting promoted.</p>
+        <p class="ans">Ans → had → did, arrived → arrive</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. Rahul attempt to open the umbrella when her spectacles slipped off and fell down.</p>
+        <p class="ans">Ans → attempt → was attempting</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. He used to walk along the road when a wild and ferocious dog knocked him down.</p>
+        <p class="ans">Ans → used to walk → was walking</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. She was trying to figure out which dress to choose when her mother had rung the doorbell.</p>
+        <p class="ans">Ans → had rung → rang</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. He was strolling in the neighborhood minding his own business when the old lady has started arguing with him.</p>
+        <p>(a) is started arguing <span class="opt-x">✘</span> (b) started arguing <span class="opt-ok">✔</span> (c) starts arguing <span class="opt-x">✘</span> (d) had started arguing <span class="opt-x">✘</span> (e) No connection required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. Rahul has succeed in catching the ball before it had reached the boundary line.</p>
+        <p class="ans">Ans → has succeed → had succeeded, had reached → reached</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. I was trying to avoid meeting Karan that is why I had come after he went.</p>
+        <p class="ans">Ans → had come → came, went → had gone</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. The thief escaped before I opened the door.</p>
+        <p class="ans">Ans → escaped → had escaped</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. We have been trying to meet each other for a very long time. For instance when he had come to meet me last week, I had gone to Mumbai.</p>
+        <p>(a) he comes to meet me last week <span class="opt-x">✘</span> (b) he is coming to meet me last week <span class="opt-x">✘</span> (c) he came to meet me last week <span class="opt-ok">✔</span> (d) he has come to meet me last week <span class="opt-x">✘</span> (e) No connection required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. The hotel is quite crowded these days due to the festive season. She works late every night hence when she reached for the family reunion, the dinner started.</p>
+        <p>(a) The dinner had started <span class="opt-ok">✔</span> (b) have started <span class="opt-x">✘</span> (c) is starting <span class="opt-x">✘</span> (d) starts <span class="opt-x">✘</span> (e) No connection required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. His father left him a fortune, but he is so extravagant that he will have spent it all before he is 30.</p>
+        <p class="ans">Ans → No Error</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. He has read four plays written by Shakespeare by the end of his vacations.</p>
+        <p class="ans">Ans → has read → will have read</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. I am trying to finish this letter for one hour. I wish you would go away or stop disturbing me.</p>
+        <p class="ans">Ans → am trying → have been trying</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. Homo sapiens is a gregarious species... even today society had been playing a crucial role in the upbringing of a child since his childhood.</p>
+        <p>(a) Society is being playing <span class="opt-x">✘</span> (b) Society had played <span class="opt-x">✘</span> (c) Society has been playing <span class="opt-ok">✔</span> (d) Society play <span class="opt-x">✘</span> (e) No connection required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q. The exams are around the corner and you have more than half of the syllabus to cover up. It is time you studies well to pass the examination.</p>
+        <p>(a) It is time you study well <span class="opt-x">✘</span> (b) It is time you are studying well <span class="opt-x">✘</span> (c) It is time you studied well <span class="opt-ok">✔</span> (d) It is time you have study well <span class="opt-x">✘</span> (e) No connection required <span class="opt-x">✘</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MASTER TABLE -->
+<div id="master" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Master Table — All 12 Tenses at a Glance</div>
+    <div class="card-body">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Tense</th><th>Structure</th><th>Key Use</th></tr></thead>
+        <tbody>
+          <tr><td>Simple Present</td><td>Sub + V1 + s/es</td><td>Habitual actions, universal truths, fixed future schedules</td></tr>
+          <tr><td>Present Continuous</td><td>Sub + is/am/are + V1+ing</td><td>Action happening now (physical activity, not state)</td></tr>
+          <tr><td>Present Perfect</td><td>Sub + has/have + V3</td><td>Past action linked to present; unspecified time; so far/already/yet/since/for</td></tr>
+          <tr><td>Present Perfect Continuous</td><td>Sub + has/have + been + V1+ing + for/since</td><td>Started in past, still continuing, with duration</td></tr>
+          <tr><td>Simple Past</td><td>Sub + V2</td><td>Finished action, specific past time given</td></tr>
+          <tr><td>Past Continuous</td><td>Sub + was/were + V1+ing</td><td>Long/background action in progress in the past; parallel actions</td></tr>
+          <tr><td>Past Perfect</td><td>Sub + had + V3</td><td>Earlier of two past actions (before/after/by the time)</td></tr>
+          <tr><td>Past Perfect Continuous</td><td>Sub + had + been + V1+ing + for/since</td><td>Long action continuing up to a point in the past</td></tr>
+          <tr><td>Simple Future</td><td>Sub + will/shall + V1</td><td>Future action; I/We→shall, others→will</td></tr>
+          <tr><td>Future Continuous</td><td>Sub + will/shall + be + V1+ing</td><td>Action in progress at a future time</td></tr>
+          <tr><td>Future Perfect</td><td>Sub + will/shall + have + V3</td><td>Action completed before a future time ("by ...")</td></tr>
+          <tr><td>Future Perfect Continuous</td><td>Sub + will/shall + have + been + V1+ing + for/since</td><td>Long action continuing up to a future point, with duration</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Master Table — Key Special Rules</div>
+    <div class="card-body">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Rule</th><th>Structure</th></tr></thead>
+        <tbody>
+          <tr><td>Time &amp; Condition Rule</td><td>If/When/Unless/Before/After/Till/Until/As soon as/As long as/In case/Provided that + Simple Present (drop will/shall); other clause keeps will/shall</td></tr>
+          <tr><td>It is (high) time</td><td>It is time / It is high time / It is about time / It is opportune time + Sub + V2</td></tr>
+          <tr><td>Always — Habit</td><td>Sub + V1 + s/es</td></tr>
+          <tr><td>Always — Invitation/Irritation</td><td>Sub + is/am/are + V1 + ing</td></tr>
+          <tr><td>Habit of Past</td><td>Sub + used to + V1 (or would + V1)</td></tr>
+          <tr><td>Habit of Present</td><td>Sub + (be) + used to + V1 + ing</td></tr>
+          <tr><td>Fixed Action in Future</td><td>Sub + will/shall + V1 = Sub + V1 + s/es</td></tr>
+          <tr><td>Past Perfect Case 1</td><td>Had + V3 + Before + V2</td></tr>
+          <tr><td>Past Perfect Case 2</td><td>V2 + After + Had + V3</td></tr>
+          <tr><td>Past Perfect Case 3</td><td>By the time + V2 (Action-2) ... Had + V3 (Action-1)</td></tr>
+          <tr><td>Long/Short Action (Past)</td><td>Was/Were + V1+ing (long) + V2 (short, interrupting)</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Master Table — State Verbs (No Continuous Form)</div>
+    <div class="card-body">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Category</th><th>Verbs</th></tr></thead>
+        <tbody>
+          <tr><td>Never take continuous</td><td>Love, Hate, Like, Remember, Forget, Notice, Recognise, Prefer, Wish, Want, Desire, Believe, Belong, Know, Agree, Own, Contain, Consist</td></tr>
+          <tr><td>Exception verbs (dual meaning — see/hear/taste/smell/appear/think/have)</td><td>State meaning → no continuous | Action meaning (meet/court-hearing/deliberate taste/sniff/publish/consider/consume) → continuous allowed</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Exam Fusion Prep | examfusionprep.com · Verb &amp; Tenses · SSC / BPSC / BSSC
+</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){ btn.classList.remove('active'); });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

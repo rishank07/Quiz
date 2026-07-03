@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basics — Parts of Speech | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:28px 24px 20px;
+    text-align:center;
+  }
+  .art-pill{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold), #d4a017);
+    color:#0f1117;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:5px 16px;
+    border-radius:20px;
+    margin-bottom:10px;
+    letter-spacing:0.5px;
+  }
+  .header h1{
+    font-size:1.8rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .header p{
+    color:#aab0c6;
+    font-size:0.95rem;
+    max-width:700px;
+    margin:0 auto;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    position: static;
+    
+    z-index:100;
+  }
+  .tab-nav button{
+    background:transparent;
+    border:none;
+    color:#aab0c6;
+    padding:10px 16px;
+    font-size:0.84rem;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all 0.2s ease;
+    border-radius:6px 6px 0 0;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    color:var(--gold);
+    background:rgba(245,200,66,0.06);
+  }
+  .tab-nav button.active{
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    background:rgba(245,200,66,0.08);
+  }
+  .content{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 20px;
+  }
+  .tab-panel{
+    display:none;
+    animation:fadeIn 0.25s ease;
+  }
+  .tab-panel.active{
+    display:block;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card-header.gold{background:linear-gradient(90deg, rgba(245,200,66,0.18), transparent);color:var(--gold);border-left:4px solid var(--gold);}
+  .card-header.green{background:linear-gradient(90deg, rgba(46,204,113,0.18), transparent);color:var(--accent3);border-left:4px solid var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg, rgba(52,152,219,0.18), transparent);color:var(--accent2);border-left:4px solid var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg, rgba(155,89,182,0.18), transparent);color:var(--accent4);border-left:4px solid var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg, rgba(230,126,34,0.18), transparent);color:var(--accent5);border-left:4px solid var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg, rgba(231,76,60,0.18), transparent);color:var(--accent1);border-left:4px solid var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg, rgba(26,188,156,0.18), transparent);color:var(--accent6);border-left:4px solid var(--accent6);}
+  .card-body{
+    padding:16px 18px 18px;
+  }
+  .arrow-list{
+    list-style:none;
+    padding-left:0;
+  }
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:6px;
+    display:block;
+  }
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0;
+    font-size:0.88rem;
+  }
+  table.data-table thead th{
+    background:#2a2200;
+    color:var(--gold);
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    font-size:0.8rem;
+  }
+  table.data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{
+    background:rgba(245,200,66,0.05);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
+    margin:16px 0;
+  }
+  .stat-box{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--gold);
+  }
+  .stat-box .lbl{
+    font-size:0.78rem;
+    color:#aab0c6;
+    margin-top:4px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:0.92rem;
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:#aab0c6;}
+  .info-row .v{color:var(--text);font-weight:600;}
+  .footer{
+    text-align:center;
+    padding:20px;
+    color:#6a7090;
+    font-size:0.82rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+  .pos-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+    gap:14px;
+    margin:14px 0;
+  }
+  .pos-card{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+  }
+  .pos-card h4{
+    margin-bottom:6px;
+    font-size:1rem;
+  }
+  .pos-card .def{
+    color:#aab0c6;
+    font-size:0.85rem;
+    margin-bottom:8px;
+  }
+  .pos-card .ex{
+    font-size:0.85rem;
+    color:var(--text);
+  }
+  .rule-box{
+    background:var(--surface2);
+    border:1px solid var(--gold);
+    border-radius:6px;
+    padding:10px 14px;
+    margin:10px 0;
+    font-size:0.9rem;
+    color:var(--gold);
+    font-weight:600;
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="art-pill">English Grammar · Basics</span>
+  <h1>Parts of Speech &amp; Sentence Basics</h1>
+  <p>Parts of Speech, Prefix/Suffix, Verb Types, Subject/Object/Complement, Sentence Kinds, Phrase &amp; Clause — for SSC exams</p>
+</div>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('pos')">Parts of Speech</button>
+  <button onclick="switchTab('affix')">Prefix &amp; Suffix</button>
+  <button onclick="switchTab('verb')">Verb Types</button>
+  <button onclick="switchTab('objsub')">Subject, Object &amp; Complement</button>
+  <button onclick="switchTab('sentence')">Sentence Kinds</button>
+  <button onclick="switchTab('phrase')">Phrase &amp; Clause</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-panel active">
+    <div class="card">
+      <div class="card-header gold">📌 Chapter Snapshot</div>
+      <div class="card-body">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num">8</div><div class="lbl">Parts of Speech</div></div>
+          <div class="stat-box"><div class="num">5</div><div class="lbl">Verb Forms (V1–V5)</div></div>
+          <div class="stat-box"><div class="num">4</div><div class="lbl">Kinds of Sentences</div></div>
+          <div class="stat-box"><div class="num">2</div><div class="lbl">Types of Clauses</div></div>
+        </div>
+        <ul class="arrow-list">
+          <li>Language is made up of Words, and Words are classified into Parts — the 8 Parts of Speech: Noun, Pronoun, Verb, Adverb, Adjective, Preposition, Conjunction, Interjection.</li>
+          <li>This chapter also covers word-formation via Prefix/Suffix, the structure of Verbs (Primary vs Modal, Finite vs Non-Finite), Subject/Object/Subject Complement identification, the 4 kinds of sentences, and the difference between Phrase and Clause.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Not even a single sentence can be made without a Main Verb (M.V.) — this is the single most tested foundational rule in this chapter.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTS OF SPEECH -->
+  <div id="pos" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🔤 The 8 Parts of Speech</div>
+      <div class="card-body">
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4 style="color:var(--accent1);">1. Verb</h4>
+            <div class="def">Action or State of being.</div>
+            <div class="ex">Action: I <u>read</u> the newspaper daily.<br>State: She <u>is</u> a teacher.<br>Examples: go, write, play, is, am, will</div>
+          </div>
+          <div class="pos-card">
+            <h4 style="color:var(--accent3);">2. Noun</h4>
+            <div class="def">Naming word.</div>
+            <div class="ex"><u>Rahul</u> stays in <u>Mumbai</u>.<br>Examples: Rohan, Mumbai, Table, Dog</div>
+          </div>
+          <div class="pos-card">
+            <h4 style="color:var(--accent1);">3. Pronoun</h4>
+            <div class="def">Replaces a noun.</div>
+            <div class="ex">Tanu is a bibliophile. <u>She</u> carries a book with her everywhere.<br>Examples: I, We, You, Me, My, ourselves</div>
+          </div>
+          <div class="pos-card">
+            <h4 style="color:var(--accent3);">4. Adjective</h4>
+            <div class="def">Modifies a noun/pronoun.</div>
+            <div class="ex">She has a <u>red</u> hat.<br>The <u>southern</u> lights are <u>beautiful</u>.<br>Examples: Big, Happy, Green, Crazy</div>
+          </div>
+          <div class="pos-card">
+            <h4 style="color:var(--accent1);">5. Adverb</h4>
+            <div class="def">Modifies a verb / adjective / adverb.</div>
+            <div class="ex">He drives <u>carefully</u>.<br>She is narrating the incident <u>very slowly</u>.<br>Examples: Slowly, very, always, never, tomorrow, here</div>
+          </div>
+          <div class="pos-card">
+            <h4 style="color:var(--accent3);">6. Preposition</h4>
+            <div class="def">Shows the relationship of a noun/pronoun to another word.</div>
+            <div class="ex">I live <u>in</u> India.<br>There is a box <u>under</u> the table.<br>Examples: at, in, with, near, between</div>
+          </div>
+          <div class="pos-card">
+            <h4 style="color:var(--accent1);">7. Conjunction</h4>
+            <div class="def">Joining word.</div>
+            <div class="ex">Rohan <u>and</u> Sahil are friends.<br>I did not go to work today <u>because</u> I was not feeling well.<br>Examples: and, or, but, because, since</div>
+          </div>
+          <div class="pos-card">
+            <h4 style="color:var(--accent3);">8. Interjection</h4>
+            <div class="def">Expressive word.</div>
+            <div class="ex"><u>Ouch!</u> That hurt.<br><u>Yo!</u> I love to listen to rap music.<br>Examples: Wow!, Oh!, Yo!, Ouch!, Hurrah!</div>
+          </div>
+        </div>
+        <div class="rule-box">Language → Words → Parts (of Speech)</div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Ad" in Adjective/Adverb signals "addition" — both ADD extra information, but an Adjective modifies nouns/pronouns while an Adverb modifies verbs/adjectives/other adverbs. Don't mix up which one modifies what.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🧩 Noun — Quick Formation Rules</div>
+      <div class="card-body">
+        <div class="rule-box">Article + Word = Noun</div>
+        <div class="rule-box">Word + s/es = Plural = Noun</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">📝 Identify the Parts of Speech — Practice Examples</div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>Sentence</th><th>Identified Word & Part of Speech</th></tr></thead>
+          <tbody>
+            <tr><td>The <u>fast</u> car drove around the curve.</td><td>fast → Adjective</td></tr>
+            <tr><td>The car drove <u>fast</u> around the curve.</td><td>fast → Adverb</td></tr>
+            <tr><td>An <u>advance</u> of five hundred rupees was given.</td><td>advance → Noun</td></tr>
+            <tr><td>The <u>advance</u> money has been returned.</td><td>advance → Adjective</td></tr>
+            <tr><td>An <u>express</u> runs from Amritsar to Delhi.</td><td>express → Noun</td></tr>
+            <tr><td>I have <u>expressed</u> my views.</td><td>expressed → Verb</td></tr>
+            <tr><td>I will catch the <u>express</u> train.</td><td>express → Adjective</td></tr>
+            <tr><td>She <u>works</u> for a multinational company.</td><td>works → Verb</td></tr>
+            <tr><td>Several <u>works</u> of art were stolen from the town museum yesterday.</td><td>works → Noun</td></tr>
+            <tr><td>The <u>object</u> of the game is to score the most points.</td><td>object → Noun</td></tr>
+            <tr><td>If nobody <u>objects</u>, we will postpone the meeting till next week.</td><td>objects → Verb</td></tr>
+          </tbody>
+        </table>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Words like "advance", "express", "object", and "works" change their Part of Speech entirely depending on position in the sentence — the SAME word can be Noun, Verb, or Adjective. This is a favourite SSC trap.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREFIX & SUFFIX -->
+  <div id="affix" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🔧 Identification of Parts of Speech Through Suffix</div>
+      <div class="card-body">
+        <h3 style="color:var(--gold);margin:10px 0 6px;font-size:1rem;">Prefix (उपसर्ग)</h3>
+        <table class="data-table">
+          <thead><tr><th>Prefix</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>In-</td><td>Inaction, Invisible</td></tr>
+            <tr><td>Re-</td><td>React, Reappear</td></tr>
+            <tr><td>Un-</td><td>Unequal, Unusual</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🔧 Verb Suffix</div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>Suffix</th><th>Meaning</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>-ate</td><td>do</td><td>captivate, annihilate, estimate, concentrate</td></tr>
+            <tr><td>-en</td><td>do</td><td>broaden, awaken, strengthen, soften</td></tr>
+            <tr><td>-ish</td><td>do</td><td>publish, nourish, punish, accomplish</td></tr>
+            <tr><td>-fy</td><td>make</td><td>rectify, simplify, amplify, glorify, nullify</td></tr>
+            <tr><td>-ize</td><td>become</td><td>organize, socialize, legalize, realize</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-box">Verb Suffix: -ate, -en, -ish, -fy, -ize</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🔧 Noun Suffix</div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>Suffix</th><th>Meaning</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>-age</td><td>a condition</td><td>leakage, bondage, marriage, coverage</td></tr>
+            <tr><td>-ar</td><td>one who performs the action</td><td>beggar, liar, scholar</td></tr>
+            <tr><td>-cy</td><td>state / quality</td><td>urgency, emergency, accuracy, decency</td></tr>
+            <tr><td>-dom</td><td>place / state of being</td><td>kingdom, boredom, freedom, stardom</td></tr>
+            <tr><td>-ee</td><td>one who performs an action (recipient)</td><td>interviewee, internee, employee, nominee</td></tr>
+            <tr><td>-er</td><td>one who performs the action</td><td>reader, driver, painter, dancer</td></tr>
+            <tr><td>-hood</td><td>state of being</td><td>boyhood, childhood, manhood, spousehood</td></tr>
+            <tr><td>-ism</td><td>doctrine or belief</td><td>Marxism, Sufism, egotism, nepotism</td></tr>
+            <tr><td>-ist</td><td>one who is something</td><td>dentist, chemist, atheist, hedonist</td></tr>
+            <tr><td>-ice</td><td>the result of an action</td><td>service, cowardice, sacrifice, injustice</td></tr>
+            <tr><td>-logy</td><td>theory</td><td>biology, ecology, technology, mythology</td></tr>
+            <tr><td>-ment</td><td>the condition of an action</td><td>acknowledgement, punishment, agreement</td></tr>
+            <tr><td>-ness</td><td>state of being</td><td>sadness, happiness, rudeness, business</td></tr>
+            <tr><td>-on/-en/-an</td><td>doer</td><td>artisan, citizen, surgeon</td></tr>
+            <tr><td>-or</td><td>one who performs the action</td><td>creator, supervisor, sailor, traitor, dictator</td></tr>
+            <tr><td>-ship</td><td>position held</td><td>internship, partnership, kinship, friendship</td></tr>
+            <tr><td>-sion/-tion</td><td>state of being</td><td>illusion, inclusion, extension, concession, creation, information, confirmation</td></tr>
+            <tr><td>-ty</td><td>quality / state</td><td>flexibility, sensibility, severity, safety, reality</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-box">Noun Suffix: -age, -ar, -cy, -dom, -ee, -er, -hood, -ism, -ist, -ice, -logy, -ment, -on/-en/-an, -ness, -or, -ship, -sion/-tion</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">🔧 Adjective Suffix</div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>Suffix</th><th>Meaning</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>-able</td><td>capable of being</td><td>readable, believable, advisable, acceptable</td></tr>
+            <tr><td>-ar</td><td>quality</td><td>familiar, regular, circular</td></tr>
+            <tr><td>-en</td><td>made of</td><td>golden, wooden, woolen</td></tr>
+            <tr><td>-ful</td><td>notable for</td><td>beautiful, wonderful, doubtful, careful</td></tr>
+            <tr><td>-ible</td><td>capable of</td><td>invincible, sensible, terrible, gullible</td></tr>
+            <tr><td>-ic</td><td>pertaining to</td><td>allergic, domestic, historic, acidic</td></tr>
+            <tr><td>-ish</td><td>belonging to</td><td>selfish, Turkish, Irish, childish</td></tr>
+            <tr><td>-istic</td><td>characterized by an attribute</td><td>fantastic, pessimistic, optimistic, sarcastic</td></tr>
+            <tr><td>-ile</td><td>having the nature of</td><td>fragile, juvenile, servile, infantile</td></tr>
+            <tr><td>-ian/-an</td><td>belonging to</td><td>Indian, American, Russian, Victorian, Italian</td></tr>
+            <tr><td>-ive</td><td>having the nature of</td><td>creative, decisive, attractive, sensitive</td></tr>
+            <tr><td>-less</td><td>without</td><td>fearless, helpless, endless, speechless</td></tr>
+            <tr><td>-ous</td><td>characterized by an attribute</td><td>studious, pious, religious, courageous</td></tr>
+            <tr><td>-al</td><td>pertaining to</td><td>essential, partial, financial, mental</td></tr>
+            <tr><td>-some</td><td>—</td><td>burdensome, handsome, troublesome, tiresome</td></tr>
+            <tr><td>-e(r)n</td><td>direction</td><td>eastern, southern, western, northern</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-box">Adjective Suffix: -able, -ar, -en, -ful, -ible, -ic, -ish, -istic, -ile, -ian/-an, -ive, -less, -ous, -al, -some, -e(r)n</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">⚠ Same Suffix — Different Parts of Speech</div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>Suffix</th><th>As Verb Suffix (do)</th><th>As Adjective Suffix</th></tr></thead>
+          <tbody>
+            <tr><td>-en</td><td>broaden, awaken, strengthen, soften</td><td>golden, wooden, woolen (meaning: made of)</td></tr>
+            <tr><td>-ish</td><td>publish, nourish, punish, accomplish</td><td>selfish, Turkish, Irish, childish (meaning: belonging to)</td></tr>
+          </tbody>
+        </table>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          The SAME suffix (-en or -ish) can form either a Verb or an Adjective depending on the base word — "strengthen" (verb) vs "wooden" (adjective) both use -en. Context decides the part of speech, not the suffix alone.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🔄 Adjective ↔ Adverb ↔ Noun Conversion</div>
+      <div class="card-body">
+        <div class="rule-box">Adjective + ly = Adverb</div>
+        <ul class="arrow-list">
+          <li>Wise + ly = Wisely</li>
+          <li>Nice + ly = Nicely</li>
+          <li>Beautiful + ly = Beautifully</li>
+        </ul>
+        <div class="rule-box">Noun + ly = Adjective</div>
+        <ul class="arrow-list">
+          <li>Friend + ly = Friendly</li>
+          <li>Man + ly = Manly</li>
+          <li>Brother + ly = Brotherly</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "-ly" doesn't always make an Adverb — Adjective+ly gives an Adverb (wisely), but Noun+ly gives an Adjective (friendly). Check the base word's part of speech first.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERB TYPES -->
+  <div id="verb" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🔨 Verb — Structure Overview</div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>Category</th><th>Sub-type</th><th>Forms / Examples</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="1">Helping Verb (H.V.)</td><td>Primary — Be</td><td>is/am/are, was/were, be/been/being</td></tr>
+            <tr><td></td><td>Primary — Have</td><td>has/have/had</td></tr>
+            <tr><td></td><td>Primary — Do</td><td>do/does/did</td></tr>
+            <tr><td></td><td>Modals</td><td>can, could, may, might, will, would, shall, should, must, need, dare, used to, ought to</td></tr>
+            <tr><td rowspan="2">Main Verb (M.V.)</td><td>Finite</td><td>Transitive / Intransitive</td></tr>
+            <tr><td></td><td>Non-Finite (Advance Verb)</td><td>Infinitive, Gerund, Participial</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-box">Note: Not even a single sentence can be made without a Main Verb (M.V.)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">📐 Five Verb Forms</div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>V1</th><th>V2</th><th>V3</th><th>V4 (-ing)</th><th>V5 (-s/-es)</th></tr></thead>
+          <tbody>
+            <tr><td>Be / am / are (Base — plural)</td><td>was / were (Past form)</td><td>been (Past participle)</td><td>being (Present participle)</td><td>is (Base — singular)</td></tr>
+            <tr><td>Have</td><td>had</td><td>had</td><td>having</td><td>has</td></tr>
+            <tr><td>Do</td><td>did</td><td>done</td><td>doing</td><td>does</td></tr>
+          </tbody>
+        </table>
+        <ul class="arrow-list">
+          <li>V1 → Base form (plural)</li>
+          <li>V2 → Past form</li>
+          <li>V3 → Past participle</li>
+          <li>V4 (-ing) → Present participle</li>
+          <li>V5 (-s/-es) → Base form (singular)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🧪 H.V. + M.V. Combination Examples</div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>Sentence</th><th>Breakdown</th></tr></thead>
+          <tbody>
+            <tr><td>She <u>writes</u> letters.</td><td>M.V.-5 only</td></tr>
+            <tr><td>He <u>played</u> hockey.</td><td>M.V.-2 only</td></tr>
+            <tr><td>I <u>am</u> <u>going</u> to Shimla.</td><td>H.V. + M.V.-4</td></tr>
+            <tr><td>He <u>is</u> <u>going</u> to Shimla.</td><td>H.V. + M.V.-4</td></tr>
+            <tr><td>They <u>have</u> <u>gone</u> to Shimla.</td><td>H.V. + M.V.-3</td></tr>
+            <tr><td>I <u>am</u> an architect.</td><td>M.V.-1 only</td></tr>
+            <tr><td>I <u>am</u> <u>teaching</u>.</td><td>H.V. + M.V.-4</td></tr>
+            <tr><td>She <u>was</u> a dancer.</td><td>M.V.-2 only</td></tr>
+            <tr><td>She <u>was</u> <u>dancing</u>.</td><td>H.V. + M.V.-4</td></tr>
+            <tr><td>She <u>has</u> a beautiful home.</td><td>M.V.-5 only</td></tr>
+            <tr><td>She <u>has</u> <u>eaten</u> food.</td><td>H.V. + M.V.-3</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-box">Be / Have / Do → either (H.V. + M.V.) OR (M.V. alone)</div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Be", "Have", and "Do" can each function as EITHER a Helping Verb OR the Main Verb of the sentence — the same word's role changes based on whether another verb follows it.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">↔ Transitive vs Intransitive Verbs</div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>Type</th><th>Rule</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Transitive Verb</td><td>Always takes an object</td><td>She ate mangoes. | I like you.</td></tr>
+            <tr><td>Intransitive Verb</td><td>Doesn't take any object</td><td>She cried loudly. | I am going to Shimla.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBJECT, OBJECT, COMPLEMENT -->
+  <div id="objsub" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">🎯 Object</div>
+      <div class="card-body">
+        <div class="rule-box">Object = Noun / Pronoun</div>
+        <ul class="arrow-list">
+          <li>Verb + Object → find object by asking Verb - what/whom = Object</li>
+          <li>Preposition + Object</li>
+        </ul>
+        <table class="data-table">
+          <thead><tr><th>Sentence</th><th>Object Identified</th></tr></thead>
+          <tbody>
+            <tr><td>She plays football.</td><td>football (Noun)</td></tr>
+            <tr><td>Karan threw the ball.</td><td>the ball (Noun)</td></tr>
+            <tr><td>Could you call the neighbours?</td><td>the neighbours (Noun)</td></tr>
+            <tr><td>I like you.</td><td>you (Pronoun)</td></tr>
+            <tr><td>We talked for hours.</td><td>hours (Noun, via preposition "for")</td></tr>
+            <tr><td>Kajal kicked Karan under the table.</td><td>Karan (Object of verb); the table (Object of preposition "under")</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">👤 Subject</div>
+      <div class="card-body">
+        <div class="rule-box">Subject = Noun / Pronoun that performs the verb's action</div>
+        <table class="data-table">
+          <thead><tr><th>Sentence</th><th>Subject Identified</th></tr></thead>
+          <tbody>
+            <tr><td>The baby is crying.</td><td>The baby</td></tr>
+            <tr><td>She is a brilliant writer.</td><td>She</td></tr>
+            <tr><td>Beauty lies in the eyes of the beholder.</td><td>Beauty</td></tr>
+            <tr><td>A wise man knows his skills.</td><td>man</td></tr>
+            <tr><td>Dead men tell no tales.</td><td>men</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🔗 Subject Complement</div>
+      <div class="card-body">
+        <div class="rule-box">Sub + Linking Verb + Sub Complement</div>
+        <ul class="arrow-list">
+          <li>Linking Verbs: Look, Sound, Smell, Feel, Taste, Appear, Seem, Get, Grow, Remain, Become, Be (as main verb)</li>
+          <li>Sub Complement = Noun / Pronoun / Adjective</li>
+          <li>Rule: Subject = Subject Complement (they refer to the same entity)</li>
+        </ul>
+        <table class="data-table">
+          <thead><tr><th>Sentence</th><th>Subject Complement</th></tr></thead>
+          <tbody>
+            <tr><td>I am a teacher.</td><td>a teacher (Noun)</td></tr>
+            <tr><td>We are friends.</td><td>friends (Noun)</td></tr>
+            <tr><td>She is beautiful.</td><td>beautiful (Adjective)</td></tr>
+            <tr><td>She will become a great mother.</td><td>a great mother (Noun)</td></tr>
+          </tbody>
+        </table>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Subject Complements are NOT the same as Objects. "She married a teacher" → "a teacher" is an OBJECT (Sub ≠ Obj). "She became a teacher" → "a teacher" is a SUBJECT COMPLEMENT (Sub = Sub. Comp). The verb type (action vs linking) decides which one it is.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SENTENCE KINDS -->
+  <div id="sentence" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📄 Sentence — Definition</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>A group of words which gives complete sense is called a sentence.</li>
+          <li>Example: Rahul is going to Shimla.</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Kinds of Sentences</h3>
+        <ul class="arrow-list">
+          <li>Assertive</li>
+          <li>Interrogative</li>
+          <li>Imperative</li>
+          <li>Exclamatory</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">✅ Assertive Sentence</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>To give information.</li>
+        </ul>
+        <table class="data-table">
+          <thead><tr><th>Affirmative (+ve)</th><th>Negative (-ve)</th></tr></thead>
+          <tbody>
+            <tr><td>Sub + H.V. + M.V…. <br>e.g. Karan has completed the work.</td><td>Sub + H.V. + not + M.V…. <br>e.g. Karan has not completed the work.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">❓ Interrogative Sentence</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>To ask a question.</li>
+        </ul>
+        <table class="data-table">
+          <thead><tr><th>Direct Interrogative</th><th>Indirect Interrogative</th></tr></thead>
+          <tbody>
+            <tr><td>What are your hobbies?</td><td>I want to know what your hobbies are.</td></tr>
+          </tbody>
+        </table>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Direct Interrogative — Two Types</h3>
+        <table class="data-table">
+          <thead><tr><th>Yes/No Questions</th><th>Wh-Questions</th></tr></thead>
+          <tbody>
+            <tr><td>H.V. + Sub + M.V. + Obj? <br>e.g. Are you playing football?</td><td>Wh-word + H.V. + Sub + M.V. + Obj? <br>e.g. Where are you playing football?</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-box">Indirect Interrogatives do NOT follow interrogative word order — no H.V. before subject, no question mark at the end (structure becomes assertive-like within the sentence).</div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          If a Yes/No question and a Wh-question come together in a single sentence, the FIRST part stays interrogative but the SECOND part (the embedded question) must be in assertive word order. E.g. "Could you tell me where the school principal is?" — NOT "...where is the school principal?"
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">❗ Imperative Sentence</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>To express Order, Advice, or Request.</li>
+        </ul>
+        <div class="rule-box">Structure: V1, Do, Do not, Let</div>
+        <ul class="arrow-list">
+          <li>Work hard.</li>
+          <li>Do work hard.</li>
+          <li>Do not talk to her.</li>
+          <li>Please, finish the work.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">😲 Exclamatory Sentence</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>To express strong feelings, emotions, or reactions.</li>
+        </ul>
+        <div class="rule-box">Structure: What/How ... ! OR Interjection ... !</div>
+        <ul class="arrow-list">
+          <li>Alas! He lost the race.</li>
+          <li>Hurrah! We won.</li>
+          <li>What an amazing movie!</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🙏 Optative Sentence</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>To express Blessing, Curse, or Wish.</li>
+        </ul>
+        <div class="rule-box">Structure: May + Sub + V1 (! or .)</div>
+        <ul class="arrow-list">
+          <li>May God bless you!</li>
+          <li>May you rot in hell!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHRASE & CLAUSE -->
+  <div id="phrase" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📎 Phrase</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>A group of words which makes sense but NOT complete sense is called a phrase.</li>
+          <li>Examples: "This information age", "In the beginning", "Really fast", "After a rainy day"</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Important Points</h3>
+        <ul class="arrow-list">
+          <li>A phrase is a group of words WITHOUT a Subject-Verb combination.</li>
+          <li>A phrase cannot be a complete sentence because it does not give complete meaning.</li>
+          <li>The purpose of a phrase is to complement the overall structure of the sentence — e.g. "He drove the car very fast."</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">🧷 Clause</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>A clause is a group of words which gives complete meaning AND has a Subject-Verb combination.</li>
+          <li>She is pretty. | He is going to a party today.</li>
+        </ul>
+        <div class="rule-box">Note: A simple sentence can also be called one clause.</div>
+        <div class="rule-box">Note: Some sentences may have more than one clause.</div>
+        <table class="data-table">
+          <thead><tr><th>Sentence</th><th>Number of Clauses</th></tr></thead>
+          <tbody>
+            <tr><td>The girl hugged the boy and the boy hugged the cat.</td><td>2</td></tr>
+            <tr><td>If you subscribe to this online service, you will need a password.</td><td>2</td></tr>
+            <tr><td>While Tom reads novels, Jack reads comics, but Sam reads only magazines.</td><td>3</td></tr>
+            <tr><td>Even though John likes golf, he played cricket at the weekend, and he enjoyed it very much.</td><td>3</td></tr>
+            <tr><td>Yesterday, the weather was terrible, yet today it's lovely, so we'll stay out all day.</td><td>3</td></tr>
+            <tr><td>I could not decide where I should work or what I should do.</td><td>3</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">🌳 Types of Clauses</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Independent / Main / Principal Clause</li>
+          <li>Dependent / Subordinate Clause</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Independent Clause</h3>
+        <ul class="arrow-list">
+          <li>Same as a complete sentence and can stand alone.</li>
+          <li>He ate dinner. | I was working.</li>
+        </ul>
+        <h3 style="color:var(--gold);margin:14px 0 6px;font-size:1rem;">Dependent Clause</h3>
+        <ul class="arrow-list">
+          <li>Cannot stand alone — has a Subject-Verb combination but cannot be a sentence by itself. It needs an Independent Clause to complete the sentence.</li>
+          <li>"When Rahul got home" (incomplete) → "When Rahul got home, he ate dinner." (complete)</li>
+        </ul>
+        <div class="rule-box">Dependent clauses often begin with: when, while, if, unless, although, as soon as, as long as, because, since, etc.</div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          A Dependent Clause has a Subject-Verb combination just like an Independent Clause — the difference is NOT grammatical completeness of structure, but whether it can stand alone with full meaning.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER TABLE -->
+  <div id="master" class="tab-panel">
+    <div class="card">
+      <div class="card-header gold">📋 Master Quick-Revision Table</div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>Topic</th><th>Key Fact</th></tr></thead>
+          <tbody>
+            <tr><td>8 Parts of Speech</td><td>Noun, Pronoun, Verb, Adverb, Adjective, Preposition, Conjunction, Interjection</td></tr>
+            <tr><td>Noun formation</td><td>Article + Word = Noun | Word + s/es = Plural Noun</td></tr>
+            <tr><td>Verb Suffixes</td><td>-ate, -en, -ish, -fy, -ize</td></tr>
+            <tr><td>Noun Suffixes</td><td>-age, -ar, -cy, -dom, -ee, -er, -hood, -ism, -ist, -ice, -logy, -ment, -on/en/an, -ness, -or, -ship, -sion/tion, -ty</td></tr>
+            <tr><td>Adjective Suffixes</td><td>-able, -ar, -en, -ful, -ible, -ic, -ish, -istic, -ile, -ian/an, -ive, -less, -ous, -al, -some, -e(r)n</td></tr>
+            <tr><td>Adjective + ly</td><td>= Adverb (e.g. wisely)</td></tr>
+            <tr><td>Noun + ly</td><td>= Adjective (e.g. friendly)</td></tr>
+            <tr><td>Main Verb rule</td><td>Not even a single sentence can be made without a Main Verb</td></tr>
+            <tr><td>5 Verb Forms</td><td>V1 (base-plural), V2 (past), V3 (past participle), V4 (-ing), V5 (-s/es base-singular)</td></tr>
+            <tr><td>Be / Have / Do</td><td>Can act as H.V. + M.V. OR as M.V. alone</td></tr>
+            <tr><td>Transitive Verb</td><td>Always takes an object</td></tr>
+            <tr><td>Intransitive Verb</td><td>Never takes an object</td></tr>
+            <tr><td>Object</td><td>Noun/Pronoun after Verb or Preposition</td></tr>
+            <tr><td>Subject Complement rule</td><td>Sub + Linking Verb + Sub Complement | Subject = Subject Complement</td></tr>
+            <tr><td>4 Kinds of Sentences</td><td>Assertive, Interrogative, Imperative, Exclamatory</td></tr>
+            <tr><td>Optative Sentence</td><td>Expresses Blessing/Curse/Wish | May + Sub + V1</td></tr>
+            <tr><td>Phrase</td><td>Incomplete meaning, no Subject-Verb combination</td></tr>
+            <tr><td>Clause</td><td>Complete meaning + Subject-Verb combination</td></tr>
+            <tr><td>Independent Clause</td><td>Can stand alone as a sentence</td></tr>
+            <tr><td>Dependent Clause</td><td>Cannot stand alone; needs an Independent Clause</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Basics — Parts of Speech · SSC / BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Adjectives | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',Roboto,Arial,sans-serif;
+    margin:0;
+    padding:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  .container{
+    max-width:1100px;
+    margin:0 auto;
+    padding:20px 16px 60px;
+  }
+  header.page-header{
+    text-align:center;
+    padding:28px 16px 20px;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+  }
+  header.page-header h1{
+    color:var(--gold);
+    font-size:2.1rem;
+    margin:0 0 8px;
+    letter-spacing:0.5px;
+  }
+  header.page-header p{
+    color:#9aa0b4;
+    margin:0;
+    font-size:0.95rem;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    margin-bottom:24px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:14px;
+    position: static;
+    
+    background:var(--bg);
+    z-index:50;
+    padding-top:10px;
+  }
+  .tab-nav button{
+    background:var(--surface);
+    color:var(--text);
+    border:1px solid var(--border);
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:0.88rem;
+    font-weight:600;
+    transition:all 0.2s ease;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    background:var(--surface2);
+    border-color:var(--gold);
+  }
+  .tab-nav button.active{
+    background:var(--surface2);
+    color:var(--gold);
+    border-bottom:3px solid var(--gold);
+    border-color:var(--gold);
+  }
+  .tab-content{display:none;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:14px 20px;
+    font-size:1.15rem;
+    font-weight:700;
+    letter-spacing:0.3px;
+  }
+  .card-body{padding:18px 20px;}
+
+  .ch-gold{background:linear-gradient(135deg,#3a3418,#22263a); color:var(--gold);}
+  .ch-green{background:linear-gradient(135deg,#123a26,#22263a); color:var(--accent3);}
+  .ch-blue{background:linear-gradient(135deg,#123249,#22263a); color:var(--accent2);}
+  .ch-purple{background:linear-gradient(135deg,#301b3d,#22263a); color:var(--accent4);}
+  .ch-orange{background:linear-gradient(135deg,#3d2712,#22263a); color:var(--accent5);}
+  .ch-red{background:linear-gradient(135deg,#3d1414,#22263a); color:var(--accent1);}
+  .ch-teal{background:linear-gradient(135deg,#0f3d35,#22263a); color:var(--accent6);}
+
+  .arrow-list{list-style:none; margin:0; padding:0;}
+  .arrow-list li{
+    position:relative;
+    padding-left:22px;
+    margin-bottom:10px;
+    line-height:1.55;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:700;
+  }
+
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:14px 16px;
+    margin:16px 0;
+  }
+  .exam-trap .label{
+    color:var(--accent1);
+    font-weight:700;
+    margin-bottom:8px;
+    display:block;
+    font-size:0.95rem;
+  }
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:14px 16px;
+    margin:16px 0;
+  }
+  .quick-recall .label{
+    color:var(--accent2);
+    font-weight:700;
+    margin-bottom:8px;
+    display:block;
+    font-size:0.95rem;
+  }
+
+  .rule-box{
+    border:2px solid var(--gold);
+    border-radius:8px;
+    padding:14px 18px;
+    margin:14px 0;
+    color:var(--gold);
+    font-weight:700;
+    font-size:1.02rem;
+    text-align:center;
+    background:rgba(245,200,66,0.05);
+  }
+
+  table.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:14px 0;
+    font-size:0.92rem;
+  }
+  table.data-table th{
+    background:#2a2200;
+    color:var(--gold);
+    padding:10px 12px;
+    border-bottom:2px solid var(--gold);
+    text-align:left;
+  }
+  table.data-table td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  table.data-table tr:hover td{background:var(--surface2);}
+  .table-scroll{overflow-x:auto;}
+
+  .pos-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:14px;
+    margin:14px 0;
+  }
+  .pos-card{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+  .pos-card h4{
+    margin:0 0 8px;
+    color:var(--gold);
+    font-size:1rem;
+  }
+  .pos-card p{margin:4px 0; font-size:0.9rem; line-height:1.5;}
+  .pos-card .eg{color:#9aa0b4; font-style:italic;}
+
+  .correction-block{
+    background:var(--surface2);
+    border-radius:8px;
+    padding:10px 14px;
+    margin:8px 0;
+    font-size:0.92rem;
+  }
+  .wrong{color:var(--accent1); text-decoration:line-through;}
+  .right{color:var(--accent3); font-weight:600;}
+
+  h2.section-title{
+    color:var(--gold);
+    border-bottom:1px solid var(--border);
+    padding-bottom:8px;
+    margin-
+  }
+  h3.sub-title{
+    color:var(--text);
+    margin-top:20px;
+    margin-bottom:10px;
+    font-size:1.05rem;
+  }
+  p.note-line{color:#9aa0b4; font-size:0.88rem; margin-top:-4px;}
+
+  footer.page-footer{
+    text-align:center;
+    padding:24px 16px;
+    color:#6b7089;
+    font-size:0.85rem;
+    border-top:1px solid var(--border);
+    margin-top:30px;
+  }
+
+  ::-webkit-scrollbar{height:8px; width:8px;}
+  ::-webkit-scrollbar-track{background:var(--surface);}
+  ::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+
+  @media (max-width:600px){
+    header.page-header h1{font-size:1.5rem;}
+    .tab-nav button{padding:8px 12px; font-size:0.8rem;}
+    .card-body{padding:14px;}
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="page-header">
+    <h1>Adjectives</h1>
+    <p>English Grammar · SSC / BPSC / BSSC Mind Map</p>
+  </header>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="switchTab('kinds')">Kinds of Adjectives</button>
+    <button class="tab-btn" onclick="switchTab('exclamatory')">Exclamatory Adj vs Pronoun</button>
+    <button class="tab-btn" onclick="switchTab('degrees')">Degrees of Comparison</button>
+    <button class="tab-btn" onclick="switchTab('special')">Special Comparative Rules</button>
+    <button class="tab-btn" onclick="switchTab('faulty')">Faulty Comparison</button>
+    <button class="tab-btn" onclick="switchTab('confusion')">Confusing Adjective Pairs</button>
+    <button class="tab-btn" onclick="switchTab('practice')">Practice Examples</button>
+    <button class="tab-btn" onclick="switchTab('master')">Master Table</button>
+  </div>
+
+  <!-- TAB 1: OVERVIEW -->
+  <div id="overview" class="tab-content active">
+    <div class="card">
+      <div class="card-header ch-gold">Definition</div>
+      <div class="card-body">
+        <p><strong>Adjective</strong> is a word that modifies a noun / pronoun.</p>
+        <div class="rule-box">Article + Word = Noun</div>
+        <div class="rule-box">Word + s/es = Plural Word = Noun</div>
+        <ul class="arrow-list">
+          <li>A girl → <strong>A beautiful girl</strong> (adjective added before noun)</li>
+          <li>She is beautiful (adjective describes pronoun "she")</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-blue">Uses of Adjectives</div>
+      <div class="card-body">
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>1. Attributive Use</h4>
+            <p>Adjective placed directly before the noun it modifies.</p>
+            <p class="eg">A <u>beautiful</u> girl. | A <u>new</u> building.</p>
+          </div>
+          <div class="pos-card">
+            <h4>2. Predicative Use</h4>
+            <p>Adjective comes after a linking verb, describing the subject.</p>
+            <p class="eg">She looks <u>happy</u>. | He is <u>smart</u>.</p>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Attributive = Adjective + Noun (side by side) | Predicative = Subject + Linking Verb + Adjective
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-green">Adverb vs Adjective After a Verb</div>
+      <div class="card-body">
+        <p>In most cases, an <strong>adverb</strong> is used to qualify a verb:</p>
+        <ul class="arrow-list">
+          <li>She sings <em>beautifully</em>. (adverb)</li>
+          <li>They fought <em>bravely</em>. (adverb)</li>
+          <li>She cried <em>loudly</em>. (adverb)</li>
+        </ul>
+        <p>But after a <strong>Linking Verb</strong>, an <strong>adjective</strong> is used — not an adverb.</p>
+        <div class="rule-box">Linking Verbs → Be, appear, seem, feel, keep, look (=appear), make, remain, smell, sound, taste, turn</div>
+        <ul class="arrow-list">
+          <li>She grew <em>impatient</em>.</li>
+          <li>She made me <em>happy</em>.</li>
+          <li>She looks <em>beautiful</em>.</li>
+          <li>He seems <em>lucky</em>.</li>
+          <li>Sugar tastes <em>sweet</em>.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          If "look, taste, smell, turn" are NOT used in a natural way but instead give the sense of a <em>deliberate action</em>, an adverb CAN qualify them.
+          <br>• She looked <em>angrily</em> at her husband.
+          <br>• I tasted the soup <em>suspiciously</em>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: KINDS OF ADJECTIVES -->
+  <div id="kinds" class="tab-content">
+    <div class="card">
+      <div class="card-header ch-gold">10 Kinds of Adjectives</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Proper Adjectives</li>
+          <li>Possessive Adjectives</li>
+          <li>Distributive Adjectives</li>
+          <li>Demonstrative Adjectives</li>
+          <li>Numeral Adjectives</li>
+          <li>Emphatic Adjectives</li>
+          <li>Interrogative Adjectives</li>
+          <li>Quantitative Adjectives</li>
+          <li>Exclamatory Adjectives</li>
+          <li>Qualitative / Descriptive Adjectives</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pos-grid">
+      <div class="pos-card">
+        <h4>1. Proper Adjectives</h4>
+        <p>Adjectives made from Proper Nouns.</p>
+        <p class="eg">American, Indian, Chinese, Japanese</p>
+      </div>
+      <div class="pos-card">
+        <h4>2. Possessive Adjectives</h4>
+        <p>My, our, your, his, her, its, their</p>
+        <p class="eg">my car, your bag, his wife</p>
+      </div>
+      <div class="pos-card">
+        <h4>3. Distributive Adjectives</h4>
+        <p>Each, Every, Either, Neither</p>
+        <p class="eg">Each boy is going to the party. | Every student of this class is intelligent. | You can buy either shirt. | Neither car is new.</p>
+      </div>
+      <div class="pos-card">
+        <h4>4. Demonstrative Adjectives</h4>
+        <p><strong>(i) Definite:</strong> this, that, these, those<br><strong>(ii) Indefinite:</strong> some, any, a certain, certain, other, another</p>
+        <p class="eg">This car / That car / These cars / Those cars. Some old man is knocking at the door. Any graduate can apply for this post. I met a certain person yesterday. The other boys, another flat.</p>
+      </div>
+      <div class="pos-card">
+        <h4>5. Numeral Adjectives</h4>
+        <p><strong>(i) Definite:</strong> Cardinals (one, two, three) & Ordinals (first, second, third)<br><strong>(ii) Indefinite:</strong> many, few, various, several, all, some, most, no</p>
+        <p class="eg">Many persons were killed. She has few books. Most people will like this film. Some books are missing.</p>
+      </div>
+      <div class="pos-card">
+        <h4>6. Quantitative Adjectives</h4>
+        <p>Much, little, all, some, most</p>
+        <p class="eg">Much money is needed. She has paid little attention to my advice.</p>
+      </div>
+      <div class="pos-card">
+        <h4>7. Emphatic Adjectives</h4>
+        <p>Own, very</p>
+        <p class="eg">I saw her with my own eyes. He killed his son before my very eyes.</p>
+      </div>
+      <div class="pos-card">
+        <h4>8. Interrogative Adjectives</h4>
+        <p>What, which, whose</p>
+        <p class="eg">What type of shirt do you want to buy? Which movie do you like most? Whose pen is this?</p>
+      </div>
+      <div class="pos-card">
+        <h4>9. Exclamatory Adjectives</h4>
+        <p>What (used before a noun to express strong emotion)</p>
+        <p class="eg">What a beautiful girl! What a cute baby!</p>
+      </div>
+      <div class="pos-card">
+        <h4>10. Qualitative / Descriptive Adjectives</h4>
+        <p>good, bad, beautiful, smart, new</p>
+        <p class="eg">She is a beautiful girl. I have a red car.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-purple">Note: Demonstrative & Interrogative Pronouns (Comparison)</div>
+      <div class="card-body">
+        <p><strong>Demonstrative Pronouns:</strong></p>
+        <ul class="arrow-list">
+          <li>This is my dog. / That is your dog.</li>
+          <li>These are my shoes. / Those are my shoes.</li>
+        </ul>
+        <p><strong>Interrogative Pronouns:</strong></p>
+        <ul class="arrow-list">
+          <li>Who is crying here?</li>
+          <li>Whom have you invited?</li>
+          <li>Whose are these books?</li>
+          <li>Which is your house?</li>
+          <li>What is your name?</li>
+        </ul>
+        <p><strong>Emphatic Pronoun note:</strong> Emphatic pronoun is used for emphasis — I <em>myself</em> saw him. They <em>themselves</em> are late.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: EXCLAMATORY ADJ VS PRONOUN (What) -->
+  <div id="exclamatory" class="tab-content">
+    <div class="card">
+      <div class="card-header ch-red">Exclamatory Pronoun vs Exclamatory Adjective ("What")</div>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Exclamatory Pronoun</th><th>Exclamatory Adjective</th></tr>
+            <tr>
+              <td>A pronoun used as an exclamation (to express sudden emotion) is called an Exclamatory Pronoun. "What" stands alone as a pronoun.</td>
+              <td>Exclamatory Adjectives are used with nouns and indicate strong emotion. Here, the question word "what" is used before a noun to express the strong emotion.</td>
+            </tr>
+            <tr>
+              <td>What! Have you met our Principal?<br>What! You haven't attended the class.<br>What! I don't believe what she says.<br>What! You have already informed her.</td>
+              <td>What a strange incident!<br>What a cute baby!<br>What a band of great musicians!<br>What a board of eminent directors!</td>
+            </tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "What" is one of the most tested words for part-of-speech confusion — it can be an Exclamatory Adjective, Exclamatory Pronoun, Interrogative Adjective, or Relative Pronoun depending on structure. Always check what follows "what."
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-teal">Practice: Identify the Role of "What"</div>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Sentence</th><th>Role of "What"</th></tr>
+            <tr><td>What book do you want to read?</td><td>Interrogative Adjective (Int.A)</td></tr>
+            <tr><td>What a big building it is!</td><td>Exclamatory Adjective (Ex.A)</td></tr>
+            <tr><td>What! I don't believe that.</td><td>Exclamatory Pronoun (Ex.P)</td></tr>
+            <tr><td>What she said made me cry.</td><td>Relative Pronoun (R.P)</td></tr>
+            <tr><td>What is your friend's name?</td><td>Interrogative Pronoun (Int.P)</td></tr>
+            <tr><td>What food have you never eaten but would like to try?</td><td>Interrogative Adjective (Int.A)</td></tr>
+            <tr><td>What a big fool!</td><td>Exclamatory Adjective (Ex.A)</td></tr>
+            <tr><td>We can't give you what you need.</td><td>Relative Pronoun (R.P)</td></tr>
+            <tr><td>What do you want for dinner?</td><td>Interrogative Pronoun (Int.P)</td></tr>
+            <tr><td>What! She has gone there without my permission.</td><td>Exclamatory Pronoun (Ex.P)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: DEGREES OF COMPARISON -->
+  <div id="degrees" class="tab-content">
+    <div class="card">
+      <div class="card-header ch-gold">Degrees of Comparison</div>
+      <div class="card-body">
+        <h3 class="sub-title">Positive Degree</h3>
+        <p>Denotes the simple quality of a person or thing.</p>
+        <p class="eg">Ex. Meerut is a <strong>big</strong> city. (adj. positive degree)</p>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Positive degree is used when no comparison is made.
+        </div>
+
+        <h3 class="sub-title">Comparative Degree</h3>
+        <p>Denotes a higher quality than the positive degree. Used to compare only <strong>two</strong> persons or things.</p>
+        <div class="rule-box">Structure: Sub + Verb + Comparative Degree + than</div>
+        <p class="eg">Ex. Meerut is <strong>bigger</strong> than Ghaziabad.</p>
+
+        <h3 class="sub-title">Superlative Degree</h3>
+        <p>Denotes the highest degree of quality. Used to compare <strong>more than two</strong> persons or things.</p>
+        <p class="eg">Ex. Meerut is the <strong>biggest</strong> city in West Uttar Pradesh.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-blue">Formation of Comparative and Superlative Degrees</div>
+      <div class="card-body">
+        <h3 class="sub-title">1. Words Pronounced Without a Pause (+er / +est)</h3>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Positive</th><th>Comparative (+er)</th><th>Superlative (+est)</th></tr>
+            <tr><td>Tall</td><td>Taller</td><td>Tallest</td></tr>
+            <tr><td>Cool</td><td>Cooler</td><td>Coolest</td></tr>
+            <tr><td>Hot</td><td>Hotter</td><td>Hottest</td></tr>
+          </table>
+        </div>
+        <h3 class="sub-title">2. Words Pronounced With a Pause (more / most)</h3>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Positive</th><th>Comparative (more)</th><th>Superlative (most)</th></tr>
+            <tr><td>Beautiful</td><td>more beautiful</td><td>most beautiful</td></tr>
+            <tr><td>Honest</td><td>more honest</td><td>most honest</td></tr>
+            <tr><td>Faithful</td><td>more faithful</td><td>most faithful</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-purple">Important Points of Adjectives (Predicative-Only Words)</div>
+      <div class="card-body">
+        <p>Afloat, afraid, alight, alike, alive, alone, ashamed, asleep, awake, upset...</p>
+        <p>All these words are <strong>always used predicatively</strong> in a sentence — never directly before a noun (attributively).</p>
+        <ul class="arrow-list">
+          <li>She had been <em>asleep</em> for over three hours. ✔</li>
+          <li>Do not disturb a <span class="wrong">asleep</span> baby. ✘</li>
+          <li>Do not disturb a <span class="right">sleeping</span> baby. ✔</li>
+        </ul>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Correct</th><th>Incorrect (attributive use)</th></tr>
+            <tr><td>The ship is still afloat ✔</td><td>An afloat leaf ✘ (use: A floating leaf)</td></tr>
+            <tr><td>He was afraid. ✔</td><td>John is an afraid man ✘ (use: John is a frightened man)</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Words like "asleep," "afraid," "alive," "alone" cannot be placed directly before a noun. SSC/BPSC frequently sets error-spotting questions using these words in the wrong (attributive) position.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: SPECIAL COMPARATIVE RULES -->
+  <div id="special" class="tab-content">
+    <div class="card">
+      <div class="card-header ch-orange">2. Latin Adjectives — Use "to", not "than"</div>
+      <div class="card-body">
+        <p>Junior, Senior, Inferior, Superior, Prior, Preferable</p>
+        <div class="rule-box">Latin Adjective + TO (never "than")</div>
+        <ul class="arrow-list">
+          <li>All these words are already in comparative degree.</li>
+          <li>"To" is used after them instead of "Than."</li>
+          <li>We cannot make their comparative and superlative forms.</li>
+        </ul>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">Tanu is two years more senior than me in college.</td><td class="right">Tanu is two years senior to me in college.</td></tr>
+            <tr><td class="wrong">Coffee is more preferable than tea.</td><td class="right">Coffee is preferable to tea.</td></tr>
+            <tr><td class="wrong">As a playwright, William Shakespeare is superior than any other 16th-century playwright.</td><td class="right">...superior to any other 16th-century playwright.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Junior/Senior/Inferior/Superior/Prior/Preferable can ALSO be used as ordinary Positive Degree adjectives or even as singular nouns — don't assume "to" is always needed.
+          <br>• He is a <em>senior</em> player. (positive degree adjective)
+          <br>• He sells the goods of <em>inferior</em> quality. (positive degree adjective)
+          <br>• Rahul is my <em>senior</em>. (used as a noun)
+          <br>• They are my <em>juniors</em>. (used as a noun)
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-teal">3. Absolute Adjectives — Superlative Degree Words</div>
+      <div class="card-body">
+        <p>These words are already in the superlative degree — we cannot make their comparative and superlative forms.</p>
+        <div class="pos-grid">
+          <div class="pos-card"><p>Absolute, Eternal, Chief, Circular, Round, Triangular</p></div>
+          <div class="pos-card"><p>Universal, Unique, Supreme, Extreme, Total, Whole</p></div>
+          <div class="pos-card"><p>Perfect, Complete, Impossible, Ideal, Right, Wrong</p></div>
+        </div>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">This is the most unique animal that I have ever seen.</td><td class="right">This is the unique animal that I have ever seen.</td></tr>
+            <tr><td class="wrong">Romanoff was the chiefest of all spies.</td><td class="right">Romanoff was the chief of all spies.</td></tr>
+            <tr><td class="wrong">The Constitution of India is rightly said to be most supreme power of the country.</td><td class="right">...rightly said to be supreme power of the country.</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-gold">4. As...As / So...As (Positive Degree Comparison)</div>
+      <div class="card-body">
+        <div class="rule-box">Affirmative (+ve): As + Positive Degree + As</div>
+        <div class="rule-box">Negative (−ve): So + Positive Degree + As (उतना ही ... जितना ही)</div>
+        <ul class="arrow-list">
+          <li>Dean is <strong>as good as</strong> Jess. ✔</li>
+          <li>Dean is not <span class="wrong">as better as</span> Jess. ✘</li>
+          <li>Dean is not <strong>so good as</strong> Jess. ✔</li>
+        </ul>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">That last offer was so high as we could reasonably go.</td><td class="right">That last offer was as high as we could reasonably go.</td></tr>
+            <tr><td class="wrong">Job opportunities are not as better as they used to be.</td><td class="right">Job opportunities are not so good as they used to be.</td></tr>
+            <tr><td class="wrong">We went back to the woods again as fastest as he could.</td><td class="right">...again as fast as he could.</td></tr>
+            <tr><td class="wrong">It was not as tastier as the one cooked by my mother.</td><td class="right">It was not as tasty as the one cooked by my mother.</td></tr>
+            <tr><td class="wrong">Relationships are not as more patriarchal as they used to be.</td><td class="right">Relationships are not so patriarchal as they used to be.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Never put a comparative form (better, fastest, tastier, more) inside an As...As or So...As structure — always use the plain positive degree form inside this structure.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-blue">5. Too + Positive Degree</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>He is too weak to walk.</li>
+          <li>He is too lazy to do this type of work.</li>
+        </ul>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">She is too busiest to go with you.</td><td class="right">She is too busy to go with you.</td></tr>
+            <tr><td class="wrong">He is too cleverest to be cheated.</td><td class="right">He is too clever to be cheated.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Too" is always followed by the plain positive degree, never comparative or superlative form.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-purple">Adjective + Enough + Noun</div>
+      <div class="card-body">
+        <div class="rule-box">Adjective + Enough (Enough acts as Adverb)</div>
+        <ul class="arrow-list">
+          <li>I can't hear the music. It's not loud enough.</li>
+          <li>The room is large enough for all the students.</li>
+        </ul>
+        <div class="rule-box">Enough + Noun (Enough acts as Adjective)</div>
+        <ul class="arrow-list">
+          <li>He has enough money to buy a new car.</li>
+          <li>They forgot to buy enough food for the camping trip.</li>
+        </ul>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">Are you older enough to vote?</td><td class="right">Are you old enough to vote?</td></tr>
+            <tr><td class="wrong">The exercise was easier enough for them to complete.</td><td class="right">The exercise was easy enough for them to complete.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Enough" is always paired with the plain Positive Degree of the adjective — never comparative (older, easier).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-orange">Comparatively / Relatively + Positive Degree</div>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">The weather is relatively better today.</td><td class="right">The weather is relatively good today.</td></tr>
+            <tr><td class="wrong">The technology is still comparatively newer.</td><td class="right">The technology is still comparatively new.</td></tr>
+            <tr><td class="wrong">The weather of Delhi is comparatively better than that of Chennai.</td><td class="right">The weather of Delhi is better than that of Chennai.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Comparatively" / "Relatively" must be followed by the Positive Degree — never a comparative form (better, newer). And when "than" is already present, drop "comparatively"/"relatively" altogether.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-teal">Other + Positive and Comparative Degree</div>
+      <div class="card-body">
+        <p>When one thing is compared with another of the same kind, "other" is used in sentences of Positive and Comparative degree.</p>
+        <ul class="arrow-list">
+          <li>Rahul is as smart as <strong>any other</strong> boy in the class.</li>
+          <li>Rahul is smarter than <strong>any other</strong> boy in the class.</li>
+          <li>Rahul is as smart as <strong>any</strong> girl in the class. (different gender — no "other" needed)</li>
+          <li>Nile is longer than <strong>any other</strong> river in the world.</li>
+          <li>Nile is longer than any river in India. (different category — "other" dropped)</li>
+          <li><strong>No other</strong> president in India is as famous as Dr. APJ Abdul Kalam.</li>
+          <li>No president in the USA is as famous as Dr. APJ Abdul Kalam. (different country — "other" dropped)</li>
+        </ul>
+        <div class="rule-box">Note: "Other" is NOT used in sentences of Superlative Degree</div>
+        <ul class="arrow-list">
+          <li class="right">Gautam is the laziest of all his brothers. ✔ (not "other brothers")</li>
+        </ul>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">No medicine is as effective as this medicine...</td><td class="right">No other medicine is as effective as this medicine...</td></tr>
+            <tr><td class="wrong">No students in this school is as intelligent and brave as Ginny.</td><td class="right">No other student in this school is as intelligent and brave as Ginny.</td></tr>
+            <tr><td class="wrong">Of all the other people I hate, he is the rudest...</td><td class="right">Of all the people I hate, he is the rudest...</td></tr>
+            <tr><td>Gold is more precious than any metal.</td><td class="right">Gold is more precious than any other metal.</td></tr>
+            <tr><td>Humans are the most intelligent of all other species.</td><td class="right">Humans are the most intelligent of all species.</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-gold">Faulty Comparison — "That" / "Those" Repetition</div>
+      <div class="card-body">
+        <div class="rule-box">Singular noun repeats: "that" &nbsp;|&nbsp; Plural noun repeats: "those"</div>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">The railway station of Jaipur is cleaner than Indore.</td><td class="right">The railway station of Jaipur is cleaner than that of Indore.</td></tr>
+            <tr><td class="wrong">The students of Mukherjee Nagar are smarter than Rajendra Nagar.</td><td class="right">The students of Mukherjee Nagar are smarter than those of Rajendra Nagar.</td></tr>
+            <tr><td class="wrong">The weather of Bengaluru is better than Delhi.</td><td class="right">The weather of Bengaluru is better than that of Delhi.</td></tr>
+            <tr><td class="wrong">The roads of Chandigarh are cleaner than Jaipur.</td><td class="right">The roads of Chandigarh are cleaner than those of Jaipur.</td></tr>
+            <tr><td>She wished her writing could be as effective as J.K. Rowling...</td><td class="right">...as effective as that of J.K. Rowling...</td></tr>
+            <tr><td>...the mass of its tiny body is far lower than a human.</td><td class="right">...far lower than that of a human.</td></tr>
+            <tr><td>The opinions of politicians are no more relevant than that of citizens.</td><td class="right">...no more relevant than those of citizens.</td></tr>
+            <tr><td>...her reflexes are as fast as a normal participant.</td><td class="right">...are as fast as those of a normal participant.</td></tr>
+            <tr><td>...the defense forces of India are better trained than that of Pakistan.</td><td class="right">...better trained than those of Pakistan.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Watch subject number carefully: "railway station" (singular) needs "that of," while "students"/"roads" (plural) need "those of." This is one of the most repeated error-spotting patterns in SSC/BPSC exams.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: FAULTY COMPARISON / TWO QUALITIES / TWO STRUCTURES -->
+  <div id="faulty" class="tab-content">
+    <div class="card">
+      <div class="card-header ch-red">Two Qualities of the Same Person</div>
+      <div class="card-body">
+        <div class="rule-box">More + Positive Degree + than + Positive Degree</div>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">Dean is smarter than brave.</td><td class="right">Dean is more smart than brave.</td></tr>
+            <tr><td class="wrong">Tanu is wiser than beautiful.</td><td class="right">Tanu is more wise than beautiful.</td></tr>
+            <tr><td class="wrong">Rahul is tallest than handsome.</td><td class="right">Rahul is more tall than handsome.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          When comparing two DIFFERENT qualities of the SAME person, never use the "-er"/"-est" comparative form — always use "more + positive degree."
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-blue">Two Structures of Comparative Degree</div>
+      <div class="card-body">
+        <h3 class="sub-title">1st Structure</h3>
+        <div class="rule-box">Sub + Verb + Comparative Degree + than</div>
+        <p>Used to compare only two persons or things.</p>
+        <p class="eg">This material is better than that material.</p>
+
+        <h3 class="sub-title">2nd Structure</h3>
+        <div class="rule-box">Sub + Verb + the + Comparative Degree + of the two + Plural Noun</div>
+        <p>Used for selection — choosing one out of two.</p>
+        <p class="eg">This material is the better of the two materials.</p>
+        <ul class="arrow-list">
+          <li>This player is better than that player.</li>
+          <li>This player is the better of the two players.</li>
+        </ul>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">Of Delhi and Mumbai, which is coolest?</td><td class="right">Of Delhi and Mumbai, which is the cooler?</td></tr>
+            <tr><td class="wrong">Of the two films in which he started, I think the former one is the best.</td><td class="right">...the former one is the better.</td></tr>
+            <tr><td class="wrong">Of the two boys in the college, Dean is braver.</td><td class="right">Of the two boys in the college, Dean is the braver.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          When only TWO items are being compared for selection (signalled by "of the two"), the superlative form ("-est"/"most") is WRONG — use "the + comparative" instead.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-purple">Mixing Positive and Comparative Degree in One Sentence</div>
+      <div class="card-body">
+        <div class="rule-box">As + Positive Degree + As + Conjunction + Comparative Degree + than</div>
+        <ul class="arrow-list">
+          <li>She is as good as, if not better than, you.</li>
+          <li>He is as tall as and more handsome than you.</li>
+          <li>He is better than and as wise as you.</li>
+        </ul>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">She is as beautiful, if not more beautiful than you.</td><td class="right">She is as beautiful <u>as</u>, if not more beautiful than, you.</td></tr>
+            <tr><td class="wrong">Rahul is more honest, and as hard working as you.</td><td class="right">Rahul is more honest <u>than</u>, and as hard working as, you.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          When "as" and "than" structures are combined, each connector must be completed properly — a missing "as" or "than" is a very common error-spotting trap.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-orange">Gradual Development or Decline</div>
+      <div class="card-body">
+        <p><strong>Note:</strong> In this case, comparative degree is used (repeated).</p>
+        <ul class="arrow-list">
+          <li>She is getting fatter and fatter.</li>
+          <li>He is becoming richer and richer.</li>
+          <li>He is becoming more and more ambitious.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-teal">"Equally" and "As" — Never Together</div>
+      <div class="card-body">
+        <p>"Equally" and "as" both cannot be used together in a sentence.</p>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">The world's biggest bull is equally as big as a small elephant.</td><td class="right">The world's biggest bull is as big as a small elephant.</td></tr>
+            <tr><td class="wrong">You are equally as good as your brother.</td><td class="right">You are as good as your brother. / You and your brother are equally good.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Use either "equally + adjective" OR "as + adjective + as" — combining both ("equally as ... as") is always wrong.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-gold">Prepositions After Superlatives</div>
+      <div class="card-body">
+        <div class="rule-box">Of + Plural Noun &nbsp;|&nbsp; In + Group/Place</div>
+        <ul class="arrow-list">
+          <li>He is the shortest <strong>of</strong> all the brothers.</li>
+          <li>Iron is the most useful <strong>of</strong> all metals.</li>
+          <li>He is the shortest person <strong>in</strong> his family.</li>
+          <li>She is the fastest player <strong>in</strong> the team.</li>
+          <li>Burj Khalifa is the tallest building <strong>in</strong> the world.</li>
+          <li>Mariana Trench is the deepest point <strong>in</strong> the ocean.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Plural noun following superlative → use "of". Group/place/team/family/world following superlative → use "in".
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: CONFUSING ADJECTIVE PAIRS -->
+  <div id="confusion" class="tab-content">
+    <div class="card">
+      <div class="card-header ch-red">Good : Well</div>
+      <div class="card-body">
+        <p><strong>Good</strong> (adjective) — tells the quality of a person or thing.</p>
+        <ul class="arrow-list">
+          <li>She is a good player.</li>
+          <li>She speaks good English.</li>
+        </ul>
+        <p><strong>Well</strong> has two roles:</p>
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>Well as Adjective (हालत / condition)</h4>
+            <p class="eg">How are you? — I am well. ✔ (not "I am good" ✘)</p>
+          </div>
+          <div class="pos-card">
+            <h4>Well as Adverb (अच्छे तरीके से / in a good manner)</h4>
+            <p class="eg">She speaks English well.</p>
+          </div>
+        </div>
+        <ul class="arrow-list">
+          <li>The quality of apples is good. ✔ (state/quality → good)</li>
+          <li>I am not feeling well today. ✔ (health/condition → well)</li>
+        </ul>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">The Indian U-19 team played pretty good in the World Cup.</td><td class="right">...played pretty well in the World Cup.</td></tr>
+            <tr><td class="wrong">Rosy is a well student even if she didn't get the call back from Harvard.</td><td class="right">Rosy is a good student even if she didn't get the call back from Harvard.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Well" describing HOW an action is done = adverb (played well). "Well" describing health/condition = adjective (I am well). "Good" describing a person's quality/skill = adjective, and never used to describe manner of action.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-blue">Bad : Ill</div>
+      <div class="card-body">
+        <p><strong>Bad</strong> (adjective) — wicked, immoral, inferior, incorrect</p>
+        <ul class="arrow-list">
+          <li>He is a bad man.</li>
+          <li>It is bad to steal.</li>
+          <li>The quality of this product is bad.</li>
+          <li>His pronunciation is bad.</li>
+        </ul>
+        <p><strong>Ill</strong> has two roles:</p>
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>Ill as Adjective (condition)</h4>
+            <p class="eg">My friend is ill. | She is ill with fever.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Ill as Adverb (insufficiently, badly)</h4>
+            <p class="eg">ill-informed person | ill-treated community</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-green">First : Foremost</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li><strong>First</strong> — denotes order</li>
+          <li><strong>Foremost</strong> — prominent, notable</li>
+        </ul>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">Indira Gandhi was the first Prime Minister of India.</td><td class="right">Indira Gandhi was the foremost Prime Minister of India. (meaning: notable/prominent)</td></tr>
+            <tr><td class="wrong">Gandhiji was the first leader of his time.</td><td class="right">Gandhiji was the foremost leader of his time.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          When the intended meaning is "most prominent/notable" (not "first in sequence"), "first" is the wrong word — use "foremost."
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-purple">Former/Latter vs First/Last</div>
+      <div class="card-body">
+        <div class="rule-box">Former / Latter → used for only TWO persons or things</div>
+        <div class="rule-box">First / Last → used for MORE THAN TWO persons or things</div>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">Rahul and Sahil are intelligent but the first is more intelligent than the last.</td><td class="right">...but the former is more intelligent than the latter.</td></tr>
+            <tr><td>Rahul, Sahil and Karan are intelligent but the first is more intelligent than the last.</td><td class="right">(Correct as is — 3 people → first/last applies)</td></tr>
+            <tr><td class="wrong">Sense & Sensibility and Pride & Prejudice are Jane Austen's two notable works but I like the latter most.</td><td class="right">...I like the latter more.</td></tr>
+            <tr><td class="wrong">The Hindu and the Indian Express are two well-written newspapers, but I prefer the last one.</td><td class="right">...but I prefer the latter one.</td></tr>
+            <tr><td>Of the two Marvel movies we have watched, the first one is the better.</td><td class="right">...the former one is the better. (correct option: "the former one is the better")</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Former/Latter" strictly for TWO items; "First/Last" for THREE or more. Mixing them up (e.g., "first" for only two items) is a classic SSC/BPSC error-spotting trap.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-orange">Later : Latter</div>
+      <div class="card-body">
+        <p><strong>Later</strong> — बाद में (afterwards, in time)</p>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">The meals arrived latter than we expected.</td><td class="right">The meals arrived later than we expected.</td></tr>
+            <tr><td class="wrong">We will discuss it latter when we reach home.</td><td class="right">We will discuss it later when we reach home.</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Later" (time) and "Latter" (the second of two) are frequently confused in spelling-based error-spotting questions — they sound alike but mean completely different things.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-teal">Elder, Eldest : Older, Oldest</div>
+      <div class="card-body">
+        <div class="rule-box">Elder / Eldest → used ONLY for human beings (blood relation)</div>
+        <ul class="arrow-list">
+          <li>He is my elder brother.</li>
+          <li>She is your elder sister.</li>
+          <li>My eldest son lives in London.</li>
+        </ul>
+        <div class="rule-box">Older / Oldest → used for human beings AND things (बड़ा / पुराना)</div>
+        <ul class="arrow-list">
+          <li>Rahul is older than Sahil.</li>
+          <li>Mr. Sharma is the oldest man in this village.</li>
+          <li>This school is older than that.</li>
+          <li>This is the oldest temple in this town.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Than" is NEVER used with "Elder" — only with "Older." ("He is elder than me" ✘ → "He is older than me" ✔, or "He is my elder brother" ✔ without "than.")
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-red">Further : Farther</div>
+      <div class="card-body">
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>Farther — to show physical distance</h4>
+            <p class="eg">Let us walk a little farther. | The fog's so thick, I can't see farther than about ten metres.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Further — additional / extra (not physical distance)</h4>
+            <p class="eg">She should not be given further punishment. | If you have any further problems, let me know.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-blue">Numeral Adjectives Recap: Ordinal vs Cardinal</div>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Ordinal (order)</th><th>Cardinal (counting)</th></tr>
+            <tr><td>First, second, third, Next, last etc.</td><td>One, two, three, etc.</td></tr>
+          </table>
+        </div>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Incorrect</th><th>Correct</th></tr>
+            <tr><td class="wrong">The two first chapters of this book has a slow pace...</td><td class="right">The first two chapters of this book have a slow pace...</td></tr>
+            <tr><td class="wrong">...anybody else, last to cross the red line will be out of the race.</td><td class="right">...anybody else, the last to cross the red line will be out of the race.</td></tr>
+            <tr><td class="wrong">The two last parts of the Harry Potter series is emotionally exhausting...</td><td class="right">The last two parts of the Harry Potter series are emotionally exhausting...</td></tr>
+            <tr><td class="wrong">Securing First position didn't give her that much pleasure...</td><td class="right">Securing the first position didn't give her that much pleasure...</td></tr>
+          </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Cardinal + Ordinal order matters: "the first two chapters" is correct, "the two first chapters" is wrong. Also, when the subject becomes plural ("the last two parts"), the verb must agree in plural (are, not is).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: PRACTICE EXAMPLES -->
+  <div id="practice" class="tab-content">
+    <div class="card">
+      <div class="card-header ch-gold">Worked Practice: Error Spotting & Correction (Degrees of Comparison)</div>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>#</th><th>Original Sentence (with error)</th><th>Correction</th></tr>
+            <tr><td>1</td><td>Everyone knows that of the two boys in the college, Deon is the bravest.</td><td class="right">...Deon is the braver.</td></tr>
+            <tr><td>2</td><td>...the path is decorated with more beautiful flowers and ponds.</td><td class="right">...decorated with very beautiful flowers and ponds.</td></tr>
+            <tr><td>3</td><td>Literature and poetry are the two most sweetest passions known to man.</td><td class="right">...the two sweetest passions known to man.</td></tr>
+            <tr><td>4</td><td>It is very challenging to prepare for this presentation when we have so less time.</td><td class="right">...when we have so little time.</td></tr>
+            <tr><td>5</td><td>Hermione Granger is the most diligent and wisest witch of her age.</td><td class="right">...the wisest and most diligent witch of her age.</td></tr>
+            <tr><td>6</td><td>The Indian Army is good and stronger than the Pakistan Army...</td><td class="right">The Indian Army is better and stronger than the Pakistan Army... (Option B)</td></tr>
+            <tr><td>7</td><td>Atal Bihari Vajpayee is the best and the honest prime minister of our time.</td><td class="right">...the best and most honest prime minister of our time. (Option D)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header ch-blue">Worked Practice: MCQ Sentence Correction Sets</div>
+      <div class="card-body">
+        <p><strong>Q1.</strong> There is no denying the fact that the Indian Army <u>is good and stronger than</u> the Pakistan Army in every possible aspect...</p>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Option</th><th>Text</th><th>Verdict</th></tr>
+            <tr><td>A</td><td>is good and strong than</td><td>✘</td></tr>
+            <tr><td>B</td><td>is better and stronger than</td><td class="right">✔</td></tr>
+            <tr><td>C</td><td>is better and stronger then</td><td>✘</td></tr>
+            <tr><td>D</td><td>is better and the strongest than</td><td>✘</td></tr>
+            <tr><td>E</td><td>No correction required</td><td>✘</td></tr>
+          </table>
+        </div>
+
+        <p><strong>Q2.</strong> Atal Bihari Vajpayee <u>is the best and the honest prime minister of</u> our time...</p>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Option</th><th>Text</th><th>Verdict</th></tr>
+            <tr><td>A</td><td>is the better and the honest prime minister of</td><td>✘</td></tr>
+            <tr><td>B</td><td>is the better and the honest prime minister of</td><td>✘</td></tr>
+            <tr><td>C</td><td>is the good and more honest prime minister of</td><td>✘</td></tr>
+            <tr><td>D</td><td>is the best and most honest prime minister of</td><td class="right">✔</td></tr>
+            <tr><td>E</td><td>No correction required</td><td>✘</td></tr>
+          </table>
+        </div>
+
+        <p><strong>Q3.</strong> Even after so many years, Gold <u>is more precious than any metal</u>...</p>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Option</th><th>Text</th><th>Verdict</th></tr>
+            <tr><td>A</td><td>is most precious than any other metal</td><td>✘</td></tr>
+            <tr><td>B</td><td>is precious than any other metal</td><td>✘</td></tr>
+            <tr><td>C</td><td>is more precious than any other metal</td><td class="right">✔</td></tr>
+            <tr><td>D</td><td>is more precious to any other metal</td><td>✘</td></tr>
+            <tr><td>E</td><td>No correction required</td><td>✘</td></tr>
+          </table>
+        </div>
+
+        <p><strong>Q4.</strong> Though humans are <u>the most intelligent of all</u> other species in the world...</p>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Option</th><th>Text</th><th>Verdict</th></tr>
+            <tr><td>A</td><td>the more intelligent of all other species</td><td>✘</td></tr>
+            <tr><td>B</td><td>the intelligent of all species</td><td>✘</td></tr>
+            <tr><td>C</td><td>the intelligent of all other species</td><td>✘</td></tr>
+            <tr><td>D</td><td>the most intelligent of all species</td><td class="right">✔</td></tr>
+            <tr><td>E</td><td>No correction required</td><td>✘</td></tr>
+          </table>
+        </div>
+
+        <p><strong>Q5.</strong> Strong will can turn impossible into possible. I can't believe that despite the injury, her reflexes <u>are as fast as a normal participant</u>...</p>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Option</th><th>Text</th><th>Verdict</th></tr>
+            <tr><td>A</td><td>is as fast as that of a normal participant</td><td>✘</td></tr>
+            <tr><td>B</td><td>are as faster as those of a normal participant</td><td>✘</td></tr>
+            <tr><td>C</td><td>are as fast as those of a normal participant</td><td class="right">✔</td></tr>
+            <tr><td>D</td><td>is as fast as those of a normal participants</td><td>✘</td></tr>
+            <tr><td>E</td><td>No correction required</td><td>✘</td></tr>
+          </table>
+        </div>
+
+        <p><strong>Q6.</strong> Being the world's third-largest military spender, the defense forces of India <u>are better trained than that of</u> Pakistan...</p>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Option</th><th>Text</th><th>Verdict</th></tr>
+            <tr><td>A</td><td>are better trained than of Pakistan</td><td>✘</td></tr>
+            <tr><td>B</td><td>are better trained than those of Pakistan</td><td class="right">✔</td></tr>
+            <tr><td>C</td><td>are best trained than those of Pakistan</td><td>✘</td></tr>
+            <tr><td>D</td><td>are good trained than those of Pakistan</td><td>✘</td></tr>
+            <tr><td>E</td><td>No correction required</td><td>✘</td></tr>
+          </table>
+        </div>
+
+        <p><strong>Q7.</strong> Though I always prefer watching DC movies. Of the two Marvel movies that we have watched, I think <u>the first one is the best</u>.</p>
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Option</th><th>Text</th><th>Verdict</th></tr>
+            <tr><td>A</td><td>the first one is the better</td><td>✘</td></tr>
+            <tr><td>B</td><td>the former one is the best</td><td>✘</td></tr>
+            <tr><td>C</td><td>the first one is the good</td><td>✘</td></tr>
+            <tr><td>D</td><td>the former one is the better</td><td class="right">✔</td></tr>
+            <tr><td>E</td><td>No correction required</td><td>✘</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 9: MASTER TABLE -->
+  <div id="master" class="tab-content">
+    <div class="card">
+      <div class="card-header ch-gold">Master Table — Adjectives (Complete Quick Revision)</div>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table class="data-table">
+            <tr><th>Topic</th><th>Key Rule / Fact</th></tr>
+            <tr><td>Definition</td><td>Adjective modifies a noun/pronoun. Article + Word = Noun; Word + s/es = Plural Noun.</td></tr>
+            <tr><td>Attributive Use</td><td>Adjective directly before noun — "a beautiful girl"</td></tr>
+            <tr><td>Predicative Use</td><td>Adjective after linking verb — "she looks happy"</td></tr>
+            <tr><td>Linking Verbs</td><td>Be, appear, seem, feel, keep, look, make, remain, smell, sound, taste, turn</td></tr>
+            <tr><td>Proper Adjectives</td><td>Made from Proper Nouns — American, Indian, Chinese, Japanese</td></tr>
+            <tr><td>Possessive Adjectives</td><td>my, our, your, his, her, its, their</td></tr>
+            <tr><td>Distributive Adjectives</td><td>Each, Every, Either, Neither</td></tr>
+            <tr><td>Demonstrative Adjectives</td><td>Definite: this/that/these/those; Indefinite: some/any/certain/other/another</td></tr>
+            <tr><td>Numeral Adjectives</td><td>Definite: Cardinals & Ordinals; Indefinite: many/few/various/several/all/some/most/no</td></tr>
+            <tr><td>Quantitative Adjectives</td><td>Much, little, all, some, most</td></tr>
+            <tr><td>Emphatic Adjectives</td><td>Own, very</td></tr>
+            <tr><td>Interrogative Adjectives</td><td>What, which, whose (before a noun)</td></tr>
+            <tr><td>Exclamatory Adjectives</td><td>"What" + noun for strong emotion — "What a cute baby!"</td></tr>
+            <tr><td>Qualitative Adjectives</td><td>good, bad, beautiful, smart, new</td></tr>
+            <tr><td>What: Ex.P vs Ex.A</td><td>Ex. Pronoun stands alone ("What! ...") vs Ex. Adjective before noun ("What a...!")</td></tr>
+            <tr><td>Positive Degree</td><td>Simple quality, no comparison — "Meerut is a big city"</td></tr>
+            <tr><td>Comparative Degree</td><td>Compares 2 things — Sub+Verb+Comp+than — "bigger than"</td></tr>
+            <tr><td>Superlative Degree</td><td>Compares 3+ things — "the biggest"</td></tr>
+            <tr><td>Formation (no pause)</td><td>+er / +est → tall-taller-tallest</td></tr>
+            <tr><td>Formation (with pause)</td><td>more/most → beautiful-more beautiful-most beautiful</td></tr>
+            <tr><td>Predicative-Only Words</td><td>afloat, afraid, alight, alike, alive, alone, ashamed, asleep, awake — never before a noun</td></tr>
+            <tr><td>Latin Adjectives</td><td>Junior, Senior, Inferior, Superior, Prior, Preferable + TO (never "than")</td></tr>
+            <tr><td>Absolute Adjectives</td><td>Absolute, Unique, Chief, Supreme, Perfect, Complete, etc. — no comparative/superlative form</td></tr>
+            <tr><td>As...As / So...As</td><td>Affirmative: As+Pos+As; Negative: So+Pos+As — never use comparative inside</td></tr>
+            <tr><td>Too + Positive</td><td>"too weak to walk" — always plain positive degree after "too"</td></tr>
+            <tr><td>Adjective + Enough</td><td>"loud enough" (enough=adverb) vs "enough money" (enough=adjective before noun)</td></tr>
+            <tr><td>Comparatively/Relatively</td><td>+ Positive Degree only — never comparative form</td></tr>
+            <tr><td>Other + Positive/Comparative</td><td>"any other boy," "no other" — dropped when comparing across different categories</td></tr>
+            <tr><td>Other + Superlative</td><td>NEVER used — "the laziest of all his brothers" (no "other")</td></tr>
+            <tr><td>Faulty Comparison (that/those)</td><td>Singular noun repeats with "that of"; Plural noun repeats with "those of"</td></tr>
+            <tr><td>Two Qualities, Same Person</td><td>More + Positive + than + Positive — "more smart than brave"</td></tr>
+            <tr><td>Two Structures (Comparative)</td><td>1) Sub+Verb+Comp+than (2 things) 2) Sub+Verb+the+Comp+of the two+plural noun (selection)</td></tr>
+            <tr><td>Mixed As/Than Structure</td><td>As+Pos+As+Conj+Comp+than — both connectors must be completed</td></tr>
+            <tr><td>Gradual Development</td><td>Comparative repeated — "fatter and fatter," "more and more ambitious"</td></tr>
+            <tr><td>Equally vs As</td><td>Never used together — "equally good" OR "as good as," never "equally as good as"</td></tr>
+            <tr><td>Prepositions after Superlative</td><td>Of + plural noun; In + group/place</td></tr>
+            <tr><td>Good : Well</td><td>Good = quality (adjective); Well = condition (adjective) / manner (adverb)</td></tr>
+            <tr><td>Bad : Ill</td><td>Bad = wicked/inferior (adjective); Ill = condition (adj) / insufficiently-badly (adverb)</td></tr>
+            <tr><td>First : Foremost</td><td>First = order; Foremost = prominent/notable</td></tr>
+            <tr><td>Former/Latter vs First/Last</td><td>Former/Latter = only 2 items; First/Last = 3+ items</td></tr>
+            <tr><td>Later : Latter</td><td>Later = time (बाद में); Latter = the second of two</td></tr>
+            <tr><td>Elder/Eldest : Older/Oldest</td><td>Elder = human blood relation only, no "than"; Older = human/things, takes "than"</td></tr>
+            <tr><td>Further : Farther</td><td>Farther = physical distance; Further = additional/extra</td></tr>
+            <tr><td>Numeral Order</td><td>Cardinal + Ordinal order — "the first two chapters," not "the two first chapters"</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer">
+    Exam Fusion Prep | examfusionprep.com · Adjectives · SSC / BPSC / BSSC
+  </footer>
+
+</div>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Voice | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  header{
+    background:linear-gradient(135deg, var(--surface2), var(--surface));
+    border-bottom:2px solid var(--gold);
+    padding:22px 16px;
+    text-align:center;
+  }
+  header h1{
+    color:var(--gold);
+    font-size:1.9rem;
+    letter-spacing:1px;
+  }
+  header p{
+    color:#aab0c6;
+    margin-top:6px;
+    font-size:0.95rem;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    position: static;
+    
+    z-index:100;
+  }
+  .tab-nav button{
+    background:var(--surface2);
+    color:#c7cbe0;
+    border:1px solid var(--border);
+    padding:9px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:0.85rem;
+    font-weight:600;
+    transition:all 0.2s ease;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+  }
+  .tab-nav button.active{
+    background:#2a2200;
+    color:var(--gold);
+    border-color:var(--gold);
+    border-bottom:3px solid var(--gold);
+  }
+  .tab-content{display:none; padding:20px 16px; max-width:1000px; margin:0 auto;}
+  .tab-content.active{display:block; animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:0.3px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#2a2200,#1a1d27); color:var(--gold);}
+  .card-header.green{background:linear-gradient(90deg,#0d2b1a,#1a1d27); color:var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg,#0d1f33,#1a1d27); color:var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg,#24123a,#1a1d27); color:var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg,#3a1f0a,#1a1d27); color:var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg,#33110d,#1a1d27); color:var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg,#0a2e29,#1a1d27); color:var(--accent6);}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:bold;
+  }
+
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{color:var(--accent1); font-weight:700; margin-bottom:6px; display:block;}
+
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{color:var(--accent2); font-weight:700; margin-bottom:6px; display:block;}
+
+  .rule-box{
+    border:1.5px solid var(--gold);
+    border-radius:8px;
+    padding:14px 18px;
+    margin:14px 0;
+    background:rgba(245,200,66,0.04);
+    color:var(--gold);
+    font-weight:700;
+    text-align:center;
+    font-size:1.05rem;
+  }
+  .rule-box .hindi{display:block; color:#e7e9f0; font-weight:400; font-size:0.9rem; margin-top:6px;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0;
+    font-size:0.92rem;
+  }
+  thead th{
+    background:#2a2200;
+    color:var(--gold);
+    border-bottom:2px solid var(--gold);
+    padding:10px;
+    text-align:left;
+  }
+  tbody td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  tbody tr:hover{background:var(--surface2);}
+  .table-wrap{overflow-x:auto;}
+
+  .pos-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:14px;
+    margin:14px 0;
+  }
+  .pos-card{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+  }
+  .pos-card h4{color:var(--gold); margin-bottom:6px; font-size:1rem;}
+  .pos-card p{color:#c7cbe0; font-size:0.88rem; margin-bottom:6px;}
+  .pos-card .example{color:var(--accent3); font-size:0.85rem; font-style:italic;}
+
+  .correct{color:var(--accent3); font-weight:700;}
+  .wrong{color:var(--accent1); text-decoration:line-through; font-weight:700;}
+  .hindi-note{color:#aab0c6; font-size:0.85rem; font-style:italic;}
+  strong.hl{color:var(--gold);}
+
+  footer{
+    text-align:center;
+    padding:20px;
+    color:#6b7089;
+    font-size:0.85rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+  @media(max-width:600px){
+    header h1{font-size:1.4rem;}
+    .tab-nav button{font-size:0.78rem; padding:8px 12px;}
+    .pos-grid{grid-template-columns:1fr;}
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<header>
+  <h1>VOICE</h1>
+  <p>English Grammar Mind Map · SSC / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tablink active" onclick="switchTab('overview')">Overview & Transitive/Intransitive</button>
+  <button class="tablink" onclick="switchTab('linking-verbs')">Linking Verbs — No Passive</button>
+  <button class="tablink" onclick="switchTab('pronoun-table')">Pronoun Table & Tense Conversion</button>
+  <button class="tablink" onclick="switchTab('assertive-practice')">Assertive Sentences Practice</button>
+  <button class="tablink" onclick="switchTab('interrogative')">Interrogative Sentences</button>
+  <button class="tablink" onclick="switchTab('wh-who-whom')">Wh / Who / Whom Questions</button>
+  <button class="tablink" onclick="switchTab('imperative')">Imperative Sentences</button>
+  <button class="tablink" onclick="switchTab('infinitive-noarticle')">Infinitive & No-Passive Words</button>
+  <button class="tablink" onclick="switchTab('double-object')">Double Object & Fixed Prepositions</button>
+  <button class="tablink" onclick="switchTab('let-sentences')">Sentences with "Let"</button>
+  <button class="tablink" onclick="switchTab('misc-concepts')">Miscellaneous Concepts (1-9)</button>
+  <button class="tablink" onclick="switchTab('master')">Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW & TRANSITIVE/INTRANSITIVE -->
+<div id="overview" class="tab-content active">
+  <div class="card">
+    <div class="card-header gold">Kinds of Voice</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li><strong class="hl">Active Voice</strong> / Active Verb</li>
+        <li><strong class="hl">Passive Voice</strong> / Passive Verb</li>
+      </ul>
+      <ul class="arrow-list">
+        <li>Aditi writes a letter. (Active Voice)</li>
+        <li>A letter is written by Aditi. (Passive Voice)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Active vs Passive — Definitions</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>Active Voice</h4>
+          <p>If the subject of the verb DOES an action, the verb is Active.</p>
+          <p class="example">Aditi writes a letter.</p>
+        </div>
+        <div class="pos-card">
+          <h4>Passive Voice</h4>
+          <p>If the subject of the verb RECEIVES an action, the verb is Passive.</p>
+          <p class="example">A letter is written by Aditi.</p>
+        </div>
+      </div>
+      <div class="rule-box">
+        Be forms used in passive: is / am / are / was / were / be / been / being
+      </div>
+      <div class="rule-box">
+        Structure for changing Active to Passive<br>
+        Active: Sub + Verb + Obj<br>
+        Passive: Sub + be + V3 + by + Obj
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Transitive vs Intransitive Verbs</div>
+    <div class="card-body">
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        We CANNOT make Passive Voice of an <strong class="hl">Intransitive Verb</strong>. Only Transitive verbs (which take an object) can be converted to passive.
+      </div>
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>Transitive</h4>
+          <p>An object is used after a Transitive Verb. Test: V + What/Whom = Object</p>
+          <p class="example">He wants toys. (V + what = toys)<br>I adore her. (V + whom = her)</p>
+        </div>
+        <div class="pos-card">
+          <h4>Intransitive</h4>
+          <p>An object is NOT used after an Intransitive Verb.</p>
+          <p class="example">I am going to Shimla. (Prepositional obj, not direct obj)<br>He walks fast. (adverb, not object)</p>
+        </div>
+      </div>
+      <p style="margin-top:8px;">She has come to the office. — Intransitive Verb (no direct object)</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: LINKING VERBS -->
+<div id="linking-verbs" class="tab-content">
+  <div class="card">
+    <div class="card-header purple">Linking Verbs — No Passive Voice</div>
+    <div class="card-body">
+      <p>The juice tastes delicious. — (n) juice, L.V. tastes, S.C.(Adj) delicious</p>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        We CANNOT make Passive Voice of <strong class="hl">Linking Verbs</strong>: Be, Become, Remain, Taste, Smell, Seem, Appear, etc. — because a Subject Complement (not an object) is used after linking verbs.
+      </div>
+      <div class="rule-box">
+        Subject = Subject Complement &nbsp;·&nbsp; Subject ≠ Object
+      </div>
+      <ul class="arrow-list">
+        <li>The juice tastes delicious.</li>
+        <li>He is handsome.</li>
+        <li>She looks stunning.</li>
+      </ul>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Structure</th></tr></thead>
+          <tbody>
+            <tr><td>He became a musician.</td><td>Sub = Sub Complement (Linking Verb — cannot passivize)</td></tr>
+            <tr><td>He married a musician.</td><td>Sub ≠ Obj (Transitive Verb — CAN passivize: A musician was married by him)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Test: if the word after the verb renames/describes the subject itself (Subject = Complement), it's a linking verb — no passive possible. If it's a separate entity receiving the action (Subject ≠ Object), it's transitive — passive is possible.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: PRONOUN TABLE & TENSE CONVERSION -->
+<div id="pronoun-table" class="tab-content">
+  <div class="card">
+    <div class="card-header orange">Pronoun Reference Table</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Person</th><th>Number</th><th>Subject</th><th>Object</th><th>Possessive Adj.</th><th>Possessive Pronoun</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="2">1st</td><td>Singular</td><td>I</td><td>Me</td><td>My</td><td>Mine</td></tr>
+            <tr><td>Plural</td><td>We</td><td>Us</td><td>Our</td><td>Ours</td></tr>
+            <tr><td rowspan="2">2nd</td><td>Singular</td><td>You</td><td>You</td><td>Your</td><td>Yours</td></tr>
+            <tr><td>Plural</td><td>You</td><td>You</td><td>Your</td><td>Yours</td></tr>
+            <tr><td rowspan="4">3rd</td><td>Singular</td><td>He</td><td>Him</td><td>His</td><td>His</td></tr>
+            <tr><td>Singular</td><td>She</td><td>Her</td><td>Her</td><td>Hers</td></tr>
+            <tr><td>Singular</td><td>It</td><td>It</td><td>Its</td><td>—</td></tr>
+            <tr><td>Plural</td><td>They</td><td>Them</td><td>Their</td><td>Theirs</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Master Tense Conversion Table — Active to Passive</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Note: When changing Active Voice into Passive Voice, TENSES DON'T get changed.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Active Voice</th><th>Passive Voice</th></tr></thead>
+          <tbody>
+            <tr><td>V1 + e/es</td><td>is / am / are + V3</td></tr>
+            <tr><td>is/am/are + V1+ing</td><td>is/am/are + being + V3</td></tr>
+            <tr><td>has/have + V3</td><td>has/have + been + V3</td></tr>
+            <tr><td>has/have + been + V1+ing</td><td>has/have + been + being + V3</td></tr>
+            <tr><td>V2</td><td>was/were + V3</td></tr>
+            <tr><td>was/were + V1+ing</td><td>was/were + being + V3</td></tr>
+            <tr><td>had + V3</td><td>had been + V3</td></tr>
+            <tr><td>had been + V1+ing</td><td>had been + being + V3</td></tr>
+            <tr><td>will/shall + V1</td><td>will/shall + be + V3</td></tr>
+            <tr><td>will/shall + be + V1+ing</td><td class="wrong">No Passive</td></tr>
+            <tr><td>will/shall + have + V3</td><td>will/shall + have + been + V3</td></tr>
+            <tr><td>Modal + V1</td><td>Modal + be + V3</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Future Continuous Tense (will/shall + be + V1+ing) has <strong class="hl">NO passive form</strong> — this is the only tense row in the table with no passive equivalent.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: ASSERTIVE SENTENCES PRACTICE -->
+<div id="assertive-practice" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Assertive Sentences — Full Tense Practice</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Active</th><th>Passive</th></tr></thead>
+          <tbody>
+            <tr><td>People love cricket.</td><td>Cricket is loved by people.</td></tr>
+            <tr><td>Aditi is writing a letter.</td><td>A letter is being written by Aditi.</td></tr>
+            <tr><td>He has brought the vegetables.</td><td>The vegetables have been brought by him.</td></tr>
+            <tr><td>You have been playing football since morning.</td><td>Football has been being played by you since morning.</td></tr>
+            <tr><td>She stole my heart.</td><td>My heart was stolen by her.</td></tr>
+            <tr><td>The family was cooking a meal.</td><td>A meal was being cooked by the family.</td></tr>
+            <tr><td>He has composed a song.</td><td>A song has been composed by him.</td></tr>
+            <tr><td>Swiggy will deliver the groceries.</td><td>The groceries will be delivered by Swiggy.</td></tr>
+            <tr><td>She will have studied the course.</td><td>The course will have been studied by her.</td></tr>
+            <tr><td>They must complete the task.</td><td>The task must be completed by them.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: INTERROGATIVE SENTENCES -->
+<div id="interrogative" class="tab-content">
+  <div class="card">
+    <div class="card-header green">Kinds of Interrogative Sentences</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Yes/No Questions</li>
+        <li>Wh-Questions</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Yes/No Questions — Structure by Tense</div>
+    <div class="card-body">
+      <div class="rule-box">
+        1. Do/Does + Sub + V1 + Obj? (Active) &nbsp;→&nbsp; Is/Am/Are + Sub + V3 + by Obj? (Passive)
+      </div>
+      <ul class="arrow-list">
+        <li>Does he cook a meal? → Is a meal cooked by him?</li>
+        <li>Do you watch a movie? → Is a movie watched by you?</li>
+        <li>Do you watch movies? → Are movies watched by you?</li>
+      </ul>
+
+      <div class="rule-box">
+        2. Is/Am/Are/Was/Were + Sub + V1+ing + Obj? (Active) &nbsp;→&nbsp; Is/Am/Are/Was/Were + Obj + being + V3 + by Sub? (Passive)
+      </div>
+      <ul class="arrow-list">
+        <li>Am I catching the thief? → Is the thief being caught by me?</li>
+        <li>Was he beating me? → Was I being beaten by him?</li>
+        <li>Was she drinking juice? → Was juice being drunk by her?</li>
+      </ul>
+
+      <div class="rule-box">
+        3. Had/Has/Have + Sub + V3 + Obj? (Active) &nbsp;→&nbsp; Had/Has/Have + Obj + been + V3 + by Sub? (Passive)
+      </div>
+      <ul class="arrow-list">
+        <li>Has she taught a class? → Has a class been taught by her?</li>
+        <li>Has she joined an NGO? → Has an NGO been joined by her?</li>
+        <li>Have they collected the money? → Has the money been collected by them?</li>
+      </ul>
+
+      <div class="rule-box">
+        4. Did + Sub + V1 + Obj? (Active) &nbsp;→&nbsp; Was/Were + Obj + V3 + by Sub? (Passive)
+      </div>
+      <ul class="arrow-list">
+        <li>Did she beat you? → Were you beaten by her?</li>
+        <li>Did he trouble you? → Were you troubled by him?</li>
+        <li>Did they abuse you? → Were you abused by them?</li>
+      </ul>
+
+      <div class="rule-box">
+        5. Modal + Sub + V1 + Obj? (Active) &nbsp;→&nbsp; Modal + Obj + be + V3 + by Sub? (Passive)
+      </div>
+      <ul class="arrow-list">
+        <li>Can he manage the office? → Can the office be managed by him?</li>
+        <li>Should she eat pineapples? → Should the pineapples be eaten by her?</li>
+        <li>May I get an estimate? → May an estimate be got by me?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Wh-Questions — Basic Rule</div>
+    <div class="card-body">
+      <div class="rule-box">
+        When making passive of Wh-questions, the Wh-word is written AS IS, and the rest of the sentence changes according to the Yes/No question rules above.
+      </div>
+      <ul class="arrow-list">
+        <li>Why have you borrowed the money? → Why has the money been borrowed by you?</li>
+        <li>When will you read my book? → When will my book be read by you?</li>
+        <li>When do you water the plant? → When is the plant watered by you?</li>
+        <li>Why are you breaking the chair? → Why is the chair being broken by you?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: WH/WHO/WHOM QUESTIONS -->
+<div id="wh-who-whom" class="tab-content">
+  <div class="card">
+    <div class="card-header orange">Who-Questions (Who as Subject)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Who + V + Obj? &nbsp;→&nbsp; Passive: By whom + H.V + Sub(be) + V3 = Who + H.V + Sub(be) + V3 + by?
+      </div>
+      <ul class="arrow-list">
+        <li>Who discovered Gravity? → By whom was Gravity discovered?</li>
+        <li>Who has discovered Gravity? → By whom has Gravity been discovered?</li>
+        <li>Who cut this blooming tree? → By whom was this blooming tree cut?</li>
+        <li>Who asked that question? → By whom was that question asked?</li>
+        <li>Who can decode this puzzle? → By whom can this puzzle be decoded?</li>
+        <li>Who will feed him? → By whom will he be fed?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Whom-Questions (Whom as Object)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Whom + H.V + Sub + M.V? &nbsp;→&nbsp; Passive: Who + H.V + (Be) + V3 + by Obj?
+      </div>
+      <ul class="arrow-list">
+        <li>Whom did he beat? → Who was/were beaten by you?</li>
+        <li>Whom has he beaten? → Who has/have been beaten by him?</li>
+        <li>Whom did she love? → Who was/were loved by her?</li>
+        <li>Whom has he tricked? → Who has/have been tricked by him?</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        The object in the active sentence (e.g. "he" in "Whom did he beat?") becomes the "by" agent in the passive — so the pronoun changes accordingly (he → by him, not "by you"). Watch subject-object pronoun conversion carefully across the transformation.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: IMPERATIVE SENTENCES -->
+<div id="imperative" class="tab-content">
+  <div class="card">
+    <div class="card-header red">Imperative Sentence — Overview</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Imperative Sentence = Order / Advise / Request<br>
+        Structure: V1 / Do / Do not / Let
+      </div>
+      <ul class="arrow-list">
+        <li>Work hard.</li>
+        <li>Do not go there.</li>
+        <li>Let me talk.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header gold">Order — Two Passive Forms</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>With Object</th><th>Without Object</th></tr></thead>
+          <tbody>
+            <tr><td>Active</td><td>V1 + Obj</td><td>V1</td></tr>
+            <tr><td>Passive-1</td><td>Let + Sub + be + V3</td><td>You are ordered to + V1</td></tr>
+            <tr><td>Passive-2</td><td>You are ordered to + V1</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>With Object</th><th>Without Object</th></tr></thead>
+          <tbody>
+            <tr><td>Active</td><td>Shut the door.</td><td>Work hard.</td></tr>
+            <tr><td>Passive-1</td><td>Let the door be shut.</td><td>You are ordered to work hard.</td></tr>
+            <tr><td>Passive-2</td><td>You are ordered to shut the door.</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="arrow-list">
+        <li>Switch off the lights. → Let the lights be switched off. / You are ordered to switch off the lights.</li>
+        <li>Do not go there. → You are ordered not to go there.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Advise — Two Passive Forms</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>With Object</th><th>Without Object</th></tr></thead>
+          <tbody>
+            <tr><td>Active</td><td>V1 + Obj</td><td>V1</td></tr>
+            <tr><td>Passive-1</td><td>Sub + should be + V3</td><td>You are advised to + V1</td></tr>
+            <tr><td>Passive-2</td><td>You are advised to + V1</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="arrow-list">
+        <li>Help the needy woman. → The needy woman should be helped. / You are advised to help the needy woman.</li>
+        <li>Get up early. → You are advised to get up early.</li>
+        <li>Always obey the elders. → The elders should always be obeyed.</li>
+        <li>Know your limitations. → Your limitations should be known.</li>
+        <li>Complete the assignment. → Let the assignment be completed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Request</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Passive: You are requested to + V1 &nbsp;(Please or Kindly)
+      </div>
+      <ul class="arrow-list">
+        <li>Please give me some money. → You are requested to give me some money.</li>
+        <li>Please hold the bag. → You are requested to hold the bag.</li>
+        <li>Bring a cup of coffee. → Let a cup of coffee be brought. / You are ordered to bring a cup of coffee.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: INFINITIVE & NO-PASSIVE WORDS -->
+<div id="infinitive-noarticle" class="tab-content">
+  <div class="card">
+    <div class="card-header purple">Infinitive Structures ("is to" / "has to")</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Sub + is/am/are + to + V1 + Obj &nbsp;→&nbsp; Passive: Sub + is/am/are + to + be + V3 + by Obj
+      </div>
+      <ul class="arrow-list">
+        <li>He is to write a book. → A book is to be written by him.</li>
+        <li>I am to buy some groceries. → Some groceries are to be bought by me.</li>
+        <li>The government is to take some strict actions against the conspirators. → Some strict actions against the conspirators are to be taken by the government.</li>
+        <li>The judge is to pronounce the verdict. → The verdict is to be pronounced.</li>
+      </ul>
+
+      <div class="rule-box">
+        Active: Sub + has/have + to + V1 + Obj &nbsp;→&nbsp; Passive: Sub + has/have + to + be + V3 + by Obj
+      </div>
+      <ul class="arrow-list">
+        <li>He has to write a book. → A book has to be written by him.</li>
+        <li>I have to buy some groceries. → Some groceries have to be bought by me.</li>
+        <li>He has to visit all his relatives. → All his relatives have to be visited by him.</li>
+        <li>You have to buy the smartwatch. → The smartwatch has to be bought by you.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Words NOT Used in Passive Voice</div>
+    <div class="card-body">
+      <div class="rule-box">
+        These words are not used in Passive Voice: Police, Public, People, Judge, Everyone, Someone, No one, Anyone
+      </div>
+      <ul class="arrow-list">
+        <li>The Police are to catch the thieves. → The thieves are to be caught. (agent dropped)</li>
+        <li>People organise parties here. → Parties are organised here.</li>
+        <li>Somebody has picked my pocket. → My pocket has been picked.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        When the active subject is one of these generic/impersonal agents, the "by + agent" phrase is simply DROPPED in the passive rather than retained — since naming "by people," "by the police," etc. adds no information.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: DOUBLE OBJECT & FIXED PREPOSITIONS -->
+<div id="double-object" class="tab-content">
+  <div class="card">
+    <div class="card-header teal">Passive Voice of Verbs with Double Objects</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Direct Object = Reply of "what" after verb &nbsp;·&nbsp; Indirect Object = Reply of "whom" after verb
+      </div>
+      <div class="rule-box">
+        Active: Sub + Verb + [Indirect Obj + Direct Obj] &nbsp;OR&nbsp; Sub + Verb + [Direct Obj + to/for + Indirect Obj]
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Active</th><th>Passive 1 (Indirect Obj as subject)</th><th>Passive 2 (Direct Obj as subject)</th></tr></thead>
+          <tbody>
+            <tr><td>My brother gifted me a bicycle.</td><td>I was gifted a bicycle by my brother.</td><td>A bicycle was gifted to me by my brother.</td></tr>
+            <tr><td>She has given me only bitter memories.</td><td>I have been given only bitter memories by her.</td><td>Only bitter memories have been given to me by her.</td></tr>
+            <tr><td>Shopkeeper gave him a discount.</td><td>He was given a discount by shopkeeper.</td><td>A discount was given to him by shopkeeper.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Verbs with double objects (give, gift, tell, teach, etc.) can form TWO valid passive versions — either object can become the new subject. Both are grammatically correct.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Passive Voice of Verbs with Fixed Prepositions</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card"><h4>+ to</h4><p>Known, Addicted, Accustomed</p></div>
+        <div class="pos-card"><h4>+ at</h4><p>Surprised, Amazed, Astonished, Startled, Vexed</p></div>
+        <div class="pos-card"><h4>+ in</h4><p>Contained, Including, Interested, Disinterested, Engulfed</p></div>
+        <div class="pos-card"><h4>+ with</h4><p>Pleased, Satisfied, Decorated, Filled, Annoyed</p></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Active</th><th>Passive</th></tr></thead>
+          <tbody>
+            <tr><td>The magician amazes the children.</td><td>The children are amazed at the magician.</td></tr>
+            <tr><td>I annoy her.</td><td>She is annoyed with me.</td></tr>
+            <tr><td>She surprised me.</td><td>I was surprised at her.</td></tr>
+            <tr><td>Their nonchalance vexed me.</td><td>I was vexed at their nonchalance.</td></tr>
+            <tr><td>The flood engulfed many houses.</td><td>Many houses were engulfed in the flood.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        These fixed prepositions are NOT "by" — passive of these specific adjectival-participle verbs takes their own dedicated preposition (at/with/in/to), which must be memorized individually since they don't follow the general "by + agent" pattern.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 10: SENTENCES WITH "LET" -->
+<div id="let-sentences" class="tab-content">
+  <div class="card">
+    <div class="card-header green">Type 1 — Let + Object + V1</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Let + Obj + V1<br>
+        Passive-1: Sub + may be allowed to + V1<br>
+        Passive-2: It is suggested that + Sub + should + V1
+      </div>
+      <ul class="arrow-list">
+        <li>Let me sing. → I may be allowed to sing.</li>
+        <li>Let him play. → He may be allowed to play. / It is suggested that he should play.</li>
+        <li>Let us dance. → We may be allowed to dance. / It is suggested that we should dance.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Type 2 — Let + Object1 + V1 + Object2</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Let + Obj1 + V1 + Obj2<br>
+        Passive: Let + Obj2 + be + V3 + by Obj1
+      </div>
+      <ul class="arrow-list">
+        <li>Let her cook the meal. → Let the meal be cooked by her.</li>
+        <li>Let her bring a glass of water. → Let a glass of water be brought by her.</li>
+        <li>Let him buy toys. → Let toys be bought by him.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 11: MISCELLANEOUS CONCEPTS -->
+<div id="misc-concepts" class="tab-content">
+  <div class="card">
+    <div class="card-header purple">Concept 1 — "There is/are... to + V1"</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: There + is/am/are/was/were + noun + to + V1<br>
+        Passive: There + is/am/are/was/were + noun + to be + V3
+      </div>
+      <ul class="arrow-list">
+        <li>There are some groceries to buy. → There are some groceries to be bought.</li>
+        <li>There is no question to ask. → There is no question to be asked.</li>
+        <li>There are chores to do. → There are chores to be done.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Concept 2 — Bid/Make/See/Watch/Hear/Notice/Help (Bare Infinitive)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Sub + Verb + Obj + V1 (bare infinitive)<br>
+        Passive: Sub + be + V3 + to V1 + by Obj
+      </div>
+      <ul class="arrow-list">
+        <li>He saw me sleep. → I was seen to sleep by him.</li>
+        <li>She made him laugh. → He was made to laugh by her.</li>
+        <li>I have noticed her steal some money. → She has been noticed to steal some money by me.</li>
+        <li>She saw me eat momos. → I was seen to eat momos by her.</li>
+        <li>We noticed him loaf around. → He was noticed to loaf around by us.</li>
+        <li>I saw him ride bicycle. → He was seen to ride bicycle by me.</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP — Exception with "Let"</span>
+        If "Let" replaces the main verb (bid/make/see/etc.), the bare infinitive is kept AS IS in the passive — "to" is NOT added.
+      </div>
+      <div class="rule-box">
+        Active: Sub + Verb + Obj + V1 (bare infinitive)<br>
+        Passive (with Let): Subject + be + V3 + V1 (no "to") + by Object
+      </div>
+      <ul class="arrow-list">
+        <li>They let me play. → I was let play by them. (NOT "let to play")</li>
+        <li>She let me speak. → I was let speak by her.</li>
+        <li>He let me work. → I was let work by him.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Concept 3 — Verb + Object + Complement</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Sub + Verb + Obj + Complement<br>
+        Passive: Sub + be + V3 + Complement + by Obj
+      </div>
+      <ul class="arrow-list">
+        <li>We made him stay. → He was made stay by us.</li>
+        <li>They elected him captain. → He was elected captain by them.</li>
+        <li>The committee appointed him chairman. → He was appointed chairman by the committee.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Concept 4 — Phrasal Verbs (Verb + Preposition)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Sub + Phrasal Verb (Verb + Prepo) + Object
+      </div>
+      <ul class="arrow-list">
+        <li>The dogs fell upon me. → I was fallen upon by the dogs.</li>
+        <li>I will bear out your testimony. → Your testimony will be borne out by me.</li>
+        <li>He can bring forth his case. → His case can be brought forth by him.</li>
+        <li>The company is laying off employees. → Employees are being laid off by the company.</li>
+        <li>He was looking for his wallet. → His wallet was being looked for by him.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        In phrasal verb passives, the entire verb+preposition combination (fall upon, bear out, bring forth, lay off, look for) moves together as one unit — the preposition stays attached to the verb, not to the object.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header gold">Concept 5 — Advise/Request/Order/Ask/Tell/Warn/Command/Allow + to V1</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Sub + Verb + Obj + to V1 (Verb list: advise, request, order, ask, tell, warn, command, allow)<br>
+        Passive: Sub + be + V3 + to V1 + by Obj
+      </div>
+      <ul class="arrow-list">
+        <li>She advised me to prepare for UPSC. → I was advised to prepare for UPSC by her.</li>
+        <li>My mother warned me not to play outside. → I was warned not to play outside by my mother.</li>
+        <li>My father ordered me to bring him a glass of water. → I was ordered to bring him a glass of water by my father.</li>
+        <li>My brother advised me to learn time management. → I was advised to learn time management by my brother.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Concept 6 — Feel/Taste + Adjective</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Sub + feel/taste + Adjective<br>
+        Passive: Sub + is/am/are/was/were + adjective + when + felt/tasted
+      </div>
+      <ul class="arrow-list">
+        <li>The samosa tastes spicy. → The samosa is spicy when tasted.</li>
+        <li>The velvet feels smooth. → The velvet is smooth when felt.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Concept 7 — Say/Believe/Think/Know/Report/Consider/Claim + That-clause</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: Subject + say/believe/think/know/report/consider/claim + that + clause<br>
+        Passive-1: It + be V3 + that + clause<br>
+        Passive-2: That + clause + be V3 + by object<br>
+        Passive-3: Subject + be + V3 + to V1
+      </div>
+      <ul class="arrow-list">
+        <li>People believe that government is judicious. → It is believed that government is judicious. / That government is judicious is believed by people. / Government is believed to be judicious.</li>
+        <li>We believe that Sachin Tendulkar is the best. → It is believed that Sachin Tendulkar is the best. / That Sachin Tendulkar is the best is believed by us. / Sachin Tendulkar is believed to be the best.</li>
+        <li>They think that the children are mischievous. → It is thought that the children are mischievous. / That the children are mischievous is thought by them. / The children are thought to be mischievous.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Concept 8 — "It is time to..."</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: It + is/am/are/was/were + time + to V1 + object<br>
+        Passive: It + is/am/are/was/were + time + for + object + to be V3
+      </div>
+      <ul class="arrow-list">
+        <li>It is time to feed kids now. → It is time for the kids to be fed.</li>
+        <li>It is time to reward him. → It is time for him to be rewarded.</li>
+        <li>It is time to learn the guitar. → It is time for the guitar to be learned.</li>
+        <li>It is time to leave the company. → It is time for the company to be left.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Concept 9 — "It is your duty to..."</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Active: It is your/my/his... duty + to V1<br>
+        Passive: You/I/He + is/am/are + supposed + to V1
+      </div>
+      <ul class="arrow-list">
+        <li>It is your duty to meet the obligation now. → You are supposed to meet the obligation now.</li>
+        <li>It is our duty to give back to the society. → We are supposed to give back to the society.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 12: MASTER TABLE -->
+<div id="master" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Master Table — Complete Chapter Revision</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Topic</th><th>Key Rule / Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Kinds of Voice</td><td>Active (subject does action), Passive (subject receives action)</td></tr>
+            <tr><td>Basic structure</td><td>Active: Sub+Verb+Obj → Passive: Sub+be+V3+by Obj</td></tr>
+            <tr><td>Intransitive Verbs</td><td>No passive possible (no object to become new subject)</td></tr>
+            <tr><td>Linking Verbs</td><td>Be/Become/Remain/Taste/Smell/Seem/Appear — no passive (Subject=Complement, not Object)</td></tr>
+            <tr><td>Tense preservation</td><td>Tenses never change when converting Active→Passive</td></tr>
+            <tr><td>Future Continuous</td><td>No passive form exists for will/shall+be+V1+ing</td></tr>
+            <tr><td>Yes/No Question passives</td><td>Different HV pattern for each tense: Do/Does→Is/Am/Are; Did→Was/Were; Has/Have→Has/Have+been; Modal→Modal+be</td></tr>
+            <tr><td>Wh-Question passives</td><td>Wh-word stays as-is; rest follows Yes/No question passive rule</td></tr>
+            <tr><td>Who-question passive</td><td>Who+V+Obj? → By whom+HV+Sub(be)+V3?</td></tr>
+            <tr><td>Whom-question passive</td><td>Whom+HV+Sub+MV? → Who+HV+(be)+V3+by Obj?</td></tr>
+            <tr><td>Imperative — Order</td><td>Let+Sub+be+V3 OR You are ordered to+V1</td></tr>
+            <tr><td>Imperative — Advise</td><td>Sub+should be+V3 OR You are advised to+V1</td></tr>
+            <tr><td>Imperative — Request</td><td>You are requested to+V1</td></tr>
+            <tr><td>Infinitive "is to"</td><td>Sub+is/am/are+to+V1+Obj → Sub+is/am/are+to+be+V3+by Obj</td></tr>
+            <tr><td>Infinitive "has to"</td><td>Sub+has/have+to+V1+Obj → Sub+has/have+to+be+V3+by Obj</td></tr>
+            <tr><td>No-passive agent words</td><td>Police, Public, People, Judge, Everyone, Someone, No one, Anyone — "by" agent dropped in passive</td></tr>
+            <tr><td>Double object verbs</td><td>2 valid passives — either Direct or Indirect object can become subject</td></tr>
+            <tr><td>Fixed preposition passives</td><td>known/addicted/accustomed→to; surprised/amazed/astonished/startled/vexed→at; contained/interested/engulfed→in; pleased/satisfied/decorated/filled/annoyed→with (NOT "by")</td></tr>
+            <tr><td>"Let" Type 1</td><td>Let+Obj+V1 → Sub+may be allowed to+V1 / It is suggested that+Sub+should+V1</td></tr>
+            <tr><td>"Let" Type 2</td><td>Let+Obj1+V1+Obj2 → Let+Obj2+be+V3+by Obj1</td></tr>
+            <tr><td>Concept 1 — There is/are...to</td><td>There+is/are+noun+to+V1 → There+is/are+noun+to be+V3</td></tr>
+            <tr><td>Concept 2 — Bid/Make/See/Watch/Hear/Notice/Help</td><td>Bare infinitive V1 → passive adds "to": be+V3+to V1+by Obj</td></tr>
+            <tr><td>Concept 2 exception — Let</td><td>If "Let" is the main verb, bare infinitive stays AS IS (no "to" added) in passive</td></tr>
+            <tr><td>Concept 3 — Verb+Obj+Complement</td><td>Sub+be+V3+Complement+by Obj (make/elect/appoint type verbs)</td></tr>
+            <tr><td>Concept 4 — Phrasal verbs</td><td>Verb+preposition moves together as one unit in passive</td></tr>
+            <tr><td>Concept 5 — Advise/Request/Order/Ask/Tell/Warn/Command/Allow+to V1</td><td>Sub+be+V3+to V1+by Obj</td></tr>
+            <tr><td>Concept 6 — Feel/Taste+Adjective</td><td>Sub+is/was+adjective+when+felt/tasted</td></tr>
+            <tr><td>Concept 7 — Say/Believe/Think/Know/Report/Consider/Claim+that</td><td>3 valid passives: It+be V3+that+clause / That+clause+be V3+by obj / Subject+be+V3+to V1</td></tr>
+            <tr><td>Concept 8 — "It is time to..."</td><td>It is time+for+object+to be V3</td></tr>
+            <tr><td>Concept 9 — "It is [X]'s duty to..."</td><td>Subject+is/am/are+supposed+to V1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Exam Fusion Prep | examfusionprep.com · Voice · SSC / BPSC / BSSC
+</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tablink').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

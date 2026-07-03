@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Verbs | Exam Fusion Prep</title>
+<style>
+:root {
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#22263a;
+  --border:#2e3250;
+  --gold:#f5c842;
+  --accent1:#e74c3c;
+  --accent2:#3498db;
+  --accent3:#2ecc71;
+  --accent4:#9b59b6;
+  --accent5:#e67e22;
+  --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+* { box-sizing: border-box; margin:0; padding:0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  line-height: 1.6;
+  padding-bottom: 40px;
+}
+.header {
+  background: linear-gradient(135deg, var(--surface2), var(--surface));
+  padding: 24px 20px;
+  text-align: center;
+  border-bottom: 3px solid var(--gold);
+}
+.header h1 { color: var(--gold); font-size: 1.8rem; letter-spacing: 1px; }
+.header p { color: var(--text); opacity: 0.8; margin-top: 6px; font-size: 0.95rem; }
+.tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: static;
+  
+  z-index: 100;
+  overflow-x: auto;
+}
+.tab-nav button {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 9px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab-nav button:hover { border-color: var(--gold); color: var(--gold); }
+.tab-nav button.active { background: var(--surface2); border-bottom: 3px solid var(--gold); color: var(--gold); }
+.container { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
+.tab-content { display: none; animation: fadeIn 0.3s; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+.card-header { padding: 12px 18px; font-weight: 700; font-size: 1.05rem; color: #0f1117; }
+.card-header.gold { background: linear-gradient(90deg, var(--gold), #d4a82f); color:#1a1400; }
+.card-header.green { background: linear-gradient(90deg, var(--accent3), #229954); }
+.card-header.blue { background: linear-gradient(90deg, var(--accent2), #2874a6); }
+.card-header.purple { background: linear-gradient(90deg, var(--accent4), #7d3c98); color:#fff; }
+.card-header.orange { background: linear-gradient(90deg, var(--accent5), #ba5f13); }
+.card-header.red { background: linear-gradient(90deg, var(--accent1), #b03a2e); color:#fff; }
+.card-header.teal { background: linear-gradient(90deg, var(--accent6), #148f77); }
+
+.card-body { padding: 18px; }
+
+.arrow-list { list-style: none; }
+.arrow-list li { padding: 6px 0 6px 22px; position: relative; }
+.arrow-list li::before { content: "▸"; position: absolute; left: 0; color: var(--gold); font-weight: bold; }
+
+.exam-trap { background: #1a0909; border-left: 4px solid var(--accent1); padding: 12px 16px; margin: 14px 0; border-radius: 4px; }
+.exam-trap .label { color: var(--accent1); font-weight: 700; margin-bottom: 6px; display:block; }
+
+.quick-recall { background: #091524; border-left: 4px solid var(--accent2); padding: 12px 16px; margin: 14px 0; border-radius: 4px; }
+.quick-recall .label { color: var(--accent2); font-weight: 700; margin-bottom: 6px; display:block; }
+
+.rule-box { border: 1.5px solid var(--gold); border-radius: 6px; padding: 12px 16px; margin: 14px 0; color: var(--gold); font-weight: 700; background: rgba(245,200,66,0.05); }
+
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.92rem; }
+thead th { background: #2a2200; color: var(--gold); padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--gold); }
+tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+tbody tr:hover { background: rgba(255,255,255,0.03); }
+.table-scroll { overflow-x: auto; }
+
+.pos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 10px; }
+.pos-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+.pos-card h4 { color: var(--gold); margin-bottom: 6px; font-size: 1rem; }
+.pos-card p { font-size: 0.9rem; opacity: 0.9; }
+.pos-card .ex { color: var(--accent3); font-size: 0.85rem; margin-top: 6px; font-style: italic; }
+
+.wrong { color: var(--accent1); text-decoration: line-through; }
+.right { color: var(--accent3); }
+.correction { color: var(--gold); font-weight: 700; }
+
+.sub-heading { color: var(--gold); font-size: 1.1rem; margin: 18px 0 8px 0; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+
+.footer { text-align: center; padding: 24px 16px; color: var(--gold); opacity: 0.7; font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 20px; }
+
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.3rem; }
+  .tab-nav button { font-size: 0.78rem; padding: 8px 12px; }
+}
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>VERBS</h1>
+  <p>English Grammar | SSC / BPSC / BSSC Exam Prep</p>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview')">Overview & Forms</button>
+  <button class="tab-btn" onclick="switchTab('have-tense')">Have + Tense Structures</button>
+  <button class="tab-btn" onclick="switchTab('irregular')">Tricky Irregular Verbs</button>
+  <button class="tab-btn" onclick="switchTab('finite')">Finite vs Non-Finite</button>
+  <button class="tab-btn" onclick="switchTab('infinitive')">Infinitive Rules</button>
+  <button class="tab-btn" onclick="switchTab('gerund')">Gerund Rules</button>
+  <button class="tab-btn" onclick="switchTab('participle')">Participles</button>
+  <button class="tab-btn" onclick="switchTab('practice')">Practice Examples</button>
+  <button class="tab-btn" onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="container">
+
+  <!-- TAB 1: OVERVIEW & FORMS -->
+  <div class="tab-content active" id="overview">
+    <div class="card">
+      <div class="card-header gold">Verb — Classification Overview</div>
+      <div class="card-body">
+        <div class="rule-box">Note: Even a single sentence CANNOT be made without a Main Verb.</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Category</th><th>Sub-type</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="3">H.V. (Helping Verb)</td><td>Primary — Be</td><td>Is/am/are, was/were, be/been/being</td></tr>
+            <tr><td>Primary — Have</td><td>has/have/had, Do-Does/did</td></tr>
+            <tr><td>Modals</td><td>can/could, may/might, will/would, shall/should, dare/need, must, used to, ought to</td></tr>
+            <tr><td rowspan="2">M.V. (Main Verb)</td><td>Finite</td><td>Transitive, Intransitive</td></tr>
+            <tr><td>Non-finite</td><td>Infinitive, Gerund, Participle</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">The 5 Verb Forms (V1–V5)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>V1 — Base form (plural)</li>
+          <li>V2 — Past form</li>
+          <li>V3 — Past participle</li>
+          <li>V4 (-ing) — Present participle</li>
+          <li>V5 (-s/-es) — Base form (singular)</li>
+        </ul>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>V1</th><th>V2</th><th>V3</th><th>V4</th><th>V5</th></tr></thead>
+          <tbody>
+            <tr><td>Be, am, are<br>Have<br>Do</td><td>was, were<br>had<br>did</td><td>been<br>had<br>done</td><td>being<br>having<br>doing</td><td>is<br>has<br>does</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="sub-heading">Identifying Verb Forms in Sentences</div>
+        <ul class="arrow-list">
+          <li>She goes to college daily. → MV-5 (goes)</li>
+          <li>He played cricket. → S + MV-5? No — MV-2 (played, past form)</li>
+          <li>I am writing a letter. → HV (am) + MV-4 (writing)</li>
+          <li>He is writing a letter. → HV (is) + MV-4 (writing)</li>
+          <li>They have written a letter. → HV (have) + MV-3 (written)</li>
+        </ul>
+        <div class="sub-heading">"Be" as Main Verb (linking/copular use)</div>
+        <ul class="arrow-list">
+          <li>I am a teacher.</li>
+          <li>She was a lawyer.</li>
+          <li>She has a new car.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: HAVE + TENSE STRUCTURES -->
+  <div class="tab-content" id="have-tense">
+    <div class="card">
+      <div class="card-header purple">"Have" as H.V. vs M.V.</div>
+      <div class="card-body">
+        <div class="rule-box">When forms of "Have" act as a Main Verb, they denote: Possession | Relationship | Eat/Drink | Spend (time)</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>H.V. (Have)</th><th>M.V. (Have)</th></tr></thead>
+          <tbody>
+            <tr><td>He has eaten lunch.</td><td>Possession</td></tr>
+            <tr><td>They have eaten lunch.</td><td>Relationship / Eat / Drink / Spend time</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <ul class="arrow-list">
+          <li>Possession — I have a brand new phone. (MV)</li>
+          <li>Relationship — She has a lovely husband. (MV)</li>
+          <li>Eat — I had dinner. (MV)</li>
+          <li>Spend (Time) — We had a great time last week. (MV)</li>
+        </ul>
+        <div class="rule-box">Have = Eat (as Main Verb): Have/had/had/having/has ≈ Eat/ate/eaten/eating/eats</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Tense Structures With "Have" (Eat/Drink Substitution)</div>
+      <div class="card-body">
+        <div class="sub-heading">Simple Present Tense — Sub + V1 + s/es</div>
+        <ul class="arrow-list">
+          <li>I usually eat Idli Dosa for breakfast. / I usually have Idli Dosa for breakfast.</li>
+          <li>She drinks black coffee in the morning. / She has black coffee in the morning.</li>
+        </ul>
+        <div class="sub-heading">Simple Past Tense — Sub + V2</div>
+        <ul class="arrow-list">
+          <li>I ate dinner. / I had dinner.</li>
+          <li>She drank black coffee in the morning. / She had black coffee in the morning.</li>
+        </ul>
+        <div class="sub-heading">Present Perfect Tense — Sub + has/have + V3</div>
+        <ul class="arrow-list">
+          <li>I have eaten dinner. / I have had dinner.</li>
+          <li>She has eaten dinner. / She has had dinner.</li>
+          <li>I have drunk black coffee in the morning. / I have had black coffee in the morning.</li>
+          <li>She has drunk black coffee in the morning. / She has had black coffee in the morning.</li>
+        </ul>
+        <div class="sub-heading">Past Perfect Tense — Sub + had + V3</div>
+        <ul class="arrow-list">
+          <li>She had eaten dinner before I reached home. / She had had dinner before I reached home.</li>
+          <li>She had drunk black coffee before she left for the office. / She had had black coffee before she left for the office.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Had had" looks like a repetition error but is grammatically correct in Past Perfect Tense when the Main Verb is "have" (=eat/possess): Sub + had (HV) + had (MV, V3 of have). Don't "correct" it to just "had".
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Has had / Have had / Had had — Worked Examples</div>
+      <div class="card-body">
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>Choose the correct sentence</h4>
+            <p><span class="right">✔ I had had breakfast before I left for work.</span></p>
+            <p><span class="wrong">✘ I had breakfast before I left for work.</span></p>
+            <p><span class="wrong">✘ I had had breakfast before I leave for work.</span></p>
+            <p><span class="wrong">✘ I have had breakfast before I left for work.</span></p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>Last weekend I just wanted to relax because I <span class="wrong">have</span> <span class="correction">had</span> a busy week.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Fill in the blank</h4>
+            <p>By the time they reached the theater, the movie ___ already ___.</p>
+            <p class="ex">✔ had, started</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>He did not <span class="wrong">had</span> <span class="correction">have</span> any money to pay the college fees.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>I <span class="wrong">was</span> <span class="correction">have</span> perfectly healthy until now.</p>
+          </div>
+          <div class="pos-card">
+            <h4>What is the correct way to use "had had" in Past Perfect Tense?</h4>
+            <p class="right">✔ He had already had dinner before we arrived.</p>
+            <p class="ex">(Not: "She had had already finished her project" / "They had had left the party early")</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>Before I met him personally, I admit that I <span class="wrong">have</span> <span class="correction">had</span> a poor opinion about him.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>She must <span class="wrong">had</span> <span class="correction">have</span> completed her work by now because she is very punctual.</p>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          After modal + must/should/would, always use "have" (not "had"): "must have completed", never "must had completed".
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: TRICKY IRREGULAR VERBS -->
+  <div class="tab-content" id="irregular">
+    <div class="card">
+      <div class="card-header red">Lie / Lay — The Most Confused Pair</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>V1</th><th>V2</th><th>V3</th><th>V4 (-ing)</th><th>V5 (-s/es)</th></tr></thead>
+          <tbody>
+            <tr><td>Lie (to recline — intransitive)</td><td>lay</td><td>lain</td><td>lying</td><td>lies</td></tr>
+            <tr><td>Lay (to place something — transitive)</td><td>laid</td><td>laid</td><td>laying</td><td>lays</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <ul class="arrow-list">
+          <li>To lie on a beach. / A pen lay on the desk. (lie = to recline; no object)</li>
+          <li>She laid the baby on the bed. / He laid the tray on the table. (lay = to place something; takes an object)</li>
+        </ul>
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>Identify the error</h4>
+            <p>She <span class="wrong">laid</span> on the couch and read a book.</p>
+            <p class="ex">✔ "Laid" should be changed to "lay" (past tense of Lie, intransitive, no object)</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>He was <span class="wrong">laying</span> <span class="correction">lying</span> comfortably on the bed.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Choose the correct sentence</h4>
+            <p><span class="wrong">✘ The cat likes to lay in the sun.</span></p>
+            <p><span class="right">✔ The cat likes to lie in the sun.</span></p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>I'm going to <span class="wrong">lay</span> <span class="correction">lie</span> down in the room.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>He <span class="wrong">lay</span> <span class="correction">laid</span> the blanket out and sat. (takes object "blanket" → lay/transitive)</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>We are tired, let's <span class="wrong">lay</span> <span class="correction">lie</span> in the shade for a while.</p>
+          </div>
+          <div class="pos-card">
+            <h4>No Error</h4>
+            <p>The plan is to lie the foundations for the new apartments in October.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>She <span class="wrong">lay</span> <span class="correction">laid</span> her head against my shoulder and fell asleep. (takes object "head" → lay/transitive)</p>
+          </div>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Lie" (recline, no object) vs "Lay" (place something, needs an object) is the #1 confused pair. Test: if there's an object after the verb, it's a form of "lay"; if not, it's a form of "lie".
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Rise / Raise</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>V1</th><th>V2</th><th>V3</th><th>V4</th><th>V5</th></tr></thead>
+          <tbody>
+            <tr><td>Rise (intransitive — no object)</td><td>rose</td><td>risen</td><td>rising</td><td>rises</td></tr>
+            <tr><td>Raise (transitive — needs object)</td><td>raised</td><td>raised</td><td>raising</td><td>raises</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <ul class="arrow-list">
+          <li>The sun rises in the east. / The aircraft rose into air.</li>
+          <li>He raised an important issue. / They will not raise taxes.</li>
+        </ul>
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>Identify the error</h4>
+            <p>The price of the stock <span class="wrong">raised</span> significantly yesterday.</p>
+            <p class="ex">✔ "Raised" should be changed to "rose" (no object)</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>It's a wonder we didn't <span class="wrong">rise</span> <span class="correction">raise</span> our arms in surrender. (object: "our arms")</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>The balloon <span class="wrong">raised</span> <span class="correction">rose</span> gracefully into the sky, carried by the gentle breeze.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>Because of the incessant rain, the flood water is <span class="wrong">raising</span> <span class="correction">rising</span>.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>Against all odds, he <span class="wrong">rises</span> <span class="correction">rose</span> above his challenges & achieved great success.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>The teacher <span class="wrong">rose</span> <span class="correction">raised</span> her voice to get the attention of the noisy students. (object: "her voice")</p>
+          </div>
+          <div class="pos-card">
+            <h4>Choose the correct sentence</h4>
+            <p><span class="right">✔ They raised their concerns at the meeting.</span></p>
+            <p><span class="wrong">✘ They rose their concerns at the meeting.</span></p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>Considering the high demand for flights to gulf countries, airlines may <span class="wrong">rise</span> <span class="correction">raise</span> prices. (object: "prices")</p>
+          </div>
+          <div class="pos-card">
+            <h4>Choose the correct option</h4>
+            <p>We have to let more women ___ to the top.</p>
+            <p class="ex">✔ have to let more women rise (bare infinitive "rise" after "let" — no object follows, intransitive)</p>
+          </div>
+        </div>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Rise = happens by itself (sun, prices, water level — no object). Raise = someone raises something (an issue, voice, taxes, hand — always has an object).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Fall / Fell (Verb) & Overflow, Hang, Find/Found, Broadcast group, Slay</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>V1</th><th>V2</th><th>V3</th><th>V4</th><th>V5</th></tr></thead>
+          <tbody>
+            <tr><td>Fall (intransitive — to drop down)</td><td>fell</td><td>fallen</td><td>falling</td><td>falls</td></tr>
+            <tr><td>Fell (transitive — to cut down)</td><td>felled</td><td>felled</td><td>felling</td><td>fells</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <ul class="arrow-list">
+          <li>The tree fell down. / He fell into the river. (fall = intransitive)</li>
+          <li>He felled the tree. (fell = transitive, to cut down)</li>
+        </ul>
+        <div class="pos-grid">
+          <div class="pos-card">
+            <h4>Choose the correct sentence</h4>
+            <p><span class="right">✔ The leaves fall from the trees in autumn.</span></p>
+            <p><span class="wrong">✘ The leaves fell from the trees in autumn.</span></p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>Silence <span class="wrong">felled</span> <span class="correction">fell</span> between them and then he finally spoke.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correct Past Perfect form</h4>
+            <p class="right">✔ She had fallen asleep before the movie started.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>The powerful earthquake <span class="wrong">fell</span> <span class="correction">felled</span> buildings, bridges, and other structures. (transitive: felled buildings)</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>You tried to dance and <span class="wrong">fall</span> <span class="correction">fell</span> upon the floor.</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>The strong wind gusts <span class="wrong">fell</span> <span class="correction">felled</span> several power lines causing a widespread blackout. (transitive)</p>
+          </div>
+          <div class="pos-card">
+            <h4>Correction</h4>
+            <p>No one is allowed to <span class="wrong">fall</span> <span class="correction">fell</span> the trees in the forest. (transitive, to cut down)</p>
+          </div>
+        </div>
+
+        <div class="sub-heading">Overflow (V1=V2=V3 pattern)</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>V1</th><th>V2</th><th>V3</th></tr></thead>
+          <tbody><tr><td>Overflow</td><td>overflowed</td><td>overflowed</td></tr></tbody>
+        </table>
+        </div>
+        <p style="margin:8px 0;">Correction: The bathtub has <span class="wrong">overflown</span> <span class="correction">overflowed</span>, causing water to spill onto the floor.</p>
+
+        <div class="sub-heading">Hang (two different meanings, two different V2/V3 forms)</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Meaning</th><th>V1</th><th>V2</th><th>V3</th></tr></thead>
+          <tbody>
+            <tr><td>Hang (to suspend an object)</td><td>Hang</td><td>hung</td><td>hung</td></tr>
+            <tr><td>Hang (to execute by hanging)</td><td>Hang</td><td>hanged</td><td>hanged</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Hung" = for objects (pictures, gifts, coats, lamps). "Hanged" = only for execution/death by hanging. Mixing these two is a classic error-spotting trap.
+        </div>
+        <ul class="arrow-list">
+          <li>Correction: I am going to have a Christmas tree in the office so people can <span class="wrong">hung</span> <span class="correction">hang</span> all the gifts upon it.</li>
+          <li>Correction: Four Indian men convicted of gang rape and murder have been <span class="wrong">hung</span> <span class="correction">hanged</span>. The four were <span class="wrong">hung</span> <span class="correction">hanged</span> in the capital's high-security Tihar prison.</li>
+          <li>Correction: The coat was drenched in rain water, I <span class="wrong">hanged</span> <span class="correction">hung</span> it on the hook.</li>
+          <li>No Error: Hang your clothes on the line to dry.</li>
+          <li>Correction: The servant <span class="wrong">hanged</span> <span class="correction">hung</span> the lamp on the wall.</li>
+          <li>Correction: For his crime, the accused will be <span class="wrong">hung</span> <span class="correction">hanged</span> till death.</li>
+        </ul>
+
+        <div class="sub-heading">Find / Found — Find vs Found(ed)</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Verb</th><th>V1</th><th>V2</th><th>V3</th></tr></thead>
+          <tbody>
+            <tr><td>Find (to discover)</td><td>Find</td><td>found</td><td>found</td></tr>
+            <tr><td>Found (to establish)</td><td>Found</td><td>founded</td><td>founded</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="pos-grid">
+          <div class="pos-card"><h4>Correct sentence</h4><p class="right">✔ The explorers found the hidden treasure.</p></div>
+          <div class="pos-card"><h4>Correct sentence</h4><p class="right">✔ The committee founded the new organization.</p></div>
+          <div class="pos-card"><h4>No Error</h4><p>Such inequalities can be found in the constitutions of other countries also.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>In a group you may <span class="wrong">found</span> <span class="correction">find</span> one or two people who tend to be extremely vocal.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>Our organization was <span class="wrong">found</span> <span class="correction">founded</span> twenty years ago.</p></div>
+          <div class="pos-card"><h4>Correct verb form</h4><p class="right">✔ She has found a solution to the problem.</p><p class="wrong">✘ She has founded a solution to the problem.</p></div>
+        </div>
+
+        <div class="sub-heading">Broadcast / Telecast / Forecast (same in all 3 forms)</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>V1</th><th>V2</th><th>V3</th></tr></thead>
+          <tbody>
+            <tr><td>Broadcast</td><td>Broadcast</td><td>Broadcast</td></tr>
+            <tr><td>Telecast</td><td>telecast</td><td>telecast</td></tr>
+            <tr><td>Forecast</td><td>forecast</td><td>forecast</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <ul class="arrow-list">
+          <li>Correction: The eminent speaker's speech was <span class="wrong">broadcasted</span> <span class="correction">broadcast</span> over all the major stations.</li>
+          <li>Correction: It cannot be <span class="wrong">forecasted</span> <span class="correction">forecast</span> how society will emerge generations hence.</li>
+        </ul>
+
+        <div class="sub-heading">Slay (formal/literary verb)</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>V1</th><th>V2</th><th>V3</th></tr></thead>
+          <tbody><tr><td>Slay</td><td>Slew</td><td>Slain</td></tr></tbody>
+        </table>
+        </div>
+        <div class="pos-grid">
+          <div class="pos-card"><h4>Choose the correct sentence</h4><p class="wrong">✘ The knight slayed the dragon with his sword.</p><p class="right">✔ The knight slew the dragon with his sword.</p></div>
+          <div class="pos-card"><h4>Choose the correct verb form</h4><p class="wrong">✘ The monster was slay by the brave warrior.</p><p class="right">✔ The monster was slain by the brave warrior.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>He has <span class="wrong">slayed</span> <span class="correction">slain</span> his rival.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: FINITE VS NON-FINITE -->
+  <div class="tab-content" id="finite">
+    <div class="card">
+      <div class="card-header blue">Finite vs Non-Finite Verb</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Finite Verb</th><th>Non-Finite Verb</th></tr></thead>
+          <tbody>
+            <tr><td>Finite means "Bound" — a Finite verb must agree with the number and person of its subject.</td><td>Unlike Finite verb, non-finite verbs are not bound by tense, number, or person of the subject.</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <ul class="arrow-list">
+          <li>I went to watch a movie yesterday. (went = finite; to watch = non-finite, unchanged regardless of subject)</li>
+          <li>He has gone to watch a movie.</li>
+          <li>They have gone to watch a movie.</li>
+          <li>They will go to watch a movie tomorrow.</li>
+        </ul>
+        <div class="rule-box">Non-finite Verbs = Infinitive (to+V1) | Gerund (V1+ing) | Participles (having+V3, and others)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: INFINITIVE RULES -->
+  <div class="tab-content" id="infinitive">
+    <div class="card">
+      <div class="card-header purple">Infinitive — To-Infinitive vs Bare Infinitive</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>To Infinitive</th><th>Bare Infinitive</th></tr></thead>
+          <tbody><tr><td>To + V1</td><td>V1 (no "to")</td></tr></tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">Infinitive as Subject</div>
+        <ul class="arrow-list">
+          <li>To walk is a good exercise.</li>
+          <li>To swim is good for health.</li>
+        </ul>
+
+        <div class="sub-heading">Infinitive as Object</div>
+        <ul class="arrow-list">
+          <li>I want to go. / I want to speak. / She loves to play.</li>
+        </ul>
+
+        <div class="sub-heading">Infinitive as Object of Preposition</div>
+        <ul class="arrow-list">
+          <li>I am about to go. / They want nothing but to earn money.</li>
+        </ul>
+
+        <div class="sub-heading">Bare Infinitive After: Would rather / Would sooner / Had better</div>
+        <div class="rule-box">Would rather / Would sooner / Had better + Bare Infinitive (also: Would rather...than / Would sooner...than)</div>
+        <div class="pos-grid">
+          <div class="pos-card"><h4>Correction</h4><p>I would rather <span class="wrong">to</span> wait for her.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>I would rather go than <span class="wrong">to</span> waste my time.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>I would sooner spend my vacation at the beach than <span class="wrong">to</span> go camping in the mountains.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>You had better <span class="wrong">left</span> <span class="correction">leave</span> the country and come to see me as soon as possible.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>You had better <span class="wrong">gone</span> <span class="correction">go</span> abroad for higher studies.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>If I had the chance, I would sooner quit my job and <span class="wrong">pursues</span> <span class="correction">pursue</span> my passion for painting.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>If you see something you like you had better <span class="wrong">bought</span> <span class="correction">buy</span> it.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>She had better <span class="wrong">get</span> <span class="correction">get</span> here soon or she'll miss the opening ceremony. (already bare — verify)</p></div>
+          <div class="pos-card"><h4>No Error</h4><p>We would rather save our money for a trip than spend it on expensive gadgets.</p></div>
+          <div class="pos-card"><h4>Choose the correct option</h4><p>If you're going to do a startup, ___.</p><p class="ex">✔ you had better be serious about it (bare infinitive "be")</p></div>
+        </div>
+
+        <div class="sub-heading">Bare Infinitive After: Why / Why not</div>
+        <div class="rule-box">Why / Why not + Bare Infinitive (no "to")</div>
+        <ul class="arrow-list">
+          <li>Correction: Why <span class="wrong">to</span> play alone when we have a number of friends who can take part in this game.</li>
+          <li>Correction: Why <span class="wrong">to</span> talk to him if he is not ready to act on the advice you have given to him.</li>
+          <li>Correction: Why not <span class="wrong">to</span> go to a dentist, if all your teeth are decaying rapidly.</li>
+          <li>Correction: Why <span class="wrong">to</span> pay more at this shop when it is available for 500 rupees only at Vishal Mega Mart.</li>
+        </ul>
+
+        <div class="sub-heading">"How + To + V1" After: Ask, Explain, Teach, Know, Learn, Discover, Remember, Forget</div>
+        <div class="rule-box">Ask / Explain / Teach / Know / Learn / Discover / Remember / Forget + How + To + V1</div>
+        <ul class="arrow-list">
+          <li>Correction: He knows <span class="wrong">to</span> <span class="correction">how to</span> befool customers.</li>
+          <li>Correction: She taught me <span class="wrong">to</span> <span class="correction">how to</span> speak English.</li>
+          <li>Correction: My teacher has taught me <span class="wrong">to</span> <span class="correction">how to</span> speak English and French in a very short span of time.</li>
+          <li>Correction: Rahul does not know <span class="wrong">to</span> <span class="correction">how to</span> swim so he is afraid of water.</li>
+          <li>Correction: Do you know <span class="wrong">to</span> <span class="correction">how to</span> prepare balance sheet?</li>
+          <li>Correction: When learning <span class="wrong">to</span> <span class="correction">how to</span> swim, one of the most important things is to relax.</li>
+        </ul>
+
+        <div class="sub-heading">Bare Infinitive After Perception Verbs: Feel, Hear, See, Notice, Watch, Make</div>
+        <div class="rule-box">Feel / Hear / See / Notice / Watch / Make + Object + Bare Infinitive</div>
+        <ul class="arrow-list">
+          <li>Correction: I heard him <span class="wrong">to</span> say so.</li>
+          <li>Correction: I watched him <span class="wrong">to</span> proceed to that location.</li>
+          <li>Correction: I saw her <span class="wrong">to</span> talk to her friend.</li>
+          <li>Correction: She made me <span class="wrong">to</span> laugh.</li>
+          <li>Correction: I noticed him <span class="wrong">to</span> make his way there.</li>
+        </ul>
+        <div class="rule-box">Exception — Passive Voice: Hear/See/Make + Object + Full (to) Infinitive is used when the sentence is passive</div>
+        <ul class="arrow-list">
+          <li>I was made to laugh. (passive)</li>
+          <li>She was seen to enter the office. (passive)</li>
+          <li>They were heard to say that they loved the movie. (passive)</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Feel/Hear/See/Notice/Watch/Make take BARE infinitive in Active Voice ("I saw him go") but FULL (to) infinitive in Passive Voice ("He was seen to go"). Examiners test both directions.
+        </div>
+        <div class="rule-box">Help + Full or Bare Infinitive — BOTH are correct</div>
+        <ul class="arrow-list">
+          <li>He helped me buy a house. / He helped me to buy a house. (both correct)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: GERUND RULES -->
+  <div class="tab-content" id="gerund">
+    <div class="card">
+      <div class="card-header teal">Gerund (V1+ing = Noun)</div>
+      <div class="card-body">
+        <div class="rule-box">Gerund = V1 + ing = functions as a Noun</div>
+        <div class="sub-heading">As a Subject</div>
+        <ul class="arrow-list">
+          <li>Singing is an art.</li>
+          <li>Sleeping is necessary to life.</li>
+        </ul>
+        <div class="sub-heading">As an Object</div>
+        <ul class="arrow-list">
+          <li>She likes dancing. / I enjoyed drinking.</li>
+        </ul>
+
+        <div class="sub-heading">Preposition + Object → Gerund (never bare V1)</div>
+        <div class="pos-grid">
+          <div class="pos-card"><h4>Correction</h4><p>Rahul is fond of <span class="wrong">eat</span> <span class="correction">eating</span>.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>He assisted me in <span class="wrong">do</span> <span class="correction">doing</span> this work.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>He is ambitious of <span class="wrong">become</span> <span class="correction">becoming</span> the P.M. of India.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>What did you do on <span class="wrong">see</span> <span class="correction">seeing</span> your result?</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>I am interested in <span class="wrong">learn</span> <span class="correction">learning</span> more.</p></div>
+        </div>
+
+        <div class="sub-heading">Possessive Adjective + Gerund (V+ing)</div>
+        <div class="rule-box">my / our / your / his / her / its / their + Gerund (not object pronoun)</div>
+        <div class="pos-grid">
+          <div class="pos-card"><h4>Correction</h4><p>You should not mind <span class="wrong">hers</span> <span class="correction">her</span> coming late.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>My teacher did not object to <span class="wrong">me</span> <span class="correction">my</span> using the calculator.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>Owing to <span class="wrong">him</span> <span class="correction">his</span> being a newcomer, he was unable to get the job.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>I am pretty confident of <span class="wrong">me</span> <span class="correction">my</span> winning the case.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>She was not sure of <span class="wrong">him</span> <span class="correction">his</span> passing the examination.</p></div>
+          <div class="pos-card"><h4>Choose the correct option</h4><p>Owing to ___, I was given fewer rights and facilities...</p><p class="ex">✔ Owing to my being a girl</p></div>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          Before a Gerund, always use a Possessive Adjective (my/his/her/their), NOT an object pronoun (me/him/her/them) and NOT a possessive pronoun (mine/his/hers). "Owing to mine being a girl" and "Owing to me being a girl" are both wrong — only "Owing to my being a girl" is correct.
+        </div>
+
+        <div class="sub-heading">Fixed Phrases + Gerund (V1+ing)</div>
+        <div class="rule-box">With a view to | Look forward to | Accustomed to | Habituated to | Addicted to | Be used to | Committed to | Averse to | Owing to | Devoted to | In addition to | Object to | Prone to | Conducive to — ALL take Gerund (V+ing), NOT base verb</div>
+        <div class="pos-grid">
+          <div class="pos-card"><h4>Correction</h4><p>He comes to me with a view to <span class="wrong">get</span> <span class="correction">getting</span> some help.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>Rahul is used to <span class="wrong">work</span> <span class="correction">working</span> at night.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>He is addicted to <span class="wrong">gamble</span> <span class="correction">gambling</span>.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>He looks forward to <span class="wrong">meet</span> <span class="correction">meeting</span> his friends.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>We are committed to <span class="wrong">withdraw</span> <span class="correction">withdrawing</span> our troops by the end of the year.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>I am looking forward to <span class="wrong">meet</span> <span class="correction">meeting</span> you.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>He has called a meeting with a view to <span class="wrong">form</span> <span class="correction">forming</span> a national reconciliation government.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>Sandy is addicted to <span class="wrong">collect</span> <span class="correction">collecting</span> stamps.</p></div>
+        </div>
+
+        <div class="sub-heading">"No use / No good / Any use / Any good" + Gerund (V1+ing)</div>
+        <div class="rule-box">No use | No good | Any use | Any good + Gerund (V+ing)</div>
+        <div class="pos-grid">
+          <div class="pos-card"><h4>Correction</h4><p>It is no use <span class="wrong">cry</span> <span class="correction">crying</span> over spilt milk.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>Is it any use <span class="wrong">support</span> <span class="correction">supporting</span> a corrupt leader?</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>It is no good <span class="wrong">help</span> <span class="correction">helping</span> the terrorist.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p>It is no good <span class="wrong">hide</span> <span class="correction">hiding</span> their mistakes. As a guardian, you should confront them.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: PARTICIPLES -->
+  <div class="tab-content" id="participle">
+    <div class="card">
+      <div class="card-header orange">Participles — Types</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>Present Participle — V + ing</li>
+          <li>Past Participle — V3</li>
+          <li>Perfect Participle — having + V3, after + V+ing</li>
+        </ul>
+        <ul class="arrow-list">
+          <li>A dog is barking. (part of verb phrase)</li>
+          <li>The barking dog alerted the neighbours. (Adjective — Participle)</li>
+          <li>The dog jumped up, barking excitedly at the arrival of its owner. (Adverbial participle)</li>
+          <li>Barking annoys the neighbours. (Gerund — Noun/subject)</li>
+          <li>She has finished her work. (Past participle in verb phrase)</li>
+          <li>The students submitted their finished assignments. (Past participle as Adjective)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Gerund vs Participle — Identification Practice</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Sentence</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td>Studying is important for academic success.</td><td>Gerund (Subject/Noun)</td></tr>
+            <tr><td>The studying environment should be free from distractions.</td><td>Participle (Adjective)</td></tr>
+            <tr><td>The professor is passionate about studying human behavior.</td><td>Gerund (Object of preposition)</td></tr>
+            <tr><td>They are studying for the upcoming exam.</td><td>Participle (part of verb phrase — HV + MV)</td></tr>
+            <tr><td>I spent the whole day studying math.</td><td>Participle (Adverb)</td></tr>
+            <tr><td>He joined a singing competition and impressed the judges.</td><td>Participle (Adjective)</td></tr>
+            <tr><td>She enjoys singing in the shower.</td><td>Gerund (Object/Noun)</td></tr>
+            <tr><td>The children were singing their favourite songs at the concert.</td><td>Participle (verb phrase)</td></tr>
+            <tr><td>Singing brings joy to my heart.</td><td>Gerund (Subject)</td></tr>
+            <tr><td>She came down the street, singing happily.</td><td>Participle (Adverb)</td></tr>
+            <tr><td>...is now fighting for his life.</td><td>Participle (Verb)</td></tr>
+            <tr><td>Many of his paintings show the setting sun.</td><td>Participle (Adjective)</td></tr>
+            <tr><td>The girl dancing on the stage is my sister.</td><td>Participle (Adjective)</td></tr>
+            <tr><td>Asking questions is a whole lot easier than answering them.</td><td>Gerund (Noun)</td></tr>
+            <tr><td>We found some money lying on the ground.</td><td>Participle (Adjective)</td></tr>
+            <tr><td>...flying above the clouds was the most incredible experience...</td><td>Gerund (Noun)</td></tr>
+            <tr><td>...the meeting looks fruitful. The magazine's cover, appealing to younger readers... I am looking forward to getting the statistics.</td><td>Meeting = Gerund (Noun); Appealing = Participle (Adj.); Looking = Participle (Verb)</td></tr>
+            <tr><td>Tom lost his keys walking through the park.</td><td>Participle (Adverb)</td></tr>
+            <tr><td>Do you mind my borrowing these supplies?</td><td>Gerund (Noun)</td></tr>
+            <tr><td>They enjoyed taking long walks on the trail.</td><td>Gerund (Noun)</td></tr>
+            <tr><td>If I catch you stealing my apples again...</td><td>Participle (Adjective)</td></tr>
+            <tr><td>Reading a good novel always gives me pleasure.</td><td>Gerund (Noun)</td></tr>
+            <tr><td>The man driving the car was not injured.</td><td>Participle (Adjective)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Complete vs Incomplete Action (Bare Infinitive vs Participle after Perception Verbs)</div>
+      <div class="card-body">
+        <ul class="arrow-list">
+          <li>I heard him say so. (Complete action)</li>
+          <li>I heard him saying so. (Either incomplete or complete action)</li>
+          <li>I saw her cross the road. (Complete action)</li>
+          <li>I saw her crossing the road. (Either incomplete or complete action)</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Perception verb + bare infinitive (V1) = you witnessed the WHOLE action from start to finish. Perception verb + present participle (V+ing) = you witnessed the action in progress (may or may not have seen it finish).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Present Participle vs Perfect Participle</div>
+      <div class="card-body">
+        <div class="rule-box">Use Perfect Participle (Having + V3) when the first action is fully COMPLETED before the second action begins. Use Present Participle (V+ing) only when both actions happen simultaneously/continuously.</div>
+        <div class="pos-grid">
+          <div class="pos-card"><h4>Correction</h4><p><span class="wrong">Standing</span> <span class="correction">Having stood</span> on the stage, the actor delivered a powerful monologue.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p><span class="wrong">Taking</span> <span class="correction">Having taken</span> the breakfast, he went to the office.</p></div>
+          <div class="pos-card"><h4>Correction</h4><p><span class="wrong">Driving</span> <span class="correction">Having driven</span> through the countryside, they admired the scenic views.</p></div>
+          <div class="pos-card"><h4>No Error (correct as-is)</h4><p>Having won the championship, the team celebrated their victory. ✔</p></div>
+          <div class="pos-card"><h4>No Error (correct as-is)</h4><p>Wandering through the museum, they admired the artwork on display. ✔ (simultaneous action)</p></div>
+          <div class="pos-card"><h4>Correction</h4><p><span class="wrong">Saving</span> <span class="correction">Having saved</span> enough money, they planned a trip to their dream destination.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Dangling / Misrelated Participle — "It being..." Rule</div>
+      <div class="card-body">
+        <div class="rule-box">A participle phrase must logically refer to the subject of the main clause. If there's no logical subject to attach to (weather, time, general situation), insert "It" before "being".</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Dangling Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>Walking in the park, a tree fell down.</td><td>Walking → While he was walking</td></tr>
+            <tr><td>Waiting for a bus, a brick fell on my head.</td><td>Waiting → While I was waiting</td></tr>
+            <tr><td>Being Sunday, I decided not to go out.</td><td>Being → It being</td></tr>
+            <tr><td>Being a rainy day, we did not go out.</td><td>Being → It being</td></tr>
+            <tr><td>Watching TV, somebody came to meet me.</td><td>Watching → while I was watching</td></tr>
+            <tr><td>Sitting on the chair, a ball hit him.</td><td>Sitting → while he was sitting</td></tr>
+            <tr><td>Sleeping in my room, a nurse came to check the temperature.</td><td>Sleeping → while I was sleeping</td></tr>
+            <tr><td>Standing near the gate, a scooter hit her.</td><td>Standing → while she was standing</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          A "dangling participle" occurs when the participle phrase's subject doesn't match the main clause's subject (e.g., "Walking in the park" implies the tree was walking, not "he"). Fix by converting the participle into a full clause with "while + subject + was + V-ing", or by adding "It" for weather/day-related openers.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: PRACTICE EXAMPLES -->
+  <div class="tab-content" id="practice">
+    <div class="card">
+      <div class="card-header gold">Practice — Verb Form Error Spotting</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Last weekend I just wanted to relax because I <span class="wrong">have</span> a busy week.</td><td class="correction">had</td></tr>
+            <tr><td>2</td><td>By the time they reached the theater, the movie ___ already ___.</td><td class="correction">had, started</td></tr>
+            <tr><td>3</td><td>He did not <span class="wrong">had</span> any money to pay the college fees.</td><td class="correction">have</td></tr>
+            <tr><td>4</td><td>I <span class="wrong">was</span> perfectly healthy until now.</td><td class="correction">have</td></tr>
+            <tr><td>5</td><td>Before I met him personally, I admit that I <span class="wrong">have</span> a poor opinion about him.</td><td class="correction">had</td></tr>
+            <tr><td>6</td><td>She must <span class="wrong">had</span> completed her work by now.</td><td class="correction">have</td></tr>
+            <tr><td>7</td><td>She <span class="wrong">laid</span> on the couch and read a book.</td><td class="correction">lay</td></tr>
+            <tr><td>8</td><td>He was <span class="wrong">laying</span> comfortably on the bed.</td><td class="correction">lying</td></tr>
+            <tr><td>9</td><td>I'm going to <span class="wrong">lay</span> down in the room.</td><td class="correction">lie</td></tr>
+            <tr><td>10</td><td>He <span class="wrong">lay</span> the blanket out and sat.</td><td class="correction">laid</td></tr>
+            <tr><td>11</td><td>We are tired, let's <span class="wrong">lay</span> in the shade for a while.</td><td class="correction">lie</td></tr>
+            <tr><td>12</td><td>The plan is to lie the foundations for the new apartments in October.</td><td class="correction">No Error</td></tr>
+            <tr><td>13</td><td>She <span class="wrong">lay</span> her head against my shoulder and fell asleep.</td><td class="correction">laid</td></tr>
+            <tr><td>14</td><td>The price of the stock <span class="wrong">raised</span> significantly yesterday.</td><td class="correction">rose</td></tr>
+            <tr><td>15</td><td>It's a wonder we didn't <span class="wrong">rise</span> our arms in surrender.</td><td class="correction">raise</td></tr>
+            <tr><td>16</td><td>The balloon <span class="wrong">raised</span> gracefully into the sky.</td><td class="correction">rose</td></tr>
+            <tr><td>17</td><td>Because of the incessant rain, the flood water is <span class="wrong">raising</span>.</td><td class="correction">rising</td></tr>
+            <tr><td>18</td><td>Against all odds, he <span class="wrong">rises</span> above his challenges & achieved great success.</td><td class="correction">rose</td></tr>
+            <tr><td>19</td><td>The teacher <span class="wrong">rose</span> her voice to get the attention of the noisy students.</td><td class="correction">raised</td></tr>
+            <tr><td>20</td><td>They raised their concerns at the meeting.</td><td class="correction">No Error</td></tr>
+            <tr><td>21</td><td>Airlines may <span class="wrong">rise</span> prices.</td><td class="correction">raise</td></tr>
+            <tr><td>22</td><td>We have to let more women rise to the top.</td><td class="correction">No Error (bare infinitive after "let")</td></tr>
+            <tr><td>23</td><td>The leaves <span class="wrong">fell</span> from the trees in autumn.</td><td class="correction">fall (general truth = present)</td></tr>
+            <tr><td>24</td><td>Silence <span class="wrong">felled</span> between them and then he finally spoke.</td><td class="correction">fell</td></tr>
+            <tr><td>25</td><td>She had fallen asleep before the movie started.</td><td class="correction">No Error</td></tr>
+            <tr><td>26</td><td>The powerful earthquake <span class="wrong">fell</span> buildings, bridges, and other structures.</td><td class="correction">felled</td></tr>
+            <tr><td>27</td><td>You tried to dance and <span class="wrong">fall</span> upon the floor.</td><td class="correction">fell</td></tr>
+            <tr><td>28</td><td>The strong wind gusts <span class="wrong">fell</span> several power lines causing a widespread blackout.</td><td class="correction">felled</td></tr>
+            <tr><td>29</td><td>No one is allowed to <span class="wrong">fall</span> the trees in the forest.</td><td class="correction">fell</td></tr>
+            <tr><td>30</td><td>The bathtub has <span class="wrong">overflown</span>, causing water to spill onto the floor.</td><td class="correction">overflowed</td></tr>
+            <tr><td>31</td><td>People can <span class="wrong">hung</span> all the gifts upon the Christmas tree.</td><td class="correction">hang</td></tr>
+            <tr><td>32</td><td>Four Indian men convicted... have been <span class="wrong">hung</span>. The four were <span class="wrong">hung</span> in the capital's high-security prison.</td><td class="correction">hanged, hanged</td></tr>
+            <tr><td>33</td><td>The coat was drenched in rain water, I <span class="wrong">hanged</span> it on the hook.</td><td class="correction">hung</td></tr>
+            <tr><td>34</td><td>Hang your clothes on the line to dry.</td><td class="correction">No Error</td></tr>
+            <tr><td>35</td><td>The servant <span class="wrong">hanged</span> the lamp on the wall.</td><td class="correction">hung</td></tr>
+            <tr><td>36</td><td>For his crime, the accused will be <span class="wrong">hung</span> till death.</td><td class="correction">hanged</td></tr>
+            <tr><td>37</td><td>In a group you may <span class="wrong">found</span> one or two people who tend to be extremely vocal.</td><td class="correction">find</td></tr>
+            <tr><td>38</td><td>Our organization was <span class="wrong">found</span> twenty years ago.</td><td class="correction">founded</td></tr>
+            <tr><td>39</td><td>The eminent speaker's speech was <span class="wrong">broadcasted</span> over all the major stations.</td><td class="correction">broadcast</td></tr>
+            <tr><td>40</td><td>It cannot be <span class="wrong">forecasted</span> how society will emerge generations hence.</td><td class="correction">forecast</td></tr>
+            <tr><td>41</td><td>The knight <span class="wrong">slayed</span> the dragon with his sword.</td><td class="correction">slew</td></tr>
+            <tr><td>42</td><td>The monster was <span class="wrong">slay</span> by the brave warrior.</td><td class="correction">slain</td></tr>
+            <tr><td>43</td><td>He has <span class="wrong">slayed</span> his rival.</td><td class="correction">slain</td></tr>
+            <tr><td>44</td><td>I would rather <span class="wrong">to</span> wait for her.</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>45</td><td>I would rather go than <span class="wrong">to</span> waste my time.</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>46</td><td>I would sooner spend my vacation at the beach than <span class="wrong">to</span> go camping in the mountains.</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>47</td><td>You had better <span class="wrong">left</span> the country and come to see me as soon as possible.</td><td class="correction">leave</td></tr>
+            <tr><td>48</td><td>You had better <span class="wrong">gone</span> abroad for higher studies.</td><td class="correction">go</td></tr>
+            <tr><td>49</td><td>I would sooner quit my job and <span class="wrong">pursues</span> my passion for painting.</td><td class="correction">pursue</td></tr>
+            <tr><td>50</td><td>You had better <span class="wrong">bought</span> it if you see something you like.</td><td class="correction">buy</td></tr>
+            <tr><td>51</td><td>We would rather save our money for a trip than spend it on expensive gadgets.</td><td class="correction">No Error</td></tr>
+            <tr><td>52</td><td>Why <span class="wrong">to</span> play alone when we have a number of friends...</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>53</td><td>Why <span class="wrong">to</span> talk to him if he is not ready to act on the advice...</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>54</td><td>Why not <span class="wrong">to</span> go to a dentist, if all your teeth are decaying rapidly.</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>55</td><td>Why <span class="wrong">to</span> pay more at this shop when it is available for 500 rupees only...</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>56</td><td>He knows <span class="wrong">to</span> befool customers.</td><td class="correction">how to</td></tr>
+            <tr><td>57</td><td>She taught me <span class="wrong">to</span> speak English.</td><td class="correction">how to</td></tr>
+            <tr><td>58</td><td>Rahul does not know <span class="wrong">to</span> swim so he is afraid of water.</td><td class="correction">how to</td></tr>
+            <tr><td>59</td><td>Do you know <span class="wrong">to</span> prepare balance sheet?</td><td class="correction">how to</td></tr>
+            <tr><td>60</td><td>I heard him <span class="wrong">to</span> say so.</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>61</td><td>I watched him <span class="wrong">to</span> proceed to that location.</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>62</td><td>I saw her <span class="wrong">to</span> talk to her friend.</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>63</td><td>She made me <span class="wrong">to</span> laugh.</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>64</td><td>I noticed him <span class="wrong">to</span> make his way there.</td><td class="correction">(remove "to")</td></tr>
+            <tr><td>65</td><td>I was made ___ laugh. / She was seen ___ enter the office. / They were heard ___ say that they loved the movie.</td><td class="correction">insert "to" (passive voice)</td></tr>
+            <tr><td>66</td><td>Rahul is fond of <span class="wrong">eat</span>.</td><td class="correction">eating</td></tr>
+            <tr><td>67</td><td>He assisted me in <span class="wrong">do</span> this work.</td><td class="correction">doing</td></tr>
+            <tr><td>68</td><td>He is ambitious of <span class="wrong">become</span> the P.M. of India.</td><td class="correction">becoming</td></tr>
+            <tr><td>69</td><td>What did you do on <span class="wrong">see</span> your result?</td><td class="correction">seeing</td></tr>
+            <tr><td>70</td><td>I am interested in <span class="wrong">learn</span> more.</td><td class="correction">learning</td></tr>
+            <tr><td>71</td><td>You should not mind <span class="wrong">hers</span> coming late.</td><td class="correction">her</td></tr>
+            <tr><td>72</td><td>My teacher did not object to <span class="wrong">me</span> using the calculator.</td><td class="correction">my</td></tr>
+            <tr><td>73</td><td>Owing to <span class="wrong">him</span> being a newcomer, he was unable to get the job.</td><td class="correction">his</td></tr>
+            <tr><td>74</td><td>I am pretty confident of <span class="wrong">me</span> winning the case.</td><td class="correction">my</td></tr>
+            <tr><td>75</td><td>She was not sure of <span class="wrong">him</span> passing the examination.</td><td class="correction">his</td></tr>
+            <tr><td>76</td><td>Owing to ___ being a girl, I was given fewer rights and facilities.</td><td class="correction">my</td></tr>
+            <tr><td>77</td><td>He comes to me with a view to <span class="wrong">get</span> some help.</td><td class="correction">getting</td></tr>
+            <tr><td>78</td><td>Rahul is used to <span class="wrong">work</span> at night.</td><td class="correction">working</td></tr>
+            <tr><td>79</td><td>He is addicted to <span class="wrong">gamble</span>.</td><td class="correction">gambling</td></tr>
+            <tr><td>80</td><td>He looks forward to <span class="wrong">meet</span> his friends.</td><td class="correction">meeting</td></tr>
+            <tr><td>81</td><td>We are committed to <span class="wrong">withdraw</span> our troops by the end of the year.</td><td class="correction">withdrawing</td></tr>
+            <tr><td>82</td><td>I am looking forward to <span class="wrong">meet</span> you.</td><td class="correction">meeting</td></tr>
+            <tr><td>83</td><td>He has called a meeting with a view to <span class="wrong">form</span> a national reconciliation government.</td><td class="correction">forming</td></tr>
+            <tr><td>84</td><td>Sandy is addicted to <span class="wrong">collect</span> stamps.</td><td class="correction">collecting</td></tr>
+            <tr><td>85</td><td>It is no use <span class="wrong">cry</span> over spilt milk.</td><td class="correction">crying</td></tr>
+            <tr><td>86</td><td>Is it any use <span class="wrong">support</span> a corrupt leader?</td><td class="correction">supporting</td></tr>
+            <tr><td>87</td><td>It is no good <span class="wrong">help</span> the terrorist.</td><td class="correction">helping</td></tr>
+            <tr><td>88</td><td>It is no good <span class="wrong">hide</span> their mistakes.</td><td class="correction">hiding</td></tr>
+            <tr><td>89</td><td>Taking the breakfast, he went to the office.</td><td class="correction">Having taken the breakfast</td></tr>
+            <tr><td>90</td><td>Standing on the stage, the actor delivered a powerful monologue.</td><td class="correction">Having stood on the stage</td></tr>
+            <tr><td>91</td><td>Driving through the countryside, they admired the scenic views.</td><td class="correction">Having driven through the countryside</td></tr>
+            <tr><td>92</td><td>Saving enough money, they planned a trip to their dream destination.</td><td class="correction">Having saved enough money</td></tr>
+            <tr><td>93</td><td>Walking in the park, a tree fell down.</td><td class="correction">While he was walking in the park...</td></tr>
+            <tr><td>94</td><td>Waiting for a bus, a brick fell on my head.</td><td class="correction">While I was waiting for a bus...</td></tr>
+            <tr><td>95</td><td>Being Sunday, I decided not to go out.</td><td class="correction">It being Sunday</td></tr>
+            <tr><td>96</td><td>Being a rainy day, we did not go out.</td><td class="correction">It being a rainy day</td></tr>
+            <tr><td>97</td><td>Watching TV, somebody came to meet me.</td><td class="correction">While I was watching TV...</td></tr>
+            <tr><td>98</td><td>Sitting on the chair, a ball hit him.</td><td class="correction">While he was sitting on the chair...</td></tr>
+            <tr><td>99</td><td>Sleeping in my room, a nurse came to check the temperature.</td><td class="correction">While I was sleeping in my room...</td></tr>
+            <tr><td>100</td><td>Standing near the gate, a scooter hit her.</td><td class="correction">While she was standing near the gate...</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 9: MASTER TABLE -->
+  <div class="tab-content" id="master">
+    <div class="card">
+      <div class="card-header gold">Master Table — Verbs (Quick Revision)</div>
+      <div class="card-body">
+
+        <div class="sub-heading">A. Verb Classification</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Category</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>H.V. Primary (Be)</td><td>Is/am/are, was/were, be/been/being</td></tr>
+            <tr><td>H.V. Primary (Have)</td><td>has/have/had, Do-Does/did</td></tr>
+            <tr><td>H.V. Modals</td><td>can/could, may/might, will/would, shall/should, dare/need, must, used to, ought to</td></tr>
+            <tr><td>M.V. Finite</td><td>Transitive, Intransitive</td></tr>
+            <tr><td>M.V. Non-finite</td><td>Infinitive, Gerund, Participle</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">B. Tricky Irregular Verbs (V1-V2-V3)</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>V1</th><th>V2</th><th>V3</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td>Lie</td><td>lay</td><td>lain</td><td>Intransitive — to recline</td></tr>
+            <tr><td>Lay</td><td>laid</td><td>laid</td><td>Transitive — to place something</td></tr>
+            <tr><td>Rise</td><td>rose</td><td>risen</td><td>Intransitive — no object</td></tr>
+            <tr><td>Raise</td><td>raised</td><td>raised</td><td>Transitive — needs object</td></tr>
+            <tr><td>Fall</td><td>fell</td><td>fallen</td><td>Intransitive — to drop</td></tr>
+            <tr><td>Fell</td><td>felled</td><td>felled</td><td>Transitive — to cut down</td></tr>
+            <tr><td>Overflow</td><td>overflowed</td><td>overflowed</td><td>Same in all forms</td></tr>
+            <tr><td>Hang (object)</td><td>hung</td><td>hung</td><td>For suspending objects</td></tr>
+            <tr><td>Hang (execution)</td><td>hanged</td><td>hanged</td><td>For death by hanging only</td></tr>
+            <tr><td>Find</td><td>found</td><td>found</td><td>To discover</td></tr>
+            <tr><td>Found</td><td>founded</td><td>founded</td><td>To establish</td></tr>
+            <tr><td>Broadcast</td><td>broadcast</td><td>broadcast</td><td>Same in all forms</td></tr>
+            <tr><td>Telecast</td><td>telecast</td><td>telecast</td><td>Same in all forms</td></tr>
+            <tr><td>Forecast</td><td>forecast</td><td>forecast</td><td>Same in all forms</td></tr>
+            <tr><td>Slay</td><td>slew</td><td>slain</td><td>Formal/literary — to kill</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">C. "Have" as Main Verb / Tense Structures</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Tense</th><th>Structure</th></tr></thead>
+          <tbody>
+            <tr><td>Simple Present</td><td>Sub + V1 + s/es</td></tr>
+            <tr><td>Simple Past</td><td>Sub + V2</td></tr>
+            <tr><td>Present Perfect</td><td>Sub + has/have + V3</td></tr>
+            <tr><td>Past Perfect</td><td>Sub + had + V3 (note: "had had" is correct when MV is "have")</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">D. Infinitive Rules</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Structure/Trigger</th><th>Infinitive Type</th></tr></thead>
+          <tbody>
+            <tr><td>Would rather / Would sooner / Had better</td><td>Bare Infinitive</td></tr>
+            <tr><td>Why / Why not</td><td>Bare Infinitive</td></tr>
+            <tr><td>Ask/Explain/Teach/Know/Learn/Discover/Remember/Forget</td><td>How + To + V1</td></tr>
+            <tr><td>Feel/Hear/See/Notice/Watch/Make + Object (Active Voice)</td><td>Bare Infinitive</td></tr>
+            <tr><td>Feel/Hear/See/Notice/Watch/Make + Object (Passive Voice)</td><td>Full (to) Infinitive</td></tr>
+            <tr><td>Help + Object</td><td>Full OR Bare Infinitive (both correct)</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">E. Gerund Rules</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Structure/Trigger</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr><td>Preposition + Object</td><td>Gerund (V+ing), never bare V1</td></tr>
+            <tr><td>Possessive Adjective + ___</td><td>Gerund (my/his/her/their + V+ing)</td></tr>
+            <tr><td>With a view to / Look forward to / Accustomed to / Habituated to / Addicted to / Be used to / Committed to / Averse to / Owing to / Devoted to / In addition to / Object to / Prone to / Conducive to</td><td>+ Gerund (V+ing)</td></tr>
+            <tr><td>No use / No good / Any use / Any good</td><td>+ Gerund (V+ing)</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">F. Participle Rules</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Type</th><th>Structure</th></tr></thead>
+          <tbody>
+            <tr><td>Present Participle</td><td>V + ing (adjective/adverb/verb phrase)</td></tr>
+            <tr><td>Past Participle</td><td>V3 (adjective/verb phrase)</td></tr>
+            <tr><td>Perfect Participle</td><td>having + V3, or after + V+ing — used when first action is fully completed before second begins</td></tr>
+            <tr><td>Dangling Participle Fix</td><td>Convert to "While + subject + was + V-ing"; use "It being..." for weather/day/situation openers</td></tr>
+            <tr><td>Perception verb + bare infinitive</td><td>Complete action witnessed</td></tr>
+            <tr><td>Perception verb + present participle</td><td>Either incomplete or complete action</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Verbs · SSC / BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-btn').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

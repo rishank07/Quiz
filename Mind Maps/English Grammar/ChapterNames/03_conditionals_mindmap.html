@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conditionals | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117; --surface:#1a1d27; --surface2:#22263a; --border:#2e3250;
+    --gold:#f5c842; --accent1:#e74c3c; --accent2:#3498db; --accent3:#2ecc71;
+    --accent4:#9b59b6; --accent5:#e67e22; --accent6:#1abc9c;
+    --text:#e7e9f0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--text); font-family:'Segoe UI',Arial,sans-serif;
+    margin:0; padding:0; -webkit-overflow-scrolling:touch;
+  }
+  header{ padding:24px 20px 16px; text-align:center; border-bottom:1px solid var(--border); }
+  header h1{ color:var(--gold); margin:0 0 6px; font-size:1.7rem; letter-spacing:.5px; }
+  header p{ margin:0; color:#a9adc4; font-size:.95rem; }
+
+  .tab-nav{
+    display:flex; flex-wrap:wrap; gap:6px; padding:14px 16px; justify-content:center;
+    background:var(--surface); border-bottom:1px solid var(--border); position: static;  z-index:10;
+  }
+  .tab-nav button{
+    background:var(--surface2); color:var(--text); border:1px solid var(--border);
+    padding:9px 16px; border-radius:6px; cursor:pointer; font-size:.85rem; font-weight:600;
+    transition:all .2s;
+  }
+  .tab-nav button:hover{ border-color:var(--gold); }
+  .tab-nav button.active{ color:var(--gold); border-bottom:3px solid var(--gold); background:#26293c; }
+
+  .tab-content{ display:none; padding:20px 16px 50px; max-width:1000px; margin:0 auto; }
+  .tab-content.active{ display:block; animation:fadein .25s ease; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:10px; margin-bottom:18px; overflow:hidden; }
+  .card-header{ padding:12px 18px; font-weight:700; font-size:1.05rem; color:#0f1117; }
+  .card-header.gold{ background:linear-gradient(135deg,#f5c842,#d9a91f); color:#241d00; }
+  .card-header.green{ background:linear-gradient(135deg,#2ecc71,#25a35a); color:#03210e; }
+  .card-header.blue{ background:linear-gradient(135deg,#3498db,#2678b0); color:#031824; }
+  .card-header.purple{ background:linear-gradient(135deg,#9b59b6,#7c3f97); color:#1c0824; }
+  .card-header.orange{ background:linear-gradient(135deg,#e67e22,#c0630f); color:#2a1300; }
+  .card-header.red{ background:linear-gradient(135deg,#e74c3c,#c0301f); color:#2a0300; }
+  .card-header.teal{ background:linear-gradient(135deg,#1abc9c,#0f9a7d); color:#01251d; }
+  .card-body{ padding:16px 18px; }
+
+  .arrow-list{ list-style:none; padding:0; margin:0; }
+  .arrow-list li{ padding:6px 0 6px 22px; position:relative; line-height:1.5; }
+  .arrow-list li::before{ content:"▸"; position:absolute; left:0; color:var(--gold); font-weight:700; }
+
+  .exam-trap{ background:#1a0909; border-left:4px solid var(--accent1); border-radius:6px; padding:14px 16px; margin:14px 0; }
+  .exam-trap .label{ color:var(--accent1); font-weight:700; margin-bottom:8px; display:block; }
+
+  .quick-recall{ background:#091524; border-left:4px solid var(--accent2); border-radius:6px; padding:14px 16px; margin:14px 0; }
+  .quick-recall .label{ color:var(--accent2); font-weight:700; margin-bottom:8px; display:block; }
+
+  .rule-box{
+    border:2px solid var(--gold); border-radius:8px; padding:14px 18px; margin:14px 0;
+    background:#1a1704; color:var(--gold); font-weight:700; text-align:center; font-size:1.05rem;
+  }
+  .rule-box small{ display:block; color:#c9b364; font-weight:500; margin-top:6px; font-size:.85rem; }
+
+  table{ width:100%; border-collapse:collapse; margin:10px 0; font-size:.9rem; }
+  thead th{ background:#2a2200; color:var(--gold); padding:10px 12px; text-align:left; border-bottom:2px solid var(--gold); white-space:nowrap; }
+  tbody td{ padding:9px 12px; border-bottom:1px solid var(--border); }
+  tbody tr:hover{ background:#20233a; }
+  .table-scroll{ overflow-x:auto; }
+
+  .pos-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .pos-card{ background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:14px; }
+  .pos-card h4{ margin:0 0 8px; color:var(--gold); font-size:.95rem; }
+  .pos-card p{ margin:4px 0; font-size:.87rem; color:#c7c9db; }
+  .pos-card .ex{ color:var(--accent3); font-style:italic; }
+
+  .practice-q{ background:var(--surface2); border-radius:8px; padding:14px; margin-bottom:12px; border:1px solid var(--border); }
+  .practice-q .q{ margin:0 0 8px; font-weight:600; }
+  .practice-q .ans{ color:var(--accent3); font-weight:600; }
+  .practice-q .opt-x{ color:var(--accent1); }
+  .practice-q .opt-ok{ color:var(--accent3); }
+
+  footer{ text-align:center; padding:22px 16px 40px; color:#7a7e96; font-size:.8rem; border-top:1px solid var(--border); }
+
+  ::-webkit-scrollbar{ height:8px; width:8px; }
+  ::-webkit-scrollbar-track{ background:var(--surface); }
+  ::-webkit-scrollbar-thumb{ background:var(--border); border-radius:4px; }
+
+  @media (max-width:600px){
+    header h1{ font-size:1.3rem; }
+    .tab-nav button{ padding:8px 12px; font-size:.78rem; }
+    .card-header{ font-size:.95rem; }
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<header>
+  <h1>CONDITIONALS</h1>
+  <p>Complete Mind Map — Zero, First, Second, Third Conditional, Wish/As if, Inversions &amp; Practice</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('overview')">Overview</button>
+  <button onclick="switchTab('zero-first')">Zero &amp; 1st Conditional</button>
+  <button onclick="switchTab('second')">2nd Conditional</button>
+  <button onclick="switchTab('third')">3rd Conditional</button>
+  <button onclick="switchTab('mip')">Most Important Points</button>
+  <button onclick="switchTab('practice')">Practice Examples</button>
+  <button onclick="switchTab('master')">Master Table</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="overview" class="tab-content active">
+  <div class="card">
+    <div class="card-header gold">Conditionals — The Basic Idea</div>
+    <div class="card-body">
+      <div class="rule-box">Conditionals = Condition + Result</div>
+      <ul class="arrow-list">
+        <li>If you come here, I will help you.</li>
+      </ul>
+      <p>Conditional sentences describe a cause (the "if" clause / condition) and its effect (the "result" clause).</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Three Main Types — Quick Snapshot</div>
+    <div class="card-body">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Type</th><th>Meaning</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>1st Conditional</td><td>Real / possible situation of future</td><td>If I win the lottery, I will buy all the famous super cars.</td></tr>
+          <tr><td>2nd Conditional</td><td>Unreal / imaginary situation of future (or present)</td><td>If I won the lottery, I would buy all the famous super cars.</td></tr>
+          <tr><td>3rd Conditional</td><td>Unreal / imaginary situation of past</td><td>If I had won the lottery, I would have bought all the famous super cars.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Same sentence idea, three tenses — as the situation moves further from reality (real future → imaginary future → imaginary past), the verb forms get "more past": V1 → V2 → had+V3.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ZERO & FIRST -->
+<div id="zero-first" class="tab-content">
+  <div class="card">
+    <div class="card-header green">0 — Conditional (Zero Conditional)</div>
+    <div class="card-body">
+      <p>Zero Conditional sentences express general truths — situations in which one thing always causes another. It talks about a general truth, not a specific instance.</p>
+      <div class="rule-box">If + Sub + V1 + s/es , Sub + V1 + s/es</div>
+      <ul class="arrow-list">
+        <li>If you don't brush your teeth, you get cavities.</li>
+        <li>If you freeze water, it becomes solid.</li>
+        <li>If you don't water the plants, they die.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Zero Conditional = both clauses in Simple Present. If it's a universal cause-effect fact, no will/would anywhere in the sentence.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header gold">1st Conditional — Real / Possible Situation of Future</div>
+    <div class="card-body">
+      <div class="rule-box">If + Sub + V1 + s/es , Sub + will + V1</div>
+      <ul class="arrow-list">
+        <li>If he studies hard, he will do well in the exam.</li>
+        <li>If I find her address, I will send her an invitation.</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Zero and First Conditional look almost identical (both use Simple Present in the "if" clause), but the result clause is the differentiator: Zero → Simple Present (always true) vs First → will + V1 (a specific, one-time real possibility).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECOND CONDITIONAL -->
+<div id="second" class="tab-content">
+  <div class="card">
+    <div class="card-header purple">2nd Conditional — Unreal / Imaginary Situation of Future</div>
+    <div class="card-body">
+      <div class="rule-box">If + Sub + V2 , Sub + would + V1</div>
+      <ul class="arrow-list">
+        <li>If he studied hard, he would do well in the exam.</li>
+        <li>If I found her address, I would send her an invitation.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        2nd Conditional ALSO denotes unreal/imaginary situation of PRESENT — not just future. This dual meaning is a key exam point.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Words That Trigger "Sub + V2 / were" (Unreal Present)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If, As if, As though, I wish, We wish, If only + Sub + V2 / were
+      </div>
+      <ul class="arrow-list">
+        <li>He talks as if he knows everything about the world ✘ → he talks as if he <b>knew</b> everything about the world. ✔ (unreal situation of present)</li>
+        <li>He talks as though he is the P.M. of India ✘ → he talks as though he <b>were</b> the P.M. of India. ✔ (unreal situation of present)</li>
+        <li>If I am a bird, I would fly ✘ → If I <b>were</b> a bird, I would fly. ✔ (unreal situation of present)</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        With "if, as if, as though, I wish, if only" — the verb "be" ALWAYS becomes "were" for every subject (I were, he were, she were), never "was," even though this looks grammatically odd outside conditionals.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Most Important Point — 1</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If + Sub + were ...... Sub + would + V1  =  Were + Sub ...... Sub + would + V1
+        <small>Inversion: drop "If", move "were" to the front</small>
+      </div>
+      <ul class="arrow-list">
+        <li>If I were a bird, I would fly. = Were I a bird, I would fly.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Formal/inverted conditionals are a favourite exam trick — "Were she I, she will not allow..." tests whether you recognize this inversion pattern (Were + Sub = If + Sub + were).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THIRD CONDITIONAL -->
+<div id="third" class="tab-content">
+  <div class="card">
+    <div class="card-header red">3rd Conditional — Unreal / Imaginary Situation of Past</div>
+    <div class="card-body">
+      <div class="rule-box">If + Sub + had + V3 , Sub + would have + V3</div>
+      <ul class="arrow-list">
+        <li>If he had studied hard, he would have done well in the exam.</li>
+        <li>If I had found her address, I would have sent her an invitation.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Words That Trigger "Had + V3" (Unreal Past)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If, As if, As though, I wish, We wish, If only + Sub + had + V3
+      </div>
+      <p>These same trigger words that used V2/were for unreal present, use Had + V3 for unreal past (imaginary situation about something that already happened).</p>
+      <ul class="arrow-list">
+        <li>I wish you were present here, when I got the prize ✘ → I wish you <b>had been</b> present here... ✔ (unreal situation of past)</li>
+        <li>I wish I saw you when you had been living in England ✘ → I wish I <b>had seen</b> you... ✔</li>
+        <li>I wish I stopped you when you had been leaving for Paris ✘ → I wish I <b>had stopped</b> you... ✔</li>
+        <li>He boasts as if the Earth belongs to him ✘ → He boasts as if the Earth <b>belonged</b> to him. ✔ (Note: this is unreal PRESENT so V2/"belonged", not had+V3 — watch context carefully)</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "I wish/as if/as though" don't automatically mean 3rd conditional — they can trigger EITHER "V2/were" (unreal present) OR "had+V3" (unreal past) depending on the timeframe described. Always check whether the imaginary situation is about NOW or about something already OVER.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Most Important Point — 2</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If + Sub + had + V3 , Sub + would have + V3  =  Had + Sub + V3 , Sub + would have + V3
+        <small>Inversion: drop "If", move "had" to the front</small>
+      </div>
+      <ul class="arrow-list">
+        <li>If I had known the answer, I would have told you. = Had I known the answer, I would have told you.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Most Important Point — 3</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If it had not happened, Sub + would have + V3  =  But for ...... Sub + would have + V3
+        <small>"But for" replaces the entire negative "if it had not" clause</small>
+      </div>
+      <ul class="arrow-list">
+        <li>But for his help, the patient would have died. ✔</li>
+        <li>But for his help, the patient would die. ✘ (wrong — "But for" always demands "would have + V3", never plain "would + V1")</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "But for" looks like ordinary "except for" but is grammatically a hidden 3rd conditional — the result clause MUST be "would have + V3," never "would + V1." "would not be" ✘ → "would not have been" ✔; "would take" ✘ → "would have taken" ✔; "would lose" ✘ → "would have lost" ✔.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header gold">Most Important Point — 4</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If + Sub + were ...... Sub + would + V1  =  If + Sub + were ...... Sub + would have + V3
+        <small>Same "if...were" clause can pair with EITHER result form, changing the meaning</small>
+      </div>
+      <ul class="arrow-list">
+        <li>If I were you, I would enjoy my vacation. (advice/hypothetical present)</li>
+        <li>If I were you, I would have enjoyed my vacation. (regret about a past vacation, imagining being in someone's shoes)</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        "If I were you" is flexible — it can combine with a 2nd conditional result (would+V1, about now/future) or a 3rd conditional result (would have+V3, about something already past). Context decides.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOST IMPORTANT POINTS (recap tab) -->
+<div id="mip" class="tab-content">
+  <div class="card">
+    <div class="card-header red">All Four "Most Important Points" — Recap</div>
+    <div class="card-body">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Point</th><th>Rule</th></tr></thead>
+        <tbody>
+          <tr><td>MIP-1</td><td>If + Sub + were ... = Were + Sub ... (inversion, 2nd conditional)</td></tr>
+          <tr><td>MIP-2</td><td>If + Sub + had + V3 ... = Had + Sub + V3 ... (inversion, 3rd conditional)</td></tr>
+          <tr><td>MIP-3</td><td>If it had not happened, Sub + would have + V3 = But for ...... Sub + would have + V3</td></tr>
+          <tr><td>MIP-4</td><td>If + Sub + were ... can take EITHER Sub + would + V1 OR Sub + would have + V3 as its result, depending on meaning</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Inversions (dropping "If") are a favourite BPSC/BSSC trick — "Were," "Had," and "Should" at the START of a sentence (without "if") are strong signals of a conditional sentence in disguise.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRACTICE -->
+<div id="practice" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Practice: Miscellaneous Error-Spotting (Conditionals)</div>
+    <div class="card-body">
+      <div class="practice-q">
+        <p class="q">Q1. If he worked hard, he will surely get the job on his choice.</p>
+        <p class="ans">Ans → will → would</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q2. If he does not respond to my appeal, I would dismiss him.</p>
+        <p class="ans">Ans → would → will</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q3. If you had not come on time, we would loose our lives.</p>
+        <p class="ans">Ans → would lose → would have lost</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q4. If I was you, I would not have committed this blunder.</p>
+        <p class="ans">Ans → was → were</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q5. If I were in your position, I would have respected the wishes of my parents and made them happy.</p>
+        <p class="ans">Ans → No Error</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q6. We are planning this trip for so long. But for the rain, we would go to the woods. Let's go next week to camping at some hilltop.</p>
+        <p>(a) We would went <span class="opt-x">✘</span> (b) We would be going <span class="opt-x">✘</span> (c) We would have gone <span class="opt-ok">✔</span> (d) We will go <span class="opt-x">✘</span> (e) No correction required <span class="opt-x">✘</span></p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q7. But for your co-operation, the organization of this workshop would not be so smooth.</p>
+        <p class="ans">Ans → would not be → would not have been</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q8. Had I realized that it was such a long way I would take a taxi.</p>
+        <p class="ans">Ans → would take → would have taken</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q9. Were she I, she will not allow you to go anywhere.</p>
+        <p class="ans">Ans → will → would</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q10. If he had enough money, he would have done some charity.</p>
+        <p class="ans">Ans → would have done → would do</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q11. I wish you were present there when your daughter got the prize.</p>
+        <p class="ans">Ans → were → had been</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q12. Had he not reached in time, he will have missed a golden opportunity.</p>
+        <p class="ans">Ans → will have missed → would have missed</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q13. If I was a Millionaire, I would fight elections.</p>
+        <p class="ans">Ans → was → were</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q14. But for her prompt action, many people would lose their lives.</p>
+        <p class="ans">Ans → would lose → would have lost</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q15. If he would have receive my letter in time he would be able to change his plans.</p>
+        <p class="ans">Ans → would have receive → received</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q16. If I would know what you wanted I would help you.</p>
+        <p class="ans">Ans → would know → knew</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q17. If I would have realized what a bad person my friend is I would have discarded his friendship.</p>
+        <p class="ans">Ans → would have realized → had realized</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q18. You will fail in the examination if you will not work hard.</p>
+        <p class="ans">Ans → you will → you do (time/condition clause must use Simple Present, not "will")</p>
+      </div>
+      <div class="practice-q">
+        <p class="q">Q19. If the bus hadn't broken down we will be at home now.</p>
+        <p class="ans">Ans → will be → would have been</p>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        The single most common conditional error: using "will/would" inside the IF-clause itself. The if-clause should never contain will (1st), would (2nd), or would have (3rd) — those only belong in the result clause. "If he would have receive," "If I would know," "If I would have realized," "if you will not work hard" — ALL wrong for this exact reason.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MASTER TABLE -->
+<div id="master" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Master Table — All Conditional Types</div>
+    <div class="card-body">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Type</th><th>If-Clause</th><th>Result Clause</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>Zero Conditional</td><td>If + Sub + V1 + s/es</td><td>Sub + V1 + s/es</td><td>General truth / always true</td></tr>
+          <tr><td>1st Conditional</td><td>If + Sub + V1 + s/es</td><td>Sub + will + V1</td><td>Real/possible future</td></tr>
+          <tr><td>2nd Conditional</td><td>If + Sub + V2 / were</td><td>Sub + would + V1</td><td>Unreal/imaginary future OR present</td></tr>
+          <tr><td>3rd Conditional</td><td>If + Sub + had + V3</td><td>Sub + would have + V3</td><td>Unreal/imaginary past</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Master Table — Wish / As if / As though / If only</div>
+    <div class="card-body">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Timeframe</th><th>Structure</th></tr></thead>
+        <tbody>
+          <tr><td>Unreal Present</td><td>If, As if, As though, I wish, We wish, If only + Sub + V2 / were</td></tr>
+          <tr><td>Unreal Past</td><td>If, As if, As though, I wish, We wish, If only + Sub + had + V3</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Master Table — Inversions &amp; Special Structures</div>
+    <div class="card-body">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Rule</th><th>Structure</th></tr></thead>
+        <tbody>
+          <tr><td>2nd Conditional Inversion</td><td>If + Sub + were ... = Were + Sub ...</td></tr>
+          <tr><td>3rd Conditional Inversion</td><td>If + Sub + had + V3 ... = Had + Sub + V3 ...</td></tr>
+          <tr><td>But For (=If it had not happened)</td><td>But for ...... , Sub + would have + V3</td></tr>
+          <tr><td>If I were you (dual result)</td><td>If + Sub + were ... = Sub + would + V1  OR  Sub + would have + V3</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Master Table — Most Common Errors</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Using will/would/would have INSIDE the if-clause itself — always wrong</li>
+        <li>Using "was" instead of "were" after if/as if/as though/I wish/if only</li>
+        <li>Mismatching tense pairs across clauses (e.g. V2 in if-clause with would have in result)</li>
+        <li>"But for" followed by plain "would + V1" instead of "would have + V3"</li>
+        <li>Confusing unreal-present ("were"/V2) triggers with unreal-past ("had+V3") triggers under wish/as if/as though</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Exam Fusion Prep | examfusionprep.com · Conditionals · SSC / BPSC / BSSC
+</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
+  document.querySelectorAll('.tab-nav button').forEach(function(btn){ btn.classList.remove('active'); });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

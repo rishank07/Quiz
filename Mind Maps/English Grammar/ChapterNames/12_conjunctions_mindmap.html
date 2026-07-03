@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Conjunctions | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  header{
+    background:linear-gradient(135deg, var(--surface2), var(--surface));
+    border-bottom:2px solid var(--gold);
+    padding:22px 16px;
+    text-align:center;
+  }
+  header h1{
+    color:var(--gold);
+    font-size:1.9rem;
+    letter-spacing:1px;
+  }
+  header p{
+    color:#aab0c6;
+    margin-top:6px;
+    font-size:0.95rem;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    position: static;
+    
+    z-index:100;
+  }
+  .tab-nav button{
+    background:var(--surface2);
+    color:#c7cbe0;
+    border:1px solid var(--border);
+    padding:9px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:0.85rem;
+    font-weight:600;
+    transition:all 0.2s ease;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+  }
+  .tab-nav button.active{
+    background:#2a2200;
+    color:var(--gold);
+    border-color:var(--gold);
+    border-bottom:3px solid var(--gold);
+  }
+  .tab-content{display:none; padding:20px 16px; max-width:1000px; margin:0 auto;}
+  .tab-content.active{display:block; animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:0.3px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#2a2200,#1a1d27); color:var(--gold);}
+  .card-header.green{background:linear-gradient(90deg,#0d2b1a,#1a1d27); color:var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg,#0d1f33,#1a1d27); color:var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg,#24123a,#1a1d27); color:var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg,#3a1f0a,#1a1d27); color:var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg,#33110d,#1a1d27); color:var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg,#0a2e29,#1a1d27); color:var(--accent6);}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:bold;
+  }
+
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{color:var(--accent1); font-weight:700; margin-bottom:6px; display:block;}
+
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{color:var(--accent2); font-weight:700; margin-bottom:6px; display:block;}
+
+  .rule-box{
+    border:1.5px solid var(--gold);
+    border-radius:8px;
+    padding:14px 18px;
+    margin:14px 0;
+    background:rgba(245,200,66,0.04);
+    color:var(--gold);
+    font-weight:700;
+    text-align:center;
+    font-size:1.05rem;
+  }
+  .rule-box .hindi{display:block; color:#e7e9f0; font-weight:400; font-size:0.9rem; margin-top:6px;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0;
+    font-size:0.92rem;
+  }
+  thead th{
+    background:#2a2200;
+    color:var(--gold);
+    border-bottom:2px solid var(--gold);
+    padding:10px;
+    text-align:left;
+  }
+  tbody td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  tbody tr:hover{background:var(--surface2);}
+  .table-wrap{overflow-x:auto;}
+
+  .pos-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:14px;
+    margin:14px 0;
+  }
+  .pos-card{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+  }
+  .pos-card h4{color:var(--gold); margin-bottom:6px; font-size:1rem;}
+  .pos-card p{color:#c7cbe0; font-size:0.88rem; margin-bottom:6px;}
+  .pos-card .example{color:var(--accent3); font-size:0.85rem; font-style:italic;}
+
+  .correct{color:var(--accent3); font-weight:700;}
+  .wrong{color:var(--accent1); text-decoration:line-through; font-weight:700;}
+  .hindi-note{color:#aab0c6; font-size:0.85rem; font-style:italic;}
+  strong.hl{color:var(--gold);}
+
+  footer{
+    text-align:center;
+    padding:20px;
+    color:#6b7089;
+    font-size:0.85rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+  @media(max-width:600px){
+    header h1{font-size:1.4rem;}
+    .tab-nav button{font-size:0.78rem; padding:8px 12px;}
+    .pos-grid{grid-template-columns:1fr;}
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<header>
+  <h1>CONJUNCTIONS</h1>
+  <p>English Grammar Mind Map · SSC / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tablink active" onclick="switchTab('overview')">Kinds of Conjunctions</button>
+  <button class="tablink" onclick="switchTab('although')">Although/Though & Lest</button>
+  <button class="tablink" onclick="switchTab('supposing-doubt')">Supposing/If & Doubt</button>
+  <button class="tablink" onclick="switchTab('because-since')">Because/Since/As & Correlatives</button>
+  <button class="tablink" onclick="switchTab('since-word')">Since (4 Roles)</button>
+  <button class="tablink" onclick="switchTab('unless-until')">Unless / Until</button>
+  <button class="tablink" onclick="switchTab('practice')">Practice Examples</button>
+  <button class="tablink" onclick="switchTab('master')">Master Table</button>
+</div>
+
+<!-- TAB 1: KINDS OF CONJUNCTIONS -->
+<div id="overview" class="tab-content active">
+  <div class="card">
+    <div class="card-header gold">3 Kinds of Conjunctions</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li><strong class="hl">Coordinating Conjunctions</strong></li>
+        <li><strong class="hl">Subordinating Conjunctions</strong></li>
+        <li><strong class="hl">Correlative Conjunctions</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Coordinating Conjunctions — FANBOYS</div>
+    <div class="card-body">
+      <p>Used to connect items that are grammatically equal: two words, two phrases, or two independent clauses.</p>
+      <div class="rule-box">
+        FANBOYS = For, And, Nor, But, Or, Yet, So
+      </div>
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>Connecting Words</h4>
+          <p class="example">I don't like to run or swim.<br>He was clever but lazy.</p>
+        </div>
+        <div class="pos-card">
+          <h4>Connecting Phrases</h4>
+          <p class="example">The dog wagged his tail and panted excitedly.<br>She usually studies in the library or at a cafe.</p>
+        </div>
+        <div class="pos-card">
+          <h4>Connecting Independent Clauses</h4>
+          <p class="example">I wanted to go shopping, but my friend wants to go to a movie.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Subordinating Conjunctions</div>
+    <div class="card-body">
+      <p>Includes words like <strong class="hl">because, if, although, since, until, while</strong>. A subordinating conjunction is used to introduce a dependent clause.</p>
+      <ul class="arrow-list">
+        <li>I will clean the house after the relatives are gone.</li>
+        <li>She wrote my article even though it is assigned to me.</li>
+        <li>My father always inspires me because he believes in me.</li>
+        <li>When he was washing my car, I went to the store.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Correlative Conjunctions</div>
+    <div class="card-body">
+      <p>A kind of tag-team conjunction — they come in pairs, used in different places in the sentence, to show a contrast or to compare equal parts of a sentence.</p>
+      <div class="rule-box">
+        not only – but also &nbsp;·&nbsp; either – or &nbsp;·&nbsp; neither – nor &nbsp;·&nbsp; both – and &nbsp;·&nbsp; not – but &nbsp;·&nbsp; whether – or
+      </div>
+      <ul class="arrow-list">
+        <li>He ate not only the ice cream but also the chocolate.</li>
+        <li>She likes neither tea nor coffee.</li>
+        <li>Raja is both the CEO and Managing Director of the company.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: ALTHOUGH/THOUGH & LEST -->
+<div id="although" class="tab-content">
+  <div class="card">
+    <div class="card-header red">Although / Though … Yet (never "but")</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Although / Though … <span style="color:var(--accent3)">✓ Yet</span> / <span style="color:var(--accent1)">✗ but</span>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Although/Though already sets up a contrast — pairing it with "but" creates a double-conjunction error. Only <strong class="hl">yet</strong> (or nothing at all) can complete the clause. Same logic applies to Because/Since/As with Therefore/So/Thus — see the next tab.
+      </div>
+      <ul class="arrow-list">
+        <li>Although/though he is well off, yet he is greedy.</li>
+        <li>Although/though he worked hard, yet he did not succeed.</li>
+      </ul>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>Although I am not so rich as you are, <span class="wrong">but</span> I have the ability to donate more money than you can.</td><td class="correct">yet</td></tr>
+            <tr><td>Although he has two big eyes, <span class="wrong">but</span> he cannot see these types of bigger things even in the light of the day.</td><td class="correct">yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px;">Q. Although she was responsible for the accident, nobody blamed her — best replacement for the underlined part:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Option</th><th>Text</th></tr></thead>
+          <tbody>
+            <tr><td>(A)</td><td>Yet nobody blamed her</td></tr>
+            <tr><td>(B)</td><td>Still nobody blamed her</td></tr>
+            <tr><td>(C)</td><td>Nevertheless nobody blamed her</td></tr>
+            <tr><td>(D)</td><td class="correct">No error ✓ (correct as it stands)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Lest … Should</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Lest … should <span class="hindi">(ऐसा न हो कि / ताकि ... न)</span>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        We cannot use "not" with the "lest" structure — "lest" already carries the negative meaning built in.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td class="wrong">Work hard, lest you should not fail.</td><td class="correct">Work hard, lest you should fail.</td></tr>
+            <tr><td class="wrong">Run fast, lest you may not miss the train.</td><td class="correct">Run fast, lest you should miss the train.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="arrow-list">
+        <li>A mother said to her children, "Walk carefully, lest you should fall down or hurt yourself."</li>
+        <li>Make haste lest you should miss the train.</li>
+        <li>You should not be so quick in giving advice, lest you should be perceived as interfering in others' affairs.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: SUPPOSING/IF & DOUBT -->
+<div id="supposing-doubt" class="tab-content">
+  <div class="card">
+    <div class="card-header teal">Supposing / If</div>
+    <div class="card-body">
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        "Supposing" and "If" mean the same thing (both introduce a hypothetical condition) and <strong class="hl">cannot be used together</strong>. Use either "Supposing" OR "If" — never both in the same clause.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td><span class="wrong">Supposing if</span> a number of ghosts meet us in the forest, will we be able to get rid of them easily without that magical wand?</td><td class="correct">Remove "Supposing" — keep only "If"</td></tr>
+            <tr><td><span class="wrong">Supposing if</span> you become a govt. officer in the next a few months, what will you do next?</td><td class="correct">Remove "Supposing" — keep only "If"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Wonder / Not sure / Not know + If / Whether</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Wonder / Not sure / Not know + if / whether <span class="hindi">(NOT "that")</span>
+      </div>
+      <ul class="arrow-list">
+        <li>I am not sure if/whether he will join the company.</li>
+        <li>I don't know if/whether she has committed a crime.</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        If <strong class="hl">"or not"</strong> appears in the clause, only <strong class="hl">whether</strong> can be used — never "if" or "that".
+      </div>
+      <ul class="arrow-list">
+        <li>I am not sure whether she will join the company or not.</li>
+        <li>I don't know whether she has committed a crime or not.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Doubt / Doubtful</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Doubt/Doubtful … if/whether &nbsp;(Affirmative sentence)<br>
+        Doubt/Doubtful … that &nbsp;(Interrogative / Negative sentence)
+      </div>
+      <ul class="arrow-list">
+        <li>I doubt if she will marry me.</li>
+        <li>I don't doubt that she will marry me.</li>
+        <li>It is doubtful if she will marry me.</li>
+        <li>Is it doubtful that she will marry me?</li>
+      </ul>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>Their director doubt <span class="wrong">that</span> the new machinery is really necessary.</td><td class="correct">if/whether</td></tr>
+            <tr><td>Her father was doubtful <span class="wrong">that</span> one of his colleagues was involved in his shameful embezzlement.</td><td class="correct">if/whether</td></tr>
+            <tr><td>Economists doubt <span class="wrong">if</span> interest rates will fall in the near future or not.</td><td class="correct">whether</td></tr>
+            <tr><td>Can you any longer be doubtful <span class="wrong">if</span> you are mistaken?</td><td class="correct">that</td></tr>
+            <tr><td>To the men of both sides alike, worn out by want of food and rest, it began to appear equally doubtful <span class="wrong">if</span> they should continue to slaughter one another or sign a peace treaty.</td><td class="correct">whether</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: BECAUSE/SINCE/AS & CORRELATIVES -->
+<div id="because-since" class="tab-content">
+  <div class="card">
+    <div class="card-header red">Because, Since, As … never with So / Therefore / Thus</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Because, Since, As … <span style="color:var(--accent1)">✗ So, Therefore, Thus</span>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Because/Since/As already introduce a reason clause. Pairing them with So/Therefore/Thus in the same sentence is a double-conjunction error — same trap as Although...but.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td class="wrong">Because he came late, therefore he failed.</td><td class="correct">Because he came late, he failed.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="arrow-list">
+        <li>Because he has been bed-ridden for more than two months, you must not force him to do much work now.</li>
+        <li>As everyone already knows each other, there's no need for introductions. We'll get straight into the business of the meeting.</li>
+        <li>Because he has been very good and supportive to all of us during the period of struggle and strife, we must help him always.</li>
+        <li>Since everything can be done from home with computers and telephones, there's no need to dress up for work anymore.</li>
+        <li>Because breathing is something we do automatically, we rarely think about it.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Correlative Conjunctions — Practice</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Either…or &nbsp;·&nbsp; Neither…nor &nbsp;·&nbsp; Not only…but also &nbsp;·&nbsp; Both…and
+        <span class="hindi">These connect the same type/part of speech on both sides of the pair</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td><span class="wrong">Either</span> the action was right or wrong.</td><td class="correct">either (position corrected before "the action")</td></tr>
+            <tr><td>He <span class="wrong">neither</span> visited Jaipur nor Udaipur.</td><td class="correct">neither (position corrected before "visited")</td></tr>
+            <tr><td>He is <span class="wrong">not only</span> famous in India but also in abroad.</td><td class="correct">not only (position corrected before "famous")</td></tr>
+            <tr><td>He is both a writer <span class="wrong">as well as</span> teacher.</td><td class="correct">and</td></tr>
+            <tr><td>We had <span class="wrong">not only</span> helped them with money but also with new machinery and raw material.</td><td class="correct">not only (position corrected before "helped")</td></tr>
+            <tr><td><span class="wrong">Not only</span> did he criticise the party's policies but also the leader's personal matters.</td><td class="correct">He not only criticised the party's policies but also the leader's personal matters.</td></tr>
+            <tr><td>In the fall, <span class="wrong">either</span> Phillip will start classes at the community college as his mother wishes or join the Navy, his father's hope.</td><td class="correct">either (position corrected before "start")</td></tr>
+            <tr><td>Most of the popular tele-serials are not only illogical in their story line but also crude in their presentation.</td><td class="correct">No Error</td></tr>
+            <tr><td>Money <span class="wrong">not only</span> satisfies the basic physiological needs but also the higher psychological needs.</td><td class="correct">No Error (structure already correct)</td></tr>
+            <tr><td>The films were <span class="wrong">both</span> enjoyable to watch and to discuss.</td><td class="correct">both (position corrected before "enjoyable")</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL — Correlative Position Rule</span>
+        The correlative word (either/neither/not only/both) must sit <strong class="hl">immediately before</strong> the exact part of speech being compared — not before an unrelated word earlier in the sentence. This is the single most common correlative-conjunction error type.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Not Either … Nor (never "or")</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Not either … <span style="color:var(--accent3)">✓ nor</span> / <span style="color:var(--accent1)">✗ or</span>
+      </div>
+      <ul class="arrow-list">
+        <li>He is not either good or wise.</li>
+        <li>She was not either tall or short.</li>
+      </ul>
+      <div class="rule-box">
+        Seldom or never &nbsp;·&nbsp; Seldom if ever
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>Language policies for education are highly charged political issues and seldom or <span class="wrong">ever</span> decided on educational grounds alone.</td><td class="correct">never</td></tr>
+            <tr><td>Seldom if <span class="wrong">never there was</span> any training or instructions in such tactics for either the tank crews or the infantry formations.</td><td class="correct">ever was there</td></tr>
+            <tr><td>These goods are made for export and seldom if ever sold in the country.</td><td class="correct">No Error</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: SINCE - 4 ROLES -->
+<div id="since-word" class="tab-content">
+  <div class="card">
+    <div class="card-header purple">Since — 4 Different Roles</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>1. Conjunction — Time (जब से)</h4>
+          <p>Connects two clauses, showing a starting point in time.</p>
+          <p class="example">Rahul has had several different jobs since he left school.<br>They haven't seen each other since they graduated.</p>
+        </div>
+        <div class="pos-card">
+          <h4>2. Conjunction — Reason (क्योंकि)</h4>
+          <p>Connects two clauses, giving a reason.</p>
+          <p class="example">Since it's raining, we should take an umbrella.<br>Since there's no more business, we can all go home.</p>
+        </div>
+        <div class="pos-card">
+          <h4>3. Preposition (उस समय से)</h4>
+          <p>Followed directly by a noun — no clause.</p>
+          <p class="example">I have been studying since morning.<br>She hasn't spoken to him since last year.</p>
+        </div>
+        <div class="pos-card">
+          <h4>4. Adverb (के बाद से)</h4>
+          <p>Used alone, without a following noun or clause.</p>
+          <p class="example">She left home in 1993 and hasn't been seen since.<br>He started working for the company in 1995, and has been there ever since (= and is still there).</p>
+        </div>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Identify "since" by what follows it: <strong class="hl">clause with time meaning</strong> → conjunction (time); <strong class="hl">clause with reason meaning</strong> → conjunction (reason); <strong class="hl">noun/noun phrase</strong> → preposition; <strong class="hl">nothing follows</strong> → adverb.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: UNLESS / UNTIL -->
+<div id="unless-until" class="tab-content">
+  <div class="card">
+    <div class="card-header orange">Unless — Denotes Condition</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Unless = except if <span class="hindi">(denotes condition)</span>
+      </div>
+      <ul class="arrow-list">
+        <li>You can't get a job unless you have experience.</li>
+        <li>Most wild animals won't attack unless they are provoked.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Until — Denotes Time</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Until = up to the point in time <span class="hindi">(denotes time)</span>
+      </div>
+      <ul class="arrow-list">
+        <li>The audience listened carefully until he spoke.</li>
+        <li>No one is allowed to leave the classroom until the exam was over.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Unless and Until — Used Together for Emphasis</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>You can't get a job unless and until you have experience.</li>
+        <li>No one is allowed to leave the classroom until and unless the exam was over.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Unlike the Although...but or Because...therefore double-conjunction traps, "unless and until" together is a valid, deliberate <strong class="hl">emphasis structure</strong> — not an error.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Unless vs Until — Practice</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Correct Choice</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>___ you are dedicated to your studies, you cannot expect success.</td><td class="correct">Unless</td></tr>
+            <tr><td>2</td><td>We will wait for Tanu, ___ she arrives.</td><td class="correct">until</td></tr>
+            <tr><td>3</td><td>He cannot withdraw all his money unless he ___ advance notice.</td><td class="correct">gives</td></tr>
+            <tr><td>4</td><td>I lived with my parents ___ I was 17.</td><td class="correct">until</td></tr>
+            <tr><td>5</td><td>You can't get admission in Delhi University ___ you have scored good grades in the higher secondary examination.</td><td class="correct">unless</td></tr>
+            <tr><td>6</td><td>Rahul can't vote ___ he turns 18.</td><td class="correct">until</td></tr>
+            <tr><td>7</td><td>Once Tanu starts playing badminton, she will continue ___ she wins.</td><td class="correct">until</td></tr>
+            <tr><td>8</td><td>No one can help you ___ you tell us the problem.</td><td class="correct">unless</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Also note: "does not give" is wrong after "unless" (double negative) — correct is "unless he gives advance notice," since "unless" already means "if not."
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: PRACTICE EXAMPLES -->
+<div id="practice" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Consolidated Error-Spotting Practice</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Although I am not so rich as you are, but I have the ability to donate more money than you can.</td><td class="correct">yet (instead of "but")</td></tr>
+            <tr><td>2</td><td>Although he has two big eyes, but he cannot see these types of bigger things even in the light of the day.</td><td class="correct">yet (instead of "but")</td></tr>
+            <tr><td>3</td><td>Supposing if a number of ghosts meet us in the forest, will we be able to get rid of them easily without that magical wand?</td><td class="correct">Remove "Supposing" — keep "If"</td></tr>
+            <tr><td>4</td><td>Work hard, lest you should not fail.</td><td class="correct">lest you should fail</td></tr>
+            <tr><td>5</td><td>A mother said to her children, "Walk carefully, lest you may fall down or hurt yourself."</td><td class="correct">lest you should fall down</td></tr>
+            <tr><td>6</td><td>I am not sure that he will join the company.</td><td class="correct">if/whether</td></tr>
+            <tr><td>7</td><td>I am not sure if she will join the company or not.</td><td class="correct">whether (because of "or not")</td></tr>
+            <tr><td>8</td><td>Their director doubt that the new machinery is really necessary.</td><td class="correct">if/whether</td></tr>
+            <tr><td>9</td><td>Economists doubt if interest rates will fall in the near future or not.</td><td class="correct">whether</td></tr>
+            <tr><td>10</td><td>Because he came late, therefore he failed.</td><td class="correct">Remove "therefore"</td></tr>
+            <tr><td>11</td><td>Either the action was right or wrong.</td><td class="correct">Move "either" before "the action"</td></tr>
+            <tr><td>12</td><td>He is not only famous in India but also in abroad.</td><td class="correct">Move "not only" before "famous"</td></tr>
+            <tr><td>13</td><td>He is both a writer as well as teacher.</td><td class="correct">and (instead of "as well as")</td></tr>
+            <tr><td>14</td><td>Language policies for education are highly charged political issues and seldom or ever decided on educational grounds alone.</td><td class="correct">never (instead of "ever")</td></tr>
+            <tr><td>15</td><td>Until you are dedicated to your studies, you cannot expect success.</td><td class="correct">Unless</td></tr>
+            <tr><td>16</td><td>He cannot withdraw all his money unless he does not give advance notice.</td><td class="correct">gives (remove double negative)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: MASTER TABLE -->
+<div id="master" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Master Table — Complete Chapter Revision</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Topic</th><th>Key Rule / Fact</th></tr></thead>
+          <tbody>
+            <tr><td>3 Kinds of Conjunctions</td><td>Coordinating, Subordinating, Correlative</td></tr>
+            <tr><td>Coordinating (FANBOYS)</td><td>For, And, Nor, But, Or, Yet, So — connects grammatically equal words/phrases/independent clauses</td></tr>
+            <tr><td>Subordinating</td><td>because, if, although, since, until, while — introduces a dependent clause</td></tr>
+            <tr><td>Correlative</td><td>Tag-team pairs: not only-but also, either-or, neither-nor, both-and, not-but, whether-or</td></tr>
+            <tr><td>Although/Though</td><td>Pairs only with "Yet," never with "but" (double-conjunction error)</td></tr>
+            <tr><td>Because/Since/As</td><td>Never paired with So/Therefore/Thus (same double-conjunction trap)</td></tr>
+            <tr><td>Lest</td><td>Always followed by "should," never "not" (negative already built-in)</td></tr>
+            <tr><td>Supposing / If</td><td>Same meaning — cannot be used together in one clause</td></tr>
+            <tr><td>Wonder/Not sure/Not know</td><td>+ if/whether (not "that")</td></tr>
+            <tr><td>"or not" in clause</td><td>Forces "whether" — never "if" or "that"</td></tr>
+            <tr><td>Doubt/Doubtful — Affirmative</td><td>+ if/whether</td></tr>
+            <tr><td>Doubt/Doubtful — Interrogative/Negative</td><td>+ that</td></tr>
+            <tr><td>Correlative position rule</td><td>The correlative word must sit immediately before the exact part being compared, on both sides of the pair</td></tr>
+            <tr><td>Not either</td><td>… nor (never "or")</td></tr>
+            <tr><td>Seldom or never / Seldom if ever</td><td>Fixed emphasis phrases — do not substitute "ever" for "never" in the first, or "never" for "ever" in the second</td></tr>
+            <tr><td>Since — Conjunction (Time)</td><td>जब से — connects two clauses about a starting point in time</td></tr>
+            <tr><td>Since — Conjunction (Reason)</td><td>क्योंकि — connects two clauses giving a reason</td></tr>
+            <tr><td>Since — Preposition</td><td>उस समय से — followed directly by a noun</td></tr>
+            <tr><td>Since — Adverb</td><td>के बाद से — used alone, nothing follows</td></tr>
+            <tr><td>Unless</td><td>= except if; denotes CONDITION</td></tr>
+            <tr><td>Until</td><td>= up to the point in time; denotes TIME</td></tr>
+            <tr><td>Unless and Until</td><td>Valid emphasis structure when used together (not an error)</td></tr>
+            <tr><td>Unless + double negative</td><td>Never use "not" after unless (unless already means "if not")</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Exam Fusion Prep | examfusionprep.com · Conjunctions · SSC / BPSC / BSSC
+</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tablink').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

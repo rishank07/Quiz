@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Adverbs | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  header{
+    background:linear-gradient(135deg, var(--surface2), var(--surface));
+    border-bottom:2px solid var(--gold);
+    padding:22px 16px;
+    text-align:center;
+  }
+  header h1{
+    color:var(--gold);
+    font-size:1.9rem;
+    letter-spacing:1px;
+  }
+  header p{
+    color:#aab0c6;
+    margin-top:6px;
+    font-size:0.95rem;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    position: static;
+    
+    z-index:100;
+  }
+  .tab-nav button{
+    background:var(--surface2);
+    color:#c7cbe0;
+    border:1px solid var(--border);
+    padding:9px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:0.85rem;
+    font-weight:600;
+    transition:all 0.2s ease;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+  }
+  .tab-nav button.active{
+    background:#2a2200;
+    color:var(--gold);
+    border-color:var(--gold);
+    border-bottom:3px solid var(--gold);
+  }
+  .tab-content{display:none; padding:20px 16px; max-width:1000px; margin:0 auto;}
+  .tab-content.active{display:block; animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:0.3px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#2a2200,#1a1d27); color:var(--gold);}
+  .card-header.green{background:linear-gradient(90deg,#0d2b1a,#1a1d27); color:var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg,#0d1f33,#1a1d27); color:var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg,#24123a,#1a1d27); color:var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg,#3a1f0a,#1a1d27); color:var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg,#33110d,#1a1d27); color:var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg,#0a2e29,#1a1d27); color:var(--accent6);}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:bold;
+  }
+
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{color:var(--accent1); font-weight:700; margin-bottom:6px; display:block;}
+
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{color:var(--accent2); font-weight:700; margin-bottom:6px; display:block;}
+
+  .rule-box{
+    border:1.5px solid var(--gold);
+    border-radius:8px;
+    padding:14px 18px;
+    margin:14px 0;
+    background:rgba(245,200,66,0.04);
+    color:var(--gold);
+    font-weight:700;
+    text-align:center;
+    font-size:1.05rem;
+  }
+  .rule-box .hindi{display:block; color:#e7e9f0; font-weight:400; font-size:0.9rem; margin-top:6px;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0;
+    font-size:0.92rem;
+  }
+  thead th{
+    background:#2a2200;
+    color:var(--gold);
+    border-bottom:2px solid var(--gold);
+    padding:10px;
+    text-align:left;
+  }
+  tbody td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  tbody tr:hover{background:var(--surface2);}
+  .table-wrap{overflow-x:auto;}
+
+  .pos-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:14px;
+    margin:14px 0;
+  }
+  .pos-card{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+  }
+  .pos-card h4{color:var(--gold); margin-bottom:6px; font-size:1rem;}
+  .pos-card p{color:#c7cbe0; font-size:0.88rem; margin-bottom:6px;}
+  .pos-card .example{color:var(--accent3); font-size:0.85rem; font-style:italic;}
+
+  .correct{color:var(--accent3); font-weight:700;}
+  .wrong{color:var(--accent1); text-decoration:line-through; font-weight:700;}
+  .hindi-note{color:#aab0c6; font-size:0.85rem; font-style:italic;}
+  strong.hl{color:var(--gold);}
+  .sentence-parse span{font-size:0.72rem; display:block; color:var(--accent1); font-weight:700;}
+
+  footer{
+    text-align:center;
+    padding:20px;
+    color:#6b7089;
+    font-size:0.85rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+  @media(max-width:600px){
+    header h1{font-size:1.4rem;}
+    .tab-nav button{font-size:0.78rem; padding:8px 12px;}
+    .pos-grid{grid-template-columns:1fr;}
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<header>
+  <h1>ADVERBS</h1>
+  <p>English Grammar Mind Map · SSC / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tablink active" onclick="switchTab('overview')">Overview</button>
+  <button class="tablink" onclick="switchTab('kinds')">Kinds of Adverbs</button>
+  <button class="tablink" onclick="switchTab('manner')">Adverb of Manner & -ly</button>
+  <button class="tablink" onclick="switchTab('too-very')">Too / Very / Much</button>
+  <button class="tablink" onclick="switchTab('confusing-pairs')">Confusing Pairs</button>
+  <button class="tablink" onclick="switchTab('prep-negative')">Adverb + Prep & Double Negative</button>
+  <button class="tablink" onclick="switchTab('position-inversion')">Position & Inversion</button>
+  <button class="tablink" onclick="switchTab('practice')">Practice Examples</button>
+  <button class="tablink" onclick="switchTab('master')">Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="overview" class="tab-content active">
+  <div class="card">
+    <div class="card-header gold">Definition</div>
+    <div class="card-body">
+      <p>An <strong class="hl">Adverb</strong> is a word that modifies a verb, an adjective, and another adverb.</p>
+      <ul class="arrow-list">
+        <li>She is walking <strong class="hl">slowly</strong>. (modifies verb)</li>
+        <li>She is <strong class="hl">very</strong> beautiful. (modifies adjective)</li>
+        <li>She is walking <strong class="hl">very</strong> slowly. (modifies another adverb)</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        An adverb can also qualify a <strong class="hl">preposition</strong> and a <strong class="hl">conjunction</strong> — not just verbs, adjectives, and adverbs.
+        <ul class="arrow-list" style="margin-top:8px;">
+          <li>The bird flew <strong class="hl">exactly</strong> over his head. (Adv qualifies preposition "over")</li>
+          <li>I like her simply <strong class="hl">because</strong> she loves singing. (Adv qualifies conjunction "because")</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Three Broad Kinds of Adverbs</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li><strong class="hl">Simple Adverb</strong></li>
+        <li><strong class="hl">Interrogative Adverb</strong></li>
+        <li><strong class="hl">Relative Adverb</strong></li>
+      </ul>
+      <p style="margin-top:10px; color:#aab0c6;">Each is explored in detail in the next tab, along with sentence-function labels (AOT, AOP, AOF, AOD, AOR, AOM) used to identify what kind of adverb is present in a sentence.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: KINDS OF ADVERBS -->
+<div id="kinds" class="tab-content">
+  <div class="card">
+    <div class="card-header green">Simple Adverb — 6 Types</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>1. Adverb of Time (AOT)</h4>
+          <p>today, tomorrow, yesterday, the day before yesterday, etc.</p>
+          <p class="example">She came yesterday.</p>
+        </div>
+        <div class="pos-card">
+          <h4>2. Adverb of Place (AOP)</h4>
+          <p>here, there, everywhere, nowhere, etc.</p>
+          <p class="example">He went there.</p>
+        </div>
+        <div class="pos-card">
+          <h4>3. Adverb of Frequency (AOF)</h4>
+          <p>always, seldom, never, hardly, frequently, etc.</p>
+          <p class="example">I always go to college.</p>
+        </div>
+        <div class="pos-card">
+          <h4>4. Adverb of Degree (AOD)</h4>
+          <p>too, very, much, quite, etc.</p>
+          <p class="example">She is very beautiful.</p>
+        </div>
+        <div class="pos-card">
+          <h4>5. Adverb of Reason (AOR)</h4>
+          <p>consequently, therefore, hence.</p>
+          <p class="example">I therefore left college.</p>
+        </div>
+        <div class="pos-card">
+          <h4>6. Adverb of Manner (AOM)</h4>
+          <p>Shows <em>how</em> an action is done — typically formed with <strong class="hl">-ly</strong>.</p>
+          <p class="example">She sings beautifully. They fought bravely.</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>She came yesterday.</td><td>AOT</td></tr>
+            <tr><td>2</td><td>He went there.</td><td>AOP</td></tr>
+            <tr><td>3</td><td>I always go to college.</td><td>AOF</td></tr>
+            <tr><td>4</td><td>She is very beautiful.</td><td>AOD</td></tr>
+            <tr><td>5</td><td>I therefore left college.</td><td>AOR</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Interrogative Adverb</div>
+    <div class="card-body">
+      <p style="margin-bottom:8px;">Used to ask questions about time, place, frequency, degree, reason, or manner.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Type</th><th>Words</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Adverb of Time</td><td>when, how long</td></tr>
+            <tr><td>2</td><td>Adverb of Place</td><td>where, whence, whither</td></tr>
+            <tr><td>3</td><td>Adverb of Frequency</td><td>how often, how many times</td></tr>
+            <tr><td>4</td><td>Adverb of Degree</td><td>how much, how far</td></tr>
+            <tr><td>5</td><td>Adverb of Reason</td><td>why</td></tr>
+            <tr><td>6</td><td>Adverb of Manner</td><td>how, in what way</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>When did she come?</td><td>AOT</td></tr>
+            <tr><td>2</td><td>Where do they live?</td><td>AOP</td></tr>
+            <tr><td>3</td><td>How often do you go there?</td><td>AOF</td></tr>
+            <tr><td>4</td><td>How much did you pay for this phone?</td><td>AOD</td></tr>
+            <tr><td>5</td><td>Why did you do this?</td><td>AOR</td></tr>
+            <tr><td>6</td><td>How did she behave with you?</td><td>AOM</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Relative Adverb</div>
+    <div class="card-body">
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        Interrogative Adverbs and Relative Adverbs use the <strong class="hl">same words</strong> (when, where, why, how). The difference: Interrogative adverbs <strong class="hl">ask</strong> a question; Relative adverbs <strong class="hl">connect two sentences</strong> instead of asking a question.
+      </div>
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>Explicit Relative Adverb</h4>
+          <p>The relative adverb clearly joins two full clauses.</p>
+          <p class="example">This is the time when she comes.<br>Do you know the place where she lives?</p>
+        </div>
+        <div class="pos-card">
+          <h4>Implicit Relative Adverb</h4>
+          <p>The adverb sits within a single reported/embedded clause.</p>
+          <p class="example">I do not know when he will come.<br>I know where Rahul lives.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: MANNER & -ly FORMATION -->
+<div id="manner" class="tab-content">
+  <div class="card">
+    <div class="card-header green">Formation of Adverb of Manner</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Adjective + ly = Adverb
+        <span class="hindi">Noun + ly = Adjective (an important reverse case!)</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Adjective + ly = Adverb</th><th>Noun + ly = Adjective</th></tr></thead>
+          <tbody>
+            <tr><td>Wise + ly = wisely</td><td>Friend + ly = friendly</td></tr>
+            <tr><td>Beautiful + ly = beautifully</td><td>Brother + ly = brotherly</td></tr>
+            <tr><td>Honest + ly = honestly</td><td>Man + ly = manly</td></tr>
+            <tr><td>Careful + ly = carefully</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Word</th><th>Breakdown</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td>Cowardly</td><td>Coward + ly</td><td>Adjective</td></tr>
+            <tr><td>Timely</td><td>Time + ly</td><td>Adjective</td></tr>
+            <tr><td>Amazingly</td><td>Amazing + ly</td><td>Adverb</td></tr>
+            <tr><td>Gladly</td><td>Glad + ly</td><td>Adverb</td></tr>
+            <tr><td>Earthly</td><td>Earth + ly</td><td>Adjective</td></tr>
+            <tr><td>Suddenly</td><td>Sudden + ly</td><td>Adverb</td></tr>
+            <tr><td>Adversely</td><td>Adverse + ly</td><td>Adverb</td></tr>
+            <tr><td>Oily</td><td>Oil + ly</td><td>Adjective</td></tr>
+            <tr><td>Talkly</td><td>Talk + ly</td><td>✗ Not a valid word</td></tr>
+            <tr><td>Bodily</td><td>Body + ly</td><td>Adjective</td></tr>
+            <tr><td>Growly</td><td>Grow + ly</td><td>✗ Not a valid word</td></tr>
+            <tr><td>Costly</td><td>Cost + ly</td><td>Adjective</td></tr>
+            <tr><td>Slowly</td><td>Slow + ly</td><td>Adverb</td></tr>
+            <tr><td>Practically</td><td>Practical + ly</td><td>Adverb</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Don't assume every "-ly" word is an adverb! Words like <strong class="hl">friendly, cowardly, timely, earthly, oily, costly, bodily</strong> are formed from Noun + ly and remain <strong class="hl">Adjectives</strong> — a very common trap in error-spotting and fill-in-the-blank questions.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: TOO / VERY / MUCH -->
+<div id="too-very" class="tab-content">
+  <div class="card">
+    <div class="card-header orange">Too — More Than Required (आवश्यकता से अधिक)</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Good Quality ✗</th><th>Bad Quality ✓</th></tr></thead>
+          <tbody>
+            <tr><td class="wrong">too happy</td><td class="correct">too dull</td></tr>
+            <tr><td class="wrong">too healthy</td><td class="correct">too difficult</td></tr>
+            <tr><td class="wrong">too glad</td><td class="correct">too careless</td></tr>
+            <tr><td class="wrong">too strong</td><td class="correct">too weak</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="hindi-note">Note: "Too" is normally used with a <strong class="hl">bad quality</strong>, not a good one.</p>
+
+      <div class="rule-box">
+        too … to + V1 <span class="hindi">(इतना ... की)</span><br>
+        too … to + be + V3 <span class="hindi">(negative tone)</span>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        In the <strong class="hl">too...to</strong> structure specifically, both good and bad qualities can be used with "too" — this is an exception to the good/bad rule above.
+      </div>
+      <ul class="arrow-list">
+        <li>The old man is too weak to walk.</li>
+        <li>He is too dull to learn.</li>
+        <li>He is too lazy to clean his room.</li>
+        <li>This news is too good to be true.</li>
+        <li>She is too beautiful to be rejected by any young man.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Very — In Great Degree</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Good Quality ✓</th><th>Bad Quality ✓</th></tr></thead>
+          <tbody>
+            <tr><td>very good</td><td>very bad</td></tr>
+            <tr><td>very active</td><td>very dull</td></tr>
+            <tr><td>very easy</td><td>very difficult</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rule-box">
+        too … to + V1 / to + be + V3 &nbsp;=&nbsp; so … that
+      </div>
+      <ul class="arrow-list">
+        <li>She is too beautiful to be rejected by any young man. = She is so beautiful that she cannot be rejected by any young man.</li>
+        <li>The old man is too weak to walk. = The old man is so weak that he cannot walk.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Very / Much</div>
+    <div class="card-body">
+      <p style="margin-bottom:8px;">Both mean the same thing but attach to different degrees of comparison.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Very (Positive Degree Adj.)</th><th>Much (Comparative Degree Adj.)</th></tr></thead>
+          <tbody>
+            <tr><td>very good</td><td>much better</td></tr>
+            <tr><td>very wise</td><td>much wiser</td></tr>
+            <tr><td>very beautiful</td><td>much more beautiful</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rule-box">
+        Very = The + very + Superlative Degree<br>
+        Much = much + the + Superlative Degree
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Very form</th><th>Much form</th></tr></thead>
+          <tbody>
+            <tr><td>the very best</td><td>much the best</td></tr>
+            <tr><td>the very wisest</td><td>much the wisest</td></tr>
+            <tr><td>the very most beautiful</td><td>much the most beautiful</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        <strong class="hl">Very</strong> goes only with Positive Degree adjectives; <strong class="hl">Much</strong> goes only with Comparative/Superlative Degree adjectives. Using "very" before a comparative ("very better") or "much" before a positive ("much good") is a classic error-spotting trap.
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>I am <span class="wrong">too</span> glad.</td><td class="correct">very glad</td></tr>
+            <tr><td>2</td><td>This news is <span class="wrong">too</span> good.</td><td class="correct">very good</td></tr>
+            <tr><td>3</td><td>She is too beautiful to be rejected by any young man.</td><td class="correct">✓ Correct (too...to structure)</td></tr>
+            <tr><td>4</td><td>She is much more honest than I.</td><td class="correct">✓ Correct</td></tr>
+            <tr><td>5</td><td>She is much the most diligent girl in the class.</td><td class="correct">✓ Correct</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: CONFUSING PAIRS -->
+<div id="confusing-pairs" class="tab-content">
+  <div class="card">
+    <div class="card-header red">Fast / Fastly</div>
+    <div class="card-body">
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Fastly" is <strong class="hl">not a word</strong> in standard English. "Fast" itself serves as both the adjective and the adverb.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Fast (Adjective — तेज़)</th><th>Fast (Adverb — तेज़ी से)</th></tr></thead>
+          <tbody>
+            <tr><td>A fast train</td><td>Bolt runs fast. / The train is running fast.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Q. He ran so <span class="wrong">fastly</span> <span class="correct">fast</span> that he reached the destination in just two minutes.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Late / Lately</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Late — Adjective (स्वर्गीय)</th><th>Late — Adverb (देरी से)</th></tr></thead>
+          <tbody>
+            <tr><td>My late grandfather</td><td>This train will come late.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rule-box">
+        Lately (Adv.) = in recent times, recently
+      </div>
+      <ul class="arrow-list">
+        <li>Have you seen Rahul lately?</li>
+        <li>I have not seen him lately.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        "Lately" is used with the <strong class="hl">Present Perfect Tense</strong> (has/have + V3) — typically in interrogative or negative sentences.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Hard / Hardly</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Hard — Adjective (कठोर)</th><th>Hard — Adverb (मेहनत से)</th></tr></thead>
+          <tbody>
+            <tr><td>a hard surface</td><td>She works hard.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rule-box">
+        Hardly (Adv.) = Scarcely <span class="hindi">(शायद ही कोई, ना के बराबर)</span>
+      </div>
+      <ul class="arrow-list">
+        <li>I hardly talk to them.</li>
+        <li>She hardly goes there.</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Hard" and "Hardly" are <strong class="hl">opposite in meaning</strong>, not degrees of the same word. "She works hardly" (meaning she works with effort) is WRONG — it should be "She works hard." "Hardly" means "scarcely/almost not at all."
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>She cannot succeed because she <span class="wrong">works hard</span>.</td><td class="correct">works hardly</td></tr>
+            <tr><td>He <span class="wrong">worked hardly</span> and broke all the previous records.</td><td class="correct">worked hard</td></tr>
+            <tr><td>She <span class="wrong">works hard</span>; so she is sure to fail.</td><td class="correct">works hardly</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: ADVERB + PREPOSITIONS & DOUBLE NEGATIVE -->
+<div id="prep-negative" class="tab-content">
+  <div class="card">
+    <div class="card-header green">Adverb and Some Prepositions</div>
+    <div class="card-body">
+      <div class="rule-box">
+        On + Monday/Tuesday... + next/last <span class="hindi">(NOT "on next/last Monday")</span><br>
+        In + next/last + week/month/year <span class="hindi">is also avoided in this pattern</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td class="wrong">My father went to London on last Monday.</td><td class="correct">My father went to London on Monday last.</td></tr>
+            <tr><td class="wrong">He will go to Shimla on Next Friday.</td><td class="correct">He will go to Shimla on Friday next.</td></tr>
+            <tr><td class="wrong">She completed her graduation in last year.</td><td class="correct">She completed her graduation last year.</td></tr>
+            <tr><td class="wrong">My grandfather died in last month.</td><td class="correct">My grandfather died last month.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        "Next" and "last" acting as time adverbs never take "on" or "in" before them when combined with week/month/year — but "on" is retained when a specific day name (Monday, Friday) comes with next/last, with the order flipped: day + next/last, not next/last + day.
+      </div>
+      <ul class="arrow-list">
+        <li>Unhappy with the results of the US elections, Donald Trump insisted on going to the US Supreme Court last week and asked for the counting of votes to stop.</li>
+        <li>I think they liked our presentation because they had scheduled one more meeting with us next Tuesday.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header red">Double Negative</div>
+    <div class="card-body">
+      <div class="rule-box">
+        We cannot use "not" together with these words
+      </div>
+      <div class="pos-grid">
+        <div class="pos-card"><p>Deny, Prevent, Prohibit, Forbid, Hardly</p></div>
+        <div class="pos-card"><p>Rarely, Scarcely, Unless, Until, Both</p></div>
+        <div class="pos-card"><p>Lest (takes "should", never "not")</p></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td class="wrong">He denied that he had not called her.</td><td class="correct">He denied that he had called her.</td></tr>
+            <tr><td class="wrong">We are prohibited from not entering the staff room.</td><td class="correct">We are prohibited from entering the staff room.</td></tr>
+            <tr><td class="wrong">My father forbade me not to see Mohit again.</td><td class="correct">My father forbade me to see Mohit again.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        With "lest," the following clause must use <strong class="hl">should</strong>, never "should not" or "may not" — "lest" itself already carries the negative meaning ("in case," "for fear that").
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Unless you study diligently, you'll never understand trigonometry.</td></tr>
+            <tr><td>2</td><td>Until she accepts my apology, I will not leave.</td></tr>
+            <tr><td>3</td><td>Neither of the girls has brought the flowers.</td></tr>
+            <tr><td>4</td><td>If your hands are dirty, don't touch your new dress, lest you should spoil it.</td></tr>
+            <tr><td>5</td><td>He noted that long-distance firms are still prohibited from accessing certain local phone services, such as high-volume calling plans.</td></tr>
+            <tr><td>6</td><td>Our director would not have signed the contract unless she had had a lawyer present.</td></tr>
+            <tr><td>7</td><td>You won't be able to get a ticket for the match unless you're prepared to pay a lot of money for it.</td></tr>
+            <tr><td>8</td><td>The woodman stirred the fire until the flames leaped high and the sparks flew out of the roof hole.</td></tr>
+            <tr><td>9</td><td>That was the end of the conversation and neither of them brought the subject up again that night.</td></tr>
+            <tr><td>10</td><td>I make it a rule to read the newspaper everyday lest I should fall behind the times.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: POSITION & INVERSION -->
+<div id="position-inversion" class="tab-content">
+  <div class="card">
+    <div class="card-header purple">Position of Adverbs</div>
+    <div class="card-body">
+      <p style="margin-bottom:8px;">Frequency adverbs: Hardly, Rarely, Scarcely, Always, Seldom, Never, Certainly, Occasionally, Frequently, Generally, Often, etc.</p>
+      <div class="rule-box">
+        These words go between the Helping Verb and Main Verb, or before the Main Verb
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td class="wrong">I will miss you certainly.</td><td class="correct">I will certainly miss you.</td></tr>
+            <tr><td class="wrong">She goes to college hardly.</td><td class="correct">She hardly goes to college.</td></tr>
+            <tr><td></td><td class="correct">She has seldom eaten chicken.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header gold">Inversion</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Inversion = Adverb + Helping Verb + Subject + Main Verb
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>General</th><th>Inversion</th></tr></thead>
+          <tbody>
+            <tr><td>I have never gone there.</td><td>Never have I gone there.</td></tr>
+            <tr><td>She has seldom eaten chicken.</td><td>Seldom has she eaten chicken.</td></tr>
+            <tr><td>She hardly goes to college.</td><td>Hardly does she go to college.</td></tr>
+            <tr><td>They rarely talk to each other.</td><td>Rarely do they talk to each other.</td></tr>
+            <tr><td>He hardly went to college.</td><td>Hardly did he go to college.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL — 5 Inversion Rules</span>
+        <ol style="margin-left:18px; margin-top:6px;">
+          <li>Hardly, Rarely, Scarcely, Seldom, Never can be used with Inversion.</li>
+          <li>Hardly / Rarely / Scarcely ... <strong class="hl">when</strong> before (never "than" or "then").</li>
+          <li>No sooner is always used with Inversion, and always followed by <strong class="hl">than</strong> (never "then" or "that").</li>
+          <li>So + Adverb can be used with Inversion.</li>
+          <li>If two verbs are joined by "not only...but also," inversion can be made with "not only."</li>
+          <li>"So" and "Neither/Nor" can also be used with Inversion.</li>
+        </ol>
+      </div>
+
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Students commonly write "than" or "then" after Hardly/Rarely/Scarcely — the correct connector is always <strong class="hl">when</strong>. Similarly, "No sooner" is commonly followed by wrong connectors ("then"/"that") — the correct connector is always <strong class="hl">than</strong>.
+      </div>
+
+      <div class="rule-box">
+        No sooner … than <span class="hindi">(जैसे ही ... वैसे ही)</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>General</th><th>Inversion</th></tr></thead>
+          <tbody>
+            <tr><td>He had hardly opened the door when the two strangers entered the house.</td><td>Hardly had he opened the door when the two strangers entered the house.</td></tr>
+            <tr><td>We had scarcely reached home when it started raining.</td><td>Scarcely had we reached home when it started raining.</td></tr>
+            <tr><td>The bell rang and the students came out of the class.</td><td>No sooner did the bell ring than the students came out of the class.</td></tr>
+            <tr><td>She finished cooking and some guest arrived.</td><td>No sooner did she finish cooking than some guest arrived.</td></tr>
+            <tr><td>She behaved so rudely that everyone got offended.</td><td>So rudely did she behave that everyone got offended.</td></tr>
+            <tr><td>She performed so well that everybody got impressed.</td><td>So well did she perform that everybody got impressed.</td></tr>
+            <tr><td>Not only she read but she also wrote.</td><td>Not only did she read but she also wrote.</td></tr>
+            <tr><td>She forgot my birthday and also didn't apologise for forgetting it.</td><td>Not only did she forget my birthday, but she also didn't apologise for forgetting it.</td></tr>
+            <tr><td>He went there.</td><td>So did I. (Affirmative)</td></tr>
+            <tr><td>He did not go there.</td><td>Neither/Nor did I. (Negative)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: PRACTICE EXAMPLES -->
+<div id="practice" class="tab-content">
+  <div class="card">
+    <div class="card-header teal">Error-Spotting Practice (Manner Adverbs)</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>She answered the police officer's questions <span class="wrong">truthful</span> because there is nothing to hide since she just defended herself from the hooligans.</td><td class="correct">truthfully</td></tr>
+            <tr><td>2</td><td>Adam <span class="wrong">expert</span> maneuvered the components of the machine into their proper positions.</td><td class="correct">expertly</td></tr>
+            <tr><td>3</td><td>Jenn is reading so <span class="wrong">quick</span> that it is difficult to understand even a single word. I don't know how she is selected for the debate team.</td><td class="correct">quickly</td></tr>
+            <tr><td>4</td><td>I am full of energy today because I slept <span class="wrong">sound</span> last night. Sleep meditation along with aromatherapy really helps in calming your senses.</td><td class="correct">soundly</td></tr>
+            <tr><td>5</td><td>Her outfit showcased her <span class="wrong">delightful</span> quirky personality and you shouldn't judge her based on her dressing style because everyone is free to dress the way they want to without any inhibitions.</td><td class="correct">delightfully</td></tr>
+            <tr><td>6</td><td>All of them work very carefully right from the beginning till they finish.</td><td class="correct">No Error</td></tr>
+            <tr><td>7</td><td>More than half the food products targeted at babies and toddlers have a high sugar content and are <span class="wrong">excessive</span> sweet.</td><td class="correct">excessively</td></tr>
+            <tr><td>8</td><td>She was so <span class="wrong">emotional</span> stable that she was not moved by their decision to suspend her.</td><td class="correct">emotionally</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Error-Spotting Practice (Too / Very / Much)</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Mohini won this beauty pageant because she is <span class="wrong">too</span> smart and compassionate. This proves that international pageants are moving ahead from the patriarchal norms and becoming more inclusive and intellectual.</td><td class="correct">very</td></tr>
+            <tr><td>2</td><td>Time is <span class="wrong">very</span> important than money. At the end of your life, it's guaranteed you will be out of time and more than likely out of money as well, if you don't value time.</td><td class="correct">much more</td></tr>
+            <tr><td>3</td><td>The famine was <span class="wrong">very</span> severe that several people perished. Even the rich faced the burnt because of the lack of resources in the market.</td><td class="correct">so</td></tr>
+            <tr><td>4</td><td>Climbing plants had grown over the walls, giving the building an appearance <span class="wrong">very</span> more ancient than it was before.</td><td class="correct">much more</td></tr>
+            <tr><td>5</td><td>It was <span class="wrong">much</span> difficult to come out because the stadium was full of viewers altogether.</td><td class="correct">too</td></tr>
+            <tr><td>6</td><td>The policies framed by the Kerala state government nowadays are <span class="wrong">much good</span> as compared to the previous policies. Undoubtedly it is an ideal example of how a well-governed state should operate.</td><td class="correct">much better</td></tr>
+            <tr><td>7</td><td>This is <span class="wrong">the much</span> lowest price I can offer for the quality like this. If you have any doubts you are free to search the market for a price lower than the one I offered.</td><td class="correct">much the</td></tr>
+            <tr><td>8</td><td>The night was <span class="wrong">too</span> cold that we had to wear two coats because we forgot to bring the jackets since the weather forecast wasn't indicating such a huge drop in the temperature.</td><td class="correct">so</td></tr>
+            <tr><td>9</td><td>He ran so <span class="wrong">fastly</span> that he reached the destination in just two minutes.</td><td class="correct">fast</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Error-Spotting Practice (Double Negative & Inversion)</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Scarcely <span class="wrong">she had</span> drunk the magic liquid <span class="wrong">then</span> she began to see everything in strange and vivid colours.</td><td class="correct">had she ... when</td></tr>
+            <tr><td>2</td><td>No sooner <span class="wrong">the train had</span> arrived at the station <span class="wrong">then</span> the passengers rushed towards it.</td><td class="correct">had the train ... than</td></tr>
+            <tr><td>3</td><td>So nicely <span class="wrong">they organised</span> the event that it was hard to tell that they are going through a financial crisis.</td><td class="correct">did they organise</td></tr>
+            <tr><td>4</td><td>Rarely <span class="wrong">I have</span> a chance to read fiction.</td><td class="correct">do I have</td></tr>
+            <tr><td>5</td><td>No sooner did the watchman <span class="wrong">saw</span> the chairman than he started saluting.</td><td class="correct">see</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: MASTER TABLE -->
+<div id="master" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Master Table — Complete Chapter Revision</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Topic</th><th>Key Rule / Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Definition</td><td>Adverb modifies a Verb, Adjective, or another Adverb; also qualifies a Preposition or Conjunction.</td></tr>
+            <tr><td>3 Kinds</td><td>Simple, Interrogative, Relative</td></tr>
+            <tr><td>Simple Adverb — 6 types</td><td>Time (AOT), Place (AOP), Frequency (AOF), Degree (AOD), Reason (AOR), Manner (AOM)</td></tr>
+            <tr><td>Interrogative Adverb</td><td>Same words as Relative Adverb (when, where, why, how) but used to ASK a question</td></tr>
+            <tr><td>Relative Adverb</td><td>Same words but CONNECTS two sentences; can be Explicit (full clause joined) or Implicit (embedded)</td></tr>
+            <tr><td>Formation — Adj + ly</td><td>Adjective + ly = Adverb (wise→wisely, honest→honestly)</td></tr>
+            <tr><td>Formation — Noun + ly</td><td>Noun + ly = Adjective (friend→friendly, man→manly) — a major exam trap</td></tr>
+            <tr><td>Too</td><td>Means "more than required"; normally used with BAD qualities only (too dull, too weak)</td></tr>
+            <tr><td>Too...to structure</td><td>too + Adj + to + V1 (इतना...की) / too + Adj + to be + V3 (negative tone) — here good/bad both allowed</td></tr>
+            <tr><td>Too...to = So...that</td><td>too beautiful to be rejected = so beautiful that she cannot be rejected</td></tr>
+            <tr><td>Very</td><td>Means "in great degree"; used with BOTH good and bad qualities; goes with Positive Degree adjective</td></tr>
+            <tr><td>Much</td><td>Used with Comparative/Superlative Degree adjective (much better, much the best)</td></tr>
+            <tr><td>Very = Much (superlative)</td><td>The + very + superlative = much + the + superlative (the very best = much the best)</td></tr>
+            <tr><td>Fast / Fastly</td><td>"Fastly" does NOT exist — "Fast" is both Adjective and Adverb</td></tr>
+            <tr><td>Late / Lately</td><td>Late = Adj (स्वर्गीय) / Adv (देरी से); Lately = Adv only, means "recently," used with Present Perfect</td></tr>
+            <tr><td>Hard / Hardly</td><td>Hard = Adj (कठोर) / Adv (मेहनत से); Hardly = Adv meaning "scarcely" — opposite meaning, not a degree variant</td></tr>
+            <tr><td>Adverb + Preposition (time)</td><td>Never "on next/last Monday" or "in last week" — correct: "on Monday next/last", drop preposition before last week/month/year</td></tr>
+            <tr><td>Double Negative — never use "not" with</td><td>Deny, Prevent, Prohibit, Forbid, Hardly, Rarely, Scarcely, Unless, Until, Both, Lest</td></tr>
+            <tr><td>Lest</td><td>Always followed by "should," never "should not"/"may not" — the negative sense is built-in</td></tr>
+            <tr><td>Position of frequency adverbs</td><td>Hardly, Rarely, Scarcely, Always, Seldom, Never, Certainly, Occasionally, Frequently, Generally, Often — go between HV and MV or before MV</td></tr>
+            <tr><td>Inversion structure</td><td>Adverb + Helping Verb + Subject + Main Verb</td></tr>
+            <tr><td>Words triggering Inversion</td><td>Hardly, Rarely, Scarcely, Seldom, Never</td></tr>
+            <tr><td>Hardly/Rarely/Scarcely connector</td><td>...+ when (never "than"/"then")</td></tr>
+            <tr><td>No sooner</td><td>Always used with Inversion; always followed by "than" (never "then"/"that")</td></tr>
+            <tr><td>So + Adverb</td><td>Can be used with Inversion (So rudely did she behave that...)</td></tr>
+            <tr><td>Not only...but also</td><td>Inversion can be made with "not only" (Not only did she read but she also wrote)</td></tr>
+            <tr><td>So / Neither-Nor</td><td>Also used with Inversion for agreement — So did I (affirmative), Neither/Nor did I (negative)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Exam Fusion Prep | examfusionprep.com · Adverbs · SSC / BPSC / BSSC
+</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tablink').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Modals | Exam Fusion Prep</title>
+<style>
+:root {
+  --bg:#0f1117; --surface:#1a1d27; --surface2:#22263a; --border:#2e3250; --gold:#f5c842;
+  --accent1:#e74c3c; --accent2:#3498db; --accent3:#2ecc71; --accent4:#9b59b6; --accent5:#e67e22; --accent6:#1abc9c;
+  --text:#e7e9f0;
+}
+* { box-sizing: border-box; margin:0; padding:0; }
+body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; padding-bottom: 40px; }
+.header { background: linear-gradient(135deg, var(--surface2), var(--surface)); padding: 24px 20px; text-align: center; border-bottom: 3px solid var(--gold); }
+.header h1 { color: var(--gold); font-size: 1.8rem; letter-spacing: 1px; }
+.header p { color: var(--text); opacity: 0.8; margin-top: 6px; font-size: 0.95rem; }
+.tab-nav { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 16px; background: var(--surface); border-bottom: 1px solid var(--border); position: static;  z-index: 100; overflow-x: auto; }
+.tab-nav button { background: var(--surface2); color: var(--text); border: 1px solid var(--border); padding: 9px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; white-space: nowrap; transition: all 0.2s; }
+.tab-nav button:hover { border-color: var(--gold); color: var(--gold); }
+.tab-nav button.active { background: var(--surface2); border-bottom: 3px solid var(--gold); color: var(--gold); }
+.container { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
+.tab-content { display: none; animation: fadeIn 0.3s; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+.card-header { padding: 12px 18px; font-weight: 700; font-size: 1.05rem; color: #0f1117; }
+.card-header.gold { background: linear-gradient(90deg, var(--gold), #d4a82f); color:#1a1400; }
+.card-header.green { background: linear-gradient(90deg, var(--accent3), #229954); }
+.card-header.blue { background: linear-gradient(90deg, var(--accent2), #2874a6); }
+.card-header.purple { background: linear-gradient(90deg, var(--accent4), #7d3c98); color:#fff; }
+.card-header.orange { background: linear-gradient(90deg, var(--accent5), #ba5f13); }
+.card-header.red { background: linear-gradient(90deg, var(--accent1), #b03a2e); color:#fff; }
+.card-header.teal { background: linear-gradient(90deg, var(--accent6), #148f77); }
+.card-body { padding: 18px; }
+.arrow-list { list-style: none; }
+.arrow-list li { padding: 6px 0 6px 22px; position: relative; }
+.arrow-list li::before { content: "▸"; position: absolute; left: 0; color: var(--gold); font-weight: bold; }
+.exam-trap { background: #1a0909; border-left: 4px solid var(--accent1); padding: 12px 16px; margin: 14px 0; border-radius: 4px; }
+.exam-trap .label { color: var(--accent1); font-weight: 700; margin-bottom: 6px; display:block; }
+.quick-recall { background: #091524; border-left: 4px solid var(--accent2); padding: 12px 16px; margin: 14px 0; border-radius: 4px; }
+.quick-recall .label { color: var(--accent2); font-weight: 700; margin-bottom: 6px; display:block; }
+.rule-box { border: 1.5px solid var(--gold); border-radius: 6px; padding: 12px 16px; margin: 14px 0; color: var(--gold); font-weight: 700; background: rgba(245,200,66,0.05); }
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.92rem; }
+thead th { background: #2a2200; color: var(--gold); padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--gold); }
+tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+tbody tr:hover { background: rgba(255,255,255,0.03); }
+.table-scroll { overflow-x: auto; }
+.pos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 10px; }
+.pos-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+.pos-card h4 { color: var(--gold); margin-bottom: 6px; font-size: 1rem; }
+.pos-card p { font-size: 0.9rem; opacity: 0.9; }
+.pos-card .ex { color: var(--accent3); font-size: 0.85rem; margin-top: 6px; font-style: italic; }
+.wrong { color: var(--accent1); text-decoration: line-through; }
+.right { color: var(--accent3); }
+.correction { color: var(--gold); font-weight: 700; }
+.sub-heading { color: var(--gold); font-size: 1.1rem; margin: 18px 0 8px 0; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+.footer { text-align: center; padding: 24px 16px; color: var(--gold); opacity: 0.7; font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 20px; }
+@media (max-width: 600px) { .header h1 { font-size: 1.3rem; } .tab-nav button { font-size: 0.78rem; padding: 8px 12px; } }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>MODALS</h1>
+  <p>English Grammar | SSC / BPSC / BSSC Exam Prep</p>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="switchTab('may-might')">May / Might</button>
+  <button class="tab-btn" onclick="switchTab('can-could')">Can / Could</button>
+  <button class="tab-btn" onclick="switchTab('will-shall')">Will / Shall</button>
+  <button class="tab-btn" onclick="switchTab('should-would')">Should / Would</button>
+  <button class="tab-btn" onclick="switchTab('must-ought-used')">Must / Ought to / Used to</button>
+  <button class="tab-btn" onclick="switchTab('need-dare')">Need / Dare</button>
+  <button class="tab-btn" onclick="switchTab('perfect-modals')">Perfect Modals</button>
+  <button class="tab-btn" onclick="switchTab('practice')">Practice Examples</button>
+  <button class="tab-btn" onclick="switchTab('master')">Master Table</button>
+</div>
+
+<div class="container">
+
+  <!-- TAB 1: OVERVIEW -->
+  <div class="tab-content active" id="overview">
+    <div class="card">
+      <div class="card-header gold">Modals — Where They Fit in Verb Classification</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>H.V. Primary (Be)</th><th>H.V. Primary (Have)</th><th>H.V. Modals</th></tr></thead>
+          <tbody>
+            <tr><td>Is/am/are, was/were, be/been/being</td><td>has/have/had, Do-Does/did</td><td>can/could, may/might, will/would, shall/should, dare/need, must, used to, ought to</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="rule-box">Primary H.V. + M.V. = Tenses &nbsp;|&nbsp; Modals + M.V. = Modals</div>
+        <div class="sub-heading">Basic Points</div>
+        <ul class="arrow-list">
+          <li>Modal + V1 (bare infinitive — never V2/V3/V-ing directly)</li>
+          <li>Subject (singular/plural) + modal + V1 — modal never changes form regardless of subject</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Modals never take "s" for third person singular, and are always followed by the bare base form (V1) of the main verb — "She can goes" and "He must going" are both wrong.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: MAY/MIGHT -->
+  <div class="tab-content" id="may-might">
+    <div class="card">
+      <div class="card-header blue">May vs Might</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>May</th><th>Might</th></tr></thead>
+          <tbody>
+            <tr><td>1. Possibility<br>2. Permission</td><td>1. Possibility<br>2. Used in past tense</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">Possibility</div>
+        <div class="rule-box">May = suggests a HIGH degree of possibility | Might = suggests a LOWER degree of possibility</div>
+        <ul class="arrow-list">
+          <li>The weather may be better tomorrow. (~50%)</li>
+          <li>The weather might be better tomorrow. (~30%)</li>
+          <li>We may go to the cinema tonight. (~50%)</li>
+          <li>We might go to the cinema tonight. (~30%)</li>
+        </ul>
+
+        <div class="sub-heading">Permission</div>
+        <div class="rule-box">May = used to ask for, give, and refuse permission. It is quite formal.</div>
+        <ul class="arrow-list">
+          <li>May I come in, sir? — Yes, you may.</li>
+          <li>May I go home now? — No, you may not.</li>
+        </ul>
+
+        <div class="sub-heading">Past Sense</div>
+        <div class="rule-box">Might — Although "might" is NOT technically the past tense of "may", it is still the best word to describe something that happened in the past (e.g., in reported speech).</div>
+        <ul class="arrow-list">
+          <li>He asked if he may borrow the car. → He asked if he might borrow the car.</li>
+          <li>I think I may go to the game. → I thought I might go to the game.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          In reported/indirect speech, when the reporting verb is in the past tense (said, thought, asked), "may" in the direct speech must shift to "might" in the indirect speech — this is a very common error-spotting target.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: CAN/COULD -->
+  <div class="tab-content" id="can-could">
+    <div class="card">
+      <div class="card-header green">Can vs Could — Ability</div>
+      <div class="card-body">
+        <div class="rule-box">Can = to define ability/capacity in the Present | Could = to define ability/capacity in the Past</div>
+        <ul class="arrow-list">
+          <li>I can answer all the questions.</li>
+          <li>She can speak English very well.</li>
+          <li>This room can accommodate more than fifty students.</li>
+          <li>I could swim when I was 5 years old.</li>
+          <li>When I was young, I could easily touch my toes.</li>
+          <li>I couldn't play chess two years ago, but I can now.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Can — Other Uses</div>
+      <div class="card-body">
+        <div class="rule-box">Can = Permission | General Truth | Offers</div>
+
+        <div class="sub-heading">Permission</div>
+        <p style="margin-bottom:8px;">Can — to give and seek permission</p>
+        <ul class="arrow-list">
+          <li>You can play with your friends after doing homework.</li>
+          <li>You can go on the trip.</li>
+          <li>Can I have your number?</li>
+          <li>Can I ask a question, please?</li>
+        </ul>
+
+        <div class="sub-heading">General Truth</div>
+        <p style="margin-bottom:8px;">Can — to talk about things which we think are usually, but not always, true</p>
+        <ul class="arrow-list">
+          <li>Water can extinguish the fire.</li>
+          <li>Fireworks can frighten pets.</li>
+        </ul>
+
+        <div class="sub-heading">Offers</div>
+        <p style="margin-bottom:8px;">We use "can" as a question form to make offers</p>
+        <ul class="arrow-list">
+          <li>Can I help you lift that?</li>
+          <li>Can we do anything for you?</li>
+        </ul>
+
+        <div class="rule-box">Note: "Cannot" is written as ONE word, not two.</div>
+        <ul class="arrow-list">
+          <li>✔ The children cannot be left unsupervised at any time.</li>
+          <li><span class="wrong">✘ The children can not be left unsupervised at any time.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">Could — Permission & Possibility</div>
+      <div class="card-body">
+        <div class="rule-box">Could = 1. Permission (Formal) | 2. Possibility (Present/Future)</div>
+
+        <div class="sub-heading">Permission</div>
+        <p style="margin-bottom:8px;">Could — to ask for permission. Could is more formal and polite than can.</p>
+        <ul class="arrow-list">
+          <li>Could I ask you a personal question?</li>
+          <li>Could I use your phone?</li>
+        </ul>
+
+        <div class="sub-heading">Possibility</div>
+        <p style="margin-bottom:8px;">We often use "could" to express possibility in the present and the future.</p>
+        <ul class="arrow-list">
+          <li>It's yellow. (I am certain that it is yellow. It's a fact.)</li>
+          <li>It could be yellow. (present — I'm not certain that it is yellow.)</li>
+          <li>The storm will get worse. (I'm certain that the storm will get worse.)</li>
+          <li>The storm could get worse. (future — I'm not certain that the storm will get worse.)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Can vs Could — Full Comparison</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Can</th><th>Could</th></tr></thead>
+          <tbody>
+            <tr><td>1. Ability (Present)<br>2. Permission<br>3. General truth<br>4. Offers</td><td>1. Ability (Past)<br>2. Permission (Formal)<br>3. Possibility (Present/Future)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: WILL/SHALL -->
+  <div class="tab-content" id="will-shall">
+    <div class="card">
+      <div class="card-header purple">Will / Shall — Future Activity</div>
+      <div class="card-body">
+        <div class="rule-box">We use "will/shall" to denote future activity</div>
+        <ul class="arrow-list">
+          <li>She will graduate from college next spring.</li>
+          <li>They will travel to Europe for their honeymoon.</li>
+          <li>I shall call you later to discuss the details.</li>
+          <li>We shall not tolerate any form of discrimination.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Will — Special Uses With "I/We"</div>
+      <div class="card-body">
+        <div class="rule-box">"Will" is specially used with "I/We" to show: Determination, Promise, Warning or Threat, Certainty, and Willingness</div>
+        <ul class="arrow-list">
+          <li>Despite the difficulties, we will achieve our goals. (Determination)</li>
+          <li>Rest assured, I will do my best to resolve the issue. (Promise)</li>
+          <li>I will fire you, if you don't work properly. (Warning)</li>
+          <li>We will kill you. (Threat)</li>
+          <li>I will definitely attend the meeting tomorrow. (Certainty)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Shall — Special Uses With "He/She/It/They"</div>
+      <div class="card-body">
+        <div class="rule-box">"Shall" is specially used with "he, she, it & they" to show: Command, Promise, Warning, Threat & Determination</div>
+        <ul class="arrow-list">
+          <li>You shall clean your room before going out to play. (Command)</li>
+          <li>You shall receive the support you need to achieve your dreams. (Promise)</li>
+          <li>Obey the rules, or they shall face consequences. (Warning)</li>
+          <li>He shall be fixed. (Threat)</li>
+        </ul>
+
+        <div class="rule-box" style="margin-top:16px;">Only "Shall" is used with fixed phrases: be grateful, be forced, be obliged, be able, be unable, be at a loss, be compelled</div>
+        <ul class="arrow-list">
+          <li>I shall be grateful to you for this act of kindness.</li>
+          <li>They shall be obliged to comply with the new regulations.</li>
+          <li>He shall be at a loss when faced with such a complex problem.</li>
+        </ul>
+
+        <div class="rule-box" style="margin-top:16px;">Only "will" is used to show inevitability and certain result</div>
+        <ul class="arrow-list">
+          <li>The sun will rise again tomorrow.</li>
+          <li>Meditation will help you keep mentally fit.</li>
+          <li>Men will be men.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Be grateful/forced/obliged/able/unable/at a loss/compelled" ALWAYS pair with "shall" (never "will"), regardless of the subject. This is a fixed-collocation rule frequently tested independent of person/number.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: SHOULD/WOULD -->
+  <div class="tab-content" id="should-would">
+    <div class="card">
+      <div class="card-header teal">Should</div>
+      <div class="card-body">
+        <div class="rule-box">Should = 1. Past Form (of shall) | 2. Duty</div>
+
+        <div class="sub-heading">Past Form</div>
+        <p style="margin-bottom:8px;">We use "should" as a "past form" of "shall" in Indirect Speech</p>
+        <ul class="arrow-list">
+          <li>I said that I should take a break from work.</li>
+          <li>We said that we should follow the safety guidelines.</li>
+        </ul>
+
+        <div class="sub-heading">Duty</div>
+        <p style="margin-bottom:8px;">Should shows Duty, Obligation, Advice, Instruction</p>
+        <ul class="arrow-list">
+          <li>As citizens, we should vote in the upcoming elections. (Duty)</li>
+          <li>Students should complete their assignments before the deadline. (Obligation)</li>
+          <li>If you want to improve your health, you should exercise regularly. (Advice)</li>
+          <li>Participants should follow the guidelines provided for the competition. (Instruction)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Would</div>
+      <div class="card-body">
+        <div class="rule-box">Would = 1. Past Form (of will) | 2. Polite Request | 3. Past Habit | 4. Wish/Choice</div>
+
+        <div class="sub-heading">Past Form</div>
+        <p style="margin-bottom:8px;">We use "would" as a "past form" of "will" in Indirect Speech</p>
+        <ul class="arrow-list">
+          <li>He said that he would not sign the agreement.</li>
+          <li>She asked me if they would go to the party that night.</li>
+        </ul>
+
+        <div class="sub-heading">Polite Request</div>
+        <p style="margin-bottom:8px;">"Would" expresses a polite request in interrogative sentences</p>
+        <ul class="arrow-list">
+          <li>Would it be possible for you to pick me up from the airport?</li>
+          <li>Would you mind helping me carry these boxes upstairs?</li>
+        </ul>
+
+        <div class="sub-heading">Past Habit</div>
+        <ul class="arrow-list">
+          <li>As a child, she would always play in the park with her friends.</li>
+          <li>Back in the day, we would often go camping during the holidays.</li>
+        </ul>
+
+        <div class="sub-heading">Wish / Choice</div>
+        <p style="margin-bottom:8px;">We use "would" to show wish, choice, and liking</p>
+        <ul class="arrow-list">
+          <li>She would prefer to travel by train rather than by bus.</li>
+          <li>She would prefer to wear comfortable clothes rather than dress up.</li>
+          <li>He would prefer to have a quiet evening at home with a good movie.</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          "Would" for past habit ≈ "used to", but "would" cannot be used for past STATES (e.g., "I would have a car" is wrong for a past possession — use "I had a car" or "I used to have a car"). "Would" only works for repeated past ACTIONS.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: MUST/OUGHT TO/USED TO -->
+  <div class="tab-content" id="must-ought-used">
+    <div class="card">
+      <div class="card-header red">Must</div>
+      <div class="card-body">
+        <div class="rule-box">"Must" is a strong form of "should". It denotes: Duty, Obligation, Compulsion, Necessity, Certainty, and Strong Possibility</div>
+        <div class="sub-heading">Duty</div>
+        <ul class="arrow-list">
+          <li>One must obey one's teacher. (Duty)</li>
+          <li>Employees must comply with the company's policies and procedures. (Obligation)</li>
+          <li>To excel in your career, you must constantly strive for improvement. (Necessity)</li>
+          <li>There must be something wrong with the engine. (Strong possibility)</li>
+        </ul>
+        <div class="sub-heading">Orders</div>
+        <p style="margin-bottom:8px;">We use "Must" to give orders</p>
+        <ul class="arrow-list">
+          <li>All team members must submit their progress reports by Friday.</li>
+          <li>Students must follow the school's dress code at all times.</li>
+          <li>Everything must be in its place before I come back.</li>
+        </ul>
+        <div class="sub-heading">Recommendation</div>
+        <p style="margin-bottom:8px;">We use "Must" to give recommendations</p>
+        <ul class="arrow-list">
+          <li>You must try the seafood pasta at that restaurant, it's amazing!</li>
+          <li>If you're interested in history, you must visit the ancient ruins in Rome.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header green">Ought To</div>
+      <div class="card-body">
+        <div class="rule-box">"Ought to" gives a sense of "moral obligation" and "duty"</div>
+        <ul class="arrow-list">
+          <li>We ought to respect our elders.</li>
+          <li>Drivers ought to follow traffic rules.</li>
+          <li>People ought to be responsible for their actions.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blue">Used To</div>
+      <div class="card-body">
+        <div class="rule-box">"Used to" denotes "habit of Past"</div>
+        <ul class="arrow-list">
+          <li>I used to play Guitar in college.</li>
+          <li>I used to go to school by bicycle.</li>
+        </ul>
+        <div class="rule-box" style="margin-top:16px;">"Used to" denotes "habit of present" when used with "be" (Be + used to + Gerund)</div>
+        <ul class="arrow-list">
+          <li>He is used to smoking.</li>
+          <li>She is used to eating Idli Dosa.</li>
+        </ul>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          "Used to + V1" (past habit, no longer true) vs "Be + used to + V-ing" (present habit/accustomed to) look similar but mean opposite time periods. "I used to smoke" (past, stopped now) vs "I am used to smoking" (present, still continuing/comfortable with it).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: NEED/DARE -->
+  <div class="tab-content" id="need-dare">
+    <div class="card">
+      <div class="card-header purple">Need — Main Verb vs Modal Verb</div>
+      <div class="card-body">
+        <div class="rule-box">Need is used BOTH as a Main Verb AND as a Modal Verb</div>
+
+        <div class="sub-heading">As a Main Verb</div>
+        <ul class="arrow-list">
+          <li>He needs my help.</li>
+          <li>We need two more players for the team.</li>
+          <li>He needed some more time to decide the question.</li>
+        </ul>
+        <div class="rule-box">When "need" is used as a Main Verb, Do/Does/Did are used to make it negative and interrogative</div>
+        <ul class="arrow-list">
+          <li>He needs my help. → He doesn't need my help.</li>
+          <li>We need two more players for the team. → We don't need two more players for the team.</li>
+          <li>He needed some more time to decide the question. → He didn't need some more time to decide the question.</li>
+        </ul>
+
+        <div class="sub-heading">As a Modal Verb</div>
+        <div class="rule-box">When "need" is used as a Modal verb, it is common in questions and negatives</div>
+        <ul class="arrow-list">
+          <li>He need not ask my permission.</li>
+          <li>They need not make such a fuss over it.</li>
+          <li>You need not mention this to anyone else.</li>
+          <li>Need we write this down?</li>
+        </ul>
+
+        <div class="sub-heading">Find — Main / Modal Verb</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Sentence</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td>He needs new shoes.</td><td>H.V. (Main Verb)</td></tr>
+            <tr><td>Need I come again?</td><td>Modal</td></tr>
+            <tr><td>You needn't drive me to the station. I can take the bus.</td><td>Modal</td></tr>
+            <tr><td>Do you need any money?</td><td>H.V. / M.V. (Main Verb — needs "do" support)</td></tr>
+            <tr><td>I need to go there.</td><td>H.V. (Main Verb)</td></tr>
+            <tr><td>I needn't go there.</td><td>Modal</td></tr>
+            <tr><td>I need hardly say that I am very grateful.</td><td>Modal</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          As Main Verb: "need + to + V1" and needs do/does/did for negatives/questions. As Modal: "need + bare V1" (no "to") and forms negatives/questions directly (needn't, Need I...?) without do-support.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">Dare — Main Verb vs Modal Verb</div>
+      <div class="card-body">
+        <div class="rule-box">Dare is used BOTH as a Main Verb AND as a Modal Verb</div>
+
+        <div class="sub-heading">As a Main Verb</div>
+        <p style="margin-bottom:8px;">Dare as a main verb means 'to challenge somebody to do something dangerous, difficult or embarrassing so that they can show that they are brave.'</p>
+        <ul class="arrow-list">
+          <li>Take it! Dare you.</li>
+          <li>No one dared him to do that prank.</li>
+        </ul>
+        <p style="margin:8px 0;">Dare as a main verb can also mean 'to be brave enough to do something':</p>
+        <ul class="arrow-list">
+          <li>I didn't dare to say that to her face. (HV + MV)</li>
+          <li>I don't dare to mention it to him. (HV + MV)</li>
+          <li>She didn't dare to go home late. (HV + MV)</li>
+          <li>Does anyone dare to go there? (HV + MV)</li>
+        </ul>
+
+        <div class="sub-heading">As a Modal Verb</div>
+        <ul class="arrow-list">
+          <li>No one dare go there. (Modal + V)</li>
+          <li>Dare anyone go there? (Modal + V)</li>
+          <li>Dare I ask how the project's going? (Modal + V)</li>
+          <li>I daren't tell him the truth; he'll go crazy. (Modal + V)</li>
+        </ul>
+
+        <div class="sub-heading">Comparison — Main Verb vs Modal Verb</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Type</th><th>Negative Statement</th><th>Affirmative Question</th><th>Negative Question</th></tr></thead>
+          <tbody>
+            <tr><td>Main Verb</td><td>He doesn't dare to go there.</td><td>Does anyone dare to go there?</td><td>Doesn't he dare to go there?</td></tr>
+            <tr><td>Modal Verb</td><td>No one dares to go there. / No one dare go there.</td><td>Dare anyone go there?</td><td>Daren't he go there?</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="exam-trap">
+          <span class="label">⚠ EXAM TRAP</span>
+          As Main Verb, "dare" needs "to + V1" and do/does/did support. As Modal, "dare" takes bare V1 directly and forms negatives/questions without do-support (daren't, Dare I...?). Both patterns are grammatically valid — don't "correct" one into the other.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Practice — Find Main / Modal Verb (Dare)</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Question</th><th>Options</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>I didn't ___ the truth.</td><td>A) dare to tell  B) dare tell  C) dared tell</td><td class="correction">A) dare to tell</td></tr>
+            <tr><td>2</td><td>Do you ___ what you think?</td><td>A) dare say  B) dare say  C) dares to say</td><td class="correction">B) dare say</td></tr>
+            <tr><td>3</td><td>I daren't ___ what I think.</td><td>A) say  B) to say</td><td class="correction">A) say</td></tr>
+            <tr><td>4</td><td>He ___ out at night.</td><td>A) dare not go  B) does not dare to go  C) Either could be used here</td><td class="correction">C) Either could be used here</td></tr>
+            <tr><td>5</td><td>She ___ the truth.</td><td>A) doesn't dare speak  B) doesn't dare to speak  C) daren't to speak</td><td class="correction">B) doesn't dare to speak</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: PERFECT MODALS -->
+  <div class="tab-content" id="perfect-modals">
+    <div class="card">
+      <div class="card-header teal">Could Have + V3 (हो/कर सकता था)</div>
+      <div class="card-body">
+        <div class="rule-box">Meaning 1: something was possible in the past, or you had the ability to do it, but you didn't do it.</div>
+        <ul class="arrow-list">
+          <li>I could have stayed up late, but I decided to go to bed early.</li>
+          <li>They could have won the race, but they didn't try hard enough.</li>
+          <li>The boy could have run away from the bullies, but he decided to confront them.</li>
+        </ul>
+
+        <div class="rule-box" style="margin-top:16px;">Meaning 2 (negative — couldn't have): something WASN'T possible in the past, even if you had wanted to do it.</div>
+        <ul class="arrow-list">
+          <li>I couldn't have arrived any earlier. There was a terrible traffic jam. (= it was impossible for me to have arrived any earlier)</li>
+          <li>He couldn't have passed the exam, even if he had studied harder. It's a really, really difficult exam.</li>
+        </ul>
+
+        <div class="rule-box" style="margin-top:16px;">Meaning 3: to make a guess about something that happened in the past — you don't know if it's true, just giving an opinion of what maybe happened.</div>
+        <ul class="arrow-list">
+          <li>Are you out of your mind?! You could have crashed into that wall!</li>
+          <li>Are you crazy? We could have got into an accident.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header red">Should Have + V3 (होना/करना चाहिए था)</div>
+      <div class="card-body">
+        <div class="rule-box">Should have + V3 means that something did NOT happen, but we wish it had happened. Used to talk about mistakes/regrets.</div>
+        <ul class="arrow-list">
+          <li>I should have studied harder! (= I didn't study very hard and so I failed the exam. I'm sorry about this now.)</li>
+          <li>I shouldn't have eaten so much cake! (= I did eat a lot of cake & now I don't feel good.)</li>
+          <li>You should have asked my permission before you used my computer. I'm really angry with you.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header purple">Would Have + V3</div>
+      <div class="card-body">
+        <div class="rule-box">Meaning 1: Use "would have" to imagine a result (if something had been different in the past) — used in third conditional sentences.</div>
+        <ul class="arrow-list">
+          <li>If I had enough money, I would have bought a car (but I didn't have enough money, so I didn't buy a car).</li>
+          <li>If we had arrived earlier, we would have caught our flight.</li>
+          <li>If I had brought my umbrella, I wouldn't have got wet in the rain.</li>
+        </ul>
+        <div class="rule-box" style="margin-top:16px;">Meaning 2: to talk about something you wanted to do but didn't.</div>
+        <ul class="arrow-list">
+          <li>I would have helped you. I didn't know you needed help. (= If I had known that you needed help, I would have helped you.)</li>
+          <li>I would have called you, but I didn't know your number. (= I wanted to call you but I didn't know your number, so I didn't call you.)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header orange">May / Might Have + V3 (शायद कर लिया होगा / हो गया होगा)</div>
+      <div class="card-body">
+        <div class="rule-box">May/Might have + V3 — to talk about the possibility that something happened in the past. Could also be used to say that something was true in the past (uncertain).</div>
+        <ul class="arrow-list">
+          <li>Tanu hasn't arrived yet. She may have missed the train.</li>
+          <li>What was that noise? It might have been an airplane.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gold">Must Have + V3 (अवश्य हो चुका होगा)</div>
+      <div class="card-body">
+        <div class="rule-box">"Must have + V3" expresses a strong deduction or conclusion about a past event/situation. Used when you are very certain or convinced that something happened in the past based on available evidence.</div>
+        <ul class="arrow-list">
+          <li>The roads are wet, so it must have rained earlier. (The speaker is deducing that it rained earlier because the roads are wet.)</li>
+          <li>She must have forgotten about the meeting. (The speaker expresses a strong belief that the person forgot, based on the current situation.)</li>
+        </ul>
+        <div class="quick-recall">
+          <span class="label">⚡ QUICK RECALL</span>
+          Perfect modal ladder of certainty about the past: Must have (near-certain, deduction) → May/Might have (uncertain possibility) → Could have (was possible but didn't happen / couldn't have = was impossible) → Should have (regret — didn't happen but wish it had) → Would have (imagined result — third conditional).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 9: PRACTICE -->
+  <div class="tab-content" id="practice">
+    <div class="card">
+      <div class="card-header gold">Practice — Modal Selection & Error Spotting</div>
+      <div class="card-body">
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Sentence / Question</th><th>Correct Answer / Correction</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>The weather ___ be better tomorrow. (high probability, ~50%)</td><td class="correction">may</td></tr>
+            <tr><td>2</td><td>We ___ go to the cinema tonight. (lower probability, ~30%)</td><td class="correction">might</td></tr>
+            <tr><td>3</td><td>He asked if he ___ borrow the car. (reported speech, past)</td><td class="correction">might (not may)</td></tr>
+            <tr><td>4</td><td>I thought I ___ go to the game. (reported speech, past)</td><td class="correction">might (not may)</td></tr>
+            <tr><td>5</td><td>The children ___ be left unsupervised at any time. (write as one word)</td><td class="correction">cannot</td></tr>
+            <tr><td>6</td><td>It ___ be yellow. (present possibility, not certain)</td><td class="correction">could</td></tr>
+            <tr><td>7</td><td>The storm ___ get worse. (future possibility, not certain)</td><td class="correction">could</td></tr>
+            <tr><td>8</td><td>I ___ be grateful to you for this act of kindness. (fixed phrase)</td><td class="correction">shall (not will)</td></tr>
+            <tr><td>9</td><td>They ___ be obliged to comply with the new regulations. (fixed phrase)</td><td class="correction">shall (not will)</td></tr>
+            <tr><td>10</td><td>The sun ___ rise again tomorrow. (inevitability)</td><td class="correction">will (not shall)</td></tr>
+            <tr><td>11</td><td>He is ___ smoking. (present habit)</td><td class="correction">used to (Be + used to + V-ing)</td></tr>
+            <tr><td>12</td><td>I ___ play Guitar in college. (past habit, no longer true)</td><td class="correction">used to</td></tr>
+            <tr><td>13</td><td>He needs my help. → Negative form?</td><td class="correction">He doesn't need my help. (Main Verb — do-support)</td></tr>
+            <tr><td>14</td><td>You ___ mention this to anyone else. (Modal, negative)</td><td class="correction">need not</td></tr>
+            <tr><td>15</td><td>___ we write this down? (Modal, question)</td><td class="correction">Need</td></tr>
+            <tr><td>16</td><td>I didn't ___ the truth. (dare + object)</td><td class="correction">dare to tell</td></tr>
+            <tr><td>17</td><td>Do you ___ what you think? (dare, modal-like question)</td><td class="correction">dare say</td></tr>
+            <tr><td>18</td><td>I daren't ___ what I think.</td><td class="correction">say (bare infinitive)</td></tr>
+            <tr><td>19</td><td>She ___ the truth. (main verb dare, negative)</td><td class="correction">doesn't dare to speak</td></tr>
+            <tr><td>20</td><td>I ___ stayed up late, but I decided to go to bed early. (possible in past, didn't do it)</td><td class="correction">could have</td></tr>
+            <tr><td>21</td><td>I ___ arrived any earlier. There was a terrible traffic jam. (impossible in past)</td><td class="correction">couldn't have</td></tr>
+            <tr><td>22</td><td>I ___ studied harder! (regret about a past mistake)</td><td class="correction">should have</td></tr>
+            <tr><td>23</td><td>If I had enough money, I ___ bought a car. (imagined past result)</td><td class="correction">would have</td></tr>
+            <tr><td>24</td><td>Tanu hasn't arrived yet. She ___ missed the train. (uncertain possibility about the past)</td><td class="correction">may have</td></tr>
+            <tr><td>25</td><td>The roads are wet, so it ___ rained earlier. (strong deduction about the past)</td><td class="correction">must have</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 10: MASTER TABLE -->
+  <div class="tab-content" id="master">
+    <div class="card">
+      <div class="card-header gold">Master Table — Modals (Quick Revision)</div>
+      <div class="card-body">
+
+        <div class="sub-heading">A. Basic Modal Structure</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Rule</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr><td>Structure</td><td>Modal + V1 (bare infinitive)</td></tr>
+            <tr><td>Subject Agreement</td><td>Modal form never changes with subject (singular/plural)</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">B. Modal Meanings At a Glance</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Modal</th><th>Uses</th></tr></thead>
+          <tbody>
+            <tr><td>May</td><td>Possibility (high, ~50%), Permission (formal)</td></tr>
+            <tr><td>Might</td><td>Possibility (low, ~30%), Past sense of "may" (reported speech)</td></tr>
+            <tr><td>Can</td><td>Ability (present), Permission, General truth, Offers</td></tr>
+            <tr><td>Could</td><td>Ability (past), Permission (formal), Possibility (present/future)</td></tr>
+            <tr><td>Will</td><td>Future activity; with I/We: determination, promise, warning/threat, certainty, willingness; inevitability (all subjects)</td></tr>
+            <tr><td>Shall</td><td>Future activity; with He/She/It/They: command, promise, warning, threat, determination; fixed phrases (be grateful/forced/obliged/able/unable/at a loss/compelled)</td></tr>
+            <tr><td>Should</td><td>Past form of "shall" (reported speech); Duty, obligation, advice, instruction</td></tr>
+            <tr><td>Would</td><td>Past form of "will" (reported speech); Polite request; Past habit; Wish/choice/liking</td></tr>
+            <tr><td>Must</td><td>Duty, obligation, compulsion, necessity, certainty, strong possibility; Orders; Recommendation</td></tr>
+            <tr><td>Ought to</td><td>Moral obligation, duty</td></tr>
+            <tr><td>Used to</td><td>Past habit (used to + V1); Present habit when with "be" (Be + used to + V-ing)</td></tr>
+            <tr><td>Need</td><td>Main Verb: need + to + V1, do-support for neg/question. Modal: need + bare V1, direct neg/question (needn't, Need I...?)</td></tr>
+            <tr><td>Dare</td><td>Main Verb: dare + to + V1, do-support for neg/question. Modal: dare + bare V1, direct neg/question (daren't, Dare I...?)</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="sub-heading">C. Perfect Modals (Modal + Have + V3)</div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Structure</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Could have + V3</td><td>Was possible/had ability in past but didn't do it; OR (negative) wasn't possible even if wanted; OR a guess about the past</td></tr>
+            <tr><td>Should have + V3</td><td>Something didn't happen but we wish it had — regret/mistake</td></tr>
+            <tr><td>Would have + V3</td><td>Imagined result if past had been different (3rd conditional); OR wanted to do something but didn't</td></tr>
+            <tr><td>May/Might have + V3</td><td>Possibility that something happened in the past (uncertain)</td></tr>
+            <tr><td>Must have + V3</td><td>Strong deduction/conclusion about a past event (near-certain)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Exam Fusion Prep | examfusionprep.com · Modals · SSC / BPSC / BSSC
+</div>
+
+<script>
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-btn').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

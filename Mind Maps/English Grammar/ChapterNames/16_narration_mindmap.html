@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Narration | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  header{
+    background:linear-gradient(135deg, var(--surface2), var(--surface));
+    border-bottom:2px solid var(--gold);
+    padding:22px 16px;
+    text-align:center;
+  }
+  header h1{
+    color:var(--gold);
+    font-size:1.9rem;
+    letter-spacing:1px;
+  }
+  header p{
+    color:#aab0c6;
+    margin-top:6px;
+    font-size:0.95rem;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    position: static;
+    
+    z-index:100;
+  }
+  .tab-nav button{
+    background:var(--surface2);
+    color:#c7cbe0;
+    border:1px solid var(--border);
+    padding:9px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:0.85rem;
+    font-weight:600;
+    transition:all 0.2s ease;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+  }
+  .tab-nav button.active{
+    background:#2a2200;
+    color:var(--gold);
+    border-color:var(--gold);
+    border-bottom:3px solid var(--gold);
+  }
+  .tab-content{display:none; padding:20px 16px; max-width:1000px; margin:0 auto;}
+  .tab-content.active{display:block; animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:0.3px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#2a2200,#1a1d27); color:var(--gold);}
+  .card-header.green{background:linear-gradient(90deg,#0d2b1a,#1a1d27); color:var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg,#0d1f33,#1a1d27); color:var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg,#24123a,#1a1d27); color:var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg,#3a1f0a,#1a1d27); color:var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg,#33110d,#1a1d27); color:var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg,#0a2e29,#1a1d27); color:var(--accent6);}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:bold;
+  }
+
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{color:var(--accent1); font-weight:700; margin-bottom:6px; display:block;}
+
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{color:var(--accent2); font-weight:700; margin-bottom:6px; display:block;}
+
+  .rule-box{
+    border:1.5px solid var(--gold);
+    border-radius:8px;
+    padding:14px 18px;
+    margin:14px 0;
+    background:rgba(245,200,66,0.04);
+    color:var(--gold);
+    font-weight:700;
+    text-align:center;
+    font-size:1.05rem;
+  }
+  .rule-box .hindi{display:block; color:#e7e9f0; font-weight:400; font-size:0.9rem; margin-top:6px;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0;
+    font-size:0.92rem;
+  }
+  thead th{
+    background:#2a2200;
+    color:var(--gold);
+    border-bottom:2px solid var(--gold);
+    padding:10px;
+    text-align:left;
+  }
+  tbody td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  tbody tr:hover{background:var(--surface2);}
+  .table-wrap{overflow-x:auto;}
+
+  .pos-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:14px;
+    margin:14px 0;
+  }
+  .pos-card{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+  }
+  .pos-card h4{color:var(--gold); margin-bottom:6px; font-size:1rem;}
+  .pos-card p{color:#c7cbe0; font-size:0.88rem; margin-bottom:6px;}
+  .pos-card .example{color:var(--accent3); font-size:0.85rem; font-style:italic;}
+
+  .correct{color:var(--accent3); font-weight:700;}
+  .wrong{color:var(--accent1); text-decoration:line-through; font-weight:700;}
+  .hindi-note{color:#aab0c6; font-size:0.85rem; font-style:italic;}
+  strong.hl{color:var(--gold);}
+
+  footer{
+    text-align:center;
+    padding:20px;
+    color:#6b7089;
+    font-size:0.85rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+  @media(max-width:600px){
+    header h1{font-size:1.4rem;}
+    .tab-nav button{font-size:0.78rem; padding:8px 12px;}
+    .pos-grid{grid-template-columns:1fr;}
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<header>
+  <h1>NARRATION</h1>
+  <p>English Grammar Mind Map · SSC / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tablink active" onclick="switchTab('overview')">Overview & 5 Sentence Kinds</button>
+  <button class="tablink" onclick="switchTab('general-rules')">General Rules (Tense/Pronoun/Time)</button>
+  <button class="tablink" onclick="switchTab('assertive')">Assertive Sentences</button>
+  <button class="tablink" onclick="switchTab('no-tense-change')">No Tense Change — Points 1-5</button>
+  <button class="tablink" onclick="switchTab('interrogative')">Interrogative Sentences</button>
+  <button class="tablink" onclick="switchTab('imperative')">Imperative Sentences</button>
+  <button class="tablink" onclick="switchTab('optative')">Optative Sentences</button>
+  <button class="tablink" onclick="switchTab('exclamatory')">Exclamatory Sentences</button>
+  <button class="tablink" onclick="switchTab('practice')">Practice Examples</button>
+  <button class="tablink" onclick="switchTab('master')">Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW & 5 SENTENCE KINDS -->
+<div id="overview" class="tab-content active">
+  <div class="card">
+    <div class="card-header gold">Narration / Speech — 2 Kinds</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li><strong class="hl">Direct</strong> Narration</li>
+        <li><strong class="hl">Indirect</strong> Narration</li>
+      </ul>
+      <ul class="arrow-list">
+        <li>Direct: Rahul says to me, "I want to be a singer."</li>
+        <li>Indirect: Rahul tells me that he wants to be a singer.</li>
+      </ul>
+      <ul class="arrow-list">
+        <li>Direct: Tanu said to me, "I am in love with you."</li>
+        <li>Indirect: Tanu told me that she was in love with me.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Two Parts of Direct Narration</div>
+    <div class="card-body">
+      <p>Rahul says to me, "I want to be a singer."</p>
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>Reporting Verb</h4>
+          <p>The part OUTSIDE the inverted commas.</p>
+          <p class="example">Rahul says to me,</p>
+        </div>
+        <div class="pos-card">
+          <h4>Reported Speech</h4>
+          <p>The part INSIDE the inverted commas.</p>
+          <p class="example">"I want to be a singer."</p>
+        </div>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        To convert Direct into Indirect, we first need to identify what KIND of sentence exists inside the Reported Speech — this determines which conversion rules apply.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">The 5 Kinds of Sentences in English</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>1. Assertive Sentence</h4>
+          <p>To give information</p>
+          <p class="example">Affirmative: Sub+HV+MV+Obj (Sachin is playing cricket)<br>Negative: Sub+HV+not+MV+Obj (Sachin is not playing cricket)</p>
+        </div>
+        <div class="pos-card">
+          <h4>2. Interrogative Sentence</h4>
+          <p>To ask questions</p>
+          <p class="example">Yes/No: HV+Sub+MV+Obj? (Are you hungry?)<br>Wh: Wh-word+HV+Sub+MV+Obj? (What do you want to eat?)</p>
+        </div>
+        <div class="pos-card">
+          <h4>3. Imperative Sentence</h4>
+          <p>To express Order, Advise, Request</p>
+          <p class="example">Structure: V1, Do, Do not, Let<br>Stay quiet. / Let me go. / Do not go outside. / Please, don't make a noise.</p>
+        </div>
+        <div class="pos-card">
+          <h4>4. Exclamatory Sentence</h4>
+          <p>To express strong feelings, emotions, reactions</p>
+          <p class="example">Structure: What/How, or Interjections (Hurrah! Wow! Alas!)<br>What a movie! / Alas! My team lost the match.</p>
+        </div>
+        <div class="pos-card">
+          <h4>5. Optative Sentence</h4>
+          <p>To express blessing, curse, wish</p>
+          <p class="example">Structure: May+Sub+V1! or May+Sub+V1.<br>May God bless you! / May you do well in life!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Two Categories of Conversion Rules</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>General Rules</h4>
+          <p>Applicable on EACH type of sentence.</p>
+        </div>
+        <div class="pos-card">
+          <h4>Special Rules</h4>
+          <p>Applicable on a PARTICULAR type of sentence.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: GENERAL RULES -->
+<div id="general-rules" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">General Rules — Overview</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>1. Change of Tenses</li>
+        <li>2. Change of Pronouns</li>
+        <li>3. Change of Words related to Time & Tense</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">1. Change of Tenses</div>
+    <div class="card-body">
+      <div class="rule-box">
+        If the reporting verb is in Present or Future tense, tenses DON'T change when converting Direct into Indirect
+      </div>
+      <ul class="arrow-list">
+        <li>Direct: She says to me, "I like mangoes."</li>
+        <li>Indirect: She tells me that she likes mangoes.</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        If the reporting verb is in the <strong class="hl">Past</strong> tense, tenses DO get changed according to the backshift table below. This is the single most important branch point in narration.
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>V1 + s/es</td><td>V2</td></tr>
+            <tr><td>Is/am/are + V1+ing</td><td>Was/were + V1+ing</td></tr>
+            <tr><td>Has/have + V3</td><td>Had + V3</td></tr>
+            <tr><td>Has/have + been + V1+ing</td><td>Had been + V1+ing</td></tr>
+            <tr><td>V2</td><td>Had + V3</td></tr>
+            <tr><td>Was/were + V1+ing</td><td>Had been + V1+ing</td></tr>
+            <tr><td>Had + V3</td><td>No change</td></tr>
+            <tr><td>Had been + V1+ing</td><td>No change</td></tr>
+            <tr><td>Can/shall/may/will</td><td>Could/should/might/would</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">2. Change of Pronouns</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Reporting Verb's Subject → 1st person pronoun in reported speech<br>
+        Reporting Verb's Object → 2nd person pronoun in reported speech<br>
+        Everything else → No change (3rd person stays)
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Person</th><th>Number</th><th>Subject</th><th>Object</th><th>Possessive Adj.</th><th>Possessive Pronoun</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="2">1st</td><td>Singular</td><td>I</td><td>Me</td><td>My</td><td>Mine</td></tr>
+            <tr><td>Plural</td><td>We</td><td>Us</td><td>Our</td><td>Ours</td></tr>
+            <tr><td rowspan="2">2nd</td><td>Singular</td><td>You</td><td>You</td><td>Your</td><td>Yours</td></tr>
+            <tr><td>Plural</td><td>You</td><td>You</td><td>Your</td><td>Yours</td></tr>
+            <tr><td rowspan="4">3rd</td><td>Singular</td><td>He</td><td>Him</td><td>His</td><td>His</td></tr>
+            <tr><td>Singular</td><td>She</td><td>Her</td><td>Her</td><td>Hers</td></tr>
+            <tr><td>Singular</td><td>It</td><td>It</td><td>Its</td><td>—</td></tr>
+            <tr><td>Plural</td><td>They</td><td>Them</td><td>Their</td><td>Theirs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>She said to me, "I have completed my task."</td><td>She told me that she had completed her task.</td></tr>
+            <tr><td>He said to me, "I have completed my task."</td><td>He told me that he had completed his task.</td></tr>
+            <tr><td>He said to her, "You have completed your task."</td><td>He told her that she had completed her task.</td></tr>
+            <tr><td>He said to them, "You have completed your task."</td><td>He told them that they had completed their task.</td></tr>
+            <tr><td>She said, "You have completed your task."</td><td>She said that I had completed my task.</td></tr>
+            <tr><td>He said to me, "He has completed his task."</td><td>He told me that he had completed his task.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Note — Hidden Object [I/He]: prefer <strong class="hl">1st person</strong>. When the reporting verb has no explicit indirect object stated (just "She said, ...") and the reported speech has "you," treat the speaker's own perspective as reference and default the ambiguous "you" to 1st person.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">3. Change of Words Related to Time & Tense</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>Ago</td><td>before</td></tr>
+            <tr><td>Now</td><td>then</td></tr>
+            <tr><td>Today</td><td>that day</td></tr>
+            <tr><td>Tomorrow</td><td>the next day</td></tr>
+            <tr><td>Tonight</td><td>that night</td></tr>
+            <tr><td>Yesterday</td><td>the previous / last day</td></tr>
+            <tr><td>This / these</td><td>that / those</td></tr>
+            <tr><td>Here</td><td>there</td></tr>
+            <tr><td>Last night / week</td><td>the previous night / week</td></tr>
+            <tr><td>Next week</td><td>the following week</td></tr>
+            <tr><td>Thus</td><td>so</td></tr>
+            <tr><td>Hence</td><td>thence</td></tr>
+            <tr><td>Hither</td><td>thither</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: ASSERTIVE SENTENCES -->
+<div id="assertive" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Special Rule 1: Assertive Sentence in Reported Speech</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>said / say / says</td><td>said / say / says</td></tr>
+            <tr><td>said to / say to / says to</td><td>told / tell / tells</td></tr>
+            <tr><td>"......"</td><td>that</td></tr>
+            <tr><td colspan="2">Rest of the things change according to General Rules</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        "Said" without "to" stays "said" in indirect too; "said to" (with an object/listener) becomes "told" — this distinction is the single most tested conversion in narration.
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>He said to her, "I do not want to play now."</td><td>He told her that he did not want to play then.</td></tr>
+            <tr><td>She said, "Kids are sleeping now."</td><td>She said that kids were sleeping then.</td></tr>
+            <tr><td>I said to my brother, "I have bought a bicycle for you."</td><td>I told my brother that I had bought a bicycle for him.</td></tr>
+            <tr><td>She said to him, "I have been looking for you for an hour."</td><td>She told him that she had been looking for him for an hour.</td></tr>
+            <tr><td>Piyush said, "He completed his Ph.D. a year ago."</td><td>Piyush said that he had completed his Ph.D. a year before.</td></tr>
+            <tr><td>She said to Rohan, "My friend was looking for you last week."</td><td>She told Rohan that her friend had been looking for him the previous week.</td></tr>
+            <tr><td>She said to me, "I shall visit you next week."</td><td>She told me that she would visit me the following week.</td></tr>
+            <tr><td>He said, "I can decode this riddle."</td><td>He said that he could decode that riddle.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: NO TENSE CHANGE - POINTS 1-5 -->
+<div id="no-tense-change" class="tab-content">
+  <div class="card">
+    <div class="card-header red">Point 1 — Universal Truth</div>
+    <div class="card-body">
+      <div class="rule-box">
+        When there is a "Universal Truth" in the reported speech, tenses WON'T change.
+      </div>
+      <ul class="arrow-list">
+        <li>Direct: He said, "The Sun rises in the east." → Indirect: He said that the sun rises in the east.</li>
+        <li>Direct: She said, "Humans are mortal." → Indirect: She said that humans are mortal.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Point 2 — Hypothetical / Unreal Fact</div>
+    <div class="card-body">
+      <div class="rule-box">
+        When there is a "Hypothetical / Unreal fact" in the reported speech, tenses WON'T change.
+      </div>
+      <ul class="arrow-list">
+        <li>Direct: He said, "If I were a politician, I would eliminate corruption."</li>
+        <li>Indirect: He said that if he were a politician, he would eliminate corruption.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Point 3 — Modal Words That Don't Backshift</div>
+    <div class="card-body">
+      <div class="rule-box">
+        When "Had+V3, Had+to+V1, Would, Could, Should, Must, Might, Ought to" appear in the reported speech, tenses WON'T change.
+      </div>
+      <ul class="arrow-list">
+        <li>Direct: She said to me, "You must pass the examination."</li>
+        <li>Indirect: She told me that I must pass the examination.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Point 4 — Vocative Address (Name Called Out)</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Direct: She said, "Avi, I am impressed with you."</li>
+        <li>Indirect: She told Avi that she was impressed with him.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        When a name is called out inside the reported speech ("Avi, I am..."), that name becomes the object of "told" in the indirect version — "said" converts to "told [name]" instead of "told me/him."
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header purple">Point 5 — Greeting Combined with Statement</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Direct: Kavan said to me, "Good morning, I am happy to see you."</li>
+        <li>Indirect: Kavan wished me good morning and said that he was happy to see me.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        A greeting ("Good morning," "Good night," etc.) combined with a statement splits into two parts in indirect speech: "wished [object] [greeting] and said that..." — the greeting itself is never put inside a "that" clause.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: INTERROGATIVE SENTENCES -->
+<div id="interrogative" class="tab-content">
+  <div class="card">
+    <div class="card-header teal">Special Rule 2: Interrogative Sentence in Reported Speech</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>said / say / says</td><td>asked / ask / asks</td></tr>
+            <tr><td>said to / say to / says to</td><td>asked / ask / asks</td></tr>
+            <tr><td>"......"</td><td>If/whether (for Yes/No) &nbsp; OR &nbsp; wh-word (for Wh-questions)</td></tr>
+            <tr><td>Interrogative structure (H.V.+Sub+M.V.+Obj)</td><td>Assertive structure (Sub+H.V.+M.V.+Obj)</td></tr>
+            <tr><td colspan="2">Rest of the things change according to General Rules</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        The word order INVERTS in indirect Wh/Yes-No questions — from question order (HV+Sub+MV) back to normal statement order (Sub+HV+MV). Students often forget to un-invert the word order, keeping question word order after "if/whether" or the wh-word.
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>He said to me, "Have you completed these tasks?"</td><td>He asked me if I had completed those tasks.</td></tr>
+            <tr><td>She said, "Is he going to school?"</td><td>She asked if he was going to school.</td></tr>
+            <tr><td>They said to him, "Do you teach in this school?"</td><td>They asked him if he taught in that school.</td></tr>
+            <tr><td>He said to me, "Why have you broken this chair?"</td><td>He asked me why I had broken that chair.</td></tr>
+            <tr><td>Salman asked, "Where do you sleep?"</td><td>Salman asked where I slept.</td></tr>
+            <tr><td>She said to me, "Where will they go?"</td><td>She asked me where they would go.</td></tr>
+            <tr><td>He says, "How do we approach the problem?"</td><td>He asks how they approach the problem.</td></tr>
+            <tr><td>He says, "When do we play?"</td><td>He asks when they play.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Interrogative — Important Points</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Point 1: Question tags in the reported speech are simply dropped — the sentence converts as a straightforward yes/no question.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>Simmi said to me, "You are going to visit Paris, aren't you?"</td><td>Simmi asked me if I was going to visit Paris.</td></tr>
+            <tr><td>She said to me, "You didn't beat my brother, did you?"</td><td>She asked me if I hadn't beaten her brother.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rule-box">
+        Point 2: When the reported speech contains a short "Yes"/"No" reply to a preceding question, convert it to "replied/answered in the affirmative/negative."
+      </div>
+      <ul class="arrow-list">
+        <li>Rohan said to me, "Did you approach her?" I said, 'Yes' → Rohan asked me if I had approached her. I replied/answered in the affirmative.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: IMPERATIVE SENTENCES -->
+<div id="imperative" class="tab-content">
+  <div class="card">
+    <div class="card-header green">Special Rule 3: Imperative Sentence in Reported Speech</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>said</td><td>Ordered / Advised / Requested</td></tr>
+            <tr><td>said to</td><td>Ordered / Advised / Requested</td></tr>
+            <tr><td>"......"</td><td>to + V1, not + to + V1</td></tr>
+            <tr><td colspan="2">Rest follows General Rules</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="arrow-list">
+        <li>Teacher said to me, "Complete your homework." → Teacher ordered me to complete my homework.</li>
+        <li>Radha said, "Begin the meeting." → Radha ordered me to begin the meeting.</li>
+        <li>Avi said to his wife, "Please do not take too much time in store." → Avi requested his wife not to take too much time in store.</li>
+        <li>He said to me, "Do not spend mindlessly." → He advised me not to spend mindlessly.</li>
+      </ul>
+
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL — Choosing Ordered/Advised/Requested</span>
+        There's no strict mechanical rule — the choice depends on the TONE of the original: a command → "ordered," friendly guidance → "advised," a polite ask (often with "please") → "requested." Judge from context.
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>She said to the boy, "Do not follow me."</td><td>She ordered the boy not to follow her. / She prevented the boy from following her.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rule-box">
+        Extra Information — Special preposition patterns:<br>
+        Prohibit / Prevent + from + V1+ing<br>
+        Forbid + to + V1
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>Aman says to me, "Sir, show me your ID card, please?"</td><td>Aman requests me respectfully to show him my ID card.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        When the speaker uses a respectful title like "Sir," it's reflected as "requests...respectfully" in indirect speech, rather than by keeping the title itself.
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>He said to his friends, "Let's go to watch a movie."</td><td>He proposed/suggested to his friends that they should go to watch a movie.</td></tr>
+            <tr><td>He said to his girlfriend, "Let's go on a museum date."</td><td>He proposed to his girlfriend that they should go on a museum date.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rule-box">
+        "Let's" special pattern: said to + "Let's..." → Proposed/Suggested to + that + we/they should + V1
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: OPTATIVE SENTENCES -->
+<div id="optative" class="tab-content">
+  <div class="card">
+    <div class="card-header purple">Special Rule 4: Optative Sentence in Reported Speech</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>said / said to</td><td>Blessed / wished / cursed</td></tr>
+            <tr><td>"......"</td><td>Blessed / wished / cursed that</td></tr>
+            <tr><td>May + Sub + V1</td><td>Sub + may / might + V1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="arrow-list">
+        <li>My mother said to me, "May God bless you." → My mother blessed me that God might bless me.</li>
+        <li>She said to me, "May you burn in hell!" → She cursed me that I might burn in hell!</li>
+        <li>Naman said, "You keep succeeding." → Naman wished that I might keep succeeding.</li>
+        <li>She said, "May you have a healthy life!" → She blessed that I might have a healthy life!</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        The choice among Blessed/Wished/Cursed depends on whether the optative sentence is a positive wish for someone's good (blessed/wished) or a negative wish for someone's harm (cursed).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: EXCLAMATORY SENTENCES -->
+<div id="exclamatory" class="tab-content">
+  <div class="card">
+    <div class="card-header orange">Special Rule 5: Exclamatory Sentence in Reported Speech</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>said / said to</td><td>Exclaimed with joy / Exclaimed with sorrow-grief / Exclaimed with surprise / Exclaimed with applause / Confessed with regret</td></tr>
+            <tr><td>"......"</td><td>that</td></tr>
+            <tr><td>Exclamatory structure</td><td>Assertive structure</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pos-grid">
+        <div class="pos-card"><h4>Joy</h4><p class="example">Hurrah! Yay!</p></div>
+        <div class="pos-card"><h4>Surprise</h4><p class="example">Wow! Ok! My God! My Goodness!</p></div>
+        <div class="pos-card"><h4>Applause</h4><p class="example">Bravo! Well done!</p></div>
+        <div class="pos-card"><h4>Sorrow</h4><p class="example">Alas! Ah! No! Oh! Shit! Oh dear! For God's sake! For Heaven's sake!</p></div>
+      </div>
+
+      <div class="rule-box">
+        "What a/an + Noun!" → S + V + appropriate Adjective + Noun
+      </div>
+      <ul class="arrow-list">
+        <li>What a sight! → It is a very beautiful sight.</li>
+        <li>What a beautiful girl! → She is a very beautiful girl.</li>
+      </ul>
+
+      <div class="rule-box">
+        "How + Adjective!" → S + V + very + Adjective
+      </div>
+      <ul class="arrow-list">
+        <li>How sad! → It is very sad.</li>
+      </ul>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>He said, "Oh! Damn, I have brushed my toe against the side of table."</td><td>He exclaimed with grief that he had brushed his toe against the side of table.</td></tr>
+            <tr><td>She said, "Yay! I have cleared the exam."</td><td>She exclaimed with joy that she had cleared the exam.</td></tr>
+            <tr><td>Anurag said, "Alas! I lost my wallet."</td><td>Anurag exclaimed with sorrow that he had lost his wallet.</td></tr>
+            <tr><td>Raju said, "Hurray! I am going to London."</td><td>Raju exclaimed with joy that he was going to London.</td></tr>
+            <tr><td>Anita said, "Wow, what a place!"</td><td>Anita exclaimed with surprise that it was a very beautiful place.</td></tr>
+            <tr><td>Gaurav said, "How cool!"</td><td>Gaurav exclaimed with joy that it was very cool.</td></tr>
+            <tr><td>Sachin said, "Wow, what a stunning car!"</td><td>Sachin exclaimed with surprise that it was a very stunning car.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: PRACTICE EXAMPLES -->
+<div id="practice" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Consolidated Narration Conversion Practice</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>She said, "Kids are sleeping now."</td><td>She said that kids were sleeping then.</td></tr>
+            <tr><td>2</td><td>He said, "I can decode this riddle."</td><td>He said that he could decode that riddle.</td></tr>
+            <tr><td>3</td><td>He said, "The Sun rises in the east."</td><td>He said that the sun rises in the east. (Universal Truth — no tense change)</td></tr>
+            <tr><td>4</td><td>He said, "If I were a politician, I would eliminate corruption."</td><td>He said that if he were a politician, he would eliminate corruption. (Hypothetical — no tense change)</td></tr>
+            <tr><td>5</td><td>She said to me, "You must pass the examination."</td><td>She told me that I must pass the examination. (Must — no tense change)</td></tr>
+            <tr><td>6</td><td>Kavan said to me, "Good morning, I am happy to see you."</td><td>Kavan wished me good morning and said that he was happy to see me.</td></tr>
+            <tr><td>7</td><td>He said to me, "Have you completed these tasks?"</td><td>He asked me if I had completed those tasks.</td></tr>
+            <tr><td>8</td><td>Salman asked, "Where do you sleep?"</td><td>Salman asked where I slept.</td></tr>
+            <tr><td>9</td><td>Simmi said to me, "You are going to visit Paris, aren't you?"</td><td>Simmi asked me if I was going to visit Paris.</td></tr>
+            <tr><td>10</td><td>Teacher said to me, "Complete your homework."</td><td>Teacher ordered me to complete my homework.</td></tr>
+            <tr><td>11</td><td>Avi said to his wife, "Please do not take too much time in store."</td><td>Avi requested his wife not to take too much time in store.</td></tr>
+            <tr><td>12</td><td>He said to his friends, "Let's go to watch a movie."</td><td>He proposed to his friends that they should go to watch a movie.</td></tr>
+            <tr><td>13</td><td>My mother said to me, "May God bless you."</td><td>My mother blessed me that God might bless me.</td></tr>
+            <tr><td>14</td><td>She said, "May you burn in hell!"</td><td>She cursed me that I might burn in hell!</td></tr>
+            <tr><td>15</td><td>She said, "Yay! I have cleared the exam."</td><td>She exclaimed with joy that she had cleared the exam.</td></tr>
+            <tr><td>16</td><td>Anita said, "Wow, what a place!"</td><td>Anita exclaimed with surprise that it was a very beautiful place.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 10: MASTER TABLE -->
+<div id="master" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Master Table — Complete Chapter Revision</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Topic</th><th>Key Rule / Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Narration kinds</td><td>Direct (exact words in quotes), Indirect (reported without quotes)</td></tr>
+            <tr><td>Direct narration parts</td><td>Reporting Verb (outside quotes) + Reported Speech (inside quotes)</td></tr>
+            <tr><td>5 kinds of sentences</td><td>Assertive (info), Interrogative (question), Imperative (order/advise/request), Exclamatory (feelings), Optative (blessing/curse/wish)</td></tr>
+            <tr><td>General Rule 1 — Tense</td><td>No change if reporting verb is Present/Future; backshift if reporting verb is Past</td></tr>
+            <tr><td>General Rule 2 — Pronoun</td><td>Reporting verb's subject→1st person; object→2nd person; else no change</td></tr>
+            <tr><td>General Rule 3 — Time words</td><td>Ago→before, Now→then, Today→that day, Tomorrow→next day, Yesterday→previous day, This/these→that/those, Here→there</td></tr>
+            <tr><td>Assertive special rule</td><td>said→said; said to→told; "..."→that</td></tr>
+            <tr><td>No-tense-change Point 1</td><td>Universal Truth in reported speech</td></tr>
+            <tr><td>No-tense-change Point 2</td><td>Hypothetical/Unreal fact (if-clauses with were/would)</td></tr>
+            <tr><td>No-tense-change Point 3</td><td>Had+V3, Had to+V1, Would, Could, Should, Must, Might, Ought to already present</td></tr>
+            <tr><td>No-tense-change Point 4</td><td>Vocative name address → becomes object of "told"</td></tr>
+            <tr><td>No-tense-change Point 5</td><td>Greeting+statement → wished + greeting + and said that...</td></tr>
+            <tr><td>Interrogative special rule</td><td>said/said to→asked; "..."→if/whether (yes-no) or wh-word; question word order→statement word order</td></tr>
+            <tr><td>Interrogative — tag questions</td><td>Question tag dropped; converts as plain yes/no question</td></tr>
+            <tr><td>Interrogative — Yes/No reply</td><td>"replied/answered in the affirmative/negative"</td></tr>
+            <tr><td>Imperative special rule</td><td>said/said to→Ordered/Advised/Requested; "..."→to+V1 or not+to+V1</td></tr>
+            <tr><td>Prohibit/Prevent</td><td>+ from + V1+ing</td></tr>
+            <tr><td>Forbid</td><td>+ to + V1</td></tr>
+            <tr><td>"Let's" pattern</td><td>said to+"Let's..."→Proposed/Suggested to+that+we/they should+V1</td></tr>
+            <tr><td>Optative special rule</td><td>said/said to→Blessed/Wished/Cursed; "..."→that; May+Sub+V1→Sub+may/might+V1</td></tr>
+            <tr><td>Exclamatory special rule</td><td>said/said to→Exclaimed with joy/sorrow/surprise/applause, Confessed with regret; "..."→that; structure→assertive</td></tr>
+            <tr><td>"What a/an+Noun!"</td><td>→ S+V+appropriate Adjective+Noun (very + adj)</td></tr>
+            <tr><td>"How+Adjective!"</td><td>→ S+V+very+Adjective</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Exam Fusion Prep | examfusionprep.com · Narration · SSC / BPSC / BSSC
+</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tablink').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

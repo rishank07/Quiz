@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Articles | Exam Fusion Prep</title>
+<style>
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --gold:#f5c842;
+    --accent1:#e74c3c;
+    --accent2:#3498db;
+    --accent3:#2ecc71;
+    --accent4:#9b59b6;
+    --accent5:#e67e22;
+    --accent6:#1abc9c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:#e7e9f0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    line-height:1.6;
+    padding-bottom:40px;
+  }
+  header{
+    background:linear-gradient(135deg, var(--surface2), var(--surface));
+    border-bottom:2px solid var(--gold);
+    padding:22px 16px;
+    text-align:center;
+  }
+  header h1{
+    color:var(--gold);
+    font-size:1.9rem;
+    letter-spacing:1px;
+  }
+  header p{
+    color:#aab0c6;
+    margin-top:6px;
+    font-size:0.95rem;
+  }
+  .tab-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    background:var(--surface);
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    position: static;
+    
+    z-index:100;
+  }
+  .tab-nav button{
+    background:var(--surface2);
+    color:#c7cbe0;
+    border:1px solid var(--border);
+    padding:9px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:0.85rem;
+    font-weight:600;
+    transition:all 0.2s ease;
+    white-space:nowrap;
+  }
+  .tab-nav button:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+  }
+  .tab-nav button.active{
+    background:#2a2200;
+    color:var(--gold);
+    border-color:var(--gold);
+    border-bottom:3px solid var(--gold);
+  }
+  .tab-content{display:none; padding:20px 16px; max-width:1000px; margin:0 auto;}
+  .tab-content.active{display:block; animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .card-header{
+    padding:12px 18px;
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:0.3px;
+  }
+  .card-header.gold{background:linear-gradient(90deg,#2a2200,#1a1d27); color:var(--gold);}
+  .card-header.green{background:linear-gradient(90deg,#0d2b1a,#1a1d27); color:var(--accent3);}
+  .card-header.blue{background:linear-gradient(90deg,#0d1f33,#1a1d27); color:var(--accent2);}
+  .card-header.purple{background:linear-gradient(90deg,#24123a,#1a1d27); color:var(--accent4);}
+  .card-header.orange{background:linear-gradient(90deg,#3a1f0a,#1a1d27); color:var(--accent5);}
+  .card-header.red{background:linear-gradient(90deg,#33110d,#1a1d27); color:var(--accent1);}
+  .card-header.teal{background:linear-gradient(90deg,#0a2e29,#1a1d27); color:var(--accent6);}
+  .card-body{padding:16px 18px;}
+
+  .arrow-list{list-style:none;}
+  .arrow-list li{
+    padding:6px 0 6px 22px;
+    position:relative;
+  }
+  .arrow-list li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:var(--gold);
+    font-weight:bold;
+  }
+
+  .exam-trap{
+    background:#1a0909;
+    border-left:4px solid var(--accent1);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .exam-trap .label{color:var(--accent1); font-weight:700; margin-bottom:6px; display:block;}
+
+  .quick-recall{
+    background:#091524;
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:12px 16px;
+    margin:14px 0;
+  }
+  .quick-recall .label{color:var(--accent2); font-weight:700; margin-bottom:6px; display:block;}
+
+  .rule-box{
+    border:1.5px solid var(--gold);
+    border-radius:8px;
+    padding:14px 18px;
+    margin:14px 0;
+    background:rgba(245,200,66,0.04);
+    color:var(--gold);
+    font-weight:700;
+    text-align:center;
+    font-size:1.05rem;
+  }
+  .rule-box .hindi{display:block; color:#e7e9f0; font-weight:400; font-size:0.9rem; margin-top:6px;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0;
+    font-size:0.92rem;
+  }
+  thead th{
+    background:#2a2200;
+    color:var(--gold);
+    border-bottom:2px solid var(--gold);
+    padding:10px;
+    text-align:left;
+  }
+  tbody td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  tbody tr:hover{background:var(--surface2);}
+  .table-wrap{overflow-x:auto;}
+
+  .pos-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:14px;
+    margin:14px 0;
+  }
+  .pos-card{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+  }
+  .pos-card h4{color:var(--gold); margin-bottom:6px; font-size:1rem;}
+  .pos-card p{color:#c7cbe0; font-size:0.88rem; margin-bottom:6px;}
+  .pos-card .example{color:var(--accent3); font-size:0.85rem; font-style:italic;}
+
+  .correct{color:var(--accent3); font-weight:700;}
+  .wrong{color:var(--accent1); text-decoration:line-through; font-weight:700;}
+  .hindi-note{color:#aab0c6; font-size:0.85rem; font-style:italic;}
+  strong.hl{color:var(--gold);}
+
+  footer{
+    text-align:center;
+    padding:20px;
+    color:#6b7089;
+    font-size:0.85rem;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+
+  @media(max-width:600px){
+    header h1{font-size:1.4rem;}
+    .tab-nav button{font-size:0.78rem; padding:8px 12px;}
+    .pos-grid{grid-template-columns:1fr;}
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
+<style>@media(max-width:768px){body{overflow-x:hidden}.container,svg{max-width:100%!important}svg{height:auto!important}}</style>
+</head>
+<body>
+
+<header>
+  <h1>ARTICLES</h1>
+  <p>English Grammar Mind Map · SSC / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="tablink active" onclick="switchTab('overview')">Overview & Position</button>
+  <button class="tablink" onclick="switchTab('a-an')">A vs An</button>
+  <button class="tablink" onclick="switchTab('uses-a-an')">Uses of A/An</button>
+  <button class="tablink" onclick="switchTab('omission')">Omission of A/An</button>
+  <button class="tablink" onclick="switchTab('uses-the-1')">Uses of The — Part 1</button>
+  <button class="tablink" onclick="switchTab('uses-the-2')">Uses of The — Part 2</button>
+  <button class="tablink" onclick="switchTab('no-article')">Case of No Article</button>
+  <button class="tablink" onclick="switchTab('practice')">Practice Examples</button>
+  <button class="tablink" onclick="switchTab('master')">Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW & POSITION -->
+<div id="overview" class="tab-content active">
+  <div class="card">
+    <div class="card-header gold">Definition</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>A, An, and The are called <strong class="hl">Articles</strong>.</li>
+        <li>They are used before nouns.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Kinds of Articles</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>1. Indefinite Article — A / An</h4>
+          <p>Used for an uncertain person or thing.</p>
+          <p class="example">I saw an adorable puppy at the park.<br>Naman sang a song.</p>
+        </div>
+        <div class="pos-card">
+          <h4>2. Definite Article — The</h4>
+          <p>Used for a definite / certain person or thing.</p>
+          <p class="example">This is the bag which contains cash.<br>The man in the black suit is my brother.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Position of Articles</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Article + Noun
+      </div>
+      <ul class="arrow-list">
+        <li>He is a singer.</li>
+        <li>a skill</li>
+      </ul>
+      <div class="rule-box">
+        Article + Adjective + Noun
+      </div>
+      <ul class="arrow-list">
+        <li>He is a good singer.</li>
+        <li>a valuable skill</li>
+      </ul>
+      <div class="rule-box">
+        Article + Adverb + Adjective + Noun
+      </div>
+      <ul class="arrow-list">
+        <li>He is a very good singer.</li>
+        <li>This is a very valuable skill.</li>
+        <li>The well prepared athletes.</li>
+      </ul>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        The article always comes first in the noun phrase, but an intervening Adverb (modifying the Adjective) can sit between the Article and the Adjective — Article + Adverb + Adjective + Noun.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: A vs AN -->
+<div id="a-an" class="tab-content">
+  <div class="card">
+    <div class="card-header purple">Difference Between A and An</div>
+    <div class="card-body">
+      <div class="rule-box">
+        A + Consonant Sound &nbsp;·&nbsp; An + Vowel Sound
+        <span class="hindi">Based on SOUND, not the actual letter</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>A + Consonant Sound</th><th>An + Vowel Sound</th></tr></thead>
+          <tbody>
+            <tr><td>A book</td><td>An heir</td></tr>
+            <tr><td>A uniform</td><td>An apple</td></tr>
+            <tr><td>A cat</td><td>An umbrella</td></tr>
+            <tr><td>A man</td><td>An M.P. / M.L.A.</td></tr>
+            <tr><td>A union</td><td>An hour</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        Go by the <strong class="hl">sound</strong>, not the spelling! "Uniform" and "union" start with a consonant sound (/j/, like "yoo") despite the vowel letter "u" — so they take "A". "Heir," "hour," and "M.P./M.L.A." start with a vowel sound despite consonant-looking spellings ("h" is silent in heir/hour; "M" is pronounced "em") — so they take "An".
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td><span class="wrong">A</span> adventurous traveler embarked on a journey to explore a mysterious island.</td><td class="correct">An</td></tr>
+            <tr><td>Canada has been <span class="wrong">an</span> US ally for long.</td><td class="correct">a</td></tr>
+            <tr><td><span class="wrong">A</span> SP has been appointed recently to combat the rampant crime in the city.</td><td class="correct">An</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: USES OF A/AN -->
+<div id="uses-a-an" class="tab-content">
+  <div class="card">
+    <div class="card-header teal">Uses of A and An — 11 Cases</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>1. In the sense of "One"</h4>
+          <p class="example">Pummy has a cat. (one)<br>An apple a day keeps a doctor away. (one)</p>
+        </div>
+        <div class="pos-card">
+          <h4>2. In the sense of "Some/A certain" (unknown)</h4>
+          <p class="example">A Mr. Aggarwal was looking for you.<br>A Miss Kriti wants to speak to you.</p>
+        </div>
+        <div class="pos-card">
+          <h4>3. In the sense of "Any"</h4>
+          <p class="example">He did not give me a book.<br>She does not like to read a novel.</p>
+        </div>
+        <div class="pos-card">
+          <h4>4. In the sense of "Each/Every" (Per)</h4>
+          <p class="example">I go there once a week.<br>She earns two thousand a month.</p>
+        </div>
+        <div class="pos-card">
+          <h4>5. Class / Representation</h4>
+          <p class="example">A cat is a notorious animal.<br>A man should be of principles.<br>A student should be disciplined.</p>
+        </div>
+        <div class="pos-card">
+          <h4>6. Before a singular countable noun</h4>
+          <p class="example">I need a cup of coffee.<br>I am an astrologer.<br>He bought a mansion.<br>She is an engineer.</p>
+        </div>
+        <div class="pos-card">
+          <h4>8. Before units/counting expressions</h4>
+          <p class="example">a dozen, a thousand, half an hour, a hundred, a million, half a kilo</p>
+        </div>
+        <div class="pos-card">
+          <h4>9. To make a common noun of a proper noun</h4>
+          <p class="example">A Sherlock is living in my neighbourhood.<br>You are a Tendulkar. (a cricketer like Tendulkar)</p>
+        </div>
+        <div class="pos-card">
+          <h4>10. Before verbs used as nouns</h4>
+          <p class="example">for a walk, take a rest, for a visit, for a talk, for a drive</p>
+        </div>
+        <div class="pos-card">
+          <h4>11. In fixed phrases</h4>
+          <p class="example">a team of, a pair of, a galaxy of, a group of, an assembly of</p>
+        </div>
+      </div>
+
+      <div class="rule-box">
+        Rule 7: First mention = A/An &nbsp; ·&nbsp; Second mention (same noun) = The
+      </div>
+      <ul class="arrow-list">
+        <li>Ayushi found a dog on the street. The dog seemed petrified.</li>
+        <li>He bought a branded shirt. The shirt is very costly.</li>
+      </ul>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>I have <span class="wrong">dozen</span> bananas.</td><td class="correct">a dozen bananas</td></tr>
+            <tr><td>He has <span class="wrong">million</span> dollars.</td><td class="correct">a million dollars</td></tr>
+            <tr><td>This smartphone costs thousand dollars.</td><td class="correct">a thousand dollars</td></tr>
+            <tr><td>The railway station is only hour away.</td><td class="correct">an hour away</td></tr>
+            <tr><td>I often go for walk post dinner.</td><td class="correct">a walk</td></tr>
+            <tr><td>My long lasting friend paid me visit last week.</td><td class="correct">a visit</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: OMISSION OF A/AN -->
+<div id="omission" class="tab-content">
+  <div class="card">
+    <div class="card-header red">Omission of A and An — 3 Rules</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Rule 1: A/An is NOT used before "only Adjectives" (no noun following)
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Correct</th><th>Wrong</th></tr></thead>
+          <tbody>
+            <tr><td>She is smart.</td><td class="wrong">She is a smart.</td></tr>
+            <tr><td>Rohan is cunning.</td><td class="wrong">Rohan is a cunning.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rule-box">
+        Rule 2: A/An is NOT used before uncountable nouns
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Correct</th><th>Wrong</th></tr></thead>
+          <tbody>
+            <tr><td>Gold is a precious metal.</td><td class="wrong">A Gold is a precious metal.</td></tr>
+            <tr><td>We drink water.</td><td class="wrong">We drink a water.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rule-box">
+        Rule 3: A/An is NOT used before plural nouns
+      </div>
+      <ul class="arrow-list">
+        <li>Children are playing.</li>
+        <li>Cows eat grass.</li>
+      </ul>
+
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        A/An by definition means "one" — it can never precede a plural noun or an uncountable noun (which has no singular "one" unit), and it cannot precede a bare adjective with no noun following.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: USES OF THE - PART 1 -->
+<div id="uses-the-1" class="tab-content">
+  <div class="card">
+    <div class="card-header orange">Pronunciation of "The"</div>
+    <div class="card-body">
+      <div class="rule-box">
+        The (thuh) + Consonant Sound &nbsp;·&nbsp; The (thee) + Vowel Sound
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>The (thuh) + Consonant Sound</th><th>The (thee) + Vowel Sound</th></tr></thead>
+          <tbody>
+            <tr><td>The house</td><td>The hour</td></tr>
+            <tr><td>The unicorn</td><td>The uninvited person</td></tr>
+            <tr><td>The party</td><td>The end of park</td></tr>
+            <tr><td>The kids</td><td>The employees</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header green">Rule 1: "The" Before Names Of...</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card"><h4>Historical Buildings</h4><p class="example">The Taj Mahal, The Red Fort</p></div>
+        <div class="pos-card"><h4>Holy Books</h4><p class="example">The Gita, The Mahabharata, The Bible</p></div>
+        <div class="pos-card"><h4>Mountain Ranges</h4><p class="example">The Himalayas, The Alps, The Eastern Ghats</p></div>
+        <div class="pos-card"><h4>Planets, Rivers, Oceans</h4><p class="example">The Sun, The Moon, The Stars, The Earth<br>The Ganga, The Kaveri, The Krishna, The Thames</p></div>
+        <div class="pos-card"><h4>Gulfs, Groups of Islands, Deserts</h4><p class="example">The Sahara, The Thar Desert<br>The Pacific Sea, The Dead Sea<br>The Bay of Bengal, The Gulf of Mexico, The Persian Gulf<br>The Arabian Sea, The Andamans, The Suez Canal</p></div>
+        <div class="pos-card"><h4>Names of Trains, Hotels, Shops</h4><p class="example">The Rajdhani Express, The Punjab Mail</p></div>
+        <div class="pos-card"><h4>Names of Countries/States (certain types)</h4><p>Used for certain plural/republic-form names</p></div>
+      </div>
+
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        <strong class="hl">Note 1:</strong> "The" is NOT used before mountain <em>peaks</em> (as opposed to mountain ranges): Mount Everest ✓, Nanda Devi ✓ — NOT "The Mount Everest" or "The Nanda Devi".
+      </div>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        <strong class="hl">Note 2:</strong> If an author's name is used before the title of a religious book, "the" is NOT used before the book's name: Valmiki's Ramayana ✓ (not "Valmiki's the Ramayana"); Homer's Iliad ✓ (not "Homer's the Iliad").
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>Pacific Ocean is the deepest ocean in the world.</td><td class="correct">The Pacific Ocean</td></tr>
+            <tr><td>Ganga is considered to be a holy river in India.</td><td class="correct">The Ganga</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header blue">Rules 2–5: Directions, Position, Communities, Nationality</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card"><h4>2. Names of Directions</h4><p class="example">The East, The West, The North, The South</p></div>
+        <div class="pos-card"><h4>3. Physical Position</h4><p class="example">At the top of / on the top of, At the bottom of, The back of</p></div>
+        <div class="pos-card"><h4>4. Religious Community</h4><p class="example">The Hindus, The Jews, The Muslims</p></div>
+        <div class="pos-card"><h4>5. Nationality</h4><p class="example">The Indians, The English, The French, The Chinese, The Americans, The Russians</p></div>
+      </div>
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        If a nationality-expressing word is used as a <strong class="hl">countable noun</strong> (referring to one individual person), "A" or "An" is used before it instead of "The": I have met an Indian in Australia. An English man was there in my college.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>Russians have a dubious reputation of being spies.</td><td class="correct">The Russians</td></tr>
+            <tr><td>On my way to the UK, I met <span class="wrong">the Briton</span>.</td><td class="correct">a Briton</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: USES OF THE - PART 2 -->
+<div id="uses-the-2" class="tab-content">
+  <div class="card">
+    <div class="card-header purple">Rule 6: "The" NOT Used Before Names of Languages</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td class="wrong">The English is spoken in England.</td><td class="correct">English is spoken in England.</td></tr>
+            <tr><td class="wrong">I know the Hindi, the Urdu and the Punjabi.</td><td class="correct">I know Hindi, Urdu and Punjabi.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        <strong class="hl">Note 1:</strong> If the name of the language is used before the word "language," "the" IS used: "Do you speak the English language?" ✓ / "Do you speak English?" ✓ — but NOT "Do you speak English language?" ✗
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td class="wrong">Do you speak English language?</td><td class="correct">Do you speak the English language? / Do you speak English?</td></tr>
+            <tr><td class="wrong">I know German language.</td><td class="correct">I know the German language. / I know German.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        <strong class="hl">Note 2:</strong> If "translate" is used before the name of a language, "the" IS used before the language name.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td class="wrong">Translate Hindi into English.</td><td class="correct">Translate the Hindi into the English.</td></tr>
+            <tr><td></td><td class="correct">Translate from the Sanskrit.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>I met a French woman who also speaks <span class="wrong">the</span> Spanish.</td><td class="correct">Remove "the"</td></tr>
+            <tr><td>Although English is the language of English, yet we the Indians can learn and speak it more fluently than they.</td><td class="correct">Although English is the language of the English (nationality), yet...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">Rules 7–9: Armed Forces, Musical Instruments, Inventions</div>
+    <div class="card-body">
+      <div class="pos-grid">
+        <div class="pos-card">
+          <h4>7. Armed Forces, Govt. Branches, Political Parties</h4>
+          <p class="example">The Army, The Air Force, The Navy<br>The Judiciary, The Legislative, The Executive<br>The Congress, The BJP</p>
+        </div>
+        <div class="pos-card">
+          <h4>8. Musical Instruments</h4>
+          <p class="example">The Tabla, The Harmonium, The Guitar<br>He cannot play the Guitar.<br>He wants to learn the Tabla.</p>
+        </div>
+        <div class="pos-card">
+          <h4>9. Inventions</h4>
+          <p class="example">The Television, The Wireless, The Telephone, The Microscope, The Radio<br>Who invented the Telescope?</p>
+        </div>
+      </div>
+
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        If the name of a musical instrument or an invented thing is used as a <strong class="hl">singular countable noun</strong> (referring to one physical object being bought/owned), "A/An" is used instead of "The": He has bought a piano ✓ (not "the piano"). He has bought a T.V. ✓, He has bought a Radio ✓.
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Right ✓</th><th>Wrong ✗</th></tr></thead>
+          <tbody>
+            <tr><td>Listen to the Radio.</td><td class="wrong">Listen to Radio.</td></tr>
+            <tr><td>On the Radio</td><td class="wrong">On Radio</td></tr>
+            <tr><td>Watch T.V.</td><td class="wrong">Watch the T.V.</td></tr>
+            <tr><td>On T.V.</td><td class="wrong">On the T.V.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>My sister wants to learn <span class="wrong">a</span> flute.</td><td class="correct">the flute</td></tr>
+            <tr><td>Avi bought <span class="wrong">the</span> guitar for himself.</td><td class="correct">a guitar</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header teal">Rules 10–14: Body Parts, Titles, Apposition, Abstract Nouns, Comparison</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Rule 10: "The" is used before names of parts of body
+      </div>
+      <ul class="arrow-list">
+        <li>She hit me on the head.</li>
+        <li>He looked her in the eye.</li>
+        <li>He was shot in the leg.</li>
+      </ul>
+      <div class="exam-trap">
+        <span class="label">⚠ EXAM TRAP</span>
+        <strong class="hl">Note 1:</strong> If the body part follows the name of a disease, "The" is still used: Cancer of the lung, Inflammation of the throat.<br><br>
+        <strong class="hl">Note 2:</strong> If the body part is used as a singular countable noun (in a general listing sense), A/An is used: A cow has a mouth, a nose, and a head.<br><br>
+        <strong class="hl">Note 3:</strong> "The" is NOT used in fixed phrases: On foot ✓ (not "on the foot"), At hand ✓ (not "at the hand"), In hand ✓ (not "in the hand").
+      </div>
+
+      <div class="rule-box">
+        Rule 11: "The" is used before a title or post denoting a person
+      </div>
+      <ul class="arrow-list">
+        <li>The Prime Minister wants to talk to you.</li>
+        <li>The Chief Minister comes here tomorrow.</li>
+        <li>You should trust the director.</li>
+      </ul>
+
+      <div class="rule-box">
+        Rule 12: "The" is used before a common noun in noun-in-apposition
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Correct</th><th>Wrong</th></tr></thead>
+          <tbody>
+            <tr><td>Tagore, the poet, was famous.</td><td class="wrong">Tagore, poet, was famous.</td></tr>
+            <tr><td>Raghav, the dancer, is laborious.</td><td class="wrong">Raghav, dancer, is laborious.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rule-box">
+        Rule 13: When a common noun is used as an abstract noun, "The" changes its meaning
+      </div>
+      <ul class="arrow-list">
+        <li>The patriot in him... (the patriotic quality in him)</li>
+        <li>When I found a baby, the father aroused in me. (paternal quality in him)</li>
+        <li>The mother is wife cried out.</li>
+      </ul>
+
+      <div class="rule-box">
+        Rule 14: When a proper noun is compared to another proper noun of the same class based on qualities, "The" is used before the second proper noun
+      </div>
+      <ul class="arrow-list">
+        <li>Mumbai is the London of India.</li>
+        <li>Kalidas is the Shakespeare of India.</li>
+        <li>Abdul Kalam is the Newton of India.</li>
+      </ul>
+      <p style="margin-top:8px;">Q. Shanghai is sometimes called <strong class="hl">the</strong> "Paris of the East" because of its sophisticated urban architecture and fashion industry.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: CASE OF NO ARTICLE -->
+<div id="no-article" class="tab-content">
+  <div class="card">
+    <div class="card-header red">Case of No Article — 2 Rules</div>
+    <div class="card-body">
+      <div class="rule-box">
+        Rule 1: Man, Woman, Nature, Life, Death, Science, Society, Humanity, Parliament, Mankind — no article when used in their GENERAL sense
+      </div>
+      <ul class="arrow-list">
+        <li>Man is mortal.</li>
+        <li>These are the boons of science.</li>
+      </ul>
+      <p style="margin-top:8px;">Q. Sooner or later you will come to know the truth that man is mortal and love is eternal. — No Error</p>
+
+      <div class="rule-box">
+        Rule 2: School, College, University, Market, Jail, Court, Church, Temple, Bed, Hospital — no article when used for their REAL PURPOSE
+      </div>
+      <ul class="arrow-list">
+        <li>I go to school regularly. (Real Purpose — as a student)</li>
+        <li>I am going to the school to meet the principal. (Other Purpose — as a visitor)</li>
+      </ul>
+
+      <div class="quick-recall">
+        <span class="label">⚡ QUICK RECALL</span>
+        The same building word takes NO article for its institutional/functional purpose but takes "The" when referring to the physical building for any other reason.
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>The driver was heavily injured in the accident so he was rushed to <span class="wrong">the</span> hospital.</td><td class="correct">Remove "the" (real purpose — treatment)</td></tr>
+            <tr><td>The robbers were caught just as they were about to escape from <span class="wrong">the</span> jail.</td><td class="correct">Remove "the" (real purpose)</td></tr>
+            <tr><td>The moment Kavan was admitted to <span class="wrong">the</span> hospital, the warden decided to inform his parents.</td><td class="correct">Remove "the" (real purpose)</td></tr>
+            <tr><td>Several ministers visited jail to see a number of prisoners.</td><td class="correct">the jail (other purpose — as visitors, not inmates)</td></tr>
+            <tr><td>She never goes to <span class="wrong">the</span> college to attend the lecture delivered by the head of the department of physics.</td><td class="correct">Remove "the" (real purpose — as a student)</td></tr>
+            <tr><td>I am going to mall to meet my friend.</td><td class="correct">the mall (mall is not in this fixed no-article list)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: PRACTICE EXAMPLES -->
+<div id="practice" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Consolidated Error-Spotting Practice</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Sentence</th><th>Correction</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>A adventurous traveler embarked on a journey to explore a mysterious island.</td><td class="correct">An adventurous</td></tr>
+            <tr><td>2</td><td>Canada has been an US ally for long.</td><td class="correct">a US ally</td></tr>
+            <tr><td>3</td><td>A SP has been appointed recently to combat the rampant crime in the city.</td><td class="correct">An SP</td></tr>
+            <tr><td>4</td><td>I have dozen bananas.</td><td class="correct">a dozen bananas</td></tr>
+            <tr><td>5</td><td>He has million dollars.</td><td class="correct">a million dollars</td></tr>
+            <tr><td>6</td><td>This smartphone costs thousand dollars.</td><td class="correct">a thousand dollars</td></tr>
+            <tr><td>7</td><td>The railway station is only hour away.</td><td class="correct">an hour away</td></tr>
+            <tr><td>8</td><td>I often go for walk post dinner.</td><td class="correct">for a walk</td></tr>
+            <tr><td>9</td><td>My long lasting friend paid me visit last week.</td><td class="correct">paid me a visit</td></tr>
+            <tr><td>10</td><td>Pacific Ocean is the deepest ocean in the world.</td><td class="correct">The Pacific Ocean</td></tr>
+            <tr><td>11</td><td>Ganga is considered to be a holy river in India.</td><td class="correct">The Ganga</td></tr>
+            <tr><td>12</td><td>Russians have a dubious reputation of being spies.</td><td class="correct">The Russians</td></tr>
+            <tr><td>13</td><td>On my way to the UK, I met the Briton.</td><td class="correct">a Briton</td></tr>
+            <tr><td>14</td><td>I met a French woman who also speaks the Spanish.</td><td class="correct">Remove "the"</td></tr>
+            <tr><td>15</td><td>My sister wants to learn a flute.</td><td class="correct">the flute</td></tr>
+            <tr><td>16</td><td>Avi bought the guitar for himself.</td><td class="correct">a guitar</td></tr>
+            <tr><td>17</td><td>The driver was heavily injured in the accident so he was rushed to the hospital.</td><td class="correct">Remove "the" (real purpose)</td></tr>
+            <tr><td>18</td><td>The robbers were caught just as they were about to escape from the jail.</td><td class="correct">Remove "the" (real purpose)</td></tr>
+            <tr><td>19</td><td>She never goes to the college to attend the lecture delivered by the head of the department of physics.</td><td class="correct">Remove "the" (real purpose)</td></tr>
+            <tr><td>20</td><td>I am going to mall to meet my friend.</td><td class="correct">to the mall</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: MASTER TABLE -->
+<div id="master" class="tab-content">
+  <div class="card">
+    <div class="card-header gold">Master Table — Complete Chapter Revision</div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Topic</th><th>Key Rule / Fact</th></tr></thead>
+          <tbody>
+            <tr><td>Articles</td><td>A, An (Indefinite — uncertain), The (Definite — certain)</td></tr>
+            <tr><td>Position of Articles</td><td>Article + Noun / Article + Adjective + Noun / Article + Adverb + Adjective + Noun</td></tr>
+            <tr><td>A vs An</td><td>A + consonant SOUND, An + vowel SOUND (go by pronunciation, not spelling — e.g. an hour, a uniform)</td></tr>
+            <tr><td>Uses of A/An</td><td>One; Some/a certain (unknown); Any; Each/Every (per); Class representation; Before singular countable noun; First mention (2nd mention→The); Units/counting expressions; Proper noun→common noun; Before verbs-as-nouns; Fixed phrases (a pair of, a group of)</td></tr>
+            <tr><td>Omission of A/An</td><td>Never before bare adjectives (no noun), uncountable nouns, or plural nouns</td></tr>
+            <tr><td>The pronunciation</td><td>"thuh" + consonant sound, "thee" + vowel sound</td></tr>
+            <tr><td>The — Rule 1</td><td>Historical buildings, holy books, mountain RANGES (not peaks), planets/rivers/oceans, gulfs/island groups/deserts, train/hotel/shop names</td></tr>
+            <tr><td>The — mountain peaks exception</td><td>NOT used before mountain peaks (Mount Everest, Nanda Devi — no "the")</td></tr>
+            <tr><td>The — author + religious book</td><td>NOT used when author's name precedes book title (Valmiki's Ramayana, not "the Ramayana")</td></tr>
+            <tr><td>The — Rules 2-5</td><td>Directions (East/West/North/South), physical position (top of/bottom of/back of), religious communities (Hindus/Muslims), nationalities (Indians/English)</td></tr>
+            <tr><td>Nationality as countable noun</td><td>Takes A/An instead of The when referring to one individual (an Indian, an English man)</td></tr>
+            <tr><td>The — Rule 6</td><td>NOT used before language names alone (English, not "the English")</td></tr>
+            <tr><td>Language + "language" word</td><td>Takes "the" (the English language)</td></tr>
+            <tr><td>"Translate" + language name</td><td>Takes "the" (translate the Hindi into the English)</td></tr>
+            <tr><td>The — Rule 7</td><td>Armed forces, govt. branches, political parties (The Army, The Judiciary, The Congress)</td></tr>
+            <tr><td>The — Rule 8</td><td>Musical instruments (The Tabla, The Guitar) — but A/An if used as a singular countable noun (bought a piano)</td></tr>
+            <tr><td>The — Rule 9</td><td>Inventions (The Television, The Radio) — but A/An if used as countable noun (bought a T.V.)</td></tr>
+            <tr><td>Radio/TV fixed phrases</td><td>Listen to the Radio / on the Radio (with "the"); Watch T.V. / on T.V. (without "the")</td></tr>
+            <tr><td>The — Rule 10</td><td>Parts of body (the head, the eye, the leg) — even after disease names (cancer of the lung)</td></tr>
+            <tr><td>Body part exceptions</td><td>A/An if used as general singular countable noun (a cow has a mouth); NOT used in fixed phrases (on foot, at hand, in hand)</td></tr>
+            <tr><td>The — Rule 11</td><td>Title/post denoting a person (The Prime Minister, The Chief Minister)</td></tr>
+            <tr><td>The — Rule 12</td><td>Common noun in noun-in-apposition (Tagore, the poet, was famous)</td></tr>
+            <tr><td>The — Rule 13</td><td>Common noun used as abstract noun — meaning changes (the patriot in him = patriotic quality)</td></tr>
+            <tr><td>The — Rule 14</td><td>Proper noun compared to another proper noun of same class by quality (Mumbai is the London of India)</td></tr>
+            <tr><td>No Article — Rule 1</td><td>Man, Woman, Nature, Life, Death, Science, Society, Humanity, Parliament, Mankind — no article in general sense</td></tr>
+            <tr><td>No Article — Rule 2</td><td>School, College, University, Market, Jail, Court, Church, Temple, Bed, Hospital — no article for their real/functional purpose; "the" used for any other purpose</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Exam Fusion Prep | examfusionprep.com · Articles · SSC / BPSC / BSSC
+</footer>
+
+<script>
+function switchTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tablink').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>
