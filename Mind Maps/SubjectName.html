@@ -329,6 +329,7 @@
       padding: 14px 18px;
       border-radius: 12px;
       background: linear-gradient(135deg, #4facfe, #00c6fb);
+      /* Bright Cyan (Unvisited) */
       transition: .3s;
       box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
     }
@@ -347,11 +348,59 @@
     }
 
     /*============================*/
+    /* VISITED LINK STYLE (NEW)   */
+    /*============================*/
+    .submenu a.visited-link,
+    .nested-links a.visited-link {
+      background: linear-gradient(135deg, #536976, #292E49) !important;
+      /* Dark Slate Grey */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #d1d5db !important;
+      /* Slightly dimmed text to show completion */
+    }
+
+    .submenu a.visited-link:hover,
+    .nested-links a.visited-link:hover {
+      transform: translateX(8px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
+      color: #ffffff !important;
+    }
+
+    /*============================*/
     .footer {
       margin-top: 45px;
       text-align: center;
       font-size: 13px;
-      opacity: .65;
+      opacity: .9;
+    }
+
+    /* Highlighted Reset Button */
+    .reset-btn {
+      background: linear-gradient(135deg, #e53935, #e35d5b);
+      border: none;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: 0.3s;
+      margin-bottom: 15px;
+      box-shadow: 0 6px 15px rgba(229, 57, 53, 0.3);
+      text-transform: uppercase;
+    }
+
+    .reset-btn:hover {
+      background: linear-gradient(135deg, #ef5350, #e53935);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(229, 57, 53, 0.5);
+    }
+
+    .footer-text {
+      opacity: 0.65;
     }
 
     @media(max-width:900px) {
@@ -1273,7 +1322,11 @@
       </div>
 
       <div class="footer">
-        © <span id="year"></span> ExamFusion Prep. All Rights Reserved.
+        <button class="reset-btn" onclick="clearProgress()">
+          <i class="fa-solid fa-rotate-right"></i> Reset Chapter Progress
+        </button>
+        <br><br>
+        <span class="footer-text">© <span id="year"></span> ExamFusion Prep. All Rights Reserved.</span>
       </div>
     </div>
   </div>
@@ -1303,7 +1356,7 @@
     });
 
     // =======================================
-    // Smart Search Engine (Fixed Issue)
+    // Smart Search Engine
     // =======================================
     const searchInput = document.getElementById("searchInput");
 
@@ -1369,34 +1422,67 @@
     });
 
     // =======================================
-    // Loading Animation
+    // Loading Animation & Persistent State
     // =======================================
     function openPage(event) {
       event.preventDefault();
       const linkEl = event.currentTarget;
-      const link = linkEl.href;
+      const linkUrl = linkEl.href;
+      const relativePath = linkEl.getAttribute("href");
 
+      // 1. Save chapter to LocalStorage to remember it
+      let visited = JSON.parse(localStorage.getItem('visitedChapters')) || [];
+      if (!visited.includes(relativePath)) {
+        visited.push(relativePath);
+        localStorage.setItem('visitedChapters', JSON.stringify(visited));
+      }
+
+      // 2. Instantly make it look "Visited"
+      linkEl.classList.add("visited-link");
+
+      // 3. Loading animation effect
       if (!linkEl.dataset.original) {
         linkEl.dataset.original = linkEl.innerHTML;
       }
-
       linkEl.innerHTML = '<span>⏳ Loading...</span>';
       linkEl.style.opacity = ".65";
       linkEl.style.pointerEvents = "none";
 
       setTimeout(function () {
-        window.location.href = link;
+        window.location.href = linkUrl;
       }, 500);
     }
 
-    // पेज वापस आने पर ओरिजिनल टेक्स्ट रिस्टोर करें
+    // Restore text and visited states when returning to page
     window.addEventListener("pageshow", function () {
+      loadVisitedLinks();
+
       document.querySelectorAll("a[data-original]").forEach(function (a) {
         a.innerHTML = a.dataset.original;
         a.style.opacity = "1";
         a.style.pointerEvents = "auto";
       });
     });
+
+    // Load visited links on fresh page load
+    document.addEventListener("DOMContentLoaded", loadVisitedLinks);
+
+    function loadVisitedLinks() {
+      let visited = JSON.parse(localStorage.getItem('visitedChapters')) || [];
+      document.querySelectorAll(".submenu a, .nested-links a").forEach(function (a) {
+        if (visited.includes(a.getAttribute("href"))) {
+          a.classList.add("visited-link");
+        }
+      });
+    }
+
+    // Reset Progress Function
+    function clearProgress() {
+      if (confirm("Are you sure you want to clear your reading progress?")) {
+        localStorage.removeItem('visitedChapters');
+        document.querySelectorAll('.visited-link').forEach(a => a.classList.remove('visited-link'));
+      }
+    }
 
     // =======================================
     // Radial Gradient Hover Effect
