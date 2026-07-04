@@ -178,6 +178,38 @@
       font-size: 18px;
     }
 
+    .search-clear {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, .12);
+      border: 1.5px solid rgba(255, 255, 255, .25);
+      color: rgba(255, 255, 255, .85);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 17px;
+      font-family: Arial, sans-serif;
+      line-height: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0 2px 0;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+
+    .search-clear:hover {
+      background: rgba(255, 106, 0, .5);
+      border-color: #ff6a00;
+      color: white;
+    }
+
+    .search-clear.show {
+      display: flex;
+    }
+
     /*============================*/
     .accordion {
       display: flex;
@@ -645,6 +677,7 @@
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" id="searchInput" placeholder="Search Subject or Chapter..."
           aria-label="Search subject or chapter">
+        <button class="search-clear" id="searchClear" aria-label="Clear search" title="Clear search">&times;</button>
       </div>
 
       <div class="no-results" id="noResults">🔎 No chapter found. Try a different keyword / कोई अध्याय नहीं मिला।</div>
@@ -1552,8 +1585,16 @@
     // Smart Search Engine
     // =======================================
     const searchInput = document.getElementById("searchInput");
+    const searchClear = document.getElementById("searchClear");
+
+    searchClear.addEventListener("click", function () {
+      searchInput.value = "";
+      searchInput.dispatchEvent(new Event("input"));
+      searchInput.focus();
+    });
 
     searchInput.addEventListener("input", function () {
+      searchClear.classList.toggle("show", this.value.length > 0);
       const keyword = this.value.trim().toLowerCase();
 
       // अगर सर्च बॉक्स खाली हो गया है, तो सब कुछ क्लोज कर दो
