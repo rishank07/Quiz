@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viral Maths — Ch09: Percentage | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--gold:#f5c842;
+  --accent1:#e74c3c;--accent2:#3498db;--accent3:#2ecc71;
+  --accent4:#9b59b6;--accent5:#e67e22;--accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#e7e9f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7;}
+header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:2px solid var(--gold);padding:22px 28px;}
+header h1{color:var(--gold);font-size:1.5rem;letter-spacing:1px;}
+header p{color:#aab;font-size:.88rem;margin-top:4px;}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab-nav button{background:var(--surface2);color:#ccd;border:1px solid var(--border);border-radius:6px;padding:7px 13px;font-size:.78rem;cursor:pointer;transition:all .2s;}
+.tab-nav button.active{color:var(--gold);border-color:var(--gold);border-bottom:2px solid var(--gold);font-weight:700;}
+.tab-nav button:hover:not(.active){border-color:#888;color:#fff;}
+.tab{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.tab.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.card-header{padding:12px 18px;font-weight:700;font-size:.95rem;letter-spacing:.5px;}
+.ch-gold{background:linear-gradient(90deg,#2a2000,#1a1d27);color:var(--gold);}
+.ch-green{background:linear-gradient(90deg,#0a2010,#1a1d27);color:var(--accent3);}
+.ch-blue{background:linear-gradient(90deg,#0a1525,#1a1d27);color:var(--accent2);}
+.ch-purple{background:linear-gradient(90deg,#180a28,#1a1d27);color:var(--accent4);}
+.ch-orange{background:linear-gradient(90deg,#251200,#1a1d27);color:var(--accent5);}
+.ch-red{background:linear-gradient(90deg,#250808,#1a1d27);color:var(--accent1);}
+.ch-teal{background:linear-gradient(90deg,#051a18,#1a1d27);color:var(--accent6);}
+.card-body{padding:16px 18px;}
+ul.arrow-list{list-style:none;padding:0;}
+ul.arrow-list li{padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #1e2235;}
+ul.arrow-list li:last-child{border-bottom:none;}
+ul.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);}
+.rule-box{border:1px solid var(--gold);border-radius:8px;padding:12px 16px;margin:10px 0;background:#1c1900;}
+.rule-box .rule-label{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;}
+.rule-box .formula{color:#fff;font-size:.96rem;font-weight:600;font-family:'Courier New',monospace;white-space:pre-line;}
+.exam-trap{border-left:4px solid var(--accent1);background:#1a0909;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.exam-trap .et-label{color:var(--accent1);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+.quick-recall{border-left:4px solid var(--accent2);background:#091524;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.quick-recall .qr-label{color:var(--accent2);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+table.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+table.data-table th{background:#2a2200;color:var(--gold);padding:9px 12px;text-align:left;border-bottom:2px solid var(--gold);}
+table.data-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+table.data-table tr:hover td{background:#1e2235;}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:12px 0;}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.pos-card .pc-title{color:var(--gold);font-weight:700;font-size:.88rem;margin-bottom:6px;}
+.pos-card .pc-step{color:#e7e9f0;font-size:.88rem;margin-bottom:4px;}
+.pos-card .pc-eg{color:var(--accent3);font-size:.82rem;margin-top:6px;font-family:'Courier New',monospace;}
+footer{text-align:center;padding:18px;color:#667;font-size:.8rem;border-top:1px solid var(--border);margin-top:30px;}
+@media(max-width:600px){.tab-nav button{font-size:.7rem;padding:5px 8px;}.tab{padding:14px;}.pos-grid{grid-template-columns:1fr;}table.data-table{display:block;overflow-x:auto;}}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tbl-wrap table{display:table!important;min-width:auto;width:max-content!important;white-space:nowrap;margin:0!important;border:none!important;border-radius:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+img,svg,video,iframe{max-width:100%;height:auto}
+@media(max-width:768px){
+  table{display:table!important;width:max-content!important;white-space:nowrap}
+}
+@media(max-width:480px){
+  body{padding:10px}
+  .container{padding:0}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<header>
+  <h1>📊 Viral Maths — Chapter 09: Percentage</h1>
+  <p>by Navneet Tiwari (Adda247) &nbsp;·&nbsp; Fraction-Percent Table + 12 Named Types · Bank / SSC / Railway / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('t1',this)">📋 Overview</button>
+  <button onclick="switchTab('t2',this)">🔢 Fraction-% Table</button>
+  <button onclick="switchTab('t3',this)">1️⃣ 25%,50%,10%,20%</button>
+  <button onclick="switchTab('t4',this)">2️⃣ 40%,60%,75%,80%</button>
+  <button onclick="switchTab('t5',this)">3️⃣ 16.66%,33.33%</button>
+  <button onclick="switchTab('t6',this)">4️⃣ 6.66%,6.25%,12.5%,14.28%</button>
+  <button onclick="switchTab('t7',this)">5️⃣ 37.5%,7.14%,62.5%,9.09%</button>
+  <button onclick="switchTab('t8',this)">6️⃣ 11.11% &amp; Derived %s</button>
+  <button onclick="switchTab('t9',this)">🔄 Dal Badlu Approach</button>
+  <button onclick="switchTab('t10',this)">📝 Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="t1" class="tab active">
+  <div class="card">
+    <div class="card-header ch-gold">📌 What This Chapter Covers</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Percentage chapter ki foundation hai fraction-percent conversions — har % value ko uske fraction se jodo, phir multiplication/division fast ho jaata hai.</li>
+        <li>12 named types hain, sab isi core idea pe based: "% ko fraction mein convert karo, phir multiply karo."</li>
+        <li>Dal Badlu Approach ek special reversal trick hai jo tough-looking % questions ko simple bana deta hai.</li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Poori chapter ka core formula: a% of b = (fraction form of a%) × b. Fraction-Percent table (Tab 2) is chapter ki backbone hai — usse pehle cold yaad karo.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🗂️ Chapter Index</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Tab</th><th>Content</th><th>Fractions Used</th></tr>
+        <tr><td>2</td><td>Fraction-Percent Reference Table</td><td>All key values</td></tr>
+        <tr><td>3</td><td>Type 1–2: 25%,50%,10%,20%</td><td>1/4, 1/2, 1/10, 1/5</td></tr>
+        <tr><td>4</td><td>Type 3–4: 40%,60%,75%,80%</td><td>2/5, 3/5, 3/4, 4/5</td></tr>
+        <tr><td>5</td><td>Type 5: 16.66%,33.33%</td><td>1/6, 1/3</td></tr>
+        <tr><td>6</td><td>Type 6–7: 6.66%,6.25%,12.5%,14.28%</td><td>1/15, 1/16, 1/8, 1/7</td></tr>
+        <tr><td>7</td><td>Type 8–9: 37.5%,7.14%,62.5%,9.09%</td><td>3/8, 1/14, 5/8, 1/11</td></tr>
+        <tr><td>8</td><td>Type 10,12: 11.11% &amp; derived %s</td><td>1/9, multiples of known fractions</td></tr>
+        <tr><td>9</td><td>Type 11: Dal Badlu Approach</td><td>a% of b = b% of a</td></tr>
+        <tr><td>10</td><td>Master Table</td><td>All types summarized</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: FRACTION-PERCENT TABLE -->
+<div id="t2" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">🔢 Fraction ↔ Percent — Complete Reference Table</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Fraction</th><th>%</th><th>Fraction</th><th>%</th><th>Fraction</th><th>%</th></tr>
+        <tr><td>1/2</td><td>50%</td><td>1/7</td><td>14.28%</td><td>3/8</td><td>37.5%</td></tr>
+        <tr><td>1/3</td><td>33.33%</td><td>2/7</td><td>28.57%</td><td>5/8</td><td>62.5%</td></tr>
+        <tr><td>2/3</td><td>66.67%</td><td>3/7</td><td>42.85%</td><td>7/8</td><td>87.5%</td></tr>
+        <tr><td>1/4</td><td>25%</td><td>4/7</td><td>57.14%</td><td>1/9</td><td>11.11%</td></tr>
+        <tr><td>3/4</td><td>75%</td><td>5/7</td><td>71.43%</td><td>2/9</td><td>22.22%</td></tr>
+        <tr><td>1/5</td><td>20%</td><td>6/7</td><td>85.71%</td><td>3/9</td><td>33.33%</td></tr>
+        <tr><td>2/5</td><td>40%</td><td>1/8</td><td>12.5%</td><td>4/9</td><td>44.44%</td></tr>
+        <tr><td>3/5</td><td>60%</td><td>1/6</td><td>16.67%</td><td>1/10</td><td>10%</td></tr>
+        <tr><td>4/5</td><td>80%</td><td>5/6</td><td>83.33%</td><td>1/11</td><td>9.09%</td></tr>
+        <tr><td colspan="2"></td><td>1/12</td><td>8.33%</td><td>1/14</td><td>7.14%</td></tr>
+        <tr><td colspan="2"></td><td>1/15</td><td>6.66%</td><td>1/16</td><td>6.25%</td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Yeh table Ch05 (Division, Broken Heart Approach) aur Ch09 dono mein use hoti hai — cold yaad karna non-negotiable hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: 25,50,10,20 -->
+<div id="t3" class="tab">
+  <div class="card">
+    <div class="card-header ch-blue">Type 1 — Finding 25% and 50% of Numbers</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">25% = 1/4, 50% = 1/2</div>
+        <div class="formula">25% of 48 = 1/4 × 48 = 12
+50% of 642 = 1/2 × 642 = 321</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-green">Type 2 — Finding 10% and 20% of Numbers</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">10% = 1/10, 20% = 1/5</div>
+        <div class="formula">10% of 450 = 1/10 × 450 = 45
+20% of 655 = 1/5 × 655 = 131</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        10% = shift decimal 1 left. 20% = 10% doubled. 25% = ÷4. 50% = ÷2. Yeh sabse common exam percentages hain — instant honi chahiye.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: 40,60,75,80 -->
+<div id="t4" class="tab">
+  <div class="card">
+    <div class="card-header ch-purple">Type 3 — Finding 40% and 60% of Numbers</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">40% = 2/5, 60% = 3/5</div>
+        <div class="formula">40% of 65 = 2/5 × 65 = 26
+60% of 125 = 3/5 × 125 = 75</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-orange">Type 4 — Finding 75% and 80% of Numbers</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">75% = 3/4, 80% = 4/5</div>
+        <div class="formula">75% of 48 = 3/4 × 48 = 36
+80% of 225 = 4/5 × 225 = 180</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Sab "/5" family (20%,40%,60%,80%) → divide by 5, multiply by numerator. "/4" family (25%,75%) → divide by 4.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: 16.66, 33.33 -->
+<div id="t5" class="tab">
+  <div class="card">
+    <div class="card-header ch-red">Type 5 — Finding 16.66% and 33.33% of Numbers</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">16.66% = 1/6, 33.33% = 1/3</div>
+        <div class="formula">16.66% of 246 = 1/6 × 246 = 41
+33.33% of 810 = 1/3 × 810 = 270</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        16.66% aur 33.33% dono "Point%" family hain — inka exact fraction repeating decimal se aata hai (1/6=0.1666..., 1/3=0.3333...). Exam mein rounded % dikhta hai, lekin fraction EXACT use karo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: 6.66,6.25,12.5,14.28 -->
+<div id="t6" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Finding 6.66% and 6.25% of Numbers</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">6.66% = 1/15, 6.25% = 1/16</div>
+        <div class="formula">6.66% of 225 = 1/15 × 225 = 15
+6.25% of 128 = 1/16 × 128 = 8</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">Finding 12.5% and 14.28% of Numbers</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">12.5% = 1/8, 14.28% = 1/7</div>
+        <div class="formula">12.5% of 488 = 1/8 × 488 = 61
+14.28% of 154 = 1/7 × 154 = 22</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        1/16=6.25% | 1/15=6.66% | 1/8=12.5% | 1/7=14.28% — inko ek dusre se confuse mat karo, denominators bahut close hain.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: 37.5,7.14,62.5,9.09 -->
+<div id="t7" class="tab">
+  <div class="card">
+    <div class="card-header ch-green">Finding 37.5% and 7.14% of Numbers</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">37.5% = 3/8, 7.14% = 1/14</div>
+        <div class="formula">37.5% of 64 = 3/8 × 64 = 24
+7.14% of 350 = 1/14 × 350 = 25</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-purple">Finding 62.5% and 9.09% of Numbers</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">62.5% = 5/8, 9.09% = 1/11</div>
+        <div class="formula">62.5% of 32 = 5/8 × 32 = 20
+9.09% of 473 = 1/11 × 473 = 43</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        7.14% = half of 14.28% (both from 1/7 family: 1/14 and 1/7). 9.09% comes from 1/11 — connects to Ch05 Division Type-7 (÷11 family).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: 11.11 AND DERIVED -->
+<div id="t8" class="tab">
+  <div class="card">
+    <div class="card-header ch-orange">Type 10 — Finding 11.11% of Numbers</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">11.11% = 1/9</div>
+        <div class="formula">11.11% of 819 = 1/9 × 819 = 91</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-red">Type 12 — Deriving New Percentages from Known Fractions</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Multiply a known base fraction to get related percentages</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 22.22% (derived from 11.11%)</div>
+        <div class="formula">11.11% = 1/9
+So 22.22% = 2 × (1/9) = 2/9</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 7.14% (derived from 14.28%)</div>
+        <div class="formula">14.28% = 1/7
+So 7.14% (half of 14.28%) = 1/14</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Agar % ka double/half/multiple ek known fraction se related dikhe, to naya fraction bhi usi anupaat mein derive kar lo — nayi table yaad karne ki zaroorat nahi.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: DAL BADLU -->
+<div id="t9" class="tab">
+  <div class="card">
+    <div class="card-header ch-teal">Type 11 — Dal Badlu Approach (Reversal Trick)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Rule: a% of b = b% of a — swap which number carries the % symbol</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 24% of 25</div>
+        <div class="formula">Rewrite as: 25% of 24
+Step 1: 25% = 1/4
+Step 2: 1/4 × 24 = 6</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        "Dal Badlu" = swap kar do — jab % wala number "ugly" ho (jaise 24%) lekin doosra number "nice" fraction bana sake (jaise 25=1/4), to hamesha swap karo. Answer same rehta hai, calculation asaan ho jaata hai.
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        112% of 12.5 = 12.5% of 112 = (1/8)×112 = 14 — is tarah bade-lagne-wale % questions turant simple ho jaate hain.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 10: MASTER TABLE -->
+<div id="t10" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">📋 Master Table — All Percentage Types</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>%</th><th>Fraction</th><th>%</th><th>Fraction</th></tr>
+        <tr><td>10%</td><td>1/10</td><td>37.5%</td><td>3/8</td></tr>
+        <tr><td>20%</td><td>1/5</td><td>62.5%</td><td>5/8</td></tr>
+        <tr><td>25%</td><td>1/4</td><td>87.5%</td><td>7/8</td></tr>
+        <tr><td>50%</td><td>1/2</td><td>11.11%</td><td>1/9</td></tr>
+        <tr><td>40%</td><td>2/5</td><td>22.22%</td><td>2/9</td></tr>
+        <tr><td>60%</td><td>3/5</td><td>9.09%</td><td>1/11</td></tr>
+        <tr><td>75%</td><td>3/4</td><td>8.33%</td><td>1/12</td></tr>
+        <tr><td>80%</td><td>4/5</td><td>7.14%</td><td>1/14</td></tr>
+        <tr><td>16.66%</td><td>1/6</td><td>6.66%</td><td>1/15</td></tr>
+        <tr><td>33.33%</td><td>1/3</td><td>6.25%</td><td>1/16</td></tr>
+        <tr><td>12.5%</td><td>1/8</td><td>14.28%</td><td>1/7</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🔑 Special Techniques Recap</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li><strong>Dal Badlu Approach:</strong> a% of b = b% of a (swap when the other number gives a nicer fraction)</li>
+        <li><strong>Derived %:</strong> multiples/halves of known fractions give new percentages instantly (e.g. 22.22% = 2×11.11%)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com &nbsp;·&nbsp; Viral Maths Ch09: Percentage &nbsp;·&nbsp; Bank / SSC / Railway / BPSC / BSSC</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

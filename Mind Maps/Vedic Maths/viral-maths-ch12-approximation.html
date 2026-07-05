@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viral Maths — Ch12: Approximation | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--gold:#f5c842;
+  --accent1:#e74c3c;--accent2:#3498db;--accent3:#2ecc71;
+  --accent4:#9b59b6;--accent5:#e67e22;--accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#e7e9f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7;}
+header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:2px solid var(--gold);padding:22px 28px;}
+header h1{color:var(--gold);font-size:1.5rem;letter-spacing:1px;}
+header p{color:#aab;font-size:.88rem;margin-top:4px;}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab-nav button{background:var(--surface2);color:#ccd;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.tab-nav button.active{color:var(--gold);border-color:var(--gold);border-bottom:2px solid var(--gold);font-weight:700;}
+.tab-nav button:hover:not(.active){border-color:#888;color:#fff;}
+.tab{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.tab.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.card-header{padding:12px 18px;font-weight:700;font-size:.95rem;letter-spacing:.5px;}
+.ch-gold{background:linear-gradient(90deg,#2a2000,#1a1d27);color:var(--gold);}
+.ch-green{background:linear-gradient(90deg,#0a2010,#1a1d27);color:var(--accent3);}
+.ch-blue{background:linear-gradient(90deg,#0a1525,#1a1d27);color:var(--accent2);}
+.ch-purple{background:linear-gradient(90deg,#180a28,#1a1d27);color:var(--accent4);}
+.ch-orange{background:linear-gradient(90deg,#251200,#1a1d27);color:var(--accent5);}
+.ch-red{background:linear-gradient(90deg,#250808,#1a1d27);color:var(--accent1);}
+.ch-teal{background:linear-gradient(90deg,#051a18,#1a1d27);color:var(--accent6);}
+.card-body{padding:16px 18px;}
+ul.arrow-list{list-style:none;padding:0;}
+ul.arrow-list li{padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #1e2235;}
+ul.arrow-list li:last-child{border-bottom:none;}
+ul.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);}
+.rule-box{border:1px solid var(--gold);border-radius:8px;padding:12px 16px;margin:10px 0;background:#1c1900;}
+.rule-box .rule-label{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;}
+.rule-box .formula{color:#fff;font-size:.96rem;font-weight:600;font-family:'Courier New',monospace;white-space:pre-line;}
+.exam-trap{border-left:4px solid var(--accent1);background:#1a0909;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.exam-trap .et-label{color:var(--accent1);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+.quick-recall{border-left:4px solid var(--accent2);background:#091524;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.quick-recall .qr-label{color:var(--accent2);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+table.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+table.data-table th{background:#2a2200;color:var(--gold);padding:9px 12px;text-align:left;border-bottom:2px solid var(--gold);}
+table.data-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+table.data-table tr:hover td{background:#1e2235;}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:12px 0;}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.pos-card .pc-title{color:var(--gold);font-weight:700;font-size:.88rem;margin-bottom:6px;}
+.pos-card .pc-step{color:#e7e9f0;font-size:.88rem;margin-bottom:4px;}
+.pos-card .pc-eg{color:var(--accent3);font-size:.82rem;margin-top:6px;font-family:'Courier New',monospace;}
+footer{text-align:center;padding:18px;color:#667;font-size:.8rem;border-top:1px solid var(--border);margin-top:30px;}
+@media(max-width:600px){.tab-nav button{font-size:.75rem;padding:6px 10px;}.tab{padding:14px;}.pos-grid{grid-template-columns:1fr;}table.data-table{display:block;overflow-x:auto;}}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tbl-wrap table{display:table!important;min-width:auto;width:max-content!important;white-space:nowrap;margin:0!important;border:none!important;border-radius:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+img,svg,video,iframe{max-width:100%;height:auto}
+@media(max-width:768px){
+  table{display:table!important;width:max-content!important;white-space:nowrap}
+}
+@media(max-width:480px){
+  body{padding:10px}
+  .container{padding:0}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<header>
+  <h1>🎯 Viral Maths — Chapter 12: Approximation</h1>
+  <p>by Navneet Tiwari (Adda247) &nbsp;·&nbsp; 4 Rounding Cases + Root Approximation · Bank / SSC / Railway / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('t1',this)">📋 Overview</button>
+  <button onclick="switchTab('t2',this)">🔢 4 Rounding Cases</button>
+  <button onclick="switchTab('t3',this)">√ Root Approximation</button>
+  <button onclick="switchTab('t4',this)">📝 Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="t1" class="tab active">
+  <div class="card">
+    <div class="card-header ch-gold">📌 What This Chapter Covers</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Approximation = converting a decimal number to a complete (whole) number, but not exactly equal — round off karna.</li>
+        <li>4 cases hain rounding ke — digit ki value ke hisaab se decide karo kya karna hai.</li>
+        <li>Ek separate technique bhi hai: root approximation — nearby perfect square/cube dhundh ke root nikalna.</li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Yeh chapter Ch07 (Square Roots) aur Ch08 (Cube Roots) se connected hai — root approximation wahi guess-approach hai, bas ab non-perfect numbers ke liye use ho raha hai.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🗂️ Chapter Index</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Tab</th><th>Content</th></tr>
+        <tr><td>2</td><td>4 Cases of Decimal Rounding</td></tr>
+        <tr><td>3</td><td>Root Approximation (using nearby perfect square/cube)</td></tr>
+        <tr><td>4</td><td>Master Table</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: 4 ROUNDING CASES -->
+<div id="t2" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Case 1 — Digit After Decimal is MORE than 5</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 54.8</div>
+        <div class="formula">Digit right of decimal (8) > 5
+Add 1 to the digit left of decimal: 54 → 55
+Answer: 55</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">Case 2 — Digit After Decimal is LESS than 5</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 54.3</div>
+        <div class="formula">Digit right of decimal (3) < 5
+No change to the left-side digit
+Answer: 54</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-green">Case 3 — Digit After Decimal is EXACTLY 5</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 54.5</div>
+        <div class="formula">Digit right of decimal is exactly 5
+No change to the original number
+Answer: 54.5 (stays as-is)</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Case 3 mein number ko round UP ya DOWN nahi karte — number bilkul same rehta hai jaisa tha (54.5 hi rehta hai, na 54 na 55). Yeh common misconception hai ki exactly-5 hamesha round up hota hai — is book ke rule mein aisa nahi hai.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-purple">Case 4 — Digit is 5, AND Next Digit is MORE than 5</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 34.58</div>
+        <div class="formula">Step 1: Digit right of decimal is 5, next digit (8) > 5
+Step 2: Since next digit > 5, treat the 5 as incremented to 6
+Step 3: Now apply Case 1 logic (6 > 5): add 1 to left digit
+34 → 35
+Answer: 35</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL — All 4 Cases At a Glance</div>
+        Digit >5 → round UP | Digit &lt;5 → round DOWN | Digit =5 exactly (nothing after) → NO CHANGE | Digit=5 but next digit>5 → treat as 6, then round UP
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: ROOT APPROXIMATION -->
+<div id="t3" class="tab">
+  <div class="card">
+    <div class="card-header ch-orange">Root Approximation — Nearest Perfect Square/Cube</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Find the nearby value which IS a perfect square or perfect cube, then compute its root</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: √37</div>
+        <div class="formula">Nearby perfect square: 36 (very close to 37)
+√37 ≈ √36 = 6</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: √126</div>
+        <div class="formula">Nearby perfect square: 125 is a perfect CUBE (5³), not square
+Actually nearby perfect square: 121 (11²)
+√126 ≈ √121 = 11</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Yeh technique tabhi kaam karti hai jab number kisi perfect square/cube ke BAHUT paas ho — exam mein aise hi questions banaye jaate hain taaki approximation clean nikle.
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Squares 1–100 aur cubes 1–25 (Ch01 aur Ch08 se) fluent yaad hone chahiye — warna "nearby perfect square/cube" dhundhna slow ho jaayega.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: MASTER TABLE -->
+<div id="t4" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">📋 Master Table — Approximation Rules</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Case</th><th>Condition</th><th>Action</th></tr>
+        <tr><td>Case 1</td><td>Digit right of decimal > 5</td><td>Round UP (add 1 to left digit)</td></tr>
+        <tr><td>Case 2</td><td>Digit right of decimal < 5</td><td>Round DOWN (no change)</td></tr>
+        <tr><td>Case 3</td><td>Digit right of decimal = 5 exactly</td><td>NO CHANGE — number stays as-is</td></tr>
+        <tr><td>Case 4</td><td>Digit = 5, next digit > 5</td><td>Treat 5 as 6, then round UP</td></tr>
+        <tr><td>Root Approximation</td><td>Any non-perfect square/cube</td><td>Use nearest perfect square/cube's root</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com &nbsp;·&nbsp; Viral Maths Ch12: Approximation &nbsp;·&nbsp; Bank / SSC / Railway / BPSC / BSSC</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viral Maths — Ch06: Squares | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--gold:#f5c842;
+  --accent1:#e74c3c;--accent2:#3498db;--accent3:#2ecc71;
+  --accent4:#9b59b6;--accent5:#e67e22;--accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#e7e9f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7;}
+header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:2px solid var(--gold);padding:22px 28px;}
+header h1{color:var(--gold);font-size:1.5rem;letter-spacing:1px;}
+header p{color:#aab;font-size:.88rem;margin-top:4px;}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab-nav button{background:var(--surface2);color:#ccd;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.tab-nav button.active{color:var(--gold);border-color:var(--gold);border-bottom:2px solid var(--gold);font-weight:700;}
+.tab-nav button:hover:not(.active){border-color:#888;color:#fff;}
+.tab{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.tab.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.card-header{padding:12px 18px;font-weight:700;font-size:.95rem;letter-spacing:.5px;}
+.ch-gold{background:linear-gradient(90deg,#2a2000,#1a1d27);color:var(--gold);}
+.ch-green{background:linear-gradient(90deg,#0a2010,#1a1d27);color:var(--accent3);}
+.ch-blue{background:linear-gradient(90deg,#0a1525,#1a1d27);color:var(--accent2);}
+.ch-purple{background:linear-gradient(90deg,#180a28,#1a1d27);color:var(--accent4);}
+.ch-orange{background:linear-gradient(90deg,#251200,#1a1d27);color:var(--accent5);}
+.ch-red{background:linear-gradient(90deg,#250808,#1a1d27);color:var(--accent1);}
+.ch-teal{background:linear-gradient(90deg,#051a18,#1a1d27);color:var(--accent6);}
+.card-body{padding:16px 18px;}
+ul.arrow-list{list-style:none;padding:0;}
+ul.arrow-list li{padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #1e2235;}
+ul.arrow-list li:last-child{border-bottom:none;}
+ul.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);}
+.rule-box{border:1px solid var(--gold);border-radius:8px;padding:12px 16px;margin:10px 0;background:#1c1900;}
+.rule-box .rule-label{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;}
+.rule-box .formula{color:#fff;font-size:.96rem;font-weight:600;font-family:'Courier New',monospace;white-space:pre-line;}
+.exam-trap{border-left:4px solid var(--accent1);background:#1a0909;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.exam-trap .et-label{color:var(--accent1);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+.quick-recall{border-left:4px solid var(--accent2);background:#091524;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.quick-recall .qr-label{color:var(--accent2);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+table.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+table.data-table th{background:#2a2200;color:var(--gold);padding:9px 12px;text-align:left;border-bottom:2px solid var(--gold);}
+table.data-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+table.data-table tr:hover td{background:#1e2235;}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:12px 0;}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.pos-card .pc-title{color:var(--gold);font-weight:700;font-size:.88rem;margin-bottom:6px;}
+.pos-card .pc-step{color:#e7e9f0;font-size:.88rem;margin-bottom:4px;}
+.pos-card .pc-eg{color:var(--accent3);font-size:.82rem;margin-top:6px;font-family:'Courier New',monospace;}
+footer{text-align:center;padding:18px;color:#667;font-size:.8rem;border-top:1px solid var(--border);margin-top:30px;}
+@media(max-width:600px){.tab-nav button{font-size:.75rem;padding:6px 10px;}.tab{padding:14px;}.pos-grid{grid-template-columns:1fr;}table.data-table{display:block;overflow-x:auto;}}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tbl-wrap table{display:table!important;min-width:auto;width:max-content!important;white-space:nowrap;margin:0!important;border:none!important;border-radius:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+img,svg,video,iframe{max-width:100%;height:auto}
+@media(max-width:768px){
+  table{display:table!important;width:max-content!important;white-space:nowrap}
+}
+@media(max-width:480px){
+  body{padding:10px}
+  .container{padding:0}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<header>
+  <h1>🔢 Viral Maths — Chapter 06: Squares</h1>
+  <p>by Navneet Tiwari (Adda247) &nbsp;·&nbsp; 5 Named Techniques for Finding Squares Fast · Bank / SSC / Railway / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('t1',this)">📋 Overview</button>
+  <button onclick="switchTab('t2',this)">🎯 Near Base 50</button>
+  <button onclick="switchTab('t3',this)">💯 Near Base 100</button>
+  <button onclick="switchTab('t4',this)">5️⃣ Ends in 5</button>
+  <button onclick="switchTab('t5',this)">🔷 Near Base 150/200/300...</button>
+  <button onclick="switchTab('t6',this)">2️⃣5️⃣ Ends in 25</button>
+  <button onclick="switchTab('t7',this)">📝 Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="t1" class="tab active">
+  <div class="card">
+    <div class="card-header ch-gold">📌 What This Chapter Covers</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Finding squares fast is a foundational skill — it feeds directly into Multiplication (Padosan, Trishul approaches) and Square Roots (next chapter).</li>
+        <li>5 named techniques hain, har ek specific number-range ke liye optimized: near 50, near 100, ending in 5, near 150/200/300+, ending in 25.</li>
+        <li>Book ki advice: squares 1–100 pehle cold yaad karo (Ch01 Important Products mein diya gaya), phir yeh advanced techniques 3-digit numbers ke liye use karo.</li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Selection guide: number 40s-50s mein → Near Base 50; number 90s-120s mein → Near Base 100; ends in 5 → dedicated 5-trick; number 150+ near a multiple of 50/100 → Near Base 150/200/300; ends in 25 → dedicated 25-trick.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🗂️ Chapter Index</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Tab</th><th>Technique</th><th>Best For</th></tr>
+        <tr><td>2</td><td>Near Base 50</td><td>Numbers roughly 35–65</td></tr>
+        <tr><td>3</td><td>Near Base 100</td><td>Numbers roughly 85–125</td></tr>
+        <tr><td>4</td><td>Ends in 5</td><td>Any number ending in digit 5</td></tr>
+        <tr><td>5</td><td>Near Base 150/200/250/300...</td><td>3-digit numbers near a multiple of 50</td></tr>
+        <tr><td>6</td><td>Ends in 25</td><td>Numbers like 125, 225, 325, 725, 825...</td></tr>
+        <tr><td>7</td><td>Master Table</td><td>All 5 techniques summarized</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: NEAR BASE 50 -->
+<div id="t2" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Square of Number Near Base 50</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: (41)² — number LESS than 50</div>
+        <div class="formula">Step 1: 41 is 9 less than 50
+Step 2: Subtract 9 from 25: 25−9 = 16
+Step 3: Square of 9 = 81
+Step 4: Combine: 1681</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: (53)² — number MORE than 50</div>
+        <div class="formula">Step 1: 53 is 3 more than 50
+Step 2: Add 3 to 25: 25+3 = 28
+Step 3: Square of 3 = 09
+Step 4: Combine: 2809</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Distance ka square hamesha 2-digit slot mein jaata hai — agar single digit ho (jaise 3²=9), to <strong>09</strong> likho, sirf 9 nahi. Warna answer galat ho jayega.
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Number 50 se KAM ho to 25 mein se distance GHATAO. Number 50 se ZYADA ho to 25 mein distance JODO. Phir distance ka square right side mein attach karo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: NEAR BASE 100 -->
+<div id="t3" class="tab">
+  <div class="card">
+    <div class="card-header ch-blue">Square of Number Near Base 100</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: (94)² — number LESS than 100</div>
+        <div class="formula">Step 1: 94 is 6 less than 100
+Step 2: Subtract 6 from the ORIGINAL number: 94−6 = 88
+Step 3: Square of 6 = 36
+Step 4: Combine: 8836</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: (112)² — number MORE than 100 (with carry)</div>
+        <div class="formula">Step 1: 112 is 12 more than 100
+Step 2: Add 12 to the ORIGINAL number: 112+12 = 124
+Step 3: Square of 12 = 144
+Step 4: 144 has 3 digits — carry the extra 1 to 124: 124+1 = 125
+Step 5: Combine: 12544</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Base 50 approach mein hum "25" se add/subtract karte hain, lekin Base 100 approach mein hum ORIGINAL NUMBER se add/subtract karte hain — yeh formula alag hai, mat mix karo.<br/>
+        Agar distance ka square 2 digits se zyada ho jaaye (jaise 12²=144), to extra digit ko carry karo left mein.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: ENDS IN 5 -->
+<div id="t4" class="tab">
+  <div class="card">
+    <div class="card-header ch-green">Square of Number Ending with 5</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: (65)²</div>
+        <div class="formula">Step 1: Square of last digit 5: 25 (always fixed ending)
+Step 2: Multiply the leading digit (6) by its successor (7): 6×7 = 42
+Step 3: Combine: 4225</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Formula: n5² = [n×(n+1)] | 25. Works for ANY number ending in 5 — 15², 25², 35²... even 105², 205².
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: NEAR BASE 150/200/300 -->
+<div id="t5" class="tab">
+  <div class="card">
+    <div class="card-header ch-purple">Square of Number Close to Base 150/200/250/300...</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: (207)² — number MORE than base 200</div>
+        <div class="formula">Step 1: 207 is 7 more than 200 (extra = 7)
+Step 2: Add extra to original: 207+7 = 214
+Step 3: Since base is 200, multiply by (200/100=2): 214×2 = 428
+Step 4: Square the extra: 7² = 49
+Step 5: Combine: 42849</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: (348)² — number LESS than base 350</div>
+        <div class="formula">Step 1: 348 is 2 less than 350 (negative extra = 2)
+Step 2: Subtract from original: 348−2 = 346
+Step 3: Since base is 350, multiply by (350/100=3.5): 346×3.5 = 1211
+Step 4: Square the extra: 2² = 04
+Step 5: Combine: 121104</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL — Multiplier Rule</div>
+        Multiplier = Base ÷ 100. Base 150→×1.5, Base 200→×2, Base 250→×2.5, Base 300→×3, Base 350→×3.5, Base 400→×4.
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Extra number ka square hamesha 2-digit slot mein rakho (single-digit extra ho to 0 pad karo, jaise 2²=04) — warna final combine step mein digits misalign ho jayenge.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: ENDS IN 25 -->
+<div id="t6" class="tab">
+  <div class="card">
+    <div class="card-header ch-orange">Square of Number Ending With 25</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: (725)²</div>
+        <div class="formula">Step 1: Square the leading digit(s): 7² = 49
+Step 2: Add half of the leading digit(s) to it: 49 + 3.5 = 52.5
+Step 3: Multiply by 10: 52.5 × 10 = 525
+Step 4: Square of 25 (fixed): 625
+Step 5: Combine: 525625</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: (825)²</div>
+        <div class="formula">Step 1: 8² = 64
+Step 2: 64 + half of 8 (4) = 68
+Step 3: 68 × 10 = 680
+Step 4: Square of 25: 625
+Step 5: Combine: 680625</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Formula: for n25², compute [n² + n/2] × 10, then attach 625 (the fixed square of 25).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: MASTER TABLE -->
+<div id="t7" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">📋 Master Table — All Square Techniques</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Technique</th><th>Range</th><th>Core Formula</th></tr>
+        <tr><td>Near Base 50</td><td>~35–65</td><td>(25±distance) | distance² (2-digit slot)</td></tr>
+        <tr><td>Near Base 100</td><td>~85–125</td><td>(original±distance) | distance² (carry if ≥100)</td></tr>
+        <tr><td>Ends in 5</td><td>any n5</td><td>[n×(n+1)] | 25</td></tr>
+        <tr><td>Near Base 150/200/300...</td><td>3-digit near multiples of 50</td><td>(original±extra)×(base/100) | extra² (2-digit slot)</td></tr>
+        <tr><td>Ends in 25</td><td>any n25</td><td>[n²+n/2]×10 | 625</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🔑 Approach Selection Flowchart</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Number ends in 25 → <strong>Ends-in-25 technique</strong> (most specific, check first)</li>
+        <li>Number ends in 5 (but not 25) → <strong>Ends-in-5 technique</strong></li>
+        <li>Number is roughly 35–65 → <strong>Near Base 50</strong></li>
+        <li>Number is roughly 85–125 → <strong>Near Base 100</strong></li>
+        <li>3-digit number near a multiple of 50 (150, 200, 250, 300...) → <strong>Near Base 150/200/300 technique</strong></li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Sabse pehle check karo: kya number 25 ya 5 pe end hota hai? Agar haan, to woh dedicated trick use karo — sabse fast hain. Warna base-proximity dekh ke Near-50/100/150+ choose karo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com &nbsp;·&nbsp; Viral Maths Ch06: Squares &nbsp;·&nbsp; Bank / SSC / Railway / BPSC / BSSC</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

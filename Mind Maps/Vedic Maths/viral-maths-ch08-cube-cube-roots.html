@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viral Maths — Ch08: Cube & Cube Roots | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--gold:#f5c842;
+  --accent1:#e74c3c;--accent2:#3498db;--accent3:#2ecc71;
+  --accent4:#9b59b6;--accent5:#e67e22;--accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#e7e9f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7;}
+header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:2px solid var(--gold);padding:22px 28px;}
+header h1{color:var(--gold);font-size:1.5rem;letter-spacing:1px;}
+header p{color:#aab;font-size:.88rem;margin-top:4px;}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab-nav button{background:var(--surface2);color:#ccd;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.tab-nav button.active{color:var(--gold);border-color:var(--gold);border-bottom:2px solid var(--gold);font-weight:700;}
+.tab-nav button:hover:not(.active){border-color:#888;color:#fff;}
+.tab{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.tab.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.card-header{padding:12px 18px;font-weight:700;font-size:.95rem;letter-spacing:.5px;}
+.ch-gold{background:linear-gradient(90deg,#2a2000,#1a1d27);color:var(--gold);}
+.ch-green{background:linear-gradient(90deg,#0a2010,#1a1d27);color:var(--accent3);}
+.ch-blue{background:linear-gradient(90deg,#0a1525,#1a1d27);color:var(--accent2);}
+.ch-purple{background:linear-gradient(90deg,#180a28,#1a1d27);color:var(--accent4);}
+.ch-orange{background:linear-gradient(90deg,#251200,#1a1d27);color:var(--accent5);}
+.ch-red{background:linear-gradient(90deg,#250808,#1a1d27);color:var(--accent1);}
+.ch-teal{background:linear-gradient(90deg,#051a18,#1a1d27);color:var(--accent6);}
+.card-body{padding:16px 18px;}
+ul.arrow-list{list-style:none;padding:0;}
+ul.arrow-list li{padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #1e2235;}
+ul.arrow-list li:last-child{border-bottom:none;}
+ul.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);}
+.rule-box{border:1px solid var(--gold);border-radius:8px;padding:12px 16px;margin:10px 0;background:#1c1900;}
+.rule-box .rule-label{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;}
+.rule-box .formula{color:#fff;font-size:.96rem;font-weight:600;font-family:'Courier New',monospace;white-space:pre-line;}
+.exam-trap{border-left:4px solid var(--accent1);background:#1a0909;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.exam-trap .et-label{color:var(--accent1);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+.quick-recall{border-left:4px solid var(--accent2);background:#091524;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.quick-recall .qr-label{color:var(--accent2);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+table.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+table.data-table th{background:#2a2200;color:var(--gold);padding:9px 12px;text-align:left;border-bottom:2px solid var(--gold);}
+table.data-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:center;}
+table.data-table tr:hover td{background:#1e2235;}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:12px 0;}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.pos-card .pc-title{color:var(--gold);font-weight:700;font-size:.88rem;margin-bottom:6px;}
+.pos-card .pc-step{color:#e7e9f0;font-size:.88rem;margin-bottom:4px;}
+.pos-card .pc-eg{color:var(--accent3);font-size:.82rem;margin-top:6px;font-family:'Courier New',monospace;}
+footer{text-align:center;padding:18px;color:#667;font-size:.8rem;border-top:1px solid var(--border);margin-top:30px;}
+@media(max-width:600px){.tab-nav button{font-size:.75rem;padding:6px 10px;}.tab{padding:14px;}.pos-grid{grid-template-columns:1fr;}table.data-table{display:block;overflow-x:auto;}}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tbl-wrap table{display:table!important;min-width:auto;width:max-content!important;white-space:nowrap;margin:0!important;border:none!important;border-radius:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+img,svg,video,iframe{max-width:100%;height:auto}
+@media(max-width:768px){
+  table{display:table!important;width:max-content!important;white-space:nowrap}
+}
+@media(max-width:480px){
+  body{padding:10px}
+  .container{padding:0}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<header>
+  <h1>🎲 Viral Maths — Chapter 08: Cube &amp; Cube Roots</h1>
+  <p>by Navneet Tiwari (Adda247) &nbsp;·&nbsp; Cubes 1–25 Reference + Cube Root Guess Approach · Bank / SSC / Railway / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('t1',this)">📋 Overview</button>
+  <button onclick="switchTab('t2',this)">🔢 Cubes 1–25</button>
+  <button onclick="switchTab('t3',this)">🔍 Cube Root Approach</button>
+  <button onclick="switchTab('t4',this)">📝 Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="t1" class="tab active">
+  <div class="card">
+    <div class="card-header ch-gold">📌 What This Chapter Covers</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Book ki seedhi baat: cube of any number ke liye koi trick nahi chahiye — exams mein sirf 1 to 25 tak ke cubes puche jaate hain. Isliye bas yeh 25 values cold yaad karo.</li>
+        <li>Cube ROOT ke liye ek "Guess Approach" diya gaya hai jo left-part aur units-digit dono ka use karta hai.</li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Cube Root Approach directly Ch07 (Square Roots) ke Guess Approach jaisa hai — bas ab teen-teen digits ka group banate hain (kyunki cube hai, square nahi).
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🗂️ Chapter Index</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table" style="text-align:left;">
+        <tr><th>Tab</th><th>Content</th></tr>
+        <tr><td>2</td><td>Cubes of 1 to 25 — full reference table (memorise, no trick)</td></tr>
+        <tr><td>3</td><td>Cube Root Right Approach — Guess method with units-digit mapping</td></tr>
+        <tr><td>4</td><td>Master Table — everything summarized</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: CUBES 1-25 -->
+<div id="t2" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">🔢 Cubes of Numbers 1 to 25 (Memorise — No Trick Needed)</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>n</th><th>n³</th><th>n</th><th>n³</th><th>n</th><th>n³</th><th>n</th><th>n³</th><th>n</th><th>n³</th></tr>
+        <tr><td>1</td><td>1</td><td>6</td><td>216</td><td>11</td><td>1331</td><td>16</td><td>4096</td><td>21</td><td>9261</td></tr>
+        <tr><td>2</td><td>8</td><td>7</td><td>343</td><td>12</td><td>1728</td><td>17</td><td>4913</td><td>22</td><td>10648</td></tr>
+        <tr><td>3</td><td>27</td><td>8</td><td>512</td><td>13</td><td>2197</td><td>18</td><td>5832</td><td>23</td><td>12167</td></tr>
+        <tr><td>4</td><td>64</td><td>9</td><td>729</td><td>14</td><td>2744</td><td>19</td><td>6859</td><td>24</td><td>13824</td></tr>
+        <tr><td>5</td><td>125</td><td>10</td><td>1000</td><td>15</td><td>3375</td><td>20</td><td>8000</td><td>25</td><td>15625</td></tr>
+      </table></div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Cubes 1–25 ratte maarna hi sabse fast tareeka hai — koi "shortcut" dhundhne ki koshish mat karo, waqt barbaad hoga. Book khud kehti hai: "no trick needed."
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: CUBE ROOT APPROACH -->
+<div id="t3" class="tab">
+  <div class="card">
+    <div class="card-header ch-blue">Cube Root Right Approach (Guess Method)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: ∛12167</div>
+        <div class="formula">Step 1: Break the number leaving 3 digits from the right: 12 | 167
+Step 2: Cube of which number is closest to (below) 12? → 2³=8, so tens digit = 2
+Step 3: Units digit of 12167 is 7 → which digit's cube ends in 7? → 3³=27, ends in 7 → units digit = 3
+Step 4: Combine: 23</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL — Cube Units-Digit Mapping</div>
+        Cube ends in: 1 → root ends in 1
+        Cube ends in: 2 → root ends in 8
+        Cube ends in: 3 → root ends in 7
+        Cube ends in: 4 → root ends in 4
+        Cube ends in: 5 → root ends in 5
+        Cube ends in: 6 → root ends in 6
+        Cube ends in: 7 → root ends in 3
+        Cube ends in: 8 → root ends in 2
+        Cube ends in: 9 → root ends in 9
+        Cube ends in: 0 → root ends in 0
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Sirf 2 aur 8, aur 3 aur 7 flip hote hain — baaki digits (1,4,5,6,9,0) apne aap same rehte hain. Yeh cube-root mapping square-root mapping se DIFFERENT hai (square roots mein 1↔9 aur 4↔8 tha) — dono ko mix mat karo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: MASTER TABLE -->
+<div id="t4" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">📋 Master Table — Chapter 8 Summary</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table" style="text-align:left;">
+        <tr><th>Topic</th><th>Approach</th></tr>
+        <tr><td>Cube of a number</td><td>No trick — memorise cubes 1–25 directly</td></tr>
+        <tr><td>Cube root</td><td>Split leaving 3 digits from right → left part gives tens digit (nearest cube below) → units digit uses the cube-ending map</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🔑 Cube Units-Digit Quick Reference</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Cube ends in</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+        <tr><th>Root ends in</th><td>0</td><td>1</td><td>8</td><td>7</td><td>4</td><td>5</td><td>6</td><td>3</td><td>2</td><td>9</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com &nbsp;·&nbsp; Viral Maths Ch08: Cube &amp; Cube Roots &nbsp;·&nbsp; Bank / SSC / Railway / BPSC / BSSC</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

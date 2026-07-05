@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viral Maths — Ch01: Important Products | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--gold:#f5c842;
+  --accent1:#e74c3c;--accent2:#3498db;--accent3:#2ecc71;
+  --accent4:#9b59b6;--accent5:#e67e22;--accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#e7e9f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7;}
+header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:2px solid var(--gold);padding:22px 28px;}
+header h1{color:var(--gold);font-size:1.5rem;letter-spacing:1px;}
+header p{color:#aab;font-size:.88rem;margin-top:4px;}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab-nav button{background:var(--surface2);color:#ccd;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.tab-nav button.active{color:var(--gold);border-color:var(--gold);border-bottom:2px solid var(--gold);font-weight:700;}
+.tab-nav button:hover:not(.active){border-color:#888;color:#fff;}
+.tab{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.tab.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.card-header{padding:12px 18px;font-weight:700;font-size:.95rem;letter-spacing:.5px;}
+.ch-gold{background:linear-gradient(90deg,#2a2000,#1a1d27);color:var(--gold);}
+.ch-green{background:linear-gradient(90deg,#0a2010,#1a1d27);color:var(--accent3);}
+.ch-blue{background:linear-gradient(90deg,#0a1525,#1a1d27);color:var(--accent2);}
+.ch-purple{background:linear-gradient(90deg,#180a28,#1a1d27);color:var(--accent4);}
+.ch-orange{background:linear-gradient(90deg,#251200,#1a1d27);color:var(--accent5);}
+.ch-red{background:linear-gradient(90deg,#250808,#1a1d27);color:var(--accent1);}
+.ch-teal{background:linear-gradient(90deg,#051a18,#1a1d27);color:var(--accent6);}
+.card-body{padding:16px 18px;}
+ul.arrow-list{list-style:none;padding:0;}
+ul.arrow-list li{padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #1e2235;}
+ul.arrow-list li:last-child{border-bottom:none;}
+ul.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);}
+.rule-box{border:1px solid var(--gold);border-radius:8px;padding:12px 16px;margin:10px 0;background:#1c1900;}
+.rule-box .rule-label{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;}
+.rule-box .formula{color:#fff;font-size:.96rem;font-weight:600;font-family:'Courier New',monospace;white-space:pre-line;}
+.exam-trap{border-left:4px solid var(--accent1);background:#1a0909;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.exam-trap .et-label{color:var(--accent1);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+.quick-recall{border-left:4px solid var(--accent2);background:#091524;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.quick-recall .qr-label{color:var(--accent2);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+table.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+table.data-table th{background:#2a2200;color:var(--gold);padding:9px 12px;text-align:left;border-bottom:2px solid var(--gold);}
+table.data-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top;text-align:center;}
+table.data-table tr:hover td{background:#1e2235;}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:12px 0;}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;}
+.pos-card .pc-title{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;text-align:center;}
+.pos-card .pc-step{color:#e7e9f0;font-size:.88rem;margin-bottom:4px;}
+.pos-card .pc-eg{color:var(--accent3);font-size:.82rem;margin-top:6px;font-family:'Courier New',monospace;}
+footer{text-align:center;padding:18px;color:#667;font-size:.8rem;border-top:1px solid var(--border);margin-top:30px;}
+@media(max-width:600px){.tab-nav button{font-size:.75rem;padding:6px 10px;}.tab{padding:14px;}.pos-grid{grid-template-columns:repeat(2,1fr);}table.data-table{display:block;overflow-x:auto;}}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tbl-wrap table{display:table!important;min-width:auto;width:max-content!important;white-space:nowrap;margin:0!important;border:none!important;border-radius:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+img,svg,video,iframe{max-width:100%;height:auto}
+@media(max-width:768px){
+  table{display:table!important;width:max-content!important;white-space:nowrap}
+}
+@media(max-width:480px){
+  body{padding:10px}
+  .container{padding:0}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<header>
+  <h1>🔢 Viral Maths — Chapter 01: Important Products</h1>
+  <p>by Navneet Tiwari (Adda247) &nbsp;·&nbsp; Chaurahas · Magic Patterns · Doubles · Tables 2–25 · Squares 1–100</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('t1',this)">📋 Overview</button>
+  <button onclick="switchTab('t2',this)">🚦 Chaurahas</button>
+  <button onclick="switchTab('t3',this)">✨ Magic Patterns</button>
+  <button onclick="switchTab('t4',this)">👯 Doubles 1–100</button>
+  <button onclick="switchTab('t5',this)">📊 Tables 2–25</button>
+  <button onclick="switchTab('t6',this)">🔢 Squares 1–100</button>
+  <button onclick="switchTab('t7',this)">📝 Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="t1" class="tab active">
+  <div class="card">
+    <div class="card-header ch-gold">📌 Why This Chapter Matters</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Yeh chapter poori Viral Maths ki foundation hai — yahan diye gaye products, patterns, tables, aur squares agar cold yaad hain to baaki saare chapters (Addition se Fractions tak) bahut fast ho jaate hain.</li>
+        <li>Kuch bhi calculate karne se pehle brain ko "known constants" ka bank chahiye — yeh chapter wahi bank banata hai.</li>
+        <li>Daily revision zaroori hai: Doubles, Tables (2–25), Squares (1–100) — inhe test lene se pehle 5 min bhi revise karo.</li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Is chapter mein 5 sections hain: Chaurahas (equal-product sets), Magic Number Patterns, Double of Numbers (1–100), Multiplication Tables (2–25), Squares (1–100).
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🗂️ Chapter Index</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Tab</th><th>Topic</th><th>What's Inside</th></tr>
+        <tr><td>2</td><td>Chaurahas</td><td>Different factor-pairs giving the same product</td></tr>
+        <tr><td>3</td><td>Magic Patterns</td><td>37-series, 16-series, 19-series, palindromes, repunits, 3-series &amp; 9-series squares</td></tr>
+        <tr><td>4</td><td>Doubles 1–100</td><td>Full lookup table of 2n for n=1 to 100</td></tr>
+        <tr><td>5</td><td>Tables 2–25</td><td>Complete multiplication tables from 2× to 25×</td></tr>
+        <tr><td>6</td><td>Squares 1–100</td><td>Full squares list + digit-cross trick method</td></tr>
+        <tr><td>7</td><td>Master Table</td><td>Everything from this chapter in one place</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: CHAURAHAS -->
+<div id="t2" class="tab">
+  <div class="card">
+    <div class="card-header ch-red">🚦 Chaurahas — Equal-Product Memory Sets</div>
+    <div class="card-body">
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL — Concept</div>
+        "Chauraha" = crossroads. Different multiplication pairs that land on the SAME product. Memorising these lets you instantly swap one pair for another mid-calculation — very useful for simplifying big multiplications and divisions.
+      </div>
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Equal Product</th><th>Factor Pairs (the "crossroads")</th></tr>
+        <tr><td>108</td><td>12×9 = 27×4 = 36×3</td></tr>
+        <tr><td>180</td><td>45×4 = 20×9 = 36×5</td></tr>
+        <tr><td>144</td><td>24×6 = 36×4 = 18×8 = 16×9</td></tr>
+        <tr><td>216</td><td>24×9 = 36×6 = 12×18</td></tr>
+        <tr><td>192</td><td>24×8 = 96×2 = 12×16</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-orange">Cube &amp; Square Anchor Values</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Cube of 6</div>
+        <div class="formula">6³ = 216 (matches the 216 chauraha above — 24×9 = 36×6 = 12×18 = 6³)</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Square Anchors</div>
+        <div class="formula">12² = 144 | 25² = 625 | 12×25 = 300 | 24×25 = 600</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Chaurahas sirf "equal product" dikhate hain — yeh mat socho ki factor pairs khud equal hain. 12×9 aur 27×4 ke factors alag hain, sirf result (108) same hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: MAGIC PATTERNS -->
+<div id="t3" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Consecutive Number Products</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Product</th><th>Result</th></tr>
+        <tr><td>12 × 13</td><td>156</td></tr>
+        <tr><td>13 × 14</td><td>182</td></tr>
+        <tr><td>14 × 15</td><td>210</td></tr>
+        <tr><td>15 × 16</td><td>240</td></tr>
+        <tr><td>16 × 17</td><td>272</td></tr>
+        <tr><td>17 × 18</td><td>306</td></tr>
+        <tr><td>18 × 19</td><td>342</td></tr>
+        <tr><td>12 × 25</td><td>300</td></tr>
+        <tr><td>24 × 25</td><td>600</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-green">37-Series (Multiples of 3)</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>37 ×</th><th>Result</th><th>37 ×</th><th>Result</th></tr>
+        <tr><td>3</td><td>111</td><td>18</td><td>666</td></tr>
+        <tr><td>6</td><td>222</td><td>21</td><td>777</td></tr>
+        <tr><td>9</td><td>333</td><td>24</td><td>888</td></tr>
+        <tr><td>12</td><td>444</td><td>27</td><td>999</td></tr>
+        <tr><td>15</td><td>555</td><td></td><td></td></tr>
+      </table></div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        37 × (3k) always gives a 3-digit repdigit (k, k, k). Divide the multiplier by 3, repeat that digit thrice.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">16-Series &amp; 19-Series</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">16-series (×4 with trailing 6s)</div>
+        <div class="formula">16 × 4 = 64
+166 × 4 = 664
+1666 × 4 = 6664
+16666 × 4 = 66664</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">19-series (×5 with trailing 9s)</div>
+        <div class="formula">19 × 5 = 95
+199 × 5 = 995
+1999 × 5 = 9995
+19999 × 5 = 99995</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-purple">Repunits &amp; Palindromic Squares</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Repunit squares (all 1's)</div>
+        <div class="formula">11 × 11 = 121
+111 × 111 = 12321
+1111 × 1111 = 1234321
+11111 × 11111 = 123454321</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Palindromic-zero squares</div>
+        <div class="formula">101 × 101 = 10201
+1001 × 1001 = 1002001
+10001 × 10001 = 100020001
+100001 × 100001 = 10000200001
+10101 × 10101 = 102030201
+1001001 × 1001001 = 1002003002001</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Pattern sirf tab tak hold karta hai jab tak digit-carry na ho — 111111×111111 se pattern break ho sakta hai kyunki carry lag jaata hai. Exam mein 5-6 repunits tak hi trust karo.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-teal">3-Series &amp; 9-Series Squares</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">3-series</div>
+        <div class="formula">33² = 1089
+333² = 110889
+3333² = 11108889</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">9-series</div>
+        <div class="formula">99² = 9801
+999² = 998001
+9999² = 99980001</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL — Pattern Logic</div>
+        n nines' square = (n−1) nines | 8 | (n−1) zeros | 1. E.g. 9999² → 3 nines, 8, 3 zeros, 1 → 99980001.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: DOUBLES 1-100 -->
+<div id="t4" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">👯 Double of Numbers — 1 to 100</div>
+    <div class="card-body">
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Yeh table roz revise karo — Addition, Ratio, aur Multiplication chapters mein "double karo" step baar-baar aata hai. Zabaani fluent hona chahiye.
+      </div>
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>n</th><th>2n</th><th>n</th><th>2n</th><th>n</th><th>2n</th><th>n</th><th>2n</th></tr>
+<tr><td>1</td><td>2</td><td>26</td><td>52</td><td>51</td><td>102</td><td>76</td><td>152</td></tr>
+<tr><td>2</td><td>4</td><td>27</td><td>54</td><td>52</td><td>104</td><td>77</td><td>154</td></tr>
+<tr><td>3</td><td>6</td><td>28</td><td>56</td><td>53</td><td>106</td><td>78</td><td>156</td></tr>
+<tr><td>4</td><td>8</td><td>29</td><td>58</td><td>54</td><td>108</td><td>79</td><td>158</td></tr>
+<tr><td>5</td><td>10</td><td>30</td><td>60</td><td>55</td><td>110</td><td>80</td><td>160</td></tr>
+<tr><td>6</td><td>12</td><td>31</td><td>62</td><td>56</td><td>112</td><td>81</td><td>162</td></tr>
+<tr><td>7</td><td>14</td><td>32</td><td>64</td><td>57</td><td>114</td><td>82</td><td>164</td></tr>
+<tr><td>8</td><td>16</td><td>33</td><td>66</td><td>58</td><td>116</td><td>83</td><td>166</td></tr>
+<tr><td>9</td><td>18</td><td>34</td><td>68</td><td>59</td><td>118</td><td>84</td><td>168</td></tr>
+<tr><td>10</td><td>20</td><td>35</td><td>70</td><td>60</td><td>120</td><td>85</td><td>170</td></tr>
+<tr><td>11</td><td>22</td><td>36</td><td>72</td><td>61</td><td>122</td><td>86</td><td>172</td></tr>
+<tr><td>12</td><td>24</td><td>37</td><td>74</td><td>62</td><td>124</td><td>87</td><td>174</td></tr>
+<tr><td>13</td><td>26</td><td>38</td><td>76</td><td>63</td><td>126</td><td>88</td><td>176</td></tr>
+<tr><td>14</td><td>28</td><td>39</td><td>78</td><td>64</td><td>128</td><td>89</td><td>178</td></tr>
+<tr><td>15</td><td>30</td><td>40</td><td>80</td><td>65</td><td>130</td><td>90</td><td>180</td></tr>
+<tr><td>16</td><td>32</td><td>41</td><td>82</td><td>66</td><td>132</td><td>91</td><td>182</td></tr>
+<tr><td>17</td><td>34</td><td>42</td><td>84</td><td>67</td><td>134</td><td>92</td><td>184</td></tr>
+<tr><td>18</td><td>36</td><td>43</td><td>86</td><td>68</td><td>136</td><td>93</td><td>186</td></tr>
+<tr><td>19</td><td>38</td><td>44</td><td>88</td><td>69</td><td>138</td><td>94</td><td>188</td></tr>
+<tr><td>20</td><td>40</td><td>45</td><td>90</td><td>70</td><td>140</td><td>95</td><td>190</td></tr>
+<tr><td>21</td><td>42</td><td>46</td><td>92</td><td>71</td><td>142</td><td>96</td><td>192</td></tr>
+<tr><td>22</td><td>44</td><td>47</td><td>94</td><td>72</td><td>144</td><td>97</td><td>194</td></tr>
+<tr><td>23</td><td>46</td><td>48</td><td>96</td><td>73</td><td>146</td><td>98</td><td>196</td></tr>
+<tr><td>24</td><td>48</td><td>49</td><td>98</td><td>74</td><td>148</td><td>99</td><td>198</td></tr>
+<tr><td>25</td><td>50</td><td>50</td><td>100</td><td>75</td><td>150</td><td>100</td><td>200</td></tr>      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: TABLES 2-25 -->
+<div id="t5" class="tab">
+  <div class="card">
+    <div class="card-header ch-blue">📊 Multiplication Tables — 2 to 25</div>
+    <div class="card-body">
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Book ki requirement: tables 2 se 25 tak zabaani yaad hone chahiye, bina soche turant bol sako. Yeh Multiplication aur Division dono chapters ki backbone hai.
+      </div>
+      <div class="pos-grid">
+<div class="pos-card">
+  <div class="pc-title">Table of 2</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>2×1</td><td>2</td></tr><tr><td>2×2</td><td>4</td></tr><tr><td>2×3</td><td>6</td></tr><tr><td>2×4</td><td>8</td></tr><tr><td>2×5</td><td>10</td></tr><tr><td>2×6</td><td>12</td></tr><tr><td>2×7</td><td>14</td></tr><tr><td>2×8</td><td>16</td></tr><tr><td>2×9</td><td>18</td></tr><tr><td>2×10</td><td>20</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 3</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>3×1</td><td>3</td></tr><tr><td>3×2</td><td>6</td></tr><tr><td>3×3</td><td>9</td></tr><tr><td>3×4</td><td>12</td></tr><tr><td>3×5</td><td>15</td></tr><tr><td>3×6</td><td>18</td></tr><tr><td>3×7</td><td>21</td></tr><tr><td>3×8</td><td>24</td></tr><tr><td>3×9</td><td>27</td></tr><tr><td>3×10</td><td>30</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 4</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>4×1</td><td>4</td></tr><tr><td>4×2</td><td>8</td></tr><tr><td>4×3</td><td>12</td></tr><tr><td>4×4</td><td>16</td></tr><tr><td>4×5</td><td>20</td></tr><tr><td>4×6</td><td>24</td></tr><tr><td>4×7</td><td>28</td></tr><tr><td>4×8</td><td>32</td></tr><tr><td>4×9</td><td>36</td></tr><tr><td>4×10</td><td>40</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 5</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>5×1</td><td>5</td></tr><tr><td>5×2</td><td>10</td></tr><tr><td>5×3</td><td>15</td></tr><tr><td>5×4</td><td>20</td></tr><tr><td>5×5</td><td>25</td></tr><tr><td>5×6</td><td>30</td></tr><tr><td>5×7</td><td>35</td></tr><tr><td>5×8</td><td>40</td></tr><tr><td>5×9</td><td>45</td></tr><tr><td>5×10</td><td>50</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 6</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>6×1</td><td>6</td></tr><tr><td>6×2</td><td>12</td></tr><tr><td>6×3</td><td>18</td></tr><tr><td>6×4</td><td>24</td></tr><tr><td>6×5</td><td>30</td></tr><tr><td>6×6</td><td>36</td></tr><tr><td>6×7</td><td>42</td></tr><tr><td>6×8</td><td>48</td></tr><tr><td>6×9</td><td>54</td></tr><tr><td>6×10</td><td>60</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 7</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>7×1</td><td>7</td></tr><tr><td>7×2</td><td>14</td></tr><tr><td>7×3</td><td>21</td></tr><tr><td>7×4</td><td>28</td></tr><tr><td>7×5</td><td>35</td></tr><tr><td>7×6</td><td>42</td></tr><tr><td>7×7</td><td>49</td></tr><tr><td>7×8</td><td>56</td></tr><tr><td>7×9</td><td>63</td></tr><tr><td>7×10</td><td>70</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 8</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>8×1</td><td>8</td></tr><tr><td>8×2</td><td>16</td></tr><tr><td>8×3</td><td>24</td></tr><tr><td>8×4</td><td>32</td></tr><tr><td>8×5</td><td>40</td></tr><tr><td>8×6</td><td>48</td></tr><tr><td>8×7</td><td>56</td></tr><tr><td>8×8</td><td>64</td></tr><tr><td>8×9</td><td>72</td></tr><tr><td>8×10</td><td>80</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 9</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>9×1</td><td>9</td></tr><tr><td>9×2</td><td>18</td></tr><tr><td>9×3</td><td>27</td></tr><tr><td>9×4</td><td>36</td></tr><tr><td>9×5</td><td>45</td></tr><tr><td>9×6</td><td>54</td></tr><tr><td>9×7</td><td>63</td></tr><tr><td>9×8</td><td>72</td></tr><tr><td>9×9</td><td>81</td></tr><tr><td>9×10</td><td>90</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 10</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>10×1</td><td>10</td></tr><tr><td>10×2</td><td>20</td></tr><tr><td>10×3</td><td>30</td></tr><tr><td>10×4</td><td>40</td></tr><tr><td>10×5</td><td>50</td></tr><tr><td>10×6</td><td>60</td></tr><tr><td>10×7</td><td>70</td></tr><tr><td>10×8</td><td>80</td></tr><tr><td>10×9</td><td>90</td></tr><tr><td>10×10</td><td>100</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 11</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>11×1</td><td>11</td></tr><tr><td>11×2</td><td>22</td></tr><tr><td>11×3</td><td>33</td></tr><tr><td>11×4</td><td>44</td></tr><tr><td>11×5</td><td>55</td></tr><tr><td>11×6</td><td>66</td></tr><tr><td>11×7</td><td>77</td></tr><tr><td>11×8</td><td>88</td></tr><tr><td>11×9</td><td>99</td></tr><tr><td>11×10</td><td>110</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 12</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>12×1</td><td>12</td></tr><tr><td>12×2</td><td>24</td></tr><tr><td>12×3</td><td>36</td></tr><tr><td>12×4</td><td>48</td></tr><tr><td>12×5</td><td>60</td></tr><tr><td>12×6</td><td>72</td></tr><tr><td>12×7</td><td>84</td></tr><tr><td>12×8</td><td>96</td></tr><tr><td>12×9</td><td>108</td></tr><tr><td>12×10</td><td>120</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 13</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>13×1</td><td>13</td></tr><tr><td>13×2</td><td>26</td></tr><tr><td>13×3</td><td>39</td></tr><tr><td>13×4</td><td>52</td></tr><tr><td>13×5</td><td>65</td></tr><tr><td>13×6</td><td>78</td></tr><tr><td>13×7</td><td>91</td></tr><tr><td>13×8</td><td>104</td></tr><tr><td>13×9</td><td>117</td></tr><tr><td>13×10</td><td>130</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 14</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>14×1</td><td>14</td></tr><tr><td>14×2</td><td>28</td></tr><tr><td>14×3</td><td>42</td></tr><tr><td>14×4</td><td>56</td></tr><tr><td>14×5</td><td>70</td></tr><tr><td>14×6</td><td>84</td></tr><tr><td>14×7</td><td>98</td></tr><tr><td>14×8</td><td>112</td></tr><tr><td>14×9</td><td>126</td></tr><tr><td>14×10</td><td>140</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 15</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>15×1</td><td>15</td></tr><tr><td>15×2</td><td>30</td></tr><tr><td>15×3</td><td>45</td></tr><tr><td>15×4</td><td>60</td></tr><tr><td>15×5</td><td>75</td></tr><tr><td>15×6</td><td>90</td></tr><tr><td>15×7</td><td>105</td></tr><tr><td>15×8</td><td>120</td></tr><tr><td>15×9</td><td>135</td></tr><tr><td>15×10</td><td>150</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 16</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>16×1</td><td>16</td></tr><tr><td>16×2</td><td>32</td></tr><tr><td>16×3</td><td>48</td></tr><tr><td>16×4</td><td>64</td></tr><tr><td>16×5</td><td>80</td></tr><tr><td>16×6</td><td>96</td></tr><tr><td>16×7</td><td>112</td></tr><tr><td>16×8</td><td>128</td></tr><tr><td>16×9</td><td>144</td></tr><tr><td>16×10</td><td>160</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 17</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>17×1</td><td>17</td></tr><tr><td>17×2</td><td>34</td></tr><tr><td>17×3</td><td>51</td></tr><tr><td>17×4</td><td>68</td></tr><tr><td>17×5</td><td>85</td></tr><tr><td>17×6</td><td>102</td></tr><tr><td>17×7</td><td>119</td></tr><tr><td>17×8</td><td>136</td></tr><tr><td>17×9</td><td>153</td></tr><tr><td>17×10</td><td>170</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 18</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>18×1</td><td>18</td></tr><tr><td>18×2</td><td>36</td></tr><tr><td>18×3</td><td>54</td></tr><tr><td>18×4</td><td>72</td></tr><tr><td>18×5</td><td>90</td></tr><tr><td>18×6</td><td>108</td></tr><tr><td>18×7</td><td>126</td></tr><tr><td>18×8</td><td>144</td></tr><tr><td>18×9</td><td>162</td></tr><tr><td>18×10</td><td>180</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 19</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>19×1</td><td>19</td></tr><tr><td>19×2</td><td>38</td></tr><tr><td>19×3</td><td>57</td></tr><tr><td>19×4</td><td>76</td></tr><tr><td>19×5</td><td>95</td></tr><tr><td>19×6</td><td>114</td></tr><tr><td>19×7</td><td>133</td></tr><tr><td>19×8</td><td>152</td></tr><tr><td>19×9</td><td>171</td></tr><tr><td>19×10</td><td>190</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 20</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>20×1</td><td>20</td></tr><tr><td>20×2</td><td>40</td></tr><tr><td>20×3</td><td>60</td></tr><tr><td>20×4</td><td>80</td></tr><tr><td>20×5</td><td>100</td></tr><tr><td>20×6</td><td>120</td></tr><tr><td>20×7</td><td>140</td></tr><tr><td>20×8</td><td>160</td></tr><tr><td>20×9</td><td>180</td></tr><tr><td>20×10</td><td>200</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 21</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>21×1</td><td>21</td></tr><tr><td>21×2</td><td>42</td></tr><tr><td>21×3</td><td>63</td></tr><tr><td>21×4</td><td>84</td></tr><tr><td>21×5</td><td>105</td></tr><tr><td>21×6</td><td>126</td></tr><tr><td>21×7</td><td>147</td></tr><tr><td>21×8</td><td>168</td></tr><tr><td>21×9</td><td>189</td></tr><tr><td>21×10</td><td>210</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 22</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>22×1</td><td>22</td></tr><tr><td>22×2</td><td>44</td></tr><tr><td>22×3</td><td>66</td></tr><tr><td>22×4</td><td>88</td></tr><tr><td>22×5</td><td>110</td></tr><tr><td>22×6</td><td>132</td></tr><tr><td>22×7</td><td>154</td></tr><tr><td>22×8</td><td>176</td></tr><tr><td>22×9</td><td>198</td></tr><tr><td>22×10</td><td>220</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 23</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>23×1</td><td>23</td></tr><tr><td>23×2</td><td>46</td></tr><tr><td>23×3</td><td>69</td></tr><tr><td>23×4</td><td>92</td></tr><tr><td>23×5</td><td>115</td></tr><tr><td>23×6</td><td>138</td></tr><tr><td>23×7</td><td>161</td></tr><tr><td>23×8</td><td>184</td></tr><tr><td>23×9</td><td>207</td></tr><tr><td>23×10</td><td>230</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 24</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>24×1</td><td>24</td></tr><tr><td>24×2</td><td>48</td></tr><tr><td>24×3</td><td>72</td></tr><tr><td>24×4</td><td>96</td></tr><tr><td>24×5</td><td>120</td></tr><tr><td>24×6</td><td>144</td></tr><tr><td>24×7</td><td>168</td></tr><tr><td>24×8</td><td>192</td></tr><tr><td>24×9</td><td>216</td></tr><tr><td>24×10</td><td>240</td></tr></table></div>
+</div>
+<div class="pos-card">
+  <div class="pc-title">Table of 25</div>
+  <div class="tbl-wrap"><table class="data-table" style="margin:0;font-size:.8rem;"><tr><td>25×1</td><td>25</td></tr><tr><td>25×2</td><td>50</td></tr><tr><td>25×3</td><td>75</td></tr><tr><td>25×4</td><td>100</td></tr><tr><td>25×5</td><td>125</td></tr><tr><td>25×6</td><td>150</td></tr><tr><td>25×7</td><td>175</td></tr><tr><td>25×8</td><td>200</td></tr><tr><td>25×9</td><td>225</td></tr><tr><td>25×10</td><td>250</td></tr></table></div>
+</div>      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: SQUARES 1-100 -->
+<div id="t6" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">🔢 Squares — 1 to 100 (Full List)</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>n</th><th>n²</th><th>n</th><th>n²</th><th>n</th><th>n²</th><th>n</th><th>n²</th><th>n</th><th>n²</th></tr>
+<tr><td>1</td><td>1</td><td>21</td><td>441</td><td>41</td><td>1681</td><td>61</td><td>3721</td><td>81</td><td>6561</td></tr>
+<tr><td>2</td><td>4</td><td>22</td><td>484</td><td>42</td><td>1764</td><td>62</td><td>3844</td><td>82</td><td>6724</td></tr>
+<tr><td>3</td><td>9</td><td>23</td><td>529</td><td>43</td><td>1849</td><td>63</td><td>3969</td><td>83</td><td>6889</td></tr>
+<tr><td>4</td><td>16</td><td>24</td><td>576</td><td>44</td><td>1936</td><td>64</td><td>4096</td><td>84</td><td>7056</td></tr>
+<tr><td>5</td><td>25</td><td>25</td><td>625</td><td>45</td><td>2025</td><td>65</td><td>4225</td><td>85</td><td>7225</td></tr>
+<tr><td>6</td><td>36</td><td>26</td><td>676</td><td>46</td><td>2116</td><td>66</td><td>4356</td><td>86</td><td>7396</td></tr>
+<tr><td>7</td><td>49</td><td>27</td><td>729</td><td>47</td><td>2209</td><td>67</td><td>4489</td><td>87</td><td>7569</td></tr>
+<tr><td>8</td><td>64</td><td>28</td><td>784</td><td>48</td><td>2304</td><td>68</td><td>4624</td><td>88</td><td>7744</td></tr>
+<tr><td>9</td><td>81</td><td>29</td><td>841</td><td>49</td><td>2401</td><td>69</td><td>4761</td><td>89</td><td>7921</td></tr>
+<tr><td>10</td><td>100</td><td>30</td><td>900</td><td>50</td><td>2500</td><td>70</td><td>4900</td><td>90</td><td>8100</td></tr>
+<tr><td>11</td><td>121</td><td>31</td><td>961</td><td>51</td><td>2601</td><td>71</td><td>5041</td><td>91</td><td>8281</td></tr>
+<tr><td>12</td><td>144</td><td>32</td><td>1024</td><td>52</td><td>2704</td><td>72</td><td>5184</td><td>92</td><td>8464</td></tr>
+<tr><td>13</td><td>169</td><td>33</td><td>1089</td><td>53</td><td>2809</td><td>73</td><td>5329</td><td>93</td><td>8649</td></tr>
+<tr><td>14</td><td>196</td><td>34</td><td>1156</td><td>54</td><td>2916</td><td>74</td><td>5476</td><td>94</td><td>8836</td></tr>
+<tr><td>15</td><td>225</td><td>35</td><td>1225</td><td>55</td><td>3025</td><td>75</td><td>5625</td><td>95</td><td>9025</td></tr>
+<tr><td>16</td><td>256</td><td>36</td><td>1296</td><td>56</td><td>3136</td><td>76</td><td>5776</td><td>96</td><td>9216</td></tr>
+<tr><td>17</td><td>289</td><td>37</td><td>1369</td><td>57</td><td>3249</td><td>77</td><td>5929</td><td>97</td><td>9409</td></tr>
+<tr><td>18</td><td>324</td><td>38</td><td>1444</td><td>58</td><td>3364</td><td>78</td><td>6084</td><td>98</td><td>9604</td></tr>
+<tr><td>19</td><td>361</td><td>39</td><td>1521</td><td>59</td><td>3481</td><td>79</td><td>6241</td><td>99</td><td>9801</td></tr>
+<tr><td>20</td><td>400</td><td>40</td><td>1600</td><td>60</td><td>3600</td><td>80</td><td>6400</td><td>100</td><td>10000</td></tr>      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-purple">Digit-Cross Trick — Find Any 2-digit Square Fast</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 68²</div>
+        <div class="formula">Step 1: Square of first digit: 6² = 36
+Step 2: Square of second digit: 8² = 64
+Step 3: Cross-multiply digits ×2: 6×8×2 = 96
+Step 4: Write as 36 | 64, then add 96 (shifted one place) into the middle
+Step 5: 36|64 → add 9 to 36 (carry from 96), add 6 to 64's tens: (36+9)|(6+6→carry 1)|4
+Final: 4624</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Cross-term (2×a×b) do-digit ho sakta hai — carry LEFT mein daalna mat bhoolo. Yeh common calculation mistake hai.
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Yeh wahi (a+b)² = a²+b²+2ab identity hai, jahan a=tens digit×10, b=units digit — Advance Maths ke Algebra chapter se connected hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: MASTER TABLE -->
+<div id="t7" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">📋 Master Table — Chapter 1 Summary</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Section</th><th>Key Content</th></tr>
+        <tr><td>Chaurahas</td><td>108 (12×9=27×4=36×3), 144 (24×6=36×4=18×8=16×9), 180, 192, 216</td></tr>
+        <tr><td>Consecutive products</td><td>12×13=156 ... 18×19=342 | 12×25=300 | 24×25=600</td></tr>
+        <tr><td>37-series</td><td>37×3k = repdigit of (k,k,k)</td></tr>
+        <tr><td>16-series</td><td>16(6)×4 = 64(6...4) pattern</td></tr>
+        <tr><td>19-series</td><td>19(9)×5 = 95(9...5) pattern</td></tr>
+        <tr><td>Repunits</td><td>111...1 × 111...1 = palindrome (123...321 style)</td></tr>
+        <tr><td>Palindromic zeros</td><td>10...01 × 10...01 = 10...0201...0001 style</td></tr>
+        <tr><td>3-series squares</td><td>33²=1089, 333²=110889, 3333²=11108889</td></tr>
+        <tr><td>9-series squares</td><td>99²=9801, 999²=998001, 9999²=99980001</td></tr>
+        <tr><td>Doubles 1–100</td><td>Full lookup — 2n for every n</td></tr>
+        <tr><td>Tables 2–25</td><td>Complete ×1 to ×10 for every base 2–25</td></tr>
+        <tr><td>Squares 1–100</td><td>Full lookup + digit-cross trick for fast calculation</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com &nbsp;·&nbsp; Viral Maths Ch01: Important Products &nbsp;·&nbsp; Bank / SSC / Railway / BPSC / BSSC</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

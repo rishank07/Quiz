@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viral Maths — Ch10: Decimal | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--gold:#f5c842;
+  --accent1:#e74c3c;--accent2:#3498db;--accent3:#2ecc71;
+  --accent4:#9b59b6;--accent5:#e67e22;--accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#e7e9f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7;}
+header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:2px solid var(--gold);padding:22px 28px;}
+header h1{color:var(--gold);font-size:1.5rem;letter-spacing:1px;}
+header p{color:#aab;font-size:.88rem;margin-top:4px;}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab-nav button{background:var(--surface2);color:#ccd;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:.8rem;cursor:pointer;transition:all .2s;}
+.tab-nav button.active{color:var(--gold);border-color:var(--gold);border-bottom:2px solid var(--gold);font-weight:700;}
+.tab-nav button:hover:not(.active){border-color:#888;color:#fff;}
+.tab{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.tab.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.card-header{padding:12px 18px;font-weight:700;font-size:.95rem;letter-spacing:.5px;}
+.ch-gold{background:linear-gradient(90deg,#2a2000,#1a1d27);color:var(--gold);}
+.ch-green{background:linear-gradient(90deg,#0a2010,#1a1d27);color:var(--accent3);}
+.ch-blue{background:linear-gradient(90deg,#0a1525,#1a1d27);color:var(--accent2);}
+.ch-purple{background:linear-gradient(90deg,#180a28,#1a1d27);color:var(--accent4);}
+.ch-orange{background:linear-gradient(90deg,#251200,#1a1d27);color:var(--accent5);}
+.ch-red{background:linear-gradient(90deg,#250808,#1a1d27);color:var(--accent1);}
+.ch-teal{background:linear-gradient(90deg,#051a18,#1a1d27);color:var(--accent6);}
+.card-body{padding:16px 18px;}
+ul.arrow-list{list-style:none;padding:0;}
+ul.arrow-list li{padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #1e2235;}
+ul.arrow-list li:last-child{border-bottom:none;}
+ul.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);}
+.rule-box{border:1px solid var(--gold);border-radius:8px;padding:12px 16px;margin:10px 0;background:#1c1900;}
+.rule-box .rule-label{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;}
+.rule-box .formula{color:#fff;font-size:.96rem;font-weight:600;font-family:'Courier New',monospace;white-space:pre-line;}
+.exam-trap{border-left:4px solid var(--accent1);background:#1a0909;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.exam-trap .et-label{color:var(--accent1);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+.quick-recall{border-left:4px solid var(--accent2);background:#091524;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.quick-recall .qr-label{color:var(--accent2);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+table.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+table.data-table th{background:#2a2200;color:var(--gold);padding:9px 12px;text-align:left;border-bottom:2px solid var(--gold);}
+table.data-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+table.data-table tr:hover td{background:#1e2235;}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:12px 0;}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.pos-card .pc-title{color:var(--gold);font-weight:700;font-size:.88rem;margin-bottom:6px;}
+.pos-card .pc-step{color:#e7e9f0;font-size:.88rem;margin-bottom:4px;}
+.pos-card .pc-eg{color:var(--accent3);font-size:.82rem;margin-top:6px;font-family:'Courier New',monospace;}
+footer{text-align:center;padding:18px;color:#667;font-size:.8rem;border-top:1px solid var(--border);margin-top:30px;}
+@media(max-width:600px){.tab-nav button{font-size:.75rem;padding:6px 10px;}.tab{padding:14px;}.pos-grid{grid-template-columns:1fr;}table.data-table{display:block;overflow-x:auto;}}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tbl-wrap table{display:table!important;min-width:auto;width:max-content!important;white-space:nowrap;margin:0!important;border:none!important;border-radius:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+img,svg,video,iframe{max-width:100%;height:auto}
+@media(max-width:768px){
+  table{display:table!important;width:max-content!important;white-space:nowrap}
+}
+@media(max-width:480px){
+  body{padding:10px}
+  .container{padding:0}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<header>
+  <h1>🔟 Viral Maths — Chapter 10: Decimal</h1>
+  <p>by Navneet Tiwari (Adda247) &nbsp;·&nbsp; Addition, Subtraction, Multiplication &amp; Division of Decimals · Bank / SSC / Railway / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('t1',this)">📋 Overview</button>
+  <button onclick="switchTab('t2',this)">➕ Decimal Addition</button>
+  <button onclick="switchTab('t3',this)">➖ Decimal Subtraction</button>
+  <button onclick="switchTab('t4',this)">✖️ Decimal Multiplication</button>
+  <button onclick="switchTab('t5',this)">➗ Decimal Division</button>
+  <button onclick="switchTab('t6',this)">📝 Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="t1" class="tab active">
+  <div class="card">
+    <div class="card-header ch-gold">📌 What This Chapter Covers</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Decimals ek number type hain jinme whole number aur fractional part ek decimal point se separate hote hain.</li>
+        <li>Chapter 4 operations mein bata hai: Addition, Subtraction, Multiplication, Division — har ek ke apne named types hain.</li>
+        <li>Core idea sabme common hai: decimal ko "ignore" karke pehle poore number pe operation karo, phir decimal ko sahi jagah wapas rakho.</li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Yeh chapter Ch09 (Percentage) ki fraction table use karta hai (.25=1/4, .5=1/2, .75=3/4, .125=1/8) — Multiplication section mein directly connect hota hai.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🗂️ Chapter Index</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Tab</th><th>Section</th><th>Types</th></tr>
+        <tr><td>2</td><td>Decimal Addition</td><td>Decimal+Whole, Decimal+Decimal</td></tr>
+        <tr><td>3</td><td>Decimal Subtraction</td><td>Decimal−Single Digit, Whole−2-digit Decimal</td></tr>
+        <tr><td>4</td><td>Decimal Multiplication</td><td>Decimal×Whole, Decimal(.25/.5/.75/.125)×Number</td></tr>
+        <tr><td>5</td><td>Decimal Division</td><td>Decimal÷Whole, Decimal÷Decimal</td></tr>
+        <tr><td>6</td><td>Master Table</td><td>All sections summarized</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: DECIMAL ADDITION -->
+<div id="t2" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 1 — Decimal Number + Whole (Non-decimal) Number</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 2.4 + 9</div>
+        <div class="formula">Step 1: Add whole parts: 2+9 = 11
+Step 2: Add back the decimal part: 11+0.4 = 11.4</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">Type 2 — Decimal Number + Decimal Number</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 87.5 + 12.7</div>
+        <div class="formula">Step 1: Break the numbers: 87+0.5 and 12+0.7
+Step 2: Add whole parts: 87+12 = 99
+Step 3: Add decimal parts: 0.5+0.7 = 1.2
+Step 4: Combine: 99+1.2 = 100.2</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Decimal parts ka sum ≥1 ho sakta hai (jaise 0.5+0.7=1.2) — is extra "1" ko whole-part total mein carry karna mat bhoolo jab final answer likho.
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Whole parts alag add karo, decimal parts alag add karo, phir dono ko combine karo — yeh Ch02 Addition ke "2-digit+2-digit base method" jaisa hi hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: DECIMAL SUBTRACTION -->
+<div id="t3" class="tab">
+  <div class="card">
+    <div class="card-header ch-green">Type 1 — Decimal Number − Single-digit Whole Number</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 58.4 − 7</div>
+        <div class="formula">Step 1: Subtract whole parts: 58−7 = 51
+Step 2: Add back the decimal part: 51+0.4 = 51.4</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-purple">Type 2 — Whole Number − Two-digit Decimal Number</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 167 − 3.6</div>
+        <div class="formula">Step 1: Round 3.6 up to 4 (extra = 0.4)
+Step 2: Subtract the rounded value: 167−4 = 163
+Step 3: Add back the extra: 163+0.4 = 163.4</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 453 − 7.3</div>
+        <div class="formula">Step 1: Round 7.3 up to 8 (extra = 0.7)
+Step 2: Subtract: 453−8 = 445
+Step 3: Add back extra: 445+0.7 = 445.7</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Yeh Ch03 Subtraction ke Tidding-Tidding Approach jaisa hi concept hai — round up karo, subtract karo, phir extra add-back karo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: DECIMAL MULTIPLICATION -->
+<div id="t4" class="tab">
+  <div class="card">
+    <div class="card-header ch-orange">Type 1 — Decimal Number × Whole Number</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 80.9 × 4</div>
+        <div class="formula">Step 1: Multiply ignoring the decimal: 809×4 = 3236
+Step 2: Count decimal places in original (here 1)
+Step 3: Place decimal 1 place from right: 323.6</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-red">Type 2 — Decimal Ending in .25/.5/.75/.125 × Number</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Know: .25=1/4, .5=1/2, .75=3/4, .125=1/8</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 80.25 × 4</div>
+        <div class="formula">Step 1: Multiply whole part: 80×4 = 320
+Step 2: Multiply decimal part: 0.25×4 = 1/4×4 = 1
+Step 3: Add both: 320+1 = 321</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Yeh trick sirf .25, .5, .75, .125 endings ke liye specifically fast hai — kyunki inke fraction-forms simple hain. Random decimals (jaise .37) ke liye Type 1 use karo.
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Directly Ch09 Percentage ki fraction table se jud raha hai — .25=25%=1/4, .75=75%=3/4.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: DECIMAL DIVISION -->
+<div id="t5" class="tab">
+  <div class="card">
+    <div class="card-header ch-teal">Type 1 — Decimal Number ÷ Whole (Non-decimal) Number</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 80.24 ÷ 4</div>
+        <div class="formula">Step 1: Divide ignoring decimal: 8024÷4 = 2006
+Step 2: Count decimal places in original (here 2)
+Step 3: Place decimal 2 places from right: 20.06</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-gold">Type 2 — Decimal Number ÷ Decimal Number (Kargil Approach)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 62.5 ÷ 0.25</div>
+        <div class="formula">Step 1: Ignore decimals, divide: 625÷25 = 25
+Step 2: Numerator decimal place = 1, Denominator decimal place = 2
+Step 3: Subtract: 1−2 = −1 (negative result)
+Step 4: Negative result of magnitude 1 → add 1 zero to answer
+Ans: 250</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 0.625 ÷ 2.5</div>
+        <div class="formula">Step 1: Ignore decimals: 625÷25 = 25
+Step 2: Numerator place=3, Denominator place=1
+Step 3: Subtract: 3−1 = +2 (positive result)
+Step 4: Positive result of 2 → place decimal 2 digits from right
+Ans: 0.25</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 62.5 ÷ 2.5 (equal places)</div>
+        <div class="formula">Step 1: Ignore decimals: 625÷25 = 25
+Step 2: Both places = 1, difference = 0
+Step 3: Just cancel out the decimal
+Ans: 25</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Direction of subtraction matters: (numerator places − denominator places). NEGATIVE result → ADD that many zeros to the answer (makes it bigger). POSITIVE result → PLACE decimal that many digits from the right (makes it smaller). ZERO → no decimal adjustment needed.
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Yeh Ch05 Division ka Kargil Approach hi hai, ab formally decimal-place-counting ke साथ explain kiya gaya hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: MASTER TABLE -->
+<div id="t6" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">📋 Master Table — All Decimal Operations</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Operation</th><th>Type</th><th>Core Rule</th></tr>
+        <tr><td rowspan="2">Addition</td><td>Decimal + Whole</td><td>Add whole parts, add back decimal</td></tr>
+        <tr><td>Decimal + Decimal</td><td>Add whole parts separately, add decimal parts separately, combine</td></tr>
+        <tr><td rowspan="2">Subtraction</td><td>Decimal − Single Digit</td><td>Subtract whole parts, add back decimal</td></tr>
+        <tr><td>Whole − 2-digit Decimal</td><td>Round up, subtract, add back the extra</td></tr>
+        <tr><td rowspan="2">Multiplication</td><td>Decimal × Whole</td><td>Multiply ignoring decimal, place decimal back by counting places</td></tr>
+        <tr><td>.25/.5/.75/.125 × Number</td><td>Multiply whole and fraction parts separately using known fractions, add</td></tr>
+        <tr><td rowspan="2">Division</td><td>Decimal ÷ Whole</td><td>Divide ignoring decimal, place decimal back by counting places</td></tr>
+        <tr><td>Decimal ÷ Decimal (Kargil)</td><td>Divide ignoring decimals, then adjust by (numerator places − denominator places)</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com &nbsp;·&nbsp; Viral Maths Ch10: Decimal &nbsp;·&nbsp; Bank / SSC / Railway / BPSC / BSSC</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

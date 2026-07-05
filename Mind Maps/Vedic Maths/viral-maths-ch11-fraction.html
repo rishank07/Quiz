@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viral Maths — Ch11: Fraction | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--gold:#f5c842;
+  --accent1:#e74c3c;--accent2:#3498db;--accent3:#2ecc71;
+  --accent4:#9b59b6;--accent5:#e67e22;--accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#e7e9f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7;}
+header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:2px solid var(--gold);padding:22px 28px;}
+header h1{color:var(--gold);font-size:1.5rem;letter-spacing:1px;}
+header p{color:#aab;font-size:.88rem;margin-top:4px;}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab-nav button{background:var(--surface2);color:#ccd;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:.8rem;cursor:pointer;transition:all .2s;}
+.tab-nav button.active{color:var(--gold);border-color:var(--gold);border-bottom:2px solid var(--gold);font-weight:700;}
+.tab-nav button:hover:not(.active){border-color:#888;color:#fff;}
+.tab{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.tab.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.card-header{padding:12px 18px;font-weight:700;font-size:.95rem;letter-spacing:.5px;}
+.ch-gold{background:linear-gradient(90deg,#2a2000,#1a1d27);color:var(--gold);}
+.ch-green{background:linear-gradient(90deg,#0a2010,#1a1d27);color:var(--accent3);}
+.ch-blue{background:linear-gradient(90deg,#0a1525,#1a1d27);color:var(--accent2);}
+.ch-purple{background:linear-gradient(90deg,#180a28,#1a1d27);color:var(--accent4);}
+.ch-orange{background:linear-gradient(90deg,#251200,#1a1d27);color:var(--accent5);}
+.ch-red{background:linear-gradient(90deg,#250808,#1a1d27);color:var(--accent1);}
+.ch-teal{background:linear-gradient(90deg,#051a18,#1a1d27);color:var(--accent6);}
+.card-body{padding:16px 18px;}
+ul.arrow-list{list-style:none;padding:0;}
+ul.arrow-list li{padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #1e2235;}
+ul.arrow-list li:last-child{border-bottom:none;}
+ul.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);}
+.rule-box{border:1px solid var(--gold);border-radius:8px;padding:12px 16px;margin:10px 0;background:#1c1900;}
+.rule-box .rule-label{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;}
+.rule-box .formula{color:#fff;font-size:.96rem;font-weight:600;font-family:'Courier New',monospace;white-space:pre-line;}
+.exam-trap{border-left:4px solid var(--accent1);background:#1a0909;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.exam-trap .et-label{color:var(--accent1);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+.quick-recall{border-left:4px solid var(--accent2);background:#091524;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.quick-recall .qr-label{color:var(--accent2);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+table.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+table.data-table th{background:#2a2200;color:var(--gold);padding:9px 12px;text-align:left;border-bottom:2px solid var(--gold);}
+table.data-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+table.data-table tr:hover td{background:#1e2235;}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:12px 0;}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.pos-card .pc-title{color:var(--gold);font-weight:700;font-size:.88rem;margin-bottom:6px;}
+.pos-card .pc-step{color:#e7e9f0;font-size:.88rem;margin-bottom:4px;}
+.pos-card .pc-eg{color:var(--accent3);font-size:.82rem;margin-top:6px;font-family:'Courier New',monospace;}
+footer{text-align:center;padding:18px;color:#667;font-size:.8rem;border-top:1px solid var(--border);margin-top:30px;}
+@media(max-width:600px){.tab-nav button{font-size:.75rem;padding:6px 10px;}.tab{padding:14px;}.pos-grid{grid-template-columns:1fr;}table.data-table{display:block;overflow-x:auto;}}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tbl-wrap table{display:table!important;min-width:auto;width:max-content!important;white-space:nowrap;margin:0!important;border:none!important;border-radius:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+img,svg,video,iframe{max-width:100%;height:auto}
+@media(max-width:768px){
+  table{display:table!important;width:max-content!important;white-space:nowrap}
+}
+@media(max-width:480px){
+  body{padding:10px}
+  .container{padding:0}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<header>
+  <h1>🔟➕ Viral Maths — Chapter 11: Fraction</h1>
+  <p>by Navneet Tiwari (Adda247) &nbsp;·&nbsp; 6 Types incl. Butterfly &amp; Shark Approach · Bank / SSC / Railway / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('t1',this)">📋 Overview</button>
+  <button onclick="switchTab('t2',this)">🟰 Like Fractions</button>
+  <button onclick="switchTab('t3',this)">🦋 Butterfly Approach</button>
+  <button onclick="switchTab('t4',this)">➕ Fraction + Whole</button>
+  <button onclick="switchTab('t5',this)">➖ Whole − Fraction</button>
+  <button onclick="switchTab('t6',this)">✖️ Fraction × Fraction</button>
+  <button onclick="switchTab('t7',this)">🦈 Shark Approach</button>
+  <button onclick="switchTab('t8',this)">📝 Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="t1" class="tab active">
+  <div class="card">
+    <div class="card-header ch-gold">📌 What This Chapter Covers</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Fraction chapter mein 6 types hain — addition/subtraction (like aur unlike denominators), fraction+whole number combos, multiplication, aur division (Shark Approach).</li>
+        <li>Butterfly Approach aur Shark Approach dono cross-multiplication based hain lekin different operations ke liye — inhe mix mat karo.</li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Butterfly = Addition/Subtraction of unlike fractions (cross-multiply then ADD/SUBTRACT numerators). Shark = Division of fractions (cross-multiply differently, no addition involved).
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🗂️ Chapter Index</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Tab</th><th>Type</th><th>Operation</th></tr>
+        <tr><td>2</td><td>Type 1: Like Fractions</td><td>Add/Subtract (same denominator)</td></tr>
+        <tr><td>3</td><td>Type 2: Butterfly Approach</td><td>Add/Subtract (different denominators)</td></tr>
+        <tr><td>4</td><td>Type 3: Fraction + Whole</td><td>Addition</td></tr>
+        <tr><td>5</td><td>Type 4: Whole − Fraction</td><td>Subtraction</td></tr>
+        <tr><td>6</td><td>Type 5: Fraction × Fraction</td><td>Multiplication</td></tr>
+        <tr><td>7</td><td>Type 6: Shark Approach</td><td>Division (single or multiple fractions)</td></tr>
+        <tr><td>8</td><td>Master Table</td><td>All types summarized</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: LIKE FRACTIONS -->
+<div id="t2" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 1 — Like Fractions (Same Denominator)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 2/12 + 5/12</div>
+        <div class="formula">Step 1: Add numerators: 2+5 = 7
+Step 2: Keep same denominator: 12
+Answer: 7/12</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Jab denominators SAME hon, sirf numerators add/subtract karo — denominator touch mat karo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: BUTTERFLY APPROACH -->
+<div id="t3" class="tab">
+  <div class="card">
+    <div class="card-header ch-purple">Type 2 — Butterfly Approach (Unlike Fractions, Different Denominators)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 3/11 + 5/9</div>
+        <div class="formula">Step 1: Cross-multiply: 3×9=27 and 5×11=55
+Step 2: Add the results: 27+55 = 82 (numerator)
+Step 3: Multiply denominators: 11×9 = 99 (denominator)
+Answer: 82/99</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Subtraction ke liye bhi same cross-multiply hota hai, bas numerators ADD ki jagah SUBTRACT karo (bade se chhota).
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL — "Butterfly" Visual</div>
+        Do fractions ke beech "X" pattern (butterfly wings) banao — diagonal cross-multiply karke jodo, phir denominators multiply karo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: FRACTION + WHOLE -->
+<div id="t4" class="tab">
+  <div class="card">
+    <div class="card-header ch-green">Type 3 — Fraction Added with a Whole Number</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 6 + 5/6</div>
+        <div class="formula">Step 1: Keep 6 as the whole number
+Step 2: Attach the fraction as-is
+Answer: 6⅚ (mixed number)</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Whole number + fraction = seedha mixed number bana do, koi calculation nahi chahiye jab tak fraction already proper form mein ho.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: WHOLE - FRACTION -->
+<div id="t5" class="tab">
+  <div class="card">
+    <div class="card-header ch-orange">Type 4 — Fraction Subtracted from a Whole Number</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 42 − 5/12</div>
+        <div class="formula">Step 1: Subtract 1 from the whole number: 42−1 = 41
+Step 2: Find the difference between denominator and numerator: 12−5 = 7
+Step 3: Combine: 41 and 7/12
+Answer: 41 7/12</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Whole number se seedha 1 minus karna zaroori hai (kyunki 1 "borrow" hoti hai fraction ke liye) — aur new numerator (denominator−original numerator) se aata hai, original numerator se nahi.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: FRACTION x FRACTION -->
+<div id="t6" class="tab">
+  <div class="card">
+    <div class="card-header ch-red">Type 5 — Fraction Multiplication</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 23/71 × 11/20</div>
+        <div class="formula">Step 1: Multiply numerators: 23×11 = 253
+Step 2: Multiply denominators: 71×20 = 1420
+Answer: 253/1420</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Multiplication sabse simple hai: Num×Num over Den×Den — koi cross-multiply nahi chahiye (yeh Butterfly ya Shark se alag hai).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: SHARK APPROACH -->
+<div id="t7" class="tab">
+  <div class="card">
+    <div class="card-header ch-teal">Type 6 — Shark Approach (Fraction ÷ Fraction)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: (23/71) ÷ (2/3) — one other fraction</div>
+        <div class="formula">Step 1: Main numerator × other's denominator: 23×3 = 69
+Step 2: Main denominator × other's numerator: 71×2 = 142
+Answer: 69/142</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: (23/71) ÷ (2/3) ÷ (1/5) — two other fractions</div>
+        <div class="formula">Step 1: Main numerator × all others' denominators: 23×3×5 = 345
+Step 2: Main denominator × all others' numerators: 71×2×1 = 142
+Answer: 345/142</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        "Main" fraction hamesha PEHLI fraction hoti hai chain mein — uska numerator baaki sabke denominators ko grab karta hai, uska denominator baaki sabke numerators ko grab karta hai.
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Shark Approach = repeated "flip-and-multiply" ek hi step mein — jitni bhi fractions divide ho rahi hon, sabka effect ek saath le lo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: MASTER TABLE -->
+<div id="t8" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">📋 Master Table — All Fraction Types</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Type</th><th>Operation</th><th>Core Rule</th></tr>
+        <tr><td>Like Fractions</td><td>Add/Subtract (same denom)</td><td>Operate on numerators only, keep denominator</td></tr>
+        <tr><td>Butterfly Approach</td><td>Add/Subtract (unlike denom)</td><td>Cross-multiply, add/subtract results, multiply denominators</td></tr>
+        <tr><td>Fraction + Whole</td><td>Addition</td><td>Combine directly as mixed number</td></tr>
+        <tr><td>Whole − Fraction</td><td>Subtraction</td><td>Whole−1, new numerator = denominator−original numerator</td></tr>
+        <tr><td>Fraction × Fraction</td><td>Multiplication</td><td>Num×Num over Den×Den</td></tr>
+        <tr><td>Shark Approach</td><td>Division</td><td>Main num×others' denoms / Main denom×others' nums</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com &nbsp;·&nbsp; Viral Maths Ch11: Fraction &nbsp;·&nbsp; Bank / SSC / Railway / BPSC / BSSC</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

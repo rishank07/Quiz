@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viral Maths — Ch04: Multiplication | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--gold:#f5c842;
+  --accent1:#e74c3c;--accent2:#3498db;--accent3:#2ecc71;
+  --accent4:#9b59b6;--accent5:#e67e22;--accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#e7e9f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7;}
+header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:2px solid var(--gold);padding:22px 28px;}
+header h1{color:var(--gold);font-size:1.5rem;letter-spacing:1px;}
+header p{color:#aab;font-size:.88rem;margin-top:4px;}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab-nav button{background:var(--surface2);color:#ccd;border:1px solid var(--border);border-radius:6px;padding:7px 13px;font-size:.78rem;cursor:pointer;transition:all .2s;}
+.tab-nav button.active{color:var(--gold);border-color:var(--gold);border-bottom:2px solid var(--gold);font-weight:700;}
+.tab-nav button:hover:not(.active){border-color:#888;color:#fff;}
+.tab{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.tab.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.card-header{padding:12px 18px;font-weight:700;font-size:.95rem;letter-spacing:.5px;}
+.ch-gold{background:linear-gradient(90deg,#2a2000,#1a1d27);color:var(--gold);}
+.ch-green{background:linear-gradient(90deg,#0a2010,#1a1d27);color:var(--accent3);}
+.ch-blue{background:linear-gradient(90deg,#0a1525,#1a1d27);color:var(--accent2);}
+.ch-purple{background:linear-gradient(90deg,#180a28,#1a1d27);color:var(--accent4);}
+.ch-orange{background:linear-gradient(90deg,#251200,#1a1d27);color:var(--accent5);}
+.ch-red{background:linear-gradient(90deg,#250808,#1a1d27);color:var(--accent1);}
+.ch-teal{background:linear-gradient(90deg,#051a18,#1a1d27);color:var(--accent6);}
+.card-body{padding:16px 18px;}
+ul.arrow-list{list-style:none;padding:0;}
+ul.arrow-list li{padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #1e2235;}
+ul.arrow-list li:last-child{border-bottom:none;}
+ul.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);}
+.rule-box{border:1px solid var(--gold);border-radius:8px;padding:12px 16px;margin:10px 0;background:#1c1900;}
+.rule-box .rule-label{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;}
+.rule-box .formula{color:#fff;font-size:.94rem;font-weight:600;font-family:'Courier New',monospace;white-space:pre-line;}
+.exam-trap{border-left:4px solid var(--accent1);background:#1a0909;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.exam-trap .et-label{color:var(--accent1);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+.quick-recall{border-left:4px solid var(--accent2);background:#091524;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.quick-recall .qr-label{color:var(--accent2);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+table.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+table.data-table th{background:#2a2200;color:var(--gold);padding:9px 12px;text-align:left;border-bottom:2px solid var(--gold);}
+table.data-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+table.data-table tr:hover td{background:#1e2235;}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:12px 0;}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.pos-card .pc-title{color:var(--gold);font-weight:700;font-size:.88rem;margin-bottom:6px;}
+.pos-card .pc-step{color:#e7e9f0;font-size:.88rem;margin-bottom:4px;}
+.pos-card .pc-eg{color:var(--accent3);font-size:.82rem;margin-top:6px;font-family:'Courier New',monospace;}
+footer{text-align:center;padding:18px;color:#667;font-size:.8rem;border-top:1px solid var(--border);margin-top:30px;}
+@media(max-width:600px){.tab-nav button{font-size:.7rem;padding:5px 8px;}.tab{padding:14px;}.pos-grid{grid-template-columns:1fr;}table.data-table{display:block;overflow-x:auto;}}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tbl-wrap table{display:table!important;min-width:auto;width:max-content!important;white-space:nowrap;margin:0!important;border:none!important;border-radius:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+img,svg,video,iframe{max-width:100%;height:auto}
+@media(max-width:768px){
+  table{display:table!important;width:max-content!important;white-space:nowrap}
+}
+@media(max-width:480px){
+  body{padding:10px}
+  .container{padding:0}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<header>
+  <h1>✖️ Viral Maths — Chapter 04: Multiplication</h1>
+  <p>by Navneet Tiwari (Adda247) &nbsp;·&nbsp; All 26 Named Approaches · Bank / SSC / Railway / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('t1',this)">📋 Overview</button>
+  <button onclick="switchTab('t2',this)">🔁 Repeat Family (11,99,101,1001)</button>
+  <button onclick="switchTab('t3',this)">🧩 General Break Methods</button>
+  <button onclick="switchTab('t4',this)">👬 Miya & Consecutive</button>
+  <button onclick="switchTab('t5',this)">5️⃣ ×5 Family</button>
+  <button onclick="switchTab('t6',this)">➗ Fraction-Shortcut Family</button>
+  <button onclick="switchTab('t7',this)">🍦 Ice Cream Approach</button>
+  <button onclick="switchTab('t8',this)">✌️ Double & Partition</button>
+  <button onclick="switchTab('t9',this)">🔲 Zero-Middle & Ends-in-1</button>
+  <button onclick="switchTab('t10',this)">📝 Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="t1" class="tab active">
+  <div class="card">
+    <div class="card-header ch-gold">📌 What This Chapter Covers</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Multiplication is the method of finding the product of two or more numbers — this is the LARGEST chapter in Viral Maths with 26 named approaches.</li>
+        <li>Book ki advice: daily practice karo, surroundings mein numbers dhundo aur verbally multiply karo.</li>
+        <li>Approaches ko groups mein organize kiya hai: Repeat-family (11/99/101/1001), general break methods, Miya/consecutive-number tricks, ×5 family, fraction-shortcut family (25/125/0.5 etc.), Ice Cream (repeat-digit), Double & Partition, aur special-pattern methods (zero-middle, ends-in-1).</li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Sabse pehle dekho: kya multiplier 11, 99, 101, 1001 hai? Ya ek number 5/25/125/0.5/1.5/2.5/12.5 hai? Ya dono numbers consecutive/close hain? Iske hisaab se sahi tab choose karo.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🗂️ Chapter Index (26 Types Grouped into 9 Families)</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Tab</th><th>Types Covered</th><th>Family</th></tr>
+        <tr><td>2</td><td>Type 1, 2, 14, 15</td><td>×11, ×99/999/9999, ×101 (Chhoti Machine), ×1001 (Badi Machine)</td></tr>
+        <tr><td>3</td><td>Type 3, 21</td><td>Any-number×any-number break method, Table Approach</td></tr>
+        <tr><td>4</td><td>Type 4, 5, 6, 18</td><td>Bade Miya-Chote Miya (even×ends5, ending-75), Padosan (consecutive), Trishul (consecutive even/odd)</td></tr>
+        <tr><td>5</td><td>Type 7, 8</td><td>Even×5, Odd×5</td></tr>
+        <tr><td>6</td><td>Type 9,10,11,12,13,16,17,19</td><td>×25, ×0.5, ×125, ×1.25, ×12.5, ×1.5, ×15, ×2.5</td></tr>
+        <tr><td>7</td><td>Type 20</td><td>Ice Cream Approach (repeat-digit × single digit)</td></tr>
+        <tr><td>8</td><td>Type 22, 23, 24</td><td>Number×its double, Product Partition (a) and (b)</td></tr>
+        <tr><td>9</td><td>Type 25, 26</td><td>Triple-digit with 0 in middle, Two-digit numbers ending in 1</td></tr>
+        <tr><td>10</td><td>—</td><td>Master Table — all 26 types summarized</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: REPEAT FAMILY -->
+<div id="t2" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 1 — Multiplication with 11 (Space Method)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">2-digit example: 11 × 63</div>
+        <div class="formula">Step 1: Leave a space between digits: 6 _ 3
+Step 2: Add them: 6+3 = 9
+Step 3: Place in middle: 693</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">3-digit example: 11 × 876</div>
+        <div class="formula">Step 1: 8 _ _ 6 (outer digits fixed)
+Step 2: Add adjacent pairs from right: 7+6=13, 8+7=15
+Step 3: Place with carries: 8(15)(13)6 → carries roll left
+Step 4: Final answer: 9636</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Jab bhi adjacent-digit sum ≥10 ho, carry ko turant left mein add karo before finalizing — warna answer galat aayega.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">Type 2 — Multiplication with 99 / 999 / 9999</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 999 × 648</div>
+        <div class="formula">Step 1: Subtract 1 from 648: 647
+Step 2: 999 − 647 = 352
+Step 3: Combine: 647352</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        n × 99...9 (k nines) = (n−1) | (10^k − n) — left part is n−1, right part is the complement.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-green">Type 14 — Chhoti Photocopy Machine Approach (× 101)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">2-digit number × 101 → just repeat the number</div>
+        <div class="formula">21 × 101 = 2121
+35 × 101 = 3535</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-purple">Type 15 — Badi Photocopy Machine Approach (× 1001)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">3-digit number × 1001 → repeat the number</div>
+        <div class="formula">352 × 1001 = 352352
+546 × 1001 = 546546</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">2-digit number × 1001 → repeat with a 0 in the middle</div>
+        <div class="formula">45 × 1001 = 45045
+31 × 1001 = 31031</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL — "Photocopy" Family</div>
+        ×101 = Chhoti (small) machine, repeats a 2-digit number.<br/>
+        ×1001 = Badi (big) machine, repeats a 3-digit number (or 2-digit with 0 padding).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: GENERAL BREAK METHODS -->
+<div id="t3" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 3 — Any Number × Any Number (Place-Value Break)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 39 × 17</div>
+        <div class="formula">Step 1: Break 39 as (30+9)
+Step 2: (30×17) + (9×17) = 510 + 153
+Step 3: Answer = 663</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 251 × 12</div>
+        <div class="formula">Break 251 = 200+50+1
+(200×12)+(50×12)+(1×12) = 2400+600+12 = 3012</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">Type 21 — Table Approach (Number 1–99 × Single Digit)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 56 × 7</div>
+        <div class="formula">Step 1: Break 56 as (50+6)
+Step 2: 50×7 = 350
+Step 3: 6×7 = 42
+Step 4: Add: 350+42 = 392</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Type 3 aur Type 21 same core idea hain — bas Type 21 specifically single-digit multiplier ke liye highlight kiya gaya hai kyunki yeh sabse common exam pattern hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: MIYA & CONSECUTIVE -->
+<div id="t4" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 4 — Bade Miya-Chote Miya Approach (Even × Ends-in-5)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 35 × 26</div>
+        <div class="formula">Step 1: Double the number ending in 5: 35×2 = 70
+Step 2: Half the even number: 26/2 = 13
+Step 3: Multiply results: 70×13 = 910</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">Type 18 — Bade Miya-Chote Miya Extended (× Number Ending in 75)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Base pattern: 75×4=300, 175×4=700, 275×4=1100, 375×4=1500...</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 28 × 175</div>
+        <div class="formula">Step 1: Divide 28 by 4: 7
+Step 2: Multiply 175 by 4: 700
+Step 3: Multiply results: 7×700 = 4900</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Yeh method sirf tab kaam karta hai jab first number 4 se cleanly divide ho jaaye — warna fraction aa jayega aur approach slow ho jayega.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-green">Type 5 — Padosan Approach (Consecutive Numbers)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Requires knowing squares 1–100 by heart</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 24 × 25</div>
+        <div class="formula">Method A: Square of smaller + smaller: 24²+24 = 576+24 = 600
+Method B: Square of bigger − bigger: 25²−25 = 625−25 = 600</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-purple">Type 6 — Trishul Approach (Consecutive Even/Odd Numbers)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 12 × 14 (middle = 13)</div>
+        <div class="formula">12 is 1 less than 13, 14 is 1 more
+Answer = 13² − 1² = 169−1 = 168</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 47 × 53 (middle = 50)</div>
+        <div class="formula">47 is 3 less, 53 is 3 more than 50
+Answer = 50² − 3² = 2500−9 = 2491</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Trishul = find the middle number, square it, subtract the square of the gap. Works for BOTH consecutive-even and consecutive-odd pairs, and even wider symmetric gaps.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: ×5 FAMILY -->
+<div id="t5" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 7 — Multiplication of Even Number with 5</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 56 × 5</div>
+        <div class="formula">Step 1: Half of 56 = 28
+Step 2: Add a 0 at the end: 280</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 648 × 5</div>
+        <div class="formula">Half of 648 = 324 → 3240</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">Type 8 — Multiplication of Odd Number with 5</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 57 × 5</div>
+        <div class="formula">Step 1: Subtract 1: 57−1 = 56 (now even)
+Step 2: Half of 56: 28
+Step 3: Add 5 at the end: 285</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 457 × 5</div>
+        <div class="formula">457−1=456 → half=228 → append 5 → 2285</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Even number×5 → append <strong>0</strong>. Odd number×5 → append <strong>5</strong>. Don't mix these up.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: FRACTION-SHORTCUT FAMILY -->
+<div id="t6" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 9 — × 25 (= 100/4)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 648 × 25</div>
+        <div class="formula">Divide by 4: 648/4 = 162
+Add 00: 16200</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">Type 10 — × 0.5 (= 1/2)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 246 × 0.5</div>
+        <div class="formula">Just halve it: 246/2 = 123</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-green">Type 11 — × 125 (= 1000/8)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 128 × 125</div>
+        <div class="formula">Divide by 8: 128/8 = 16
+Add 000: 16000</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-purple">Type 12 — × 1.25 (= 10/8)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 48 × 1.25</div>
+        <div class="formula">Divide by 8: 48/8 = 6
+Add 0: 60</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-orange">Type 13 — × 12.5 (= 100/8)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 128 × 12.5</div>
+        <div class="formula">Divide by 8: 128/8 = 16
+Add 00: 1600</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        ×1.25, ×12.5, ×125 — sab ÷8 hain. Sirf zeros ki ginती alag hai: 1.25→one 0, 12.5→two 0s, 125→three 0s.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-red">Type 16 — × 1.5 (Add Half of Itself)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 42 × 1.5</div>
+        <div class="formula">Half of 42 = 21
+42+21 = 63</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-teal">Type 17 — × 15 (Add Half, Then ×10)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 48 × 15</div>
+        <div class="formula">Step 1: Add half of itself: 48+24 = 72
+Step 2: Append a 0: 720</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-gold">Type 19 — × 2.5 (= 10/4)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 36 × 2.5</div>
+        <div class="formula">Divide by 4: 36/4 = 9
+Add 0: 90</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 248 × 2.5</div>
+        <div class="formula">248/4 = 62 → 620</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL — Whole Fraction-Shortcut Family</div>
+        ×0.5=÷2 | ×2.5=÷4+0 | ×25=÷4+00 | ×1.25=÷8+0 | ×12.5=÷8+00 | ×125=÷8+000 | ×1.5=+half | ×15=+half then ×10
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: ICE CREAM APPROACH -->
+<div id="t7" class="tab">
+  <div class="card">
+    <div class="card-header ch-purple">Type 20 — Ice Cream Approach (Repeated-digit Number × Single Digit)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use for: 22, 44, 55, 555, 666... × single digit</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 44 × 3</div>
+        <div class="formula">Step 1: Units product: 4×3 = 12
+Step 2: One "4" left over → leave 1 space
+Step 3: Place sum of end digits (1+2=3) in between
+Answer: 1(3)2 = 132</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 666 × 8</div>
+        <div class="formula">Step 1: Units product: 6×8 = 48
+Step 2: Two "6"s left → leave 2 spaces
+Step 3: Fill with sum (4+8=12), carry 1
+Answer: 5328</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Jitni baar digit repeat hoti hai, utni hi spaces beech mein banti hain — carries ko dhyan se left mein propagate karo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: DOUBLE & PARTITION -->
+<div id="t8" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 22 — Number × Its Own Double</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 14 × 28</div>
+        <div class="formula">Square of smaller: 14² = 196
+Double it: 196×2 = 392</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        n × 2n = 2n² — requires knowing squares 1-100 fluently (connects to Ch01 Important Products).
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">Type 23 — Product Partition Approach (a) — Clean 2-digit Split</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 1224 × 4</div>
+        <div class="formula">Step 1: Break into 12 (Part 1) and 24 (Part 2)
+Step 2: 12×4 = 48
+Step 3: 24×4 = 96
+Step 4: Since part 2 has exactly 2 digits, combine directly: 4896</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-green">Type 24 — Product Partition Approach (b) — With Carry</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 2568 × 2</div>
+        <div class="formula">Step 1: Break into 256 (Part 1) and 8 (Part 2)
+Step 2: 256×2 = 512
+Step 3: 8×2 = 16
+Step 4: Part 2 should be 1 digit only — use 6, carry the 1 to Part 1
+Step 5: 512+1 = 513, combine with 6: 5136</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Right-partition ka result hamesha utne hi digits ka hona chahiye jitna original right-part tha — extra digit ho to carry LEFT mein daalo, jaise column-addition mein hota hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: ZERO-MIDDLE & ENDS-IN-1 -->
+<div id="t9" class="tab">
+  <div class="card">
+    <div class="card-header ch-orange">Type 25 — Triple-Digit × Triple-Digit with Zero in Middle</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Pattern: a0b × c0d</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 503 × 408</div>
+        <div class="formula">Step 1: 5×4 = 20 (left block)
+Step 2: 5×8 + 4×3 = 40+12 = 52 (middle block)
+Step 3: 3×8 = 24 (right block)
+Step 4: Combine (with carries): 20|52|24 → 205224</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Left = a×c, Middle = a×d+b×c, Right = b×d — teen blocks banao, phir right-to-left carry adjust karo.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-red">Type 26 — Two-digit Numbers Ending in 1</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 51 × 41</div>
+        <div class="formula">Step 1: Units product: 1×1 = 1
+Step 2: Sum of tens digits: 5+4 = 9
+Step 3: Product of tens digits: 5×4 = 20
+Combine: 20 | 9 | 1 → 2091</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Yeh sirf tab kaam karta hai jab DONO numbers ka units digit 1 ho — 51×42 pe apply nahi hoga.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 10: MASTER TABLE -->
+<div id="t10" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">📋 Master Table — All 26 Multiplication Types</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>#</th><th>Approach</th><th>Rule</th></tr>
+        <tr><td>1</td><td>× 11</td><td>Space method: add adjacent digits, place in middle</td></tr>
+        <tr><td>2</td><td>× 99/999/9999</td><td>(n−1) | complement to power of 10</td></tr>
+        <tr><td>3</td><td>Any × Any</td><td>Break by place value, multiply each part, add</td></tr>
+        <tr><td>4</td><td>Bade Miya-Chote Miya</td><td>Even × ends-5: double the 5-ender, halve the even</td></tr>
+        <tr><td>5</td><td>Padosan (consecutive)</td><td>smaller²+smaller OR bigger²−bigger</td></tr>
+        <tr><td>6</td><td>Trishul (consecutive even/odd)</td><td>middle² − gap²</td></tr>
+        <tr><td>7</td><td>Even × 5</td><td>Half the number, append 0</td></tr>
+        <tr><td>8</td><td>Odd × 5</td><td>Subtract 1, half, append 5</td></tr>
+        <tr><td>9</td><td>× 25</td><td>÷4, append 00</td></tr>
+        <tr><td>10</td><td>× 0.5</td><td>÷2</td></tr>
+        <tr><td>11</td><td>× 125</td><td>÷8, append 000</td></tr>
+        <tr><td>12</td><td>× 1.25</td><td>÷8, append 0</td></tr>
+        <tr><td>13</td><td>× 12.5</td><td>÷8, append 00</td></tr>
+        <tr><td>14</td><td>Chhoti Machine (×101)</td><td>Repeat 2-digit number</td></tr>
+        <tr><td>15</td><td>Badi Machine (×1001)</td><td>Repeat 3-digit (or 2-digit with 0 pad)</td></tr>
+        <tr><td>16</td><td>× 1.5</td><td>Add half of itself</td></tr>
+        <tr><td>17</td><td>× 15</td><td>Add half of itself, append 0</td></tr>
+        <tr><td>18</td><td>Bade Miya (ends-75)</td><td>÷4 first number, ×4 second number, multiply</td></tr>
+        <tr><td>19</td><td>× 2.5</td><td>÷4, append 0</td></tr>
+        <tr><td>20</td><td>Ice Cream (repeat-digit×1digit)</td><td>units product, spaced digit-sum insert</td></tr>
+        <tr><td>21</td><td>Table Approach</td><td>Break tens+units, multiply single digit, add</td></tr>
+        <tr><td>22</td><td>Number × its double</td><td>2 × (smaller number)²</td></tr>
+        <tr><td>23</td><td>Product Partition (a)</td><td>Split clean, multiply each, combine</td></tr>
+        <tr><td>24</td><td>Product Partition (b)</td><td>Split with carry when right part overflows</td></tr>
+        <tr><td>25</td><td>Zero-middle triple×triple</td><td>a×c | a×d+b×c | b×d</td></tr>
+        <tr><td>26</td><td>Ends-in-1 (2-digit)</td><td>tens×tens | tens sum | 1</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🔑 Approach Selection Flowchart</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Multiplier is 11 → <strong>Type 1</strong></li>
+        <li>Multiplier is 99/999/9999 → <strong>Type 2</strong></li>
+        <li>Multiplier is 101 → <strong>Type 14</strong> | 1001 → <strong>Type 15</strong></li>
+        <li>One number even, other ends in 5 → <strong>Type 4</strong> (or Type 18 if ends in 75)</li>
+        <li>Two consecutive numbers → <strong>Type 5</strong></li>
+        <li>Two consecutive even OR odd numbers → <strong>Type 6 (Trishul)</strong></li>
+        <li>Multiplier is 5 → <strong>Type 7/8</strong> (even/odd)</li>
+        <li>Multiplier is 25/125/0.5/1.25/12.5/1.5/15/2.5 → <strong>Fraction-Shortcut family (Tab 6)</strong></li>
+        <li>Number is a repeated digit (22,44,555...) × single digit → <strong>Type 20 (Ice Cream)</strong></li>
+        <li>Number × its own double → <strong>Type 22</strong></li>
+        <li>Big number × single digit, no special pattern → <strong>Type 23/24 (Product Partition)</strong></li>
+        <li>Triple-digit × triple-digit, zero in middle → <strong>Type 25</strong></li>
+        <li>Both numbers end in 1 → <strong>Type 26</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com &nbsp;·&nbsp; Viral Maths Ch04: Multiplication &nbsp;·&nbsp; Bank / SSC / Railway / BPSC / BSSC</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viral Maths — Ch03: Subtraction | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--gold:#f5c842;
+  --accent1:#e74c3c;--accent2:#3498db;--accent3:#2ecc71;
+  --accent4:#9b59b6;--accent5:#e67e22;--accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#e7e9f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7;}
+header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:2px solid var(--gold);padding:22px 28px;}
+header h1{color:var(--gold);font-size:1.5rem;letter-spacing:1px;}
+header p{color:#aab;font-size:.88rem;margin-top:4px;}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab-nav button{background:var(--surface2);color:#ccd;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:.8rem;cursor:pointer;transition:all .2s;}
+.tab-nav button.active{color:var(--gold);border-color:var(--gold);border-bottom:2px solid var(--gold);font-weight:700;}
+.tab-nav button:hover:not(.active){border-color:#888;color:#fff;}
+.tab{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.tab.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.card-header{padding:12px 18px;font-weight:700;font-size:.95rem;letter-spacing:.5px;}
+.ch-gold{background:linear-gradient(90deg,#2a2000,#1a1d27);color:var(--gold);}
+.ch-green{background:linear-gradient(90deg,#0a2010,#1a1d27);color:var(--accent3);}
+.ch-blue{background:linear-gradient(90deg,#0a1525,#1a1d27);color:var(--accent2);}
+.ch-purple{background:linear-gradient(90deg,#180a28,#1a1d27);color:var(--accent4);}
+.ch-orange{background:linear-gradient(90deg,#251200,#1a1d27);color:var(--accent5);}
+.ch-red{background:linear-gradient(90deg,#250808,#1a1d27);color:var(--accent1);}
+.ch-teal{background:linear-gradient(90deg,#051a18,#1a1d27);color:var(--accent6);}
+.card-body{padding:16px 18px;}
+ul.arrow-list{list-style:none;padding:0;}
+ul.arrow-list li{padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #1e2235;}
+ul.arrow-list li:last-child{border-bottom:none;}
+ul.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);}
+.rule-box{border:1px solid var(--gold);border-radius:8px;padding:12px 16px;margin:10px 0;background:#1c1900;}
+.rule-box .rule-label{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;}
+.rule-box .formula{color:#fff;font-size:.96rem;font-weight:600;font-family:'Courier New',monospace;white-space:pre-line;}
+.exam-trap{border-left:4px solid var(--accent1);background:#1a0909;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.exam-trap .et-label{color:var(--accent1);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+.quick-recall{border-left:4px solid var(--accent2);background:#091524;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.quick-recall .qr-label{color:var(--accent2);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+table.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+table.data-table th{background:#2a2200;color:var(--gold);padding:9px 12px;text-align:left;border-bottom:2px solid var(--gold);}
+table.data-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+table.data-table tr:hover td{background:#1e2235;}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:12px 0;}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.pos-card .pc-title{color:var(--gold);font-weight:700;font-size:.88rem;margin-bottom:6px;}
+.pos-card .pc-step{color:#e7e9f0;font-size:.88rem;margin-bottom:4px;}
+.pos-card .pc-eg{color:var(--accent3);font-size:.82rem;margin-top:6px;font-family:'Courier New',monospace;}
+footer{text-align:center;padding:18px;color:#667;font-size:.8rem;border-top:1px solid var(--border);margin-top:30px;}
+@media(max-width:600px){.tab-nav button{font-size:.72rem;padding:6px 8px;}.tab{padding:14px;}.pos-grid{grid-template-columns:1fr;}table.data-table{display:block;overflow-x:auto;}}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tbl-wrap table{display:table!important;min-width:auto;width:max-content!important;white-space:nowrap;margin:0!important;border:none!important;border-radius:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+img,svg,video,iframe{max-width:100%;height:auto}
+@media(max-width:768px){
+  table{display:table!important;width:max-content!important;white-space:nowrap}
+}
+@media(max-width:480px){
+  body{padding:10px}
+  .container{padding:0}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<header>
+  <h1>➖ Viral Maths — Chapter 03: Subtraction</h1>
+  <p>by Navneet Tiwari (Adda247) &nbsp;·&nbsp; 8 Named Approaches for Finding the Gap Fast · Bank / SSC / Railway / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('t1',this)">📋 Overview</button>
+  <button onclick="switchTab('t2',this)">🔹 Todu-Modu</button>
+  <button onclick="switchTab('t3',this)">👯 Sita-Gita (Judwa)</button>
+  <button onclick="switchTab('t4',this)">🎯 Tidding-Tidding</button>
+  <button onclick="switchTab('t5',this)">🌊 Nadiya Paar</button>
+  <button onclick="switchTab('t6',this)">🔄 Anti-Bodmas</button>
+  <button onclick="switchTab('t7',this)">💯 Sabji Wala (100)</button>
+  <button onclick="switchTab('t8',this)">👬 Bhai Bhai</button>
+  <button onclick="switchTab('t9',this)">🔧 Last-2-Digit Fix</button>
+  <button onclick="switchTab('t10',this)">📝 Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="t1" class="tab active">
+  <div class="card">
+    <div class="card-header ch-gold">📌 What This Chapter Covers</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Subtraction is all about finding the GAP between two numbers.</li>
+        <li>Book ki example: sabji-wala (vegetable vendor) shop mein subtraction ka sabse zyada real-life use hota hai — daily practice karo aur verbally calculate karo.</li>
+        <li>8 named approaches hain — number ki shape/closeness dekh ke sahi approach choose karo.</li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Selection guide: 2-digit−1-digit → Todu-Modu; mirror numbers → Sita-Gita; number near 100/200/300 → Tidding-Tidding; both numbers near same base → Nadiya Paar; mixed +/− chain → Anti-Bodmas; subtract FROM 100/1000 → Sabji Wala; subtract from 50 (20s) → Bhai Bhai; last-2-digits close → Last-2-Digit Fix method.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🗂️ Chapter Index</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Tab</th><th>Approach</th><th>Best For</th></tr>
+        <tr><td>2</td><td>Todu-Modu</td><td>2-3 digit number − 1-digit number</td></tr>
+        <tr><td>3</td><td>Sita-Gita (Judwa)</td><td>Number − its digit-reversal (mirror)</td></tr>
+        <tr><td>4</td><td>Tidding-Tidding</td><td>Subtrahend close to 100/200/300...</td></tr>
+        <tr><td>5</td><td>Nadiya Paar</td><td>Both numbers close to the SAME base</td></tr>
+        <tr><td>6</td><td>Anti-Bodmas</td><td>Mixed addition-subtraction chains</td></tr>
+        <tr><td>7</td><td>Sabji Wala (Century)</td><td>100/1000/multiples MINUS a number</td></tr>
+        <tr><td>8</td><td>Bhai Bhai</td><td>50 minus a number in the 20s</td></tr>
+        <tr><td>9</td><td>Last-2-Digit Fix</td><td>Big numbers whose last 2 digits are close</td></tr>
+        <tr><td>10</td><td>Master Table</td><td>All 8 approaches summarized</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: TODU-MODU -->
+<div id="t2" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 1 — Todu-Modu Approach</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Break the number being subtracted (using the units digit of the first number) into two convenient parts.</li>
+      </ul>
+      <div class="rule-box">
+        <div class="rule-label">Example: 83 − 7</div>
+        <div class="formula">Break 7 as (3+4) using unit digit of 83
+Step 1: 83 − 3 = 80
+Step 2: 80 − 4 = 76</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 87 − 9</div>
+        <div class="formula">Break 9 as (7+2) using unit digit of 87
+Step 1: 87 − 7 = 80
+Step 2: 80 − 2 = 78</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Pehle apni first number ka unit digit hata ke round number banao, phir bacha hua subtract karo — do chhote steps mein poora ho jaata hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: SITA-GITA (JUDWA) -->
+<div id="t3" class="tab">
+  <div class="card">
+    <div class="card-header ch-green">Type 2(a) — Sita-Gita (Judwa) Approach — 2-digit Mirror</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: a 2-digit number is subtracted from its digit-reversal (Judwa pair)</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 63 − 36</div>
+        <div class="formula">Step 1: Difference between digits: 6−3 = 3
+Step 2: Multiply always by 9: 3×9 = 27</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        2-digit mirror subtraction = (digit difference) × 9 — always.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">Type 2(b) — Sita-Gita Approach — 3-digit Mirror</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: a 3-digit number is subtracted from its digit-reversal (middle digit stays fixed)</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 652 − 256</div>
+        <div class="formula">Step 1: Difference between FIRST and LAST digit: 6−2 = 4
+Step 2: Multiply always by 99: 4×99 = 396</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        3-digit mirror subtraction ka multiplier <strong>99</strong> hai, 2-digit ka <strong>9</strong> — aur sirf FIRST aur LAST digit ka difference lena hai, middle digit ignore karo (wo automatically cancel ho jaata hai).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: TIDDING-TIDDING -->
+<div id="t4" class="tab">
+  <div class="card">
+    <div class="card-header ch-purple">Type 3 — Tidding-Tidding Approach (Subtrahend Near a Base)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: the number BEING SUBTRACTED is close to 100, 200, 300...</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 167 − 96</div>
+        <div class="formula">Consider 96 as 100 (4 extra)
+Step 1: Subtract 100 from 167: 67
+Step 2: Add back the extra: 67+4 = 71</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 667 − 293</div>
+        <div class="formula">Consider 293 as 300 (7 extra)
+Step 1: Subtract 300 from 667: 367
+Step 2: Add back extra: 367+7 = 374</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Round the SUBTRAHEND up to its nearest base, subtract that clean base, then ADD BACK the extra you over-subtracted.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: NADIYA PAAR -->
+<div id="t5" class="tab">
+  <div class="card">
+    <div class="card-header ch-orange">Type 4 — Nadiya Paar Approach (Both Numbers Near Same Base)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: BOTH numbers are close to the same base (100, 200, 300...) — find each number's margin from that base and ADD the margins</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 915 − 888 (base = 900)</div>
+        <div class="formula">Step 1: 915 is 15 above 900
+Step 2: 888 is 12 below 900
+Add the margins: 15+12 = 27</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 1205 − 778 (base = 800)</div>
+        <div class="formula">Step 1: 1205 is 405 above 800
+Step 2: 778 is 22 below 800
+Add margins: 405+22 = 427</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        "Nadiya Paar" (crossing the river) — dono numbers ek hi base ke "kinare" (bank) pe hone chahiye, ek upar ek neeche. Agar dono same side pe hon (dono base se upar ya dono neeche), yeh approach kaam nahi karega — margins subtract karne padenge, add nahi.
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Ek number base ke upar (+margin), doosra base ke neeche (−margin) → seedha dono margins ADD kar do.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: ANTI-BODMAS -->
+<div id="t6" class="tab">
+  <div class="card">
+    <div class="card-header ch-red">Type 5 — Anti-Bodmas Approach (Reorder for Easy Subtraction)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">It's not necessary to always calculate left-to-right — if two numbers in the chain are close to each other, subtract them FIRST</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 25 + 63 − 65</div>
+        <div class="formula">Step 1: 63 and 65 are close → do this first: 63−65 = −2
+Step 2: Add to 25: 25+(−2) = 23</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: −267 + 196 + 253</div>
+        <div class="formula">Step 1: 253 and 267 are close → 253−267 = −14
+Step 2: Add to 196: 196−14 = 182</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Poori expression ko scan karo — jo do numbers sabse close hain unhe pehle nipta do, phir baaki simple ho jaata hai. Yeh Addition ke Giddh Approach ka subtraction-version hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: SABJI WALA (100) -->
+<div id="t7" class="tab">
+  <div class="card">
+    <div class="card-header ch-teal">Type 6 — Sabji Wala / Century Approach (100/1000 − Number)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: subtracting a number FROM 100, 1000, or their multiples</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 100 − 36 (Method A — build up)</div>
+        <div class="formula">Try to make 36 reach 100:
+Step 1: Add 4 to 36 → 40
+Step 2: Add 60 to 40 → 100
+Total added: 4+60 = 64 (Answer)</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 100 − 36 (Method B — break and subtract)</div>
+        <div class="formula">36 = 30+6
+Step 1: 100−30 = 70
+Step 2: 70−6 = 64</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 1000 − 357</div>
+        <div class="formula">357 = 300+50+7
+Step 1: 1000−300 = 700
+Step 2: 700−50 = 650
+Step 3: 650−7 = 643</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Sabji-wale ko change dete waqt yehi karte hain — number ko place-value pieces mein tod ke ek-ek karke base se ghatao.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: BHAI BHAI -->
+<div id="t8" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 7 — Bhai Bhai Approach (50 − Number in 20s)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Rule: Whenever subtracting a number in the 20s (21, 22, 23...) from 50, the answer is always in the 20s too</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Formula</div>
+        <div class="formula">Tens place of answer = always 2
+Units place of answer = 10 − (units digit of subtracted number)</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 50 − 26</div>
+        <div class="formula">Tens place = 2
+Units place = 10−6 = 4
+Answer: 24</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 50 − 28</div>
+        <div class="formula">Tens place = 2
+Units place = 10−8 = 2
+Answer: 22</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        "Bhai Bhai" (brothers) — dono numbers 20s family ke hain (subtracted number bhi 20s mein, answer bhi 20s mein). Yeh sirf 50 se subtract karne par kaam karta hai, kisi aur base pe nahi.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: LAST-2-DIGIT FIX -->
+<div id="t9" class="tab">
+  <div class="card">
+    <div class="card-header ch-blue">Type 8 — Last-2-Digit Proximity Method</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: two big numbers being subtracted have last-2-digits that are close to each other</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 4449 − 3051</div>
+        <div class="formula">Step 1: Add a convenient base (1400) to smaller number (3051) to get close to 4449: 3051+1400 = 4451
+Step 2: Now you're 2 steps AHEAD of 4449 (4451 vs 4449)
+Step 3: Subtract that overshoot from your base: 1400−2 = 1398 (Answer)</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Guess a round gap (like 1400) between the two numbers, add it to the smaller number, see how far off you land from the bigger number, then correct the guessed gap by that overshoot/undershoot.
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Agar guess ke baad result BADA nikle target se, to overshoot ko base se GHATAO (jaisa example mein hua). Agar CHHOTA nikle, to undershoot ko base mein JODO.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 10: MASTER TABLE -->
+<div id="t10" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">📋 Master Table — All Subtraction Approaches</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Approach</th><th>When to Use</th><th>Core Rule</th></tr>
+        <tr><td>Todu-Modu</td><td>Number − 1-digit</td><td>Break subtrahend using first number's unit digit</td></tr>
+        <tr><td>Sita-Gita (2-digit)</td><td>Number − its mirror</td><td>(digit difference) × 9</td></tr>
+        <tr><td>Sita-Gita (3-digit)</td><td>Number − its mirror</td><td>(first−last digit difference) × 99</td></tr>
+        <tr><td>Tidding-Tidding</td><td>Subtrahend near a base</td><td>Subtract full base, add back the extra</td></tr>
+        <tr><td>Nadiya Paar</td><td>Both numbers near same base</td><td>Add the two margins from base</td></tr>
+        <tr><td>Anti-Bodmas</td><td>Mixed +/− chain</td><td>Subtract closest pair first, then combine</td></tr>
+        <tr><td>Sabji Wala (Century)</td><td>100/1000/multiple − number</td><td>Break subtrahend by place value, subtract stepwise</td></tr>
+        <tr><td>Bhai Bhai</td><td>50 − (20s number)</td><td>Tens=2, Units=10−unit digit</td></tr>
+        <tr><td>Last-2-Digit Fix</td><td>Big numbers, close last-2-digits</td><td>Guess round gap, add to smaller, correct by overshoot</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🔑 Approach Selection Flowchart</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Subtracting a single digit → <strong>Todu-Modu</strong></li>
+        <li>Number − its own digit-reversal → <strong>Sita-Gita (Judwa)</strong></li>
+        <li>Only the subtrahend is near a round base → <strong>Tidding-Tidding</strong></li>
+        <li>BOTH numbers are near the SAME round base → <strong>Nadiya Paar</strong></li>
+        <li>Chain of + and − with two close numbers in it → <strong>Anti-Bodmas</strong></li>
+        <li>Subtracting FROM 100/1000/multiples → <strong>Sabji Wala</strong></li>
+        <li>50 minus a 20s number → <strong>Bhai Bhai</strong></li>
+        <li>Big 4-digit numbers with close last-2-digits → <strong>Last-2-Digit Fix</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com &nbsp;·&nbsp; Viral Maths Ch03: Subtraction &nbsp;·&nbsp; Bank / SSC / Railway / BPSC / BSSC</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

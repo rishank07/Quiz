@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viral Maths — Ch02: Addition | Exam Fusion Prep</title>
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--gold:#f5c842;
+  --accent1:#e74c3c;--accent2:#3498db;--accent3:#2ecc71;
+  --accent4:#9b59b6;--accent5:#e67e22;--accent6:#1abc9c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#e7e9f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7;}
+header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:2px solid var(--gold);padding:22px 28px;}
+header h1{color:var(--gold);font-size:1.5rem;letter-spacing:1px;}
+header p{color:#aab;font-size:.88rem;margin-top:4px;}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab-nav button{background:var(--surface2);color:#ccd;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.tab-nav button.active{color:var(--gold);border-color:var(--gold);border-bottom:2px solid var(--gold);font-weight:700;}
+.tab-nav button:hover:not(.active){border-color:#888;color:#fff;}
+.tab{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.tab.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.card-header{padding:12px 18px;font-weight:700;font-size:.95rem;letter-spacing:.5px;}
+.ch-gold{background:linear-gradient(90deg,#2a2000,#1a1d27);color:var(--gold);}
+.ch-green{background:linear-gradient(90deg,#0a2010,#1a1d27);color:var(--accent3);}
+.ch-blue{background:linear-gradient(90deg,#0a1525,#1a1d27);color:var(--accent2);}
+.ch-purple{background:linear-gradient(90deg,#180a28,#1a1d27);color:var(--accent4);}
+.ch-orange{background:linear-gradient(90deg,#251200,#1a1d27);color:var(--accent5);}
+.ch-red{background:linear-gradient(90deg,#250808,#1a1d27);color:var(--accent1);}
+.ch-teal{background:linear-gradient(90deg,#051a18,#1a1d27);color:var(--accent6);}
+.card-body{padding:16px 18px;}
+ul.arrow-list{list-style:none;padding:0;}
+ul.arrow-list li{padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #1e2235;}
+ul.arrow-list li:last-child{border-bottom:none;}
+ul.arrow-list li::before{content:"▸";position:absolute;left:0;color:var(--gold);}
+.rule-box{border:1px solid var(--gold);border-radius:8px;padding:12px 16px;margin:10px 0;background:#1c1900;}
+.rule-box .rule-label{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:6px;}
+.rule-box .formula{color:#fff;font-size:.96rem;font-weight:600;font-family:'Courier New',monospace;white-space:pre-line;}
+.exam-trap{border-left:4px solid var(--accent1);background:#1a0909;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.exam-trap .et-label{color:var(--accent1);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+.quick-recall{border-left:4px solid var(--accent2);background:#091524;border-radius:6px;padding:12px 16px;margin:12px 0;}
+.quick-recall .qr-label{color:var(--accent2);font-weight:700;font-size:.85rem;margin-bottom:5px;}
+table.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+table.data-table th{background:#2a2200;color:var(--gold);padding:9px 12px;text-align:left;border-bottom:2px solid var(--gold);}
+table.data-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+table.data-table tr:hover td{background:#1e2235;}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:12px 0;}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.pos-card .pc-title{color:var(--gold);font-weight:700;font-size:.88rem;margin-bottom:6px;}
+.pos-card .pc-step{color:#e7e9f0;font-size:.88rem;margin-bottom:4px;}
+.pos-card .pc-eg{color:var(--accent3);font-size:.82rem;margin-top:6px;font-family:'Courier New',monospace;}
+footer{text-align:center;padding:18px;color:#667;font-size:.8rem;border-top:1px solid var(--border);margin-top:30px;}
+@media(max-width:600px){.tab-nav button{font-size:.75rem;padding:6px 10px;}.tab{padding:14px;}.pos-grid{grid-template-columns:1fr;}table.data-table{display:block;overflow-x:auto;}}
+
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tbl-wrap table{display:table!important;min-width:auto;width:max-content!important;white-space:nowrap;margin:0!important;border:none!important;border-radius:0!important}
+.tbl-wrap::-webkit-scrollbar{height:8px}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface2);border-radius:10px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+img,svg,video,iframe{max-width:100%;height:auto}
+@media(max-width:768px){
+  table{display:table!important;width:max-content!important;white-space:nowrap}
+}
+@media(max-width:480px){
+  body{padding:10px}
+  .container{padding:0}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-Q1WNRY8ECV');
+</script>
+</head>
+<body>
+<header>
+  <h1>➕ Viral Maths — Chapter 02: Addition</h1>
+  <p>by Navneet Tiwari (Adda247) &nbsp;·&nbsp; 7 Named Approaches for Lightning-Fast Addition · Bank / SSC / Railway / BPSC / BSSC</p>
+</header>
+
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('t1',this)">📋 Overview</button>
+  <button onclick="switchTab('t2',this)">🔹 Todu-Modu</button>
+  <button onclick="switchTab('t3',this)">🔸 2-digit+2-digit</button>
+  <button onclick="switchTab('t4',this)">👯 Ram-Shyam (Judwa)</button>
+  <button onclick="switchTab('t5',this)">🏘️ Padosan</button>
+  <button onclick="switchTab('t6',this)">🎯 Tiding-Tiding</button>
+  <button onclick="switchTab('t7',this)">🦅 Giddh Approach</button>
+  <button onclick="switchTab('t8',this)">🔢 Multi-Number Addition</button>
+  <button onclick="switchTab('t9',this)">📝 Master Table</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="t1" class="tab active">
+  <div class="card">
+    <div class="card-header ch-gold">📌 What This Chapter Covers</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Addition is the process of finding the sum of two or more numbers — used everywhere from grocery bills to exam calculations.</li>
+        <li>Book ki advice: daily practice karo, surroundings mein numbers dekh ke verbally add karo (jaise car/bike plate numbers) — isse mental horizon expand hota hai.</li>
+        <li>7 named approaches hain is chapter mein, har ek specific number-pattern ke liye optimized.</li>
+      </ul>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Approach choose karne ka tarika: numbers ki shape dekho — 2-digit+1-digit → Todu-Modu; mirror digits → Ram-Shyam; close numbers → Padosan; near 100/200/300 → Tiding-Tiding; multiple addends → Giddh; long column → Multi-Number method.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🗂️ Chapter Index</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Tab</th><th>Approach</th><th>Best For</th></tr>
+        <tr><td>2</td><td>Todu-Modu</td><td>2-digit + 1-digit numbers</td></tr>
+        <tr><td>3</td><td>2-digit+2-digit / 3-digit+3-digit</td><td>Similar-size number pairs</td></tr>
+        <tr><td>4</td><td>Ram-Shyam (Judwa)</td><td>Number + its digit-reversal (mirror pair)</td></tr>
+        <tr><td>5</td><td>Padosan</td><td>Two numbers very close to each other</td></tr>
+        <tr><td>6</td><td>Tiding-Tiding (Hritik-Roshan)</td><td>One number close to 100/200/300...</td></tr>
+        <tr><td>7</td><td>Giddh Approach</td><td>3+ numbers where some pair sums to a round base</td></tr>
+        <tr><td>8</td><td>Multi-Number Addition</td><td>Long column of 5+ numbers, place-value grouped</td></tr>
+        <tr><td>9</td><td>Master Table</td><td>All 7 approaches summarized</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: TODU-MODU -->
+<div id="t2" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 1 — Todu-Modu Approach (2-digit + 1-digit)</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Use when: a two-digit number is added to a one-digit number.</li>
+        <li>Practice daily to add smoothly in a single flow — this is the base skill for every other approach.</li>
+      </ul>
+      <div class="rule-box">
+        <div class="rule-label">Example: 86 + 7</div>
+        <div class="formula">Step 1: Break 86 as 80 + 6
+Step 2: Add unit digits: 6 + 7 = 13
+Step 3: Add 80 and 13 = 93</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        "Todu-Modu" = tod-mod ke, i.e. break the tens-units apart, add the small pieces, then rejoin. Foundation for all bigger addition approaches.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: 2-digit+2-digit -->
+<div id="t3" class="tab">
+  <div class="card">
+    <div class="card-header ch-blue">Type 2 — Two-digit + Two-digit (and Three-digit + Three-digit)</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 76 + 37</div>
+        <div class="formula">Step 1: Break 76 as 70+6, and 37 as 30+7
+Step 2: Add base numbers first: 70+30 = 100
+Step 3: Add unit digits: 6+7 = 13
+Step 4: Add both results: 100+13 = 113</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 167 + 378 (3-digit version)</div>
+        <div class="formula">Step 1: Break 167 as 100+60+7, and 378 as 300+70+8
+Step 2: Add hundreds: 100+300 = 400
+Step 3: Add tens: 60+70 = 130
+Step 4: Add units: 7+8 = 15
+Step 5: Combine: 400+130+15 = 545</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Same Todu-Modu logic, just extended to more place-values: break every number into its place-value parts, add same-place parts together, then combine.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: RAM-SHYAM (JUDWA) -->
+<div id="t4" class="tab">
+  <div class="card">
+    <div class="card-header ch-green">Type 3 — Ram-Shyam (Judwa) Approach — Number + Its Mirror</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: a number is added to its own digit-reversal (Judwa/mirror pair)</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 36 + 63</div>
+        <div class="formula">Step 1: Add the digits: 3+6 = 9
+Step 2: Multiply result by 11: 9 × 11 = 99</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 84 + 48</div>
+        <div class="formula">Step 1: Add digits: 4+8 = 12
+Step 2: Multiply by 11: 12 × 11 = 132</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Yeh rule KEVAL mirror pairs (Ram-Shyam/Judwa numbers) pe kaam karta hai — 36+63 ✓ but 36+52 ✗ (52 mirror nahi hai 36 ka).
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        (digit sum) × 11 — chahe 2-digit ho, formula same rehta hai jab tak dono numbers ek dusre ke digit-reversal hon.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: PADOSAN -->
+<div id="t5" class="tab">
+  <div class="card">
+    <div class="card-header ch-purple">Type 4 — Padosan Approach (Close/Neighbouring Numbers)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: two numbers being added are very close to each other</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 35 + 42</div>
+        <div class="formula">Step 1: Double the smaller number: 35×2 = 70
+Step 2: Find the gap: 42−35 = 7
+Step 3: Add both results: 70+7 = 77</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 233 + 238</div>
+        <div class="formula">Step 1: Double smaller: 233×2 = 466
+Step 2: Gap: 238−233 = 5
+Step 3: Add: 466+5 = 471</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        "Padosan" = neighbour — jitne paas numbers hongi, utna hi fast yeh approach hai. Doubling ek known number pe hoti hai, phir sirf chhota sa gap add karna hota hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: TIDING-TIDING -->
+<div id="t6" class="tab">
+  <div class="card">
+    <div class="card-header ch-orange">Type 5 — Tiding-Tiding (Hritik-Roshan) Approach — Near 100/200/300</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: one number is close to a round base like 100, 200, 300...</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 67 + 96</div>
+        <div class="formula">Step 1: Assume 96 as 100 (4 extra)
+Step 2: Add 67 with 100: 167
+Step 3: Subtract the extra: 167 − 4 = 163</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 214 + 299</div>
+        <div class="formula">Step 1: Assume 299 as 300 (1 extra)
+Step 2: Add 214 with 300: 514
+Step 3: Subtract extra: 514 − 1 = 513</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-teal">Type 5 Extension — Near 90/190/290/390...</div>
+    <div class="card-body">
+      <div class="rule-box">
+        <div class="rule-label">Example: 77 + 90</div>
+        <div class="formula">Step 1: Assume 90 as 100 (10 extra)
+Step 2: Add 77 with 100: 177
+Step 3: Subtract extra: 177 − 10 = 167</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 568 + 890</div>
+        <div class="formula">Step 1: Assume 890 as 900 (10 extra)
+Step 2: Add 568 with 900: 1468
+Step 3: Subtract extra: 1468 − 10 = 1458</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        90/190/290 wale case mein "extra" hamesha 10 hota hai (kyunki 90 se 100 tak 10 ka gap hai) — 96/196/296 wale case mein extra sirf single-digit hota hai. Dono ko mix mat karo.
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Round up to the NEAREST clean hundred, add, then subtract exactly what you added extra.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: GIDDH APPROACH -->
+<div id="t7" class="tab">
+  <div class="card">
+    <div class="card-header ch-red">Type 6 — Giddh (Vulture) Approach — Spot the Base-Forming Pair</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: 3 or more numbers are being added — be alert like a vulture (Giddh) to spot which pair sums to a round base (100, 200, 300...)</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 35 + 43 + 65</div>
+        <div class="formula">Step 1: Spot the pair that forms a base: 35+65 = 100
+Step 2: Add remaining number: 100+43 = 143</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 167 + 196 + 133</div>
+        <div class="formula">Step 1: Spot the pair: 167+133 = 300
+Step 2: Add remaining: 300+196 = 496</div>
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Jaise giddh (vulture) upar se dekh ke shikar pehchanta hai, waise hi tumhe pehle scan karna hai ki kaunsi do numbers milke round base bana rahi hain — phir baaki simple ho jaata hai.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: MULTI-NUMBER ADDITION -->
+<div id="t8" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">Type 7 — Multi-Number Addition (Place-Value Grouped)</div>
+    <div class="card-body">
+      <div class="step-box">
+        <div class="step-title">Use when: many numbers (5+) are added together in one go — group by place value instead of adding sequentially</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 67+68+35+43+65+55</div>
+        <div class="formula">Step 1: Add all tens-place digits: 6+6+3+4+6+5 = 30
+Step 2: Attach a 0: 300
+Step 3: Add all units-place digits: 7+8+5+3+5+5 = 33
+Step 4: Combine: 300+33 = 333</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-label">Example: 56+48+78+567+983 (with hundreds place)</div>
+        <div class="formula">Step 1: Add hundreds-place digits: 5+9 = 14 → attach 00 → 1400
+Step 2: Add tens-place digits: 5+4+7+6+8 = 30 → attach 0 → 300
+Step 3: Add units-place digits: 6+8+8+7+3 = 32
+Step 4: Combine: 1400+300+32 = 1732</div>
+      </div>
+      <div class="exam-trap">
+        <div class="et-label">⚠ EXAM TRAP</div>
+        Har column ka digit-sum agar 10 se zyada ho, to carry agle column mein already accounted ho jaata hai jab tum "attach 0/00" karte ho aur end mein combine karte ho — bas final addition mein dhyan se carry lagana, step-by-step carry mat karna.
+      </div>
+      <div class="quick-recall">
+        <div class="qr-label">⚡ QUICK RECALL</div>
+        Yeh column-addition ka mental-math version hai — sabse right column se ulta shuru karke place-values ko group karo, phir sabko jod do.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 9: MASTER TABLE -->
+<div id="t9" class="tab">
+  <div class="card">
+    <div class="card-header ch-gold">📋 Master Table — All Addition Approaches</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table class="data-table">
+        <tr><th>Approach</th><th>When to Use</th><th>Core Rule</th></tr>
+        <tr><td>Todu-Modu</td><td>2-digit + 1-digit</td><td>Break tens+units, add units first</td></tr>
+        <tr><td>2-digit+2-digit</td><td>Similar-size numbers</td><td>Add base numbers, add units, combine</td></tr>
+        <tr><td>Ram-Shyam (Judwa)</td><td>Number + its mirror</td><td>(digit sum) × 11</td></tr>
+        <tr><td>Padosan</td><td>Very close numbers</td><td>2×smaller + gap</td></tr>
+        <tr><td>Tiding-Tiding</td><td>Near 100/200/300</td><td>Round up, add, subtract excess</td></tr>
+        <tr><td>Tiding-Tiding (90-family)</td><td>Near 90/190/290/390</td><td>Round to 100/200/300 (extra=10), subtract 10</td></tr>
+        <tr><td>Giddh</td><td>3+ numbers, one pair forms a base</td><td>Spot base-pair first, then add remainder</td></tr>
+        <tr><td>Multi-Number (Place-Value)</td><td>Long column, 5+ numbers</td><td>Sum each place-value column separately, then combine</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-blue">🔑 Approach Selection Flowchart (Quick Reference)</div>
+    <div class="card-body">
+      <ul class="arrow-list">
+        <li>Only 2 numbers, one is 1-digit → <strong>Todu-Modu</strong></li>
+        <li>Only 2 numbers, similar digit-count, no special pattern → <strong>2-digit+2-digit method</strong></li>
+        <li>Only 2 numbers, one is exact mirror of other → <strong>Ram-Shyam (Judwa)</strong></li>
+        <li>Only 2 numbers, very close in value → <strong>Padosan</strong></li>
+        <li>Only 2 numbers, one is near a round hundred → <strong>Tiding-Tiding</strong></li>
+        <li>3+ numbers, some pair sums to a round base → <strong>Giddh</strong></li>
+        <li>5+ numbers, no obvious pattern → <strong>Multi-Number Place-Value method</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>Exam Fusion Prep | examfusionprep.com &nbsp;·&nbsp; Viral Maths Ch02: Addition &nbsp;·&nbsp; Bank / SSC / Railway / BPSC / BSSC</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
