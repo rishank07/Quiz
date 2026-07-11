@@ -394,22 +394,6 @@
     }
 
     /*============================*/
-    /* VISITED LINK STYLE          */
-    /*============================*/
-    .nested-links a.visited-link {
-      background: linear-gradient(135deg, #536976, #292E49) !important;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #d1d5db !important;
-    }
-
-    .nested-links a.visited-link:hover {
-      transform: translateX(8px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
-      color: #ffffff !important;
-    }
-
-    /*============================*/
     .footer {
       margin-top: 45px;
       text-align: center;
@@ -683,14 +667,7 @@
       const linkUrl = linkEl.href;
       const relativePath = linkEl.getAttribute("href");
 
-      // 1. Save topic to LocalStorage to remember it
-      let visited = JSON.parse(localStorage.getItem('visitedTopicsCA')) || [];
-      if (!visited.includes(relativePath)) {
-        visited.push(relativePath);
-        localStorage.setItem('visitedTopicsCA', JSON.stringify(visited));
-      }
-
-      // 1b. Remember last opened topic for "Continue where you left off"
+      // Remember last opened topic for "Continue where you left off"
       if (linkEl.id !== "resumeLink") {
         localStorage.setItem('lastTopicCA', JSON.stringify({
           path: relativePath,
@@ -698,10 +675,7 @@
         }));
       }
 
-      // 2. Instantly make it look "Visited"
-      linkEl.classList.add("visited-link");
-
-      // 3. Loading animation effect
+      // Loading animation effect
       if (!linkEl.dataset.original) {
         linkEl.dataset.original = linkEl.innerHTML;
       }
@@ -714,10 +688,8 @@
       }, 500);
     }
 
-    // Restore text and visited states when returning to page
+    // Restore text states when returning to page
     window.addEventListener("pageshow", function () {
-      loadVisitedLinks();
-
       document.querySelectorAll("a[data-original]").forEach(function (a) {
         a.innerHTML = a.dataset.original;
         a.style.opacity = "1";
@@ -725,18 +697,8 @@
       });
     });
 
-    // Load visited links on fresh page load
-    document.addEventListener("DOMContentLoaded", loadVisitedLinks);
-
-    function loadVisitedLinks() {
-      let visited = JSON.parse(localStorage.getItem('visitedTopicsCA')) || [];
-      document.querySelectorAll(".nested-links a").forEach(function (a) {
-        if (visited.includes(a.getAttribute("href"))) {
-          a.classList.add("visited-link");
-        }
-      });
-      showResumeBanner();
-    }
+    // Show resume banner on page load
+    document.addEventListener("DOMContentLoaded", showResumeBanner);
 
     // =======================================
     // Continue Where You Left Off
