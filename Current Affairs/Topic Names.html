@@ -113,83 +113,85 @@
     }
 
     .container {
+      position: relative;
       max-width: 900px;
       margin: auto;
       background: rgba(255, 255, 255, .08);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 200, 120, .18);
       border-radius: 26px;
       padding: 45px;
       box-shadow:
         0 25px 60px rgba(0, 0, 0, .45),
+        0 0 0 1px rgba(255, 179, 71, .06),
         inset 0 1px rgba(255, 255, 255, .08);
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #ffb347, #ff6a00, #ee0979, #ffb347, transparent);
+      background-size: 200% 100%;
+      animation: shimmerLine 6s linear infinite;
+    }
+
+    @keyframes shimmerLine {
+      0% { background-position: 0% 0; }
+      100% { background-position: 200% 0; }
     }
 
     h1 {
-      font-size: 38px;
+      font-size: 40px;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       font-weight: 800;
+      letter-spacing: .5px;
+      background: linear-gradient(135deg, #fff6e5 0%, #ffd27a 45%, #ff9d5c 75%, #ff6a6a 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 6px 30px rgba(255, 154, 60, .25);
     }
 
     .subtitle {
       text-align: center;
       opacity: .8;
       font-size: 15px;
-      margin-bottom: 35px;
+      margin-bottom: 16px;
     }
 
-    /*============================*/
-    /* OVERALL PROGRESS            */
-    /*============================*/
-    .progress-wrap {
-      margin: -15px 0 30px;
-      text-align: center;
-    }
-
-    .progress-label {
-      font-size: 13px;
-      opacity: .85;
-      margin-bottom: 8px;
+    .premium-divider {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 30px;
     }
 
-    .progress-label strong {
+    .premium-divider::before,
+    .premium-divider::after {
+      content: "";
+      height: 1px;
+      width: 60px;
+      background: linear-gradient(90deg, transparent, rgba(255, 179, 71, .6));
+    }
+
+    .premium-divider::after {
+      background: linear-gradient(90deg, rgba(255, 179, 71, .6), transparent);
+    }
+
+    .premium-divider span {
       color: #ffb347;
+      font-size: 12px;
+      letter-spacing: 2px;
       font-weight: 700;
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 10px;
-      background: rgba(255, 255, 255, .1);
-      border-radius: 30px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #ff6a00, #ee0979);
-      border-radius: 30px;
-      transition: width .8s ease;
-    }
-
-    .count-badge {
-      font-size: 11px;
-      font-weight: 700;
-      background: rgba(0, 0, 0, .3);
-      padding: 4px 10px;
-      border-radius: 20px;
-      margin-left: 10px;
-      white-space: nowrap;
-      letter-spacing: .3px;
-    }
-
-    .count-badge.done {
-      background: rgba(255, 255, 255, .25);
+      text-transform: uppercase;
+      opacity: .9;
     }
 
     /*============================*/
@@ -246,15 +248,17 @@
       background: rgba(255, 255, 255, .07);
       border-radius: 18px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, .07);
+      border: 1px solid rgba(255, 179, 71, .15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
       transition: .35s;
     }
 
     .card:hover {
-      box-shadow: 0 18px 35px rgba(0, 0, 0, .28);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, .35), 0 0 0 1px rgba(255, 179, 71, .2);
     }
 
     .card-header {
+      position: relative;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -264,6 +268,24 @@
       background: linear-gradient(135deg, #ff6a00, #ee0979);
       font-size: 20px;
       font-weight: 700;
+      letter-spacing: .3px;
+      overflow: hidden;
+    }
+
+    .card-header::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .18), transparent);
+      transform: skewX(-20deg);
+      transition: left .6s ease;
+    }
+
+    .card:hover .card-header::after {
+      left: 130%;
     }
 
     .card-header i {
@@ -300,7 +322,8 @@
       border-radius: 14px;
       overflow: hidden;
       background: rgba(255, 255, 255, .05);
-      border: 1px solid rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .08);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
     }
 
     .nested-header {
@@ -355,11 +378,13 @@
       background: linear-gradient(135deg, #4facfe, #00c6fb);
       transition: .3s;
       box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
+      border: 1px solid transparent;
     }
 
     .nested-links a:hover {
       transform: translateX(8px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, .3);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .3);
+      border-color: rgba(255, 179, 71, .5);
     }
 
     .nested-links a span {
@@ -390,29 +415,6 @@
       text-align: center;
       font-size: 13px;
       opacity: .9;
-    }
-
-    .reset-btn {
-      background: linear-gradient(135deg, #e53935, #e35d5b);
-      border: none;
-      color: white;
-      padding: 10px 24px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      transition: 0.3s;
-      margin-bottom: 15px;
-      box-shadow: 0 6px 15px rgba(229, 57, 53, 0.3);
-      text-transform: uppercase;
-    }
-
-    .reset-btn:hover {
-      background: linear-gradient(135deg, #ef5350, #e53935);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(229, 57, 53, 0.5);
     }
 
     .footer-text {
@@ -523,16 +525,7 @@
     <div class="container">
       <h1>📰 Current Affairs</h1>
       <p class="subtitle">Select Year, then Month Wise or Topic Wise / वर्ष चुनें, फिर माह अनुसार या विषय अनुसार</p>
-
-      <div class="progress-wrap">
-        <div class="progress-label">
-          <span>📈 Your Progress / आपकी प्रगति</span>
-          <strong id="progressText">0 / 0 Topics</strong>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-      </div>
+      <div class="premium-divider"><span>ExamFusion Prep</span></div>
 
       <div class="resume-banner" id="resumeBanner">
         <span><span class="resume-title">⏯️ Continue where you left off:</span> <span id="resumeName"></span></span>
@@ -655,10 +648,6 @@
       </div>
 
       <div class="footer">
-        <button class="reset-btn" onclick="clearProgress()">
-          <i class="fa-solid fa-rotate-right"></i> Reset Progress
-        </button>
-        <br><br>
         <span class="footer-text">© <span id="year"></span> ExamFusion Prep. All Rights Reserved.</span>
       </div>
     </div>
@@ -746,45 +735,7 @@
           a.classList.add("visited-link");
         }
       });
-      updateProgress();
       showResumeBanner();
-    }
-
-    // =======================================
-    // Progress Counter + Badges
-    // =======================================
-    function topicLinks(scope) {
-      return (scope || document).querySelectorAll(".nested-links a[href]");
-    }
-
-    function updateProgress() {
-      const visited = JSON.parse(localStorage.getItem('visitedTopicsCA')) || [];
-      const all = topicLinks();
-      let done = 0;
-      all.forEach(a => { if (visited.includes(a.getAttribute("href"))) done++; });
-
-      const pct = all.length ? Math.round((done / all.length) * 100) : 0;
-      document.getElementById("progressText").innerText = done + " / " + all.length + " Topics (" + pct + "%)";
-      document.getElementById("progressFill").style.width = pct + "%";
-
-      // Per-section badges on every card / nested header
-      document.querySelectorAll(".card, .nested").forEach(function (section) {
-        const header = section.querySelector(":scope > .card-header, :scope > .nested-header");
-        if (!header) return;
-        const links = section.querySelectorAll("a[href]");
-        if (!links.length) return;
-        let v = 0;
-        links.forEach(a => { if (visited.includes(a.getAttribute("href"))) v++; });
-
-        let badge = header.querySelector(".count-badge");
-        if (!badge) {
-          badge = document.createElement("span");
-          badge.className = "count-badge";
-          header.querySelector("span").appendChild(badge);
-        }
-        badge.innerText = v + "/" + links.length;
-        badge.classList.toggle("done", v === links.length);
-      });
     }
 
     // =======================================
@@ -800,17 +751,6 @@
         banner.classList.add("show");
       } else {
         banner.classList.remove("show");
-      }
-    }
-
-    // Reset Progress Function
-    function clearProgress() {
-      if (confirm("Are you sure you want to clear your reading progress?")) {
-        localStorage.removeItem('visitedTopicsCA');
-        localStorage.removeItem('lastTopicCA');
-        document.querySelectorAll('.visited-link').forEach(a => a.classList.remove('visited-link'));
-        updateProgress();
-        showResumeBanner();
       }
     }
 
