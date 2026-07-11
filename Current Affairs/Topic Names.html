@@ -195,49 +195,6 @@
     }
 
     /*============================*/
-    /* RESUME BANNER               */
-    /*============================*/
-    .resume-banner {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 25px;
-      padding: 14px 18px;
-      border-radius: 14px;
-      background: rgba(255, 179, 71, .12);
-      border: 1px solid rgba(255, 179, 71, .35);
-      font-size: 14px;
-      flex-wrap: wrap;
-    }
-
-    .resume-banner.show {
-      display: flex;
-    }
-
-    .resume-banner .resume-title {
-      color: #ffb347;
-      font-weight: 600;
-    }
-
-    .resume-banner a {
-      color: white;
-      text-decoration: none;
-      background: linear-gradient(135deg, #ff6a00, #ee0979);
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      transition: .3s;
-      white-space: nowrap;
-    }
-
-    .resume-banner a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(238, 9, 121, .4);
-    }
-
-    /*============================*/
     .accordion {
       display: flex;
       flex-direction: column;
@@ -511,11 +468,6 @@
       <p class="subtitle">Select Year, then Month Wise or Topic Wise / वर्ष चुनें, फिर माह अनुसार या विषय अनुसार</p>
       <div class="premium-divider"><span>ExamFusion Prep</span></div>
 
-      <div class="resume-banner" id="resumeBanner">
-        <span><span class="resume-title">⏯️ Continue where you left off:</span> <span id="resumeName"></span></span>
-        <a href="#" id="resumeLink" onclick="openPage(event)">Resume →</a>
-      </div>
-
       <div class="accordion">
 
         <!-- ========================================================= -->
@@ -665,15 +617,6 @@
       event.preventDefault();
       const linkEl = event.currentTarget;
       const linkUrl = linkEl.href;
-      const relativePath = linkEl.getAttribute("href");
-
-      // Remember last opened topic for "Continue where you left off"
-      if (linkEl.id !== "resumeLink") {
-        localStorage.setItem('lastTopicCA', JSON.stringify({
-          path: relativePath,
-          name: linkEl.innerText.replace(/\s+/g, " ").trim()
-        }));
-      }
 
       // Loading animation effect
       if (!linkEl.dataset.original) {
@@ -696,25 +639,6 @@
         a.style.pointerEvents = "auto";
       });
     });
-
-    // Show resume banner on page load
-    document.addEventListener("DOMContentLoaded", showResumeBanner);
-
-    // =======================================
-    // Continue Where You Left Off
-    // =======================================
-    function showResumeBanner() {
-      const banner = document.getElementById("resumeBanner");
-      let last = null;
-      try { last = JSON.parse(localStorage.getItem('lastTopicCA')); } catch (e) { }
-      if (last && last.path) {
-        document.getElementById("resumeName").innerText = last.name || "Last topic";
-        document.getElementById("resumeLink").setAttribute("href", last.path);
-        banner.classList.add("show");
-      } else {
-        banner.classList.remove("show");
-      }
-    }
 
     // =======================================
     // Back To Top Button
