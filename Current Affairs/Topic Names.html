@@ -151,6 +151,13 @@
       margin-bottom: 10px;
       font-weight: 800;
       letter-spacing: .5px;
+    }
+
+    .h1-emoji {
+      font-style: normal;
+    }
+
+    .h1-text {
       background: linear-gradient(135deg, #fff6e5 0%, #ffd27a 45%, #ff9d5c 75%, #ff6a6a 100%);
       -webkit-background-clip: text;
       background-clip: text;
@@ -464,7 +471,7 @@
 
   <div class="wrapper">
     <div class="container">
-      <h1>📰 Current Affairs</h1>
+      <h1><span class="h1-emoji">📰</span> <span class="h1-text">Current Affairs</span></h1>
       <p class="subtitle">Select Year, then Month Wise or Topic Wise / वर्ष चुनें, फिर माह अनुसार या विषय अनुसार</p>
       <div class="premium-divider"><span>ExamFusion Prep</span></div>
 
@@ -473,7 +480,7 @@
         <!-- ========================================================= -->
         <!-- YEAR 2026 -->
         <!-- ========================================================= -->
-        <div class="card">
+        <div class="card" id="card-2026">
           <div class="card-header">
             <span>📅 2026</span>
             <i class="fa-solid fa-chevron-down"></i>
@@ -484,7 +491,7 @@
               <!-- ====================== -->
               <!-- MONTH WISE -->
               <!-- ====================== -->
-              <div class="nested">
+              <div class="nested" id="nested-month-wise">
                 <div class="nested-header">
                   <span>🗓️ Month Wise / माह अनुसार</span>
                   <i class="fa-solid fa-chevron-down"></i>
@@ -522,7 +529,7 @@
               <!-- ====================== -->
               <!-- TOPIC WISE -->
               <!-- ====================== -->
-              <div class="nested">
+              <div class="nested" id="nested-topic-wise">
                 <div class="nested-header">
                   <span>📂 Topic Wise / विषय अनुसार</span>
                   <i class="fa-solid fa-chevron-down"></i>
@@ -599,16 +606,57 @@
     // =======================================
     document.querySelectorAll(".card-header").forEach(function (header) {
       header.addEventListener("click", function () {
-        this.parentElement.classList.toggle("active");
+        const el = this.parentElement;
+        el.classList.toggle("active");
+        saveAccordionState();
       });
     });
 
     document.querySelectorAll(".nested-header").forEach(function (header) {
       header.addEventListener("click", function (e) {
         e.stopPropagation();
-        this.parentElement.classList.toggle("active");
+        const el = this.parentElement;
+        el.classList.toggle("active");
+        saveAccordionState();
       });
     });
+
+    // =======================================
+    // Remember open/closed dropdowns (so back navigation doesn't collapse them)
+    // =======================================
+    function saveAccordionState() {
+      const state = {};
+      document.querySelectorAll(".card[id], .nested[id]").forEach(function (el) {
+        state[el.id] = el.classList.contains("active");
+      });
+      sessionStorage.setItem('caAccordionState', JSON.stringify(state));
+    }
+
+    function restoreAccordionState() {
+      let state = null;
+      try { state = JSON.parse(sessionStorage.getItem('caAccordionState')); } catch (e) { }
+      if (!state) return;
+      document.querySelectorAll(".card[id], .nested[id]").forEach(function (el) {
+        el.classList.toggle("active", !!state[el.id]);
+      });
+    }
+
+    function isBackForwardNavigation() {
+      try {
+        const nav = performance.getEntriesByType("navigation")[0];
+        if (nav) return nav.type === "back_forward";
+        if (performance.navigation) return performance.navigation.type === 2;
+      } catch (e) { }
+      return false;
+    }
+
+    // Fresh visit / reload => always start closed. Only a genuine
+    // back/forward navigation restores whatever was open before.
+    if (isBackForwardNavigation()) {
+      restoreAccordionState();
+    } else {
+      sessionStorage.removeItem('caAccordionState');
+    }
 
     // =======================================
     // Loading Animation & Persistent State
@@ -632,7 +680,8 @@
     }
 
     // Restore text states when returning to page
-    window.addEventListener("pageshow", function () {
+    window.addEventListener("pageshow", function (e) {
+      if (e.persisted) restoreAccordionState();
       document.querySelectorAll("a[data-original]").forEach(function (a) {
         a.innerHTML = a.dataset.original;
         a.style.opacity = "1";
