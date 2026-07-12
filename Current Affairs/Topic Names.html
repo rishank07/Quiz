@@ -202,6 +202,111 @@
     }
 
     /*============================*/
+    /* GLOBAL SEARCH                */
+    /*============================*/
+    .global-search-wrap {
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .global-search-box {
+      width: 100%;
+      padding: 16px 52px 16px 20px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 179, 71, .22);
+      color: white;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: .3s;
+    }
+
+    .global-search-box::placeholder {
+      color: rgba(255, 255, 255, .5);
+    }
+
+    .global-search-box:focus {
+      border-color: rgba(255, 179, 71, .6);
+      box-shadow: 0 0 0 3px rgba(255, 179, 71, .15);
+      background: rgba(255, 255, 255, .11);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: .6;
+      pointer-events: none;
+    }
+
+    .search-status {
+      text-align: center;
+      font-size: 12.5px;
+      opacity: .75;
+      margin: 10px 0 0;
+      min-height: 16px;
+    }
+
+    .search-results {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      margin: 18px 0 30px;
+    }
+
+    .search-result-item {
+      display: block;
+      text-decoration: none;
+      color: white;
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 14px;
+      padding: 15px 18px;
+      transition: .25s;
+    }
+
+    .search-result-item:hover {
+      background: rgba(255, 255, 255, .1);
+      transform: translateX(6px);
+      border-color: rgba(255, 179, 71, .4);
+    }
+
+    .search-result-source {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: #ffb347;
+      background: rgba(255, 179, 71, .12);
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 9px;
+    }
+
+    .search-result-snippet {
+      font-size: 14px;
+      line-height: 1.65;
+      opacity: .92;
+    }
+
+    .search-result-snippet mark {
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      color: white;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    .search-empty {
+      text-align: center;
+      padding: 35px 10px;
+      opacity: .7;
+      font-size: 14px;
+    }
+
+    /*============================*/
     .accordion {
       display: flex;
       flex-direction: column;
@@ -475,7 +580,15 @@
       <p class="subtitle">Select Year, then Month Wise or Topic Wise / वर्ष चुनें, फिर माह अनुसार या विषय अनुसार</p>
       <div class="premium-divider"><span>ExamFusion Prep</span></div>
 
-      <div class="accordion">
+      <div class="global-search-wrap">
+        <input type="text" id="globalSearch" class="global-search-box" autocomplete="off"
+          placeholder="Search any word... any topic, any file / कोई भी शब्द खोजें...">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      </div>
+      <div class="search-status" id="searchStatus"></div>
+      <div class="search-results" id="searchResults"></div>
+
+      <div class="accordion" id="mainAccordion">
 
         <!-- ========================================================= -->
         <!-- YEAR 2026 -->
@@ -601,6 +714,119 @@
   </button>
 
   <script>
+    // =======================================
+    // Global Full-Text Search (across all Current Affairs files)
+    // Uses a pre-built static index (search-index.js) so it works
+    // even when the page is opened directly as a local file.
+    // =======================================
+    let searchIndex = null;
+    let indexBuildPromise = null;
+
+    function loadSearchIndexScript() {
+      return new Promise(function (resolve, reject) {
+        if (window.CA_SEARCH_INDEX) return resolve(window.CA_SEARCH_INDEX);
+        const script = document.createElement("script");
+        script.src = "./Topic Names/search-index.js";
+        script.onload = function () { resolve(window.CA_SEARCH_INDEX || []); };
+        script.onerror = function () { reject(new Error("Failed to load search index")); };
+        document.body.appendChild(script);
+      });
+    }
+
+    function buildSearchIndex() {
+      if (searchIndex) return Promise.resolve(searchIndex);
+      if (indexBuildPromise) return indexBuildPromise;
+
+      const statusEl = document.getElementById("searchStatus");
+      statusEl.textContent = "⏳ Loading search data... / सामग्री लोड हो रही है...";
+
+      indexBuildPromise = loadSearchIndexScript().then(function (raw) {
+        searchIndex = raw.map(function (e) {
+          return { file: e.f, title: e.t, text: e.x };
+        });
+        statusEl.textContent = "";
+        return searchIndex;
+      }).catch(function () {
+        statusEl.textContent = "⚠️ Could not load search content right now.";
+        return [];
+      });
+
+      return indexBuildPromise;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+
+    function snippetWithHighlight(text, query) {
+      const lower = text.toLowerCase();
+      const idx = lower.indexOf(query.toLowerCase());
+      let raw;
+      if (idx === -1) {
+        raw = text.slice(0, 150) + (text.length > 150 ? "..." : "");
+      } else {
+        const start = Math.max(0, idx - 60);
+        const end = Math.min(text.length, idx + query.length + 80);
+        raw = (start > 0 ? "..." : "") + text.slice(start, end) + (end < text.length ? "..." : "");
+      }
+      const escaped = escapeHtml(raw);
+      const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const re = new RegExp("(" + safeQuery + ")", "ig");
+      return escaped.replace(re, "<mark>$1</mark>");
+    }
+
+    const searchInputEl = document.getElementById("globalSearch");
+    const searchResultsEl = document.getElementById("searchResults");
+    const searchStatusEl = document.getElementById("searchStatus");
+    const mainAccordionEl = document.getElementById("mainAccordion");
+    let searchDebounce = null;
+
+    searchInputEl.addEventListener("focus", function () {
+      buildSearchIndex();
+    });
+
+    searchInputEl.addEventListener("input", function () {
+      const query = this.value.trim();
+      clearTimeout(searchDebounce);
+
+      if (!query) {
+        searchResultsEl.style.display = "none";
+        searchResultsEl.innerHTML = "";
+        mainAccordionEl.style.display = "flex";
+        searchStatusEl.textContent = "";
+        return;
+      }
+
+      mainAccordionEl.style.display = "none";
+
+      searchDebounce = setTimeout(function () {
+        buildSearchIndex().then(function (index) {
+          const q = query.toLowerCase();
+          const matches = index.filter(function (e) {
+            return e.text.toLowerCase().indexOf(q) !== -1;
+          }).slice(0, 40);
+
+          if (!matches.length) {
+            searchResultsEl.style.display = "flex";
+            searchResultsEl.innerHTML = '<div class="search-empty">😕 No results found for "' + escapeHtml(query) + '" / कोई परिणाम नहीं मिला</div>';
+            searchStatusEl.textContent = "";
+            return;
+          }
+
+          searchStatusEl.textContent = matches.length + " result(s) found / परिणाम मिले";
+          searchResultsEl.style.display = "flex";
+          searchResultsEl.innerHTML = matches.map(function (m) {
+            return '<a href="' + m.file + '" class="search-result-item" onclick="openPage(event)">' +
+              '<span class="search-result-source">' + escapeHtml(m.title) + '</span>' +
+              '<div class="search-result-snippet">' + snippetWithHighlight(m.text, query) + '</div>' +
+              '</a>';
+          }).join("");
+        });
+      }, 300);
+    });
+
     // =======================================
     // Accordion Control
     // =======================================
