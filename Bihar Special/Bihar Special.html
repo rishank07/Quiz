@@ -62,7 +62,7 @@
     .container {
       margin-top: 40px;
       width: 100%;
-      max-width: 500px;
+      max-width: 640px;
       padding: 40px;
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.1);
@@ -115,6 +115,119 @@
       font-size: 13px;
       opacity: 0.6;
     }
+
+    /* Search */
+
+    .search-hint {
+      opacity: 0.65;
+      font-size: 13px;
+      margin: 4px 0 18px;
+      line-height: 1.5;
+    }
+
+    .global-search-wrap {
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .global-search-box {
+      width: 100%;
+      padding: 16px 52px 16px 20px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 179, 71, 0.25);
+      color: white;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .global-search-box::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .global-search-box:focus {
+      border-color: rgba(255, 179, 71, 0.6);
+      box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.15);
+      background: rgba(255, 255, 255, 0.11);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .search-status {
+      text-align: center;
+      font-size: 12.5px;
+      opacity: 0.75;
+      margin: 10px 0 0;
+      min-height: 16px;
+    }
+
+    .search-results {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      margin: 18px 0 10px;
+      text-align: left;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+
+    .search-result-item {
+      display: block;
+      text-decoration: none;
+      color: white;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px 16px;
+      transition: 0.25s;
+    }
+
+    .search-result-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(4px);
+      border-color: rgba(255, 179, 71, 0.4);
+    }
+
+    .search-result-source {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: #ffb347;
+      background: rgba(255, 179, 71, 0.12);
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+
+    .search-result-snippet {
+      font-size: 13.5px;
+      line-height: 1.6;
+      opacity: 0.92;
+    }
+
+    .search-result-snippet mark {
+      background: linear-gradient(135deg, #ff512f, #dd2476);
+      color: white;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    .search-empty {
+      text-align: center;
+      padding: 20px 10px;
+      opacity: 0.7;
+      font-size: 13.5px;
+    }
   </style>
 </head>
 
@@ -128,6 +241,14 @@
     <h1>📚 Bihar Special</h1>
 
     <p>Select a Topic</p>
+
+    <div class="global-search-wrap">
+      <input type="text" id="globalSearch" class="global-search-box" autocomplete="off"
+        placeholder="Search any word... any topic, any file / कोई भी शब्द खोजें...">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    </div>
+    <div class="search-status" id="searchStatus"></div>
+    <div class="search-results" id="searchResults"></div>
 
     <ul class="menu">
       <li>
@@ -202,48 +323,10 @@
       </li>
 
       <li>
-        <a href="./Topic Names/BIHAR ECONOMIC SURVEY 2024-25.html" onclick="openPage(event)"
-          data-original="BIHAR ECONOMIC SURVEY 2024-25 / बिहार आर्थिक सर्वेक्षण 2024-25">
-          BIHAR ECONOMIC SURVEY 2024-25 / बिहार आर्थिक सर्वेक्षण 2024-25
+        <a href="./Topic Names/Current Affairs for BPSC Pre 72.html" onclick="openPage(event)"
+          data-original="CURRENT AFFAIRS FOR BPSC PRE 72 / बीपीएससी प्री 72 करेंट अफेयर्स">
+          CURRENT AFFAIRS FOR BPSC PRE 72 / बीपीएससी प्री 72 करेंट अफेयर्स
         </a>
-      </li>
-
-      <li>
-        <a href="./Topic Names/Bihar Current Affairs Sep 2025–Jan 2026.html" onclick="openPage(event)"
-          data-original="BIHAR CURRENT AFFAIRS SEP 2025 — JAN 2026 / बिहार समसामयिकी (सितंबर 2025 — जनवरी 2026)">
-          BIHAR CURRENT AFFAIRS SEP 2025 — JAN 2026 / बिहार समसामयिकी (सितंबर
-          2025 — जनवरी 2026)
-        </a>
-      </li>
-
-      <li>
-        <a href="./Topic Names/Bihar Budget 2026-27.html" onclick="openPage(event)"
-          data-original="BIHAR BUDGET 2026-27 / बिहार बजट 2026-27">
-          BIHAR BUDGET 2026-27 / बिहार बजट 2026-27
-        </a>
-      </li>
-
-      <li>
-        <a href="./Topic Names/Saat Nischay 3 (2025–2030) Bihar.html" onclick="openPage(event)"
-          data-original="SAAT NISCHAY 3 (2025–2030) BIHAR / सात निश्चय 3 (2025–2030) बिहार">
-          SAAT NISCHAY 3 (2025–2030) BIHAR / सात निश्चय 3 (2025–2030) बिहार
-        </a>
-      </li>
-
-      <li>
-        <a href="./Topic Names/Bihar Economic Survey 2025-26.html" onclick="openPage(event)"
-          data-original="BIHAR ECONOMIC SURVEY 2025-26 / बिहार आर्थिक सर्वेक्षण 2025-26">
-          BIHAR ECONOMIC SURVEY 2025-26 / बिहार आर्थिक सर्वेक्षण 2025-26
-        </a>
-      </li>
-
-      <li>
-
-        <a href="./Topic Names/1-15 March Bihar Current Affairs.html" onclick="openPage(event)"
-          data-original="1–15 MARCH BIHAR CURRENT AFFAIRS / 1–15 मार्च बिहार करेंट अफेयर्स">
-          1–15 MARCH BIHAR CURRENT AFFAIRS / 1–15 मार्च बिहार करेंट अफेयर्स
-        </a>
-
       </li>
     </ul>
 
@@ -270,6 +353,119 @@
         a.innerText = a.dataset.original;
         a.style.opacity = "1";
       });
+    });
+
+    // =======================================
+    // Global Full-Text Search (across every Bihar Special file)
+    // Uses a pre-built static index (search-index.js) so it works
+    // even when the page is opened directly as a local file.
+    // =======================================
+    let bsSearchIndex = null;
+    let bsIndexBuildPromise = null;
+
+    function loadBsSearchIndexScript() {
+      return new Promise(function (resolve, reject) {
+        if (window.BS_SEARCH_INDEX) return resolve(window.BS_SEARCH_INDEX);
+        const script = document.createElement("script");
+        script.src = "./Topic Names/search-index.js";
+        script.onload = function () { resolve(window.BS_SEARCH_INDEX || []); };
+        script.onerror = function () { reject(new Error("Failed to load search index")); };
+        document.body.appendChild(script);
+      });
+    }
+
+    function buildBsSearchIndex() {
+      if (bsSearchIndex) return Promise.resolve(bsSearchIndex);
+      if (bsIndexBuildPromise) return bsIndexBuildPromise;
+
+      const statusEl = document.getElementById("searchStatus");
+      statusEl.textContent = "⏳ Loading search data... / सामग्री लोड हो रही है...";
+
+      bsIndexBuildPromise = loadBsSearchIndexScript().then(function (raw) {
+        bsSearchIndex = raw.map(function (e) {
+          return { file: e.f, title: e.t, text: e.x };
+        });
+        statusEl.textContent = "";
+        return bsSearchIndex;
+      }).catch(function () {
+        statusEl.textContent = "⚠️ Could not load search content right now.";
+        return [];
+      });
+
+      return bsIndexBuildPromise;
+    }
+
+    function bsEscapeHtml(str) {
+      return str.replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+
+    function bsSnippetWithHighlight(text, query) {
+      const lower = text.toLowerCase();
+      const idx = lower.indexOf(query.toLowerCase());
+      let raw;
+      if (idx === -1) {
+        raw = text.slice(0, 150) + (text.length > 150 ? "..." : "");
+      } else {
+        const start = Math.max(0, idx - 60);
+        const end = Math.min(text.length, idx + query.length + 80);
+        raw = (start > 0 ? "..." : "") + text.slice(start, end) + (end < text.length ? "..." : "");
+      }
+      const escaped = bsEscapeHtml(raw);
+      const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const re = new RegExp("(" + safeQuery + ")", "ig");
+      return escaped.replace(re, "<mark>$1</mark>");
+    }
+
+    const bsSearchInputEl = document.getElementById("globalSearch");
+    const bsSearchResultsEl = document.getElementById("searchResults");
+    const bsSearchStatusEl = document.getElementById("searchStatus");
+    const bsMenuEl = document.querySelector(".menu");
+    let bsSearchDebounce = null;
+
+    bsSearchInputEl.addEventListener("focus", function () {
+      buildBsSearchIndex();
+    });
+
+    bsSearchInputEl.addEventListener("input", function () {
+      const query = this.value.trim();
+      clearTimeout(bsSearchDebounce);
+
+      if (!query) {
+        bsSearchResultsEl.style.display = "none";
+        bsSearchResultsEl.innerHTML = "";
+        bsMenuEl.style.display = "";
+        bsSearchStatusEl.textContent = "";
+        return;
+      }
+
+      bsMenuEl.style.display = "none";
+
+      bsSearchDebounce = setTimeout(function () {
+        buildBsSearchIndex().then(function (index) {
+          const q = query.toLowerCase();
+          const matches = index.filter(function (e) {
+            return e.text.toLowerCase().indexOf(q) !== -1;
+          }).slice(0, 40);
+
+          if (!matches.length) {
+            bsSearchResultsEl.style.display = "flex";
+            bsSearchResultsEl.innerHTML = '<div class="search-empty">😕 No results found for "' + bsEscapeHtml(query) + '" / कोई परिणाम नहीं मिला</div>';
+            bsSearchStatusEl.textContent = "";
+            return;
+          }
+
+          bsSearchStatusEl.textContent = matches.length + " result(s) found / परिणाम मिले";
+          bsSearchResultsEl.style.display = "flex";
+          bsSearchResultsEl.innerHTML = matches.map(function (m) {
+            return '<a href="' + m.file + '" class="search-result-item" onclick="openPage(event)">' +
+              '<span class="search-result-source">' + bsEscapeHtml(m.title) + '</span>' +
+              '<div class="search-result-snippet">' + bsSnippetWithHighlight(m.text, query) + '</div>' +
+              '</a>';
+          }).join("");
+        });
+      }, 300);
     });
   </script>
 </body>
