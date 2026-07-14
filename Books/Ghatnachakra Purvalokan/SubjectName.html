@@ -120,6 +120,148 @@
         transform: translateY(0);
       }
     }
+
+    /* ✅ Scoped section search (searches only within this section, incl. content inside pages) */
+    .ef-search-wrap {
+      position: relative;
+      margin-bottom: 22px;
+      text-align: left;
+    }
+
+    .ef-search-box {
+      position: relative;
+    }
+
+    .ef-search-box input {
+      width: 100%;
+      padding: 14px 44px;
+      border: none;
+      outline: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-family: inherit;
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      transition: 0.3s;
+    }
+
+    .ef-search-box input::placeholder {
+      color: #d8d8d8;
+    }
+
+    .ef-search-box input:focus {
+      box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.35);
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .ef-search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      opacity: 0.85;
+    }
+
+    .ef-search-clear {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      color: rgba(255, 255, 255, 0.85);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 15px;
+      font-family: Arial, sans-serif;
+      line-height: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0 2px 0;
+      transition: 0.2s;
+    }
+
+    .ef-search-clear:hover {
+      background: rgba(255, 106, 0, 0.5);
+      border-color: #ff6a00;
+      color: white;
+    }
+
+    .ef-search-clear.show {
+      display: flex;
+    }
+
+    .ef-search-results {
+      list-style: none;
+      margin-top: 10px;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .ef-search-results li {
+      margin-bottom: 8px;
+    }
+
+    .ef-search-results a {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      color: white;
+      transition: 0.2s;
+    }
+
+    .ef-search-results a:hover {
+      background: rgba(255, 106, 0, 0.28);
+      transform: translateX(3px);
+    }
+
+    .ef-result-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .ef-result-breadcrumb {
+      font-size: 12px;
+      opacity: 0.65;
+      margin-top: 2px;
+    }
+
+    .ef-result-snippet {
+      font-size: 12.5px;
+      line-height: 1.45;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .ef-result-snippet mark {
+      background: #ff6a00;
+      color: #fff;
+      padding: 0 3px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .ef-search-noresults {
+      display: none;
+      text-align: center;
+      opacity: 0.6;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .ef-search-noresults.show {
+      display: block;
+    }
+
   </style>
 </head>
 
@@ -132,6 +274,16 @@
 
     <h1>📘 GhatnaChakra Purvalokan</h1>
     <p>Select a subject to begin your preparation</p>
+
+    <div class="ef-search-wrap">
+      <div class="ef-search-box">
+        <span class="ef-search-icon">🔍</span>
+        <input type="text" id="efScopedSearch" placeholder="Search within Ghatnachakra Purvalokan...">
+        <button type="button" class="ef-search-clear" id="efScopedSearchClear" aria-label="Clear">&times;</button>
+      </div>
+      <ul class="ef-search-results" id="efScopedResults"></ul>
+      <div class="ef-search-noresults" id="efScopedNoResults">No results found / कोई परिणाम नहीं मिला</div>
+    </div>
 
     <ul class="menu">
       <li>
@@ -163,6 +315,120 @@
 
     <div class="footer">© 2026 ExamFusion Prep. All Rights Reserved.</div>
   </div>
+
+  <!-- Site-wide search indexes (title index + deep content index), scoped below to this section only -->
+  <script src="../../search-index-main.js"></script>
+  <script src="../../search-logic.js"></script>
+  <script src="../../search-snippets-ghatnachakra.js"></script>
+  <script>
+    (function () {
+      var SECTION_PREFIX = "./Books/Ghatnachakra%20Purvalokan/";
+      var REL_ROOT = "../../";
+      var input = document.getElementById("efScopedSearch");
+      var clearBtn = document.getElementById("efScopedSearchClear");
+      var resultsEl = document.getElementById("efScopedResults");
+      var noResultsEl = document.getElementById("efScopedNoResults");
+      var origPlaceholder = input.placeholder;
+
+      function ready() { return typeof SEARCH_INDEX !== "undefined"; }
+      if (!ready()) {
+        input.placeholder = "Loading search index...";
+        var waitTimer = setInterval(function () {
+          if (ready()) {
+            input.placeholder = origPlaceholder;
+            clearInterval(waitTimer);
+          }
+        }, 200);
+      }
+
+      function clearResults() {
+        resultsEl.innerHTML = "";
+        noResultsEl.classList.remove("show");
+      }
+
+      function runSearch(qRaw) {
+        clearResults();
+        var q = qRaw.trim();
+        if (q.length < 2 || !ready()) return;
+        var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+
+        // Primary: efSnippetSearch (search-snippets-*.js) shows a real highlighted
+        // excerpt from inside the page — the same way Current Affairs / Bihar Special
+        // already do — instead of just the bare chapter name. Falls back to plain
+        // title/breadcrumb matches (efSearchRank) for pages the snippet index doesn't
+        // cover (e.g. subject/part hub pages).
+        var snippetHits = (typeof efSnippetSearch === "function")
+          ? efSnippetSearch(q, { sectionPrefix: SECTION_PREFIX, limit: 30 })
+          : [];
+        var usedUrls = {};
+        var results = [];
+        snippetHits.forEach(function (hit) {
+          if (usedUrls[hit.f]) return;
+          usedUrls[hit.f] = true;
+          results.push(hit);
+        });
+        var titleHits = (typeof efSearchRank === "function")
+          ? efSearchRank(q, { sectionPrefix: SECTION_PREFIX, limit: 30 })
+          : [];
+        titleHits.forEach(function (rec) {
+          if (usedUrls[rec.url]) return;
+          results.push({ f: rec.url, t: rec.title, b: rec.breadcrumb, x: null });
+        });
+        results = results.slice(0, 30);
+
+        if (results.length === 0) {
+          noResultsEl.classList.add("show");
+          return;
+        }
+        results.forEach(function (rec) {
+          var li = document.createElement("li");
+          var a = document.createElement("a");
+          a.href = REL_ROOT + rec.f.slice(2);
+          var titleSpan = document.createElement("span");
+          titleSpan.className = "ef-result-title";
+          titleSpan.textContent = rec.t;
+          a.appendChild(titleSpan);
+          if (rec.x) {
+            var snipSpan = document.createElement("span");
+            snipSpan.className = "ef-result-snippet";
+            snipSpan.innerHTML = (typeof efSnippetWithHighlight === "function")
+              ? efSnippetWithHighlight(rec.x, terms)
+              : "";
+            a.appendChild(snipSpan);
+          } else {
+            var bcSpan = document.createElement("span");
+            bcSpan.className = "ef-result-breadcrumb";
+            bcSpan.textContent = rec.b;
+            a.appendChild(bcSpan);
+          }
+          li.appendChild(a);
+          resultsEl.appendChild(li);
+        });
+      }
+
+      input.addEventListener("input", function () {
+        clearBtn.classList.toggle("show", this.value.length > 0);
+        runSearch(this.value);
+      });
+      clearBtn.addEventListener("click", function () {
+        input.value = "";
+        clearResults();
+        clearBtn.classList.remove("show");
+        input.focus();
+      });
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          input.value = "";
+          clearResults();
+          clearBtn.classList.remove("show");
+        }
+        if (e.key === "Enter") {
+          var first = resultsEl.querySelector("a");
+          if (first) first.click();
+        }
+      });
+    })();
+  </script>
 
   <!-- ✅ Your JS Function -->
   <script>

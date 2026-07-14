@@ -542,6 +542,72 @@
     }
 
     /*============================*/
+    /* DEEP CONTENT SEARCH (searches text INSIDE chapter pages, not just titles) */
+    /*============================*/
+    .ef-content-label {
+      font-size: 13px;
+      opacity: 0.7;
+      margin: 14px 0 8px;
+      display: none;
+    }
+
+    .ef-content-label.show {
+      display: block;
+    }
+
+    .ef-search-results {
+      list-style: none;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .ef-search-results li {
+      margin-bottom: 8px;
+    }
+
+    .ef-search-results a {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      color: white;
+      transition: 0.2s;
+    }
+
+    .ef-search-results a:hover {
+      background: rgba(255, 106, 0, 0.28);
+      transform: translateX(3px);
+    }
+
+    .ef-result-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .ef-result-breadcrumb {
+      font-size: 12px;
+      opacity: 0.65;
+      margin-top: 2px;
+    }
+
+    .ef-result-snippet {
+      font-size: 12.5px;
+      line-height: 1.45;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .ef-result-snippet mark {
+      background: #ff6a00;
+      color: #fff;
+      padding: 0 3px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    /*============================*/
     /* SEARCH NO-RESULTS (NEW)    */
     /*============================*/
     .no-results {
@@ -675,12 +741,15 @@
 
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="searchInput" placeholder="Search Subject or Chapter..."
+        <input type="text" id="searchInput" placeholder="Search any word... any topic, any file / कोई भी शब्द खोजें..."
           aria-label="Search subject or chapter">
         <button class="search-clear" id="searchClear" aria-label="Clear search" title="Clear search">&times;</button>
       </div>
 
       <div class="no-results" id="noResults">🔎 No chapter found. Try a different keyword / कोई अध्याय नहीं मिला।</div>
+
+      <div class="ef-content-label" id="efContentLabel">📖 Also found inside chapters / अध्याय के अंदर भी मिला:</div>
+      <ul class="ef-search-results" id="efContentResults"></ul>
 
       <div class="accordion">
 
@@ -1607,6 +1676,10 @@
     <i class="fa-solid fa-arrow-up"></i>
   </button>
 
+  <!-- Site-wide search indexes (title index + deep content index), scoped below to Mind Maps only -->
+  <script src="../search-index-main.js"></script>
+  <script src="../search-logic.js"></script>
+  <script src="../search-snippets-mindmaps.js"></script>
   <script>
     // =======================================
     // Accordion Control
@@ -1709,6 +1782,83 @@
         if (first) first.click();
       }
     });
+
+    // =======================================
+    // Deep content search (searches text INSIDE each mind map page, not just its title)
+    // Uses the site-wide SEARCH_INDEX + CONTENT_INDEX, scoped to Mind Maps only, and only
+    // shows chapters that did NOT already match by title above (avoids duplicate listing).
+    // =======================================
+    (function () {
+      var SECTION_PREFIX = "./Mind%20Maps/";
+      var REL_ROOT = "../";
+      var contentResultsEl = document.getElementById("efContentResults");
+      var contentLabelEl = document.getElementById("efContentLabel");
+
+      function ready() { return typeof SEARCH_INDEX !== "undefined"; }
+
+      function runContentSearch(qRaw) {
+        contentResultsEl.innerHTML = "";
+        contentLabelEl.classList.remove("show");
+        var q = qRaw.trim();
+        if (q.length < 2 || !ready()) return;
+        var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+        // efSnippetSearch (search-snippets-mindmaps.js) shows a real highlighted excerpt
+        // from inside the mind map page — the same way Current Affairs / Bihar Special
+        // already do — instead of just a bare chapter name. excludeTitleMatches skips
+        // chapters already shown by the plain title filter above (avoids duplicate listing).
+        var snippetHits = (typeof efSnippetSearch === "function")
+          ? efSnippetSearch(q, { sectionPrefix: SECTION_PREFIX, excludeTitleMatches: true, limit: 25 })
+          : [];
+        var usedUrls = {};
+        var results = [];
+        snippetHits.forEach(function (hit) {
+          if (usedUrls[hit.f]) return;
+          usedUrls[hit.f] = true;
+          results.push(hit);
+        });
+        var titleHits = (typeof efSearchRank === "function")
+          ? efSearchRank(q, { sectionPrefix: SECTION_PREFIX, excludeTitleMatches: true, limit: 25 })
+          : [];
+        titleHits.forEach(function (rec) {
+          if (usedUrls[rec.url]) return;
+          results.push({ f: rec.url, t: rec.title, b: rec.breadcrumb, x: null });
+        });
+        results = results.slice(0, 25);
+        if (results.length === 0) return;
+        contentLabelEl.classList.add("show");
+        results.forEach(function (rec) {
+          var li = document.createElement("li");
+          var a = document.createElement("a");
+          a.href = REL_ROOT + rec.f.slice(2);
+          var titleSpan = document.createElement("span");
+          titleSpan.className = "ef-result-title";
+          titleSpan.textContent = rec.t;
+          a.appendChild(titleSpan);
+          if (rec.x) {
+            var snipSpan = document.createElement("span");
+            snipSpan.className = "ef-result-snippet";
+            snipSpan.innerHTML = (typeof efSnippetWithHighlight === "function")
+              ? efSnippetWithHighlight(rec.x, terms)
+              : "";
+            a.appendChild(snipSpan);
+          } else {
+            var bcSpan = document.createElement("span");
+            bcSpan.className = "ef-result-breadcrumb";
+            bcSpan.textContent = rec.b;
+            a.appendChild(bcSpan);
+          }
+          li.appendChild(a);
+          contentResultsEl.appendChild(li);
+        });
+      }
+
+      searchInput.addEventListener("input", function () {
+        runContentSearch(this.value);
+      });
+      searchClear.addEventListener("click", function () {
+        runContentSearch("");
+      });
+    })();
 
     // =======================================
     // Loading Animation & Persistent State

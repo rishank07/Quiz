@@ -162,6 +162,38 @@
       pointer-events: none;
     }
 
+    .search-clear-btn {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      color: rgba(255, 255, 255, 0.85);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 15px;
+      font-family: Arial, sans-serif;
+      line-height: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0 2px 0;
+      transition: 0.2s;
+    }
+
+    .search-clear-btn:hover {
+      background: rgba(255, 179, 71, 0.5);
+      border-color: #ffb347;
+      color: white;
+    }
+
+    .search-clear-btn.show {
+      display: flex;
+    }
+
     .search-status {
       text-align: center;
       font-size: 12.5px;
@@ -245,7 +277,8 @@
     <div class="global-search-wrap">
       <input type="text" id="globalSearch" class="global-search-box" autocomplete="off"
         placeholder="Search any word... any topic, any file / कोई भी शब्द खोजें...">
-      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <i class="fa-solid fa-magnifying-glass search-icon" id="searchIcon"></i>
+      <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="Clear">&times;</button>
     </div>
     <div class="search-status" id="searchStatus"></div>
     <div class="search-results" id="searchResults"></div>
@@ -421,6 +454,8 @@
     const bsSearchInputEl = document.getElementById("globalSearch");
     const bsSearchResultsEl = document.getElementById("searchResults");
     const bsSearchStatusEl = document.getElementById("searchStatus");
+    const bsSearchClearBtn = document.getElementById("searchClearBtn");
+    const bsSearchIconEl = document.getElementById("searchIcon");
     const bsMenuEl = document.querySelector(".menu");
     let bsSearchDebounce = null;
 
@@ -428,9 +463,18 @@
       buildBsSearchIndex();
     });
 
+    bsSearchClearBtn.addEventListener("click", function () {
+      bsSearchInputEl.value = "";
+      bsSearchInputEl.dispatchEvent(new Event("input"));
+      bsSearchInputEl.focus();
+    });
+
     bsSearchInputEl.addEventListener("input", function () {
       const query = this.value.trim();
       clearTimeout(bsSearchDebounce);
+      const hasText = this.value.length > 0;
+      bsSearchClearBtn.classList.toggle("show", hasText);
+      bsSearchIconEl.style.display = hasText ? "none" : "";
 
       if (!query) {
         bsSearchResultsEl.style.display = "none";

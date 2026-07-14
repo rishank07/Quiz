@@ -31,7 +31,7 @@
     "description": "Free bilingual (Hindi + English) preparation platform for SSC, Railway, BPSC and BSSC exams — MCQs, mind maps and current affairs.",
     "sameAs": [
       "https://youtube.com/@examfusionprep",
-      "https://t.me/examfusionprep"
+      "https://telegram.me/examfusionprep"
     ]
   }
   </script>
@@ -908,6 +908,10 @@
 
   <!-- ✨ Loading + Search Script -->
   <script src="search-index-main.js"></script>
+  <!-- Shared ranking logic (matches every word in the query anywhere in a page's title or
+       breadcrumb — not just an exact contiguous phrase — so multi-word searches like
+       "gandhi movement" work). -->
+  <script src="search-logic.js"></script>
   <script>
     // Embedded site-wide search index (chapters/topics/subjects) — avoids fetch()
     // so search works even when the file is opened directly (file://) as well as on the live server.
@@ -978,30 +982,22 @@
         clearDeepResults();
         if (!deepIndex || q.length < 2) return 0;
 
-        const scored = [];
-        for (let i = 0; i < deepIndex.length; i++) {
-          const rec = deepIndex[i];
-          const haystack = (rec.title + " " + rec.breadcrumb).toLowerCase();
-          const idx = haystack.indexOf(q);
-          if (idx === -1) continue;
-          const titleIdx = rec.title.toLowerCase().indexOf(q);
-          const score = (titleIdx === -1 ? 100 : titleIdx) + (idx === 0 ? -5 : 0);
-          scored.push([score, rec]);
-        }
-        scored.sort(function (a, b) { return a[0] - b[0]; });
-        const top = scored.slice(0, 40);
+        // efSearchRank (search-logic.js) matches every WORD in the query anywhere in a
+        // page's title/breadcrumb — not just an exact contiguous phrase — so multi-word
+        // searches like "gandhi movement" work, while keeping results to topic/chapter
+        // names only (no in-page content snippets here).
+        const top = (typeof efSearchRank === "function") ? efSearchRank(q, { limit: 40 }) : [];
         if (top.length === 0) return 0;
 
         const groupLi = document.createElement("li");
         groupLi.setAttribute("data-deepresult", "");
         const groupTitle = document.createElement("div");
         groupTitle.className = "group-title";
-        groupTitle.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Search Results (' + top.length + (scored.length > top.length ? "+" : "") + ")";
+        groupTitle.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Search Results (' + top.length + (top.length === 40 ? "+" : "") + ")";
         groupLi.appendChild(groupTitle);
         menuList.appendChild(groupLi);
 
-        top.forEach(function (pair) {
-          const rec = pair[1];
+        top.forEach(function (rec) {
           const li = document.createElement("li");
           li.setAttribute("data-deepresult", "");
           const a = document.createElement("a");
