@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <script src="translate.js"></script>
   <script src="../black-mode.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -85,6 +86,40 @@
     ::-webkit-scrollbar-thumb {
       background: linear-gradient(#ff6a00, #ee0979);
       border-radius: 30px;
+    }
+
+    /*============================*/
+    .translate-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 4px 0 18px 0;
+      padding: 9px 18px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 106, 0, 0.45);
+      background: rgba(255, 255, 255, 0.06);
+      color: white;
+      font-size: 13.5px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: 0.3s ease;
+    }
+
+    .translate-toggle:hover {
+      background: linear-gradient(135deg, rgba(255, 106, 0, 0.25), rgba(238, 9, 121, 0.2));
+      border-color: rgba(255, 106, 0, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .translate-toggle.is-active {
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      border-color: transparent;
+    }
+
+    .translate-toggle i {
+      font-size: 14px;
     }
 
     /*============================*/
@@ -724,6 +759,25 @@
     <div class="container">
       <h1>📚 Mind Maps Dashboard</h1>
       <p class="subtitle">Select any subject to begin your preparation</p>
+
+      <button type="button" class="translate-toggle" id="translateBtn" onclick="toggleHindiTranslate()">
+        <i class="fa-solid fa-language" aria-hidden="true"></i>
+        <span id="translateBtnLabel">हिंदी में पढ़ें / Read in Hindi</span>
+      </button>
+      <script>
+        document.addEventListener('efp-translate-state', function (e) {
+          var btn = document.getElementById('translateBtn');
+          var label = document.getElementById('translateBtnLabel');
+          if (!btn || !label) return;
+          if (e.detail.hindi) {
+            btn.classList.add('is-active');
+            label.textContent = 'Read in English / अंग्रेज़ी में पढ़ें';
+          } else {
+            btn.classList.remove('is-active');
+            label.textContent = 'हिंदी में पढ़ें / Read in Hindi';
+          }
+        });
+      </script>
 
       <div class="progress-wrap">
         <div class="progress-label">
