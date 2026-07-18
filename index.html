@@ -871,7 +871,7 @@
     <div class="logo-row">
       <img src="./logo.png" alt="Exam Fusion Prep Logo" class="logo">
 
-      <button type="button" class="black-mode-toggle" id="blackModeBtn" onclick="toggleBlackMode(); syncBlackModeLabel();">
+      <button type="button" class="black-mode-toggle" id="blackModeBtn" onclick="toggleBlackMode()">
         <span class="toggle-icon"><i class="fa-solid fa-moon"></i></span>
         <span id="blackModeLabel">Black Mode</span>
       </button>
@@ -884,6 +884,7 @@
           if (icon) icon.className = isOn ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
         syncBlackModeLabel();
+        document.addEventListener('efp-black-mode-changed', syncBlackModeLabel);
       </script>
     </div>
 

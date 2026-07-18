@@ -96,6 +96,27 @@
     document.documentElement.style.visibility = "";
   }
 
+  function notify(on) {
+    document.dispatchEvent(new CustomEvent("efp-black-mode-changed", { detail: { on: on } }));
+  }
+
+  // Re-reads localStorage and (re)applies the correct state. Safe to call
+  // any number of times — used on initial load, on browser back/forward
+  // (including bfcache restores), and when another tab changes the setting.
+  function syncFromStorage() {
+    var isOn = localStorage.getItem(STORAGE_KEY) === "on";
+    if (isOn) {
+      if (document.body) applyOnAfterBodyReady();
+      else document.addEventListener("DOMContentLoaded", function () {
+        applyOnAfterBodyReady();
+        notify(true);
+      });
+    } else {
+      applyOff();
+    }
+    if (document.body || !isOn) notify(isOn);
+  }
+
   injectStyle();
 
   var wantsOn = localStorage.getItem(STORAGE_KEY) === "on";
@@ -103,12 +124,8 @@
     // Hide render briefly to avoid a flash of the un-adjusted theme
     // while we wait for <body> to exist so we can detect it.
     document.documentElement.style.visibility = "hidden";
-    if (document.body) {
-      applyOnAfterBodyReady();
-    } else {
-      document.addEventListener("DOMContentLoaded", applyOnAfterBodyReady);
-    }
   }
+  syncFromStorage();
 
   // Public toggle function — call from any button: onclick="toggleBlackMode()"
   window.toggleBlackMode = function () {
@@ -120,18 +137,20 @@
     } else {
       applyOff();
     }
-    document.dispatchEvent(new CustomEvent("efp-black-mode-changed", { detail: { on: turningOn } }));
+    notify(turningOn);
     return turningOn;
   };
 
   // Keep multiple open tabs/pages in sync with each other.
   window.addEventListener("storage", function (e) {
     if (e.key !== STORAGE_KEY) return;
-    if (e.newValue === "on") {
-      if (document.body) applyOnAfterBodyReady();
-      else document.addEventListener("DOMContentLoaded", applyOnAfterBodyReady);
-    } else {
-      applyOff();
-    }
+    syncFromStorage();
+  });
+
+  // Browser back/forward (including pages restored straight from bfcache,
+  // where scripts don't re-run at all) — always re-check and re-apply,
+  // and re-sync any UI (like the toggle button label) listening for it.
+  window.addEventListener("pageshow", function () {
+    syncFromStorage();
   });
 })();
