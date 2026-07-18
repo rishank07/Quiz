@@ -120,6 +120,13 @@
     }, 200);
   }
 
+  /* Did Google actually translate anything yet? When translation is
+     active, Google adds <font> wrappers / marks the html element. */
+  function looksTranslated() {
+    return !!document.querySelector("html.translated-ltr, html.translated-rtl, font[style*='vertical-align']") ||
+      /translated/.test(document.documentElement.className);
+  }
+
   function ensureWidgetContainer() {
     if (document.getElementById("google_translate_element")) return;
     var div = document.createElement("div");
@@ -150,23 +157,51 @@
     loadGoogleScript();
     startBannerWatch();
     var on = wantsHindi();
-    if (on) applyLang(TARGET_LANG);
+    if (on) {
+      applyLang(TARGET_LANG, function (ok) {
+        setTimeout(function () {
+          /* One guarded auto-retry per page if translation didn't kick in. */
+          if (!looksTranslated() && !sessionStorage.getItem("efp_tr_retry_" + location.pathname)) {
+            sessionStorage.setItem("efp_tr_retry_" + location.pathname, "1");
+            window.location.reload();
+          }
+        }, 5000);
+      });
+    }
     notify(on);
   }
 
   window.toggleHindiTranslate = function () {
     var turningOn = !wantsHindi();
+    notify(turningOn);
     if (turningOn) {
       setCookie(COOKIE_NAME, "/en/" + TARGET_LANG);
-      applyLang(TARGET_LANG);
+      /* Try the in-page combo trigger first (no reload). If the widget
+         isn't ready or nothing visibly translates within ~4s, fall back
+         to a one-time automatic reload — Google's script reliably
+         auto-translates on load from the googtrans cookie. This is the
+         same thing the user was doing manually by refreshing. */
+      applyLang(TARGET_LANG, function (ok) {
+        if (!ok) { window.location.reload(); return; }
+        setTimeout(function () {
+          if (!looksTranslated()) window.location.reload();
+        }, 4000);
+      });
     } else {
-      setCookie(COOKIE_NAME, "/" + TARGET_LANG + "/en");
-      applyLang("en");
+      /* Turning OFF via the combo is unreliable (Google often leaves the
+         translated DOM in place). Clearing state + reload is the only
+         dependable way to restore the original text. */
+      setCookie(COOKIE_NAME, "/en/en");
+      var expired = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      document.cookie = expired;
+      var host = window.location.hostname;
+      if (host) {
+        document.cookie = expired + "; domain=" + host;
+        var parts = host.split(".");
+        if (parts.length > 2) document.cookie = expired + "; domain=." + parts.slice(-2).join(".");
+      }
+      window.location.reload();
     }
-    /* Button state reflects the user's CHOICE (the cookie), not the
-       translation engine's async progress — so it flips instantly and
-       stays correct even if Google is still translating. */
-    notify(turningOn);
     nukeBanner();
   };
 
