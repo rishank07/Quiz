@@ -173,25 +173,15 @@
 
   window.toggleHindiTranslate = function () {
     var turningOn = !wantsHindi();
-    notify(turningOn);
+    /* Deterministic toggle: set/clear the cookie, clear the retry
+       guard, and reload. On load Google auto-translates from the
+       cookie (or shows the original when it's absent). One reload
+       per toggle, zero race conditions — reloading is exactly what
+       fixed every stuck state manually. */
+    try { sessionStorage.removeItem("efp_tr_retry_" + location.pathname); } catch (e) {}
     if (turningOn) {
       setCookie(COOKIE_NAME, "/en/" + TARGET_LANG);
-      /* Try the in-page combo trigger first (no reload). If the widget
-         isn't ready or nothing visibly translates within ~4s, fall back
-         to a one-time automatic reload — Google's script reliably
-         auto-translates on load from the googtrans cookie. This is the
-         same thing the user was doing manually by refreshing. */
-      applyLang(TARGET_LANG, function (ok) {
-        if (!ok) { window.location.reload(); return; }
-        setTimeout(function () {
-          if (!looksTranslated()) window.location.reload();
-        }, 4000);
-      });
     } else {
-      /* Turning OFF via the combo is unreliable (Google often leaves the
-         translated DOM in place). Clearing state + reload is the only
-         dependable way to restore the original text. */
-      setCookie(COOKIE_NAME, "/en/en");
       var expired = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
       document.cookie = expired;
       var host = window.location.hostname;
@@ -200,9 +190,8 @@
         var parts = host.split(".");
         if (parts.length > 2) document.cookie = expired + "; domain=." + parts.slice(-2).join(".");
       }
-      window.location.reload();
     }
-    nukeBanner();
+    window.location.reload();
   };
 
   injectStyle();
