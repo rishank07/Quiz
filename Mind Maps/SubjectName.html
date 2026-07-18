@@ -89,37 +89,51 @@
     }
 
     /*============================*/
+    .translate-toggle-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 2px 0 22px 0;
+    }
+
     .translate-toggle {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      margin: 4px 0 18px 0;
-      padding: 9px 18px;
+      gap: 9px;
+      padding: 10px 20px;
       border-radius: 30px;
-      border: 1px solid rgba(255, 106, 0, 0.45);
-      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
       color: white;
       font-size: 13.5px;
       font-weight: 600;
       letter-spacing: 0.3px;
       cursor: pointer;
       font-family: inherit;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
       transition: 0.3s ease;
     }
 
     .translate-toggle:hover {
-      background: linear-gradient(135deg, rgba(255, 106, 0, 0.25), rgba(238, 9, 121, 0.2));
-      border-color: rgba(255, 106, 0, 0.8);
+      background: rgba(255, 106, 0, 0.14);
+      border-color: rgba(255, 106, 0, 0.6);
       transform: translateY(-2px);
     }
 
     .translate-toggle.is-active {
       background: linear-gradient(135deg, #ff6a00, #ee0979);
       border-color: transparent;
+      box-shadow: 0 4px 16px rgba(238, 9, 121, 0.35);
     }
 
-    .translate-toggle i {
-      font-size: 14px;
+    .translate-toggle .toggle-icon {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.12);
+      flex: 0 0 auto;
     }
 
     /*============================*/
@@ -760,10 +774,12 @@
       <h1>📚 Mind Maps Dashboard</h1>
       <p class="subtitle">Select any subject to begin your preparation</p>
 
-      <button type="button" class="translate-toggle" id="translateBtn" onclick="toggleHindiTranslate()">
-        <i class="fa-solid fa-language" aria-hidden="true"></i>
-        <span id="translateBtnLabel">हिंदी में पढ़ें / Read in Hindi</span>
-      </button>
+      <div class="translate-toggle-wrap">
+        <button type="button" class="translate-toggle notranslate" id="translateBtn" onclick="toggleHindiTranslate()" translate="no">
+          <span class="toggle-icon" aria-hidden="true"><i class="fa-solid fa-language"></i></span>
+          <span id="translateBtnLabel">हिंदी में पढ़ें / Read in Hindi</span>
+        </button>
+      </div>
       <script>
         document.addEventListener('efp-translate-state', function (e) {
           var btn = document.getElementById('translateBtn');

@@ -28,8 +28,12 @@
     style.id = STYLE_ID;
     style.textContent =
       "#google_translate_element{position:fixed;left:-9999px;top:0;height:1px;width:1px;overflow:hidden;}" +
-      ".goog-te-banner-frame.skiptranslate{display:none!important;}" +
-      "body{top:0!important;position:static!important;}" +
+      ".goog-te-banner-frame, .goog-te-banner-frame.skiptranslate, iframe.goog-te-banner-frame," +
+      " .goog-te-ftab, .goog-te-balloon-frame, #\\:1\\.container {" +
+      " display:none!important; visibility:hidden!important; height:0!important; width:0!important;" +
+      " opacity:0!important; pointer-events:none!important; }" +
+      "html, html body, body {" +
+      " top:0!important; position:static!important; margin-top:0!important; }" +
       ".goog-text-highlight{background:none!important;box-shadow:none!important;}" +
       ".goog-tooltip, .goog-tooltip:hover{display:none!important;}" +
       ".goog-te-gadget{height:0;overflow:hidden;}";
