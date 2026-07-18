@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <script src="./black-mode.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -119,6 +120,82 @@
     }
 
     /* ===== YouTube Banner ===== */
+    .logo-row {
+      grid-area: logo;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .black-mode-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      padding: 9px 16px 9px 9px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      line-height: 1.2;
+      color: var(--ink);
+      background: var(--glass-strong);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.3s cubic-bezier(.2, .8, .2, 1), border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    }
+
+    .black-mode-toggle .toggle-icon {
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      border-radius: 10px;
+      color: var(--gold-bright);
+      background: linear-gradient(160deg, rgba(246, 217, 138, 0.16), rgba(246, 217, 138, 0.05));
+      border: 1px solid var(--line);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      transition: 0.3s ease;
+    }
+
+    .black-mode-toggle:hover {
+      transform: translateY(-4px);
+      background: linear-gradient(160deg, rgba(246, 217, 138, 0.10), rgba(255, 255, 255, 0.05));
+      border-color: var(--line-strong);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45), 0 0 22px rgba(246, 217, 138, 0.10);
+    }
+
+    .black-mode-toggle:hover .toggle-icon {
+      transform: scale(1.06);
+      color: #fff6df;
+      box-shadow: 0 6px 18px rgba(246, 217, 138, 0.22);
+    }
+
+    html.efp-black .black-mode-toggle,
+    html.efp-black-invert .black-mode-toggle {
+      background: #000;
+      border-color: #333;
+    }
+
+    html.efp-black .black-mode-toggle .toggle-icon,
+    html.efp-black-invert .black-mode-toggle .toggle-icon {
+      background: #111;
+    }
+
+    @media (min-width: 1025px) {
+      .logo-row {
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+    }
+
     .youtube-banner {
       width: 100%;
       text-align: center;
@@ -194,10 +271,6 @@
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--gold), transparent);
       opacity: 0.7;
-    }
-
-    .logo {
-      grid-area: logo;
     }
 
     .kicker {
@@ -795,7 +868,25 @@
   </a>
 
   <div class="container">
-    <img src="./logo.png" alt="Exam Fusion Prep Logo" class="logo">
+    <div class="logo-row">
+      <img src="./logo.png" alt="Exam Fusion Prep Logo" class="logo">
+
+      <button type="button" class="black-mode-toggle" id="blackModeBtn" onclick="toggleBlackMode(); syncBlackModeLabel();">
+        <span class="toggle-icon"><i class="fa-solid fa-moon"></i></span>
+        <span id="blackModeLabel">Black Mode</span>
+      </button>
+      <script>
+        function syncBlackModeLabel() {
+          var isOn = document.documentElement.classList.contains('efp-black') || document.documentElement.classList.contains('efp-black-invert');
+          var label = document.getElementById('blackModeLabel');
+          var icon = document.querySelector('#blackModeBtn .toggle-icon i');
+          if (label) label.textContent = isOn ? 'Black Mode: ON' : 'Black Mode';
+          if (icon) icon.className = isOn ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+        syncBlackModeLabel();
+      </script>
+    </div>
+
 
     <span class="kicker">Competitive Exam Hub</span>
     <h1>Exam Fusion Prep</h1>
