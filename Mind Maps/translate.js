@@ -149,22 +149,24 @@
     ensureWidgetContainer();
     loadGoogleScript();
     startBannerWatch();
-    if (wantsHindi()) {
-      applyLang(TARGET_LANG, function (ok) { notify(ok); });
-    } else {
-      notify(false);
-    }
+    var on = wantsHindi();
+    if (on) applyLang(TARGET_LANG);
+    notify(on);
   }
 
   window.toggleHindiTranslate = function () {
     var turningOn = !wantsHindi();
     if (turningOn) {
       setCookie(COOKIE_NAME, "/en/" + TARGET_LANG);
-      applyLang(TARGET_LANG, function (ok) { notify(ok); });
+      applyLang(TARGET_LANG);
     } else {
       setCookie(COOKIE_NAME, "/" + TARGET_LANG + "/en");
-      applyLang("en", function (ok) { notify(false); });
+      applyLang("en");
     }
+    /* Button state reflects the user's CHOICE (the cookie), not the
+       translation engine's async progress — so it flips instantly and
+       stays correct even if Google is still translating. */
+    notify(turningOn);
     nukeBanner();
   };
 
@@ -175,6 +177,16 @@
   } else {
     document.addEventListener("DOMContentLoaded", initWhenBodyReady);
   }
+
+  /* Browser back/forward — including bfcache restores where scripts
+     don't re-run — re-check the cookie and re-sync both the
+     translation and any UI (button label) listening for state. */
+  window.addEventListener("pageshow", function () {
+    var on = wantsHindi();
+    if (on) applyLang(TARGET_LANG);
+    notify(on);
+    nukeBanner();
+  });
 
   window.efpIsHindiOn = wantsHindi;
 })();
