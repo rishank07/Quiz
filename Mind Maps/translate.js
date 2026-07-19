@@ -152,22 +152,36 @@
     document.dispatchEvent(new CustomEvent("efp-translate-state", { detail: { hindi: hindiOn } }));
   }
 
+  /* Make sure the page actually ends up translated when the cookie
+     says it should be. Tries the in-page combo trigger; if it hasn't
+     visibly worked after a few seconds, falls back to ONE reload
+     (reload is the fully reliable path — this is exactly what fixed
+     every stuck-in-English case manually). The retry guard is keyed
+     per pathname AND cleared again once translation is confirmed
+     working, so a page that fails once doesn't stay "used up" and
+     silently give up on every later visit. */
+  function ensureTranslated() {
+    var guardKey = "efp_tr_retry_" + location.pathname;
+    applyLang(TARGET_LANG, function () {
+      setTimeout(function () {
+        if (looksTranslated()) {
+          try { sessionStorage.removeItem(guardKey); } catch (e) {}
+          return;
+        }
+        if (!sessionStorage.getItem(guardKey)) {
+          try { sessionStorage.setItem(guardKey, "1"); } catch (e) {}
+          window.location.reload();
+        }
+      }, 4000);
+    });
+  }
+
   function initWhenBodyReady() {
     ensureWidgetContainer();
     loadGoogleScript();
     startBannerWatch();
     var on = wantsHindi();
-    if (on) {
-      applyLang(TARGET_LANG, function (ok) {
-        setTimeout(function () {
-          /* One guarded auto-retry per page if translation didn't kick in. */
-          if (!looksTranslated() && !sessionStorage.getItem("efp_tr_retry_" + location.pathname)) {
-            sessionStorage.setItem("efp_tr_retry_" + location.pathname, "1");
-            window.location.reload();
-          }
-        }, 5000);
-      });
-    }
+    if (on) ensureTranslated();
     notify(on);
   }
 
@@ -207,7 +221,7 @@
      translation and any UI (button label) listening for state. */
   window.addEventListener("pageshow", function () {
     var on = wantsHindi();
-    if (on) applyLang(TARGET_LANG);
+    if (on) ensureTranslated();
     notify(on);
     nukeBanner();
   });
