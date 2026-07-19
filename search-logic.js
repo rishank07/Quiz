@@ -34,6 +34,7 @@ function efSearchRank(query, options) {
     var titleLower = rec.title.toLowerCase();
     var breadcrumbLower = rec.breadcrumb.toLowerCase();
     var contentLower = hasContent ? (CONTENT_INDEX[rec.url] || "").toLowerCase() : "";
+    var hiLower = rec.hi ? rec.hi.toLowerCase() : "";
 
     if (excludeTitleMatches) {
       var titleAloneMatches = true;
@@ -47,7 +48,7 @@ function efSearchRank(query, options) {
     var allFound = true;
     for (var j = 0; j < terms.length; j++) {
       var t = terms[j];
-      if (titleLower.indexOf(t) !== -1) {
+      if (titleLower.indexOf(t) !== -1 || (hiLower && hiLower.indexOf(t) !== -1)) {
         score += 0;
       } else if (breadcrumbLower.indexOf(t) !== -1) {
         score += 1;
