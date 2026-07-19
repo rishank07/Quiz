@@ -170,16 +170,24 @@
        the previous version feel like it "did nothing" for way too
        long before ever reloading. */
     applyLang(TARGET_LANG);
-    setTimeout(function () {
+    /* Poll every second for up to 4s; reload at the first confirmed
+       failure instead of waiting out one long timer. */
+    var checks = 0;
+    var checker = setInterval(function () {
+      checks++;
       if (looksTranslated()) {
+        clearInterval(checker);
         try { sessionStorage.removeItem(guardKey); } catch (e) {}
         return;
       }
-      if (!sessionStorage.getItem(guardKey)) {
-        try { sessionStorage.setItem(guardKey, "1"); } catch (e) {}
-        window.location.reload();
+      if (checks >= 4) {
+        clearInterval(checker);
+        if (!sessionStorage.getItem(guardKey)) {
+          try { sessionStorage.setItem(guardKey, "1"); } catch (e) {}
+          window.location.reload();
+        }
       }
-    }, 3500);
+    }, 1000);
   }
 
   function initWhenBodyReady() {
@@ -225,9 +233,22 @@
   /* Browser back/forward — including bfcache restores where scripts
      don't re-run — re-check the cookie and re-sync both the
      translation and any UI (button label) listening for state. */
-  window.addEventListener("pageshow", function () {
+  window.addEventListener("pageshow", function (e) {
     var on = wantsHindi();
-    if (on) ensureTranslated();
+    if (on) {
+      /* bfcache restore (browser back/forward serving the frozen page):
+         Google's translate engine does NOT survive the freeze — the
+         page comes back in its original language and no amount of
+         combo-triggering revives the dead engine. A reload is the only
+         thing that works (it's what the user was doing by hand), and
+         reloads always bypass bfcache, so this cannot loop. Do it
+         immediately — no timers, no guard. */
+      if (e.persisted && !looksTranslated()) {
+        window.location.reload();
+        return;
+      }
+      ensureTranslated();
+    }
     notify(on);
     nukeBanner();
   });
