@@ -162,18 +162,24 @@
      silently give up on every later visit. */
   function ensureTranslated() {
     var guardKey = "efp_tr_retry_" + location.pathname;
-    applyLang(TARGET_LANG, function () {
-      setTimeout(function () {
-        if (looksTranslated()) {
-          try { sessionStorage.removeItem(guardKey); } catch (e) {}
-          return;
-        }
-        if (!sessionStorage.getItem(guardKey)) {
-          try { sessionStorage.setItem(guardKey, "1"); } catch (e) {}
-          window.location.reload();
-        }
-      }, 4000);
-    });
+    /* Kick off the combo trigger (fire-and-forget — it may take a
+       while to find the combo, or never find it at all on a
+       bfcache-restored page where Google's widget doesn't
+       reconnect). Don't wait on its callback for the safety check
+       below — that callback can itself take up to ~20s, which made
+       the previous version feel like it "did nothing" for way too
+       long before ever reloading. */
+    applyLang(TARGET_LANG);
+    setTimeout(function () {
+      if (looksTranslated()) {
+        try { sessionStorage.removeItem(guardKey); } catch (e) {}
+        return;
+      }
+      if (!sessionStorage.getItem(guardKey)) {
+        try { sessionStorage.setItem(guardKey, "1"); } catch (e) {}
+        window.location.reload();
+      }
+    }, 3500);
   }
 
   function initWhenBodyReady() {
