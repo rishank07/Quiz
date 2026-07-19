@@ -129,6 +129,23 @@
       gap: 14px;
     }
 
+    @keyframes efp-shimmer {
+      0% { left: -60%; }
+      45% { left: 130%; }
+      100% { left: 130%; }
+    }
+
+    @keyframes efp-glow-pulse {
+      0%, 100% { box-shadow: 0 4px 16px rgba(238, 9, 121, .35), 0 0 0 rgba(255, 179, 71, 0); }
+      50% { box-shadow: 0 6px 26px rgba(238, 9, 121, .55), 0 0 22px rgba(255, 179, 71, .4); }
+    }
+
+    @keyframes efp-icon-flip {
+      0% { transform: rotate(0deg) scale(1); }
+      45% { transform: rotate(200deg) scale(1.35); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
     .black-mode-toggle {
       display: inline-flex;
       align-items: center;
@@ -150,6 +167,23 @@
       transition: transform 0.3s cubic-bezier(.2, .8, .2, 1), border-color 0.3s, background 0.3s, box-shadow 0.3s;
     }
 
+    .black-mode-toggle::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      transform: skewX(-20deg);
+      animation: efp-shimmer 3.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .black-mode-toggle:active {
+      transform: scale(0.94) !important;
+    }
+
     .black-mode-toggle .toggle-icon {
       flex: 0 0 auto;
       width: 32px;
@@ -163,6 +197,10 @@
       border: 1px solid var(--line);
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
       transition: 0.3s ease;
+    }
+
+    .black-mode-toggle .toggle-icon.efp-spin {
+      animation: efp-icon-flip 0.6s cubic-bezier(.34, 1.56, .64, 1);
     }
 
     .black-mode-toggle:hover {
@@ -180,8 +218,9 @@
 
     html.efp-black .black-mode-toggle,
     html.efp-black-invert .black-mode-toggle {
-      background: #000;
-      border-color: #333;
+      background: linear-gradient(135deg, #1a1a1a, #050505);
+      border-color: transparent;
+      animation: efp-glow-pulse 2.4s ease-in-out infinite;
     }
 
     html.efp-black .black-mode-toggle .toggle-icon,
@@ -872,19 +911,25 @@
       <img src="./logo.png" alt="Exam Fusion Prep Logo" class="logo">
 
       <button type="button" class="black-mode-toggle" id="blackModeBtn" onclick="toggleBlackMode()">
-        <span class="toggle-icon"><i class="fa-solid fa-moon"></i></span>
-        <span id="blackModeLabel">Black Mode</span>
+        <span class="toggle-icon" id="blackModeIconWrap"><i class="fa-solid fa-moon"></i></span>
+        <span id="blackModeLabel">Dark Mode</span>
       </button>
       <script>
-        function syncBlackModeLabel() {
+        function syncBlackModeLabel(animate) {
           var isOn = document.documentElement.classList.contains('efp-black') || document.documentElement.classList.contains('efp-black-invert');
           var label = document.getElementById('blackModeLabel');
+          var iconWrap = document.getElementById('blackModeIconWrap');
           var icon = document.querySelector('#blackModeBtn .toggle-icon i');
-          if (label) label.textContent = isOn ? 'Black Mode: ON' : 'Black Mode';
+          if (label) label.textContent = isOn ? 'Dark Mode: ON' : 'Dark Mode';
           if (icon) icon.className = isOn ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+          if (animate && iconWrap) {
+            iconWrap.classList.remove('efp-spin');
+            void iconWrap.offsetWidth; /* restart animation every time */
+            iconWrap.classList.add('efp-spin');
+          }
         }
-        syncBlackModeLabel();
-        document.addEventListener('efp-black-mode-changed', syncBlackModeLabel);
+        syncBlackModeLabel(false);
+        document.addEventListener('efp-black-mode-changed', function () { syncBlackModeLabel(true); });
       </script>
     </div>
 
