@@ -42,21 +42,6 @@
       --badge-bg: #2a2f4a;
     }
 
-    [data-theme="light"] {
-      --bg: #f4f6fb;
-      --surface: #ffffff;
-      --card: #eef1f9;
-      --border: #d0d5ee;
-      --accent: #c97a00;
-      --accent2: #5849d6;
-      --accent3: #1e9e68;
-      --accent4: #c0284d;
-      --text: #1a1d2e;
-      --muted: #5a6080;
-      --tab-active: #c97a00;
-      --badge-bg: #dde2f5;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -85,10 +70,6 @@
       gap: 10px;
     }
 
-    [data-theme="light"] header {
-      background: linear-gradient(135deg, #ffffff 0%, #eef1f9 100%);
-    }
-
     .brand {
       font-size: 11px;
       color: var(--accent);
@@ -111,21 +92,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-    }
-
-    .theme-btn {
-      background: var(--badge-bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 20px;
-      padding: 5px 14px;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .theme-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
     }
 
     .badge-exam {
@@ -624,7 +590,7 @@
   </style>
 </head>
 
-<body data-theme="dark">
+<body>
 
   <header>
     <div>
@@ -633,7 +599,6 @@
     </div>
     <div class="header-right">
       <span class="badge-exam">BPSC · BSSC</span>
-      <button class="theme-btn" onclick="toggleTheme()">☀ Light</button>
     </div>
   </header>
 
@@ -1368,14 +1333,6 @@
     function toggleCard(header) {
       header.closest('.section-card').classList.toggle('open');
     }
-    function toggleTheme() {
-      const body = document.body;
-      const btn = document.querySelector('.theme-btn');
-      if (body.dataset.theme === 'dark') {
-        body.dataset.theme = 'light'; btn.textContent = '🌙 Dark';
-      } else {
-        body.dataset.theme = 'dark'; btn.textContent = '☀ Light';
-      }
     }
     document.querySelectorAll('.section-card').forEach(c => c.classList.add('open'));
   </script>
