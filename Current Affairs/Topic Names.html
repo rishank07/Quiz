@@ -205,6 +205,33 @@
     /*============================*/
     /* GLOBAL SEARCH                */
     /*============================*/
+    .ca-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin: 14px 0 4px;
+      flex-wrap: wrap;
+    }
+
+    .ca-toolbar button {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(246, 217, 138, 0.25);
+      color: #f5f1e6;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: 0.25s ease;
+    }
+
+    .ca-toolbar button:hover {
+      background: rgba(246, 217, 138, 0.12);
+      border-color: rgba(246, 217, 138, 0.5);
+      transform: translateY(-2px);
+    }
+
     .global-search-wrap {
       position: relative;
       margin-bottom: 8px;
@@ -678,6 +705,11 @@
       <div class="search-status" id="searchStatus"></div>
       <div class="search-results" id="searchResults"></div>
 
+      <div class="ca-toolbar">
+        <button type="button" onclick="expandAllCA()">⬇️ Expand All</button>
+        <button type="button" onclick="collapseAllCA()">⬆️ Collapse All</button>
+      </div>
+
       <div class="accordion" id="mainAccordion">
 
         <!-- ========================================================= -->
@@ -1030,6 +1062,20 @@
         state[el.id] = el.classList.contains("active");
       });
       sessionStorage.setItem('caAccordionState', JSON.stringify(state));
+    }
+
+    function expandAllCA() {
+      document.querySelectorAll(".card, .nested").forEach(function (el) {
+        el.classList.add("active");
+      });
+      saveAccordionState();
+    }
+
+    function collapseAllCA() {
+      document.querySelectorAll(".card, .nested").forEach(function (el) {
+        el.classList.remove("active");
+      });
+      saveAccordionState();
     }
 
     function restoreAccordionState() {
