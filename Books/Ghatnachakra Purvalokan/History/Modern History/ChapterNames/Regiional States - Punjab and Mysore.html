@@ -142,7 +142,38 @@
       .match-table th {
         background-color: #f2f2f2;
       }
-    </style>
+    
+    /* Mobile-safe horizontal scroll for tables sitting directly inside question text (added) */
+    .q-text-en, .q-text-hi { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .q-text-en table, .q-text-hi table { min-width: 480px; max-width: 100%; }
+    @media (max-width: 480px) {
+      .q-text-en table, .q-text-hi table { font-size: 0.85em; }
+    }
+
+    /* Premium match-table look — overrides the plain inline gray borders (added) */
+    .match-table { border-collapse: collapse !important; border-radius: 10px; overflow: hidden; }
+    .match-table th[style] {
+      background: rgba(128, 128, 128, 0.22) !important;
+      border: 1px solid rgba(128, 128, 128, 0.4) !important;
+      font-weight: 700 !important;
+      text-align: left;
+    }
+    .match-table td[style] {
+      border: 1px solid rgba(128, 128, 128, 0.22) !important;
+      background: rgba(128, 128, 128, 0.05);
+    }
+    .match-table tr:nth-child(even) td[style] {
+      background: rgba(128, 128, 128, 0.1);
+    }
+
+    /* Fix plain unclassed tables with light-gray inline header background (added) */
+    tr[style*="background-color: #f2f2f2"] {
+      background-color: rgba(128, 128, 128, 0.22) !important;
+    }
+    table[border="1"] th, table[border="1"] td {
+      border: 1px solid rgba(128, 128, 128, 0.4) !important;
+    }
+</style>
   </head>
   <body>
     <h1>Modern History Quiz</h1>

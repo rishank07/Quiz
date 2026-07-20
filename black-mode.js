@@ -40,6 +40,16 @@
       "html.efp-black-invert {" +
       "background:#fff !important;" +
       "filter: invert(1) hue-rotate(180deg) !important;" +
+      "-webkit-transform: translateZ(0);" +
+      "transform: translateZ(0);" +
+      "-webkit-backface-visibility: hidden;" +
+      "backface-visibility: hidden;" +
+      "isolation: isolate;" +
+      "}" +
+      "html.efp-black-invert body {" +
+      "min-height: 100vh;" +
+      "-webkit-transform: translateZ(0);" +
+      "transform: translateZ(0);" +
       "}" +
       "html.efp-black-invert img," +
       "html.efp-black-invert video," +
