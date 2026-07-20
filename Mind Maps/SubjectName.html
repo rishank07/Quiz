@@ -468,6 +468,16 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
     }
 
+    .nested-links a > i:first-child {
+      margin-right: 10px;
+      flex: 0 0 auto;
+    }
+
+    .nested-links a .bilabel {
+      flex: 1;
+      min-width: 0;
+    }
+
     .submenu a:hover,
     .nested-links a:hover {
       transform: translateX(8px);
@@ -815,7 +825,19 @@
     }
   
     /* ===== Bilingual label — premium stacked style (added) ===== */
-    .bilabel { display: flex; flex-direction: column; line-height: 1.35; text-align: inherit; }
+    .bilabel-icon {
+      margin-right: 10px;
+      flex: 0 0 auto;
+    }
+
+    .card-header .bilabel,
+    .nested-header .bilabel,
+    .sub-nested-header .bilabel {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .bilabel { display: flex; flex-direction: column; align-items: flex-start !important; line-height: 1.35; text-align: left; }
     .bilabel-en { font-weight: 700; display: inline-flex; align-items: center; flex-wrap: wrap; gap: 0; }
     .bilabel-hi { font-size: 0.82em; opacity: 0.78; font-weight: 500; margin-top: 3px; letter-spacing: 0.1px; }
     @media (max-width: 480px) {
@@ -896,7 +918,7 @@
         <!-- ========================================================= -->
         <div class="card">
           <div class="card-header">
-            <span class="bilabel"><span class="bilabel-en">📚 General Knowledge</span><span class="bilabel-hi">सामान्य ज्ञान</span></span>
+            <span class="bilabel-icon">📚</span><span class="bilabel"><span class="bilabel-en">General Knowledge</span><span class="bilabel-hi">सामान्य ज्ञान</span></span>
             <i class="fa-solid fa-chevron-down"></i>
           </div>
           <div class="card-body">
@@ -907,7 +929,7 @@
               <!-- ====================== -->
               <div class="nested">
                 <div class="nested-header">
-                  <span class="bilabel"><span class="bilabel-en">📜 History</span><span class="bilabel-hi">इतिहास</span></span>
+                  <span class="bilabel-icon">📜</span><span class="bilabel"><span class="bilabel-en">History</span><span class="bilabel-hi">इतिहास</span></span>
                   <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="nested-body">
@@ -916,44 +938,44 @@
                     <!-- Ancient History -->
                     <div class="sub-nested">
                       <div class="sub-nested-header">
-                        <span class="bilabel"><span class="bilabel-en">🏛️ Ancient History</span><span class="bilabel-hi">प्राचीन इतिहास</span></span>
+                        <span class="bilabel-icon">🏛️</span><span class="bilabel"><span class="bilabel-en">Ancient History</span><span class="bilabel-hi">प्राचीन इतिहास</span></span>
                         <i class="fa-solid fa-chevron-down"></i>
                       </div>
                       <div class="sub-nested-body">
                         <div class="nested-links">
                           <a href="./History/Ancient History/ChapterNames/01_sources_of_ancient_history_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. Sources of Ancient
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. Sources of Ancient
                               History</span><span class="bilabel-hi">प्राचीन इतिहास के स्रोत</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/02_pre_historic_age_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Pre Historic Age</span><span class="bilabel-hi">प्रागैतिहासिक काल</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Pre Historic Age</span><span class="bilabel-hi">प्रागैतिहासिक काल</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/03_indus_valley_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 3. Indus Valley</span><span class="bilabel-hi">सिंधु घाटी सभ्यता</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. Indus Valley</span><span class="bilabel-hi">सिंधु घाटी सभ्यता</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/04_vedic_age_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Vedic Age</span><span class="bilabel-hi">वैदिक
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Vedic Age</span><span class="bilabel-hi">वैदिक
                               काल</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/05_jainism_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Jainism</span><span class="bilabel-hi">जैन
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Jainism</span><span class="bilabel-hi">जैन
                               धर्म</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/06_buddhism_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Buddhism</span><span class="bilabel-hi">बौद्ध
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Buddhism</span><span class="bilabel-hi">बौद्ध
                               धर्म</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/07_mahajanapadas_magadha_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Mahajanapadas &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Mahajanapadas &
                               Magadha</span><span class="bilabel-hi">महाजनपद एवं मगध</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/08_mauryan_empire_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Mauryan Empire</span><span class="bilabel-hi">मौर्य साम्राज्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Mauryan Empire</span><span class="bilabel-hi">मौर्य साम्राज्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/09_post_mauryan_empire_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 9. Post Mauryan
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Post Mauryan
                               Empire</span><span class="bilabel-hi">मौर्योत्तर साम्राज्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/10_gupta_empire_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 10. Gupta Empire</span><span class="bilabel-hi">गुप्त साम्राज्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">10. Gupta Empire</span><span class="bilabel-hi">गुप्त साम्राज्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/11_post_gupta_empire_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 11. Post Gupta Empire</span><span class="bilabel-hi">गुप्तोत्तर साम्राज्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">11. Post Gupta Empire</span><span class="bilabel-hi">गुप्तोत्तर साम्राज्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/12_history_of_south_india_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 12. History of South
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">12. History of South
                               India</span><span class="bilabel-hi">दक्षिण भारत का इतिहास</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Ancient History/ChapterNames/13_early_medieval_period_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 13. Early Medieval
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">13. Early Medieval
                               Period</span><span class="bilabel-hi">पूर्व मध्यकालीन काल</span></span><i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                       </div>
@@ -962,36 +984,36 @@
                     <!-- Medieval History -->
                     <div class="sub-nested">
                       <div class="sub-nested-header">
-                        <span class="bilabel"><span class="bilabel-en">⚔️ Medieval History</span><span class="bilabel-hi">मध्यकालीन इतिहास</span></span>
+                        <span class="bilabel-icon">⚔️</span><span class="bilabel"><span class="bilabel-en">Medieval History</span><span class="bilabel-hi">मध्यकालीन इतिहास</span></span>
                         <i class="fa-solid fa-chevron-down"></i>
                       </div>
                       <div class="sub-nested-body">
                         <div class="nested-links">
                           <a href="./History/Medieval History/ChapterNames/14_arab_and_turk_invasions_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. Arab & Turk
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. Arab & Turk
                               Invasions</span><span class="bilabel-hi">अरब और तुर्क आक्रमण</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Medieval History/ChapterNames/15_delhi_sultanate_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Delhi Sultanate</span><span class="bilabel-hi">दिल्ली सल्तनत</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Delhi Sultanate</span><span class="bilabel-hi">दिल्ली सल्तनत</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Medieval History/ChapterNames/16_vijayanagara_bahmani_empire_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 3. Vijayanagara &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. Vijayanagara &
                               Bahmani Empire</span><span class="bilabel-hi">विजयनगर एवं बहमनी साम्राज्य</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Medieval History/ChapterNames/17_bhakti_sufi_movement_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Bhakti & Sufi
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Bhakti & Sufi
                               Movement</span><span class="bilabel-hi">भक्ति एवं सूफी आंदोलन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Medieval History/ChapterNames/18_mughal_empire_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Mughal Empire</span><span class="bilabel-hi">मुगल साम्राज्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Mughal Empire</span><span class="bilabel-hi">मुगल साम्राज्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Medieval History/ChapterNames/19_provincial_dynasties_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Provincial
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Provincial
                               Dynasties</span><span class="bilabel-hi">प्रांतीय राजवंश</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Medieval History/ChapterNames/20_later_mughal_period_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Later Mughal
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Later Mughal
                               Period</span><span class="bilabel-hi">उत्तर मुगल काल</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Medieval History/ChapterNames/21_rise_of_maratha_power_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Rise of Maratha
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Rise of Maratha
                               Power</span><span class="bilabel-hi">मराठा शक्ति का उदय</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Medieval History/ChapterNames/22_rise_of_the_sikhs_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 9. Rise of the Sikhs</span><span class="bilabel-hi">सिखों का उदय</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Rise of the Sikhs</span><span class="bilabel-hi">सिखों का उदय</span></span><i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                       </div>
                     </div>
@@ -999,56 +1021,56 @@
                     <!-- Modern History -->
                     <div class="sub-nested">
                       <div class="sub-nested-header">
-                        <span class="bilabel"><span class="bilabel-en">🔥 Modern History</span><span class="bilabel-hi">आधुनिक इतिहास</span></span>
+                        <span class="bilabel-icon">🔥</span><span class="bilabel"><span class="bilabel-en">Modern History</span><span class="bilabel-hi">आधुनिक इतिहास</span></span>
                         <i class="fa-solid fa-chevron-down"></i>
                       </div>
                       <div class="sub-nested-body">
                         <div class="nested-links">
                           <a href="./History/Modern History/ChapterNames/european_companies_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. Arrival of
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. Arrival of
                               European Companies</span><span class="bilabel-hi">यूरोपीय कंपनियों का आगमन</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/british_expansion_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. British Expansion
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. British Expansion
                               in Indian Territories</span><span class="bilabel-hi">भारतीय क्षेत्रों में ब्रिटिश विस्तार</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/revolt_of_1857_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 3. The Revolt of 1857</span><span class="bilabel-hi">1857 की क्रांति</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. The Revolt of 1857</span><span class="bilabel-hi">1857 की क्रांति</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/peasant_tribal_movements_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Peasant Movements
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Peasant Movements
                               & Tribal Revolt</span><span class="bilabel-hi">किसान आंदोलन और जनजातीय विद्रोह</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/socio_religious_reform_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Socio-Religious
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Socio-Religious
                               Reform Movement</span><span class="bilabel-hi">सामाजिक-धार्मिक सुधार आंदोलन</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/press_education_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Development of
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Development of
                               Press & Education</span><span class="bilabel-hi">प्रेस और शिक्षा का विकास</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/INC_formation_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Formation of
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Formation of
                               Indian National Congress</span><span class="bilabel-hi">भारतीय राष्ट्रीय कांग्रेस की स्थापना</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/indian_national_movement_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Indian National
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Indian National
                               Movement</span><span class="bilabel-hi">भारतीय राष्ट्रीय आंदोलन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/gandhian_era_first_phase_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 9. Gandhian Era:
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Gandhian Era:
                               First Phase</span><span class="bilabel-hi">गांधीवादी युग: प्रथम चरण</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/national_politics_1922_29_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 10. Phase of National
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">10. Phase of National
                               Politics (1922-29)</span><span class="bilabel-hi">राष्ट्रीय राजनीति का चरण (1922-29)</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/gandhian_era_second_phase_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 11. Gandhian Era:
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">11. Gandhian Era:
                               Second Phase</span><span class="bilabel-hi">गांधीवादी युग: द्वितीय चरण</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/towards_independence_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 12. Towards
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">12. Towards
                               Independence</span><span class="bilabel-hi">स्वतंत्रता की ओर</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./History/Modern History/ChapterNames/governor_gg_viceroy_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 13. Governor,
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">13. Governor,
                               Governor-General & Viceroy</span><span class="bilabel-hi">गवर्नर, गवर्नर-जनरल और वायसराय</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                         </div>
@@ -1064,7 +1086,7 @@
               <!-- ====================== -->
               <div class="nested">
                 <div class="nested-header">
-                  <span class="bilabel"><span class="bilabel-en">🌍 Geography</span><span class="bilabel-hi">भूगोल</span></span>
+                  <span class="bilabel-icon">🌍</span><span class="bilabel"><span class="bilabel-en">Geography</span><span class="bilabel-hi">भूगोल</span></span>
                   <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="nested-body">
@@ -1073,55 +1095,55 @@
                     <!-- Indian Geography -->
                     <div class="sub-nested">
                       <div class="sub-nested-header">
-                        <span class="bilabel"><span class="bilabel-en">🇮🇳 Indian Geography</span><span class="bilabel-hi">भारत का भूगोल</span></span>
+                        <span class="bilabel-icon">🇮</span><span class="bilabel"><span class="bilabel-en">🇳 Indian Geography</span><span class="bilabel-hi">भारत का भूगोल</span></span>
                         <i class="fa-solid fa-chevron-down"></i>
                       </div>
                       <div class="sub-nested-body">
                         <div class="nested-links">
                           <a href="./Geography/Indian Geography/ChapterNames/01_general_introduction_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. General
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. General
                               Introduction</span><span class="bilabel-hi">सामान्य परिचय</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/02_geological_structure_of_india_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Geological
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Geological
                               Structure of India</span><span class="bilabel-hi">भारत की भूगर्भीय संरचना</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/03_physical_divisions_of_india_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 3. Physical Divisions
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. Physical Divisions
                               of India</span><span class="bilabel-hi">भारत के भौतिक विभाजन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/04_rivers_of_india_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Rivers of India</span><span class="bilabel-hi">भारत की नदियाँ</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Rivers of India</span><span class="bilabel-hi">भारत की नदियाँ</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/05_lakes_waterfalls_of_india_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Lakes & Waterfalls
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Lakes & Waterfalls
                               of India</span><span class="bilabel-hi">भारत की झीलें और जलप्रपात</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/06_multipurpose_project_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Multipurpose
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Multipurpose
                               Projects</span><span class="bilabel-hi">बहुउद्देशीय परियोजनाएं</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/07_climate_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Climate</span><span class="bilabel-hi">जलवायु</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Climate</span><span class="bilabel-hi">जलवायु</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/08_soils_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Soils</span><span class="bilabel-hi">मिट्टियाँ</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Soils</span><span class="bilabel-hi">मिट्टियाँ</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/09_natural_vegetation_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 9. Natural Vegetation</span><span class="bilabel-hi">प्राकृतिक वनस्पति</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Natural Vegetation</span><span class="bilabel-hi">प्राकृतिक वनस्पति</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/10_agriculture_animal_husbandry_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 10. Agriculture &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">10. Agriculture &
                               Animal Husbandry</span><span class="bilabel-hi">कृषि एवं पशुपालन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/11_mineral_resources_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 11. Mineral Resources</span><span class="bilabel-hi">खनिज संसाधन</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">11. Mineral Resources</span><span class="bilabel-hi">खनिज संसाधन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/12_energy_resources_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 12. Energy Resources</span><span class="bilabel-hi">ऊर्जा संसाधन</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">12. Energy Resources</span><span class="bilabel-hi">ऊर्जा संसाधन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/13_industries_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 13. Industries</span><span class="bilabel-hi">उद्योग</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">13. Industries</span><span class="bilabel-hi">उद्योग</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/14_transport_communication_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 14. Transport &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">14. Transport &
                               Communication</span><span class="bilabel-hi">परिवहन एवं संचार</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/15_population_urbanization_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 15. Population &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">15. Population &
                               Urbanization</span><span class="bilabel-hi">जनसंख्या एवं नगरीकरण</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/16_races_tribes_of_india_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 16. Races & Tribes of
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">16. Races & Tribes of
                               India</span><span class="bilabel-hi">भारत की प्रजातियां एवं जनजातियां</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/Indian Geography/ChapterNames/17_states_union_territories_of_india_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 17. States & Union
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">17. States & Union
                               Territories</span><span class="bilabel-hi">राज्य और केंद्र शासित प्रदेश</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                         </div>
@@ -1131,99 +1153,99 @@
                     <!-- World Geography -->
                     <div class="sub-nested">
                       <div class="sub-nested-header">
-                        <span class="bilabel"><span class="bilabel-en">🌎 World Geography</span><span class="bilabel-hi">विश्व का भूगोल</span></span>
+                        <span class="bilabel-icon">🌎</span><span class="bilabel"><span class="bilabel-en">World Geography</span><span class="bilabel-hi">विश्व का भूगोल</span></span>
                         <i class="fa-solid fa-chevron-down"></i>
                       </div>
                       <div class="sub-nested-body">
                         <div class="nested-links">
                           <a href="./Geography/World Geography/ChapterNames/01_geography_introduction_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. Geography
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. Geography
                               Introduction</span><span class="bilabel-hi">भूगोल एक परिचय</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/02_universe_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Universe</span><span class="bilabel-hi">ब्रह्मांड</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Universe</span><span class="bilabel-hi">ब्रह्मांड</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/03_solar_system_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 3. Solar System</span><span class="bilabel-hi">सौरमंडल</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. Solar System</span><span class="bilabel-hi">सौरमंडल</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/04_rotation_revolution_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Rotation &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Rotation &
                               Revolution</span><span class="bilabel-hi">घूर्णन एवं परिक्रमण</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/05_latitude_longitude_standard_time_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Latitude,
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Latitude,
                               Longitude & Time</span><span class="bilabel-hi">अक्षांश, देशांतर एवं समय</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/06_origin_evolution_earth_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Origin & Evolution
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Origin & Evolution
                               of Earth</span><span class="bilabel-hi">पृथ्वी की उत्पत्ति एवं विकास</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/07_internal_structure_earth_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Internal Structure
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Internal Structure
                               of Earth</span><span class="bilabel-hi">पृथ्वी की आंतरिक संरचना</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/08_rocks_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Rocks</span><span class="bilabel-hi">चट्टानें</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Rocks</span><span class="bilabel-hi">चट्टानें</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/09_earthquakes_tsunamis_volcanoes_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 9. Earthquakes,
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Earthquakes,
                               Tsunamis & Volcanoes</span><span class="bilabel-hi">भूकंप, सूनामी एवं ज्वालामुखी</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/10_geomorphic_processes_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 10. Geomorphic
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">10. Geomorphic
                               Processes</span><span class="bilabel-hi">भू-आकृतिक प्रक्रियाएं</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/11_landforms_relief_features_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 11. Landforms &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">11. Landforms &
                               Relief Features</span><span class="bilabel-hi">स्थलाकृतियां एवं उच्चावच विशेषताएँ</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/12_mountains_plateaus_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 12. Mountains &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">12. Mountains &
                               Plateaus</span><span class="bilabel-hi">पर्वत एवं पठार</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/13_plains_islands_deserts_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 13. Plains, Islands &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">13. Plains, Islands &
                               Deserts</span><span class="bilabel-hi">मैदान, द्वीप एवं मरुस्थल</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/14_rivers_lakes_waterfalls_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 14. Rivers, Lakes &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">14. Rivers, Lakes &
                               Waterfalls</span><span class="bilabel-hi">नदियाँ, झीलें एवं जलप्रपात</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/15_atmosphere_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 15. Atmosphere</span><span class="bilabel-hi">वायुमंडल</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">15. Atmosphere</span><span class="bilabel-hi">वायुमंडल</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/16_air_pressure_winds_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 16. Air Pressure &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">16. Air Pressure &
                               Winds</span><span class="bilabel-hi">वायुदाब एवं पवनें</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/17_humidity_precipitation_clouds_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 17. Humidity,
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">17. Humidity,
                               Precipitation & Clouds</span><span class="bilabel-hi">आर्द्रता, वर्षण एवं बादल</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/18_air_mass_cyclone_anticyclone_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 18. Air Mass, Cyclone
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">18. Air Mass, Cyclone
                               & Anticyclone</span><span class="bilabel-hi">वायुराशि, चक्रवात एवं प्रतिचक्रवात</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/19_major_climatic_regions_world_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 19. Major Climatic
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">19. Major Climatic
                               Regions of the World</span><span class="bilabel-hi">विश्व के प्रमुख जलवायु प्रदेश</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/20_hydrosphere_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 20. Hydrosphere</span><span class="bilabel-hi">जलमंडल</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">20. Hydrosphere</span><span class="bilabel-hi">जलमंडल</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/21_ocean_currents_waves_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 21. Ocean Currents &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">21. Ocean Currents &
                               Waves</span><span class="bilabel-hi">महासागरीय धाराएँ एवं लहरें</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/22_soils_natural_vegetation_world_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 22. Soils & Natural
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">22. Soils & Natural
                               Vegetation of the World</span><span class="bilabel-hi">विश्व की मिट्टियाँ एवं प्राकृतिक वनस्पति</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/23_agriculture_animal_husbandry_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 23. Agriculture &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">23. Agriculture &
                               Animal Husbandry</span><span class="bilabel-hi">कृषि एवं पशुपालन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/24_minerals_energy_resources_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 24. Minerals & Energy
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">24. Minerals & Energy
                               Resources</span><span class="bilabel-hi">खनिज एवं ऊर्जा संसाधन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/25_major_industries_world_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 25. Major Industries
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">25. Major Industries
                               of the World</span><span class="bilabel-hi">विश्व के प्रमुख उद्योग</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/26_transport_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 26. Transport</span><span class="bilabel-hi">परिवहन</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">26. Transport</span><span class="bilabel-hi">परिवहन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/27_population_urbanization_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 27. Population &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">27. Population &
                               Urbanization</span><span class="bilabel-hi">जनसंख्या एवं नगरीकरण</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/28_human_races_tribes_languages_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 28. Human Races,
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">28. Human Races,
                               Tribes & Languages</span><span class="bilabel-hi">मानव प्रजातियां, जनजातियां एवं भाषाएं</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Geography/World Geography/ChapterNames/29_continents_world_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 29. Continents of the
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">29. Continents of the
                               World</span><span class="bilabel-hi">विश्व के महाद्वीप</span></span><i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                       </div>
@@ -1238,7 +1260,7 @@
               <!-- ====================== -->
               <div class="nested">
                 <div class="nested-header">
-                  <span class="bilabel"><span class="bilabel-en">🔬 Science</span><span class="bilabel-hi">विज्ञान</span></span>
+                  <span class="bilabel-icon">🔬</span><span class="bilabel"><span class="bilabel-en">Science</span><span class="bilabel-hi">विज्ञान</span></span>
                   <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="nested-body">
@@ -1247,36 +1269,36 @@
                     <!-- Biology -->
                     <div class="sub-nested">
                       <div class="sub-nested-header">
-                        <span class="bilabel"><span class="bilabel-en">🧬 Biology</span><span class="bilabel-hi">जीव विज्ञान</span></span>
+                        <span class="bilabel-icon">🧬</span><span class="bilabel"><span class="bilabel-en">Biology</span><span class="bilabel-hi">जीव विज्ञान</span></span>
                         <i class="fa-solid fa-chevron-down"></i>
                       </div>
                       <div class="sub-nested-body">
                         <div class="nested-links">
                           <a href="./Science/BioLogy/ChapterNames/01_introduction_to_biology_living_world_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. Introduction to
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. Introduction to
                               Biology & Living World</span><span class="bilabel-hi">जीव विज्ञान का परिचय एवं सजीव जगत</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/BioLogy/ChapterNames/02_plant_kingdom_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Plant Kingdom</span><span class="bilabel-hi">पादप जगत</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Plant Kingdom</span><span class="bilabel-hi">पादप जगत</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/BioLogy/ChapterNames/03_animal_world_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 3. Animal World</span><span class="bilabel-hi">जंतु जगत</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. Animal World</span><span class="bilabel-hi">जंतु जगत</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/BioLogy/ChapterNames/04_cell_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Cell</span><span class="bilabel-hi">कोशिका</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Cell</span><span class="bilabel-hi">कोशिका</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/BioLogy/ChapterNames/05_tissue_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Tissue</span><span class="bilabel-hi">ऊतक</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Tissue</span><span class="bilabel-hi">ऊतक</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/BioLogy/ChapterNames/06_biological_process_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Biological Process</span><span class="bilabel-hi">जैविक प्रक्रियाएं</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Biological Process</span><span class="bilabel-hi">जैविक प्रक्रियाएं</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/BioLogy/ChapterNames/07_control_coordination_movement_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Control,
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Control,
                               Coordination & Movement</span><span class="bilabel-hi">नियंत्रण, समन्वय एवं गति</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/BioLogy/ChapterNames/08_reproduction_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Reproduction</span><span class="bilabel-hi">प्रजनन</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Reproduction</span><span class="bilabel-hi">प्रजनन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/BioLogy/ChapterNames/09_heredity_evolution_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 9. Heredity &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Heredity &
                               Evolution</span><span class="bilabel-hi">आनुवंशिकता एवं विकास</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/BioLogy/ChapterNames/10_human_disease_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 10. Human Disease</span><span class="bilabel-hi">मानव रोग</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">10. Human Disease</span><span class="bilabel-hi">मानव रोग</span></span><i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                       </div>
                     </div>
@@ -1284,38 +1306,38 @@
                     <!-- Chemistry -->
                     <div class="sub-nested">
                       <div class="sub-nested-header">
-                        <span class="bilabel"><span class="bilabel-en">🧪 Chemistry</span><span class="bilabel-hi">रसायन विज्ञान</span></span>
+                        <span class="bilabel-icon">🧪</span><span class="bilabel"><span class="bilabel-en">Chemistry</span><span class="bilabel-hi">रसायन विज्ञान</span></span>
                         <i class="fa-solid fa-chevron-down"></i>
                       </div>
                       <div class="sub-nested-body">
                         <div class="nested-links">
                           <a href="./Science/Chemistry/ChapterNames/01_matter_states_of_matter_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. Matter & States of
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. Matter & States of
                               Matter</span><span class="bilabel-hi">पदार्थ एवं पदार्थ की अवस्थाएँ</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Chemistry/ChapterNames/02_atomic_structure_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Atomic Structure</span><span class="bilabel-hi">परमाणु संरचना</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Atomic Structure</span><span class="bilabel-hi">परमाणु संरचना</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Chemistry/ChapterNames/03_periodic_classification_of_elements_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 3. Periodic
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. Periodic
                               Classification of Elements</span><span class="bilabel-hi">तत्वों का आवर्ती वर्गीकरण</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Chemistry/ChapterNames/04_chemical_bonds_reactions_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Chemical Bonds &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Chemical Bonds &
                               Reactions</span><span class="bilabel-hi">रासायनिक बंधन एवं अभिक्रियाएँ</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Chemistry/ChapterNames/05_solution_colloid_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Solution & Colloid</span><span class="bilabel-hi">विलयन एवं कोलॉइड</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Solution & Colloid</span><span class="bilabel-hi">विलयन एवं कोलॉइड</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Chemistry/ChapterNames/06_acid_base_salt_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Acid, Base & Salt</span><span class="bilabel-hi">अम्ल, क्षार एवं लवण</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Acid, Base & Salt</span><span class="bilabel-hi">अम्ल, क्षार एवं लवण</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Chemistry/ChapterNames/07_metals_nonmetals_metallurgy_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Metals, Nonmetals
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Metals, Nonmetals
                               & Metallurgy</span><span class="bilabel-hi">धातु, अधातु एवं धातुकर्म</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Chemistry/ChapterNames/08_organic_chemistry_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Organic Chemistry</span><span class="bilabel-hi">कार्बनिक रसायन</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Organic Chemistry</span><span class="bilabel-hi">कार्बनिक रसायन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Chemistry/ChapterNames/09_chemistry_in_everyday_life_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 9. Chemistry in
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Chemistry in
                               Everyday Life</span><span class="bilabel-hi">दैनिक जीवन में रसायन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Chemistry/ChapterNames/10_environmental_chemicals_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 10. Environmental
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">10. Environmental
                               Chemistry</span><span class="bilabel-hi">पर्यावरणीय रसायन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                       </div>
@@ -1324,46 +1346,46 @@
                     <!-- Physics -->
                     <div class="sub-nested">
                       <div class="sub-nested-header">
-                        <span class="bilabel"><span class="bilabel-en">⚡ Physics</span><span class="bilabel-hi">भौतिक विज्ञान</span></span>
+                        <span class="bilabel-icon">⚡</span><span class="bilabel"><span class="bilabel-en">Physics</span><span class="bilabel-hi">भौतिक विज्ञान</span></span>
                         <i class="fa-solid fa-chevron-down"></i>
                       </div>
                       <div class="sub-nested-body">
                         <div class="nested-links">
                           <a href="./Science/Physics/ChapterNames/01_physical_quantities_units_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. Physical
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. Physical
                               Quantities & Units</span><span class="bilabel-hi">भौतिक राशियाँ एवं मात्रक</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/02_motion_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Motion</span><span class="bilabel-hi">गति</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Motion</span><span class="bilabel-hi">गति</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/03_laws_of_force_motion_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 3. Laws of Force &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. Laws of Force &
                               Motion</span><span class="bilabel-hi">बल एवं गति के नियम</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/04_work_power_energy_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Work, Power &
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Work, Power &
                               Energy</span><span class="bilabel-hi">कार्य, शक्ति एवं ऊर्जा</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/05_gravitation_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Gravitation</span><span class="bilabel-hi">गुरुत्वाकर्षण</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Gravitation</span><span class="bilabel-hi">गुरुत्वाकर्षण</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/06_mechanical_properties_of_matter_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Mechanical
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Mechanical
                               Properties of Matter</span><span class="bilabel-hi">पदार्थ के यांत्रिक गुण</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/07_temperature_heat_thermodynamics_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Temperature, Heat
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Temperature, Heat
                               & Thermodynamics</span><span class="bilabel-hi">तापमान, ऊष्मा एवं उष्मागतिकी</span></span><i
                               class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/08_periodic_wave_motion_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Periodic & Wave
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Periodic & Wave
                               Motion</span><span class="bilabel-hi">आवधिक एवं तरंग गति</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/09_electrostatics_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 9. Electrostatics</span><span class="bilabel-hi">स्थिर वैद्युतिकी</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Electrostatics</span><span class="bilabel-hi">स्थिर वैद्युतिकी</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/10_magnetism_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 10. Magnetism</span><span class="bilabel-hi">चुंबकत्व</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">10. Magnetism</span><span class="bilabel-hi">चुंबकत्व</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/11_light_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 11. Light</span><span class="bilabel-hi">प्रकाश</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">11. Light</span><span class="bilabel-hi">प्रकाश</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/12_semiconductor_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 12. Semiconductor</span><span class="bilabel-hi">अर्धचालक</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">12. Semiconductor</span><span class="bilabel-hi">अर्धचालक</span></span><i class="fa-solid fa-arrow-right"></i></a>
                           <a href="./Science/Physics/ChapterNames/13_our_universe_mindmap.html"
-                            onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 13. Our Universe</span><span class="bilabel-hi">हमारा ब्रह्मांड</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                            onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">13. Our Universe</span><span class="bilabel-hi">हमारा ब्रह्मांड</span></span><i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                       </div>
                     </div>
@@ -1377,69 +1399,69 @@
               <!-- ====================== -->
               <div class="nested">
                 <div class="nested-header">
-                  <span class="bilabel"><span class="bilabel-en">⚖️ Polity</span><span class="bilabel-hi">राजनीति विज्ञान</span></span>
+                  <span class="bilabel-icon">⚖️</span><span class="bilabel"><span class="bilabel-en">Polity</span><span class="bilabel-hi">राजनीति विज्ञान</span></span>
                   <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="nested-body">
                   <div class="nested-links">
                     <a href="./Polity/ChapterNames/01_constitutional_development_of_india_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. Constitutional
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. Constitutional
                         Development of India</span><span class="bilabel-hi">भारत का संवैधानिक विकास</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/02_making_of_constitution_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Making of Constitution</span><span class="bilabel-hi">संविधान का निर्माण</span></span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Polity/ChapterNames/03_preamble_features_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 3. Preamble & Features</span><span class="bilabel-hi">प्रस्तावना एवं विशेषताएँ</span></span><i
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Making of Constitution</span><span class="bilabel-hi">संविधान का निर्माण</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/03_preamble_features_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. Preamble & Features</span><span class="bilabel-hi">प्रस्तावना एवं विशेषताएँ</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/04_sources_parts_articles_schedules_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Sources, Parts, Articles
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Sources, Parts, Articles
                         & Schedules</span><span class="bilabel-hi">स्रोत, भाग, अनुच्छेद एवं अनुसूचियां</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Polity/ChapterNames/05_union_territories_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 5. Union & its Territories</span><span class="bilabel-hi">संघ एवं इसके राज्यक्षेत्र</span></span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Polity/ChapterNames/06_citizenship_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 6. Citizenship</span><span class="bilabel-hi">नागरिकता</span></span><i
+                    <a href="./Polity/ChapterNames/05_union_territories_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Union & its Territories</span><span class="bilabel-hi">संघ एवं इसके राज्यक्षेत्र</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/06_citizenship_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Citizenship</span><span class="bilabel-hi">नागरिकता</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/07_fundamental_rights_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Fundamental Rights</span><span class="bilabel-hi">मौलिक अधिकार</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Fundamental Rights</span><span class="bilabel-hi">मौलिक अधिकार</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/08_directive_principles_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Directive Principles</span><span class="bilabel-hi">नीति निर्देशक तत्व</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Directive Principles</span><span class="bilabel-hi">नीति निर्देशक तत्व</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/09_fundamental_duties_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 9. Fundamental Duties</span><span class="bilabel-hi">मौलिक कर्तव्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Fundamental Duties</span><span class="bilabel-hi">मौलिक कर्तव्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/10_president_of_india_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 10. President of India</span><span class="bilabel-hi">भारत के राष्ट्रपति</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">10. President of India</span><span class="bilabel-hi">भारत के राष्ट्रपति</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/11_prime_minister_council_of_ministers_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 11. Prime Minister &
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">11. Prime Minister &
                         Council of Ministers</span><span class="bilabel-hi">प्रधानमंत्री एवं मंत्रिपरिषद</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/12_parliament_of_india_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 12. Parliament of India</span><span class="bilabel-hi">भारत की संसद</span></span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Polity/ChapterNames/13_state_executive_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 13. State Executive</span><span class="bilabel-hi">राज्य कार्यपालिका</span></span><i
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">12. Parliament of India</span><span class="bilabel-hi">भारत की संसद</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/13_state_executive_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">13. State Executive</span><span class="bilabel-hi">राज्य कार्यपालिका</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Polity/ChapterNames/14_state_legislature_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 14. State Legislature</span><span class="bilabel-hi">राज्य विधानमंडल</span></span><i
+                    <a href="./Polity/ChapterNames/14_state_legislature_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">14. State Legislature</span><span class="bilabel-hi">राज्य विधानमंडल</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Polity/ChapterNames/15_supreme_court_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 15. Supreme Court</span><span class="bilabel-hi">सर्वोच्च न्यायालय</span></span><i
+                    <a href="./Polity/ChapterNames/15_supreme_court_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">15. Supreme Court</span><span class="bilabel-hi">सर्वोच्च न्यायालय</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/16_high_courts_subordinate_courts_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 16. High Courts &
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">16. High Courts &
                         Subordinate Courts</span><span class="bilabel-hi">उच्च न्यायालय एवं अधीनस्थ न्यायालय</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/17_centre_state_relations_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 17. Centre-State Relations</span><span class="bilabel-hi">केंद्र-राज्य संबंध</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">17. Centre-State Relations</span><span class="bilabel-hi">केंद्र-राज्य संबंध</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/18_emergency_provisions_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 18. Emergency Provisions</span><span class="bilabel-hi">आपातकालीन प्रावधान</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">18. Emergency Provisions</span><span class="bilabel-hi">आपातकालीन प्रावधान</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/19_local_self_government_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 19. Local Self Government</span><span class="bilabel-hi">स्थानीय स्वशासन</span></span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Polity/ChapterNames/20_official_language_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 20. Official Language</span><span class="bilabel-hi">राजभाषा</span></span><i
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">19. Local Self Government</span><span class="bilabel-hi">स्थानीय स्वशासन</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Polity/ChapterNames/20_official_language_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">20. Official Language</span><span class="bilabel-hi">राजभाषा</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/21_constitutional_amendment_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 21. Constitutional
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">21. Constitutional
                         Amendment</span><span class="bilabel-hi">संविधान संशोधन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Polity/ChapterNames/22_constitutional_non_constitutional_bodies_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 22. Constitutional &
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">22. Constitutional &
                         Non-Constitutional Bodies</span><span class="bilabel-hi">संवैधानिक एवं गैर-संवैधानिक निकाय</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                   </div>
@@ -1451,58 +1473,58 @@
               <!-- ====================== -->
               <div class="nested">
                 <div class="nested-header">
-                  <span class="bilabel"><span class="bilabel-en">💰 Economics</span><span class="bilabel-hi">अर्थशास्त्र</span></span>
+                  <span class="bilabel-icon">💰</span><span class="bilabel"><span class="bilabel-en">Economics</span><span class="bilabel-hi">अर्थशास्त्र</span></span>
                   <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="nested-body">
                   <div class="nested-links">
                     <a href="./Economics/ChapterNames/01_economics_demand_supply_market_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. Economics, Demand,
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. Economics, Demand,
                         Supply & Market</span><span class="bilabel-hi">अर्थशास्त्र, मांग, आपूर्ति एवं बाजार</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/02_economy_introduction_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Economy Introduction</span><span class="bilabel-hi">अर्थव्यवस्था एक परिचय</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Economy Introduction</span><span class="bilabel-hi">अर्थव्यवस्था एक परिचय</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/03_economic_growth_development_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 3. Economic Growth &
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. Economic Growth &
                         Development</span><span class="bilabel-hi">आर्थिक समृद्धि एवं विकास</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/04_national_income_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. National Income</span><span class="bilabel-hi">राष्ट्रीय आय</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. National Income</span><span class="bilabel-hi">राष्ट्रीय आय</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/05_economic_planning_india_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Economic Planning in
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Economic Planning in
                         India</span><span class="bilabel-hi">भारत में आर्थिक नियोजन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/06_poverty_unemployment_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Poverty & Unemployment</span><span class="bilabel-hi">गरीबी एवं बेरोजगारी</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Poverty & Unemployment</span><span class="bilabel-hi">गरीबी एवं बेरोजगारी</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/07_money_inflation_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Money & Inflation</span><span class="bilabel-hi">मुद्रा एवं मुद्रास्फीति</span></span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Economics/ChapterNames/08_banking_india_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 8. Banking in India</span><span class="bilabel-hi">भारत में बैंकिंग</span></span><i
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Money & Inflation</span><span class="bilabel-hi">मुद्रा एवं मुद्रास्फीति</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/08_banking_india_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Banking in India</span><span class="bilabel-hi">भारत में बैंकिंग</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/09_money_capital_markets_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 9. Money & Capital Markets</span><span class="bilabel-hi">मुद्रा एवं पूंजी बाजार</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Money & Capital Markets</span><span class="bilabel-hi">मुद्रा एवं पूंजी बाजार</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/10_fiscal_policy_budget_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 10. Fiscal Policy & Budget</span><span class="bilabel-hi">राजकोषीय नीति एवं बजट</span></span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Economics/ChapterNames/11_tax_system_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 11. Tax System</span><span class="bilabel-hi">कर प्रणाली</span></span><i
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">10. Fiscal Policy & Budget</span><span class="bilabel-hi">राजकोषीय नीति एवं बजट</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/11_tax_system_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">11. Tax System</span><span class="bilabel-hi">कर प्रणाली</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/12_foreign_trade_balance_payments_investment_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 12. Foreign Trade & Balance
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">12. Foreign Trade & Balance
                         of Payments</span><span class="bilabel-hi">विदेशी व्यापार एवं भुगतान संतुलन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/13_indian_agriculture_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 13. Indian Agriculture</span><span class="bilabel-hi">भारतीय कृषि</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">13. Indian Agriculture</span><span class="bilabel-hi">भारतीय कृषि</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/14_indian_industries_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 14. Indian Industries</span><span class="bilabel-hi">भारतीय उद्योग</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">14. Indian Industries</span><span class="bilabel-hi">भारतीय उद्योग</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/15_other_major_schemes_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 15. Other Major Schemes</span><span class="bilabel-hi">अन्य प्रमुख योजनाएं</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">15. Other Major Schemes</span><span class="bilabel-hi">अन्य प्रमुख योजनाएं</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/16_international_financial_institutions_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 16. International Financial
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">16. International Financial
                         Institutions</span><span class="bilabel-hi">अंतर्राष्ट्रीय वित्तीय संस्थान</span></span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Economics/ChapterNames/17_census_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 17. Census</span><span class="bilabel-hi">जनगणना</span></span><i
+                    <a href="./Economics/ChapterNames/17_census_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">17. Census</span><span class="bilabel-hi">जनगणना</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Economics/ChapterNames/18_major_committees_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 18. Major Committees</span><span class="bilabel-hi">प्रमुख समितियां</span></span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Economics/ChapterNames/19_miscellaneous_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 19. Miscellaneous</span><span class="bilabel-hi">विविध</span></span><i
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">18. Major Committees</span><span class="bilabel-hi">प्रमुख समितियां</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="./Economics/ChapterNames/19_miscellaneous_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">19. Miscellaneous</span><span class="bilabel-hi">विविध</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                   </div>
                 </div>
@@ -1513,30 +1535,30 @@
               <!-- ====================== -->
               <div class="nested">
                 <div class="nested-header">
-                  <span class="bilabel"><span class="bilabel-en">🌿 Environment & Ecology</span><span class="bilabel-hi">पर्यावरण एवं पारिस्थितिकी</span></span>
+                  <span class="bilabel-icon">🌿</span><span class="bilabel"><span class="bilabel-en">Environment & Ecology</span><span class="bilabel-hi">पर्यावरण एवं पारिस्थितिकी</span></span>
                   <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="nested-body">
                   <div class="nested-links">
                     <a href="./Envitonment & Ecology/ChapterNames/01_environment_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 1. Environment</span><span class="bilabel-hi">पर्यावरण</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. Environment</span><span class="bilabel-hi">पर्यावरण</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Envitonment & Ecology/ChapterNames/02_ecosystem_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Ecosystem</span><span class="bilabel-hi">पारिस्थितिकी
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Ecosystem</span><span class="bilabel-hi">पारिस्थितिकी
                         तंत्र</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Envitonment & Ecology/ChapterNames/03_biodiversity_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 3. Biodiversity</span><span class="bilabel-hi">जैव
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. Biodiversity</span><span class="bilabel-hi">जैव
                         विविधता</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Envitonment & Ecology/ChapterNames/04_wildlife_conservation_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Wildlife Conservation</span><span class="bilabel-hi">वन्यजीव संरक्षण</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Wildlife Conservation</span><span class="bilabel-hi">वन्यजीव संरक्षण</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Envitonment & Ecology/ChapterNames/05_climate_change_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Climate Change</span><span class="bilabel-hi">जलवायु
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Climate Change</span><span class="bilabel-hi">जलवायु
                         परिवर्तन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Envitonment & Ecology/ChapterNames/06_environmental_pollution_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Environmental Pollution</span><span class="bilabel-hi">पर्यावरणीय प्रदूषण</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Environmental Pollution</span><span class="bilabel-hi">पर्यावरणीय प्रदूषण</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Envitonment & Ecology/ChapterNames/07_sustainable_development_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Sustainable Development</span><span class="bilabel-hi">सतत विकास</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Sustainable Development</span><span class="bilabel-hi">सतत विकास</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Envitonment & Ecology/ChapterNames/08_disaster_management_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Disaster Management</span><span class="bilabel-hi">आपदा प्रबंधन</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Disaster Management</span><span class="bilabel-hi">आपदा प्रबंधन</span></span><i class="fa-solid fa-arrow-right"></i></a>
                   </div>
                 </div>
               </div>
@@ -1546,71 +1568,71 @@
               <!-- ====================== -->
               <div class="nested">
                 <div class="nested-header">
-                  <span class="bilabel"><span class="bilabel-en">📘 Static G.K.</span><span class="bilabel-hi">स्थैतिक सामान्य ज्ञान</span></span>
+                  <span class="bilabel-icon">📘</span><span class="bilabel"><span class="bilabel-en">Static G.K.</span><span class="bilabel-hi">स्थैतिक सामान्य ज्ञान</span></span>
                   <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="nested-body">
                   <div class="nested-links">
-                    <a href="./Static GK/ChapterNames/01_first_in_india_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 1. First in India</span><span class="bilabel-hi">भारत में प्रथम</span></span><i
+                    <a href="./Static GK/ChapterNames/01_first_in_india_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">1. First in India</span><span class="bilabel-hi">भारत में प्रथम</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/02_largest_highest_longest_india_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 2. Largest, Highest &
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">2. Largest, Highest &
                         Longest in India</span><span class="bilabel-hi">भारत में सबसे बड़ा, ऊँचा एवं लंबा</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Static GK/ChapterNames/03_first_in_world_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 3. First in World</span><span class="bilabel-hi">विश्व में प्रथम</span></span><i
+                    <a href="./Static GK/ChapterNames/03_first_in_world_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">3. First in World</span><span class="bilabel-hi">विश्व में प्रथम</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/04_largest_tallest_smallest_world_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 4. Largest, Tallest &
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">4. Largest, Tallest &
                         Smallest in World</span><span class="bilabel-hi">विश्व में सबसे बड़ा, ऊँचा एवं छोटा</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/05_places_related_prominent_people_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 5. Places Related to
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">5. Places Related to
                         Prominent People</span><span class="bilabel-hi">प्रमुख व्यक्तियों से संबंधित स्थान</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/06_popular_nicknames_personalities_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 6. Popular Nicknames of
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">6. Popular Nicknames of
                         Personalities</span><span class="bilabel-hi">व्यक्तियों के लोकप्रिय उपनाम</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/07_facts_major_countries_world_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 7. Facts of Major Countries</span><span class="bilabel-hi">प्रमुख देशों के तथ्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">7. Facts of Major Countries</span><span class="bilabel-hi">प्रमुख देशों के तथ्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/08_capitals_currencies_languages_world_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 8. Capitals, Currencies &
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">8. Capitals, Currencies &
                         Languages</span><span class="bilabel-hi">राजधानियां, मुद्राएं एवं भाषाएं</span></span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Static GK/ChapterNames/09_authors_books_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 9. Authors & Books</span><span class="bilabel-hi">लेखक एवं पुस्तकें</span></span><i
+                    <a href="./Static GK/ChapterNames/09_authors_books_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">9. Authors & Books</span><span class="bilabel-hi">लेखक एवं पुस्तकें</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Static GK/ChapterNames/10_awards_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 10. Awards</span><span class="bilabel-hi">पुरस्कार</span></span><i
+                    <a href="./Static GK/ChapterNames/10_awards_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">10. Awards</span><span class="bilabel-hi">पुरस्कार</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/11_sports_panorama_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 11. Sports Panorama</span><span class="bilabel-hi">खेल
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">11. Sports Panorama</span><span class="bilabel-hi">खेल
                         परिदृश्य</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/12_indian_defence_security_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 12. Indian Defence &
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">12. Indian Defence &
                         Security</span><span class="bilabel-hi">भारतीय रक्षा एवं सुरक्षा</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/13_indian_nuclear_program_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 13. Indian Nuclear Program</span><span class="bilabel-hi">भारतीय परमाणु कार्यक्रम</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">13. Indian Nuclear Program</span><span class="bilabel-hi">भारतीय परमाणु कार्यक्रम</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/14_space_program_india_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 14. Space Program of India</span><span class="bilabel-hi">भारत का अंतरिक्ष कार्यक्रम</span></span><i class="fa-solid fa-arrow-right"></i></a>
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">14. Space Program of India</span><span class="bilabel-hi">भारत का अंतरिक्ष कार्यक्रम</span></span><i class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/15_international_organization_institution_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 15. International
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">15. International
                         Organizations & Institutions</span><span class="bilabel-hi">अंतर्राष्ट्रीय संगठन एवं संस्थान</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Static GK/ChapterNames/16_computer_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 16. Computer</span><span class="bilabel-hi">कंप्यूटर</span></span><i
+                    <a href="./Static GK/ChapterNames/16_computer_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">16. Computer</span><span class="bilabel-hi">कंप्यूटर</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                     <a href="./Static GK/ChapterNames/17_unesco_world_heritage_india_mindmap.html"
-                      onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-file-lines"></i> 17. UNESCO World Heritage
+                      onclick="openPage(event)"><i class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">17. UNESCO World Heritage
                         in India</span><span class="bilabel-hi">भारत में यूनेस्को विश्व धरोहर</span></span><i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Static GK/ChapterNames/18_art_culture_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 18. Art & Culture</span><span class="bilabel-hi">कला एवं संस्कृति</span></span><i
+                    <a href="./Static GK/ChapterNames/18_art_culture_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">18. Art & Culture</span><span class="bilabel-hi">कला एवं संस्कृति</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Static GK/ChapterNames/19_abbreviation_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 19. Abbreviations</span><span class="bilabel-hi">शब्द संक्षेप</span></span><i
+                    <a href="./Static GK/ChapterNames/19_abbreviation_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">19. Abbreviations</span><span class="bilabel-hi">शब्द संक्षेप</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
-                    <a href="./Static GK/ChapterNames/20_important_days_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                          class="fa-solid fa-file-lines"></i> 20. Important Days</span><span class="bilabel-hi">महत्वपूर्ण दिवस</span></span><i
+                    <a href="./Static GK/ChapterNames/20_important_days_mindmap.html" onclick="openPage(event)"><i
+                          class="fa-solid fa-file-lines"></i><span class="bilabel"><span class="bilabel-en">20. Important Days</span><span class="bilabel-hi">महत्वपूर्ण दिवस</span></span><i
                         class="fa-solid fa-arrow-right"></i></a>
                   </div>
                 </div>
@@ -1625,55 +1647,55 @@
         <!-- ========================================================= -->
         <div class="card">
           <div class="card-header">
-            <span class="bilabel"><span class="bilabel-en">📖 English Grammar</span><span class="bilabel-hi">अंग्रेज़ी व्याकरण</span></span>
+            <span class="bilabel-icon">📖</span><span class="bilabel"><span class="bilabel-en">English Grammar</span><span class="bilabel-hi">अंग्रेज़ी व्याकरण</span></span>
             <i class="fa-solid fa-chevron-down"></i>
           </div>
           <div class="card-body">
             <div class="submenu">
-              <a href="./English Grammar/ChapterNames/01_basics_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-book"></i> 1. Basics</span><span class="bilabel-hi">मूल बातें</span></span><i
+              <a href="./English Grammar/ChapterNames/01_basics_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-book"></i><span class="bilabel"><span class="bilabel-en">1. Basics</span><span class="bilabel-hi">मूल बातें</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/02_tenses_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-clock"></i> 2. Tenses</span><span class="bilabel-hi">काल</span></span><i class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/03_conditionals_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-code-branch"></i> 3. Conditionals</span><span class="bilabel-hi">शर्तवाचक वाक्य</span></span><i
+              <a href="./English Grammar/ChapterNames/02_tenses_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-clock"></i><span class="bilabel"><span class="bilabel-en">2. Tenses</span><span class="bilabel-hi">काल</span></span><i class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/03_conditionals_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-code-branch"></i><span class="bilabel"><span class="bilabel-en">3. Conditionals</span><span class="bilabel-hi">शर्तवाचक वाक्य</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/04_nouns_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-font"></i> 4. Nouns</span><span class="bilabel-hi">संज्ञा</span></span><i class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/05_pronouns_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-user"></i> 5. Pronouns</span><span class="bilabel-hi">सर्वनाम</span></span><i
+              <a href="./English Grammar/ChapterNames/04_nouns_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-font"></i><span class="bilabel"><span class="bilabel-en">4. Nouns</span><span class="bilabel-hi">संज्ञा</span></span><i class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/05_pronouns_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-user"></i><span class="bilabel"><span class="bilabel-en">5. Pronouns</span><span class="bilabel-hi">सर्वनाम</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/06_adjectives_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-star"></i> 6. Adjectives</span><span class="bilabel-hi">विशेषण</span></span><i
+              <a href="./English Grammar/ChapterNames/06_adjectives_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-star"></i><span class="bilabel"><span class="bilabel-en">6. Adjectives</span><span class="bilabel-hi">विशेषण</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
               <a href="./English Grammar/ChapterNames/07_subject_verb_agreement_mindmap.html"
-                onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i class="fa-solid fa-check-double"></i> 7. Subject Verb Agreement</span><span class="bilabel-hi">कर्ता क्रिया सहमति</span></span><i class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/08_prepositions_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-location-dot"></i> 8. Prepositions</span><span class="bilabel-hi">संबंधबोधक</span></span><i
+                onclick="openPage(event)"><i class="fa-solid fa-check-double"></i><span class="bilabel"><span class="bilabel-en">7. Subject Verb Agreement</span><span class="bilabel-hi">कर्ता क्रिया सहमति</span></span><i class="fa-solid fa-arrow-right"></i></a>
+              <a href="./English Grammar/ChapterNames/08_prepositions_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-location-dot"></i><span class="bilabel"><span class="bilabel-en">8. Prepositions</span><span class="bilabel-hi">संबंधबोधक</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/09_verbs_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-person-running"></i> 9. Verbs</span><span class="bilabel-hi">क्रिया</span></span><i
+              <a href="./English Grammar/ChapterNames/09_verbs_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-person-running"></i><span class="bilabel"><span class="bilabel-en">9. Verbs</span><span class="bilabel-hi">क्रिया</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/10_modals_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-circle-check"></i> 10. Modals</span><span class="bilabel-hi">सहायक क्रियाएँ</span></span><i
+              <a href="./English Grammar/ChapterNames/10_modals_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-circle-check"></i><span class="bilabel"><span class="bilabel-en">10. Modals</span><span class="bilabel-hi">सहायक क्रियाएँ</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/11_adverbs_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-gauge-high"></i> 11. Adverbs</span><span class="bilabel-hi">क्रिया विशेषण</span></span><i
+              <a href="./English Grammar/ChapterNames/11_adverbs_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-gauge-high"></i><span class="bilabel"><span class="bilabel-en">11. Adverbs</span><span class="bilabel-hi">क्रिया विशेषण</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/12_conjunctions_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-link"></i> 12. Conjunctions</span><span class="bilabel-hi">समुच्चयबोधक</span></span><i
+              <a href="./English Grammar/ChapterNames/12_conjunctions_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-link"></i><span class="bilabel"><span class="bilabel-en">12. Conjunctions</span><span class="bilabel-hi">समुच्चयबोधक</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/13_articles_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-newspaper"></i> 13. Articles</span><span class="bilabel-hi">आर्टिकल्स</span></span><i
+              <a href="./English Grammar/ChapterNames/13_articles_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-newspaper"></i><span class="bilabel"><span class="bilabel-en">13. Articles</span><span class="bilabel-hi">आर्टिकल्स</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/14_question_tags_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-question"></i> 14. Question Tags</span><span class="bilabel-hi">प्रश्न टैग</span></span><i
+              <a href="./English Grammar/ChapterNames/14_question_tags_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-question"></i><span class="bilabel"><span class="bilabel-en">14. Question Tags</span><span class="bilabel-hi">प्रश्न टैग</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/15_voice_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-microphone"></i> 15. Voice</span><span class="bilabel-hi">वाच्य</span></span><i
+              <a href="./English Grammar/ChapterNames/15_voice_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-microphone"></i><span class="bilabel"><span class="bilabel-en">15. Voice</span><span class="bilabel-hi">वाच्य</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./English Grammar/ChapterNames/16_narration_mindmap.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-comments"></i> 16. Narration</span><span class="bilabel-hi">प्रत्यक्ष एवं परोक्ष कथन</span></span><i
+              <a href="./English Grammar/ChapterNames/16_narration_mindmap.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-comments"></i><span class="bilabel"><span class="bilabel-en">16. Narration</span><span class="bilabel-hi">प्रत्यक्ष एवं परोक्ष कथन</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
             </div>
           </div>
@@ -1684,46 +1706,46 @@
         <!-- ========================================================= -->
         <div class="card">
           <div class="card-header">
-            <span class="bilabel"><span class="bilabel-en">🧮 Vedic Maths</span><span class="bilabel-hi">वैदिक गणित</span></span>
+            <span class="bilabel-icon">🧮</span><span class="bilabel"><span class="bilabel-en">Vedic Maths</span><span class="bilabel-hi">वैदिक गणित</span></span>
             <i class="fa-solid fa-chevron-down"></i>
           </div>
           <div class="card-body">
             <div class="submenu">
-              <a href="./Vedic Maths/viral-maths-ch01-important-products.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-calculator"></i> 1. Important Products</span><span class="bilabel-hi">महत्वपूर्ण गुणनफल</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch01-important-products.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-calculator"></i><span class="bilabel"><span class="bilabel-en">1. Important Products</span><span class="bilabel-hi">महत्वपूर्ण गुणनफल</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch02-addition.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-plus"></i> 2. Addition</span><span class="bilabel-hi">जोड़</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch02-addition.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-plus"></i><span class="bilabel"><span class="bilabel-en">2. Addition</span><span class="bilabel-hi">जोड़</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch03-subtraction.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-minus"></i> 3. Subtraction</span><span class="bilabel-hi">घटाव</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch03-subtraction.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-minus"></i><span class="bilabel"><span class="bilabel-en">3. Subtraction</span><span class="bilabel-hi">घटाव</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch04-multiplication.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-xmark"></i> 4. Multiplication</span><span class="bilabel-hi">गुणा</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch04-multiplication.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-xmark"></i><span class="bilabel"><span class="bilabel-en">4. Multiplication</span><span class="bilabel-hi">गुणा</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch05-division.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-divide"></i> 5. Division</span><span class="bilabel-hi">भाग</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch05-division.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-divide"></i><span class="bilabel"><span class="bilabel-en">5. Division</span><span class="bilabel-hi">भाग</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch06-squares.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-superscript"></i> 6. Squares</span><span class="bilabel-hi">वर्ग</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch06-squares.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-superscript"></i><span class="bilabel"><span class="bilabel-en">6. Squares</span><span class="bilabel-hi">वर्ग</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch07-square-roots.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-square-root-variable"></i> 7. Square Roots</span><span class="bilabel-hi">वर्गमूल</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch07-square-roots.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-square-root-variable"></i><span class="bilabel"><span class="bilabel-en">7. Square Roots</span><span class="bilabel-hi">वर्गमूल</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch08-cube-cube-roots.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-cube"></i> 8. Cube & Cube Roots</span><span class="bilabel-hi">घन एवं घनमूल</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch08-cube-cube-roots.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-cube"></i><span class="bilabel"><span class="bilabel-en">8. Cube & Cube Roots</span><span class="bilabel-hi">घन एवं घनमूल</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch09-percentage.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-percent"></i> 9. Percentage</span><span class="bilabel-hi">प्रतिशत</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch09-percentage.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-percent"></i><span class="bilabel"><span class="bilabel-en">9. Percentage</span><span class="bilabel-hi">प्रतिशत</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch10-decimal.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-ellipsis"></i> 10. Decimal</span><span class="bilabel-hi">दशमलव</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch10-decimal.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-ellipsis"></i><span class="bilabel"><span class="bilabel-en">10. Decimal</span><span class="bilabel-hi">दशमलव</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch11-fraction.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-chart-pie"></i> 11. Fraction</span><span class="bilabel-hi">भिन्न</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch11-fraction.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-chart-pie"></i><span class="bilabel"><span class="bilabel-en">11. Fraction</span><span class="bilabel-hi">भिन्न</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
-              <a href="./Vedic Maths/viral-maths-ch12-approximation.html" onclick="openPage(event)"><span class="bilabel"><span class="bilabel-en"><i
-                    class="fa-solid fa-equals"></i> 12. Approximation</span><span class="bilabel-hi">सन्निकटन</span></span><i
+              <a href="./Vedic Maths/viral-maths-ch12-approximation.html" onclick="openPage(event)"><i
+                    class="fa-solid fa-equals"></i><span class="bilabel"><span class="bilabel-en">12. Approximation</span><span class="bilabel-hi">सन्निकटन</span></span><i
                   class="fa-solid fa-arrow-right"></i></a>
             </div>
           </div>
