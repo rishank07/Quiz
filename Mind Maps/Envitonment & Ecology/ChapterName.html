@@ -111,7 +111,15 @@
       font-size: 13px;
       opacity: .6;
     }
-  </style>
+  
+    /* ===== Bilingual label — premium stacked style (added) ===== */
+    .bilabel { display: flex; flex-direction: column; line-height: 1.35; text-align: inherit; }
+    .bilabel-en { font-weight: 700; }
+    .bilabel-hi { font-size: 0.82em; opacity: 0.78; font-weight: 500; margin-top: 3px; letter-spacing: 0.1px; }
+    @media (max-width: 480px) {
+      .bilabel-hi { font-size: 0.78em; }
+    }
+</style>
 
 </head>
 
@@ -132,58 +140,42 @@
 
         <li>
           <a href="./ChapterNames/01_environment_mindmap.html" onclick="openPage(event)"
-            data-original="1. Environment / पर्यावरण">
-            1. Environment / पर्यावरण
-          </a>
+            data-original="1. Environment / पर्यावरण"><span class="bilabel"><span class="bilabel-en">1. Environment</span><span class="bilabel-hi">पर्यावरण</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/02_ecosystem_mindmap.html" onclick="openPage(event)"
-            data-original="2. Ecosystem / पारिस्थितिकी तंत्र">
-            2. Ecosystem / पारिस्थितिकी तंत्र
-          </a>
+            data-original="2. Ecosystem / पारिस्थितिकी तंत्र"><span class="bilabel"><span class="bilabel-en">2. Ecosystem</span><span class="bilabel-hi">पारिस्थितिकी तंत्र</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/03_biodiversity_mindmap.html" onclick="openPage(event)"
-            data-original="3. Biodiversity / जैव विविधता">
-            3. Biodiversity / जैव विविधता
-          </a>
+            data-original="3. Biodiversity / जैव विविधता"><span class="bilabel"><span class="bilabel-en">3. Biodiversity</span><span class="bilabel-hi">जैव विविधता</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/04_wildlife_conservation_mindmap.html" onclick="openPage(event)"
-            data-original="4. Wildlife Conservation / वन्यजीव संरक्षण">
-            4. Wildlife Conservation / वन्यजीव संरक्षण
-          </a>
+            data-original="4. Wildlife Conservation / वन्यजीव संरक्षण"><span class="bilabel"><span class="bilabel-en">4. Wildlife Conservation</span><span class="bilabel-hi">वन्यजीव संरक्षण</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/05_climate_change_mindmap.html" onclick="openPage(event)"
-            data-original="5. Climate Change / जलवायु परिवर्तन">
-            5. Climate Change / जलवायु परिवर्तन
-          </a>
+            data-original="5. Climate Change / जलवायु परिवर्तन"><span class="bilabel"><span class="bilabel-en">5. Climate Change</span><span class="bilabel-hi">जलवायु परिवर्तन</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/06_environmental_pollution_mindmap.html" onclick="openPage(event)"
-            data-original="6. Environmental Pollution / पर्यावरण प्रदूषण">
-            6. Environmental Pollution / पर्यावरण प्रदूषण
-          </a>
+            data-original="6. Environmental Pollution / पर्यावरण प्रदूषण"><span class="bilabel"><span class="bilabel-en">6. Environmental Pollution</span><span class="bilabel-hi">पर्यावरण प्रदूषण</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/07_sustainable_development_mindmap.html" onclick="openPage(event)"
-            data-original="7. Sustainable Development / सतत विकास">
-            7. Sustainable Development / सतत विकास
-          </a>
+            data-original="7. Sustainable Development / सतत विकास"><span class="bilabel"><span class="bilabel-en">7. Sustainable Development</span><span class="bilabel-hi">सतत विकास</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/08_disaster_management_mindmap.html" onclick="openPage(event)"
-            data-original="8. Disaster and Disaster Management / आपदा एवं आपदा प्रबंधन">
-            8. Disaster and Disaster Management / आपदा एवं आपदा प्रबंधन
-          </a>
+            data-original="8. Disaster and Disaster Management / आपदा एवं आपदा प्रबंधन"><span class="bilabel"><span class="bilabel-en">8. Disaster and Disaster Management</span><span class="bilabel-hi">आपदा एवं आपदा प्रबंधन</span></span></a>
         </li>
 
       </ul>
@@ -196,6 +188,25 @@
   </div>
 
   <script>
+    function efpRestoreBilabel(a) {
+      var label = a.dataset.original.replace(/\s+/g, " ").trim();
+      var segs = label.split(" / ");
+      var splitIdx = -1;
+      for (var i = 0; i < segs.length; i++) {
+        var dev = (segs[i].match(/[\u0900-\u097F]/g) || []).length;
+        var lat = (segs[i].match(/[A-Za-z]/g) || []).length;
+        if (dev > lat) { splitIdx = i; break; }
+      }
+      if (splitIdx > 0) {
+        var en = segs.slice(0, splitIdx).join(" / ");
+        var hi = segs.slice(splitIdx).join(" / ");
+        a.innerHTML = '<span class="bilabel"><span class="bilabel-en">' + en +
+          '</span><span class="bilabel-hi">' + hi + '</span></span>';
+      } else {
+        a.innerText = label;
+      }
+    }
+
 
     function openPage(event) {
 
@@ -221,7 +232,7 @@
 
       document.querySelectorAll("a[data-original]").forEach(function (a) {
 
-        a.innerText = a.dataset.original;
+        efpRestoreBilabel(a);
         a.style.opacity = "1";
 
       });

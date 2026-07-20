@@ -130,7 +130,15 @@
       font-size: 13px;
       opacity: .6;
     }
-  </style>
+  
+    /* ===== Bilingual label — premium stacked style (added) ===== */
+    .bilabel { display: flex; flex-direction: column; line-height: 1.35; text-align: inherit; }
+    .bilabel-en { font-weight: 700; }
+    .bilabel-hi { font-size: 0.82em; opacity: 0.78; font-weight: 500; margin-top: 3px; letter-spacing: 0.1px; }
+    @media (max-width: 480px) {
+      .bilabel-hi { font-size: 0.78em; }
+    }
+</style>
 </head>
 
 <body>
@@ -158,11 +166,7 @@
           <div class="sub-menu">
 
             <a href="./Files/All one Word.html" target="_blank" rel="noopener noreferrer" onclick="openPage(event)"
-              data-original="A1. All One Word Substitutions Asked in SSC Exams / SSC परीक्षाओं में पूछे गए सभी एक शब्द प्रतिस्थापन">
-
-              A1. All One Word Substitutions Asked in SSC Exams / SSC परीक्षाओं में पूछे गए सभी एक शब्द प्रतिस्थापन
-
-            </a>
+              data-original="A1. All One Word Substitutions Asked in SSC Exams / SSC परीक्षाओं में पूछे गए सभी एक शब्द प्रतिस्थापन"><span class="bilabel"><span class="bilabel-en">A1. All One Word Substitutions Asked in SSC Exams</span><span class="bilabel-hi">SSC परीक्षाओं में पूछे गए सभी एक शब्द प्रतिस्थापन</span></span></a>
 
           </div>
 
@@ -178,11 +182,7 @@
 
             <a href="./Files/Idioms and Phrases.html" target="_blank" rel="noopener noreferrer"
               onclick="openPage(event)"
-              data-original="B1. All Idioms / Phrases Asked in SSC Exams / SSC परीक्षाओं में पूछे गए सभी मुहावरे एवं वाक्यांश">
-
-              B1. All Idioms / Phrases Asked in SSC Exams / SSC परीक्षाओं में पूछे गए सभी मुहावरे एवं वाक्यांश
-
-            </a>
+              data-original="B1. All Idioms / Phrases Asked in SSC Exams / SSC परीक्षाओं में पूछे गए सभी मुहावरे एवं वाक्यांश"><span class="bilabel"><span class="bilabel-en">B1. All Idioms / Phrases Asked in SSC Exams</span><span class="bilabel-hi">SSC परीक्षाओं में पूछे गए सभी मुहावरे एवं वाक्यांश</span></span></a>
 
           </div>
 
@@ -199,11 +199,7 @@
           <div class="sub-menu">
 
             <a href="./Files/Syno & Anto.html" target="_blank" rel="noopener noreferrer" onclick="openPage(event)"
-              data-original="C1. Synonyms + Antonyms (Common List : SSC) / SSC हेतु सामान्य पर्यायवाची एवं विलोम शब्द सूची">
-
-              C1. Synonyms + Antonyms (Common List : SSC) / SSC हेतु सामान्य पर्यायवाची एवं विलोम शब्द सूची
-
-            </a>
+              data-original="C1. Synonyms + Antonyms (Common List : SSC) / SSC हेतु सामान्य पर्यायवाची एवं विलोम शब्द सूची"><span class="bilabel"><span class="bilabel-en">C1. Synonyms + Antonyms (Common List : SSC)</span><span class="bilabel-hi">SSC हेतु सामान्य पर्यायवाची एवं विलोम शब्द सूची</span></span></a>
 
           </div>
 
@@ -218,11 +214,7 @@
           <div class="sub-menu">
 
             <a href="./Files/All Spelling.html" target="_blank" rel="noopener noreferrer" onclick="openPage(event)"
-              data-original="E1. All Spelling Questions Asked in SSC Exams / SSC परीक्षाओं में पूछे गए सभी वर्तनी प्रश्न">
-
-              E1. All Spelling Questions Asked in SSC Exams / SSC परीक्षाओं में पूछे गए सभी वर्तनी प्रश्न
-
-            </a>
+              data-original="E1. All Spelling Questions Asked in SSC Exams / SSC परीक्षाओं में पूछे गए सभी वर्तनी प्रश्न"><span class="bilabel"><span class="bilabel-en">E1. All Spelling Questions Asked in SSC Exams</span><span class="bilabel-hi">SSC परीक्षाओं में पूछे गए सभी वर्तनी प्रश्न</span></span></a>
 
           </div>
 
@@ -238,6 +230,25 @@
   </div>
 
   <script>
+    function efpRestoreBilabel(a) {
+      var label = a.dataset.original.replace(/\s+/g, " ").trim();
+      var segs = label.split(" / ");
+      var splitIdx = -1;
+      for (var i = 0; i < segs.length; i++) {
+        var dev = (segs[i].match(/[\u0900-\u097F]/g) || []).length;
+        var lat = (segs[i].match(/[A-Za-z]/g) || []).length;
+        if (dev > lat) { splitIdx = i; break; }
+      }
+      if (splitIdx > 0) {
+        var en = segs.slice(0, splitIdx).join(" / ");
+        var hi = segs.slice(splitIdx).join(" / ");
+        a.innerHTML = '<span class="bilabel"><span class="bilabel-en">' + en +
+          '</span><span class="bilabel-hi">' + hi + '</span></span>';
+      } else {
+        a.innerText = label;
+      }
+    }
+
 
     function openPage(event) {
 
@@ -264,7 +275,7 @@
       document.querySelectorAll("a").forEach(function (a) {
 
         if (a.dataset.original) {
-          a.innerText = a.dataset.original;
+          efpRestoreBilabel(a);
           a.style.opacity = "1";
         }
 

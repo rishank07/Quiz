@@ -270,7 +270,15 @@
       display: block;
     }
 
-  </style>
+  
+    /* ===== Bilingual label — premium stacked style (added) ===== */
+    .bilabel { display: flex; flex-direction: column; line-height: 1.35; text-align: inherit; }
+    .bilabel-en { font-weight: 700; }
+    .bilabel-hi { font-size: 0.82em; opacity: 0.78; font-weight: 500; margin-top: 3px; letter-spacing: 0.1px; }
+    @media (max-width: 480px) {
+      .bilabel-hi { font-size: 0.78em; }
+    }
+</style>
 </head>
 
 <body>
@@ -295,27 +303,19 @@
 
     <ul class="menu">
       <li>
-        <a href="./History/HistoryParts.html" onclick="openPage(event)" data-original=" History / इतिहास">
-          History / इतिहास
-        </a>
+        <a href="./History/HistoryParts.html" onclick="openPage(event)" data-original=" History / इतिहास"><span class="bilabel"><span class="bilabel-en">History</span><span class="bilabel-hi">इतिहास</span></span></a>
       </li>
 
       <li>
-        <a href="./Science/ScienceParts.html" onclick="openPage(event)" data-original="SCIENCE / विज्ञान">
-          SCIENCE / विज्ञान
-        </a>
+        <a href="./Science/ScienceParts.html" onclick="openPage(event)" data-original="SCIENCE / विज्ञान"><span class="bilabel"><span class="bilabel-en">SCIENCE</span><span class="bilabel-hi">विज्ञान</span></span></a>
       </li>
 
       <li>
-        <a href="./Polity/ChapterName.html" onclick="openPage(event)" data-original="POLITY / राजनीति विज्ञान">
-          POLITY / राजनीति विज्ञान
-        </a>
+        <a href="./Polity/ChapterName.html" onclick="openPage(event)" data-original="POLITY / राजनीति विज्ञान"><span class="bilabel"><span class="bilabel-en">POLITY</span><span class="bilabel-hi">राजनीति विज्ञान</span></span></a>
       </li>
 
       <li>
-        <a href="./Geography/GeographyParts.html" onclick="openPage(event)" data-original="GEOGRAPHY / भूगोल">
-          GEOGRAPHY / भूगोल
-        </a>
+        <a href="./Geography/GeographyParts.html" onclick="openPage(event)" data-original="GEOGRAPHY / भूगोल"><span class="bilabel"><span class="bilabel-en">GEOGRAPHY</span><span class="bilabel-hi">भूगोल</span></span></a>
       </li>
 
 
@@ -456,7 +456,22 @@
 
     window.addEventListener("pageshow", function () {
       document.querySelectorAll("a[data-original]").forEach(function (a) {
-        a.innerText = a.dataset.original;
+        var label = a.dataset.original.replace(/\s+/g, " ").trim();
+        var segs = label.split(" / ");
+        var splitIdx = -1;
+        for (var i = 0; i < segs.length; i++) {
+          var dev = (segs[i].match(/[\u0900-\u097F]/g) || []).length;
+          var lat = (segs[i].match(/[A-Za-z]/g) || []).length;
+          if (dev > lat) { splitIdx = i; break; }
+        }
+        if (splitIdx > 0) {
+          var en = segs.slice(0, splitIdx).join(" / ");
+          var hi = segs.slice(splitIdx).join(" / ");
+          a.innerHTML = '<span class="bilabel"><span class="bilabel-en">' + en +
+            '</span><span class="bilabel-hi">' + hi + '</span></span>';
+        } else {
+          a.innerText = label;
+        }
         a.style.opacity = "1";
       });
     });

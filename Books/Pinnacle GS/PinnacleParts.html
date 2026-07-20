@@ -251,7 +251,15 @@
     .ef-search-noresults.show {
       display: block;
     }
-  </style>
+  
+    /* ===== Bilingual label — premium stacked style (added) ===== */
+    .bilabel { display: flex; flex-direction: column; line-height: 1.35; text-align: inherit; }
+    .bilabel-en { font-weight: 700; }
+    .bilabel-hi { font-size: 0.82em; opacity: 0.78; font-weight: 500; margin-top: 3px; letter-spacing: 0.1px; }
+    @media (max-width: 480px) {
+      .bilabel-hi { font-size: 0.78em; }
+    }
+</style>
 </head>
 
 <body>
@@ -280,16 +288,12 @@
 
         <li>
           <a href="./PinnacleParts/SSC/SubjectName.html" onclick="openPage(event)"
-            data-original="SSC GS / एसएससी सामान्य अध्ययन">
-            SSC GS / एसएससी सामान्य अध्ययन
-          </a>
+            data-original="SSC GS / एसएससी सामान्य अध्ययन"><span class="bilabel"><span class="bilabel-en">SSC GS</span><span class="bilabel-hi">एसएससी सामान्य अध्ययन</span></span></a>
         </li>
 
         <li>
           <a href="./PinnacleParts/Railway/SubjectName.html" onclick="openPage(event)"
-            data-original="Railway GS / रेलवे सामान्य अध्ययन">
-            Railway GS / रेलवे सामान्य अध्ययन
-          </a>
+            data-original="Railway GS / रेलवे सामान्य अध्ययन"><span class="bilabel"><span class="bilabel-en">Railway GS</span><span class="bilabel-hi">रेलवे सामान्य अध्ययन</span></span></a>
         </li>
 
       </ul>
@@ -417,6 +421,25 @@
   </script>
 
   <script>
+    function efpRestoreBilabel(a) {
+      var label = a.dataset.original.replace(/\s+/g, " ").trim();
+      var segs = label.split(" / ");
+      var splitIdx = -1;
+      for (var i = 0; i < segs.length; i++) {
+        var dev = (segs[i].match(/[\u0900-\u097F]/g) || []).length;
+        var lat = (segs[i].match(/[A-Za-z]/g) || []).length;
+        if (dev > lat) { splitIdx = i; break; }
+      }
+      if (splitIdx > 0) {
+        var en = segs.slice(0, splitIdx).join(" / ");
+        var hi = segs.slice(splitIdx).join(" / ");
+        a.innerHTML = '<span class="bilabel"><span class="bilabel-en">' + en +
+          '</span><span class="bilabel-hi">' + hi + '</span></span>';
+      } else {
+        a.innerText = label;
+      }
+    }
+
 
     function openPage(event) {
 
@@ -443,7 +466,7 @@
       document.querySelectorAll("a").forEach(function (a) {
 
         if (a.dataset.original) {
-          a.innerText = a.dataset.original;
+          efpRestoreBilabel(a);
           a.style.opacity = "1";
         }
 

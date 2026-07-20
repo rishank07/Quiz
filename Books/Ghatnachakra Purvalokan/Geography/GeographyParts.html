@@ -124,7 +124,15 @@
         transform: translateY(0);
       }
     }
-  </style>
+  
+    /* ===== Bilingual label — premium stacked style (added) ===== */
+    .bilabel { display: flex; flex-direction: column; line-height: 1.35; text-align: inherit; }
+    .bilabel-en { font-weight: 700; }
+    .bilabel-hi { font-size: 0.82em; opacity: 0.78; font-weight: 500; margin-top: 3px; letter-spacing: 0.1px; }
+    @media (max-width: 480px) {
+      .bilabel-hi { font-size: 0.78em; }
+    }
+</style>
 </head>
 
 <body>
@@ -146,11 +154,7 @@
       <li>
 
         <a href="./Indian Geography/ChapterName.html" onclick="openPage(event)"
-          data-original="Indian Geography / भारतीय भूगोल">
-
-          Indian Geography / भारतीय भूगोल
-
-        </a>
+          data-original="Indian Geography / भारतीय भूगोल"><span class="bilabel"><span class="bilabel-en">Indian Geography</span><span class="bilabel-hi">भारतीय भूगोल</span></span></a>
 
       </li>
 
@@ -165,6 +169,25 @@
   </div>
 
   <script>
+    function efpRestoreBilabel(a) {
+      var label = a.dataset.original.replace(/\s+/g, " ").trim();
+      var segs = label.split(" / ");
+      var splitIdx = -1;
+      for (var i = 0; i < segs.length; i++) {
+        var dev = (segs[i].match(/[\u0900-\u097F]/g) || []).length;
+        var lat = (segs[i].match(/[A-Za-z]/g) || []).length;
+        if (dev > lat) { splitIdx = i; break; }
+      }
+      if (splitIdx > 0) {
+        var en = segs.slice(0, splitIdx).join(" / ");
+        var hi = segs.slice(splitIdx).join(" / ");
+        a.innerHTML = '<span class="bilabel"><span class="bilabel-en">' + en +
+          '</span><span class="bilabel-hi">' + hi + '</span></span>';
+      } else {
+        a.innerText = label;
+      }
+    }
+
 
     function openPage(event) {
 
@@ -188,7 +211,7 @@
 
       document.querySelectorAll("a[data-original]").forEach(function (a) {
 
-        a.innerText = a.dataset.original;
+        efpRestoreBilabel(a);
         a.style.opacity = "1";
 
       });

@@ -108,7 +108,15 @@
       font-size: 13px;
       opacity: .6;
     }
-  </style>
+  
+    /* ===== Bilingual label — premium stacked style (added) ===== */
+    .bilabel { display: flex; flex-direction: column; line-height: 1.35; text-align: inherit; }
+    .bilabel-en { font-weight: 700; }
+    .bilabel-hi { font-size: 0.82em; opacity: 0.78; font-weight: 500; margin-top: 3px; letter-spacing: 0.1px; }
+    @media (max-width: 480px) {
+      .bilabel-hi { font-size: 0.78em; }
+    }
+</style>
 
 </head>
 
@@ -165,9 +173,7 @@
         <li>
 
           <a href="./ChapterNames/Social Sectors.html" onclick="openPage(event)"
-            data-original="Chapter 7: Social Sectors / सामाजिक क्षेत्र">
-            Chapter 7: Social Sectors / सामाजिक क्षेत्र
-          </a>
+            data-original="Chapter 7: Social Sectors / सामाजिक क्षेत्र"><span class="bilabel"><span class="bilabel-en">Chapter 7: Social Sectors</span><span class="bilabel-hi">सामाजिक क्षेत्र</span></span></a>
 
         </li>
 
@@ -175,44 +181,34 @@
         <li>
 
           <a href="./ChapterNames/Agriculture.html" onclick="openPage(event)"
-            data-original="Chapter 8: Agriculture / कृषि">
-            Chapter 8: Agriculture / कृषि
-          </a>
+            data-original="Chapter 8: Agriculture / कृषि"><span class="bilabel"><span class="bilabel-en">Chapter 8: Agriculture</span><span class="bilabel-hi">कृषि</span></span></a>
 
         </li>
 
 
         <li>
 
-          <a href="./ChapterNames/Industry.html" onclick="openPage(event)" data-original="Chapter 9: Industry / उद्योग">
-            Chapter 9: Industry / उद्योग
-          </a>
+          <a href="./ChapterNames/Industry.html" onclick="openPage(event)" data-original="Chapter 9: Industry / उद्योग"><span class="bilabel"><span class="bilabel-en">Chapter 9: Industry</span><span class="bilabel-hi">उद्योग</span></span></a>
 
         </li>
 
         <li>
 
-          <a href="./ChapterNames/Money.html" onclick="openPage(event)" data-original="Chapter 10: Money / मुद्रा">
-            Chapter 10: Money / मुद्रा
-          </a>
+          <a href="./ChapterNames/Money.html" onclick="openPage(event)" data-original="Chapter 10: Money / मुद्रा"><span class="bilabel"><span class="bilabel-en">Chapter 10: Money</span><span class="bilabel-hi">मुद्रा</span></span></a>
 
         </li>
 
 
         <li>
 
-          <a href="./ChapterNames/Banking.html" onclick="openPage(event)" data-original="Chapter 11: Banking / बैंकिंग">
-            Chapter 11: Banking / बैंकिंग
-          </a>
+          <a href="./ChapterNames/Banking.html" onclick="openPage(event)" data-original="Chapter 11: Banking / बैंकिंग"><span class="bilabel"><span class="bilabel-en">Chapter 11: Banking</span><span class="bilabel-hi">बैंकिंग</span></span></a>
 
         </li>
 
         <li>
 
           <a href="./ChapterNames/Public Finance.html" onclick="openPage(event)"
-            data-original="Chapter 12: Public Finance / लोक वित्त">
-            Chapter 12: Public Finance / लोक वित्त
-          </a>
+            data-original="Chapter 12: Public Finance / लोक वित्त"><span class="bilabel"><span class="bilabel-en">Chapter 12: Public Finance</span><span class="bilabel-hi">लोक वित्त</span></span></a>
 
         </li>
 
@@ -220,9 +216,7 @@
         <li>
 
           <a href="./ChapterNames/Foreign Trade.html" onclick="openPage(event)"
-            data-original="Chapter 13: Foreign Trade / विदेश व्यापार">
-            Chapter 13: Foreign Trade / विदेश व्यापार
-          </a>
+            data-original="Chapter 13: Foreign Trade / विदेश व्यापार"><span class="bilabel"><span class="bilabel-en">Chapter 13: Foreign Trade</span><span class="bilabel-hi">विदेश व्यापार</span></span></a>
 
         </li>
 
@@ -230,9 +224,7 @@
         <li>
 
           <a href="./ChapterNames/International Organisations.html" onclick="openPage(event)"
-            data-original="Chapter 14: International Organisation / अंतर्राष्ट्रीय संगठन">
-            Chapter 14: International Organisation / अंतर्राष्ट्रीय संगठन
-          </a>
+            data-original="Chapter 14: International Organisation / अंतर्राष्ट्रीय संगठन"><span class="bilabel"><span class="bilabel-en">Chapter 14: International Organisation</span><span class="bilabel-hi">अंतर्राष्ट्रीय संगठन</span></span></a>
 
         </li>
 
@@ -240,9 +232,7 @@
         <li>
 
           <a href="./ChapterNames/Miscellaneous.html" onclick="openPage(event)"
-            data-original="Chapter 15: Miscellaneous / विविध">
-            Chapter 15: Miscellaneous / विविध
-          </a>
+            data-original="Chapter 15: Miscellaneous / विविध"><span class="bilabel"><span class="bilabel-en">Chapter 15: Miscellaneous</span><span class="bilabel-hi">विविध</span></span></a>
 
         </li>
 
@@ -256,6 +246,25 @@
   </div>
 
   <script>
+    function efpRestoreBilabel(a) {
+      var label = a.dataset.original.replace(/\s+/g, " ").trim();
+      var segs = label.split(" / ");
+      var splitIdx = -1;
+      for (var i = 0; i < segs.length; i++) {
+        var dev = (segs[i].match(/[\u0900-\u097F]/g) || []).length;
+        var lat = (segs[i].match(/[A-Za-z]/g) || []).length;
+        if (dev > lat) { splitIdx = i; break; }
+      }
+      if (splitIdx > 0) {
+        var en = segs.slice(0, splitIdx).join(" / ");
+        var hi = segs.slice(splitIdx).join(" / ");
+        a.innerHTML = '<span class="bilabel"><span class="bilabel-en">' + en +
+          '</span><span class="bilabel-hi">' + hi + '</span></span>';
+      } else {
+        a.innerText = label;
+      }
+    }
+
 
     function openPage(event) {
 
@@ -282,7 +291,7 @@
       document.querySelectorAll("a").forEach(function (a) {
 
         if (a.dataset.original) {
-          a.innerText = a.dataset.original;
+          efpRestoreBilabel(a);
           a.style.opacity = "1";
         }
 

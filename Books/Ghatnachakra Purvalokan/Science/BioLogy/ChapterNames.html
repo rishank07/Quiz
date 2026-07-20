@@ -136,7 +136,15 @@
       font-size: 13px;
       opacity: 0.6;
     }
-  </style>
+  
+    /* ===== Bilingual label — premium stacked style (added) ===== */
+    .bilabel { display: flex; flex-direction: column; line-height: 1.35; text-align: inherit; }
+    .bilabel-en { font-weight: 700; }
+    .bilabel-hi { font-size: 0.82em; opacity: 0.78; font-weight: 500; margin-top: 3px; letter-spacing: 0.1px; }
+    @media (max-width: 480px) {
+      .bilabel-hi { font-size: 0.78em; }
+    }
+</style>
 </head>
 
 <body>
@@ -155,43 +163,31 @@
 
         <li>
           <a href="./ChapterNames/Subdivisions of Biology.html" onclick="openPage(event)"
-            data-original="Chapter 1: Subdivisions of Biology / जीवविज्ञान की शाखाएँ">
-            Chapter 1: Subdivisions of Biology / जीवविज्ञान की शाखाएँ
-          </a>
+            data-original="Chapter 1: Subdivisions of Biology / जीवविज्ञान की शाखाएँ"><span class="bilabel"><span class="bilabel-en">Chapter 1: Subdivisions of Biology</span><span class="bilabel-hi">जीवविज्ञान की शाखाएँ</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/Evolution of Life.html" onclick="openPage(event)"
-            data-original="Chapter 2: Evolution of Life / जीवन का विकास">
-            Chapter 2: Evolution of Life / जीवन का विकास
-          </a>
+            data-original="Chapter 2: Evolution of Life / जीवन का विकास"><span class="bilabel"><span class="bilabel-en">Chapter 2: Evolution of Life</span><span class="bilabel-hi">जीवन का विकास</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/Taxonomy.html" onclick="openPage(event)"
-            data-original="Chapter 3: Taxonomy / वर्गिकी">
-            Chapter 3: Taxonomy / वर्गिकी
-          </a>
+            data-original="Chapter 3: Taxonomy / वर्गिकी"><span class="bilabel"><span class="bilabel-en">Chapter 3: Taxonomy</span><span class="bilabel-hi">वर्गिकी</span></span></a>
         </li>
 
         <li>
-          <a href="./ChapterNames/Cell.html" onclick="openPage(event)" data-original="Chapter 4: Cell / कोशिका">
-            Chapter 4: Cell / कोशिका
-          </a>
+          <a href="./ChapterNames/Cell.html" onclick="openPage(event)" data-original="Chapter 4: Cell / कोशिका"><span class="bilabel"><span class="bilabel-en">Chapter 4: Cell</span><span class="bilabel-hi">कोशिका</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/Heredity.html" onclick="openPage(event)"
-            data-original="Chapter 5: Heredity / वंशागति">
-            Chapter 5: Heredity / वंशागति
-          </a>
+            data-original="Chapter 5: Heredity / वंशागति"><span class="bilabel"><span class="bilabel-en">Chapter 5: Heredity</span><span class="bilabel-hi">वंशागति</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/Biofertilizers.html" onclick="openPage(event)"
-            data-original="Chapter 6: Biofertilizers / जैव उर्वरक">
-            Chapter 6: Biofertilizers / जैव उर्वरक
-          </a>
+            data-original="Chapter 6: Biofertilizers / जैव उर्वरक"><span class="bilabel"><span class="bilabel-en">Chapter 6: Biofertilizers</span><span class="bilabel-hi">जैव उर्वरक</span></span></a>
         </li>
 
         <!-- Chapter 7 -->
@@ -244,9 +240,7 @@
               प्रजनन</a>
 
             <a href="./ChapterNames/Plant  Economic Importance.html" onclick="openPage(event)"
-              data-original="V. Plant: Economic Importance / पादप का आर्थिक महत्व">
-              V. Plant: Economic Importance / पादप का आर्थिक महत्व
-            </a>
+              data-original="V. Plant: Economic Importance / पादप का आर्थिक महत्व"><span class="bilabel"><span class="bilabel-en">V. Plant: Economic Importance</span><span class="bilabel-hi">पादप का आर्थिक महत्व</span></span></a>
 
 
           </div>
@@ -283,16 +277,12 @@
 
         <li>
           <a href="./ChapterNames/Genetic Engineering and Biotechnology.html" onclick="openPage(event)"
-            data-original="Chapter 10: Genetic Engineering and Biotechnology / आनुवंशिक अभियांत्रिकी एवं जैव प्रौद्योगिकी">
-            Chapter 10: Genetic Engineering and Biotechnology / आनुवंशिक अभियांत्रिकी एवं जैव प्रौद्योगिकी
-          </a>
+            data-original="Chapter 10: Genetic Engineering and Biotechnology / आनुवंशिक अभियांत्रिकी एवं जैव प्रौद्योगिकी"><span class="bilabel"><span class="bilabel-en">Chapter 10: Genetic Engineering and Biotechnology</span><span class="bilabel-hi">आनुवंशिक अभियांत्रिकी एवं जैव प्रौद्योगिकी</span></span></a>
         </li>
 
         <li>
           <a href="./ChapterNames/Miscellaneous.html" onclick="openPage(event)"
-            data-original="Chapter 11: Miscellaneous / विविध">
-            Chapter 11: Miscellaneous / विविध
-          </a>
+            data-original="Chapter 11: Miscellaneous / विविध"><span class="bilabel"><span class="bilabel-en">Chapter 11: Miscellaneous</span><span class="bilabel-hi">विविध</span></span></a>
         </li>
 
       </ul>
@@ -303,6 +293,25 @@
   </div>
 
   <script>
+    function efpRestoreBilabel(a) {
+      var label = a.dataset.original.replace(/\s+/g, " ").trim();
+      var segs = label.split(" / ");
+      var splitIdx = -1;
+      for (var i = 0; i < segs.length; i++) {
+        var dev = (segs[i].match(/[\u0900-\u097F]/g) || []).length;
+        var lat = (segs[i].match(/[A-Za-z]/g) || []).length;
+        if (dev > lat) { splitIdx = i; break; }
+      }
+      if (splitIdx > 0) {
+        var en = segs.slice(0, splitIdx).join(" / ");
+        var hi = segs.slice(splitIdx).join(" / ");
+        a.innerHTML = '<span class="bilabel"><span class="bilabel-en">' + en +
+          '</span><span class="bilabel-hi">' + hi + '</span></span>';
+      } else {
+        a.innerText = label;
+      }
+    }
+
     function openPage(event) {
       event.preventDefault();
       const linkEl = event.currentTarget;
@@ -323,7 +332,7 @@
     window.addEventListener("pageshow", function () {
       document.querySelectorAll("a").forEach(function (a) {
         if (a.dataset.original) {
-          a.innerText = a.dataset.original;
+          efpRestoreBilabel(a);
           a.style.opacity = "1";
         }
       });
