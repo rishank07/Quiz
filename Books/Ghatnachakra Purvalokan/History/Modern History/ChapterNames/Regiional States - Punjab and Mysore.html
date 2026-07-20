@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="hi">
   <head>
+  <script src="../../../../../bookmarks.js"></script>
   <script src="../../../../../black-mode.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,1103 +26,761 @@
       gtag("js", new Date());
       gtag("config", "G-Q1WNRY8ECV");
     </script>
-    <style>
-      body {
-        font-family: "Segoe UI", "Roboto", Helvetica, Arial, sans-serif;
-        background: #f1f5f9;
-        color: #334155;
-        margin: 0;
-        padding: 15px;
-        line-height: 1.6;
-      }
-      h1 {
-        text-align: center;
-        color: #1e3a8a;
-        margin-bottom: 5px;
-      }
-      h2 {
-        text-align: center;
-        color: #64748b;
-        font-size: 1rem;
-        margin-top: 0;
-      }
-
-      .question-box {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        margin: 25px auto;
-        max-width: 850px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e2e8f0;
-      }
-
-      .q-text-en {
-        font-weight: 700;
-        color: #0f172a;
-        font-size: 1.1rem;
-        margin-bottom: 4px;
-      }
-      .q-text-hi {
-        font-weight: 600;
-        color: #059669;
-        font-size: 1.05rem;
-        margin-bottom: 15px;
-      }
-
-      .options {
-        margin-top: 15px;
-      }
-      .option-label {
-        display: block;
-        background: #f8fafc;
-        border: 1px solid #cbd5e1;
-        padding: 12px;
-        margin-bottom: 10px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .option-label:hover {
-        background: #e2e8f0;
-      }
-
-      input[type="radio"] {
-        margin-right: 10px;
-        transform: scale(1.2);
-      }
-
-      .check-btn {
-        background: #2563eb;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 1rem;
-        margin-top: 10px;
-      }
-      .check-btn:hover {
-        background: #1d4ed8;
-      }
-
-      .correct {
-        background: #dcfce7 !important;
-        border-color: #22c55e !important;
-        color: #14532d;
-      }
-      .incorrect {
-        background: #fee2e2 !important;
-        border-color: #ef4444 !important;
-        color: #7f1d1d;
-      }
-
-      .explanation {
-        display: none;
-        margin-top: 15px;
-        padding: 15px;
-        background: #eff6ff;
-        border-left: 5px solid #3b82f6;
-        border-radius: 6px;
-      }
-      .explanation h4 {
-        margin: 0 0 10px 0;
-        color: #1e40af;
-      }
-      .match-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 10px 0;
-      }
-      .match-table th,
-      .match-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .match-table th {
-        background-color: #f2f2f2;
-      }
-    
-    /* Mobile-safe horizontal scroll for tables sitting directly inside question text (added) */
-    .q-text-en, .q-text-hi { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .q-text-en table, .q-text-hi table { min-width: 480px; max-width: 100%; }
-    @media (max-width: 480px) {
-      .q-text-en table, .q-text-hi table { font-size: 0.85em; }
-    }
-
-    /* Premium match-table look — overrides the plain inline gray borders (added) */
-    .match-table { border-collapse: collapse !important; border-radius: 10px; overflow: hidden; }
-    .match-table th[style] {
-      background: rgba(128, 128, 128, 0.22) !important;
-      border: 1px solid rgba(128, 128, 128, 0.4) !important;
-      font-weight: 700 !important;
-      text-align: left;
-    }
-    .match-table td[style] {
-      border: 1px solid rgba(128, 128, 128, 0.22) !important;
-      background: rgba(128, 128, 128, 0.05);
-    }
-    .match-table tr:nth-child(even) td[style] {
-      background: rgba(128, 128, 128, 0.1);
-    }
-
-    /* Fix plain unclassed tables with light-gray inline header background (added) */
-    tr[style*="background-color: #f2f2f2"] {
-      background-color: rgba(128, 128, 128, 0.22) !important;
-    }
-    table[border="1"] th, table[border="1"] td {
-      border: 1px solid rgba(128, 128, 128, 0.4) !important;
-    }
-</style>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <h1>Modern History Quiz</h1>
-    <h2>Topic: Regional States - Punjab and Mysore (Questions 1-27)</h2>
+  <div class="container">
+    <div class="header">
+      <h1>Regional States: Punjab and Mysore</h1>
+      <h2>Questions 1 – 27</h2>
+      <div class="subtitle-hi">क्षेत्रीय राज्य: पंजाब और मैसूर — प्रश्न 1 – 27</div>
+    </div>
 
-    <div class="question-box" id="q1">
-      <div class="q-text-en">1. The kingdom of Ranjit Singh included -</div>
-      <div class="q-text-hi">1. रणजीत सिंह के राज्य में सम्मिलित था -</div>
+    <div class="score-bar" id="scoreBar">
+      <span class="score-item total-count">Total: <span id="totalAttempted">0</span>/27</span>
+      <span class="score-item correct-count">Correct: <span id="correctCount">0</span></span>
+      <span class="score-item wrong-count">Wrong: <span id="wrongCount">0</span></span>
+    </div>
+
+<div class="question-box" id="q1">
+      <span class="q-number">1</span>
+      <div class="q-text-en">
+        The kingdom of Ranjit Singh included -</div>
+      <div class="q-text-hi">रणजीत सिंह के राज्य में सम्मिलित था -</div>
 
       <div class="options" data-correct="D">
-        <label class="option-label"
-          ><input type="radio" name="q1" value="A" /> (A) Delhi / दिल्ली</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q1" value="B" /> (B) Kabul / काबुल</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q1" value="C" /> (C) Makran / मकराना</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q1" value="D" /> (D) Srinagar /
-          श्रीनगर</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q1')">
+        <label class="option-label"><input type="radio" name="q1" value="A" /><span class="opt-text"><span class="opt-en">(A) Delhi</span><br /><span class="opt-hi">(A) दिल्ली</span></span></label>
+        <label class="option-label"><input type="radio" name="q1" value="B" /><span class="opt-text"><span class="opt-en">(B) Kabul</span><br /><span class="opt-hi">(B) काबुल</span></span></label>
+        <label class="option-label"><input type="radio" name="q1" value="C" /><span class="opt-text"><span class="opt-en">(C) Makran</span><br /><span class="opt-hi">(C) मकराना</span></span></label>
+        <label class="option-label"><input type="radio" name="q1" value="D" /><span class="opt-text"><span class="opt-en">(D) Srinagar</span><br /><span class="opt-hi">(D) श्रीनगर</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(1)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Ranjit Singh captured Multan (1818), Kashmir
-          (1819) and Peshawar (1834). Thus, Srinagar (Kashmir) was part of his
-          kingdom.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> रणजीत सिंह ने मुल्तान (1818), कश्मीर (1819) और
-          पेशावर (1834) पर कब्जा किया था। अतः श्रीनगर उनके राज्य में शामिल था।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (D)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Ranjit Singh captured Multan (1818), Kashmir (1819) and Peshawar (1834). Thus, Srinagar (Kashmir) was part of his kingdom.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>रणजीत सिंह ने मुल्तान (1818), कश्मीर (1819) और पेशावर (1834) पर कब्जा किया था। अतः श्रीनगर उनके राज्य में शामिल था।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q2">
-      <div class="q-text-en">2. To which Misl did Ranjeet Singh belong?</div>
-      <div class="q-text-hi">2. रणजीत सिंह किस मिसल से संबंधित थे?</div>
+      <span class="q-number">2</span>
+      <div class="q-text-en">
+        To which Misl did Ranjeet Singh belong?</div>
+      <div class="q-text-hi">रणजीत सिंह किस मिसल से संबंधित थे?</div>
 
       <div class="options" data-correct="A">
-        <label class="option-label"
-          ><input type="radio" name="q2" value="A" /> (A) Sukerchakia /
-          सुकरचकिया</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q2" value="B" /> (B) Sandhawalia /
-          संधावालिया</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q2" value="C" /> (C) Ahluwalia /
-          आहलूवालिया</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q2" value="D" /> (D) Ramgarhia /
-          रामगढ़िया</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q2')">
+        <label class="option-label"><input type="radio" name="q2" value="A" /><span class="opt-text"><span class="opt-en">(A) Sukerchakia</span><br /><span class="opt-hi">(A) सुकरचकिया</span></span></label>
+        <label class="option-label"><input type="radio" name="q2" value="B" /><span class="opt-text"><span class="opt-en">(B) Sandhawalia</span><br /><span class="opt-hi">(B) संधावालिया</span></span></label>
+        <label class="option-label"><input type="radio" name="q2" value="C" /><span class="opt-text"><span class="opt-en">(C) Ahluwalia</span><br /><span class="opt-hi">(C) आहलूवालिया</span></span></label>
+        <label class="option-label"><input type="radio" name="q2" value="D" /><span class="opt-text"><span class="opt-en">(D) Ramgarhia</span><br /><span class="opt-hi">(D) रामगढ़िया</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(2)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Ranjit Singh was born to the chief of
-          Sukerchakia Misl.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> रणजीत सिंह का जन्म सुकरचकिया मिसल के प्रमुख के
-          घर हुआ था।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (A)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Ranjit Singh was born to the chief of Sukerchakia Misl.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>रणजीत सिंह का जन्म सुकरचकिया मिसल के प्रमुख के घर हुआ था।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q3">
-      <div class="q-text-en">3. With which misal was Ranjit Singh related?</div>
-      <div class="q-text-hi">
-        3. रणजीत सिंह किस मिसल से संबंधित थे? (Duplicate Check)
+      <span class="q-number">3</span>
+      <div class="q-text-en">
+        With which misal was Ranjit Singh related?</div>
+      <div class="q-text-hi">रणजीत सिंह किस मिसल से संबंधित थे? (Duplicate Check)
       </div>
 
       <div class="options" data-correct="D">
-        <label class="option-label"
-          ><input type="radio" name="q3" value="A" /> (A) Aahluvaliyan /
-          आहलूवालिया</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q3" value="B" /> (B) Dalevaliyan /
-          डल्लेवालिया</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q3" value="C" /> (C) Kanhaiya /
-          कन्हैया</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q3" value="D" /> (D) Shukarchakiya /
-          सुकरचकिया</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q3')">
+        <label class="option-label"><input type="radio" name="q3" value="A" /><span class="opt-text"><span class="opt-en">(A) Aahluvaliyan</span><br /><span class="opt-hi">(A) आहलूवालिया</span></span></label>
+        <label class="option-label"><input type="radio" name="q3" value="B" /><span class="opt-text"><span class="opt-en">(B) Dalevaliyan</span><br /><span class="opt-hi">(B) डल्लेवालिया</span></span></label>
+        <label class="option-label"><input type="radio" name="q3" value="C" /><span class="opt-text"><span class="opt-en">(C) Kanhaiya</span><br /><span class="opt-hi">(C) कन्हैया</span></span></label>
+        <label class="option-label"><input type="radio" name="q3" value="D" /><span class="opt-text"><span class="opt-en">(D) Shukarchakiya</span><br /><span class="opt-hi">(D) सुकरचकिया</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(3)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> See the explanation of the above question.
-          He belonged to Sukerchakia Misl.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> ऊपर के प्रश्न की व्याख्या देखें। वे सुकरचकिया
-          मिसल से थे।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (D)</div>
+        <div class="exp-en">
+          <ul>
+            <li>See the explanation of the above question. He belonged to Sukerchakia Misl.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>ऊपर के प्रश्न की व्याख्या देखें। वे सुकरचकिया मिसल से थे।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q4">
+      <span class="q-number">4</span>
       <div class="q-text-en">
-        4. Capital of Kingdom of Maharaja Ranjit Singh was:
+        Capital of Kingdom of Maharaja Ranjit Singh was:
       </div>
-      <div class="q-text-hi">4. महाराजा रणजीत सिंह के राज्य की राजधानी थी:</div>
+      <div class="q-text-hi">महाराजा रणजीत सिंह के राज्य की राजधानी थी:</div>
 
       <div class="options" data-correct="C">
-        <label class="option-label"
-          ><input type="radio" name="q4" value="A" /> (A) Amritsar /
-          अमृतसर</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q4" value="B" /> (B) Patiala /
-          पटियाला</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q4" value="C" /> (C) Lahore / लाहौर</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q4" value="D" /> (D) Kapurthala /
-          कपूरथला</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q4')">
+        <label class="option-label"><input type="radio" name="q4" value="A" /><span class="opt-text"><span class="opt-en">(A) Amritsar</span><br /><span class="opt-hi">(A) अमृतसर</span></span></label>
+        <label class="option-label"><input type="radio" name="q4" value="B" /><span class="opt-text"><span class="opt-en">(B) Patiala</span><br /><span class="opt-hi">(B) पटियाला</span></span></label>
+        <label class="option-label"><input type="radio" name="q4" value="C" /><span class="opt-text"><span class="opt-en">(C) Lahore</span><br /><span class="opt-hi">(C) लाहौर</span></span></label>
+        <label class="option-label"><input type="radio" name="q4" value="D" /><span class="opt-text"><span class="opt-en">(D) Kapurthala</span><br /><span class="opt-hi">(D) कपूरथला</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(4)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> In 1799 A.D., Ranjit Singh took control of
-          Lahore and made it his Capital.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> 1799 ई. में रणजीत सिंह ने लाहौर पर अधिकार कर
-          लिया और इसे अपनी राजधानी बनाया।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (C)</div>
+        <div class="exp-en">
+          <ul>
+            <li>In 1799 A.D., Ranjit Singh took control of Lahore and made it his Capital.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>1799 ई. में रणजीत सिंह ने लाहौर पर अधिकार कर लिया और इसे अपनी राजधानी बनाया।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q5">
+      <span class="q-number">5</span>
       <div class="q-text-en">
-        5. At which place did Raja Ranjit Singh set up the Adalat-i-Ala?
+        At which place did Raja Ranjit Singh set up the Adalat-i-Ala?
       </div>
-      <div class="q-text-hi">
-        5. राजा रणजीत सिंह ने अदालत-ए-आला की स्थापना किस स्थान पर की थी?
+      <div class="q-text-hi">राजा रणजीत सिंह ने अदालत-ए-आला की स्थापना किस स्थान पर की थी?
       </div>
 
       <div class="options" data-correct="B">
-        <label class="option-label"
-          ><input type="radio" name="q5" value="A" /> (A) Amritsar /
-          अमृतसर</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q5" value="B" /> (B) Lahore / लाहौर</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q5" value="C" /> (C) Firozpur /
-          फिरोजपुर</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q5" value="D" /> (D) Multan /
-          मुल्तान</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q5')">
+        <label class="option-label"><input type="radio" name="q5" value="A" /><span class="opt-text"><span class="opt-en">(A) Amritsar</span><br /><span class="opt-hi">(A) अमृतसर</span></span></label>
+        <label class="option-label"><input type="radio" name="q5" value="B" /><span class="opt-text"><span class="opt-en">(B) Lahore</span><br /><span class="opt-hi">(B) लाहौर</span></span></label>
+        <label class="option-label"><input type="radio" name="q5" value="C" /><span class="opt-text"><span class="opt-en">(C) Firozpur</span><br /><span class="opt-hi">(C) फिरोजपुर</span></span></label>
+        <label class="option-label"><input type="radio" name="q5" value="D" /><span class="opt-text"><span class="opt-en">(D) Multan</span><br /><span class="opt-hi">(D) मुल्तान</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(5)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Maharaja Ranjit Singh set up the
-          Adalat-i-Ala at Lahore which heard appeals from the district courts.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> महाराजा रणजीत सिंह ने लाहौर में अदालत-ए-आला की
-          स्थापना की जो जिला अदालतों की अपीलें सुनती थी।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (B)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Maharaja Ranjit Singh set up the Adalat-i-Ala at Lahore which heard appeals from the district courts.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>महाराजा रणजीत सिंह ने लाहौर में अदालत-ए-आला की स्थापना की जो जिला अदालतों की अपीलें सुनती थी।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q6">
+      <span class="q-number">6</span>
       <div class="q-text-en">
-        6. The Treaty of Amritsar was concluded between Maharaja Ranjit Singh
+        The Treaty of Amritsar was concluded between Maharaja Ranjit Singh
         and whom?
       </div>
-      <div class="q-text-hi">
-        6. अमृतसर की संधि महाराजा रणजीत सिंह और किसके बीच संपन्न हुई थी?
+      <div class="q-text-hi">अमृतसर की संधि महाराजा रणजीत सिंह और किसके बीच संपन्न हुई थी?
       </div>
 
       <div class="options" data-correct="B">
-        <label class="option-label"
-          ><input type="radio" name="q6" value="A" /> (A) Lord Cornwallis /
-          लॉर्ड कॉर्नवालिस</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q6" value="B" /> (B) Lord Minto / लॉर्ड
-          मिंटो</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q6" value="C" /> (C) Lord Hastings / लॉर्ड
-          हेस्टिंग्स</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q6" value="D" /> (D) Lord Dalhousie / लॉर्ड
-          डलहौजी</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q6')">
+        <label class="option-label"><input type="radio" name="q6" value="A" /><span class="opt-text"><span class="opt-en">(A) Lord Cornwallis</span><br /><span class="opt-hi">(A) लॉर्ड कॉर्नवालिस</span></span></label>
+        <label class="option-label"><input type="radio" name="q6" value="B" /><span class="opt-text"><span class="opt-en">(B) Lord Minto</span><br /><span class="opt-hi">(B) लॉर्ड मिंटो</span></span></label>
+        <label class="option-label"><input type="radio" name="q6" value="C" /><span class="opt-text"><span class="opt-en">(C) Lord Hastings</span><br /><span class="opt-hi">(C) लॉर्ड हेस्टिंग्स</span></span></label>
+        <label class="option-label"><input type="radio" name="q6" value="D" /><span class="opt-text"><span class="opt-en">(D) Lord Dalhousie</span><br /><span class="opt-hi">(D) लॉर्ड डलहौजी</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(6)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Treaty of Amritsar (1809) was signed by
-          Charles Metcalfe on behalf of Lord Minto I and Ranjit Singh.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> अमृतसर की संधि (1809) पर लॉर्ड मिंटो प्रथम की
-          ओर से चार्ल्स मेटकाल्फ और रणजीत सिंह ने हस्ताक्षर किए थे।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (B)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Treaty of Amritsar (1809) was signed by Charles Metcalfe on behalf of Lord Minto I and Ranjit Singh.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>अमृतसर की संधि (1809) पर लॉर्ड मिंटो प्रथम की ओर से चार्ल्स मेटकाल्फ और रणजीत सिंह ने हस्ताक्षर किए थे।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q7">
+      <span class="q-number">7</span>
       <div class="q-text-en">
-        7. Ranjeet Singh got famous Kohinoor diamond from-
+        Ranjeet Singh got famous Kohinoor diamond from-
       </div>
-      <div class="q-text-hi">
-        7. रणजीत सिंह को प्रसिद्ध कोहिनूर हीरा किससे मिला था?
+      <div class="q-text-hi">रणजीत सिंह को प्रसिद्ध कोहिनूर हीरा किससे मिला था?
       </div>
 
       <div class="options" data-correct="A">
-        <label class="option-label"
-          ><input type="radio" name="q7" value="A" /> (A) Shah Shuja / शाह
-          शुजा</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q7" value="B" /> (B) Zaman Shah / जमान
-          शाह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q7" value="C" /> (C) Dost Mohammad / दोस्त
-          मोहम्मद</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q7" value="D" /> (D) Sher Ali / शेर
-          अली</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q7')">
+        <label class="option-label"><input type="radio" name="q7" value="A" /><span class="opt-text"><span class="opt-en">(A) Shah Shuja</span><br /><span class="opt-hi">(A) शाह शुजा</span></span></label>
+        <label class="option-label"><input type="radio" name="q7" value="B" /><span class="opt-text"><span class="opt-en">(B) Zaman Shah</span><br /><span class="opt-hi">(B) जमान शाह</span></span></label>
+        <label class="option-label"><input type="radio" name="q7" value="C" /><span class="opt-text"><span class="opt-en">(C) Dost Mohammad</span><br /><span class="opt-hi">(C) दोस्त मोहम्मद</span></span></label>
+        <label class="option-label"><input type="radio" name="q7" value="D" /><span class="opt-text"><span class="opt-en">(D) Sher Ali</span><br /><span class="opt-hi">(D) शेर अली</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(7)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Shah Shuja, descendant of Ahmed Shah Abdali,
-          gifted Kohinoor diamond to Ranjit Singh.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> अहमद शाह अब्दाली के वंशज शाह शुजा ने रणजीत
-          सिंह को कोहिनूर हीरा भेंट किया था।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (A)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Shah Shuja, descendant of Ahmed Shah Abdali, gifted Kohinoor diamond to Ranjit Singh.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>अहमद शाह अब्दाली के वंशज शाह शुजा ने रणजीत सिंह को कोहिनूर हीरा भेंट किया था।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q8">
+      <span class="q-number">8</span>
       <div class="q-text-en">
-        8. Who said, 'God intended me to look upon all religions with one eye,
+        Who said, 'God intended me to look upon all religions with one eye,
         that is why he took away the light from the other'?
       </div>
-      <div class="q-text-hi">
-        8. किसने कहा था, 'भगवान चाहता था कि मैं सभी धर्मों को एक आँख से देखूँ,
+      <div class="q-text-hi">किसने कहा था, 'भगवान चाहता था कि मैं सभी धर्मों को एक आँख से देखूँ,
         इसीलिए उसने दूसरी आँख की रोशनी ले ली'?
       </div>
 
       <div class="options" data-correct="A">
-        <label class="option-label"
-          ><input type="radio" name="q8" value="A" /> (A) Maharaja Ranjit Singh
-          / महाराजा रणजीत सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q8" value="B" /> (B) Maharaja Sher Singh /
-          महाराजा शेर सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q8" value="C" /> (C) Maharaja Dalip Singh /
-          महाराजा दलीप सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q8" value="D" /> (D) None of the above /
-          इनमें से कोई नहीं</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q8')">
+        <label class="option-label"><input type="radio" name="q8" value="A" /><span class="opt-text"><span class="opt-en">(A) Maharaja Ranjit Singh</span><br /><span class="opt-hi">(A) महाराजा रणजीत सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q8" value="B" /><span class="opt-text"><span class="opt-en">(B) Maharaja Sher Singh</span><br /><span class="opt-hi">(B) महाराजा शेर सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q8" value="C" /><span class="opt-text"><span class="opt-en">(C) Maharaja Dalip Singh</span><br /><span class="opt-hi">(C) महाराजा दलीप सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q8" value="D" /><span class="opt-text"><span class="opt-en">(D) None of the above</span><br /><span class="opt-hi">(D) इनमें से कोई नहीं</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(8)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> This famous statement was made by Maharaja
-          Ranjit Singh.
-        </p>
-        <p><strong>हिंदी:</strong> यह प्रसिद्ध कथन महाराजा रणजीत सिंह का था।</p>
+        <div class="exp-label">✅ Correct Answer: (A)</div>
+        <div class="exp-en">
+          <ul>
+            <li>This famous statement was made by Maharaja Ranjit Singh.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>यह प्रसिद्ध कथन महाराजा रणजीत सिंह का था।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q9">
+      <span class="q-number">9</span>
       <div class="q-text-en">
-        9. The successor of Maharaja Ranjit Singh was:
+        The successor of Maharaja Ranjit Singh was:
       </div>
-      <div class="q-text-hi">9. महाराजा रणजीत सिंह के उत्तराधिकारी कौन थे?</div>
+      <div class="q-text-hi">महाराजा रणजीत सिंह के उत्तराधिकारी कौन थे?</div>
 
       <div class="options" data-correct="B">
-        <label class="option-label"
-          ><input type="radio" name="q9" value="A" /> (A) Harsingh Nalwa /
-          हरिसिंह नलवा</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q9" value="B" /> (B) Khadag Singh / खड़क
-          सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q9" value="C" /> (C) Sher Singh / शेर
-          सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q9" value="D" /> (D) Naunihal Singh /
-          नौनिहाल सिंह</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q9')">
+        <label class="option-label"><input type="radio" name="q9" value="A" /><span class="opt-text"><span class="opt-en">(A) Harsingh Nalwa</span><br /><span class="opt-hi">(A) हरिसिंह नलवा</span></span></label>
+        <label class="option-label"><input type="radio" name="q9" value="B" /><span class="opt-text"><span class="opt-en">(B) Khadag Singh</span><br /><span class="opt-hi">(B) खड़क सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q9" value="C" /><span class="opt-text"><span class="opt-en">(C) Sher Singh</span><br /><span class="opt-hi">(C) शेर सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q9" value="D" /><span class="opt-text"><span class="opt-en">(D) Naunihal Singh</span><br /><span class="opt-hi">(D) नौनिहाल सिंह</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(9)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Khadag Singh succeeded Ranjit Singh after
-          his death in 1839.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> 1839 में रणजीत सिंह की मृत्यु के बाद खड़क सिंह
-          उनके उत्तराधिकारी बने।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (B)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Khadag Singh succeeded Ranjit Singh after his death in 1839.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>1839 में रणजीत सिंह की मृत्यु के बाद खड़क सिंह उनके उत्तराधिकारी बने।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q10">
-      <div class="q-text-en">10. Who was the last King of Sikh empire?</div>
-      <div class="q-text-hi">10. सिख साम्राज्य का अंतिम राजा कौन था?</div>
+      <span class="q-number">10</span>
+      <div class="q-text-en">
+        Who was the last King of Sikh empire?</div>
+      <div class="q-text-hi">सिख साम्राज्य का अंतिम राजा कौन था?</div>
 
       <div class="options" data-correct="D">
-        <label class="option-label"
-          ><input type="radio" name="q10" value="A" /> (A) Khadag Singh / खड़क
-          सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q10" value="B" /> (B) Sher Singh / शेर
-          सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q10" value="C" /> (C) Naunihal Singh /
-          नौनिहाल सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q10" value="D" /> (D) Duleep Singh / दलीप
-          सिंह</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q10')">
+        <label class="option-label"><input type="radio" name="q10" value="A" /><span class="opt-text"><span class="opt-en">(A) Khadag Singh</span><br /><span class="opt-hi">(A) खड़क सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q10" value="B" /><span class="opt-text"><span class="opt-en">(B) Sher Singh</span><br /><span class="opt-hi">(B) शेर सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q10" value="C" /><span class="opt-text"><span class="opt-en">(C) Naunihal Singh</span><br /><span class="opt-hi">(C) नौनिहाल सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q10" value="D" /><span class="opt-text"><span class="opt-en">(D) Duleep Singh</span><br /><span class="opt-hi">(D) दलीप सिंह</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(10)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Maharaja Duleep Singh was the last ruler of
-          the Sikh Empire (1843-1849).
-        </p>
-        <p>
-          <strong>हिंदी:</strong> महाराजा दलीप सिंह सिख साम्राज्य के अंतिम राजा
-          थे (1843-1849)।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (D)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Maharaja Duleep Singh was the last ruler of the Sikh Empire (1843-1849).</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>महाराजा दलीप सिंह सिख साम्राज्य के अंतिम राजा थे (1843-1849)।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q11">
+      <span class="q-number">11</span>
       <div class="q-text-en">
-        11. Which one of the following statements is correct about Dalip Singh,
+        Which one of the following statements is correct about Dalip Singh,
         the ex-Maharaja of Punjab?
       </div>
-      <div class="q-text-hi">
-        11. पंजाब के पूर्व महाराजा दलीप सिंह के बारे में निम्नलिखित में से कौन
+      <div class="q-text-hi">पंजाब के पूर्व महाराजा दलीप सिंह के बारे में निम्नलिखित में से कौन
         सा कथन सही है?
       </div>
 
       <div class="options" data-correct="A">
-        <label class="option-label"
-          ><input type="radio" name="q11" value="A" /> (A) He died in Paris on
-          23 October, 1893 / 23 अक्टूबर, 1893 को पेरिस में उनका निधन हो
-          गया</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q11" value="B" /> (B) He was cremated at
-          Nasik / नासिक में उनका अंतिम संस्कार किया गया</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q11" value="C" /> (C) He never renounced
-          the Sikh faith / उन्होंने कभी सिख धर्म नहीं छोड़ा</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q11" value="D" /> (D) He had never visited
-          Russia / वे कभी रूस नहीं गए</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q11')">
+        <label class="option-label"><input type="radio" name="q11" value="A" /><span class="opt-text"><span class="opt-en">(A) He died in Paris on 23 October, 1893</span><br /><span class="opt-hi">(A) 23 अक्टूबर, 1893 को पेरिस में उनका निधन हो गया</span></span></label>
+        <label class="option-label"><input type="radio" name="q11" value="B" /><span class="opt-text"><span class="opt-en">(B) He was cremated at Nasik</span><br /><span class="opt-hi">(B) नासिक में उनका अंतिम संस्कार किया गया</span></span></label>
+        <label class="option-label"><input type="radio" name="q11" value="C" /><span class="opt-text"><span class="opt-en">(C) He never renounced the Sikh faith</span><br /><span class="opt-hi">(C) उन्होंने कभी सिख धर्म नहीं छोड़ा</span></span></label>
+        <label class="option-label"><input type="radio" name="q11" value="D" /><span class="opt-text"><span class="opt-en">(D) He had never visited Russia</span><br /><span class="opt-hi">(D) वे कभी रूस नहीं गए</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(11)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> He died in Paris on 23 October 1893. He had
-          converted to Christianity and visited Russia.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> उनका निधन 23 अक्टूबर 1893 को पेरिस में हुआ था।
-          उन्होंने ईसाई धर्म अपना लिया था और रूस की यात्रा भी की थी।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (A)</div>
+        <div class="exp-en">
+          <ul>
+            <li>He died in Paris on 23 October 1893. He had converted to Christianity and visited Russia.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>उनका निधन 23 अक्टूबर 1893 को पेरिस में हुआ था। उन्होंने ईसाई धर्म अपना लिया था और रूस की यात्रा भी की थी।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q12">
-      <div class="q-text-en">12. Who was last king of Sikh empire?</div>
-      <div class="q-text-hi">
-        12. सिख साम्राज्य का अंतिम राजा कौन था? (Duplicate check)
+      <span class="q-number">12</span>
+      <div class="q-text-en">
+        Who was last king of Sikh empire?</div>
+      <div class="q-text-hi">सिख साम्राज्य का अंतिम राजा कौन था? (Duplicate check)
       </div>
 
       <div class="options" data-correct="A">
-        <label class="option-label"
-          ><input type="radio" name="q12" value="A" /> (A) Duleep Singh / दलीप
-          सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q12" value="B" /> (B) Naunihal Singh /
-          नौनिहाल सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q12" value="C" /> (C) Ranjit Singh / रणजीत
-          सिंह</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q12" value="D" /> (D) Sher Singh / शेर
-          सिंह</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q12')">
+        <label class="option-label"><input type="radio" name="q12" value="A" /><span class="opt-text"><span class="opt-en">(A) Duleep Singh</span><br /><span class="opt-hi">(A) दलीप सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q12" value="B" /><span class="opt-text"><span class="opt-en">(B) Naunihal Singh</span><br /><span class="opt-hi">(B) नौनिहाल सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q12" value="C" /><span class="opt-text"><span class="opt-en">(C) Ranjit Singh</span><br /><span class="opt-hi">(C) रणजीत सिंह</span></span></label>
+        <label class="option-label"><input type="radio" name="q12" value="D" /><span class="opt-text"><span class="opt-en">(D) Sher Singh</span><br /><span class="opt-hi">(D) शेर सिंह</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(12)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p><strong>English:</strong> Duleep Singh was the last king.</p>
-        <p><strong>हिंदी:</strong> दलीप सिंह अंतिम राजा थे।</p>
+        <div class="exp-label">✅ Correct Answer: (A)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Duleep Singh was the last king.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>दलीप सिंह अंतिम राजा थे।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q13">
+      <span class="q-number">13</span>
       <div class="q-text-en">
-        13. Regarding Punjab Merger, which of the following statement is false?
+        Regarding Punjab Merger, which of the following statement is false?
       </div>
-      <div class="q-text-hi">
-        13. पंजाब विलय के संबंध में, निम्नलिखित में से कौन सा कथन गलत है?
+      <div class="q-text-hi">पंजाब विलय के संबंध में, निम्नलिखित में से कौन सा कथन गलत है?
       </div>
 
       <div class="options" data-correct="C">
-        <label class="option-label"
-          ><input type="radio" name="q13" value="A" /> (A) Punjab ended on 29
-          March 1849 / 29 मार्च 1849 को पंजाब राज्य समाप्त हो गया</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q13" value="B" /> (B) All territories
-          became British Empire / सभी क्षेत्र ब्रिटिश साम्राज्य का हिस्सा बन
-          गए</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q13" value="C" /> (C) Duleep Singh was
-          given annual pension of Rs 2,50,000 / दलीप सिंह को 2,50,000 रुपये की
-          वार्षिक पेंशन दी गई</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q13" value="D" /> (D) None of the above /
-          इनमें से कोई नहीं</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q13')">
+        <label class="option-label"><input type="radio" name="q13" value="A" /><span class="opt-text"><span class="opt-en">(A) Punjab ended on 29 March 1849</span><br /><span class="opt-hi">(A) 29 मार्च 1849 को पंजाब राज्य समाप्त हो गया</span></span></label>
+        <label class="option-label"><input type="radio" name="q13" value="B" /><span class="opt-text"><span class="opt-en">(B) All territories became British Empire</span><br /><span class="opt-hi">(B) सभी क्षेत्र ब्रिटिश साम्राज्य का हिस्सा बन गए</span></span></label>
+        <label class="option-label"><input type="radio" name="q13" value="C" /><span class="opt-text"><span class="opt-en">(C) Duleep Singh was given annual pension of Rs 2,50,000</span><br /><span class="opt-hi">(C) दलीप सिंह को 2,50,000 रुपये की वार्षिक पेंशन दी गई</span></span></label>
+        <label class="option-label"><input type="radio" name="q13" value="D" /><span class="opt-text"><span class="opt-en">(D) None of the above</span><br /><span class="opt-hi">(D) इनमें से कोई नहीं</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(13)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Statement (c) is false because the pension
-          was fixed at 4-5 Lakh rupees, not 2.5 Lakh.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> कथन (c) गलत है क्योंकि पेंशन 4-5 लाख रुपये तय
-          की गई थी, 2.5 लाख नहीं।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (C)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Statement (c) is false because the pension was fixed at 4-5 Lakh rupees, not 2.5 Lakh.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>कथन (c) गलत है क्योंकि पेंशन 4-5 लाख रुपये तय की गई थी, 2.5 लाख नहीं।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q14">
+      <span class="q-number">14</span>
       <div class="q-text-en">
-        14. Who among the following was not a member of 'Board of Three' to
+        Who among the following was not a member of 'Board of Three' to
         administer Punjab after annexation?
       </div>
-      <div class="q-text-hi">
-        14. विलय के बाद पंजाब का प्रशासन चलाने के लिए 'तीन के बोर्ड' का सदस्य
+      <div class="q-text-hi">विलय के बाद पंजाब का प्रशासन चलाने के लिए 'तीन के बोर्ड' का सदस्य
         कौन नहीं था?
       </div>
 
       <div class="options" data-correct="A">
-        <label class="option-label"
-          ><input type="radio" name="q14" value="A" /> (A) H.M. Elliot & Robert
-          Montgomery / एच.एम. एलियट और रॉबर्ट मोंटगोमरी</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q14" value="B" /> (B) Sir Henry Lawrence /
-          सर हेनरी लॉरेंस</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q14" value="C" /> (C) John Lawrence / जॉन
-          लॉरेंस</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q14" value="D" /> (D) Charles Grenville
-          Mansel / चार्ल्स ग्रेनविले मेंसेल</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q14')">
+        <label class="option-label"><input type="radio" name="q14" value="A" /><span class="opt-text"><span class="opt-en">(A) H.M. Elliot & Robert Montgomery</span><br /><span class="opt-hi">(A) एच.एम. एलियट और रॉबर्ट मोंटगोमरी</span></span></label>
+        <label class="option-label"><input type="radio" name="q14" value="B" /><span class="opt-text"><span class="opt-en">(B) Sir Henry Lawrence</span><br /><span class="opt-hi">(B) सर हेनरी लॉरेंस</span></span></label>
+        <label class="option-label"><input type="radio" name="q14" value="C" /><span class="opt-text"><span class="opt-en">(C) John Lawrence</span><br /><span class="opt-hi">(C) जॉन लॉरेंस</span></span></label>
+        <label class="option-label"><input type="radio" name="q14" value="D" /><span class="opt-text"><span class="opt-en">(D) Charles Grenville Mansel</span><br /><span class="opt-hi">(D) चार्ल्स ग्रेनविले मेंसेल</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(14)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> The Board members were Henry Lawrence, John
-          Lawrence, and Charles Mansel. Elliot and Montgomery were not members.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> बोर्ड के सदस्य हेनरी लॉरेंस, जॉन लॉरेंस और
-          चार्ल्स मेंसेल थे। एलियट और मोंटगोमरी सदस्य नहीं थे।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (A)</div>
+        <div class="exp-en">
+          <ul>
+            <li>The Board members were Henry Lawrence, John Lawrence, and Charles Mansel. Elliot and Montgomery were not members.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>बोर्ड के सदस्य हेनरी लॉरेंस, जॉन लॉरेंस और चार्ल्स मेंसेल थे। एलियट और मोंटगोमरी सदस्य नहीं थे।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q15">
+      <span class="q-number">15</span>
       <div class="q-text-en">
-        15. Who emerged victorious in the first Anglo-Mysore War (1767-69)?
+        Who emerged victorious in the first Anglo-Mysore War (1767-69)?
       </div>
-      <div class="q-text-hi">
-        15. प्रथम आंग्ल-मैसूर युद्ध (1767-69) में कौन विजयी हुआ?
+      <div class="q-text-hi">प्रथम आंग्ल-मैसूर युद्ध (1767-69) में कौन विजयी हुआ?
       </div>
 
       <div class="options" data-correct="B">
-        <label class="option-label"
-          ><input type="radio" name="q15" value="A" /> (A) English /
-          अंग्रेज</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q15" value="B" /> (B) Haider Ali / हैदर
-          अली</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q15" value="C" /> (C) Maratha /
-          मराठा</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q15" value="D" /> (D) Nizam of Hyderabad /
-          हैदराबाद के निजाम</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q15')">
+        <label class="option-label"><input type="radio" name="q15" value="A" /><span class="opt-text"><span class="opt-en">(A) English</span><br /><span class="opt-hi">(A) अंग्रेज</span></span></label>
+        <label class="option-label"><input type="radio" name="q15" value="B" /><span class="opt-text"><span class="opt-en">(B) Haider Ali</span><br /><span class="opt-hi">(B) हैदर अली</span></span></label>
+        <label class="option-label"><input type="radio" name="q15" value="C" /><span class="opt-text"><span class="opt-en">(C) Maratha</span><br /><span class="opt-hi">(C) मराठा</span></span></label>
+        <label class="option-label"><input type="radio" name="q15" value="D" /><span class="opt-text"><span class="opt-en">(D) Nizam of Hyderabad</span><br /><span class="opt-hi">(D) हैदराबाद के निजाम</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(15)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Haidar Ali was victorious and the English
-          had to sign the Treaty of Madras in 1769.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> हैदर अली विजयी हुआ और अंग्रेजों को 1769 में
-          मद्रास की संधि पर हस्ताक्षर करने पड़े।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (B)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Haidar Ali was victorious and the English had to sign the Treaty of Madras in 1769.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>हैदर अली विजयी हुआ और अंग्रेजों को 1769 में मद्रास की संधि पर हस्ताक्षर करने पड़े।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q16">
+      <span class="q-number">16</span>
       <div class="q-text-en">
-        16. Who established a modern armoury in Dindigul Mysore in 1755?
+        Who established a modern armoury in Dindigul Mysore in 1755?
       </div>
-      <div class="q-text-hi">
-        16. 1755 में डिंडीगुल मैसूर में एक आधुनिक शस्त्रागार की स्थापना किसने
+      <div class="q-text-hi">1755 में डिंडीगुल मैसूर में एक आधुनिक शस्त्रागार की स्थापना किसने
         की?
       </div>
 
       <div class="options" data-correct="B">
-        <label class="option-label"
-          ><input type="radio" name="q16" value="A" /> (A) Nanjraj /
-          नंजराज</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q16" value="B" /> (B) Haidar Ali / हैदर
-          अली</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q16" value="C" /> (C) Devraj /
-          देवराज</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q16" value="D" /> (D) Chikka Krishnaraj /
-          चिक्का कृष्णराज</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q16')">
+        <label class="option-label"><input type="radio" name="q16" value="A" /><span class="opt-text"><span class="opt-en">(A) Nanjraj</span><br /><span class="opt-hi">(A) नंजराज</span></span></label>
+        <label class="option-label"><input type="radio" name="q16" value="B" /><span class="opt-text"><span class="opt-en">(B) Haidar Ali</span><br /><span class="opt-hi">(B) हैदर अली</span></span></label>
+        <label class="option-label"><input type="radio" name="q16" value="C" /><span class="opt-text"><span class="opt-en">(C) Devraj</span><br /><span class="opt-hi">(C) देवराज</span></span></label>
+        <label class="option-label"><input type="radio" name="q16" value="D" /><span class="opt-text"><span class="opt-en">(D) Chikka Krishnaraj</span><br /><span class="opt-hi">(D) चिक्का कृष्णराज</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(16)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Haidar Ali established a modern armoury in
-          Dindigul in 1755 A.D.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> हैदर अली ने 1755 ई. में डिंडीगुल में एक आधुनिक
-          शस्त्रागार की स्थापना की।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (B)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Haidar Ali established a modern armoury in Dindigul in 1755 A.D.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>हैदर अली ने 1755 ई. में डिंडीगुल में एक आधुनिक शस्त्रागार की स्थापना की।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q17">
+      <span class="q-number">17</span>
       <div class="q-text-en">
-        17. British general who defeated Haidar Ali in War of Porto Novo:
+        British general who defeated Haidar Ali in War of Porto Novo:
       </div>
-      <div class="q-text-hi">
-        17. पोर्टो नोवो के युद्ध में हैदर अली को हराने वाला ब्रिटिश जनरल:
+      <div class="q-text-hi">पोर्टो नोवो के युद्ध में हैदर अली को हराने वाला ब्रिटिश जनरल:
       </div>
 
       <div class="options" data-correct="B">
-        <label class="option-label"
-          ><input type="radio" name="q17" value="A" /> (A) Captain Popham /
-          कैप्टन पोफम</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q17" value="B" /> (B) Sir Eyre Coote / सर
-          आयर कूट</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q17" value="C" /> (C) Sir Hector Munro / सर
-          हेक्टर मुनरो</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q17" value="D" /> (D) General Goddard /
-          जनरल गोडार्ड</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q17')">
+        <label class="option-label"><input type="radio" name="q17" value="A" /><span class="opt-text"><span class="opt-en">(A) Captain Popham</span><br /><span class="opt-hi">(A) कैप्टन पोफम</span></span></label>
+        <label class="option-label"><input type="radio" name="q17" value="B" /><span class="opt-text"><span class="opt-en">(B) Sir Eyre Coote</span><br /><span class="opt-hi">(B) सर आयर कूट</span></span></label>
+        <label class="option-label"><input type="radio" name="q17" value="C" /><span class="opt-text"><span class="opt-en">(C) Sir Hector Munro</span><br /><span class="opt-hi">(C) सर हेक्टर मुनरो</span></span></label>
+        <label class="option-label"><input type="radio" name="q17" value="D" /><span class="opt-text"><span class="opt-en">(D) General Goddard</span><br /><span class="opt-hi">(D) जनरल गोडार्ड</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(17)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Sir Eyre Coote defeated Haidar Ali in the
-          Battle of Porto Novo in July 1781.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> सर आयर कूट ने जुलाई 1781 में पोर्टो नोवो की
-          लड़ाई में हैदर अली को हराया था।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (B)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Sir Eyre Coote defeated Haidar Ali in the Battle of Porto Novo in July 1781.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>सर आयर कूट ने जुलाई 1781 में पोर्टो नोवो की लड़ाई में हैदर अली को हराया था।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q18">
-      <div class="q-text-en">18. Tipu Sultan set up his capital at -</div>
-      <div class="q-text-hi">
-        18. टीपू सुल्तान ने अपनी राजधानी कहाँ स्थापित की?
+      <span class="q-number">18</span>
+      <div class="q-text-en">
+        Tipu Sultan set up his capital at -</div>
+      <div class="q-text-hi">टीपू सुल्तान ने अपनी राजधानी कहाँ स्थापित की?
       </div>
 
       <div class="options" data-correct="A">
-        <label class="option-label"
-          ><input type="radio" name="q18" value="A" /> (A) Srirangapatna /
-          श्रीरंगपट्टनम</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q18" value="B" /> (B) Mysore / मैसूर</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q18" value="C" /> (C) Bangalore /
-          बैंगलोर</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q18" value="D" /> (D) Coimbatore /
-          कोयंबटूर</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q18')">
+        <label class="option-label"><input type="radio" name="q18" value="A" /><span class="opt-text"><span class="opt-en">(A) Srirangapatna</span><br /><span class="opt-hi">(A) श्रीरंगपट्टनम</span></span></label>
+        <label class="option-label"><input type="radio" name="q18" value="B" /><span class="opt-text"><span class="opt-en">(B) Mysore</span><br /><span class="opt-hi">(B) मैसूर</span></span></label>
+        <label class="option-label"><input type="radio" name="q18" value="C" /><span class="opt-text"><span class="opt-en">(C) Bangalore</span><br /><span class="opt-hi">(C) बैंगलोर</span></span></label>
+        <label class="option-label"><input type="radio" name="q18" value="D" /><span class="opt-text"><span class="opt-en">(D) Coimbatore</span><br /><span class="opt-hi">(D) कोयंबटूर</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(18)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Tipu Sultan set up his Capital at
-          Srirangapatna.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> टीपू सुल्तान ने अपनी राजधानी श्रीरंगपट्टनम में
-          स्थापित की।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (A)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Tipu Sultan set up his Capital at Srirangapatna.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>टीपू सुल्तान ने अपनी राजधानी श्रीरंगपट्टनम में स्थापित की।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q19">
+      <span class="q-number">19</span>
       <div class="q-text-en">
-        19. Who established embassies in foreign countries on modern lines?
+        Who established embassies in foreign countries on modern lines?
       </div>
-      <div class="q-text-hi">
-        19. किसने आधुनिक तर्ज पर विदेशों में दूतावास स्थापित किए?
+      <div class="q-text-hi">किसने आधुनिक तर्ज पर विदेशों में दूतावास स्थापित किए?
       </div>
 
       <div class="options" data-correct="D">
-        <label class="option-label"
-          ><input type="radio" name="q19" value="A" /> (A) Haider Ali / हैदर
-          अली</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q19" value="B" /> (B) Mir Qasim / मीर
-          कासिम</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q19" value="C" /> (C) Shah Alam- II / शाह
-          आलम-द्वितीय</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q19" value="D" /> (D) Tipu Sultan / टीपू
-          सुल्तान</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q19')">
+        <label class="option-label"><input type="radio" name="q19" value="A" /><span class="opt-text"><span class="opt-en">(A) Haider Ali</span><br /><span class="opt-hi">(A) हैदर अली</span></span></label>
+        <label class="option-label"><input type="radio" name="q19" value="B" /><span class="opt-text"><span class="opt-en">(B) Mir Qasim</span><br /><span class="opt-hi">(B) मीर कासिम</span></span></label>
+        <label class="option-label"><input type="radio" name="q19" value="C" /><span class="opt-text"><span class="opt-en">(C) Shah Alam- II</span><br /><span class="opt-hi">(C) शाह आलम-द्वितीय</span></span></label>
+        <label class="option-label"><input type="radio" name="q19" value="D" /><span class="opt-text"><span class="opt-en">(D) Tipu Sultan</span><br /><span class="opt-hi">(D) टीपू सुल्तान</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(19)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Tipu Sultan established embassies in Iran,
-          Istanbul, France etc. on modern lines.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> टीपू सुल्तान ने आधुनिक तर्ज पर ईरान,
-          इस्तांबुल, फ्रांस आदि में दूतावास स्थापित किए।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (D)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Tipu Sultan established embassies in Iran, Istanbul, France etc. on modern lines.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>टीपू सुल्तान ने आधुनिक तर्ज पर ईरान, इस्तांबुल, फ्रांस आदि में दूतावास स्थापित किए।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q20">
+      <span class="q-number">20</span>
       <div class="q-text-en">
-        20. Tipu Sultan defeated the British Army in 1780 at-
+        Tipu Sultan defeated the British Army in 1780 at-
       </div>
-      <div class="q-text-hi">
-        20. टीपू सुल्तान ने 1780 में ब्रिटिश सेना को कहाँ हराया था?
+      <div class="q-text-hi">टीपू सुल्तान ने 1780 में ब्रिटिश सेना को कहाँ हराया था?
       </div>
 
       <div class="options" data-correct="B">
-        <label class="option-label"
-          ><input type="radio" name="q20" value="A" /> (A) Hyderabad /
-          हैदराबाद</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q20" value="B" /> (B) Pollilur /
-          पोल्लिलुर</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q20" value="C" /> (C) Shrirangapatnam /
-          श्रीरंगपट्टनम</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q20" value="D" /> (D) Nizamabad /
-          निज़ामाबाद</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q20')">
+        <label class="option-label"><input type="radio" name="q20" value="A" /><span class="opt-text"><span class="opt-en">(A) Hyderabad</span><br /><span class="opt-hi">(A) हैदराबाद</span></span></label>
+        <label class="option-label"><input type="radio" name="q20" value="B" /><span class="opt-text"><span class="opt-en">(B) Pollilur</span><br /><span class="opt-hi">(B) पोल्लिलुर</span></span></label>
+        <label class="option-label"><input type="radio" name="q20" value="C" /><span class="opt-text"><span class="opt-en">(C) Shrirangapatnam</span><br /><span class="opt-hi">(C) श्रीरंगपट्टनम</span></span></label>
+        <label class="option-label"><input type="radio" name="q20" value="D" /><span class="opt-text"><span class="opt-en">(D) Nizamabad</span><br /><span class="opt-hi">(D) निज़ामाबाद</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(20)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> British Army led by Col. Baillie was
-          defeated at Pollilur in 1780.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> कर्नल बैली के नेतृत्व वाली ब्रिटिश सेना 1780
-          में पोल्लिलुर में हार गई थी।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (B)</div>
+        <div class="exp-en">
+          <ul>
+            <li>British Army led by Col. Baillie was defeated at Pollilur in 1780.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>कर्नल बैली के नेतृत्व वाली ब्रिटिश सेना 1780 में पोल्लिलुर में हार गई थी।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q21">
+      <span class="q-number">21</span>
       <div class="q-text-en">
-        21. Englishmen made the Treaty of Srirangapatna with-
+        Englishmen made the Treaty of Srirangapatna with-
       </div>
-      <div class="q-text-hi">
-        21. अंग्रेजों ने श्रीरंगपट्टनम की संधि किसके साथ की थी?
+      <div class="q-text-hi">अंग्रेजों ने श्रीरंगपट्टनम की संधि किसके साथ की थी?
       </div>
 
       <div class="options" data-correct="C">
-        <label class="option-label"
-          ><input type="radio" name="q21" value="A" /> (A) Hyder Ali / हैदर
-          अली</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q21" value="B" /> (B) Dupleix /
-          डुपले</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q21" value="C" /> (C) Tipu Sultan / टीपू
-          सुल्तान</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q21" value="D" /> (D) Nandraj /
-          नंजराज</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q21')">
+        <label class="option-label"><input type="radio" name="q21" value="A" /><span class="opt-text"><span class="opt-en">(A) Hyder Ali</span><br /><span class="opt-hi">(A) हैदर अली</span></span></label>
+        <label class="option-label"><input type="radio" name="q21" value="B" /><span class="opt-text"><span class="opt-en">(B) Dupleix</span><br /><span class="opt-hi">(B) डुपले</span></span></label>
+        <label class="option-label"><input type="radio" name="q21" value="C" /><span class="opt-text"><span class="opt-en">(C) Tipu Sultan</span><br /><span class="opt-hi">(C) टीपू सुल्तान</span></span></label>
+        <label class="option-label"><input type="radio" name="q21" value="D" /><span class="opt-text"><span class="opt-en">(D) Nandraj</span><br /><span class="opt-hi">(D) नंजराज</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(21)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Treaty of Srirangapatna (1792) was signed by
-          Tipu Sultan and Cornwallis.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> श्रीरंगपट्टनम की संधि (1792) पर टीपू सुल्तान
-          और कॉर्नवालिस ने हस्ताक्षर किए थे।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (C)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Treaty of Srirangapatna (1792) was signed by Tipu Sultan and Cornwallis.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>श्रीरंगपट्टनम की संधि (1792) पर टीपू सुल्तान और कॉर्नवालिस ने हस्ताक्षर किए थे।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q22">
+      <span class="q-number">22</span>
       <div class="q-text-en">
-        22. When did Tipu Sultan die at war with the British?
+        When did Tipu Sultan die at war with the British?
       </div>
-      <div class="q-text-hi">
-        22. टीपू सुल्तान की मृत्यु अंग्रेजों से युद्ध करते समय कब हुई?
+      <div class="q-text-hi">टीपू सुल्तान की मृत्यु अंग्रेजों से युद्ध करते समय कब हुई?
       </div>
 
       <div class="options" data-correct="B">
-        <label class="option-label"
-          ><input type="radio" name="q22" value="A" /> (A) 1857</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q22" value="B" /> (B) 1799</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q22" value="C" /> (C) 1793</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q22" value="D" /> (D) 1769</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q22')">
+        <label class="option-label"><input type="radio" name="q22" value="A" /><span class="opt-text"><span class="opt-en">(A) 1857</span></span></label>
+        <label class="option-label"><input type="radio" name="q22" value="B" /><span class="opt-text"><span class="opt-en">(B) 1799</span></span></label>
+        <label class="option-label"><input type="radio" name="q22" value="C" /><span class="opt-text"><span class="opt-en">(C) 1793</span></span></label>
+        <label class="option-label"><input type="radio" name="q22" value="D" /><span class="opt-text"><span class="opt-en">(D) 1769</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(22)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Tipu Sultan died fighting in the Fourth
-          Anglo-Mysore War in 1799 A.D..
-        </p>
-        <p>
-          <strong>हिंदी:</strong> टीपू सुल्तान 1799 ई. में चौथे आंग्ल-मैसूर
-          युद्ध में लड़ते हुए मारे गए।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (B)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Tipu Sultan died fighting in the Fourth Anglo-Mysore War in 1799 A.D..</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>टीपू सुल्तान 1799 ई. में चौथे आंग्ल-मैसूर युद्ध में लड़ते हुए मारे गए।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q23">
+      <span class="q-number">23</span>
       <div class="q-text-en">
-        23. Which of the following is correctly matched?
+        Which of the following is correctly matched?
       </div>
-      <div class="q-text-hi">23. निम्नलिखित में से कौन सा सही सुमेलित है?</div>
+      <div class="q-text-hi">निम्नलिखित में से कौन सा सही सुमेलित है?</div>
 
       <div class="options" data-correct="D">
-        <label class="option-label"
-          ><input type="radio" name="q23" value="A" /> (A) 1st Mysore War:
-          Haidar Ali defeated / प्रथम मैसूर युद्ध: हैदर अली हारा</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q23" value="B" /> (B) 2nd Mysore War:
-          Haidar Ali defeated British / द्वितीय मैसूर युद्ध: हैदर अली ने
-          अंग्रेजों को हराया</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q23" value="C" /> (C) 3rd Mysore War: Tipu
-          won / तृतीय मैसूर युद्ध: टीपू जीता</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q23" value="D" /> (D) 4th Mysore War: Tipu
-          defeated and killed / चतुर्थ मैसूर युद्ध: टीपू हारा और मारा गया</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q23')">
+        <label class="option-label"><input type="radio" name="q23" value="A" /><span class="opt-text"><span class="opt-en">(A) 1st Mysore War: Haidar Ali defeated</span><br /><span class="opt-hi">(A) प्रथम मैसूर युद्ध: हैदर अली हारा</span></span></label>
+        <label class="option-label"><input type="radio" name="q23" value="B" /><span class="opt-text"><span class="opt-en">(B) 2nd Mysore War: Haidar Ali defeated British</span><br /><span class="opt-hi">(B) द्वितीय मैसूर युद्ध: हैदर अली ने अंग्रेजों को हराया</span></span></label>
+        <label class="option-label"><input type="radio" name="q23" value="C" /><span class="opt-text"><span class="opt-en">(C) 3rd Mysore War: Tipu won</span><br /><span class="opt-hi">(C) तृतीय मैसूर युद्ध: टीपू जीता</span></span></label>
+        <label class="option-label"><input type="radio" name="q23" value="D" /><span class="opt-text"><span class="opt-en">(D) 4th Mysore War: Tipu defeated and killed</span><br /><span class="opt-hi">(D) चतुर्थ मैसूर युद्ध: टीपू हारा और मारा गया</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(23)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> In the 4th Anglo-Mysore War (1799), Tipu was
-          defeated and killed.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> चौथे आंग्ल-मैसूर युद्ध (1799) में टीपू की हार
-          हुई और वे मारे गए।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (D)</div>
+        <div class="exp-en">
+          <ul>
+            <li>In the 4th Anglo-Mysore War (1799), Tipu was defeated and killed.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>चौथे आंग्ल-मैसूर युद्ध (1799) में टीपू की हार हुई और वे मारे गए।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q24">
+      <span class="q-number">24</span>
       <div class="q-text-en">
-        24. Match List-I with List-II and select the correct answer using the
+        Match List-I with List-II and select the correct answer using the
         code given below:
       </div>
-      <div class="q-text-hi">
-        24. सूची-I को सूची-II से सुमेलित कीजिए और नीचे दिए गए कूट से सही उत्तर
+      <div class="q-text-hi">सूची-I को सूची-II से सुमेलित कीजिए और नीचे दिए गए कूट से सही उत्तर
         चुनिए:
       </div>
 
@@ -1149,131 +808,99 @@
       </table>
 
       <div class="options" data-correct="C">
-        <label class="option-label">
-          <input type="radio" name="q24" value="A" />
-          (A) A-4, B-2, C-3, D-1
-        </label>
-        <label class="option-label">
-          <input type="radio" name="q24" value="B" />
-          (B) A-2, B-4, C-3, D-1
-        </label>
-        <label class="option-label">
-          <input type="radio" name="q24" value="C" />
-          (C) A-4, B-2, C-1, D-3
-        </label>
-        <label class="option-label">
-          <input type="radio" name="q24" value="D" />
-          (D) A-2, B-4, C-1, D-3
-        </label>
+        <label class="option-label"><input type="radio" name="q24" value="A" /><span class="opt-text"><span class="opt-en">(A) A-4, B-2, C-3, D-1</span></span></label>
+        <label class="option-label"><input type="radio" name="q24" value="B" /><span class="opt-text"><span class="opt-en">(B) A-2, B-4, C-3, D-1</span></span></label>
+        <label class="option-label"><input type="radio" name="q24" value="C" /><span class="opt-text"><span class="opt-en">(C) A-4, B-2, C-1, D-3</span></span></label>
+        <label class="option-label"><input type="radio" name="q24" value="D" /><span class="opt-text"><span class="opt-en">(D) A-2, B-4, C-1, D-3</span></span></label>
 
-        <button class="check-btn" onclick="checkAnswer('q24')">
+        <button class="check-btn" onclick="checkAnswer(24)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
 
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong>
-          Treaty of Allahabad – 1765, Treaty of Mangalore – 1784, Treaty of
-          Salbai – 1782, Treaty of Madras – 1769.
-        </p>
-        <p>
-          <strong>हिंदी:</strong>
-          इलाहाबाद की संधि – 1765, मंगलौर की संधि – 1784, सालबाई की संधि – 1782,
-          मद्रास की संधि – 1769।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (C)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Treaty of Allahabad – 1765, Treaty of Mangalore – 1784, Treaty of Salbai – 1782, Treaty of Madras – 1769.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>इलाहाबाद की संधि – 1765, मंगलौर की संधि – 1784, सालबाई की संधि – 1782, मद्रास की संधि – 1769।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q25">
+      <span class="q-number">25</span>
       <div class="q-text-en">
-        25. Begum Samru constructed most eminent church at:
+        Begum Samru constructed most eminent church at:
       </div>
-      <div class="q-text-hi">
-        25. बेगम समरू ने सबसे प्रसिद्ध चर्च का निर्माण कहाँ करवाया था?
+      <div class="q-text-hi">बेगम समरू ने सबसे प्रसिद्ध चर्च का निर्माण कहाँ करवाया था?
       </div>
 
       <div class="options" data-correct="C">
-        <label class="option-label"
-          ><input type="radio" name="q25" value="A" /> (A) Mount Abu / माउंट
-          आबू</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q25" value="B" /> (B) Nainital /
-          नैनीताल</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q25" value="C" /> (C) Sardhana /
-          सरधना</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q25" value="D" /> (D) Kanpur /
-          कानपुर</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q25')">
+        <label class="option-label"><input type="radio" name="q25" value="A" /><span class="opt-text"><span class="opt-en">(A) Mount Abu</span><br /><span class="opt-hi">(A) माउंट आबू</span></span></label>
+        <label class="option-label"><input type="radio" name="q25" value="B" /><span class="opt-text"><span class="opt-en">(B) Nainital</span><br /><span class="opt-hi">(B) नैनीताल</span></span></label>
+        <label class="option-label"><input type="radio" name="q25" value="C" /><span class="opt-text"><span class="opt-en">(C) Sardhana</span><br /><span class="opt-hi">(C) सरधना</span></span></label>
+        <label class="option-label"><input type="radio" name="q25" value="D" /><span class="opt-text"><span class="opt-en">(D) Kanpur</span><br /><span class="opt-hi">(D) कानपुर</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(25)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Begum Samru constructed the church at
-          Sardhana near Meerut.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> बेगम समरू ने मेरठ के निकट सरधना में चर्च का
-          निर्माण करवाया था।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (C)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Begum Samru constructed the church at Sardhana near Meerut.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>बेगम समरू ने मेरठ के निकट सरधना में चर्च का निर्माण करवाया था।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q26">
+      <span class="q-number">26</span>
       <div class="q-text-en">
-        26. Which one of the statements is NOT correct?
+        Which one of the statements is NOT correct?
       </div>
-      <div class="q-text-hi">26. कौन सा कथन सही नहीं है?</div>
+      <div class="q-text-hi">कौन सा कथन सही नहीं है?</div>
 
       <div class="options" data-correct="A">
-        <label class="option-label"
-          ><input type="radio" name="q26" value="A" /> (A) Ali Mardan Khan
-          introduced revenue farming in Bengal. / अली मर्दान खान ने बंगाल में
-          राजस्व कृषि प्रणाली शुरू की।</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q26" value="B" /> (B) Ranjit Singh set up
-          cannons foundry at Lahore. / रणजीत सिंह ने लाहौर में तोप बनाने का
-          कारखाना लगाया।</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q26" value="C" /> (C) Jai Singh translated
-          Euclid's Geometry. / जय सिंह ने यूक्लिड की ज्यामिति का अनुवाद
-          कराया।</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q26" value="D" /> (D) Tipu gave money for
-          Sharda temple. / टीपू ने शारदा मंदिर के लिए धन दिया।</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q26')">
+        <label class="option-label"><input type="radio" name="q26" value="A" /><span class="opt-text"><span class="opt-en">(A) Ali Mardan Khan introduced revenue farming in Bengal.</span><br /><span class="opt-hi">(A) अली मर्दान खान ने बंगाल में राजस्व कृषि प्रणाली शुरू की।</span></span></label>
+        <label class="option-label"><input type="radio" name="q26" value="B" /><span class="opt-text"><span class="opt-en">(B) Ranjit Singh set up cannons foundry at Lahore.</span><br /><span class="opt-hi">(B) रणजीत सिंह ने लाहौर में तोप बनाने का कारखाना लगाया।</span></span></label>
+        <label class="option-label"><input type="radio" name="q26" value="C" /><span class="opt-text"><span class="opt-en">(C) Jai Singh translated Euclid's Geometry.</span><br /><span class="opt-hi">(C) जय सिंह ने यूक्लिड की ज्यामिति का अनुवाद कराया।</span></span></label>
+        <label class="option-label"><input type="radio" name="q26" value="D" /><span class="opt-text"><span class="opt-en">(D) Tipu gave money for Sharda temple.</span><br /><span class="opt-hi">(D) टीपू ने शारदा मंदिर के लिए धन दिया।</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(26)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Revenue farming in Bengal was introduced by
-          Murshid Quli Khan, not Ali Mardan Khan.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> बंगाल में इजारेदारी (राजस्व कृषि) प्रथा
-          मुर्शिद कुली खान ने शुरू की थी, अली मर्दान खान ने नहीं।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (A)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Revenue farming in Bengal was introduced by Murshid Quli Khan, not Ali Mardan Khan.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>बंगाल में इजारेदारी (राजस्व कृषि) प्रथा मुर्शिद कुली खान ने शुरू की थी, अली मर्दान खान ने नहीं।</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="question-box" id="q27">
-      <div class="q-text-en">27. Consider the following statements:</div>
-      <div class="q-text-hi">27. निम्नलिखित कथनों पर विचार करें:</div>
+      <span class="q-number">27</span>
+      <div class="q-text-en">
+        Consider the following statements:</div>
+      <div class="q-text-hi">निम्नलिखित कथनों पर विचार करें:</div>
       <div
         style="
           background: #fffbeb;
@@ -1302,75 +929,31 @@
       </p>
 
       <div class="options" data-correct="B">
-        <label class="option-label"
-          ><input type="radio" name="q27" value="A" /> (A) 1, 2 and 3 / 1, 2 और
-          3</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q27" value="B" /> (B) 3 only / केवल
-          3</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q27" value="C" /> (C) 2 and 3 / 2 और
-          3</label
-        >
-        <label class="option-label"
-          ><input type="radio" name="q27" value="D" /> (D) None / कोई
-          नहीं</label
-        >
-        <button class="check-btn" onclick="checkAnswer('q27')">
+        <label class="option-label"><input type="radio" name="q27" value="A" /><span class="opt-text"><span class="opt-en">(A) 1, 2 and 3</span><br /><span class="opt-hi">(A) 1, 2 और 3</span></span></label>
+        <label class="option-label"><input type="radio" name="q27" value="B" /><span class="opt-text"><span class="opt-en">(B) 3 only</span><br /><span class="opt-hi">(B) केवल 3</span></span></label>
+        <label class="option-label"><input type="radio" name="q27" value="C" /><span class="opt-text"><span class="opt-en">(C) 2 and 3</span><br /><span class="opt-hi">(C) 2 और 3</span></span></label>
+        <label class="option-label"><input type="radio" name="q27" value="D" /><span class="opt-text"><span class="opt-en">(D) None</span><br /><span class="opt-hi">(D) कोई नहीं</span></span></label>
+        <button class="check-btn" onclick="checkAnswer(27)">
           Check Answer / उत्तर जाँचें
         </button>
       </div>
       <div class="explanation">
-        <h4>Explanation / व्याख्या</h4>
-        <p>
-          <strong>English:</strong> Statement 1 is incorrect (Abdali defeated
-          Marathas in 1761, not Ibrahim Lodi). Statement 2 is incorrect (Tipu
-          died in the 4th War in 1799). Statement 3 is correct.
-        </p>
-        <p>
-          <strong>हिंदी:</strong> कथन 1 गलत है (1761 में अब्दाली ने मराठों को
-          हराया था, इब्राहिम लोदी को नहीं)। कथन 2 गलत है (टीपू चौथे युद्ध में
-          1799 में मारे गए)। कथन 3 सही है।
-        </p>
+        <div class="exp-label">✅ Correct Answer: (B)</div>
+        <div class="exp-en">
+          <ul>
+            <li>Statement 1 is incorrect (Abdali defeated Marathas in 1761, not Ibrahim Lodi). Statement 2 is incorrect (Tipu died in the 4th War in 1799). Statement 3 is correct.</li>
+          </ul>
+        </div>
+        <div class="exp-hi">
+          <ul>
+            <li>कथन 1 गलत है (1761 में अब्दाली ने मराठों को हराया था, इब्राहिम लोदी को नहीं)। कथन 2 गलत है (टीपू चौथे युद्ध में 1799 में मारे गए)। कथन 3 सही है।</li>
+          </ul>
+        </div>
       </div>
     </div>
-
-    <script>
-      function checkAnswer(qId) {
-        const box = document.getElementById(qId);
-        const optionsDiv = box.querySelector(".options");
-        const selected = optionsDiv.querySelector("input:checked");
-        const correctVal = optionsDiv.getAttribute("data-correct");
-        const explanation = box.querySelector(".explanation");
-        const allLabels = optionsDiv.querySelectorAll(".option-label");
-
-        allLabels.forEach((label) =>
-          label.classList.remove("correct", "incorrect"),
-        );
-
-        if (!selected) {
-          alert("Please select an option first / कृपया पहले एक विकल्प चुनें");
-          return;
-        }
-
-        const parentLabel = selected.parentElement;
-
-        if (selected.value === correctVal) {
-          parentLabel.classList.add("correct");
-        } else {
-          parentLabel.classList.add("incorrect");
-          const correctInput = optionsDiv.querySelector(
-            `input[value="${correctVal}"]`,
-          );
-          if (correctInput) correctInput.parentElement.classList.add("correct");
-        }
-
-        explanation.style.display = "block";
-      }
-    </script>
+  <script src="script.js"></script>
   <div style="text-align:center;font-size:12px;opacity:.6;padding:14px 10px;">© <span id="efpCopyrightYear"></span> ExamFusion Prep. All Rights Reserved.</div>
 <script>document.getElementById("efpCopyrightYear").innerText = new Date().getFullYear();</script>
+  </div>
 </body>
 </html>
