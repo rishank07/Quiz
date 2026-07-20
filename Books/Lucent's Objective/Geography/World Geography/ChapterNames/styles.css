@@ -260,8 +260,20 @@ body {
   .q-text-en table, .q-text-hi table { font-size: 0.85em; }
 }
 
+/* Universal mobile-safe scroll for match-table wherever it sits — fixes page-wide
+   zoom-out on mobile when the table is a direct sibling inside .question-box
+   rather than nested inside .q-text-en/.q-text-hi (added) */
+.match-table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+.match-table tr { display: table-row; }
+.match-table th, .match-table td { display: table-cell; }
+
 /* Premium match-table look — overrides the plain inline gray borders (added) */
-.match-table { border-collapse: collapse !important; border-radius: 10px; overflow: hidden; }
+.match-table { border-collapse: collapse !important; border-radius: 10px; }
 .match-table th[style] {
   background: rgba(128, 128, 128, 0.22) !important;
   border: 1px solid rgba(128, 128, 128, 0.4) !important;
