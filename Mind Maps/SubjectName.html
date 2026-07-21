@@ -1803,8 +1803,8 @@
     function isBackForwardNavigationMM() {
       try {
         const nav = performance.getEntriesByType("navigation")[0];
-        if (nav) return nav.type === "back_forward";
-        if (performance.navigation) return performance.navigation.type === 2;
+        if (nav) return nav.type === "back_forward" || nav.type === "reload";
+        if (performance.navigation) return performance.navigation.type === 1 || performance.navigation.type === 2;
       } catch (e) { }
       return false;
     }
