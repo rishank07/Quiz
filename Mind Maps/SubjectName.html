@@ -1777,9 +1777,50 @@
     // =======================================
     // Accordion Control
     // =======================================
+    // Assign stable position-based ids so open/closed state can be
+    // saved and restored across back/forward navigation.
+    document.querySelectorAll(".card").forEach(function (el, i) { el.dataset.accId = "card-" + i; });
+    document.querySelectorAll(".nested").forEach(function (el, i) { el.dataset.accId = "nested-" + i; });
+    document.querySelectorAll(".sub-nested").forEach(function (el, i) { el.dataset.accId = "subnested-" + i; });
+
+    function saveAccordionState() {
+      const state = {};
+      document.querySelectorAll(".card[data-acc-id], .nested[data-acc-id], .sub-nested[data-acc-id]").forEach(function (el) {
+        state[el.dataset.accId] = el.classList.contains("active");
+      });
+      sessionStorage.setItem('mmAccordionState', JSON.stringify(state));
+    }
+
+    function restoreAccordionState() {
+      let state = null;
+      try { state = JSON.parse(sessionStorage.getItem('mmAccordionState')); } catch (e) { }
+      if (!state) return;
+      document.querySelectorAll(".card[data-acc-id], .nested[data-acc-id], .sub-nested[data-acc-id]").forEach(function (el) {
+        el.classList.toggle("active", !!state[el.dataset.accId]);
+      });
+    }
+
+    function isBackForwardNavigationMM() {
+      try {
+        const nav = performance.getEntriesByType("navigation")[0];
+        if (nav) return nav.type === "back_forward";
+        if (performance.navigation) return performance.navigation.type === 2;
+      } catch (e) { }
+      return false;
+    }
+
+    // Fresh visit / reload => start with default state. Only a genuine
+    // back/forward navigation restores whatever was open before.
+    if (isBackForwardNavigationMM()) {
+      restoreAccordionState();
+    } else {
+      sessionStorage.removeItem('mmAccordionState');
+    }
+
     document.querySelectorAll(".card-header").forEach(function (header) {
       header.addEventListener("click", function () {
         this.parentElement.classList.toggle("active");
+        saveAccordionState();
       });
     });
 
@@ -1787,6 +1828,7 @@
       header.addEventListener("click", function (e) {
         e.stopPropagation();
         this.parentElement.classList.toggle("active");
+        saveAccordionState();
       });
     });
 
@@ -1794,6 +1836,7 @@
       header.addEventListener("click", function (e) {
         e.stopPropagation();
         this.parentElement.classList.toggle("active");
+        saveAccordionState();
       });
     });
 
@@ -1994,8 +2037,9 @@
     }
 
     // Restore text and visited states when returning to page
-    window.addEventListener("pageshow", function () {
+    window.addEventListener("pageshow", function (e) {
       loadVisitedLinks();
+      if (e.persisted) restoreAccordionState();
 
       document.querySelectorAll("a[data-original]").forEach(function (a) {
         a.innerHTML = a.dataset.original;
