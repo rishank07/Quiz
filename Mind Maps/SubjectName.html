@@ -1772,7 +1772,6 @@
   <!-- Site-wide search indexes (title index + deep content index), scoped below to Mind Maps only -->
   <script src="../search-index-main.js"></script>
   <script src="../search-logic.js"></script>
-  <script src="../search-snippets-mindmaps.js"></script>
   <script>
     // =======================================
     // Accordion Control
@@ -1988,9 +1987,28 @@
         });
       }
 
+      var snippetsLoaded = false;
+      var snippetsLoading = false;
+      function ensureSnippetsLoaded(onReady) {
+        if (snippetsLoaded) { onReady(); return; }
+        if (snippetsLoading) { return; }
+        snippetsLoading = true;
+        var s = document.createElement("script");
+        s.src = REL_ROOT + "search-snippets-mindmaps.js";
+        s.onload = function () {
+          snippetsLoaded = true;
+          onReady();
+        };
+        document.body.appendChild(s);
+      }
+
       searchInput.addEventListener("input", function () {
+        ensureSnippetsLoaded(function () { runContentSearch(searchInput.value); });
         runContentSearch(this.value);
       });
+      searchInput.addEventListener("focus", function () {
+        ensureSnippetsLoaded(function () {});
+      }, { once: true });
       searchClear.addEventListener("click", function () {
         runContentSearch("");
       });

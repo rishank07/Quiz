@@ -309,7 +309,6 @@
   <!-- Site-wide search indexes (title index + deep content index), scoped below to this section only -->
   <script src="../../search-index-main.js"></script>
   <script src="../../search-logic.js"></script>
-  <script src="../../search-snippets-pinnacle.js"></script>
   <script>
     (function () {
       var SECTION_PREFIX = "./Books/Pinnacle%20GS/";
@@ -396,10 +395,29 @@
         });
       }
 
+      var snippetsLoaded = false;
+      var snippetsLoading = false;
+      function ensureSnippetsLoaded(onReady) {
+        if (snippetsLoaded) { onReady(); return; }
+        if (snippetsLoading) { return; }
+        snippetsLoading = true;
+        var s = document.createElement("script");
+        s.src = REL_ROOT + "search-snippets-pinnacle.js";
+        s.onload = function () {
+          snippetsLoaded = true;
+          onReady();
+        };
+        document.body.appendChild(s);
+      }
+
       input.addEventListener("input", function () {
         clearBtn.classList.toggle("show", this.value.length > 0);
+        ensureSnippetsLoaded(function () { runSearch(input.value); });
         runSearch(this.value);
       });
+      input.addEventListener("focus", function () {
+        ensureSnippetsLoaded(function () {});
+      }, { once: true });
       clearBtn.addEventListener("click", function () {
         input.value = "";
         clearResults();
