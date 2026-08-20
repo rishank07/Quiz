@@ -16,7 +16,6 @@ def write_report(report_dir: Path, issues: list[dict], stats: dict) -> None:
         "",
         f"- HTML files scanned: **{stats.get('html_files', 0)}**",
         f"- Scan scope: **{stats.get('scan_scope', 'full')}**",
-        f"- AI candidates: **{stats.get('ai_candidates', 0)}**",
         f"- Total issues: **{len(issues)}**",
         f"- Critical: **{sev.get('critical', 0)}**",
         f"- Review: **{sev.get('review', 0)}**",
@@ -38,10 +37,6 @@ def write_report(report_dir: Path, issues: list[dict], stats: dict) -> None:
         lines.append(i.get("message", ""))
         if i.get("snippet"):
             lines += ["", "```text", str(i["snippet"])[:1200], "```"]
-        if i.get("suggested_fix"):
-            lines += ["", "**Suggested fix:**", "", "```text", str(i["suggested_fix"])[:2500], "```"]
-        if i.get("needs_web_verification"):
-            lines += ["", "⚠️ Requires external/web verification before changing the answer."]
         lines.append("")
 
     (report_dir / "report.md").write_text("\n".join(lines), encoding="utf-8")

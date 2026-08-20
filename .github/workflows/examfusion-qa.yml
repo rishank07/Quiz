@@ -12,6 +12,7 @@ permissions:
 jobs:
   qa:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -21,7 +22,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install QA agent dependencies
+      - name: Install QA dependencies
         run: pip install -r tools/examfusion-agent/requirements.txt
 
       - name: Run structural QA
@@ -29,8 +30,7 @@ jobs:
           python tools/examfusion-agent/agent.py \
             --repo . \
             --config tools/examfusion-agent/config.yml \
-            --report-dir examfusion-qa-report \
-            --no-ai
+            --report-dir examfusion-qa-report
 
       - name: Upload QA report
         if: always()

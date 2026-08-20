@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 from .utils import (
     contains_mojibake,
     local_target,
-    looks_bilingual,
     normalize_question,
     normalize_ws,
     relpath,
@@ -34,7 +33,7 @@ def issue(path: str, code: str, severity: str, message: str, **extra):
 
 
 def _question_nodes(soup: BeautifulSoup):
-    # Prefer complete MCQ cards so duplicate/AI checks see
+    # Prefer complete MCQ cards so duplicate checks see
     # question + options + answer + explanation together.
     preferred = []
 
@@ -84,12 +83,11 @@ def _question_nodes(soup: BeautifulSoup):
     return out[:2000]
 
 
-def scan_html(path: Path, repo_root: Path, site_url: str | None = None) -> tuple[list[dict], list[dict]]:
+def scan_html(path: Path, repo_root: Path, site_url: str | None = None) -> list[dict]:
     rel = relpath(path, repo_root)
     raw = path.read_text(encoding="utf-8", errors="replace")
     soup = BeautifulSoup(raw, "html.parser")
     issues: list[dict] = []
-    ai_candidates: list[dict] = []
 
     # Encoding / head basics
     if contains_mojibake(raw):
@@ -151,7 +149,6 @@ def scan_html(path: Path, repo_root: Path, site_url: str | None = None) -> tuple
 
     # Question-number anomalies: count one leading number per complete question card.
     # Counting the whole page produced many false positives from explanations/scripts.
-    full_text = normalize_ws(soup.get_text(" ", strip=True))
     qnodes = _question_nodes(soup)
     qnums = []
     for node in qnodes:
@@ -176,9 +173,6 @@ def scan_html(path: Path, repo_root: Path, site_url: str | None = None) -> tuple
         dev, lat = script_counts(text)
         if (dev >= 8 and lat < 8) or (lat >= 20 and dev < 4):
             issues.append(issue(rel, "POSSIBLE_MISSING_TRANSLATION", "review", f"Question block {idx} appears mostly single-language (Devanagari={dev}, Latin={lat}).", block=idx, snippet=text[:500]))
-            ai_candidates.append({"file": rel, "block": idx, "reason": "possible_missing_translation", "text": text, "html": str(node)})
-        elif looks_bilingual(text):
-            ai_candidates.append({"file": rel, "block": idx, "reason": "bilingual_semantic_audit", "text": text, "html": str(node)})
 
         # Exact duplicate guard on the normalized complete question card.
         n = normalize_question(text)
@@ -188,15 +182,7 @@ def scan_html(path: Path, repo_root: Path, site_url: str | None = None) -> tuple
             else:
                 seen_questions[n] = idx
 
-        lower = text.lower()
-        if ("correct answer" in lower or "सही उत्तर" in text) and ("explanation" in lower or "व्याख्या" in text):
-            ai_candidates.append({"file": rel, "block": idx, "reason": "answer_explanation_consistency", "text": text, "html": str(node)})
-
-    # If no known question wrappers exist, create a file-level AI candidate only for quiz-like files.
-    if not qnodes and re.search(r"correct answer|सही उत्तर|question|प्रश्न", full_text, re.I):
-        ai_candidates.append({"file": rel, "block": None, "reason": "file_level_quiz_audit", "text": full_text[:12000], "html": raw[:12000]})
-
-    return issues, ai_candidates
+    return issues
 
 
 def apply_safe_fixes(path: Path) -> list[str]:
