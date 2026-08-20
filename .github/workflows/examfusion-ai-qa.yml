@@ -1,0 +1,50 @@
+name: ExamFusion AI QA
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ai-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r tools/examfusion-agent/requirements.txt
+
+      - name: Restore AI review cache
+        uses: actions/cache@v4
+        with:
+          path: .examfusion-qa-cache
+          key: examfusion-ai-cache-${{ runner.os }}-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            examfusion-ai-cache-${{ runner.os }}-${{ github.ref_name }}-
+            examfusion-ai-cache-${{ runner.os }}-
+
+      - name: Run AI QA
+        continue-on-error: true
+        env:
+          EXAMFUSION_AI_API_KEY: ${{ secrets.EXAMFUSION_AI_API_KEY }}
+          EXAMFUSION_AI_BASE_URL: ${{ secrets.EXAMFUSION_AI_BASE_URL }}
+          EXAMFUSION_AI_MODEL: ${{ secrets.EXAMFUSION_AI_MODEL }}
+        run: |
+          python tools/examfusion-agent/agent.py \
+            --repo . \
+            --config tools/examfusion-agent/config.yml \
+            --report-dir examfusion-qa-report \
+            --ai
+
+      - name: Upload QA report
+        uses: actions/upload-artifact@v4
+        with:
+          name: examfusion-ai-qa-report
+          path: examfusion-qa-report/

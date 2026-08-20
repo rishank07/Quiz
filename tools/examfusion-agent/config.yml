@@ -1,0 +1,47 @@
+site_name: ExamFusion Prep
+tracked_roots:
+  - .
+exclude_globs:
+  - "**/node_modules/**"
+  - "**/.git/**"
+  - "**/vendor/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/404.html"
+
+search_index_files:
+  - search-index-main.js
+  - search-index.js
+sitemap_file: sitemap.xml
+
+fail_on_critical: true
+
+# Free-quota optimization: deduplicated candidate blocks are batched before AI.
+# At batch_size=25, 1,000 suspicious blocks normally need about 40 successful API calls.
+max_ai_items_per_run: 1000
+max_snippet_chars: 3500
+
+ai:
+  enabled: false
+  api_key_env: EXAMFUSION_AI_API_KEY
+  base_url_env: EXAMFUSION_AI_BASE_URL
+  model_env: EXAMFUSION_AI_MODEL
+
+  # OpenRouter defaults: with these defaults you only NEED to set the API key.
+  default_base_url: "https://openrouter.ai/api/v1"
+  default_model: "nvidia/nemotron-3-ultra-550b-a55b:free"
+  fallback_model: "openrouter/free"
+
+  # Free-plan guards / batching.
+  batch_size: 25
+  max_batch_chars: 65000
+  max_request_attempts_per_run: 45
+  timeout_seconds: 120
+  transient_backoff_seconds: 2
+
+  # Unchanged blocks are not sent to AI again. GitHub workflow caches this folder.
+  cache_enabled: true
+  cache_file: ".examfusion-qa-cache/ai-review-cache.json"
+
+  http_referer: "https://examfusionprep.com/"
+  app_title: "ExamFusion QA Agent"
