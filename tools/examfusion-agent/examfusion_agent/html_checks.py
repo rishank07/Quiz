@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 from collections import Counter
+from urllib.parse import unquote, urlparse
 from pathlib import Path
 from bs4 import BeautifulSoup
 
@@ -83,7 +84,7 @@ def _question_nodes(soup: BeautifulSoup):
     return out[:2000]
 
 
-def scan_html(path: Path, repo_root: Path) -> tuple[list[dict], list[dict]]:
+def scan_html(path: Path, repo_root: Path, site_url: str | None = None) -> tuple[list[dict], list[dict]]:
     rel = relpath(path, repo_root)
     raw = path.read_text(encoding="utf-8", errors="replace")
     soup = BeautifulSoup(raw, "html.parser")
@@ -101,6 +102,32 @@ def scan_html(path: Path, repo_root: Path) -> tuple[list[dict], list[dict]]:
 
     if not soup.title or not normalize_ws(soup.title.get_text()):
         issues.append(issue(rel, "MISSING_TITLE", "review", "HTML <title> is missing or empty."))
+
+    # Self-referential SEO metadata should point to the file that actually exists.
+    # This catches stale folder names after pages are moved/renamed.
+    if site_url:
+        site_host = urlparse(site_url).hostname
+        expected_paths = {rel}
+        if rel == "index.html":
+            expected_paths.add("")
+        url_fields = []
+        og = soup.find("meta", attrs={"property": "og:url"})
+        if og and og.get("content"):
+            url_fields.append(("og:url", str(og.get("content"))))
+        canonical = soup.find("link", attrs={"rel": lambda v: v and ("canonical" in v if isinstance(v, list) else str(v).lower() == "canonical")})
+        if canonical and canonical.get("href"):
+            url_fields.append(("canonical", str(canonical.get("href"))))
+        for field, value in url_fields:
+            parsed = urlparse(value)
+            if parsed.hostname == site_host:
+                actual_path = unquote(parsed.path).lstrip("/")
+                if actual_path not in expected_paths:
+                    issues.append(issue(
+                        rel,
+                        "SELF_URL_MISMATCH",
+                        "review",
+                        f"{field} points to '{actual_path}' instead of this page's path '{rel}'.",
+                    ))
 
     # duplicate ids
     ids = [t.get("id") for t in soup.find_all(attrs={"id": True}) if t.get("id")]
@@ -122,17 +149,25 @@ def scan_html(path: Path, repo_root: Path) -> tuple[list[dict], list[dict]]:
             if not exists:
                 issues.append(issue(rel, "BROKEN_LOCAL_LINK", "critical", f"Missing local target: {value}", target=value))
 
-    # question-number anomalies and bilingual heuristics
+    # Question-number anomalies: count one leading number per complete question card.
+    # Counting the whole page produced many false positives from explanations/scripts.
     full_text = normalize_ws(soup.get_text(" ", strip=True))
-    nums = [int(x) for x in QUESTION_NO_RE.findall(full_text)]
-    if nums:
-        counts = Counter(nums)
-        # More than two occurrences usually means duplicated rendered question labels even on bilingual pages.
-        for num, count in counts.items():
-            if count > 2:
-                issues.append(issue(rel, "QUESTION_NUMBER_REPEAT", "review", f"Question number {num} appears {count} times; inspect for duplication."))
-
     qnodes = _question_nodes(soup)
+    qnums = []
+    for node in qnodes:
+        text_head = normalize_ws(node.get_text(" ", strip=True))[:180]
+        m = QUESTION_NO_RE.search(text_head)
+        if m:
+            qnums.append(int(m.group(1)))
+    for num, count in Counter(qnums).items():
+        if count > 1:
+            issues.append(issue(
+                rel,
+                "QUESTION_NUMBER_REPEAT",
+                "review",
+                f"Question number {num} appears on {count} separate question cards; inspect numbering/duplication.",
+            ))
+
     seen_questions: dict[str, int] = {}
     for idx, node in enumerate(qnodes, start=1):
         text = normalize_ws(node.get_text(" ", strip=True))
@@ -145,7 +180,7 @@ def scan_html(path: Path, repo_root: Path) -> tuple[list[dict], list[dict]]:
         elif looks_bilingual(text):
             ai_candidates.append({"file": rel, "block": idx, "reason": "bilingual_semantic_audit", "text": text, "html": str(node)})
 
-        # exact/near-exact duplicate guard on normalized first 300 chars
+        # Exact duplicate guard on the normalized complete question card.
         n = normalize_question(text)
         if len(n) > 60:
             if n in seen_questions:

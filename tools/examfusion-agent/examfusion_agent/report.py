@@ -15,6 +15,7 @@ def write_report(report_dir: Path, issues: list[dict], stats: dict) -> None:
         "# ExamFusion QA Report",
         "",
         f"- HTML files scanned: **{stats.get('html_files', 0)}**",
+        f"- Scan scope: **{stats.get('scan_scope', 'full')}**",
         f"- AI candidates: **{stats.get('ai_candidates', 0)}**",
         f"- Total issues: **{len(issues)}**",
         f"- Critical: **{sev.get('critical', 0)}**",

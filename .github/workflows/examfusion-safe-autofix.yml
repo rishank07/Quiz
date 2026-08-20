@@ -12,20 +12,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
       - name: Install dependencies
         run: pip install -r tools/examfusion-agent/requirements.txt
 
-      - name: Apply safe fixes
-        
+      - name: Apply safe structural fixes
         run: |
           python tools/examfusion-agent/agent.py \
             --repo . \
@@ -49,10 +48,15 @@ jobs:
           git add -u
           git commit -m "chore: ExamFusion safe QA fixes"
           git push origin "$BRANCH"
-          gh pr create --title "ExamFusion safe QA fixes" --body "Automated conservative fixes from ExamFusion QA Agent. Review before merging." --base "${{ github.event.repository.default_branch }}" --head "$BRANCH"
+          gh pr create \
+            --title "ExamFusion safe QA fixes" \
+            --body "Automated conservative structural fixes from ExamFusion QA Agent. Review before merging." \
+            --base "${{ github.event.repository.default_branch }}" \
+            --head "$BRANCH"
 
       - name: Upload QA report
-        uses: actions/upload-artifact@v4
+        if: always()
+        uses: actions/upload-artifact@v6
         with:
           name: examfusion-safe-fix-report
           path: examfusion-qa-report/

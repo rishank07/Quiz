@@ -1,4 +1,5 @@
 site_name: ExamFusion Prep
+site_url: "https://examfusionprep.com/"
 tracked_roots:
   - .
 exclude_globs:
@@ -34,10 +35,16 @@ ai:
 
   # Free-plan guards / batching.
   batch_size: 25
-  max_batch_chars: 65000
+  max_batch_chars: 200000
   max_request_attempts_per_run: 45
+  max_output_tokens: 12000
   timeout_seconds: 120
   transient_backoff_seconds: 2
+
+  # Computer mind maps intentionally stay outside AI auto-editing.
+  # They may still be reviewed/reported, but AI will never patch them.
+  auto_fix_exclude_globs:
+    - "Mind Maps/Computer/**"
 
   # Unchanged blocks are not sent to AI again. GitHub workflow caches this folder.
   cache_enabled: true

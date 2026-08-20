@@ -10,6 +10,8 @@ from typing import Iterable
 
 import requests
 
+from .utils import is_excluded
+
 SYSTEM_PROMPT = r"""
 You are ExamFusion Prep's conservative QA reviewer for competitive-exam HTML content.
 Audit ONLY the supplied blocks. Do not invent errors.
@@ -173,6 +175,7 @@ def _post_batch(base: str, key: str, model: str, fallback_model: str, batch: lis
                 {"role": "user", "content": prompt},
             ],
             "temperature": 0,
+            "max_tokens": int(ai.get("max_output_tokens", 12000)),
         }
         try:
             r = requests.post(
@@ -204,6 +207,14 @@ def _post_batch(base: str, key: str, model: str, fallback_model: str, batch: lis
     raise last_error or RuntimeError("AI request failed")
 
 
+def _env_or_default(env_name: str, default_value: str = "") -> str:
+    """Use a non-empty environment override; otherwise fall back to config default."""
+    value = os.getenv(env_name)
+    if value is not None and value.strip():
+        return value.strip()
+    return str(default_value or "").strip()
+
+
 def review_candidates(candidates: Iterable[dict], cfg: dict, repo_root: Path | None = None) -> list[dict]:
     ai = cfg.get("ai", {})
     if not ai.get("enabled"):
@@ -212,9 +223,9 @@ def review_candidates(candidates: Iterable[dict], cfg: dict, repo_root: Path | N
     key_env = ai.get("api_key_env", "EXAMFUSION_AI_API_KEY")
     base_env = ai.get("base_url_env", "EXAMFUSION_AI_BASE_URL")
     model_env = ai.get("model_env", "EXAMFUSION_AI_MODEL")
-    key = os.getenv(key_env, "").strip()
-    base = os.getenv(base_env, ai.get("default_base_url", "")).strip().rstrip("/")
-    model = os.getenv(model_env, ai.get("default_model", "")).strip()
+    key = _env_or_default(key_env)
+    base = _env_or_default(base_env, ai.get("default_base_url", "")).rstrip("/")
+    model = _env_or_default(model_env, ai.get("default_model", ""))
     fallback_model = str(ai.get("fallback_model", "")).strip()
 
     missing = [name for name, value in ((key_env, key), (base_env, base), (model_env, model)) if not value]
@@ -222,16 +233,15 @@ def review_candidates(candidates: Iterable[dict], cfg: dict, repo_root: Path | N
         return [{
             "file": "config",
             "code": "AI_CONFIG_MISSING",
-            "severity": "review",
+            "severity": "critical",
             "message": "AI enabled but required environment/default values are missing: " + ", ".join(missing),
         }]
 
-    unique = _dedupe_candidates(candidates)
+    unique_all = _dedupe_candidates(candidates)
     limit = int(cfg.get("max_ai_items_per_run", 1000))
-    unique = unique[:limit]
     max_chars = int(cfg.get("max_snippet_chars", 3500))
     batch_size = int(ai.get("batch_size", 25))
-    max_batch_chars = int(ai.get("max_batch_chars", 65000))
+    max_batch_chars = int(ai.get("max_batch_chars", 200000))
 
     root = repo_root or Path.cwd()
     cache_path = Path(ai.get("cache_file", ".examfusion-qa-cache/ai-review-cache.json"))
@@ -242,7 +252,12 @@ def review_candidates(candidates: Iterable[dict], cfg: dict, repo_root: Path | N
     out: list[dict] = []
     pending: list[dict] = []
     cache_hits = 0
-    for c in unique:
+    deferred_uncached = 0
+
+    # Important: apply the per-run limit AFTER checking cache. This lets later
+    # runs progress through the rest of a large repository instead of getting
+    # stuck on the same first N cached candidates forever.
+    for c in unique_all:
         ck = _candidate_key(c, model)
         cached = cache.get(ck)
         if isinstance(cached, dict):
@@ -259,12 +274,20 @@ def review_candidates(candidates: Iterable[dict], cfg: dict, repo_root: Path | N
                     "ai_cache": "hit",
                 })
             continue
+
+        if len(pending) >= limit:
+            deferred_uncached += 1
+            continue
         c2 = dict(c)
         c2["_cache_key"] = ck
         pending.append(c2)
 
     request_counter = {"attempts": 0}
     processed = 0
+    failed_items = 0
+    incomplete_items = 0
+    stop_after_guard = False
+
     for batch in _make_batches(pending, batch_size, max_batch_chars, max_chars):
         try:
             response = _post_batch(base, key, model, fallback_model, batch, ai, max_chars, request_counter)
@@ -273,6 +296,7 @@ def review_candidates(candidates: Iterable[dict], cfg: dict, repo_root: Path | N
             for idx, c in enumerate(batch, start=1):
                 result = by_id.get(idx)
                 if result is None:
+                    incomplete_items += 1
                     out.append({
                         "file": c["file"],
                         "block": c.get("block"),
@@ -301,6 +325,7 @@ def review_candidates(candidates: Iterable[dict], cfg: dict, repo_root: Path | N
                     })
                 processed += 1
         except Exception as e:
+            failed_items += len(batch)
             for c in batch:
                 out.append({
                     "file": c["file"],
@@ -309,32 +334,52 @@ def review_candidates(candidates: Iterable[dict], cfg: dict, repo_root: Path | N
                     "severity": "review",
                     "message": f"AI batch review failed: {type(e).__name__}: {e}",
                 })
-            # If the guard was reached, don't keep creating failure rows/calls for later batches.
             if "Free-quota guard" in str(e):
+                stop_after_guard = True
                 break
 
     if ai.get("cache_enabled", True):
         _save_cache(cache_path, cache)
 
-    # One compact info row makes quota savings visible in report without treating it as an error.
+    if failed_items or incomplete_items:
+        out.append({
+            "file": "AI",
+            "code": "AI_PIPELINE_INCOMPLETE",
+            "severity": "critical",
+            "message": (
+                f"AI audit was incomplete: failed items={failed_items}; omitted items={incomplete_items}; "
+                f"API request attempts={request_counter['attempts']}. Re-run the workflow after checking provider/quota status."
+            ),
+        })
+
     out.append({
         "file": "AI",
         "code": "AI_USAGE_SUMMARY",
         "severity": "info",
         "message": (
-            f"Unique candidates={len(unique)}; cache hits={cache_hits}; newly processed={processed}; "
-            f"API request attempts={request_counter['attempts']}; batch_size={batch_size}."
+            f"Unique candidates={len(unique_all)}; cache hits={cache_hits}; selected uncached={len(pending)}; "
+            f"newly processed={processed}; deferred uncached={deferred_uncached}; "
+            f"API request attempts={request_counter['attempts']}; batch_size={batch_size}; "
+            f"quota_guard_hit={stop_after_guard}."
         ),
     })
     return out
 
 
-def apply_ai_patches(repo_root: Path, ai_issues: list[dict]) -> tuple[list[dict], list[dict]]:
+def apply_ai_patches(repo_root: Path, ai_issues: list[dict], exclude_globs: list[str] | None = None) -> tuple[list[dict], list[dict]]:
     """Apply only exact, text-only, non-answer-key AI patches. Returns (applied_events, unresolved_issues)."""
     applied_events: list[dict] = []
     unresolved: list[dict] = []
 
+    exclude_globs = exclude_globs or []
+
     for item in ai_issues:
+        rel_file = str(item.get("file", ""))
+        if rel_file and rel_file not in {"AI", "config"} and is_excluded(rel_file, exclude_globs):
+            blocked = dict(item)
+            blocked["message"] = item.get("message", "") + " Auto-fix blocked by configured path exclusion."
+            unresolved.append(blocked)
+            continue
         if item.get("code") == "AI_USAGE_SUMMARY":
             unresolved.append(item)
             continue

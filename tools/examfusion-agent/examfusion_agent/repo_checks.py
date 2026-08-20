@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 from xml.etree import ElementTree as ET
@@ -26,6 +27,40 @@ def tracked_html(repo_root: Path, tracked_roots: list[str], excludes: list[str])
             if not is_excluded(rel, excludes):
                 files.append(p)
     return sorted(set(files))
+
+
+def changed_html_since(repo_root: Path, base_ref: str | None) -> set[str] | None:
+    """Return repo-relative changed HTML paths since base_ref. None means full-scan fallback."""
+    base = (base_ref or "").strip()
+    if not base or set(base) == {"0"}:
+        return None
+    try:
+        result = subprocess.run(
+            ["git", "diff", "--name-only", "--diff-filter=ACMRT", f"{base}..HEAD"],
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except Exception:
+        return None
+
+    out: set[str] = set()
+    root = repo_root.resolve()
+    for line in result.stdout.splitlines():
+        rel = line.strip().replace("\\", "/")
+        if not rel.lower().endswith(".html"):
+            continue
+        candidate = (repo_root / rel).resolve()
+        try:
+            candidate.relative_to(root)
+        except ValueError:
+            continue
+        if candidate.exists():
+            out.add(rel)
+    return out
 
 
 def check_sitemap(repo_root: Path, html_files: list[Path], sitemap_file: str) -> list[dict]:

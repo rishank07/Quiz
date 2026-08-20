@@ -3,7 +3,7 @@ name: ExamFusion QA
 on:
   pull_request:
   push:
-    branches: [ main, master ]
+    branches: [master]
   workflow_dispatch:
 
 permissions:
@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -25,7 +25,6 @@ jobs:
         run: pip install -r tools/examfusion-agent/requirements.txt
 
       - name: Run structural QA
-        continue-on-error: true
         run: |
           python tools/examfusion-agent/agent.py \
             --repo . \
@@ -34,7 +33,8 @@ jobs:
             --no-ai
 
       - name: Upload QA report
-        uses: actions/upload-artifact@v4
+        if: always()
+        uses: actions/upload-artifact@v6
         with:
           name: examfusion-qa-report
           path: examfusion-qa-report/
