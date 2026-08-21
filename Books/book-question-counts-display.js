@@ -140,6 +140,49 @@
     });
   }
 
+  // Some existing hub pages temporarily replace link text/HTML with a
+  // "Loading..." label before navigation.  If our count badge is inside that
+  // markup, browser Back/Forward can otherwise restore the count as plain text
+  // and then append another badge (or lose the structured holder entirely).
+  // Preserve the original link markup *without* generated count elements and
+  // restore it on pageshow before re-applying the current count.
+  function cleanBaseHtml(a) {
+    var clone = a.cloneNode(true);
+    clone.querySelectorAll(".ef-qcount-badge,.ef-qcount-placeholder").forEach(function (n) {
+      n.remove();
+    });
+    return clone.innerHTML;
+  }
+
+  function rememberNavigationMarkup(event) {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    var target = event.target;
+    if (!target || !target.closest) return;
+    var a = target.closest("a[href]");
+    if (!a || (a.target && a.target.toLowerCase() === "_blank")) return;
+
+    var decorations = a.querySelectorAll(".ef-qcount-badge,.ef-qcount-placeholder");
+    if (!decorations.length) return;
+
+    // Save a pristine copy each time, excluding our generated decorations.
+    a.dataset.efQcountRestoreHtml = cleanBaseHtml(a);
+
+    // Remove generated decorations before the page's legacy onclick handler
+    // reads innerText/innerHTML. This prevents counts being baked into its
+    // own "original" text snapshot.
+    decorations.forEach(function (n) {
+      n.remove();
+    });
+  }
+
+  function restoreNavigationMarkup() {
+    document.querySelectorAll("a[data-ef-qcount-restore-html]").forEach(function (a) {
+      var html = a.dataset.efQcountRestoreHtml;
+      if (html) a.innerHTML = html;
+      delete a.dataset.efQcountRestoreHtml;
+    });
+  }
+
   function loadManifest() {
     var sep = manifestUrl.indexOf("?") >= 0 ? "&" : "?";
     fetch(manifestUrl + sep + "v=" + Date.now(), { cache: "no-store" })
@@ -157,6 +200,7 @@
   }
 
   function reapplyAfterNavigation() {
+    restoreNavigationMarkup();
     clearTimeout(refreshTimer);
     refreshTimer = setTimeout(function () {
       if (lastManifest) applyCounts(lastManifest);
@@ -164,6 +208,8 @@
     }, 25);
   }
 
+  // Capture runs before inline onclick handlers used by the existing hubs.
+  document.addEventListener("click", rememberNavigationMarkup, true);
   loadManifest();
   window.addEventListener("pageshow", reapplyAfterNavigation);
 })();

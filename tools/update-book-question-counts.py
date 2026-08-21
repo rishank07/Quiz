@@ -28,7 +28,7 @@ QUESTION_CONTAINER_PRIORITY = (
 )
 
 DISPLAY_SCRIPT_NAME = "book-question-counts-display.js"
-DISPLAY_SCRIPT_VERSION = "20260821c"
+DISPLAY_SCRIPT_VERSION = "20260821d"
 DISPLAY_MARKER = "ExamFusion automatic book question counts"
 
 
