@@ -1,10 +1,13 @@
-name: Update Book Question Counts
+name: Update Section Counts
 
 on:
   push:
     branches: [master]
     paths:
       - "Books/**/*.html"
+      - "Bihar Special/**/*.html"
+      - "Current Affairs/**/*.html"
+      - "Mind Maps/**/*.html"
       - "index.html"
       - "tools/update-book-question-counts.py"
       - "Books/book-question-counts-display.js"
@@ -14,7 +17,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: book-question-counts-${{ github.ref }}
+  group: section-counts-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -33,17 +36,17 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Recalculate book question counts
+      - name: Recalculate section counts
         run: python tools/update-book-question-counts.py --repo .
 
       - name: Commit updated counts if needed
         run: |
           if git diff --quiet; then
-            echo "Question counts are already current."
+            echo "Section counts are already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Books index.html
-          git commit -m "chore: update book question counts"
+          git add Books "Bihar Special" "Current Affairs" "Mind Maps" index.html
+          git commit -m "chore: update section counts"
           git push
