@@ -36,26 +36,26 @@
       "background-color:#000 !important;" +
       "background-image:none !important;" +
       "}" +
-      /* Path B: page is light-themed -> invert the whole page to darkify it */
+      /* Path B: page is light-themed -> invert BODY, not the root HTML.
+         Keeping the root itself genuinely black prevents the transient white
+         compositor/overscroll strip some mobile browsers show while scrolling. */
       "html.efp-black-invert {" +
-      "background:#fff !important;" +
-      "filter: invert(1) hue-rotate(180deg) !important;" +
-      "-webkit-transform: translateZ(0);" +
-      "transform: translateZ(0);" +
-      "-webkit-backface-visibility: hidden;" +
-      "backface-visibility: hidden;" +
-      "isolation: isolate;" +
+      "background:#000 !important;" +
+      "background-image:none !important;" +
+      "min-height:100%;" +
+      "overscroll-behavior-y:none;" +
       "}" +
       "html.efp-black-invert body {" +
-      "min-height: 100vh;" +
-      "-webkit-transform: translateZ(0);" +
-      "transform: translateZ(0);" +
+      "background-color:#fff !important;" +
+      "min-height:100vh;" +
+      "filter: invert(1) hue-rotate(180deg) !important;" +
+      "overscroll-behavior-y:none;" +
       "}" +
-      "html.efp-black-invert img," +
-      "html.efp-black-invert video," +
-      "html.efp-black-invert svg," +
-      "html.efp-black-invert iframe," +
-      "html.efp-black-invert canvas {" +
+      "html.efp-black-invert body img," +
+      "html.efp-black-invert body video," +
+      "html.efp-black-invert body svg," +
+      "html.efp-black-invert body iframe," +
+      "html.efp-black-invert body canvas {" +
       "filter: invert(1) hue-rotate(180deg) !important;" +
       "}";
     document.head.appendChild(style);
