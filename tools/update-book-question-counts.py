@@ -28,7 +28,7 @@ QUESTION_CONTAINER_PRIORITY = (
 )
 
 DISPLAY_SCRIPT_NAME = "book-question-counts-display.js"
-DISPLAY_SCRIPT_VERSION = "20260821e"
+DISPLAY_SCRIPT_VERSION = "20260821f"
 DISPLAY_MARKER = "ExamFusion automatic book question counts"
 
 
@@ -125,9 +125,19 @@ def parse_page(path: Path, config: SectionConfig) -> PageInfo:
         return PageInfo(path, count, count if is_quiz else 0, "Questions" if is_quiz else "Entries", parser.hrefs)
 
     if config.mode == "mindmaps":
-        is_map = path.name.lower().endswith("_mindmap.html")
-        # One HTML mind-map chapter = one map. Keep leaf links uncluttered;
-        # totals are shown on hub/section buttons and the landing page.
+        # Count every actual mind-map/content HTML page, regardless of its
+        # filename convention. Navigation-only hub pages use the known
+        # Subject/Chapter/Parts naming pattern and must not count as maps.
+        # This also includes Vedic Maths chapter files such as
+        # viral-maths-ch01-important-products.html.
+        name = path.name.lower()
+        is_hub = (
+            name in {"subjectname.html", "chaptername.html", "chapternames.html"}
+            or name.endswith("parts.html")
+        )
+        is_map = not is_hub
+        # One HTML mind-map/content chapter = one map. Keep leaf links
+        # uncluttered; totals are shown on hub/section buttons and landing.
         return PageInfo(path, 0, 1 if is_map else 0, "Maps", parser.hrefs)
 
     return PageInfo(path, 0, 0, config.hub_unit, parser.hrefs)
@@ -219,7 +229,9 @@ def build_counts(repo: Path, install_scripts: bool = True) -> tuple[dict, list[P
     for config, root in roots:
         for p in root.rglob("*.html"):
             rp = p.resolve()
-            if config.mode == "bihar" and is_legacy_duplicate(rp):
+            # Skip legacy filename copies in every section when the real Unicode twin exists.
+            # This prevents stale #U2013/#U2014 copies from inflating totals.
+            if is_legacy_duplicate(rp):
                 continue
             config_by_path[rp] = config
             html_paths.append(rp)

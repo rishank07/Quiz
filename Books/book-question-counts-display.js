@@ -185,7 +185,7 @@
     });
   }
 
-  var SESSION_CACHE_KEY = "ef-qcount-manifest-v2";
+  var SESSION_CACHE_KEY = "ef-qcount-manifest-v3";
 
   function readCachedManifest() {
     try {
