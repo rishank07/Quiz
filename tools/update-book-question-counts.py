@@ -36,6 +36,7 @@ QUESTION_CONTAINER_PRIORITY = (
 )
 
 DISPLAY_SCRIPT_NAME = "book-question-counts-display.js"
+DISPLAY_SCRIPT_VERSION = "20260821b"
 DISPLAY_MARKER = "ExamFusion automatic book question counts"
 
 
@@ -128,7 +129,7 @@ def ensure_display_script(page: Path, books_root: Path) -> bool:
     src = relative_script_src(page, books_root)
     tag = (
         f'\n  <!-- {DISPLAY_MARKER} -->\n'
-        f'  <script src="{src}" defer></script>\n'
+        f'  <script src="{src}?v={DISPLAY_SCRIPT_VERSION}" defer></script>\n'
     )
     m = re.search(r"</body\s*>", raw, re.I)
     if m:
