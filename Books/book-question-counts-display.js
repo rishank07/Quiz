@@ -15,6 +15,8 @@
   var siteRootPath = decodeURIComponent(new URL("../", scriptUrl).pathname);
   var lastManifest = null;
   var refreshTimer = null;
+  var initialLoadScheduled = false;
+  var firstPageShow = true;
 
   function normalizePath(url) {
     try {
@@ -183,15 +185,57 @@
     });
   }
 
+  var SESSION_CACHE_KEY = "ef-qcount-manifest-v2";
+
+  function readCachedManifest() {
+    try {
+      var raw = window.sessionStorage.getItem(SESSION_CACHE_KEY);
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      return parsed && parsed.manifest ? parsed.manifest : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function cacheManifest(manifest) {
+    try {
+      window.sessionStorage.setItem(SESSION_CACHE_KEY, JSON.stringify({
+        savedAt: Date.now(),
+        manifest: manifest
+      }));
+    } catch (_) {
+      // sessionStorage is optional; counts still work without it.
+    }
+  }
+
+  // Counts are a progressive enhancement.  Always let the actual page paint
+  // and become clickable first, then do count work during an idle slice.
+  function scheduleIdle(fn, delay, timeout) {
+    window.setTimeout(function () {
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(fn, { timeout: timeout || 1200 });
+      } else if ("requestAnimationFrame" in window) {
+        window.requestAnimationFrame(function () {
+          window.setTimeout(fn, 0);
+        });
+      } else {
+        window.setTimeout(fn, 0);
+      }
+    }, delay || 0);
+  }
+
   function loadManifest() {
-    var sep = manifestUrl.indexOf("?") >= 0 ? "&" : "?";
-    fetch(manifestUrl + sep + "v=" + Date.now(), { cache: "no-store" })
+    // Revalidate instead of forcing a brand-new URL on every page view. This
+    // lets the browser reuse its HTTP cache while still picking up new counts.
+    fetch(manifestUrl, { cache: "no-cache" })
       .then(function (r) {
         if (!r.ok) throw new Error("question-count manifest unavailable");
         return r.json();
       })
       .then(function (manifest) {
         lastManifest = manifest;
+        cacheManifest(manifest);
         applyCounts(manifest);
       })
       .catch(function () {
@@ -199,17 +243,63 @@
       });
   }
 
+  function startLazyCounts() {
+    if (initialLoadScheduled) return;
+    initialLoadScheduled = true;
+
+    // If this tab has already visited another section, paint the cached counts
+    // after the first frame so Back/Forward feels instant and never waits on
+    // the network. A quiet background revalidation follows afterwards.
+    var cached = readCachedManifest();
+    if (cached) {
+      lastManifest = cached;
+      scheduleIdle(function () {
+        applyCounts(cached);
+      }, 80, 700);
+      scheduleIdle(loadManifest, 1600, 1500);
+    } else {
+      // First visit: give the real page a clear head start before fetching the
+      // ~count manifest. Users can scroll/click immediately while this waits.
+      scheduleIdle(loadManifest, 450, 1400);
+    }
+  }
+
   function reapplyAfterNavigation() {
+    // Restore pristine link markup immediately, but do the heavier DOM scan
+    // lazily after the browser has restored/painted the BFCache page.
     restoreNavigationMarkup();
     clearTimeout(refreshTimer);
     refreshTimer = setTimeout(function () {
-      if (lastManifest) applyCounts(lastManifest);
-      loadManifest();
-    }, 25);
+      if (lastManifest) {
+        scheduleIdle(function () {
+          applyCounts(lastManifest);
+        }, 60, 700);
+      } else {
+        scheduleIdle(loadManifest, 350, 1200);
+      }
+      // Revalidate well after the restored page is already usable.
+      if (lastManifest) scheduleIdle(loadManifest, 1800, 1500);
+    }, 0);
   }
 
   // Capture runs before inline onclick handlers used by the existing hubs.
   document.addEventListener("click", rememberNavigationMarkup, true);
-  loadManifest();
-  window.addEventListener("pageshow", reapplyAfterNavigation);
+
+  // Defer initial count work until the full page load event. The count system
+  // must never hold up the first usable render of ExamFusion pages.
+  if (document.readyState === "complete") {
+    startLazyCounts();
+  } else {
+    window.addEventListener("load", startLazyCounts, { once: true });
+  }
+  window.addEventListener("pageshow", function () {
+    // Every normal page load fires pageshow once after load. Skip that first
+    // event so we do not schedule a duplicate manifest request. A BFCache
+    // restore reuses this script state, so subsequent pageshow events reapply.
+    if (firstPageShow) {
+      firstPageShow = false;
+      return;
+    }
+    reapplyAfterNavigation();
+  });
 })();
