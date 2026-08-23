@@ -70,8 +70,8 @@ body {
     box-shadow: 0 2px 16px rgba(0,0,0,0.06);
     border-left: 5px solid #3498db;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    max-width: 100%;
 }
 .question-box:hover {
     transform: translateY(-2px);
@@ -249,33 +249,60 @@ body {
     .score-bar { font-size: 0.85em; padding: 10px 14px; }
 }
 /* Mobile-safe horizontal scroll for comparison tables (added for responsiveness) */
-.statement-box { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.match-table { min-width: 480px; }
-@media (max-width: 480px) {
-  .match-table { font-size: 0.85em; }
-}
+.statement-box { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
 
 /* Mobile-safe horizontal scroll for tables sitting directly inside question text (added) */
-.q-text-en, .q-text-hi { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.q-text-en table, .q-text-hi table { min-width: 480px; max-width: 100%; }
-@media (max-width: 480px) {
-  .q-text-en table, .q-text-hi table { font-size: 0.85em; }
-}
+.q-text-en, .q-text-hi { max-width: 100%; }
+.q-text-en table, .q-text-hi table { max-width: none; }
 
-/* Universal mobile-safe scroll for match-table wherever it sits — fixes page-wide
-   zoom-out on mobile when the table is a direct sibling inside .question-box
-   rather than nested inside .q-text-en/.q-text-hi (added) */
-.match-table {
-  display: block;
+/* Universal mobile-safe scroll for match-table/data-table/qa-table wherever they sit
+   (inside .exp-en/.exp-hi, .q-text-en/.q-text-hi, or as a direct sibling in .question-box).
+   The SCROLL CONTAINER is this wrapper div, not the table itself and not the parent
+   .question-box card — that is what previously caused the whole card (including the
+   score bar above it) to pan sideways on mobile instead of just the table scrolling
+   in place (fixed). Every table in every chapter file is now wrapped in this div. */
+.match-table-wrap {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   max-width: 100%;
+  margin: 10px 0;
 }
-.match-table tr { display: table-row; }
-.match-table th, .match-table td { display: table-cell; }
-
-/* Premium match-table look — overrides the plain inline gray borders (added) */
-.match-table { border-collapse: collapse !important; border-radius: 10px; }
+.match-table,
+.data-table,
+.qa-table,
+.match-table-wrap > table {
+  display: table;
+  width: max-content !important;
+  min-width: 100%;
+  max-width: none;
+  margin: 0 !important;
+  border-collapse: collapse !important;
+  border-radius: 10px;
+}
+@media (max-width: 480px) {
+  .match-table, .data-table, .qa-table, .match-table-wrap > table { font-size: 0.85em; }
+}
+.match-table tr, .data-table tr, .qa-table tr, .match-table-wrap > table tr { display: table-row; }
+.match-table th, .match-table td,
+.data-table th, .data-table td,
+.qa-table th, .qa-table td,
+.match-table-wrap > table th, .match-table-wrap > table td {
+  display: table-cell;
+  white-space: nowrap;
+}
+.data-table th, .data-table td, .qa-table th, .qa-table td,
+.match-table-wrap > table:not([style]) th, .match-table-wrap > table:not([style]) td {
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  padding: 8px;
+}
+.data-table thead th, .qa-table thead th {
+  background: rgba(128, 128, 128, 0.22);
+  font-weight: 700;
+  text-align: left;
+}
+.data-table tbody tr:nth-child(even) td, .qa-table tbody tr:nth-child(even) td {
+  background: rgba(128, 128, 128, 0.1);
+}
 .match-table th[style] {
   background: rgba(128, 128, 128, 0.22) !important;
   border: 1px solid rgba(128, 128, 128, 0.4) !important;
