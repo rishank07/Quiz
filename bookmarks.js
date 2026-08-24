@@ -70,8 +70,22 @@
     return count;
   }
 
-  function injectStars() {
-    var boxes = document.querySelectorAll(".question-box[id]");
+  function injectStars(root) {
+    var scope = root || document;
+    var boxes = scope.querySelectorAll(".question-box[id]");
+    // Read bookmarks ONCE per call instead of once per question —
+    // on pages with a few dozen questions the per-box localStorage read was
+    // unnoticeable, but on very large pages (hundreds/thousands of
+    // question-box elements, e.g. a combined multi-set quiz file) re-parsing
+    // localStorage for every single box made the initial render freeze the
+    // tab. Reading it once here keeps behavior identical while making
+    // injectStars() O(n) instead of O(n) JSON.parse calls. Passing a `root`
+    // element (instead of the default whole-document scan) lets a page lazily
+    // add new content later — e.g. a newly-revealed quiz section — and only
+    // process that new content instead of re-scanning everything already on
+    // the page.
+    var bookmarks = getBookmarks();
+    var prefix = keyFor("");
     boxes.forEach(function (box) {
       var qid = box.id;
       var numEl = box.querySelector(".q-number");
@@ -80,7 +94,7 @@
       star.className = "bookmark-star";
       star.setAttribute("role", "button");
       star.setAttribute("title", "Bookmark this question");
-      var active = isBookmarked(qid);
+      var active = !!bookmarks[prefix + qid];
       star.textContent = active ? "\u2605" : "\u2606";
       if (active) star.classList.add("is-bookmarked");
       star.addEventListener("click", function (e) {
@@ -91,15 +105,29 @@
     });
   }
 
+  // Public hook: pages that inject their own content lazily after page load
+  // (e.g. a quiz split across many sets, where only the visible set's HTML
+  // is in the DOM at a time) can call this on the newly-added element to
+  // get bookmark stars wired up for just that content, without re-scanning
+  // the whole document. Safe no-op if bookmarks.js isn't present.
+  window.efpBookmarksInjectInto = function (root) {
+    injectStyle();
+    injectStars(root);
+  };
+
   function applyFilter() {
     var boxes = document.querySelectorAll(".question-box[id]");
     var anyVisible = false;
+    // Same fix as injectStars(): read bookmarks once instead of once per
+    // box, so toggling the filter doesn't freeze on very large pages.
+    var bookmarks = filterActive ? getBookmarks() : null;
+    var prefix = keyFor("");
     boxes.forEach(function (box) {
       if (!filterActive) {
         box.style.display = "";
         anyVisible = true;
       } else {
-        var show = isBookmarked(box.id);
+        var show = !!bookmarks[prefix + box.id];
         box.style.display = show ? "" : "none";
         if (show) anyVisible = true;
       }
