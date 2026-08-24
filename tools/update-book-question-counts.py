@@ -112,8 +112,12 @@ def parse_page(path: Path, config: SectionConfig) -> PageInfo:
     if config.mode == "bihar":
         # Most Bihar Special pages are bilingual fact cards (.cd). The large
         # BPSC CA compilation uses paired .en-txt/.hi-txt rows; count English
-        # rows once so bilingual content is not double-counted.
-        count = parser.class_counts["cd"] or parser.class_counts["en-txt"]
+        # rows once so bilingual content is not double-counted. MCQ-style
+        # Bihar Special pages (radio-button quizzes, e.g. the 60-set
+        # Objective GK file) use .question-box like the Books/ quiz sections
+        # instead of fact cards, so fall back to that count when no .cd or
+        # .en-txt cards are present.
+        count = parser.class_counts["cd"] or parser.class_counts["en-txt"] or parser.class_counts["question-box"]
         return PageInfo(path, count, count, "Facts", parser.hrefs)
 
     if config.mode == "blackbook":
