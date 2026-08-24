@@ -58,6 +58,17 @@ class PageParser(HTMLParser):
         self.class_counts.update({"cd": 0, "en-txt": 0})
         self.q_ids: set[str] = set()
         self.hrefs: list[str] = []
+        # Explicit override for pages whose true question count can't be
+        # read off the static DOM — e.g. a page that lazy-loads most of its
+        # content via JS after the first section, to avoid shipping a huge
+        # DOM up front (see the Bihar Objective GK 60-set quiz). Such pages
+        # can declare their real total directly:
+        #   <meta name="efp-question-count" content="2066">
+        # in <head>, and this parser will use that number instead of
+        # counting .question-box/.cd/etc elements actually present in the
+        # static HTML (which would otherwise only see whatever ships in the
+        # initial DOM, not content injected later from a JS data blob).
+        self.explicit_count: int | None = None
 
     def handle_starttag(self, tag: str, attrs) -> None:
         data = dict(attrs)
@@ -69,6 +80,11 @@ class PageParser(HTMLParser):
         ident = (data.get("id") or "").strip()
         if tag in {"div", "main", "article", "section"} and re.fullmatch(r"q\d{1,5}", ident, re.I):
             self.q_ids.add(ident.lower())
+
+        if tag == "meta" and (data.get("name") or "").strip().lower() == "efp-question-count":
+            raw = (data.get("content") or "").strip()
+            if raw.isdigit():
+                self.explicit_count = int(raw)
 
         if tag == "a" and data.get("href"):
             self.hrefs.append(data["href"])
@@ -106,7 +122,7 @@ def parse_page(path: Path, config: SectionConfig) -> PageInfo:
     parser, raw = read_page_parser(path)
 
     if config.mode == "quiz":
-        count = parser.quiz_question_count()
+        count = parser.explicit_count if parser.explicit_count is not None else parser.quiz_question_count()
         return PageInfo(path, count, count, "Questions", parser.hrefs)
 
     if config.mode == "bihar":
@@ -116,7 +132,13 @@ def parse_page(path: Path, config: SectionConfig) -> PageInfo:
         # Bihar Special pages (radio-button quizzes, e.g. the 60-set
         # Objective GK file) use .question-box like the Books/ quiz sections
         # instead of fact cards, so fall back to that count when no .cd or
-        # .en-txt cards are present.
+        # .en-txt cards are present. An explicit <meta
+        # name="efp-question-count"> (see PageParser above) always wins over
+        # both, since it's the only reliable source of truth for a page that
+        # lazy-loads most of its questions via JS.
+        if parser.explicit_count is not None:
+            count = parser.explicit_count
+            return PageInfo(path, count, count, "Facts", parser.hrefs)
         count = parser.class_counts["cd"] or parser.class_counts["en-txt"] or parser.class_counts["question-box"]
         return PageInfo(path, count, count, "Facts", parser.hrefs)
 
