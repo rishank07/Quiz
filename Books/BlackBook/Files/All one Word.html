@@ -2318,9 +2318,9 @@
             if (!term) {
                 currentFiltered = [...vocabData];
             } else {
-                // Strict search only on Word column with word boundary
+                // Strict search only on the Word column, including titles ending in punctuation.
                 const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const regex = new RegExp(`\\b${escapedTerm}\\b`, 'i');
+                const regex = new RegExp(`(?:^|\\W)${escapedTerm}(?:\\W|$)`, 'i');
 
                 currentFiltered = vocabData.filter(item => {
                     return regex.test(item.word);
@@ -2421,6 +2421,13 @@
 
             const search = document.getElementById('search-input');
             search.addEventListener('input', filterAll);
+
+            const globalQuery = new URLSearchParams(window.location.search).get('efsearch');
+            if (globalQuery) {
+                search.value = globalQuery;
+                filterAll();
+                setTimeout(() => search.scrollIntoView({ behavior: 'smooth', block: 'center' }), 0);
+            }
 
             document.addEventListener('keydown', e => {
                 if (e.key === '/' && document.activeElement.tagName === 'BODY') {

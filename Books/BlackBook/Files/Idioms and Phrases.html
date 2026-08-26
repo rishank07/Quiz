@@ -2177,9 +2177,9 @@
       if (!term) {
         currentFiltered = [...idiomsData];
       } else {
-        // Sirf Idiom column mein strict word match
+        // Sirf Idiom column mein strict match, punctuation wale idioms bhi included.
         const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`\\b${escapedTerm}\\b`, 'i');
+        const regex = new RegExp(`(?:^|\\W)${escapedTerm}(?:\\W|$)`, 'i');
 
         currentFiltered = idiomsData.filter(item => {
           return regex.test(item.idiom);   // ← Sirf Idiom column
@@ -2287,6 +2287,13 @@
 
       const search = document.getElementById('search-input');
       search.addEventListener('input', filterAll);
+
+      const globalQuery = new URLSearchParams(window.location.search).get('efsearch');
+      if (globalQuery) {
+        search.value = globalQuery;
+        filterAll();
+        setTimeout(() => search.scrollIntoView({ behavior: 'smooth', block: 'center' }), 0);
+      }
 
       document.addEventListener('keydown', e => {
         if (e.key === '/' && document.activeElement.tagName === 'BODY') {

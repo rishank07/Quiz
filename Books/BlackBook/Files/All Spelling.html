@@ -3351,7 +3351,7 @@
         currentFiltered = [...spellingData];
       } else {
         const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`\\b${escaped}\\b`, 'i');
+        const regex = new RegExp(`(?:^|\\W)${escaped}(?:\\W|$)`, 'i');
         currentFiltered = spellingData.filter(item => regex.test(item.word));
       }
       renderTable(currentFiltered);
@@ -3426,6 +3426,13 @@
 
       const search = document.getElementById('search-input');
       search.addEventListener('input', filterAll);
+
+      const globalQuery = new URLSearchParams(window.location.search).get('efsearch');
+      if (globalQuery) {
+        search.value = globalQuery;
+        filterAll();
+        setTimeout(() => search.scrollIntoView({ behavior: 'smooth', block: 'center' }), 0);
+      }
 
       document.addEventListener('keydown', e => {
         if (e.key === '/' && document.activeElement.tagName === 'BODY') {
