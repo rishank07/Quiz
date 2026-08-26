@@ -1,185 +1,340 @@
-// Shared search ranking logic — used by the global site search (index.html) AND the
-// per-section scoped search boxes (Ghatnachakra Purvalokan, Lucent's Objective,
-// Pinnacle GS, Mind Maps).
+// ExamFusion shared bilingual search engine.
 //
-// Why this exists: a plain "does this exact phrase appear" search fails constantly
-// for real queries — e.g. "gandhi movement" or "fundamental right" would find ZERO
-// pages even though both words are all over the site, just never as one exact
-// contiguous phrase (and the content index itself stores de-duplicated keywords,
-// not full sentences). This version splits the query into separate words and
-// requires EVERY word to appear SOMEWHERE in the page (title, breadcrumb, or the
-// full page content) — in any order, not necessarily next to each other. Matches
-// found in the title rank above matches found only in the breadcrumb, which rank
-// above matches found only deep inside the page content.
-//
-// Depends on: SEARCH_INDEX (search-index-main.js) and, optionally, CONTENT_INDEX
-// (search-content-index.js — if it hasn't loaded yet, matching just falls back to
-// title + breadcrumb only, no error).
-function efSearchRank(query, options) {
-  options = options || {};
-  var sectionPrefix = options.sectionPrefix || null; // only consider urls starting with this
-  var excludeTitleMatches = !!options.excludeTitleMatches; // skip records whose title alone already satisfies the query
-  var limit = options.limit || 40;
+// Used by the homepage and every section-level/global search box. Matching is:
+// - Unicode-aware for Hindi and English;
+// - case, punctuation, dash and repeated-space insensitive;
+// - word-order independent for multi-word queries;
+// - partial-word friendly; and
+// - tolerant of one small typo (two for long words) when no exact result exists.
 
-  var terms = String(query).toLowerCase().split(/\s+/).filter(Boolean);
-  if (terms.length === 0) return [];
-  if (typeof SEARCH_INDEX === "undefined") return [];
-  var hasContent = typeof CONTENT_INDEX !== "undefined";
-
-  var scored = [];
-  for (var i = 0; i < SEARCH_INDEX.length; i++) {
-    var rec = SEARCH_INDEX[i];
-    if (sectionPrefix && rec.url.indexOf(sectionPrefix) !== 0) continue;
-
-    var titleLower = rec.title.toLowerCase();
-    var breadcrumbLower = rec.breadcrumb.toLowerCase();
-    var contentLower = hasContent ? (CONTENT_INDEX[rec.url] || "").toLowerCase() : "";
-    var hiLower = rec.hi ? rec.hi.toLowerCase() : "";
-
-    if (excludeTitleMatches) {
-      var titleAloneMatches = true;
-      for (var k = 0; k < terms.length; k++) {
-        if (titleLower.indexOf(terms[k]) === -1) { titleAloneMatches = false; break; }
-      }
-      if (titleAloneMatches) continue;
-    }
-
-    var score = 0;
-    var allFound = true;
-    for (var j = 0; j < terms.length; j++) {
-      var t = terms[j];
-      if (titleLower.indexOf(t) !== -1 || (hiLower && hiLower.indexOf(t) !== -1)) {
-        score += 0;
-      } else if (breadcrumbLower.indexOf(t) !== -1) {
-        score += 1;
-      } else if (contentLower.indexOf(t) !== -1) {
-        score += 3;
-      } else {
-        allFound = false;
-        break;
-      }
-    }
-    if (!allFound) continue;
-
-    // Tiny tie-breaker so results with an earlier/first-word title match float up.
-    var firstIdx = titleLower.indexOf(terms[0]);
-    score += firstIdx === -1 ? 0.5 : firstIdx * 0.001;
-
-    scored.push({ score: score, rec: rec });
+function efNormalizeSearchText(value) {
+  var text = String(value == null ? "" : value);
+  if (text.normalize) {
+    try { text = text.normalize("NFKC"); } catch (ignore) {}
   }
 
-  scored.sort(function (a, b) { return a.score - b.score; });
+  var devanagariDigits = "०१२३४५६७८९";
+  text = text.replace(/[०-९]/g, function (digit) {
+    return String(devanagariDigits.indexOf(digit));
+  });
 
-  var out = [];
-  for (var m = 0; m < scored.length && m < limit; m++) out.push(scored[m].rec);
-  return out;
+  return text
+    .replace(/[\u200B-\u200D\u2060\uFEFF]/g, "")
+    .replace(/[’‘`´]/g, "'")
+    .replace(/['"]/g, "")
+    .replace(/[‐‑‒–—―−]/g, "-")
+    .toLowerCase()
+    .replace(/[^a-z0-9\u0900-\u097f]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-// =====================================================================================
-// Snippet-level search — shows a real highlighted excerpt from inside the page (like
-// Current Affairs / Bihar Special already do), instead of just a bare chapter name.
-//
-// Depends on EF_SNIPPET_INDEX (search-snippets-*.js): an array of
-// { f: url, t: title, b: breadcrumb, x: [snippet1, snippet2, ...] } — one group per
-// page, each snippet being one self-contained searchable unit (one MCQ question+answer,
-// or one mind-map fact/card). Every word in the query must appear somewhere in a given
-// snippet (or its page's title/breadcrumb) for that snippet to match — not necessarily
-// as one exact phrase — so multi-word queries work the same way efSearchRank's do.
-// =====================================================================================
+function efSearchTerms(query) {
+  var normalized = efNormalizeSearchText(query);
+  if (!normalized) return [];
+  var raw = normalized.split(" ");
+  var seen = {};
+  var terms = [];
+  for (var i = 0; i < raw.length; i++) {
+    if (!raw[i] || seen[raw[i]]) continue;
+    seen[raw[i]] = true;
+    terms.push(raw[i]);
+  }
+  return terms;
+}
 
-function efEscapeHtml(str) {
-  return String(str).replace(/[&<>"']/g, function (c) {
-    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+function efPrepareSearchText(value) {
+  var raw = String(value == null ? "" : value);
+  var normalized = efNormalizeSearchText(raw);
+  return {
+    raw: raw,
+    normalized: normalized,
+    compact: normalized.replace(/\s+/g, ""),
+    tokens: null
+  };
+}
+
+function efAllowedEditDistance(term) {
+  if (/^\d+$/.test(term) || term.length < 4) return 0;
+  return term.length >= 8 ? 2 : 1;
+}
+
+function efBoundedEditDistance(a, b, maximum) {
+  if (a === b) return 0;
+  if (Math.abs(a.length - b.length) > maximum) return maximum + 1;
+
+  var previous = [];
+  var current = [];
+  var i;
+  var j;
+  for (j = 0; j <= b.length; j++) previous[j] = j;
+
+  for (i = 1; i <= a.length; i++) {
+    current[0] = i;
+    var rowMinimum = current[0];
+    for (j = 1; j <= b.length; j++) {
+      var cost = a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1;
+      current[j] = Math.min(
+        previous[j] + 1,
+        current[j - 1] + 1,
+        previous[j - 1] + cost
+      );
+      if (current[j] < rowMinimum) rowMinimum = current[j];
+    }
+    if (rowMinimum > maximum) return maximum + 1;
+    var swap = previous;
+    previous = current;
+    current = swap;
+  }
+  return previous[b.length];
+}
+
+function efFindTermInPreparedText(field, term, allowFuzzy) {
+  var position = field.normalized.indexOf(term);
+  if (position !== -1) return { score: 0, position: position, word: term };
+
+  var compactTerm = term.replace(/\s+/g, "");
+  if (compactTerm.length > 1 && field.compact.indexOf(compactTerm) !== -1) {
+    return { score: 4, position: 0, word: term };
+  }
+
+  if (!allowFuzzy) return null;
+  var maximum = efAllowedEditDistance(term);
+  if (!maximum) return null;
+
+  if (!field.tokens) field.tokens = field.normalized.split(" ").filter(Boolean);
+  var best = null;
+  for (var i = 0; i < field.tokens.length; i++) {
+    var candidate = field.tokens[i];
+    if (candidate.charAt(0) !== term.charAt(0)) continue;
+    if (Math.abs(candidate.length - term.length) > maximum) continue;
+    var distance = efBoundedEditDistance(term, candidate, maximum);
+    if (distance <= maximum && (!best || distance < best.distance)) {
+      best = { distance: distance, word: candidate };
+      if (distance === 1) break;
+    }
+  }
+  return best ? { score: 120 + best.distance * 10, position: 0, word: best.word } : null;
+}
+
+function efMatchPreparedFields(terms, fields, allowFuzzy) {
+  var total = 0;
+  var earliest = 1000000;
+  for (var i = 0; i < terms.length; i++) {
+    var best = null;
+    for (var j = 0; j < fields.length; j++) {
+      var found = efFindTermInPreparedText(fields[j], terms[i], allowFuzzy);
+      if (!found) continue;
+      var weighted = found.score + j * 20;
+      if (!best || weighted < best.score) {
+        best = { score: weighted, position: found.position };
+      }
+    }
+    if (!best) return null;
+    total += best.score;
+    if (best.position < earliest) earliest = best.position;
+  }
+  return total + Math.min(earliest, 999) * 0.001;
+}
+
+function efSearchRecords(query, records, options) {
+  options = options || {};
+  var limit = options.limit || 40;
+  var fieldNames = options.fields || ["title", "breadcrumb", "text"];
+  var terms = efSearchTerms(query);
+  if (!terms.length || !records) return [];
+
+  function collect(allowFuzzy) {
+    var found = [];
+    for (var i = 0; i < records.length; i++) {
+      var fields = [];
+      for (var j = 0; j < fieldNames.length; j++) {
+        fields.push(efPrepareSearchText(records[i][fieldNames[j]] || ""));
+      }
+      var score = efMatchPreparedFields(terms, fields, allowFuzzy);
+      if (score !== null) found.push({ index: i, score: score, record: records[i] });
+    }
+    return found;
+  }
+
+  var scored = collect(false);
+  if (scored.length === 0 && options.fuzzy !== false) scored = collect(true);
+  scored.sort(function (a, b) { return a.score - b.score || a.index - b.index; });
+
+  var output = [];
+  for (var k = 0; k < scored.length && k < limit; k++) output.push(scored[k].record);
+  return output;
+}
+
+function efTextMatches(query, text, allowFuzzy) {
+  var terms = efSearchTerms(query);
+  if (!terms.length) return true;
+  return efMatchPreparedFields(terms, [efPrepareSearchText(text)], !!allowFuzzy) !== null;
+}
+
+// Homepage title/breadcrumb search.
+function efSearchRank(query, options) {
+  options = options || {};
+  var sectionPrefix = options.sectionPrefix || null;
+  var excludeTitleMatches = !!options.excludeTitleMatches;
+  var limit = options.limit || 40;
+  var terms = efSearchTerms(query);
+  if (!terms.length || typeof SEARCH_INDEX === "undefined") return [];
+  var hasContent = typeof CONTENT_INDEX !== "undefined";
+
+  function collect(allowFuzzy) {
+    var found = [];
+    for (var i = 0; i < SEARCH_INDEX.length; i++) {
+      var record = SEARCH_INDEX[i];
+      if (sectionPrefix && record.url.indexOf(sectionPrefix) !== 0) continue;
+
+      var titleFields = [
+        efPrepareSearchText(record.title || ""),
+        efPrepareSearchText(record.hi || "")
+      ];
+      if (excludeTitleMatches && efMatchPreparedFields(terms, titleFields, allowFuzzy) !== null) continue;
+
+      var fields = titleFields.concat([
+        efPrepareSearchText(record.breadcrumb || ""),
+        efPrepareSearchText(hasContent ? (CONTENT_INDEX[record.url] || "") : "")
+      ]);
+      var score = efMatchPreparedFields(terms, fields, allowFuzzy);
+      if (score !== null) found.push({ index: i, score: score, record: record });
+    }
+    return found;
+  }
+
+  var scored = collect(false);
+  if (scored.length === 0 && options.fuzzy !== false) scored = collect(true);
+  scored.sort(function (a, b) { return a.score - b.score || a.index - b.index; });
+
+  var output = [];
+  for (var i = 0; i < scored.length && i < limit; i++) output.push(scored[i].record);
+  return output;
+}
+
+function efEscapeHtml(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, function (character) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character];
   });
 }
 
-// Builds a safe, HTML-highlighted excerpt centered on the first matched term.
-function efSnippetWithHighlight(text, terms) {
+function efRegexEscape(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function efSnippetWithHighlight(text, queryOrTerms) {
+  text = String(text == null ? "" : text);
+  var terms = Array.isArray(queryOrTerms)
+    ? queryOrTerms.map(efNormalizeSearchText).filter(Boolean)
+    : efSearchTerms(queryOrTerms);
   var lower = text.toLowerCase();
-  var bestIdx = -1;
-  var bestLen = 0;
+  var bestIndex = -1;
+  var bestLength = 0;
+  var highlightWords = [];
+
   for (var i = 0; i < terms.length; i++) {
-    var idx = lower.indexOf(terms[i]);
-    if (idx !== -1 && (bestIdx === -1 || idx < bestIdx)) {
-      bestIdx = idx;
-      bestLen = terms[i].length;
+    var directIndex = lower.indexOf(terms[i]);
+    if (directIndex !== -1) {
+      highlightWords.push(text.slice(directIndex, directIndex + terms[i].length));
+      if (bestIndex === -1 || directIndex < bestIndex) {
+        bestIndex = directIndex;
+        bestLength = terms[i].length;
+      }
+    }
+  }
+
+  if (bestIndex === -1 && terms.length) {
+    var tokenRegex = /[A-Za-z0-9\u0900-\u097F]+/g;
+    var match;
+    while ((match = tokenRegex.exec(text)) !== null) {
+      var candidate = efNormalizeSearchText(match[0]);
+      for (var j = 0; j < terms.length; j++) {
+        var maximum = efAllowedEditDistance(terms[j]);
+        if (!maximum || candidate.charAt(0) !== terms[j].charAt(0)) continue;
+        if (efBoundedEditDistance(terms[j], candidate, maximum) <= maximum) {
+          bestIndex = match.index;
+          bestLength = match[0].length;
+          highlightWords.push(match[0]);
+          break;
+        }
+      }
+      if (bestIndex !== -1) break;
     }
   }
 
   var raw;
-  if (bestIdx === -1) {
-    raw = text.slice(0, 160) + (text.length > 160 ? "..." : "");
+  if (bestIndex === -1) {
+    raw = text.slice(0, 180) + (text.length > 180 ? "..." : "");
   } else {
-    var start = Math.max(0, bestIdx - 60);
-    var end = Math.min(text.length, bestIdx + bestLen + 100);
+    var start = Math.max(0, bestIndex - 65);
+    var end = Math.min(text.length, bestIndex + bestLength + 115);
     raw = (start > 0 ? "..." : "") + text.slice(start, end) + (end < text.length ? "..." : "");
   }
 
+  for (var k = 0; k < terms.length; k++) {
+    if (lower.indexOf(terms[k]) !== -1) highlightWords.push(terms[k]);
+  }
+  highlightWords.sort(function (a, b) { return b.length - a.length; });
+
   var escaped = efEscapeHtml(raw);
-  for (var j = 0; j < terms.length; j++) {
-    var safe = terms[j].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    var re = new RegExp("(" + safe + ")", "ig");
-    escaped = escaped.replace(re, "<mark>$1</mark>");
+  var used = {};
+  for (var h = 0; h < highlightWords.length; h++) {
+    var word = highlightWords[h];
+    var key = word.toLowerCase();
+    if (!word || used[key]) continue;
+    used[key] = true;
+    escaped = escaped.replace(new RegExp("(" + efRegexEscape(efEscapeHtml(word)) + ")", "ig"), "<mark>$1</mark>");
   }
   return escaped;
 }
 
+// Full-content snippet search used by Ghatnachakra, Lucent, Pinnacle and Mind Maps.
 function efSnippetSearch(query, options) {
   options = options || {};
   var sectionPrefix = options.sectionPrefix || null;
-  var excludeTitleMatches = !!options.excludeTitleMatches; // skip pages whose TITLE alone already satisfies the query
+  var excludeTitleMatches = !!options.excludeTitleMatches;
   var limit = options.limit || 40;
+  var terms = efSearchTerms(query);
+  if (!terms.length || typeof EF_SNIPPET_INDEX === "undefined") return [];
 
-  var terms = String(query).toLowerCase().split(/\s+/).filter(Boolean);
-  if (terms.length === 0) return [];
-  if (typeof EF_SNIPPET_INDEX === "undefined") return [];
+  function collect(allowFuzzy) {
+    var found = [];
+    var sequence = 0;
+    for (var i = 0; i < EF_SNIPPET_INDEX.length; i++) {
+      var group = EF_SNIPPET_INDEX[i];
+      if (sectionPrefix && group.f.indexOf(sectionPrefix) !== 0) continue;
 
-  var scored = [];
-  for (var i = 0; i < EF_SNIPPET_INDEX.length; i++) {
-    var group = EF_SNIPPET_INDEX[i];
-    if (sectionPrefix && group.f.indexOf(sectionPrefix) !== 0) continue;
+      var titleField = efPrepareSearchText(group.t || "");
+      var breadcrumbField = efPrepareSearchText(group.b || "");
+      if (excludeTitleMatches && efMatchPreparedFields(terms, [titleField], allowFuzzy) !== null) continue;
 
-    var titleLower = group.t.toLowerCase();
-    var breadcrumbLower = group.b.toLowerCase();
-    var xs = group.x;
-
-    if (excludeTitleMatches) {
-      var titleAloneMatches = true;
-      for (var tk = 0; tk < terms.length; tk++) {
-        if (titleLower.indexOf(terms[tk]) === -1) { titleAloneMatches = false; break; }
-      }
-      if (titleAloneMatches) continue;
-    }
-
-    for (var j = 0; j < xs.length; j++) {
-      var snippetLower = xs[j].toLowerCase();
-      var allFound = true;
-      var firstIdx = -1;
-      var inSnippetCount = 0;
-      for (var k = 0; k < terms.length; k++) {
-        var t = terms[k];
-        var idx = snippetLower.indexOf(t);
-        if (idx !== -1) {
-          inSnippetCount++;
-          if (firstIdx === -1 || idx < firstIdx) firstIdx = idx;
-          continue;
+      for (var j = 0; j < group.x.length; j++) {
+        var fields = [efPrepareSearchText(group.x[j]), titleField, breadcrumbField];
+        var score = efMatchPreparedFields(terms, fields, allowFuzzy);
+        if (score !== null) {
+          found.push({
+            score: score,
+            sequence: sequence,
+            f: group.f,
+            t: group.t,
+            b: group.b,
+            x: group.x[j]
+          });
         }
-        if (titleLower.indexOf(t) !== -1 || breadcrumbLower.indexOf(t) !== -1) continue;
-        allFound = false;
-        break;
+        sequence++;
       }
-      if (!allFound) continue;
-
-      // Prefer snippets that contain MORE of the query terms themselves (not just
-      // via title/breadcrumb), and among those, an earlier match position.
-      var score = (terms.length - inSnippetCount) * 1000 + (firstIdx === -1 ? 500 : firstIdx);
-      scored.push({ score: score, f: group.f, t: group.t, b: group.b, x: xs[j] });
     }
+    return found;
   }
 
-  scored.sort(function (a, b) { return a.score - b.score; });
+  var scored = collect(false);
+  if (scored.length === 0 && options.fuzzy !== false) scored = collect(true);
+  scored.sort(function (a, b) { return a.score - b.score || a.sequence - b.sequence; });
 
-  var out = [];
-  for (var m = 0; m < scored.length && m < limit; m++) out.push(scored[m]);
-  return out;
+  var output = [];
+  for (var i = 0; i < scored.length && i < limit; i++) {
+    output.push({ f: scored[i].f, t: scored[i].t, b: scored[i].b, x: scored[i].x });
+  }
+  return output;
 }

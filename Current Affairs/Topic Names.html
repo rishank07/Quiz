@@ -21,6 +21,7 @@
   <!-- Google Analytics -->
   <!-- ============================= -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script src="../search-logic.js?v=20260826a"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -950,7 +951,7 @@
       return new Promise(function (resolve, reject) {
         if (window.CA_SEARCH_INDEX) return resolve(window.CA_SEARCH_INDEX);
         const script = document.createElement("script");
-        script.src = "./Topic Names/search-index.js";
+        script.src = "./Topic Names/search-index.js?v=20260826a";
         script.onload = function () { resolve(window.CA_SEARCH_INDEX || []); };
         script.onerror = function () { reject(new Error("Failed to load search index")); };
         document.body.appendChild(script);
@@ -1038,10 +1039,11 @@
 
       searchDebounce = setTimeout(function () {
         buildSearchIndex().then(function (index) {
-          const q = query.toLowerCase();
-          const matches = index.filter(function (e) {
-            return e.text.toLowerCase().indexOf(q) !== -1;
-          }).slice(0, 40);
+          const matches = (typeof efSearchRecords === "function")
+            ? efSearchRecords(query, index, { fields: ["title", "text"], limit: 40 })
+            : index.filter(function (e) {
+                return e.text.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+              }).slice(0, 40);
 
           if (!matches.length) {
             searchResultsEl.style.display = "flex";
@@ -1055,7 +1057,11 @@
           searchResultsEl.innerHTML = matches.map(function (m) {
             return '<a href="' + m.file + '" class="search-result-item" onclick="openPage(event)">' +
               '<span class="search-result-source">' + escapeHtml(m.title) + '</span>' +
-              '<div class="search-result-snippet">' + snippetWithHighlight(m.text, query) + '</div>' +
+              '<div class="search-result-snippet">' +
+                ((typeof efSnippetWithHighlight === "function")
+                  ? efSnippetWithHighlight(m.text, query)
+                  : snippetWithHighlight(m.text, query)) +
+              '</div>' +
               '</a>';
           }).join("");
         });

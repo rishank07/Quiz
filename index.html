@@ -1052,11 +1052,11 @@
   </div>
 
   <!-- ✨ Loading + Search Script -->
-  <script src="search-index-main.js"></script>
+  <script src="search-index-main.js?v=20260826a"></script>
   <!-- Shared ranking logic (matches every word in the query anywhere in a page's title or
        breadcrumb — not just an exact contiguous phrase — so multi-word searches like
        "gandhi movement" work). -->
-  <script src="search-logic.js"></script>
+  <script src="search-logic.js?v=20260826a"></script>
   <script>
     // Embedded site-wide search index (chapters/topics/subjects) — avoids fetch()
     // so search works even when the file is opened directly (file://) as well as on the live server.
@@ -1172,18 +1172,22 @@
       }
 
       box.addEventListener("input", function () {
-        const q = box.value.trim().toLowerCase();
+        const q = box.value.trim();
         let visible = 0;
 
         items.forEach(function (li) {
           if (li.hasAttribute("data-noresult")) {
             li.classList.toggle("hidden", q.length > 0 &&
-              !("telegram community notes channel discussion group टेलीग्राम".includes(q)));
+              !((typeof efTextMatches === "function")
+                ? efTextMatches(q, "telegram community notes channel discussion group टेलीग्राम", false)
+                : "telegram community notes channel discussion group टेलीग्राम".includes(q.toLowerCase())));
             if (!li.classList.contains("hidden")) visible++;
             return;
           }
-          const text = li.textContent.toLowerCase();
-          const match = text.includes(q);
+          const text = li.textContent;
+          const match = (typeof efTextMatches === "function")
+            ? efTextMatches(q, text, false)
+            : text.toLowerCase().includes(q.toLowerCase());
           li.classList.toggle("hidden", !match);
           if (match) visible++;
         });
