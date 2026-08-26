@@ -1,0 +1,56 @@
+name: Build ExamFusion Prep AAB
+
+on:
+  push:
+    branches:
+      - aab-build-temp
+    paths:
+      - '.github/workflows/build-examfusion-aab.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK 35
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Extract Android project
+        run: |
+          rm -rf /tmp/examfusion-aab
+          mkdir -p /tmp/examfusion-aab
+          unzip -q android-aab-temp/ExamFusion-Prep-Android-Source-v1.0.0.zip -d /tmp/examfusion-aab
+          sed -i '/signingConfig signingConfigs.release/d' /tmp/examfusion-aab/ExamFusionPrepAndroid/app/build.gradle
+
+      - name: Build release bundle
+        working-directory: /tmp/examfusion-aab/ExamFusionPrepAndroid
+        run: gradle --no-daemon bundleRelease
+
+      - name: Upload unsigned AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: ExamFusion-Prep-unsigned-aab
+          path: /tmp/examfusion-aab/ExamFusionPrepAndroid/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
