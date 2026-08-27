@@ -8,7 +8,15 @@
 
   <title>Exam Fusion Prep — Free MCQs, Mind Maps & Current Affairs</title>
   <link rel="icon" type="image/png" href="./favicon.png">
+  <link rel="apple-touch-icon" href="./pwa-icons/icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#070a13">
+  <meta name="application-name" content="ExamFusion Prep">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ExamFusion Prep">
+  <meta name="msapplication-TileColor" content="#070a13">
   <meta name="description"
     content="Free SSC, Railway, BPSC & BSSC preparation — Lucent's Objective MCQs, Pinnacle GS, Blackbook Vocabulary, Bihar Special, Mind Maps and daily Current Affairs. हिंदी + English.">
 
@@ -690,6 +698,26 @@
       opacity: 0.65;
     }
 
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 9px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--gold-soft);
+      text-decoration: none;
+      opacity: 0.75;
+    }
+
+    .footer-links a:hover,
+    .footer-links a:focus-visible {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
     /* ===== Media Queries ===== */
     @media (min-width: 601px) and (max-width: 1024px) {
       .container {
@@ -791,6 +819,10 @@
         align-self: end;
         text-align: left;
         margin: 26px 0 0;
+      }
+
+      .footer-links {
+        justify-content: flex-start;
       }
 
       .menu {
@@ -1048,6 +1080,10 @@
     <footer class="footer">
       © 2026 ExamFusion Prep. All Rights Reserved.
       <span class="tagline">मेहनत आपकी, साथ हमारा 🎯</span>
+      <span class="footer-links">
+        <a href="./privacy-policy.html">Privacy Policy</a>
+        <a href="./support.html">Support</a>
+      </span>
     </footer>
   </div>
 
@@ -1206,6 +1242,17 @@
 
   <!-- ExamFusion automatic book question counts -->
   <script src="./Books/book-question-counts-display.js?v=20260821f" defer></script>
+  <script>
+    // Enables installability and graceful offline handling for the Windows/PWA app.
+    if ("serviceWorker" in navigator && window.isSecureContext) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("./service-worker.js", { scope: "./" })
+          .catch(function (error) {
+            console.warn("ExamFusion service worker registration failed:", error);
+          });
+      });
+    }
+  </script>
 </body>
 
 </html>
