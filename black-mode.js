@@ -133,7 +133,9 @@
       /* A visible in-app Back control is required because the packaged PWA
          window does not provide normal browser navigation controls. */
       "#" + BACK_BUTTON_ID + "{" +
-      "position:fixed;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));" +
+      /* Keep the control anchored to the browser/PWA viewport. The !important
+         guards also prevent page-specific button rules from changing this. */
+      "position:fixed!important;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));" +
       "z-index:2147483647;min-width:92px;min-height:44px;padding:10px 16px;" +
       "border:1px solid rgba(255,255,255,.42);border-radius:999px;" +
       "background:rgba(12,16,26,.94);color:#fff;font:700 15px/1.2 system-ui,-apple-system,'Segoe UI',sans-serif;" +
@@ -223,7 +225,14 @@
     button.innerHTML = "<span class=\"efp-back-icon\" aria-hidden=\"true\">&#8592;</span>" +
       "<span class=\"efp-back-label\">Back</span>";
     button.addEventListener("click", navigateBack);
-    document.body.appendChild(button);
+
+    /* IMPORTANT: keep the fixed navigation control OUTSIDE <body>.
+       Light-theme pages use a CSS filter on <body> for Black Mode. A filtered
+       ancestor creates a containing block for position:fixed descendants, which
+       makes a fixed button scroll away on desktop and return only when the page
+       is scrolled back up. Making the button a direct child of <html> keeps it
+       genuinely viewport-fixed in normal mode and Black Mode alike. */
+    document.documentElement.appendChild(button);
   }
 
   function firstContentElement() {
