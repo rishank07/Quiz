@@ -25,6 +25,12 @@
 (function () {
   var STORAGE_KEY = "efp_black_mode";
   var STYLE_ID = "efp-amoled-style";
+  var BACK_BUTTON_ID = "efp-app-back-button";
+  var scriptUrl = document.currentScript && document.currentScript.src
+    ? new URL(document.currentScript.src, window.location.href)
+    : new URL("/black-mode.js", window.location.origin);
+  var siteRootUrl = new URL("./", scriptUrl);
+  var homeUrl = new URL("index.html", siteRootUrl).href;
 
   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
@@ -57,8 +63,72 @@
       "html.efp-black-invert body iframe," +
       "html.efp-black-invert body canvas {" +
       "filter: invert(1) hue-rotate(180deg) !important;" +
+      "}" +
+      /* A visible in-app Back control is required because the packaged PWA
+         window does not provide normal browser navigation controls. */
+      "#" + BACK_BUTTON_ID + "{" +
+      "position:fixed;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));" +
+      "z-index:2147483647;min-width:92px;min-height:44px;padding:10px 16px;" +
+      "border:1px solid rgba(255,255,255,.42);border-radius:999px;" +
+      "background:rgba(12,16,26,.94);color:#fff;font:700 15px/1.2 system-ui,-apple-system,'Segoe UI',sans-serif;" +
+      "box-shadow:0 8px 24px rgba(0,0,0,.38);cursor:pointer;" +
+      "display:flex;align-items:center;justify-content:center;gap:7px;" +
+      "-webkit-tap-highlight-color:transparent;" +
+      "}" +
+      "#" + BACK_BUTTON_ID + ":hover{background:#20283a;border-color:#fff;transform:translateY(-1px);}" +
+      "#" + BACK_BUTTON_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px;}" +
+      "#" + BACK_BUTTON_ID + ":active{transform:translateY(0);}" +
+      "@media(max-width:640px){#" + BACK_BUTTON_ID + "{min-width:82px;min-height:44px;padding:9px 13px;font-size:14px;}}" +
+      "@media(print){#" + BACK_BUTTON_ID + "{display:none!important;}" +
       "}";
     document.head.appendChild(style);
+  }
+
+  function normalizePath(pathname) {
+    var decoded;
+    try {
+      decoded = decodeURIComponent(pathname);
+    } catch (e) {
+      decoded = pathname;
+    }
+    return decoded.replace(/\/{2,}/g, "/").replace(/\/$/, "");
+  }
+
+  function isHomePage() {
+    var currentPath = normalizePath(window.location.pathname);
+    var rootPath = normalizePath(siteRootUrl.pathname);
+    var indexPath = normalizePath(new URL("index.html", siteRootUrl).pathname);
+    return currentPath === rootPath || currentPath === indexPath;
+  }
+
+  function hasSameOriginReferrer() {
+    if (!document.referrer) return false;
+    try {
+      return new URL(document.referrer).origin === window.location.origin;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function navigateBack() {
+    if (window.history.length > 1 && hasSameOriginReferrer()) {
+      window.history.back();
+      return;
+    }
+    window.location.assign(homeUrl);
+  }
+
+  function installBackNavigation() {
+    if (!document.body || isHomePage() || document.getElementById(BACK_BUTTON_ID)) return;
+
+    var button = document.createElement("button");
+    button.id = BACK_BUTTON_ID;
+    button.type = "button";
+    button.setAttribute("aria-label", "Go back to the previous page");
+    button.setAttribute("title", "Back");
+    button.innerHTML = "<span aria-hidden=\"true\">&#8592;</span><span>Back</span>";
+    button.addEventListener("click", navigateBack);
+    document.body.appendChild(button);
   }
 
   function parseRGBA(str) {
@@ -137,6 +207,12 @@
   }
   syncFromStorage();
 
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", installBackNavigation, { once: true });
+  } else {
+    installBackNavigation();
+  }
+
   // Public toggle function — call from any button: onclick="toggleBlackMode()"
   window.toggleBlackMode = function () {
     var turningOn = !document.documentElement.classList.contains("efp-black") &&
@@ -162,5 +238,15 @@
   // and re-sync any UI (like the toggle button label) listening for it.
   window.addEventListener("pageshow", function () {
     syncFromStorage();
+    installBackNavigation();
+  });
+
+  // Support common keyboard and mouse Back controls in the packaged app too.
+  window.addEventListener("keydown", function (event) {
+    if (isHomePage()) return;
+    if ((event.altKey && event.key === "ArrowLeft") || event.key === "BrowserBack") {
+      event.preventDefault();
+      navigateBack();
+    }
   });
 })();
