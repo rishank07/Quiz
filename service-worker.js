@@ -1,4 +1,4 @@
-const CACHE_VERSION = "efp-pwa-2026-09-01-legal-back-v2";
+const CACHE_VERSION = "efp-pwa-2026-09-01-dark-toggle-nowrap-v1";
 const APP_SHELL = [
   "/",
   "/index.html",
