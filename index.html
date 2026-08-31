@@ -340,6 +340,10 @@
       min-width: 0;
     }
 
+    .footer {
+      grid-area: footer;
+    }
+
     .logo {
       width: 104px;
       height: 104px;
@@ -803,6 +807,17 @@
     }
 
     /* ===== Media Queries ===== */
+    @media (max-width: 1119px) {
+      .container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .footer {
+        order: 99;
+      }
+    }
+
     @media (max-width: 600px) {
       .footer {
         text-align: center;
@@ -955,7 +970,7 @@
         text-align: left;
         align-items: start;
         grid-template-columns: 340px minmax(0, 1fr);
-        grid-template-rows: auto auto auto auto auto auto 1fr;
+        grid-template-rows: auto auto auto auto auto auto 1fr auto;
         grid-template-areas:
           "logo    menu"
           "kicker  menu"
@@ -963,7 +978,8 @@
           "subtitle menu"
           "stats   menu"
           "backup  menu"
-          ".       menu";
+          ".       menu"
+          "footer  menu";
       }
 
       .logo {
@@ -1000,6 +1016,7 @@
       }
 
       .footer {
+        align-self: end;
         text-align: center;
         margin: 20px 0 0;
         padding-top: 18px;
@@ -1183,6 +1200,17 @@
       <i class="fa-solid fa-chevron-right chevron-icon"></i>
     </a>
 
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-copyright">© 2026 ExamFusion Prep. All Rights Reserved.</div>
+        <span class="tagline">मेहनत आपकी, साथ हमारा 🎯</span>
+        <span class="footer-links" aria-label="Help and legal links">
+          <a href="./privacy-policy.html">Privacy Policy</a>
+          <a href="./support.html">Support</a>
+        </span>
+      </div>
+    </footer>
+
     <nav class="menu-container" aria-label="Study sections">
       <div class="search-wrap">
         <i class="fa-solid fa-magnifying-glass"></i>
@@ -1271,17 +1299,6 @@
           </div>
         </li>
       </ul>
-
-      <footer class="footer">
-        <div class="footer-content">
-          <div class="footer-copyright">© 2026 ExamFusion Prep. All Rights Reserved.</div>
-          <span class="tagline">मेहनत आपकी, साथ हमारा 🎯</span>
-          <span class="footer-links" aria-label="Help and legal links">
-            <a href="./privacy-policy.html">Privacy Policy</a>
-            <a href="./support.html">Support</a>
-          </span>
-        </div>
-      </footer>
 
       <div class="no-results" id="noResults">
         कुछ नहीं मिला। कोई अलग chapter, topic या subject नाम try करें।
