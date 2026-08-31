@@ -1,4 +1,4 @@
-const CACHE_VERSION = "efp-pwa-2026-09-01-back-button-responsive-v6";
+const CACHE_VERSION = "efp-pwa-2026-09-01-backup-restore-v7";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -6,6 +6,7 @@ const APP_SHELL = [
   "/manifest.webmanifest",
   "/privacy-policy.html",
   "/support.html",
+  "/backup-restore.html",
   "/logo.png",
   "/favicon.png",
   "/pwa-icons/icon-192.png",

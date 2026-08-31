@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#070a13">
+  <meta name="robots" content="noindex,follow">
+  <title>Backup & Restore — ExamFusion Prep</title>
+  <link rel="icon" type="image/png" href="./favicon.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <script src="./black-mode.js?v=20260901b"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070a13;
+      --panel: rgba(17, 24, 39, .88);
+      --panel-2: rgba(30, 41, 59, .72);
+      --border: rgba(148, 163, 184, .20);
+      --text: #f8fafc;
+      --muted: #aab4c5;
+      --gold: #f6d98a;
+      --accent: #60a5fa;
+      --good: #4ade80;
+      --warn: #fbbf24;
+      --danger: #fb7185;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .42);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    html { background: var(--bg); overscroll-behavior-y: none; }
+    body {
+      margin: 0;
+      min-width: 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(37, 99, 235, .16), transparent 34rem),
+        radial-gradient(circle at 90% 10%, rgba(245, 158, 11, .10), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      padding: max(26px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(38px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    }
+
+    button, input { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .shell { width: min(900px, 100%); margin: 0 auto; }
+    .hero { text-align: center; margin: 6px auto 24px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border: 1px solid rgba(246, 217, 138, .28);
+      background: rgba(246, 217, 138, .08); border-radius: 999px;
+      color: var(--gold); font-size: 12px; font-weight: 800; letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 14px 0 8px; font-size: clamp(1.8rem, 5.5vw, 3rem); line-height: 1.08; }
+    .hero p { margin: 0 auto; max-width: 680px; color: var(--muted); font-size: clamp(.94rem, 2.8vw, 1.04rem); }
+
+    .summary {
+      display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;
+      margin: 22px 0;
+    }
+    .stat {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 18px;
+      padding: 18px; box-shadow: 0 12px 34px rgba(0,0,0,.18);
+    }
+    .stat strong { display:block; font-size: clamp(1.6rem, 6vw, 2.25rem); line-height: 1; color: var(--gold); }
+    .stat span { display:block; margin-top: 8px; color: var(--muted); font-size: 13px; }
+
+    .grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+    .card {
+      background: linear-gradient(180deg, rgba(22,31,49,.92), rgba(12,18,30,.94));
+      border: 1px solid var(--border); border-radius: 22px; padding: 22px;
+      box-shadow: var(--shadow); min-width: 0;
+    }
+    .card h2 { margin: 0 0 7px; font-size: 1.2rem; }
+    .card p { margin: 0 0 17px; color: var(--muted); font-size: .92rem; }
+
+    .btn {
+      width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid transparent;
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      padding: 11px 16px; cursor: pointer; font-weight: 800; transition: .18s ease;
+      text-decoration: none;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary { background: linear-gradient(135deg, #f6d98a, #f0b84c); color: #15100a; box-shadow: 0 10px 26px rgba(246,185,73,.18); }
+    .btn-secondary { background: rgba(96,165,250,.13); color: #dbeafe; border-color: rgba(96,165,250,.32); }
+    .btn:focus-visible, .file-label:focus-within { outline: 3px solid #fde68a; outline-offset: 3px; }
+
+    .file-label {
+      display: flex; align-items: center; justify-content: center; min-height: 48px;
+      padding: 11px 14px; border: 1px dashed rgba(148,163,184,.45); border-radius: 14px;
+      background: rgba(148,163,184,.07); color: #e2e8f0; cursor: pointer;
+      text-align: center; font-weight: 700;
+    }
+    .file-label input { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+    .file-name { margin-top: 10px; min-height: 21px; color: var(--muted); font-size: 12px; overflow-wrap:anywhere; }
+
+    .restore-options {
+      display: flex; align-items: flex-start; gap: 10px; margin: 14px 0;
+      padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: rgba(255,255,255,.025);
+      color: var(--muted); font-size: 13px;
+    }
+    .restore-options input { margin-top: 3px; width: 17px; height: 17px; flex: 0 0 auto; }
+    .restore-options strong { color: var(--text); }
+
+    .privacy {
+      margin: 16px 0 0; padding: 15px 16px; border-radius: 16px;
+      border: 1px solid rgba(74,222,128,.18); background: rgba(74,222,128,.06);
+      color: #d1fae5; font-size: 13px;
+    }
+
+    .status {
+      display:none; margin-top: 16px; padding: 13px 15px; border-radius: 14px;
+      border: 1px solid var(--border); background: var(--panel-2); font-size: 13px;
+      overflow-wrap:anywhere;
+    }
+    .status.show { display:block; }
+    .status.good { border-color: rgba(74,222,128,.34); color:#dcfce7; }
+    .status.warn { border-color: rgba(251,191,36,.34); color:#fef3c7; }
+    .status.bad { border-color: rgba(251,113,133,.38); color:#ffe4e6; }
+
+    .details { margin-top: 18px; background: var(--panel); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+    details { padding: 0; }
+    summary { cursor:pointer; padding: 16px 18px; font-weight: 800; color:#e2e8f0; }
+    .details-body { padding: 0 18px 18px; color: var(--muted); font-size: 13px; }
+    .details-body ul { margin: 8px 0 0 18px; padding:0; }
+
+    .footer { text-align:center; color:#778399; font-size:12px; margin-top:24px; }
+    .footer a { color: var(--gold); text-decoration:none; }
+
+    @media (max-width: 700px) {
+      body { padding-inline: 12px; }
+      .grid { grid-template-columns: 1fr; }
+      .card { padding: 18px; border-radius: 18px; }
+      .summary { gap: 10px; }
+      .stat { padding: 15px; border-radius: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn { transition:none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <span class="eyebrow">ExamFusion Prep · Device Backup</span>
+      <h1>Backup &amp; Restore</h1>
+      <p>Save your bookmarked questions and chapter progress to one small JSON file, then restore it after clearing browser data, reinstalling the app, or moving to another device.</p>
+    </section>
+
+    <section class="summary" aria-label="Saved data summary">
+      <div class="stat"><strong id="bookmarkCount">0</strong><span>Bookmarked questions on this device</span></div>
+      <div class="stat"><strong id="progressCount">0</strong><span>Chapter progress entries on this device</span></div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>⬇️ Create Backup</h2>
+        <p>Downloads one local backup file containing only your ExamFusion bookmarks and chapter progress.</p>
+        <button class="btn btn-primary" type="button" id="backupBtn">Download Backup</button>
+        <div class="status" id="backupStatus" role="status" aria-live="polite"></div>
+      </article>
+
+      <article class="card">
+        <h2>⬆️ Restore Backup</h2>
+        <p>Select an ExamFusion backup JSON file. By default, saved data is merged with what is already on this device.</p>
+
+        <label class="file-label">
+          Choose Backup File (.json)
+          <input type="file" id="restoreFile" accept="application/json,.json">
+        </label>
+        <div class="file-name" id="fileName">No file selected</div>
+
+        <label class="restore-options">
+          <input type="checkbox" id="replaceMode">
+          <span><strong>Replace existing data</strong><br>Turn this on only if you want the backup file to become the exact bookmark/progress state on this device.</span>
+        </label>
+
+        <button class="btn btn-secondary" type="button" id="restoreBtn" disabled>Restore Selected Backup</button>
+        <div class="status" id="restoreStatus" role="status" aria-live="polite"></div>
+      </article>
+    </section>
+
+    <div class="privacy">🔒 <strong>Private by design:</strong> the backup is created and restored inside your browser. ExamFusion Prep does not upload the selected backup file to a server.</div>
+
+    <section class="details">
+      <details>
+        <summary>What exactly is included?</summary>
+        <div class="details-body">
+          <ul>
+            <li>Question bookmarks saved by ExamFusion Prep.</li>
+            <li>Visited/completed chapter progress for supported study sections.</li>
+            <li>No passwords, browsing history, quiz answers, or unrelated browser data.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <div class="footer">© 2026 ExamFusion Prep · <a href="./index.html">Home</a></div>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var BOOKMARK_KEY = "efp_bookmarks";
+      var PROGRESS_PREFIX = "efp_visited_";
+      var APP_NAME = "ExamFusion Prep";
+      var SCHEMA_VERSION = 1;
+      var selectedBackup = null;
+
+      var bookmarkCountEl = document.getElementById("bookmarkCount");
+      var progressCountEl = document.getElementById("progressCount");
+      var backupBtn = document.getElementById("backupBtn");
+      var restoreFile = document.getElementById("restoreFile");
+      var restoreBtn = document.getElementById("restoreBtn");
+      var replaceMode = document.getElementById("replaceMode");
+      var fileName = document.getElementById("fileName");
+      var backupStatus = document.getElementById("backupStatus");
+      var restoreStatus = document.getElementById("restoreStatus");
+
+      function safeParse(raw, fallback) {
+        if (!raw) return fallback;
+        try { return JSON.parse(raw); } catch (e) { return fallback; }
+      }
+
+      function getBookmarks() {
+        var value = safeParse(localStorage.getItem(BOOKMARK_KEY), {});
+        return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+      }
+
+      function getProgress() {
+        var progress = {};
+        for (var i = 0; i < localStorage.length; i++) {
+          var key = localStorage.key(i);
+          if (!key || key.indexOf(PROGRESS_PREFIX) !== 0) continue;
+          var value = safeParse(localStorage.getItem(key), []);
+          if (Array.isArray(value)) progress[key] = value;
+        }
+        return progress;
+      }
+
+      function countBookmarks(bookmarks) {
+        return Object.keys(bookmarks || {}).reduce(function (sum, key) {
+          return sum + (bookmarks[key] ? 1 : 0);
+        }, 0);
+      }
+
+      function countProgress(progress) {
+        var total = 0;
+        Object.keys(progress || {}).forEach(function (key) {
+          var arr = progress[key];
+          if (Array.isArray(arr)) total += new Set(arr).size;
+        });
+        return total;
+      }
+
+      function refreshCounts() {
+        bookmarkCountEl.textContent = countBookmarks(getBookmarks());
+        progressCountEl.textContent = countProgress(getProgress());
+      }
+
+      function showStatus(el, kind, message) {
+        el.className = "status show " + kind;
+        el.textContent = message;
+      }
+
+      function clearStatus(el) {
+        el.className = "status";
+        el.textContent = "";
+      }
+
+      function backupPayload() {
+        return {
+          app: APP_NAME,
+          schema: SCHEMA_VERSION,
+          exportedAt: new Date().toISOString(),
+          source: {
+            origin: location.origin,
+            path: location.pathname
+          },
+          data: {
+            bookmarks: getBookmarks(),
+            progress: getProgress()
+          }
+        };
+      }
+
+      function downloadJson(payload) {
+        var text = JSON.stringify(payload, null, 2);
+        var blob = new Blob([text], { type: "application/json;charset=utf-8" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        var d = new Date();
+        function pad(n) { return String(n).padStart(2, "0"); }
+        var stamp = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "_" + pad(d.getHours()) + "-" + pad(d.getMinutes());
+        a.href = url;
+        a.download = "ExamFusionPrep_Backup_" + stamp + ".json";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      }
+
+      function normalizeBackup(obj) {
+        if (!obj || typeof obj !== "object") throw new Error("This is not a valid JSON backup.");
+        if (obj.app !== APP_NAME || Number(obj.schema) !== SCHEMA_VERSION || !obj.data || typeof obj.data !== "object") {
+          throw new Error("This file is not a supported ExamFusion Prep backup.");
+        }
+
+        var bookmarks = obj.data.bookmarks;
+        if (!bookmarks || typeof bookmarks !== "object" || Array.isArray(bookmarks)) bookmarks = {};
+
+        var progress = {};
+        var rawProgress = obj.data.progress;
+        if (rawProgress && typeof rawProgress === "object" && !Array.isArray(rawProgress)) {
+          Object.keys(rawProgress).forEach(function (key) {
+            if (key.indexOf(PROGRESS_PREFIX) !== 0 || !Array.isArray(rawProgress[key])) return;
+            progress[key] = rawProgress[key].filter(function (item) { return typeof item === "string"; });
+          });
+        }
+
+        return {
+          bookmarks: bookmarks,
+          progress: progress,
+          exportedAt: obj.exportedAt || "Unknown date"
+        };
+      }
+
+      function mergeBookmarks(current, incoming) {
+        var merged = Object.assign({}, current);
+        Object.keys(incoming).forEach(function (key) {
+          if (incoming[key]) merged[key] = true;
+        });
+        return merged;
+      }
+
+      function uniqueStrings(arr) {
+        var out = [];
+        var seen = new Set();
+        (arr || []).forEach(function (value) {
+          if (typeof value !== "string" || seen.has(value)) return;
+          seen.add(value);
+          out.push(value);
+        });
+        return out;
+      }
+
+      function restoreBackup(data, replace) {
+        if (replace) {
+          var toRemove = [];
+          for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            if (key && key.indexOf(PROGRESS_PREFIX) === 0) toRemove.push(key);
+          }
+          toRemove.forEach(function (key) { localStorage.removeItem(key); });
+          localStorage.setItem(BOOKMARK_KEY, JSON.stringify(data.bookmarks || {}));
+          Object.keys(data.progress).forEach(function (key) {
+            localStorage.setItem(key, JSON.stringify(uniqueStrings(data.progress[key])));
+          });
+          return;
+        }
+
+        localStorage.setItem(BOOKMARK_KEY, JSON.stringify(mergeBookmarks(getBookmarks(), data.bookmarks)));
+        var currentProgress = getProgress();
+        Object.keys(data.progress).forEach(function (key) {
+          var merged = uniqueStrings((currentProgress[key] || []).concat(data.progress[key] || []));
+          localStorage.setItem(key, JSON.stringify(merged));
+        });
+      }
+
+      backupBtn.addEventListener("click", function () {
+        clearStatus(backupStatus);
+        try {
+          var payload = backupPayload();
+          downloadJson(payload);
+          var b = countBookmarks(payload.data.bookmarks);
+          var p = countProgress(payload.data.progress);
+          showStatus(backupStatus, "good", "Backup created: " + b + " bookmarks and " + p + " chapter-progress entries.");
+        } catch (e) {
+          showStatus(backupStatus, "bad", "Backup failed: " + (e && e.message ? e.message : "Unknown error"));
+        }
+      });
+
+      restoreFile.addEventListener("change", function () {
+        clearStatus(restoreStatus);
+        selectedBackup = null;
+        restoreBtn.disabled = true;
+        var file = restoreFile.files && restoreFile.files[0];
+        if (!file) {
+          fileName.textContent = "No file selected";
+          return;
+        }
+
+        fileName.textContent = file.name;
+        var reader = new FileReader();
+        reader.onload = function () {
+          try {
+            var parsed = JSON.parse(String(reader.result || ""));
+            selectedBackup = normalizeBackup(parsed);
+            restoreBtn.disabled = false;
+            showStatus(
+              restoreStatus,
+              "good",
+              "Valid backup: " + countBookmarks(selectedBackup.bookmarks) + " bookmarks, " + countProgress(selectedBackup.progress) + " progress entries. Created: " + selectedBackup.exportedAt
+            );
+          } catch (e) {
+            selectedBackup = null;
+            restoreBtn.disabled = true;
+            showStatus(restoreStatus, "bad", e && e.message ? e.message : "Could not read this backup file.");
+          }
+        };
+        reader.onerror = function () {
+          selectedBackup = null;
+          restoreBtn.disabled = true;
+          showStatus(restoreStatus, "bad", "Could not read the selected file.");
+        };
+        reader.readAsText(file);
+      });
+
+      restoreBtn.addEventListener("click", function () {
+        if (!selectedBackup) return;
+        var replace = !!replaceMode.checked;
+        var b = countBookmarks(selectedBackup.bookmarks);
+        var p = countProgress(selectedBackup.progress);
+        var action = replace ? "REPLACE the current ExamFusion bookmarks/progress with" : "MERGE the current ExamFusion bookmarks/progress with";
+        var ok = window.confirm(action + " this backup?\n\nBackup contains " + b + " bookmarks and " + p + " chapter-progress entries.");
+        if (!ok) return;
+
+        try {
+          restoreBackup(selectedBackup, replace);
+          refreshCounts();
+          showStatus(restoreStatus, "good", "Restore complete. Open or reload a chapter/quiz page to see the restored bookmarks and progress.");
+        } catch (e) {
+          showStatus(restoreStatus, "bad", "Restore failed: " + (e && e.message ? e.message : "Browser storage is unavailable."));
+        }
+      });
+
+      refreshCounts();
+    })();
+  </script>
+</body>
+</html>
