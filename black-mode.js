@@ -164,18 +164,33 @@
       "#" + BACK_BUTTON_ID + ":hover{background:#20283a;border-color:#fff;transform:translateY(-1px);}" +
       "#" + BACK_BUTTON_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px;}" +
       "#" + BACK_BUTTON_ID + ":active{transform:translateY(0);}" +
-      /* Compact/narrow windows do not have enough side rail for the full Back
-         pill. Move only the Back control to the bottom-left below 1200px. This
-         also covers phone/tablet landscape widths such as ~915/932 CSS px,
-         where the old top-left pill could overlap the header or score card. */
+      /* Universal no-overlap rule. Only the specially widened desktop quiz
+         pages have a guaranteed left rail large enough for the full Back pill.
+         Every other page (menus, topic lists, quizzes outside that widened set,
+         notes, etc.) therefore uses the compact bottom-left Back control at ALL
+         viewport widths. This keeps the shared navigation from covering page
+         headings, score bars, cards or menu content on any device. */
+      "html:not(." + WIDE_QUIZ_CLASS + ") #" + BACK_BUTTON_ID + "{" +
+      "top:auto!important;right:auto!important;" +
+      "bottom:max(14px,env(safe-area-inset-bottom))!important;" +
+      "left:max(14px,env(safe-area-inset-left))!important;" +
+      "width:48px!important;min-width:48px!important;" +
+      "height:48px!important;min-height:48px!important;padding:0!important;" +
+      "border-radius:50%!important;font-size:21px!important;line-height:1!important;gap:0!important;" +
+      "}" +
+      "html:not(." + WIDE_QUIZ_CLASS + ") #" + BACK_BUTTON_ID + " .efp-back-label{display:none!important;}" +
+      /* Even widened quiz pages lose their side rail on compact/narrow windows,
+         so below 1200px they switch to the same bottom-left compact control. */
       "@media(max-width:1199px){" +
       "#" + BACK_BUTTON_ID + "{" +
-      "top:auto;bottom:max(14px,env(safe-area-inset-bottom));" +
-      "left:max(14px,env(safe-area-inset-left));" +
-      "width:48px;min-width:48px;height:48px;min-height:48px;padding:0;" +
-      "border-radius:50%;font-size:21px;line-height:1;gap:0;" +
+      "top:auto!important;right:auto!important;" +
+      "bottom:max(14px,env(safe-area-inset-bottom))!important;" +
+      "left:max(14px,env(safe-area-inset-left))!important;" +
+      "width:48px!important;min-width:48px!important;" +
+      "height:48px!important;min-height:48px!important;padding:0!important;" +
+      "border-radius:50%!important;font-size:21px!important;line-height:1!important;gap:0!important;" +
       "}" +
-      "#" + BACK_BUTTON_ID + " .efp-back-label{display:none;}" +
+      "#" + BACK_BUTTON_ID + " .efp-back-label{display:none!important;}" +
       "}" +
       /* Phone-specific content fitting stays limited to actual phone widths. */
       "@media(max-width:700px){" +
