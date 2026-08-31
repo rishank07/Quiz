@@ -78,44 +78,78 @@
     }
   
 
-    /* ExamFusion Prep: mobile Random-card visibility fix.
-       Android/WebView can composite backdrop-filter above the modal sheet.
-       Keep a normal dim overlay, force the sheet onto its own layer, and
-       constrain the modal to the dynamic viewport. */
+    /* ExamFusion Prep: Random-card mobile viewport + full blur + scroll-lock fix. */
+    #random-modal.hidden { display: none !important; }
+    #random-modal.flex { display: flex !important; }
+
     #random-modal {
-      isolation: isolate;
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      height: 100dvh !important;
+      min-height: 100vh !important;
+      z-index: 2147483000 !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: hidden !important;
+      overscroll-behavior: contain !important;
+      touch-action: none !important;
+      background: rgba(15, 23, 42, 0.58) !important;
+      -webkit-backdrop-filter: blur(7px) saturate(0.9) !important;
+      backdrop-filter: blur(7px) saturate(0.9) !important;
+      padding-top: max(12px, env(safe-area-inset-top)) !important;
+      padding-right: max(12px, env(safe-area-inset-right)) !important;
+      padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+      padding-left: max(12px, env(safe-area-inset-left)) !important;
+      isolation: isolate !important;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
 
     #random-modal > div {
       position: relative !important;
-      z-index: 1 !important;
+      z-index: 2147483001 !important;
+      width: min(100%, 520px) !important;
+      max-height: calc(100vh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+      max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+      overflow-y: auto !important;
+      touch-action: pan-y !important;
+      overscroll-behavior: contain !important;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 1.5rem !important;
+      transform: translateZ(1px);
+      -webkit-transform: translateZ(1px);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    html.random-modal-open,
+    body.random-modal-open {
+      overflow: hidden !important;
+      overscroll-behavior: none !important;
+    }
+
+    /* Fallback blur for Android/WebView builds where backdrop-filter is unreliable. */
+    body.random-modal-open > *:not(#random-modal):not(script):not(style) {
+      filter: blur(6px) !important;
+      -webkit-filter: blur(6px) !important;
+      pointer-events: none !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
     }
 
     @media (max-width: 767px) {
       #random-modal {
-        height: 100dvh !important;
-        min-height: 100vh !important;
-        max-height: 100dvh !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        padding-top: max(10px, env(safe-area-inset-top)) !important;
-        padding-right: max(10px, env(safe-area-inset-right)) !important;
-        padding-bottom: max(10px, env(safe-area-inset-bottom)) !important;
-        padding-left: max(10px, env(safe-area-inset-left)) !important;
+        align-items: center !important;
+        justify-content: center !important;
       }
 
       #random-modal > div {
-        width: 100% !important;
-        max-width: 520px !important;
-        max-height: calc(100dvh - 20px) !important;
-        overflow-y: auto !important;
+        width: min(100%, 520px) !important;
+        max-height: calc(100vh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+        max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
         border-radius: 1.5rem !important;
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
       }
     }
 </style>
@@ -323,7 +357,7 @@
   </div>
 
   <!-- Random Modal -->
-  <div id="random-modal" onclick="if (event.target.id === 'random-modal') hideRandomModal()"
+  <div id="random-modal" aria-hidden="true" onclick="if (event.target.id === 'random-modal') hideRandomModal()"
     class="hidden fixed inset-0 bg-black/70 z-[100] flex items-end md:items-center justify-center p-0 md:p-4">
     <div onclick="event.stopImmediatePropagation()"
       class="bg-white w-full md:w-full md:max-w-md rounded-t-3xl md:rounded-3xl shadow-2xl overflow-hidden">
@@ -3435,6 +3469,64 @@
       a.click();
     }
 
+    /* Keeps the Random card pinned to the current viewport, blurs the full
+       background and freezes page scrolling until the modal is closed. */
+    function openRandomModalFixed(modal) {
+      if (!modal) return;
+
+      // Move the overlay directly under <body>. This avoids position:fixed
+      // becoming scroll-relative when an ancestor uses transform/filter.
+      if (modal.parentElement !== document.body) {
+        document.body.appendChild(modal);
+      }
+
+      if (!document.body.classList.contains('random-modal-open')) {
+        const y = window.scrollY || document.documentElement.scrollTop || 0;
+        document.body.dataset.efpRandomScrollY = String(y);
+
+        document.documentElement.classList.add('random-modal-open');
+        document.body.classList.add('random-modal-open');
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${y}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      modal.setAttribute('aria-hidden', 'false');
+
+      requestAnimationFrame(() => {
+        modal.scrollTop = 0;
+        const card = modal.firstElementChild;
+        if (card) card.scrollTop = 0;
+      });
+    }
+
+    function closeRandomModalFixed(modal) {
+      if (!modal) return;
+
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+
+      const y = parseInt(document.body.dataset.efpRandomScrollY || '0', 10) || 0;
+      document.documentElement.classList.remove('random-modal-open');
+      document.body.classList.remove('random-modal-open');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      delete document.body.dataset.efpRandomScrollY;
+
+      window.scrollTo(0, y);
+    }
+
+
     function showRandomWord() {
       const item = spellingData[Math.floor(Math.random() * spellingData.length)];
       const modal = document.getElementById('random-modal');
@@ -3450,14 +3542,12 @@
         }
                 </div>
             `;
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      openRandomModalFixed(modal);
     }
 
     function hideRandomModal() {
       const modal = document.getElementById('random-modal');
-      modal.classList.remove('flex');
-      modal.classList.add('hidden');
+      closeRandomModalFixed(modal);
     }
 
     function init() {
