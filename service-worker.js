@@ -1,4 +1,4 @@
-const CACHE_VERSION = "efp-pwa-2026-09-01-backup-code-v11";
+const CACHE_VERSION = "efp-pwa-2026-09-01-latest-index-backfix-v13";
 const APP_SHELL = [
   "/",
   "/index.html",
