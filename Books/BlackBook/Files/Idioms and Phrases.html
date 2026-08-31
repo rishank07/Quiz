@@ -105,50 +105,64 @@
     }
   
 
-    /* ExamFusion Prep: Random-card mobile viewport + full blur + scroll-lock fix. */
+    /* ExamFusion Prep: Random-card stable mobile viewport + full blur + scroll-lock v3. */
     #random-modal.hidden { display: none !important; }
     #random-modal.flex { display: flex !important; }
 
     #random-modal {
       position: fixed !important;
-      inset: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      height: 100dvh !important;
-      min-height: 100vh !important;
+      left: var(--efp-random-vleft, 0px) !important;
+      top: var(--efp-random-vtop, 0px) !important;
+      right: auto !important;
+      bottom: auto !important;
+      width: var(--efp-random-vw, 100vw) !important;
+      height: var(--efp-random-vh, 100dvh) !important;
+      min-height: 0 !important;
       z-index: 2147483000 !important;
       align-items: center !important;
       justify-content: center !important;
+      box-sizing: border-box !important;
       overflow: hidden !important;
-      overscroll-behavior: contain !important;
-      touch-action: none !important;
-      background: rgba(15, 23, 42, 0.58) !important;
-      -webkit-backdrop-filter: blur(7px) saturate(0.9) !important;
-      backdrop-filter: blur(7px) saturate(0.9) !important;
+      overscroll-behavior: none !important;
+      background: rgba(15, 23, 42, 0.56) !important;
+      -webkit-backdrop-filter: blur(10px) saturate(0.88) !important;
+      backdrop-filter: blur(10px) saturate(0.88) !important;
+      padding: 12px !important;
       padding-top: max(12px, env(safe-area-inset-top)) !important;
       padding-right: max(12px, env(safe-area-inset-right)) !important;
       padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
       padding-left: max(12px, env(safe-area-inset-left)) !important;
       isolation: isolate !important;
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
     }
 
+    /* The card itself never moves with page scroll. Header/footer stay visible;
+       only the content area can scroll when a long word entry is shown. */
     #random-modal > div {
       position: relative !important;
       z-index: 2147483001 !important;
+      display: flex !important;
+      flex-direction: column !important;
       width: min(100%, 520px) !important;
-      max-height: calc(100vh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
-      max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
-      overflow-y: auto !important;
-      touch-action: pan-y !important;
-      overscroll-behavior: contain !important;
-      -webkit-overflow-scrolling: touch;
+      max-width: 520px !important;
+      max-height: calc(var(--efp-random-vh, 100dvh) - 24px) !important;
+      overflow: hidden !important;
       border-radius: 1.5rem !important;
-      transform: translateZ(1px);
-      -webkit-transform: translateZ(1px);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      box-sizing: border-box !important;
+    }
+
+    #random-content {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      overscroll-behavior: contain !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-y !important;
+    }
+
+    #random-modal > div > :first-child,
+    #random-modal > div > :last-child {
+      flex: 0 0 auto !important;
     }
 
     html.random-modal-open,
@@ -157,13 +171,12 @@
       overscroll-behavior: none !important;
     }
 
-    /* Fallback blur for Android/WebView builds where backdrop-filter is unreliable. */
-    body.random-modal-open > *:not(#random-modal):not(script):not(style) {
-      filter: blur(6px) !important;
-      -webkit-filter: blur(6px) !important;
-      pointer-events: none !important;
-      user-select: none !important;
-      -webkit-user-select: none !important;
+    /* Only used on very old browsers with no backdrop-filter support. */
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      body.random-modal-open > *:not(#random-modal):not(script):not(style) {
+        filter: blur(7px) !important;
+        -webkit-filter: blur(7px) !important;
+      }
     }
 
     @media (max-width: 767px) {
@@ -171,15 +184,15 @@
         align-items: center !important;
         justify-content: center !important;
       }
-
       #random-modal > div {
-        width: min(100%, 520px) !important;
-        max-height: calc(100vh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
-        max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+        width: 100% !important;
+        max-width: 520px !important;
+        max-height: calc(var(--efp-random-vh, 100dvh) - 24px) !important;
         border-radius: 1.5rem !important;
       }
     }
-</style>
+
+  </style>
 </head>
 
 <body class="bg-slate-50 text-slate-800">
@@ -2332,40 +2345,94 @@
       a.click();
     }
 
-    /* Keeps the Random card pinned to the current viewport, blurs the full
-       background and freezes page scrolling until the modal is closed. */
+    /* Stable Random-card overlay for Android Chrome/WebView.
+       Do NOT freeze the body with position:fixed/top:-scrollY: that can shift a
+       fixed modal above the visible viewport. We lock scrolling without moving
+       the document and size the overlay from VisualViewport when available. */
+    let efpRandomSavedScrollY = 0;
+    let efpRandomTouchLockInstalled = false;
+
+    function syncRandomModalViewport(modal) {
+      if (!modal) return;
+      const vv = window.visualViewport;
+      if (vv) {
+        modal.style.setProperty('--efp-random-vleft', `${Math.round(vv.offsetLeft || 0)}px`);
+        modal.style.setProperty('--efp-random-vtop', `${Math.round(vv.offsetTop || 0)}px`);
+        modal.style.setProperty('--efp-random-vw', `${Math.round(vv.width)}px`);
+        modal.style.setProperty('--efp-random-vh', `${Math.round(vv.height)}px`);
+      } else {
+        modal.style.setProperty('--efp-random-vleft', '0px');
+        modal.style.setProperty('--efp-random-vtop', '0px');
+        modal.style.setProperty('--efp-random-vw', '100vw');
+        modal.style.setProperty('--efp-random-vh', `${window.innerHeight}px`);
+      }
+    }
+
+    function efpRandomPreventBackgroundTouch(e) {
+      const modal = document.getElementById('random-modal');
+      if (!modal || modal.classList.contains('hidden')) return;
+      const content = document.getElementById('random-content');
+      if (content && content.contains(e.target)) return;
+      e.preventDefault();
+    }
+
+    function efpInstallRandomTouchLock() {
+      if (efpRandomTouchLockInstalled) return;
+      document.addEventListener('touchmove', efpRandomPreventBackgroundTouch, { passive: false });
+      efpRandomTouchLockInstalled = true;
+    }
+
+    function efpRemoveRandomTouchLock() {
+      if (!efpRandomTouchLockInstalled) return;
+      document.removeEventListener('touchmove', efpRandomPreventBackgroundTouch, { passive: false });
+      efpRandomTouchLockInstalled = false;
+    }
+
     function openRandomModalFixed(modal) {
       if (!modal) return;
 
-      // Move the overlay directly under <body>. This avoids position:fixed
-      // becoming scroll-relative when an ancestor uses transform/filter.
-      if (modal.parentElement !== document.body) {
-        document.body.appendChild(modal);
-      }
+      // Keep the overlay directly under <body> so transformed page wrappers
+      // cannot turn position:fixed into a scroll-relative element.
+      if (modal.parentElement !== document.body) document.body.appendChild(modal);
 
-      if (!document.body.classList.contains('random-modal-open')) {
-        const y = window.scrollY || document.documentElement.scrollTop || 0;
-        document.body.dataset.efpRandomScrollY = String(y);
+      efpRandomSavedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      document.documentElement.classList.add('random-modal-open');
+      document.body.classList.add('random-modal-open');
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overscrollBehavior = 'none';
+      document.body.style.overscrollBehavior = 'none';
 
-        document.documentElement.classList.add('random-modal-open');
-        document.body.classList.add('random-modal-open');
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${y}px`;
-        document.body.style.left = '0';
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
-      }
+      // Clear any stale v2 lock styles restored by browser back/forward cache.
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
 
       modal.classList.remove('hidden');
       modal.classList.add('flex');
       modal.setAttribute('aria-hidden', 'false');
+      syncRandomModalViewport(modal);
+      efpInstallRandomTouchLock();
+
+      const vv = window.visualViewport;
+      if (vv) {
+        vv.removeEventListener('resize', efpRandomViewportRefresh);
+        vv.removeEventListener('scroll', efpRandomViewportRefresh);
+        vv.addEventListener('resize', efpRandomViewportRefresh);
+        vv.addEventListener('scroll', efpRandomViewportRefresh);
+      }
 
       requestAnimationFrame(() => {
-        modal.scrollTop = 0;
-        const card = modal.firstElementChild;
-        if (card) card.scrollTop = 0;
+        const content = document.getElementById('random-content');
+        if (content) content.scrollTop = 0;
       });
+    }
+
+    function efpRandomViewportRefresh() {
+      const modal = document.getElementById('random-modal');
+      if (modal && !modal.classList.contains('hidden')) syncRandomModalViewport(modal);
     }
 
     function closeRandomModalFixed(modal) {
@@ -2375,19 +2442,51 @@
       modal.classList.add('hidden');
       modal.setAttribute('aria-hidden', 'true');
 
-      const y = parseInt(document.body.dataset.efpRandomScrollY || '0', 10) || 0;
       document.documentElement.classList.remove('random-modal-open');
       document.body.classList.remove('random-modal-open');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.overscrollBehavior = '';
+      document.body.style.overscrollBehavior = '';
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.left = '';
       document.body.style.right = '';
       document.body.style.width = '';
-      document.body.style.overflow = '';
-      delete document.body.dataset.efpRandomScrollY;
+      efpRemoveRandomTouchLock();
 
-      window.scrollTo(0, y);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', efpRandomViewportRefresh);
+        window.visualViewport.removeEventListener('scroll', efpRandomViewportRefresh);
+      }
+
+      // overflow:hidden does not move the page, but restoring the saved Y keeps
+      // behaviour stable across Android WebView/browser implementations.
+      requestAnimationFrame(() => window.scrollTo(0, efpRandomSavedScrollY));
     }
+
+    function efpResetRandomModalAfterNavigation() {
+      const modal = document.getElementById('random-modal');
+      if (modal) {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      document.documentElement.classList.remove('random-modal-open');
+      document.body.classList.remove('random-modal-open');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.overscrollBehavior = '';
+      document.body.style.overscrollBehavior = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      efpRemoveRandomTouchLock();
+    }
+
+    window.addEventListener('pageshow', efpResetRandomModalAfterNavigation);
 
 
     function showRandomIdiom() {
