@@ -37,6 +37,7 @@
   var VIEWPORT_GUARD_CLASS = "efp-viewport-guard";
   var responsiveListenerInstalled = false;
   var responsiveFrame = 0;
+  var cachedPageTheme = null;
   var scriptUrl = document.currentScript && document.currentScript.src
     ? new URL(document.currentScript.src, window.location.href)
     : new URL("/black-mode.js", window.location.origin);
@@ -79,10 +80,21 @@
          not replace each page's desktop max-width, so compact laptop layouts
          remain compact while phone/tablet layouts can shrink safely. */
       "html." + SCREEN_FIT_CLASS + "{" +
-      "width:100%;min-width:0;max-width:100%;" +
+      "width:100%;min-width:0;max-width:100%;min-height:100%;" +
+      "background-color:var(--efp-canvas-color,#070a13)!important;" +
+      "overscroll-behavior-x:none;overscroll-behavior-y:none;" +
       "-webkit-text-size-adjust:100%;text-size-adjust:100%;" +
       "}" +
-      "html." + SCREEN_FIT_CLASS + " body{min-width:0;max-width:100%;}" +
+      "html." + SCREEN_FIT_CLASS + " body{" +
+      "min-width:0;max-width:100%;overscroll-behavior-y:none;" +
+      "}" +
+      /* background-attachment:fixed can expose the browser's default white
+         compositor surface while a mobile address/navigation bar is moving.
+         Scrolling the same background on compact screens avoids that repaint
+         gap; desktop artwork keeps its original fixed-background behaviour. */
+      "@media(max-width:1199px){" +
+      "html." + SCREEN_FIT_CLASS + " body{background-attachment:scroll!important;}" +
+      "}" +
       "html." + SCREEN_FIT_CLASS + " body>*:not(script):not(style)," +
       "html." + SCREEN_FIT_CLASS + " .container," +
       "html." + SCREEN_FIT_CLASS + " .main-wrapper," +
@@ -516,6 +528,7 @@
   }
 
   function installPageEnhancements() {
+    syncPageCanvas();
     markWideDesktopQuizLayout();
     markBackButtonLayout();
     installResponsiveFit();
@@ -531,22 +544,60 @@
   }
 
   // Walk down the first-child chain looking for a reasonably opaque
-  // background color to judge the page's overall theme by.
-  function detectIsLight() {
+  // background color to judge the page's overall theme by. The same detected
+  // color is painted on <html>, so elastic/dynamic mobile scrolling never
+  // reveals the browser's default white canvas below a dark page.
+  function detectPageTheme() {
     var el = document.body;
     var depth = 0;
     while (el && depth < 8) {
       var c = parseRGBA(getComputedStyle(el).backgroundColor);
       if (c && c.a >= 0.5) {
         var luminance = (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) / 255;
-        return luminance > 0.5;
+        return {
+          isLight: luminance > 0.5,
+          canvasColor: "rgb(" +
+            Math.round(c.r) + "," +
+            Math.round(c.g) + "," +
+            Math.round(c.b) + ")"
+        };
       }
       el = el.firstElementChild;
       depth++;
     }
     // Couldn't find a definitive background — default to "dark"
     // since that's this site's overwhelming default theme.
-    return false;
+    return { isLight: false, canvasColor: "#070a13" };
+  }
+
+  function getPageTheme() {
+    if (!cachedPageTheme && document.body) cachedPageTheme = detectPageTheme();
+    return cachedPageTheme || { isLight: false, canvasColor: "#070a13" };
+  }
+
+  function updateThemeColor(color) {
+    if (!document.head) return;
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "theme-color");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", color);
+  }
+
+  function syncPageCanvas(forceBlackMode) {
+    var html = document.documentElement;
+    var blackModeOn = typeof forceBlackMode === "boolean"
+      ? forceBlackMode
+      : html.classList.contains("efp-black") ||
+        html.classList.contains("efp-black-invert");
+    var pageTheme = getPageTheme();
+    var canvasColor = blackModeOn ? "#000000" : pageTheme.canvasColor;
+
+    html.style.setProperty("--efp-canvas-color", canvasColor);
+    html.style.colorScheme = blackModeOn || !pageTheme.isLight ? "dark" : "light";
+    updateThemeColor(canvasColor);
   }
 
   function setModeClasses(mode) {
@@ -558,12 +609,14 @@
 
   function applyOff() {
     setModeClasses(null);
+    syncPageCanvas(false);
     document.documentElement.style.visibility = "";
   }
 
   function applyOnAfterBodyReady() {
-    var isLight = detectIsLight();
-    setModeClasses(isLight ? "light" : "dark");
+    var pageTheme = getPageTheme();
+    setModeClasses(pageTheme.isLight ? "light" : "dark");
+    syncPageCanvas(true);
     document.documentElement.style.visibility = "";
   }
 
