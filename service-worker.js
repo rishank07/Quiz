@@ -1,4 +1,4 @@
-const CACHE_VERSION = "efp-pwa-2026-09-01-dark-toggle-fixed-v3";
+const CACHE_VERSION = "efp-pwa-2026-09-01-back-button-responsive-v6";
 const APP_SHELL = [
   "/",
   "/index.html",

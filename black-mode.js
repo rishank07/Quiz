@@ -29,6 +29,10 @@
   var SCREEN_FIT_CLASS = "efp-screen-fit";
   var CENTERED_SHELL_CLASS = "efp-centered-shell";
   var WIDE_QUIZ_CLASS = "efp-wide-desktop-quiz";
+  var BACK_TOP_CLASS = "efp-back-top";
+  var BACK_BOTTOM_CLASS = "efp-back-bottom";
+  var BACK_HEADER_CLASS = "efp-back-header-docked";
+  var BACK_HEADER_HOST_CLASS = "efp-back-header-host";
   var TABLE_SCROLL_CLASS = "efp-table-scroll";
   var VIEWPORT_GUARD_CLASS = "efp-viewport-guard";
   var responsiveListenerInstalled = false;
@@ -146,51 +150,56 @@
       "}" +
       "}" +
       /* A visible in-app Back control is required because the packaged PWA
-         window does not provide normal browser navigation controls. */
+         window does not provide normal browser navigation controls. The
+         desktop pill uses a real empty side rail whenever one exists. Pages
+         with a full-width top bar reserve a pill-sized slot in that bar. */
       "#" + BACK_BUTTON_ID + "{" +
-      /* Keep the control anchored to the browser/PWA viewport. The !important
-         guards also prevent page-specific button rules from changing this. */
-      "position:fixed!important;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));" +
-      "z-index:2147483647;min-width:92px;min-height:44px;padding:10px 16px;" +
-      "border:1px solid rgba(255,255,255,.42);border-radius:999px;" +
-      "background:rgba(12,16,26,.94);color:#fff;font:700 15px/1.2 system-ui,-apple-system,'Segoe UI',sans-serif;" +
-      "box-shadow:0 8px 24px rgba(0,0,0,.38);cursor:pointer;" +
-      "display:flex;align-items:center;justify-content:center;gap:7px;" +
+      "position:fixed!important;top:max(var(--efp-back-top,12px),env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));" +
+      "z-index:2147483647;width:auto;min-width:96px;height:46px;min-height:46px;padding:0 17px;" +
+      "border:1px solid rgba(246,217,138,.62);border-radius:999px;" +
+      "background:linear-gradient(135deg,rgba(12,18,32,.98),rgba(27,38,59,.96));" +
+      "-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);" +
+      "color:#fff;font:700 15px/1.2 system-ui,-apple-system,'Segoe UI',sans-serif;" +
+      "box-shadow:0 10px 28px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.1);cursor:pointer;" +
+      "display:flex;align-items:center;justify-content:center;gap:8px;" +
+      "transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease;" +
       "-webkit-tap-highlight-color:transparent;touch-action:manipulation;" +
       "}" +
-      "html.efp-black-invert body #" + BACK_BUTTON_ID + "{" +
-      "filter:invert(1) hue-rotate(180deg)!important;" +
-      "}" +
-      "#" + BACK_BUTTON_ID + ":hover{background:#20283a;border-color:#fff;transform:translateY(-1px);}" +
+      "#" + BACK_BUTTON_ID + " .efp-back-icon{color:#f6d98a;font-size:19px;line-height:1;}" +
+      "#" + BACK_BUTTON_ID + ":hover{background:linear-gradient(135deg,#1d2a43,#293a59);border-color:#ffe7a6;box-shadow:0 12px 32px rgba(0,0,0,.46);transform:translateY(-1px);}" +
       "#" + BACK_BUTTON_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px;}" +
       "#" + BACK_BUTTON_ID + ":active{transform:translateY(0);}" +
-      /* Universal no-overlap rule. Only the specially widened desktop quiz/content
-         pages have a guaranteed left rail large enough for the full Back pill.
-         Every other page (menus, topic lists, quizzes outside that widened set,
-         notes, etc.) therefore uses the compact bottom-left Back control at ALL
-         viewport widths. This keeps the shared navigation from covering page
-         headings, score bars, cards or menu content on any device. */
-      "html:not(." + WIDE_QUIZ_CLASS + ") #" + BACK_BUTTON_ID + "{" +
+      /* Legacy full-width pages with neither a side rail nor a dockable top bar
+         keep the readable pill in the lower corner instead of an unexplained
+         arrow-only circle on a large desktop. */
+      "html." + BACK_BOTTOM_CLASS + " #" + BACK_BUTTON_ID + "{" +
       "top:auto!important;right:auto!important;" +
       "bottom:max(14px,env(safe-area-inset-bottom))!important;" +
       "left:max(14px,env(safe-area-inset-left))!important;" +
-      "width:48px!important;min-width:48px!important;" +
-      "height:48px!important;min-height:48px!important;padding:0!important;" +
-      "border-radius:50%!important;font-size:21px!important;line-height:1!important;gap:0!important;" +
       "}" +
-      "html:not(." + WIDE_QUIZ_CLASS + ") #" + BACK_BUTTON_ID + " .efp-back-label{display:none!important;}" +
-      /* Even widened quiz/content pages lose their side rail on compact/narrow windows,
-         so below 1200px they switch to the same bottom-left compact control. */
+      /* Full-width sticky headers (for example Blackbook vocabulary pages) get
+         a reserved desktop slot, so the fixed pill never covers their logo or
+         controls. The host is selected at runtime from the actual layout. */
+      "@media(min-width:1200px){" +
+      "html." + BACK_HEADER_CLASS + " ." + BACK_HEADER_HOST_CLASS + "{" +
+      "padding-left:max(7.5rem,calc(env(safe-area-inset-left) + 7.5rem))!important;" +
+      "box-sizing:border-box!important;" +
+      "}" +
+      "}" +
+      /* Compact screens use an explicit arrow control in the lower safe area.
+         The accessible name and tooltip still say Back; only its visible label
+         is hidden to protect the page width. */
       "@media(max-width:1199px){" +
       "#" + BACK_BUTTON_ID + "{" +
       "top:auto!important;right:auto!important;" +
-      "bottom:max(14px,env(safe-area-inset-bottom))!important;" +
-      "left:max(14px,env(safe-area-inset-left))!important;" +
-      "width:48px!important;min-width:48px!important;" +
-      "height:48px!important;min-height:48px!important;padding:0!important;" +
-      "border-radius:50%!important;font-size:21px!important;line-height:1!important;gap:0!important;" +
+      "bottom:max(12px,env(safe-area-inset-bottom))!important;" +
+      "left:max(12px,env(safe-area-inset-left))!important;" +
+      "width:50px!important;min-width:50px!important;" +
+      "height:50px!important;min-height:50px!important;padding:0!important;" +
+      "border-radius:50%!important;font-size:22px!important;line-height:1!important;gap:0!important;" +
       "}" +
       "#" + BACK_BUTTON_ID + " .efp-back-label{display:none!important;}" +
+      "#" + BACK_BUTTON_ID + " .efp-back-icon{font-size:22px;}" +
       "}" +
       /* Phone-specific content fitting stays limited to actual phone widths. */
       "@media(max-width:700px){" +
@@ -208,6 +217,7 @@
       "width:100%;max-width:100%;padding-left:18px!important;padding-right:18px!important;" +
       "}" +
       "}" +
+      "@media(prefers-reduced-motion:reduce){#" + BACK_BUTTON_ID + "{transition:none!important;}}" +
       "@media(print){#" + BACK_BUTTON_ID + "{display:none!important;}" +
       "}";
     document.head.appendChild(style);
@@ -256,6 +266,7 @@
     button.id = BACK_BUTTON_ID;
     button.type = "button";
     button.setAttribute("aria-label", "Go back to the previous page");
+    button.setAttribute("aria-keyshortcuts", "Alt+ArrowLeft");
     button.setAttribute("title", "Back");
     button.innerHTML = "<span class=\"efp-back-icon\" aria-hidden=\"true\">&#8592;</span>" +
       "<span class=\"efp-back-label\">Back</span>";
@@ -292,6 +303,95 @@
       CENTERED_SHELL_CLASS,
       Boolean(isCentredLayout && hasPrimaryContainer)
     );
+  }
+
+  function clearBackLayoutState() {
+    var html = document.documentElement;
+    html.classList.remove(BACK_TOP_CLASS, BACK_BOTTOM_CLASS, BACK_HEADER_CLASS);
+    html.style.removeProperty("--efp-back-top");
+    var oldHosts = document.querySelectorAll("." + BACK_HEADER_HOST_CLASS);
+    for (var i = 0; i < oldHosts.length; i++) {
+      oldHosts[i].classList.remove(BACK_HEADER_HOST_CLASS);
+    }
+  }
+
+  function primaryContentShell() {
+    /* querySelector() with a comma list returns the first DOM match, not the
+       first selector preference. Check in priority order so an outer full-width
+       wrapper cannot hide the genuinely centred inner container. */
+    var selectors = [
+      "body>.container",
+      ".main-wrapper>.container",
+      ".wrapper>.container",
+      "body>main",
+      "body>.wrap",
+      "body>#app",
+      "body>.main-wrapper",
+      "body>.wrapper"
+    ];
+    for (var i = 0; i < selectors.length; i++) {
+      var shell = document.querySelector(selectors[i]);
+      if (shell) return shell;
+    }
+    return null;
+  }
+
+  function fullWidthTopBannerBottom() {
+    var first = firstContentElement();
+    if (!first) return 0;
+    var rect = first.getBoundingClientRect();
+    var viewportWidth = document.documentElement.clientWidth;
+    var isShallowTopBanner = rect.top <= 2 && rect.height >= 36 && rect.height <= 96;
+    var isNearlyFullWidth = rect.width >= viewportWidth * 0.88;
+    return isShallowTopBanner && isNearlyFullWidth ? Math.ceil(rect.bottom) : 0;
+  }
+
+  function dockableTopHeaderHost() {
+    var headers = document.querySelectorAll(
+      "body>nav,body>header,body>.navbar,body>.topbar,body>.site-header"
+    );
+    var viewportWidth = document.documentElement.clientWidth;
+    for (var i = 0; i < headers.length; i++) {
+      var header = headers[i];
+      var rect = header.getBoundingClientRect();
+      var position = getComputedStyle(header).position;
+      var staysVisible = position === "sticky" || position === "fixed";
+      var isTopBar = rect.top <= 2 && rect.height >= 44 && rect.height <= 104;
+      var isWide = rect.width >= viewportWidth * 0.8;
+      if (!staysVisible || !isTopBar || !isWide) continue;
+      return header.firstElementChild || header;
+    }
+    return null;
+  }
+
+  function markBackButtonLayout() {
+    if (!document.body || isHomePage()) return;
+    clearBackLayoutState();
+
+    /* Compact devices are handled exclusively by the media query. Keeping the
+       layout classes desktop-only prevents resize/minimise leftovers. */
+    if (document.documentElement.clientWidth < 1200) return;
+
+    var html = document.documentElement;
+    var shell = primaryContentShell();
+    var shellRect = shell ? shell.getBoundingClientRect() : null;
+    var hasSafeLeftRail = Boolean(shellRect && shellRect.left >= 120);
+
+    if (html.classList.contains(WIDE_QUIZ_CLASS) || hasSafeLeftRail) {
+      html.classList.add(BACK_TOP_CLASS);
+      var bannerBottom = fullWidthTopBannerBottom();
+      if (bannerBottom) html.style.setProperty("--efp-back-top", (bannerBottom + 12) + "px");
+      return;
+    }
+
+    var headerHost = dockableTopHeaderHost();
+    if (headerHost) {
+      headerHost.classList.add(BACK_HEADER_HOST_CLASS);
+      html.classList.add(BACK_HEADER_CLASS, BACK_TOP_CLASS);
+      return;
+    }
+
+    html.classList.add(BACK_BOTTOM_CLASS);
   }
 
   function elementScrollsHorizontally(element) {
@@ -361,6 +461,7 @@
     responsiveFrame = window.requestAnimationFrame(function () {
       responsiveFrame = 0;
       markCenteredShell();
+      markBackButtonLayout();
       wrapBareTables();
       guardViewportShells();
     });
@@ -416,6 +517,7 @@
 
   function installPageEnhancements() {
     markWideDesktopQuizLayout();
+    markBackButtonLayout();
     installResponsiveFit();
     installBackNavigation();
   }
