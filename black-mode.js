@@ -28,6 +28,7 @@
   var BACK_BUTTON_ID = "efp-app-back-button";
   var SCREEN_FIT_CLASS = "efp-screen-fit";
   var CENTERED_SHELL_CLASS = "efp-centered-shell";
+  var WIDE_QUIZ_CLASS = "efp-wide-desktop-quiz";
   var TABLE_SCROLL_CLASS = "efp-table-scroll";
   var VIEWPORT_GUARD_CLASS = "efp-viewport-guard";
   var responsiveListenerInstalled = false;
@@ -130,6 +131,20 @@
       "}" +
       "html." + CENTERED_SHELL_CLASS + " body>.container{width:100%;min-width:0;}" +
       "}" +
+      /* Real quiz pages get a genuinely fluid desktop width. Instead of
+         device-specific pixel positions, the total left+right reserve scales
+         with the viewport (16vw) and is bounded in rem. Because the container
+         stays centred, both side gaps are always identical, and the fixed Back
+         control sits completely inside the left reserve. On narrower windows
+         the Back control switches to the compact bottom button below, so it can
+         never collide with the quiz header/score bar while changing devices. */
+      "@media(min-width:1200px){" +
+      "html." + WIDE_QUIZ_CLASS + " body>.container{" +
+      "width:calc(100vw - clamp(16rem,16vw,19rem))!important;" +
+      "max-width:none!important;box-sizing:border-box!important;" +
+      "margin-inline:auto!important;" +
+      "}" +
+      "}" +
       /* A visible in-app Back control is required because the packaged PWA
          window does not provide normal browser navigation controls. */
       "#" + BACK_BUTTON_ID + "{" +
@@ -149,9 +164,11 @@
       "#" + BACK_BUTTON_ID + ":hover{background:#20283a;border-color:#fff;transform:translateY(-1px);}" +
       "#" + BACK_BUTTON_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px;}" +
       "#" + BACK_BUTTON_ID + ":active{transform:translateY(0);}" +
-      /* On phones the old top-left pill covered page headers and the YouTube
-         banner. Use a compact, thumb-friendly bottom control instead. */
-      "@media(max-width:700px){" +
+      /* Compact/narrow windows do not have enough side rail for the full Back
+         pill. Move only the Back control to the bottom-left below 1200px. This
+         also covers phone/tablet landscape widths such as ~915/932 CSS px,
+         where the old top-left pill could overlap the header or score card. */
+      "@media(max-width:1199px){" +
       "#" + BACK_BUTTON_ID + "{" +
       "top:auto;bottom:max(14px,env(safe-area-inset-bottom));" +
       "left:max(14px,env(safe-area-inset-left));" +
@@ -159,6 +176,9 @@
       "border-radius:50%;font-size:21px;line-height:1;gap:0;" +
       "}" +
       "#" + BACK_BUTTON_ID + " .efp-back-label{display:none;}" +
+      "}" +
+      /* Phone-specific content fitting stays limited to actual phone widths. */
+      "@media(max-width:700px){" +
       "html." + SCREEN_FIT_CLASS + " body>.container{min-width:0!important;max-width:100%!important;}" +
       "html." + CENTERED_SHELL_CLASS + " body>.container{" +
       "padding:clamp(18px,6vw,28px)!important;border-radius:min(20px,5vw);" +
@@ -343,7 +363,34 @@
     }
   }
 
+  function isRealQuizPage() {
+    if (!document.body) return false;
+    return Boolean(
+      document.querySelector(".question-box") ||
+      document.querySelector(".options[data-correct]")
+    );
+  }
+
+  function shouldUseWideDesktopQuizLayout() {
+    var path = normalizePath(window.location.pathname).toLowerCase();
+    var inBooks = path.indexOf("/books/") !== -1;
+    var inBlackBook = path.indexOf("/books/blackbook/") !== -1;
+    var isBiharSixtySets = path.endsWith(
+      "/bihar special/topic names/bihar objective gk - 60 sets.html"
+    );
+
+    return (inBooks && !inBlackBook && isRealQuizPage()) || isBiharSixtySets;
+  }
+
+  function markWideDesktopQuizLayout() {
+    document.documentElement.classList.toggle(
+      WIDE_QUIZ_CLASS,
+      shouldUseWideDesktopQuizLayout()
+    );
+  }
+
   function installPageEnhancements() {
+    markWideDesktopQuizLayout();
     installResponsiveFit();
     installBackNavigation();
   }

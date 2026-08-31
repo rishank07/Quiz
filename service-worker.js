@@ -1,4 +1,4 @@
-const CACHE_VERSION = "efp-pwa-2026-08-28-v1";
+const CACHE_VERSION = "efp-pwa-2026-08-31-wide-quiz-responsive-v3";
 const APP_SHELL = [
   "/",
   "/index.html",
