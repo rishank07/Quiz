@@ -131,7 +131,7 @@
       "}" +
       "html." + CENTERED_SHELL_CLASS + " body>.container{width:100%;min-width:0;}" +
       "}" +
-      /* Real quiz pages get a genuinely fluid desktop width. Instead of
+      /* Supported quiz/content pages get a genuinely fluid desktop width. Instead of
          device-specific pixel positions, the total left+right reserve scales
          with the viewport (16vw) and is bounded in rem. Because the container
          stays centred, both side gaps are always identical, and the fixed Back
@@ -164,7 +164,7 @@
       "#" + BACK_BUTTON_ID + ":hover{background:#20283a;border-color:#fff;transform:translateY(-1px);}" +
       "#" + BACK_BUTTON_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px;}" +
       "#" + BACK_BUTTON_ID + ":active{transform:translateY(0);}" +
-      /* Universal no-overlap rule. Only the specially widened desktop quiz
+      /* Universal no-overlap rule. Only the specially widened desktop quiz/content
          pages have a guaranteed left rail large enough for the full Back pill.
          Every other page (menus, topic lists, quizzes outside that widened set,
          notes, etc.) therefore uses the compact bottom-left Back control at ALL
@@ -179,7 +179,7 @@
       "border-radius:50%!important;font-size:21px!important;line-height:1!important;gap:0!important;" +
       "}" +
       "html:not(." + WIDE_QUIZ_CLASS + ") #" + BACK_BUTTON_ID + " .efp-back-label{display:none!important;}" +
-      /* Even widened quiz pages lose their side rail on compact/narrow windows,
+      /* Even widened quiz/content pages lose their side rail on compact/narrow windows,
          so below 1200px they switch to the same bottom-left compact control. */
       "@media(max-width:1199px){" +
       "#" + BACK_BUTTON_ID + "{" +
@@ -394,7 +394,17 @@
       "/bihar special/topic names/bihar objective gk - 60 sets.html"
     );
 
-    return (inBooks && !inBlackBook && isRealQuizPage()) || isBiharSixtySets;
+    /* Current Affairs chapter/content pages live below Topic Names/<year>/... .
+       Give every one of those chapter pages the same wide desktop canvas used
+       by the supported Books quizzes. Topic Names.html itself is intentionally
+       excluded because its path does not contain "/current affairs/topic names/". */
+    var isCurrentAffairsChapter =
+      path.indexOf("/current affairs/topic names/") !== -1 &&
+      path.endsWith(".html");
+
+    return (inBooks && !inBlackBook && isRealQuizPage()) ||
+      isBiharSixtySets ||
+      isCurrentAffairsChapter;
   }
 
   function markWideDesktopQuizLayout() {
