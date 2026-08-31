@@ -1,4 +1,4 @@
-const CACHE_VERSION = "efp-pwa-2026-09-01-backup-restore-v7";
+const CACHE_VERSION = "efp-pwa-2026-09-01-android-save-picker-v11";
 const APP_SHELL = [
   "/",
   "/index.html",

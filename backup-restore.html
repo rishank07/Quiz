@@ -160,8 +160,8 @@
     <section class="grid">
       <article class="card">
         <h2>⬇️ Create Backup</h2>
-        <p>Downloads one local backup file containing only your ExamFusion bookmarks and chapter progress.</p>
-        <button class="btn btn-primary" type="button" id="backupBtn">Download Backup</button>
+        <p>Opens your device save dialog and creates one local backup file containing only your ExamFusion bookmarks and chapter progress.</p>
+        <button class="btn btn-primary" type="button" id="backupBtn">Save Backup File</button>
         <div class="status" id="backupStatus" role="status" aria-live="polite"></div>
       </article>
 
@@ -290,20 +290,47 @@
         };
       }
 
-      function downloadJson(payload) {
-        var text = JSON.stringify(payload, null, 2);
-        var blob = new Blob([text], { type: "application/json;charset=utf-8" });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
+      function backupFileName() {
         var d = new Date();
         function pad(n) { return String(n).padStart(2, "0"); }
         var stamp = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "_" + pad(d.getHours()) + "-" + pad(d.getMinutes());
+        return "ExamFusionPrep_Backup_" + stamp + ".json";
+      }
+
+      async function saveJson(payload) {
+        var text = JSON.stringify(payload, null, 2);
+        var fileName = backupFileName();
+
+        // Preferred path on current Chromium/Android: opens the system Save As picker.
+        // The user chooses the destination; broad storage permission is not required.
+        if (typeof window.showSaveFilePicker === "function") {
+          var handle = await window.showSaveFilePicker({
+            id: "examfusion-backup",
+            suggestedName: fileName,
+            startIn: "downloads",
+            types: [{
+              description: "ExamFusion Prep backup",
+              accept: { "application/json": [".json"] }
+            }]
+          });
+          var writable = await handle.createWritable();
+          await writable.write(text);
+          await writable.close();
+          return { method: "picker", fileName: fileName };
+        }
+
+        // Fallback for browsers that do not expose the File System Access save picker.
+        var blob = new Blob([text], { type: "application/json;charset=utf-8" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
         a.href = url;
-        a.download = "ExamFusionPrep_Backup_" + stamp + ".json";
+        a.download = fileName;
+        a.style.display = "none";
         document.body.appendChild(a);
         a.click();
         a.remove();
-        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+        return { method: "download", fileName: fileName };
       }
 
       function normalizeBackup(obj) {
@@ -373,16 +400,24 @@
         });
       }
 
-      backupBtn.addEventListener("click", function () {
+      backupBtn.addEventListener("click", async function () {
         clearStatus(backupStatus);
+        backupBtn.disabled = true;
         try {
           var payload = backupPayload();
-          downloadJson(payload);
+          var result = await saveJson(payload);
           var b = countBookmarks(payload.data.bookmarks);
           var p = countProgress(payload.data.progress);
-          showStatus(backupStatus, "good", "Backup created: " + b + " bookmarks and " + p + " chapter-progress entries.");
+          var where = result.method === "picker" ? "Backup saved" : "Backup download started";
+          showStatus(backupStatus, "good", where + ": " + b + " bookmarks and " + p + " chapter-progress entries.");
         } catch (e) {
-          showStatus(backupStatus, "bad", "Backup failed: " + (e && e.message ? e.message : "Unknown error"));
+          if (e && e.name === "AbortError") {
+            showStatus(backupStatus, "bad", "Save cancelled. No backup file was created.");
+          } else {
+            showStatus(backupStatus, "bad", "Backup failed: " + (e && e.message ? e.message : "Unknown error"));
+          }
+        } finally {
+          backupBtn.disabled = false;
         }
       });
 
