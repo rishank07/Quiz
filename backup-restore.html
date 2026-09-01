@@ -240,18 +240,18 @@
     <section class="grid">
       <article class="card">
         <h2>⬇️ Create Backup</h2>
-        <p>Opens your device save dialog and creates one local backup file containing only your ExamFusion bookmarks and chapter progress.</p>
-        <button class="btn btn-primary" type="button" id="backupBtn">Save Backup File</button>
+        <p>On Android, this opens the system Share/Save sheet. On desktop, it opens Save As. The file contains only your ExamFusion bookmarks and chapter progress.</p>
+        <button class="btn btn-primary" type="button" id="backupBtn">Save / Share Backup</button>
         <div class="status" id="backupStatus" role="status" aria-live="polite"></div>
       </article>
 
       <article class="card">
         <h2>⬆️ Restore Backup</h2>
-        <p>Select an ExamFusion backup JSON file. By default, saved data is merged with what is already on this device.</p>
+        <p>Select an ExamFusion backup JSON or text file. By default, saved data is merged with what is already on this device.</p>
 
         <label class="file-label">
-          Choose Backup File (.json)
-          <input type="file" id="restoreFile" accept="application/json,.json">
+          Choose Backup File (.json or .txt)
+          <input type="file" id="restoreFile" accept="application/json,text/plain,.json,.txt">
         </label>
         <div class="file-name" id="fileName">No file selected</div>
 
@@ -275,7 +275,7 @@
       <p>Delete every ExamFusion bookmark and chapter-progress entry saved on this device. Dark Mode and other app settings will stay unchanged.</p>
       <p class="danger-note"><strong>Recommended:</strong> save a backup before resetting. This action affects only this browser/app installation.</p>
       <div class="danger-actions">
-        <button class="danger-backup" type="button" id="dangerBackupBtn">⬇️ Save Backup First</button>
+        <button class="danger-backup" type="button" id="dangerBackupBtn">⬇️ Save / Share Backup First</button>
         <button class="btn btn-danger" type="button" id="resetOpenBtn">Reset All Progress &amp; Bookmarks</button>
       </div>
       <div class="status" id="resetStatus" role="status" aria-live="polite"></div>
@@ -432,26 +432,77 @@
         return "ExamFusionPrep_Backup_" + stamp + ".json";
       }
 
+      function isAndroidDevice() {
+        return typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent || "");
+      }
+
+      function shareableBackupFile(text, fileName) {
+        if (typeof File !== "function" || typeof navigator === "undefined" || typeof navigator.share !== "function" || typeof navigator.canShare !== "function") {
+          return null;
+        }
+
+        var candidates = [
+          new File([text], fileName, { type: "application/json" }),
+          new File([text], fileName.replace(/\.json$/i, ".txt"), { type: "text/plain" })
+        ];
+
+        for (var i = 0; i < candidates.length; i++) {
+          try {
+            if (navigator.canShare({ files: [candidates[i]] })) return candidates[i];
+          } catch (e) {
+            // Continue to the next safe file type or the download fallback.
+          }
+        }
+        return null;
+      }
+
       async function saveJson(payload) {
         var text = JSON.stringify(payload, null, 2);
         var fileName = backupFileName();
+        var android = isAndroidDevice();
 
-        // Preferred path on current Chromium/Android: opens the system Save As picker.
-        // The user chooses the destination; broad storage permission is not required.
-        if (typeof window.showSaveFilePicker === "function") {
-          var handle = await window.showSaveFilePicker({
-            id: "examfusion-backup",
-            suggestedName: fileName,
-            startIn: "downloads",
-            types: [{
-              description: "ExamFusion Prep backup",
-              accept: { "application/json": [".json"] }
-            }]
-          });
-          var writable = await handle.createWritable();
-          await writable.write(text);
-          await writable.close();
-          return { method: "picker", fileName: fileName };
+        // Android app/PWA path: use the operating system Share/Save sheet.
+        // application/json is tried first; text/plain keeps sharing compatible
+        // with Android versions that reject JSON as a Web Share file type.
+        if (android) {
+          var shareFile = shareableBackupFile(text, fileName);
+          if (shareFile) {
+            try {
+              await navigator.share({
+                files: [shareFile],
+                title: "ExamFusion Prep backup",
+                text: "Save this ExamFusion Prep bookmarks and progress backup."
+              });
+              return { method: "share", fileName: shareFile.name };
+            } catch (shareError) {
+              if (shareError && shareError.name === "AbortError") throw shareError;
+              // Some Android wrappers expose Web Share but cannot complete it.
+              // Continue to the browser download fallback instead of failing.
+            }
+          }
+        }
+
+        // Desktop path: use Save As. Android intentionally skips this API
+        // because some app wrappers open the picker but fail while writing.
+        if (!android && typeof window.showSaveFilePicker === "function") {
+          try {
+            var handle = await window.showSaveFilePicker({
+              id: "examfusion-backup",
+              suggestedName: fileName,
+              startIn: "downloads",
+              types: [{
+                description: "ExamFusion Prep backup",
+                accept: { "application/json": [".json"] }
+              }]
+            });
+            var writable = await handle.createWritable();
+            await writable.write(text);
+            await writable.close();
+            return { method: "picker", fileName: fileName };
+          } catch (pickerError) {
+            if (pickerError && pickerError.name === "AbortError") throw pickerError;
+            // Continue to the ordinary browser download fallback.
+          }
         }
 
         // Fallback for browsers that do not expose the File System Access save picker.
@@ -609,31 +660,35 @@
         resetConfirmBtn.disabled = true;
       }
 
-      backupBtn.addEventListener("click", async function () {
-        clearStatus(backupStatus);
-        backupBtn.disabled = true;
+      async function runBackup(statusEl, buttonEl) {
+        clearStatus(statusEl);
+        buttonEl.disabled = true;
         try {
           var payload = backupPayload();
           var result = await saveJson(payload);
           var b = countBookmarks(payload.data.bookmarks);
           var p = countProgress(payload.data.progress);
-          var where = result.method === "picker" ? "Backup saved" : "Backup download started";
-          showStatus(backupStatus, "good", where + ": " + b + " bookmarks and " + p + " chapter-progress entries.");
+          var where = result.method === "picker" ? "Backup saved" :
+            result.method === "share" ? "Backup sent to the selected Android app" :
+            "Backup download started";
+          showStatus(statusEl, "good", where + ": " + b + " bookmarks and " + p + " chapter-progress entries.");
         } catch (e) {
           if (e && e.name === "AbortError") {
-            showStatus(backupStatus, "bad", "Save cancelled. No backup file was created.");
+            showStatus(statusEl, "bad", "Save cancelled. No backup file was created.");
           } else {
-            showStatus(backupStatus, "bad", "Backup failed: " + (e && e.message ? e.message : "Unknown error"));
+            showStatus(statusEl, "bad", "Backup failed: " + (e && e.message ? e.message : "Unknown error"));
           }
         } finally {
-          backupBtn.disabled = false;
+          buttonEl.disabled = false;
         }
+      }
+
+      backupBtn.addEventListener("click", function () {
+        return runBackup(backupStatus, backupBtn);
       });
 
       dangerBackupBtn.addEventListener("click", function () {
-        clearStatus(resetStatus);
-        backupBtn.click();
-        backupBtn.scrollIntoView({ behavior: "smooth", block: "center" });
+        return runBackup(resetStatus, dangerBackupBtn);
       });
 
       resetOpenBtn.addEventListener("click", openResetModal);
