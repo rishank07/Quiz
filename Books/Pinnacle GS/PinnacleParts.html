@@ -308,7 +308,7 @@
 
   <!-- Site-wide search indexes (title index + deep content index), scoped below to this section only -->
   <script src="../../search-index-main.js?v=20260826a"></script>
-  <script src="../../search-logic.js?v=20260826a"></script>
+  <script src="../../search-logic.js?v=20260901a"></script>
   <script>
     (function () {
       var SECTION_PREFIX = "./Books/Pinnacle%20GS/";
@@ -335,7 +335,7 @@
         noResultsEl.classList.remove("show");
       }
 
-      function runSearch(qRaw) {
+      function runSearch(qRaw, snippetHits, deepPending) {
         clearResults();
         var q = qRaw.trim();
         if (q.length < 2 || !ready()) return;
@@ -346,9 +346,7 @@
         // already do — instead of just the bare chapter name. Falls back to plain
         // title/breadcrumb matches (efSearchRank) for pages the snippet index doesn't
         // cover (e.g. subject/part hub pages).
-        var snippetHits = (typeof efSnippetSearch === "function")
-          ? efSnippetSearch(q, { sectionPrefix: SECTION_PREFIX, limit: 30 })
-          : [];
+        snippetHits = Array.isArray(snippetHits) ? snippetHits : [];
         var usedUrls = {};
         var results = [];
         snippetHits.forEach(function (hit) {
@@ -366,7 +364,7 @@
         results = results.slice(0, 30);
 
         if (results.length === 0) {
-          noResultsEl.classList.add("show");
+          if (!deepPending) noResultsEl.classList.add("show");
           return;
         }
         results.forEach(function (rec) {
@@ -395,29 +393,86 @@
         });
       }
 
-      var snippetsLoaded = false;
-      var snippetsLoading = false;
-      function ensureSnippetsLoaded(onReady) {
-        if (snippetsLoaded) { onReady(); return; }
-        if (snippetsLoading) { return; }
-        snippetsLoading = true;
-        var s = document.createElement("script");
-        s.src = REL_ROOT + "search-snippets-pinnacle.js";
-        s.onload = function () {
-          snippetsLoaded = true;
-          onReady();
-        };
-        document.body.appendChild(s);
+      var deepClient = (typeof efCreateSearchWorker === "function")
+        ? efCreateSearchWorker({
+            workerUrl: new URL(REL_ROOT + "search-worker.js?v=20260901a", document.baseURI).href,
+            logicUrl: new URL(REL_ROOT + "search-logic.js?v=20260901a", document.baseURI).href,
+            indexUrl: new URL(REL_ROOT + "search-snippets-pinnacle.js", document.baseURI).href,
+            mode: "snippet",
+            globalName: "EF_SNIPPET_INDEX",
+            sectionPrefix: SECTION_PREFIX,
+            limit: 30
+          })
+        : null;
+      var fallbackPromise = null;
+      var searchTimer = null;
+      var searchSequence = 0;
+
+      function loadFallbackIndex() {
+        if (Array.isArray(window.EF_SNIPPET_INDEX)) return Promise.resolve();
+        if (fallbackPromise) return fallbackPromise;
+        fallbackPromise = new Promise(function (resolve, reject) {
+          var script = document.createElement("script");
+          script.src = REL_ROOT + "search-snippets-pinnacle.js";
+          script.onload = resolve;
+          script.onerror = reject;
+          document.body.appendChild(script);
+        });
+        return fallbackPromise;
+      }
+
+      function runFallbackSearch(q, sequence) {
+        loadFallbackIndex().then(function () {
+          if (sequence !== searchSequence || input.value.trim() !== q) return;
+          var hits = (typeof efSnippetSearch === "function")
+            ? efSnippetSearch(q, { sectionPrefix: SECTION_PREFIX, limit: 30 })
+            : [];
+          runSearch(q, hits, false);
+        }).catch(function () {
+          if (sequence === searchSequence) runSearch(q, [], false);
+        });
+      }
+
+      function requestDeepSearch(q, sequence) {
+        if (!deepClient) {
+          runFallbackSearch(q, sequence);
+          return;
+        }
+        deepClient.search(q).then(function (hits) {
+          if (sequence !== searchSequence || input.value.trim() !== q) return;
+          runSearch(q, hits, false);
+        }).catch(function () {
+          deepClient = null;
+          runFallbackSearch(q, sequence);
+        });
+      }
+
+      function warmDeepSearch() {
+        if (deepClient) deepClient.warm().catch(function () {});
       }
 
       input.addEventListener("input", function () {
         clearBtn.classList.toggle("show", this.value.length > 0);
-        ensureSnippetsLoaded(function () { runSearch(input.value); });
-        runSearch(this.value);
+        clearTimeout(searchTimer);
+        var q = this.value.trim();
+        var sequence = ++searchSequence;
+        if (q.length < 2) {
+          clearResults();
+          return;
+        }
+        runSearch(q, [], true);
+        searchTimer = setTimeout(function () {
+          requestDeepSearch(q, sequence);
+        }, 180);
       });
-      input.addEventListener("focus", function () {
-        ensureSnippetsLoaded(function () {});
-      }, { once: true });
+      input.addEventListener("focus", warmDeepSearch, { once: true });
+      if (!(navigator.connection && navigator.connection.saveData)) {
+        if (typeof requestIdleCallback === "function") {
+          requestIdleCallback(warmDeepSearch, { timeout: 2500 });
+        } else {
+          setTimeout(warmDeepSearch, 900);
+        }
+      }
       clearBtn.addEventListener("click", function () {
         input.value = "";
         clearResults();

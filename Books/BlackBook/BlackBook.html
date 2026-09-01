@@ -398,34 +398,43 @@
     </div>
   </div>
 
-  <script src="../../search-logic.js?v=20260826b"></script>
+  <script src="../../search-logic.js?v=20260901a"></script>
   <script>
     (function () {
       var input = document.getElementById("efBlackbookSearch");
       var clearBtn = document.getElementById("efBlackbookSearchClear");
       var resultsEl = document.getElementById("efBlackbookResults");
       var statusEl = document.getElementById("efBlackbookSearchStatus");
-      var indexLoading = false;
       var debounceTimer = null;
+      var searchSequence = 0;
+      var fallbackPromise = null;
+      var searchClient = (typeof efCreateSearchWorker === "function")
+        ? efCreateSearchWorker({
+            workerUrl: new URL("../../search-worker.js?v=20260901a", document.baseURI).href,
+            logicUrl: new URL("../../search-logic.js?v=20260901a", document.baseURI).href,
+            indexUrl: new URL("../../search-snippets-blackbook.js?v=20260826a", document.baseURI).href,
+            mode: "records",
+            globalName: "EF_BLACKBOOK_INDEX",
+            fields: ["t", "x", "b"],
+            limit: 41
+          })
+        : null;
 
       function clearResults() {
         resultsEl.innerHTML = "";
         statusEl.textContent = "";
       }
 
-      function renderResults(query) {
+      function renderResults(query, hits, loading) {
         var cleanQuery = query.trim();
         clearResults();
         if (cleanQuery.length < 2) return;
-        if (!Array.isArray(window.EF_BLACKBOOK_INDEX)) {
+        if (loading) {
           statusEl.textContent = "Loading search index… / खोज सूची लोड हो रही है…";
           return;
         }
 
-        var hits = efSearchRecords(cleanQuery, window.EF_BLACKBOOK_INDEX, {
-          fields: ["t", "x", "b"],
-          limit: 41
-        });
+        hits = Array.isArray(hits) ? hits : [];
         var hasMore = hits.length > 40;
         hits = hits.slice(0, 40);
 
@@ -458,38 +467,74 @@
         });
       }
 
-      function ensureIndex() {
-        if (Array.isArray(window.EF_BLACKBOOK_INDEX)) return;
-        if (indexLoading) return;
-        indexLoading = true;
-        if (input.value.trim().length >= 2) {
-          statusEl.textContent = "Loading search index… / खोज सूची लोड हो रही है…";
-        }
-        var script = document.createElement("script");
-        script.src = "../../search-snippets-blackbook.js?v=20260826a";
-        script.onload = function () {
-          indexLoading = false;
-          renderResults(input.value);
-        };
-        script.onerror = function () {
-          indexLoading = false;
-          statusEl.textContent = "Search could not load / खोज लोड नहीं हो सकी";
-        };
-        document.body.appendChild(script);
+      function loadFallbackIndex() {
+        if (Array.isArray(window.EF_BLACKBOOK_INDEX)) return Promise.resolve();
+        if (fallbackPromise) return fallbackPromise;
+        fallbackPromise = new Promise(function (resolve, reject) {
+          var script = document.createElement("script");
+          script.src = "../../search-snippets-blackbook.js?v=20260826a";
+          script.onload = resolve;
+          script.onerror = reject;
+          document.body.appendChild(script);
+        });
+        return fallbackPromise;
       }
 
-      input.addEventListener("focus", ensureIndex, { once: true });
+      function runFallbackSearch(query, sequence) {
+        loadFallbackIndex().then(function () {
+          if (sequence !== searchSequence || input.value.trim() !== query) return;
+          var hits = efSearchRecords(query, window.EF_BLACKBOOK_INDEX, {
+            fields: ["t", "x", "b"],
+            limit: 41
+          });
+          renderResults(query, hits, false);
+        }).catch(function () {
+          if (sequence === searchSequence) {
+            clearResults();
+            statusEl.textContent = "Search could not load / खोज लोड नहीं हो सकी";
+          }
+        });
+      }
+
+      function requestSearch(query, sequence) {
+        if (!searchClient) {
+          runFallbackSearch(query, sequence);
+          return;
+        }
+        searchClient.search(query).then(function (hits) {
+          if (sequence !== searchSequence || input.value.trim() !== query) return;
+          renderResults(query, hits, false);
+        }).catch(function () {
+          searchClient = null;
+          runFallbackSearch(query, sequence);
+        });
+      }
+
+      function warmIndex() {
+        if (searchClient) searchClient.warm().catch(function () {});
+      }
+
+      input.addEventListener("focus", warmIndex, { once: true });
+      if (!(navigator.connection && navigator.connection.saveData)) {
+        if (typeof requestIdleCallback === "function") {
+          requestIdleCallback(warmIndex, { timeout: 2500 });
+        } else {
+          setTimeout(warmIndex, 900);
+        }
+      }
       input.addEventListener("input", function () {
         clearBtn.classList.toggle("show", this.value.length > 0);
         clearTimeout(debounceTimer);
-        if (this.value.trim().length < 2) {
+        var query = this.value.trim();
+        var sequence = ++searchSequence;
+        if (query.length < 2) {
           clearResults();
           return;
         }
-        ensureIndex();
+        renderResults(query, [], true);
         debounceTimer = setTimeout(function () {
-          renderResults(input.value);
-        }, 120);
+          requestSearch(query, sequence);
+        }, 180);
       });
       input.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {

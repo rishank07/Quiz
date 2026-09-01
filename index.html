@@ -340,10 +340,6 @@
       min-width: 0;
     }
 
-    .footer {
-      grid-area: footer;
-    }
-
     .logo {
       width: 104px;
       height: 104px;
@@ -807,17 +803,6 @@
     }
 
     /* ===== Media Queries ===== */
-    @media (max-width: 1119px) {
-      .container {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .footer {
-        order: 99;
-      }
-    }
-
     @media (max-width: 600px) {
       .footer {
         text-align: center;
@@ -970,7 +955,7 @@
         text-align: left;
         align-items: start;
         grid-template-columns: 340px minmax(0, 1fr);
-        grid-template-rows: auto auto auto auto auto auto 1fr auto;
+        grid-template-rows: auto auto auto auto auto auto 1fr;
         grid-template-areas:
           "logo    menu"
           "kicker  menu"
@@ -978,8 +963,7 @@
           "subtitle menu"
           "stats   menu"
           "backup  menu"
-          ".       menu"
-          "footer  menu";
+          ".       menu";
       }
 
       .logo {
@@ -994,10 +978,8 @@
       }
 
       h1 {
-        font-size: 34px;
-        line-height: 1.1;
+        font-size: 48px;
         margin-bottom: 14px;
-        white-space: nowrap;
       }
 
       p.subtitle {
@@ -1018,7 +1000,6 @@
       }
 
       .footer {
-        align-self: end;
         text-align: center;
         margin: 20px 0 0;
         padding-top: 18px;
@@ -1036,7 +1017,7 @@
       .menu {
         align-self: start;
         display: grid;
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         gap: 14px;
       }
 
@@ -1046,7 +1027,7 @@
       }
 
       .menu>li[data-noresult] {
-        grid-column: 1;
+        grid-column: 1 / -1;
       }
 
       .sub-menu {
@@ -1065,15 +1046,7 @@
       }
 
       h1 {
-        font-size: 38px;
-      }
-
-      .menu {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      }
-
-      .menu>li[data-noresult] {
-        grid-column: 1 / -1;
+        font-size: 54px;
       }
     }
 
@@ -1210,17 +1183,6 @@
       <i class="fa-solid fa-chevron-right chevron-icon"></i>
     </a>
 
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-copyright">© 2026 ExamFusion Prep. All Rights Reserved.</div>
-        <span class="tagline">मेहनत आपकी, साथ हमारा 🎯</span>
-        <span class="footer-links" aria-label="Help and legal links">
-          <a href="./privacy-policy.html">Privacy Policy</a>
-          <a href="./support.html">Support</a>
-        </span>
-      </div>
-    </footer>
-
     <nav class="menu-container" aria-label="Study sections">
       <div class="search-wrap">
         <i class="fa-solid fa-magnifying-glass"></i>
@@ -1310,6 +1272,17 @@
         </li>
       </ul>
 
+      <footer class="footer">
+        <div class="footer-content">
+          <div class="footer-copyright">© 2026 ExamFusion Prep. All Rights Reserved.</div>
+          <span class="tagline">मेहनत आपकी, साथ हमारा 🎯</span>
+          <span class="footer-links" aria-label="Help and legal links">
+            <a href="./privacy-policy.html">Privacy Policy</a>
+            <a href="./support.html">Support</a>
+          </span>
+        </div>
+      </footer>
+
       <div class="no-results" id="noResults">
         कुछ नहीं मिला। कोई अलग chapter, topic या subject नाम try करें।
       </div>
@@ -1321,7 +1294,7 @@
   <!-- Shared ranking logic (matches every word in the query anywhere in a page's title or
        breadcrumb — not just an exact contiguous phrase — so multi-word searches like
        "gandhi movement" work). -->
-  <script src="search-logic.js?v=20260826a"></script>
+  <script src="search-logic.js?v=20260901a"></script>
   <script>
     // Embedded site-wide search index (chapters/topics/subjects) — avoids fetch()
     // so search works even when the file is opened directly (file://) as well as on the live server.
@@ -1360,7 +1333,7 @@
       document.querySelectorAll(".link-text[data-original]").forEach(function (span) {
         span.innerText = span.dataset.original;
       });
-      document.querySelectorAll(".menu a, .backup-home-card").forEach(function (a) {
+      document.querySelectorAll(".menu a").forEach(function (a) {
         a.style.opacity = "1";
         a.style.pointerEvents = "auto";
       });
@@ -1436,8 +1409,10 @@
         return top.length;
       }
 
+      let deepSearchTimer = null;
       box.addEventListener("input", function () {
         const q = box.value.trim();
+        clearTimeout(deepSearchTimer);
         let visible = 0;
 
         items.forEach(function (li) {
@@ -1463,8 +1438,15 @@
           return;
         }
 
-        const deepCount = renderDeepResults(q);
-        noResults.classList.toggle("show", visible === 0 && deepCount === 0);
+        // Keep keyboard input fluid. The small visible-menu filter above stays
+        // instant; the 993-record site index runs only after typing pauses.
+        clearDeepResults();
+        noResults.classList.remove("show");
+        deepSearchTimer = setTimeout(function () {
+          if (box.value.trim() !== q) return;
+          const deepCount = renderDeepResults(q);
+          noResults.classList.toggle("show", visible === 0 && deepCount === 0);
+        }, 120);
       });
     })();
   </script>

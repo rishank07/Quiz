@@ -21,7 +21,7 @@
   <!-- Google Analytics -->
   <!-- ============================= -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
-  <script src="../search-logic.js?v=20260826a"></script>
+  <script src="../search-logic.js?v=20260901a"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -946,6 +946,19 @@
     // =======================================
     let searchIndex = null;
     let indexBuildPromise = null;
+    let searchRequestSequence = 0;
+    let searchWorkerClient = (typeof efCreateSearchWorker === "function")
+      ? efCreateSearchWorker({
+          workerUrl: new URL("../search-worker.js?v=20260901a", document.baseURI).href,
+          logicUrl: new URL("../search-logic.js?v=20260901a", document.baseURI).href,
+          indexUrl: new URL("./Topic Names/search-index.js?v=20260826a", document.baseURI).href,
+          mode: "records",
+          globalName: "CA_SEARCH_INDEX",
+          mapCompactContent: true,
+          fields: ["title", "text"],
+          limit: 40
+        })
+      : null;
 
     function loadSearchIndexScript() {
       return new Promise(function (resolve, reject) {
@@ -977,6 +990,26 @@
       });
 
       return indexBuildPromise;
+    }
+
+    function warmCurrentAffairsSearch() {
+      if (searchWorkerClient) searchWorkerClient.warm().catch(function () {});
+    }
+
+    function searchCurrentAffairs(query) {
+      if (searchWorkerClient) {
+        return searchWorkerClient.search(query).catch(function () {
+          searchWorkerClient = null;
+          return searchCurrentAffairs(query);
+        });
+      }
+      return buildSearchIndex().then(function (index) {
+        return (typeof efSearchRecords === "function")
+          ? efSearchRecords(query, index, { fields: ["title", "text"], limit: 40 })
+          : index.filter(function (e) {
+              return e.text.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+            }).slice(0, 40);
+      });
     }
 
     function escapeHtml(str) {
@@ -1011,8 +1044,15 @@
     let searchDebounce = null;
 
     searchInputEl.addEventListener("focus", function () {
-      buildSearchIndex();
+      warmCurrentAffairsSearch();
     });
+    if (!(navigator.connection && navigator.connection.saveData)) {
+      if (typeof requestIdleCallback === "function") {
+        requestIdleCallback(warmCurrentAffairsSearch, { timeout: 2500 });
+      } else {
+        setTimeout(warmCurrentAffairsSearch, 900);
+      }
+    }
 
     searchClearBtnEl.addEventListener("click", function () {
       searchInputEl.value = "";
@@ -1022,6 +1062,7 @@
 
     searchInputEl.addEventListener("input", function () {
       const query = this.value.trim();
+      const requestSequence = ++searchRequestSequence;
       clearTimeout(searchDebounce);
       const hasText = this.value.length > 0;
       searchClearBtnEl.classList.toggle("show", hasText);
@@ -1036,14 +1077,11 @@
       }
 
       mainAccordionEl.style.display = "none";
+      searchStatusEl.textContent = "⏳ Searching... / खोज जारी है...";
 
       searchDebounce = setTimeout(function () {
-        buildSearchIndex().then(function (index) {
-          const matches = (typeof efSearchRecords === "function")
-            ? efSearchRecords(query, index, { fields: ["title", "text"], limit: 40 })
-            : index.filter(function (e) {
-                return e.text.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-              }).slice(0, 40);
+        searchCurrentAffairs(query).then(function (matches) {
+          if (requestSequence !== searchRequestSequence || searchInputEl.value.trim() !== query) return;
 
           if (!matches.length) {
             searchResultsEl.style.display = "flex";

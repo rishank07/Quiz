@@ -1861,7 +1861,7 @@
 
   <!-- Site-wide search indexes (title index + deep content index), scoped below to Mind Maps only -->
   <script src="../search-index-main.js?v=20260826a"></script>
-  <script src="../search-logic.js?v=20260826a"></script>
+  <script src="../search-logic.js?v=20260901a"></script>
   <script>
     // =======================================
     // Accordion Control
@@ -2021,7 +2021,7 @@
 
       function ready() { return typeof SEARCH_INDEX !== "undefined"; }
 
-      function runContentSearch(qRaw) {
+      function runContentSearch(qRaw, snippetHits) {
         contentResultsEl.innerHTML = "";
         contentLabelEl.classList.remove("show");
         var q = qRaw.trim();
@@ -2031,9 +2031,7 @@
         // from inside the mind map page — the same way Current Affairs / Bihar Special
         // already do — instead of just a bare chapter name. excludeTitleMatches skips
         // chapters already shown by the plain title filter above (avoids duplicate listing).
-        var snippetHits = (typeof efSnippetSearch === "function")
-          ? efSnippetSearch(q, { sectionPrefix: SECTION_PREFIX, excludeTitleMatches: true, limit: 25 })
-          : [];
+        snippetHits = Array.isArray(snippetHits) ? snippetHits : [];
         var usedUrls = {};
         var results = [];
         snippetHits.forEach(function (hit) {
@@ -2077,30 +2075,89 @@
         });
       }
 
-      var snippetsLoaded = false;
-      var snippetsLoading = false;
-      function ensureSnippetsLoaded(onReady) {
-        if (snippetsLoaded) { onReady(); return; }
-        if (snippetsLoading) { return; }
-        snippetsLoading = true;
-        var s = document.createElement("script");
-        s.src = REL_ROOT + "search-snippets-mindmaps.js";
-        s.onload = function () {
-          snippetsLoaded = true;
-          onReady();
-        };
-        document.body.appendChild(s);
+      var deepClient = (typeof efCreateSearchWorker === "function")
+        ? efCreateSearchWorker({
+            workerUrl: new URL(REL_ROOT + "search-worker.js?v=20260901a", document.baseURI).href,
+            logicUrl: new URL(REL_ROOT + "search-logic.js?v=20260901a", document.baseURI).href,
+            indexUrl: new URL(REL_ROOT + "search-snippets-mindmaps.js", document.baseURI).href,
+            mode: "snippet",
+            globalName: "EF_SNIPPET_INDEX",
+            sectionPrefix: SECTION_PREFIX,
+            excludeTitleMatches: true,
+            limit: 25
+          })
+        : null;
+      var fallbackPromise = null;
+      var contentSearchTimer = null;
+      var contentSearchSequence = 0;
+
+      function loadFallbackIndex() {
+        if (Array.isArray(window.EF_SNIPPET_INDEX)) return Promise.resolve();
+        if (fallbackPromise) return fallbackPromise;
+        fallbackPromise = new Promise(function (resolve, reject) {
+          var script = document.createElement("script");
+          script.src = REL_ROOT + "search-snippets-mindmaps.js";
+          script.onload = resolve;
+          script.onerror = reject;
+          document.body.appendChild(script);
+        });
+        return fallbackPromise;
+      }
+
+      function runFallbackSearch(q, sequence) {
+        loadFallbackIndex().then(function () {
+          if (sequence !== contentSearchSequence || searchInput.value.trim() !== q) return;
+          var hits = (typeof efSnippetSearch === "function")
+            ? efSnippetSearch(q, {
+                sectionPrefix: SECTION_PREFIX,
+                excludeTitleMatches: true,
+                limit: 25
+              })
+            : [];
+          runContentSearch(q, hits);
+        }).catch(function () {
+          if (sequence === contentSearchSequence) runContentSearch(q, []);
+        });
+      }
+
+      function requestContentSearch(q, sequence) {
+        if (!deepClient) {
+          runFallbackSearch(q, sequence);
+          return;
+        }
+        deepClient.search(q).then(function (hits) {
+          if (sequence !== contentSearchSequence || searchInput.value.trim() !== q) return;
+          runContentSearch(q, hits);
+        }).catch(function () {
+          deepClient = null;
+          runFallbackSearch(q, sequence);
+        });
+      }
+
+      function warmContentSearch() {
+        if (deepClient) deepClient.warm().catch(function () {});
       }
 
       searchInput.addEventListener("input", function () {
-        ensureSnippetsLoaded(function () { runContentSearch(searchInput.value); });
-        runContentSearch(this.value);
+        clearTimeout(contentSearchTimer);
+        var q = this.value.trim();
+        var sequence = ++contentSearchSequence;
+        runContentSearch(q, []);
+        if (q.length < 2) return;
+        contentSearchTimer = setTimeout(function () {
+          requestContentSearch(q, sequence);
+        }, 180);
       });
-      searchInput.addEventListener("focus", function () {
-        ensureSnippetsLoaded(function () {});
-      }, { once: true });
+      searchInput.addEventListener("focus", warmContentSearch, { once: true });
+      if (!(navigator.connection && navigator.connection.saveData)) {
+        if (typeof requestIdleCallback === "function") {
+          requestIdleCallback(warmContentSearch, { timeout: 2500 });
+        } else {
+          setTimeout(warmContentSearch, 900);
+        }
+      }
       searchClear.addEventListener("click", function () {
-        runContentSearch("");
+        runContentSearch("", []);
       });
     })();
 
