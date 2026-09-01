@@ -87,7 +87,11 @@
     .btn:active { transform: translateY(0); }
     .btn-primary { background: linear-gradient(135deg, #f6d98a, #f0b84c); color: #15100a; box-shadow: 0 10px 26px rgba(246,185,73,.18); }
     .btn-secondary { background: rgba(96,165,250,.13); color: #dbeafe; border-color: rgba(96,165,250,.32); }
-    .btn:focus-visible, .file-label:focus-within { outline: 3px solid #fde68a; outline-offset: 3px; }
+    .btn-danger { background: rgba(251,113,133,.10); color: #ffe4e6; border-color: rgba(251,113,133,.48); }
+    .btn-danger:hover { background: rgba(251,113,133,.17); border-color: rgba(251,113,133,.72); }
+    .btn-ghost { background: rgba(148,163,184,.08); color:#e2e8f0; border-color:rgba(148,163,184,.25); }
+    .btn:disabled { cursor:not-allowed; opacity:.48; transform:none; box-shadow:none; }
+    .btn:focus-visible, .file-label:focus-within, .danger-backup:focus-visible, .undo-btn:focus-visible { outline: 3px solid #fde68a; outline-offset: 3px; }
 
     .file-label {
       display: flex; align-items: center; justify-content: center; min-height: 48px;
@@ -106,29 +110,78 @@
     .restore-options input { margin-top: 3px; width: 17px; height: 17px; flex: 0 0 auto; }
     .restore-options strong { color: var(--text); }
 
-
-    .code-tools {
-      margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
-    }
-    .code-tools h3 { margin: 0 0 6px; font-size: .98rem; color: #f8fafc; }
-    .code-tools p { margin: 0 0 12px; font-size: .84rem; }
-    .code-box {
-      width: 100%; min-height: 92px; resize: vertical; margin-top: 10px;
-      border: 1px solid rgba(148,163,184,.34); border-radius: 12px;
-      background: rgba(2,6,23,.62); color: #e2e8f0; padding: 11px 12px;
-      font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      overflow-wrap: anywhere;
-    }
-    .code-box:focus { outline: 2px solid rgba(96,165,250,.7); outline-offset: 2px; }
-    .code-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 10px; }
-    .btn-code { background: rgba(74,222,128,.12); color: #dcfce7; border-color: rgba(74,222,128,.30); }
-    .btn-share { background: rgba(168,85,247,.12); color: #f3e8ff; border-color: rgba(168,85,247,.30); }
-    .mini-note { margin-top: 9px; color: #94a3b8; font-size: 11px; }
-
     .privacy {
       margin: 16px 0 0; padding: 15px 16px; border-radius: 16px;
       border: 1px solid rgba(74,222,128,.18); background: rgba(74,222,128,.06);
       color: #d1fae5; font-size: 13px;
+    }
+
+    .danger-zone {
+      margin-top: 18px; padding: 22px; border-radius: 22px;
+      border: 1px solid rgba(251,113,133,.32);
+      background: linear-gradient(180deg, rgba(74,15,28,.30), rgba(28,12,19,.72));
+      box-shadow: 0 18px 46px rgba(0,0,0,.24);
+    }
+    .danger-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:7px; }
+    .danger-heading h2 { margin:0; font-size:1.16rem; color:#ffe4e6; }
+    .danger-pill {
+      flex:0 0 auto; padding:4px 9px; border-radius:999px;
+      border:1px solid rgba(251,113,133,.38); background:rgba(251,113,133,.10);
+      color:#fecdd3; font-size:10px; font-weight:900; letter-spacing:.06em; text-transform:uppercase;
+    }
+    .danger-zone p { margin:0; color:#d9aeb8; font-size:.9rem; }
+    .danger-note { margin-top:11px!important; color:#fbc9d2!important; font-size:13px!important; }
+    .danger-actions { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; margin-top:17px; }
+    .danger-backup {
+      min-height:48px; border-radius:14px; border:1px solid rgba(246,217,138,.28);
+      background:rgba(246,217,138,.07); color:var(--gold); cursor:pointer; font-weight:800; padding:10px 14px;
+    }
+
+    body.reset-modal-open { overflow:hidden; }
+    body.reset-modal-open #efp-app-back-button { visibility:hidden!important; pointer-events:none!important; }
+    .reset-modal[hidden] { display:none; }
+    .reset-modal {
+      position:fixed; inset:0; z-index:2147483646; display:grid; place-items:center;
+      padding:18px; background:rgba(0,0,0,.76); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    }
+    .reset-dialog {
+      width:min(480px,100%); max-height:min(680px,calc(100vh - 36px)); overflow:auto;
+      padding:23px; border-radius:22px; border:1px solid rgba(251,113,133,.42);
+      background:linear-gradient(180deg,#17111a,#0b0d15); box-shadow:0 28px 90px rgba(0,0,0,.62);
+    }
+    .reset-icon {
+      width:46px; height:46px; display:grid; place-items:center; border-radius:14px;
+      background:rgba(251,113,133,.13); border:1px solid rgba(251,113,133,.32); font-size:21px;
+    }
+    .reset-dialog h2 { margin:14px 0 7px; font-size:1.3rem; color:#fff1f2; }
+    .reset-dialog > p { margin:0; color:#c9a8b0; font-size:.9rem; }
+    .reset-summary {
+      margin-top:15px; padding:13px 14px; border-radius:14px;
+      border:1px solid rgba(251,113,133,.25); background:rgba(251,113,133,.07);
+      color:#ffe4e6; font-size:13px; font-weight:750;
+    }
+    .reset-check {
+      display:flex; align-items:flex-start; gap:10px; margin-top:15px; padding:13px;
+      border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.025);
+      color:#d6c2c7; font-size:13px; cursor:pointer;
+    }
+    .reset-check input { width:18px; height:18px; margin:2px 0 0; flex:0 0 auto; accent-color:#fb7185; }
+    .reset-modal-actions { display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:17px; }
+
+    .undo-toast {
+      position:fixed; z-index:2147483647; left:50%; bottom:max(82px,calc(env(safe-area-inset-bottom) + 64px));
+      width:min(560px,calc(100% - 24px)); transform:translate(-50%,calc(100% + 42px));
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:12px 13px 12px 16px; border-radius:16px; border:1px solid rgba(246,217,138,.30);
+      background:rgba(12,18,30,.97); color:#f8fafc; box-shadow:0 18px 55px rgba(0,0,0,.52);
+      opacity:0; pointer-events:none; transition:.2s ease;
+    }
+    .undo-toast.show { opacity:1; transform:translate(-50%,0); pointer-events:auto; }
+    .undo-message { min-width:0; font-size:13px; color:#e2e8f0; }
+    .undo-btn {
+      flex:0 0 auto; min-height:38px; padding:8px 13px; border-radius:11px;
+      border:1px solid rgba(246,217,138,.42); background:rgba(246,217,138,.12);
+      color:var(--gold); font-weight:900; cursor:pointer;
     }
 
     .status {
@@ -155,8 +208,15 @@
       .grid { grid-template-columns: 1fr; }
       .card { padding: 18px; border-radius: 18px; }
       .summary { gap: 10px; }
-      .code-row { grid-template-columns: 1fr; }
       .stat { padding: 15px; border-radius: 16px; }
+      .danger-zone { padding:18px; border-radius:18px; }
+      .danger-actions, .reset-modal-actions { grid-template-columns:1fr; }
+      .reset-dialog { padding:20px; border-radius:19px; }
+      .undo-toast { align-items:flex-start; }
+    }
+
+    @media (min-width: 900px) {
+      .undo-toast { bottom:24px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -169,7 +229,7 @@
     <section class="hero">
       <span class="eyebrow">ExamFusion Prep · Device Backup</span>
       <h1>Backup &amp; Restore</h1>
-      <p>Save your bookmarked questions and chapter progress as a JSON file or an Android-friendly backup code, then restore it after clearing browser data, reinstalling the app, or moving to another device.</p>
+      <p>Save your bookmarked questions and chapter progress to one small JSON file, then restore it after clearing browser data, reinstalling the app, or moving to another device.</p>
     </section>
 
     <section class="summary" aria-label="Saved data summary">
@@ -182,19 +242,6 @@
         <h2>⬇️ Create Backup</h2>
         <p>Downloads one local backup file containing only your ExamFusion bookmarks and chapter progress.</p>
         <button class="btn btn-primary" type="button" id="backupBtn">Download Backup</button>
-
-        <div class="code-tools">
-          <h3>📱 Android App — Backup without Download</h3>
-          <p>Create one backup code and save it in Notes, Keep, Telegram Saved Messages, email draft, etc.</p>
-          <button class="btn btn-code" type="button" id="copyCodeBtn">📋 Copy Backup Code</button>
-          <div class="code-row">
-            <button class="btn btn-share" type="button" id="shareCodeBtn">↗️ Share Backup Code</button>
-            <button class="btn btn-secondary" type="button" id="showCodeBtn">👁️ Show Backup Code</button>
-          </div>
-          <textarea class="code-box" id="backupCodeOut" readonly hidden aria-label="Generated backup code"></textarea>
-          <div class="mini-note">Keep the complete code starting with <strong>EFP1.</strong>. Anyone who gets this code can restore your ExamFusion bookmarks/progress.</div>
-        </div>
-
         <div class="status" id="backupStatus" role="status" aria-live="polite"></div>
       </article>
 
@@ -214,19 +261,25 @@
         </label>
 
         <button class="btn btn-secondary" type="button" id="restoreBtn" disabled>Restore Selected Backup</button>
-
-        <div class="code-tools">
-          <h3>📋 Restore using Backup Code</h3>
-          <p>Paste the full code that starts with <strong>EFP1.</strong>. The same Merge / Replace option above applies.</p>
-          <textarea class="code-box" id="backupCodeIn" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Paste EFP1... backup code here"></textarea>
-          <button class="btn btn-code" type="button" id="restoreCodeBtn">Restore Pasted Backup Code</button>
-        </div>
-
         <div class="status" id="restoreStatus" role="status" aria-live="polite"></div>
       </article>
     </section>
 
-    <div class="privacy">🔒 <strong>Private by design:</strong> backup files and backup codes are created/restored inside your browser. ExamFusion Prep does not upload them to a server.</div>
+    <div class="privacy">🔒 <strong>Private by design:</strong> the backup is created and restored inside your browser. ExamFusion Prep does not upload the selected backup file to a server.</div>
+
+    <section class="danger-zone" aria-labelledby="dangerTitle">
+      <div class="danger-heading">
+        <h2 id="dangerTitle">⚠️ Reset Study Data</h2>
+        <span class="danger-pill">Danger Zone</span>
+      </div>
+      <p>Delete every ExamFusion bookmark and chapter-progress entry saved on this device. Dark Mode and other app settings will stay unchanged.</p>
+      <p class="danger-note"><strong>Recommended:</strong> download a backup before resetting. This action affects only this browser/app installation.</p>
+      <div class="danger-actions">
+        <button class="danger-backup" type="button" id="dangerBackupBtn">⬇️ Download Backup First</button>
+        <button class="btn btn-danger" type="button" id="resetOpenBtn">Reset All Progress &amp; Bookmarks</button>
+      </div>
+      <div class="status" id="resetStatus" role="status" aria-live="polite"></div>
+    </section>
 
     <section class="details">
       <details>
@@ -235,7 +288,6 @@
           <ul>
             <li>Question bookmarks saved by ExamFusion Prep.</li>
             <li>Visited/completed chapter progress for supported study sections.</li>
-            <li>Backup Code contains the same ExamFusion data as the JSON backup file, encoded as text.</li>
             <li>No passwords, browsing history, quiz answers, or unrelated browser data.</li>
           </ul>
         </div>
@@ -244,6 +296,28 @@
 
     <div class="footer">© 2026 ExamFusion Prep · <a href="./index.html">Home</a></div>
   </main>
+
+  <div class="reset-modal" id="resetModal" role="dialog" aria-modal="true" aria-labelledby="resetDialogTitle" hidden>
+    <div class="reset-dialog" id="resetDialog" tabindex="-1">
+      <div class="reset-icon" aria-hidden="true">🗑️</div>
+      <h2 id="resetDialogTitle">Reset all study data?</h2>
+      <p>This permanently removes saved bookmarks and progress from this device. A temporary Undo option will remain available for 30 seconds.</p>
+      <div class="reset-summary" id="resetSummary"></div>
+      <label class="reset-check">
+        <input type="checkbox" id="resetConfirmCheck">
+        <span>I understand that my current ExamFusion bookmarks and chapter progress will be deleted.</span>
+      </label>
+      <div class="reset-modal-actions">
+        <button class="btn btn-ghost" type="button" id="resetCancelBtn">Cancel</button>
+        <button class="btn btn-danger" type="button" id="resetConfirmBtn" disabled>Confirm Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="undo-toast" id="undoToast" role="status" aria-live="assertive">
+    <div class="undo-message" id="undoMessage">Study data reset.</div>
+    <button class="undo-btn" type="button" id="undoBtn">Undo (30s)</button>
+  </div>
 
   <script>
     (function () {
@@ -254,6 +328,9 @@
       var APP_NAME = "ExamFusion Prep";
       var SCHEMA_VERSION = 1;
       var selectedBackup = null;
+      var undoSnapshot = null;
+      var undoTimer = null;
+      var undoDeadline = 0;
 
       var bookmarkCountEl = document.getElementById("bookmarkCount");
       var progressCountEl = document.getElementById("progressCount");
@@ -264,13 +341,18 @@
       var fileName = document.getElementById("fileName");
       var backupStatus = document.getElementById("backupStatus");
       var restoreStatus = document.getElementById("restoreStatus");
-      var copyCodeBtn = document.getElementById("copyCodeBtn");
-      var shareCodeBtn = document.getElementById("shareCodeBtn");
-      var showCodeBtn = document.getElementById("showCodeBtn");
-      var backupCodeOut = document.getElementById("backupCodeOut");
-      var backupCodeIn = document.getElementById("backupCodeIn");
-      var restoreCodeBtn = document.getElementById("restoreCodeBtn");
-      var lastBackupCode = "";
+      var dangerBackupBtn = document.getElementById("dangerBackupBtn");
+      var resetOpenBtn = document.getElementById("resetOpenBtn");
+      var resetStatus = document.getElementById("resetStatus");
+      var resetModal = document.getElementById("resetModal");
+      var resetDialog = document.getElementById("resetDialog");
+      var resetSummary = document.getElementById("resetSummary");
+      var resetConfirmCheck = document.getElementById("resetConfirmCheck");
+      var resetCancelBtn = document.getElementById("resetCancelBtn");
+      var resetConfirmBtn = document.getElementById("resetConfirmBtn");
+      var undoToast = document.getElementById("undoToast");
+      var undoMessage = document.getElementById("undoMessage");
+      var undoBtn = document.getElementById("undoBtn");
 
       function safeParse(raw, fallback) {
         if (!raw) return fallback;
@@ -309,8 +391,12 @@
       }
 
       function refreshCounts() {
-        bookmarkCountEl.textContent = countBookmarks(getBookmarks());
-        progressCountEl.textContent = countProgress(getProgress());
+        var bookmarkTotal = countBookmarks(getBookmarks());
+        var progressTotal = countProgress(getProgress());
+        bookmarkCountEl.textContent = bookmarkTotal;
+        progressCountEl.textContent = progressTotal;
+        resetOpenBtn.disabled = bookmarkTotal + progressTotal === 0;
+        return { bookmarks: bookmarkTotal, progress: progressTotal };
       }
 
       function showStatus(el, kind, message) {
@@ -337,85 +423,6 @@
             progress: getProgress()
           }
         };
-      }
-
-      function bytesToBase64Url(bytes) {
-        var binary = "";
-        var chunk = 0x8000;
-        for (var i = 0; i < bytes.length; i += chunk) {
-          var part = bytes.subarray(i, Math.min(i + chunk, bytes.length));
-          binary += String.fromCharCode.apply(null, part);
-        }
-        return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-      }
-
-      function base64UrlToBytes(value) {
-        var base64 = value.replace(/-/g, "+").replace(/_/g, "/");
-        while (base64.length % 4) base64 += "=";
-        var binary = atob(base64);
-        var bytes = new Uint8Array(binary.length);
-        for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-        return bytes;
-      }
-
-      function textToBytes(text) {
-        if (window.TextEncoder) return new TextEncoder().encode(text);
-        var encoded = unescape(encodeURIComponent(text));
-        var bytes = new Uint8Array(encoded.length);
-        for (var i = 0; i < encoded.length; i++) bytes[i] = encoded.charCodeAt(i);
-        return bytes;
-      }
-
-      function bytesToText(bytes) {
-        if (window.TextDecoder) return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
-        var binary = "";
-        var chunk = 0x8000;
-        for (var i = 0; i < bytes.length; i += chunk) {
-          var part = bytes.subarray(i, Math.min(i + chunk, bytes.length));
-          binary += String.fromCharCode.apply(null, part);
-        }
-        return decodeURIComponent(escape(binary));
-      }
-
-      function makeBackupCode(payload) {
-        var compact = JSON.stringify(payload);
-        return "EFP1." + bytesToBase64Url(textToBytes(compact));
-      }
-
-      function parseBackupCode(raw) {
-        var code = String(raw || "").trim().replace(/\s+/g, "");
-        if (!code || code.indexOf("EFP1.") !== 0) {
-          throw new Error("Invalid backup code. It must start with EFP1.");
-        }
-        var encoded = code.slice(5);
-        if (!encoded) throw new Error("Backup code is incomplete.");
-        var obj;
-        try {
-          obj = JSON.parse(bytesToText(base64UrlToBytes(encoded)));
-        } catch (e) {
-          throw new Error("Backup code is incomplete or damaged.");
-        }
-        return normalizeBackup(obj);
-      }
-
-      function ensureBackupCode() {
-        if (!lastBackupCode) lastBackupCode = makeBackupCode(backupPayload());
-        return lastBackupCode;
-      }
-
-      async function copyText(text) {
-        if (navigator.clipboard && window.isSecureContext) {
-          try {
-            await navigator.clipboard.writeText(text);
-            return true;
-          } catch (e) {}
-        }
-        backupCodeOut.hidden = false;
-        backupCodeOut.value = text;
-        backupCodeOut.focus();
-        backupCodeOut.select();
-        backupCodeOut.setSelectionRange(0, text.length);
-        try { return document.execCommand("copy"); } catch (e) { return false; }
       }
 
       function downloadJson(payload) {
@@ -501,11 +508,84 @@
         });
       }
 
+      function snapshotStudyData() {
+        return {
+          bookmarks: getBookmarks(),
+          progress: getProgress()
+        };
+      }
+
+      function clearStudyData() {
+        var keys = [];
+        for (var i = 0; i < localStorage.length; i++) {
+          var key = localStorage.key(i);
+          if (key === BOOKMARK_KEY || (key && key.indexOf(PROGRESS_PREFIX) === 0)) keys.push(key);
+        }
+        keys.forEach(function (key) { localStorage.removeItem(key); });
+      }
+
+      function restoreSnapshot(snapshot) {
+        clearStudyData();
+        var bookmarks = snapshot && snapshot.bookmarks ? snapshot.bookmarks : {};
+        var progress = snapshot && snapshot.progress ? snapshot.progress : {};
+        if (Object.keys(bookmarks).length) {
+          localStorage.setItem(BOOKMARK_KEY, JSON.stringify(bookmarks));
+        }
+        Object.keys(progress).forEach(function (key) {
+          if (key.indexOf(PROGRESS_PREFIX) !== 0 || !Array.isArray(progress[key])) return;
+          localStorage.setItem(key, JSON.stringify(uniqueStrings(progress[key])));
+        });
+      }
+
+      function hideUndo(clearSnapshot) {
+        if (undoTimer) clearInterval(undoTimer);
+        undoTimer = null;
+        undoDeadline = 0;
+        undoToast.classList.remove("show");
+        if (clearSnapshot) undoSnapshot = null;
+      }
+
+      function updateUndoCountdown() {
+        var remaining = Math.max(0, Math.ceil((undoDeadline - Date.now()) / 1000));
+        if (remaining <= 0) {
+          hideUndo(true);
+          return;
+        }
+        undoBtn.textContent = "Undo (" + remaining + "s)";
+      }
+
+      function showUndo(snapshot, bookmarkTotal, progressTotal) {
+        hideUndo(false);
+        undoSnapshot = snapshot;
+        undoDeadline = Date.now() + 30000;
+        undoMessage.textContent = "Deleted " + bookmarkTotal + " bookmarks and " + progressTotal + " progress entries.";
+        undoToast.classList.add("show");
+        updateUndoCountdown();
+        undoTimer = setInterval(updateUndoCountdown, 1000);
+      }
+
+      function openResetModal() {
+        var totals = refreshCounts();
+        if (totals.bookmarks + totals.progress === 0) return;
+        resetSummary.textContent = "This will delete " + totals.bookmarks + " bookmarks and " + totals.progress + " chapter-progress entries from this device.";
+        resetConfirmCheck.checked = false;
+        resetConfirmBtn.disabled = true;
+        resetModal.hidden = false;
+        document.body.classList.add("reset-modal-open");
+        setTimeout(function () { resetDialog.focus(); }, 0);
+      }
+
+      function closeResetModal() {
+        resetModal.hidden = true;
+        document.body.classList.remove("reset-modal-open");
+        resetConfirmCheck.checked = false;
+        resetConfirmBtn.disabled = true;
+      }
+
       backupBtn.addEventListener("click", function () {
         clearStatus(backupStatus);
         try {
           var payload = backupPayload();
-          lastBackupCode = makeBackupCode(payload);
           downloadJson(payload);
           var b = countBookmarks(payload.data.bookmarks);
           var p = countProgress(payload.data.progress);
@@ -515,77 +595,56 @@
         }
       });
 
-      copyCodeBtn.addEventListener("click", async function () {
-        clearStatus(backupStatus);
-        try {
-          lastBackupCode = makeBackupCode(backupPayload());
-          var ok = await copyText(lastBackupCode);
-          var payload = backupPayload();
-          var b = countBookmarks(payload.data.bookmarks);
-          var p = countProgress(payload.data.progress);
-          if (ok) {
-            showStatus(backupStatus, "good", "Backup code copied: " + b + " bookmarks and " + p + " progress entries. Save the full EFP1... code somewhere safe.");
-          } else {
-            backupCodeOut.hidden = false;
-            backupCodeOut.value = lastBackupCode;
-            showStatus(backupStatus, "warn", "Automatic copy was blocked. The backup code is shown below—long-press/select all and copy it manually.");
-          }
-        } catch (e) {
-          showStatus(backupStatus, "bad", "Could not create backup code: " + (e && e.message ? e.message : "Unknown error"));
-        }
+      dangerBackupBtn.addEventListener("click", function () {
+        clearStatus(resetStatus);
+        backupBtn.click();
+        backupBtn.scrollIntoView({ behavior: "smooth", block: "center" });
       });
 
-      showCodeBtn.addEventListener("click", function () {
-        try {
-          var code = ensureBackupCode();
-          backupCodeOut.value = code;
-          backupCodeOut.hidden = !backupCodeOut.hidden;
-          showCodeBtn.textContent = backupCodeOut.hidden ? "👁️ Show Backup Code" : "🙈 Hide Backup Code";
-          if (!backupCodeOut.hidden) {
-            backupCodeOut.scrollTop = 0;
-            backupCodeOut.focus();
-          }
-        } catch (e) {
-          showStatus(backupStatus, "bad", "Could not create backup code.");
-        }
+      resetOpenBtn.addEventListener("click", openResetModal);
+      resetCancelBtn.addEventListener("click", closeResetModal);
+
+      resetConfirmCheck.addEventListener("change", function () {
+        resetConfirmBtn.disabled = !resetConfirmCheck.checked;
       });
 
-      shareCodeBtn.addEventListener("click", async function () {
-        clearStatus(backupStatus);
-        try {
-          lastBackupCode = makeBackupCode(backupPayload());
-          if (navigator.share) {
-            await navigator.share({
-              title: "ExamFusion Prep Backup Code",
-              text: "ExamFusion Prep Backup Code\n\n" + lastBackupCode
-            });
-            showStatus(backupStatus, "good", "Android share menu opened for your backup code.");
-          } else {
-            var copied = await copyText(lastBackupCode);
-            showStatus(backupStatus, copied ? "good" : "warn", copied ? "Share is unavailable here, so the backup code was copied instead." : "Share is unavailable. The backup code is shown below for manual copying.");
-          }
-        } catch (e) {
-          if (e && e.name === "AbortError") return;
-          var fallback = await copyText(lastBackupCode || makeBackupCode(backupPayload()));
-          showStatus(backupStatus, fallback ? "warn" : "bad", fallback ? "Share did not open, so the backup code was copied instead." : "Share/copy was blocked. Use Show Backup Code and copy it manually.");
-        }
+      resetModal.addEventListener("click", function (event) {
+        if (event.target === resetModal) closeResetModal();
       });
 
-      restoreCodeBtn.addEventListener("click", function () {
-        clearStatus(restoreStatus);
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !resetModal.hidden) closeResetModal();
+      });
+
+      resetConfirmBtn.addEventListener("click", function () {
+        if (!resetConfirmCheck.checked) return;
+        clearStatus(resetStatus);
         try {
-          var codeBackup = parseBackupCode(backupCodeIn.value);
-          var replace = !!replaceMode.checked;
-          var b = countBookmarks(codeBackup.bookmarks);
-          var p = countProgress(codeBackup.progress);
-          var action = replace ? "REPLACE the current ExamFusion bookmarks/progress with" : "MERGE the current ExamFusion bookmarks/progress with";
-          var ok = window.confirm(action + " this backup code?\n\nBackup contains " + b + " bookmarks and " + p + " chapter-progress entries.");
-          if (!ok) return;
-          restoreBackup(codeBackup, replace);
+          var snapshot = snapshotStudyData();
+          var bookmarkTotal = countBookmarks(snapshot.bookmarks);
+          var progressTotal = countProgress(snapshot.progress);
+          clearStudyData();
+          closeResetModal();
           refreshCounts();
-          showStatus(restoreStatus, "good", "Backup code restored successfully: " + b + " bookmarks and " + p + " progress entries.");
+          showUndo(snapshot, bookmarkTotal, progressTotal);
+          showStatus(resetStatus, "warn", "Reset complete on this device. You can undo it for 30 seconds using the bar at the bottom.");
         } catch (e) {
-          showStatus(restoreStatus, "bad", e && e.message ? e.message : "Could not restore this backup code.");
+          closeResetModal();
+          showStatus(resetStatus, "bad", "Reset failed: " + (e && e.message ? e.message : "Browser storage is unavailable."));
+        }
+      });
+
+      undoBtn.addEventListener("click", function () {
+        if (!undoSnapshot) return;
+        try {
+          var snapshot = undoSnapshot;
+          hideUndo(true);
+          restoreSnapshot(snapshot);
+          refreshCounts();
+          showStatus(resetStatus, "good", "Reset undone. Your bookmarks and chapter progress have been restored.");
+        } catch (e) {
+          hideUndo(true);
+          showStatus(resetStatus, "bad", "Undo failed: " + (e && e.message ? e.message : "Browser storage is unavailable."));
         }
       });
 
@@ -635,6 +694,7 @@
         if (!ok) return;
 
         try {
+          hideUndo(true);
           restoreBackup(selectedBackup, replace);
           refreshCounts();
           showStatus(restoreStatus, "good", "Restore complete. Open or reload a chapter/quiz page to see the restored bookmarks and progress.");
@@ -642,6 +702,9 @@
           showStatus(restoreStatus, "bad", "Restore failed: " + (e && e.message ? e.message : "Browser storage is unavailable."));
         }
       });
+
+      window.addEventListener("storage", refreshCounts);
+      window.addEventListener("pageshow", refreshCounts);
 
       refreshCounts();
     })();
