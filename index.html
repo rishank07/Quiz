@@ -211,6 +211,29 @@
       animation: efp-icon-flip 0.6s cubic-bezier(.34, 1.56, .64, 1);
     }
 
+    .black-mode-toggle .toggle-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .black-mode-toggle .toggle-state {
+      display: inline-grid;
+      place-items: center;
+      min-width: 34px;
+      padding: 5px 8px;
+      border: 1px solid rgba(255, 238, 192, 0.92);
+      border-radius: 999px;
+      color: #171006;
+      background: linear-gradient(135deg, #ffeec0 0%, #d9b75f 100%);
+      box-shadow: 0 4px 12px rgba(217, 183, 95, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      line-height: 1;
+    }
+
     .black-mode-toggle:hover {
       transform: translateY(-4px);
       background: linear-gradient(160deg, rgba(246, 217, 138, 0.10), rgba(255, 255, 255, 0.05));
@@ -866,6 +889,16 @@
         font-size: 13px;
       }
 
+      .black-mode-toggle .toggle-copy {
+        gap: 5px;
+      }
+
+      .black-mode-toggle .toggle-state {
+        min-width: 31px;
+        padding: 4px 7px;
+        font-size: 9px;
+      }
+
       .kicker {
         margin-bottom: 6px;
         font-size: 10px;
@@ -1166,17 +1199,26 @@
     <div class="logo-row">
       <img src="./logo.png" alt="Exam Fusion Prep Logo" class="logo">
 
-      <button type="button" class="black-mode-toggle" id="blackModeBtn" onclick="toggleBlackMode()">
+      <button type="button" class="black-mode-toggle" id="blackModeBtn" onclick="toggleBlackMode()"
+        aria-pressed="false" aria-label="Turn dark mode on">
         <span class="toggle-icon" id="blackModeIconWrap"><i class="fa-solid fa-moon"></i></span>
-        <span id="blackModeLabel">Dark Mode</span>
+        <span class="toggle-copy">
+          <span id="blackModeLabel">Dark Mode:</span>
+          <span class="toggle-state" id="blackModeState">OFF</span>
+        </span>
       </button>
       <script>
         function syncBlackModeLabel(animate) {
           var isOn = document.documentElement.classList.contains('efp-black') || document.documentElement.classList.contains('efp-black-invert');
-          var label = document.getElementById('blackModeLabel');
+          var button = document.getElementById('blackModeBtn');
+          var state = document.getElementById('blackModeState');
           var iconWrap = document.getElementById('blackModeIconWrap');
           var icon = document.querySelector('#blackModeBtn .toggle-icon i');
-          if (label) label.textContent = isOn ? 'Dark Mode: ON' : 'Dark Mode';
+          if (state) state.textContent = isOn ? 'ON' : 'OFF';
+          if (button) {
+            button.setAttribute('aria-pressed', isOn ? 'true' : 'false');
+            button.setAttribute('aria-label', isOn ? 'Turn dark mode off' : 'Turn dark mode on');
+          }
           if (icon) icon.className = isOn ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
           if (animate && iconWrap) {
             iconWrap.classList.remove('efp-spin');
@@ -1317,16 +1359,10 @@
   </div>
 
   <!-- ✨ Loading + Search Script -->
-  <script src="search-index-main.js?v=20260826a"></script>
-  <!-- Shared ranking logic (matches every word in the query anywhere in a page's title or
-       breadcrumb — not just an exact contiguous phrase — so multi-word searches like
-       "gandhi movement" work). -->
-  <script src="search-logic.js?v=20260901a"></script>
+  <!-- The large global index is loaded only after the search box is used. -->
   <script>
-    // Embedded site-wide search index (chapters/topics/subjects) — avoids fetch()
-    // so search works even when the file is opened directly (file://) as well as on the live server.
-    // Site-wide search index is loaded from an external file (search-index-main.js)
-    // so it can be updated independently of this page.
+    // Site-wide search assets stay external so they can be updated independently,
+    // but are requested only after the user focuses or types in the search box.
 
 
     function openPage(event) {
@@ -1343,8 +1379,8 @@
 
       // Add loading state
       if (textSpan) {
-        textSpan.dataset.original = textSpan.innerText;
-        textSpan.innerText = "✨ Loading...";
+        textSpan.dataset.originalHtml = textSpan.innerHTML;
+        textSpan.textContent = "✨ Loading...";
       }
 
       linkEl.style.opacity = "0.7";
@@ -1357,8 +1393,9 @@
 
     // Reset state when user navigates back to this page
     window.addEventListener("pageshow", function (event) {
-      document.querySelectorAll(".link-text[data-original]").forEach(function (span) {
-        span.innerText = span.dataset.original;
+      document.querySelectorAll(".link-text[data-original-html]").forEach(function (span) {
+        span.innerHTML = span.dataset.originalHtml;
+        delete span.dataset.originalHtml;
       });
       document.querySelectorAll(".menu a, .backup-home-card").forEach(function (a) {
         a.style.opacity = "1";
@@ -1380,8 +1417,48 @@
         "Mind Maps": "fa-sitemap"
       };
 
-      // Deep index of every chapter/topic/subject page on the site (embedded above).
-      const deepIndex = SEARCH_INDEX;
+      // The 266 KB global index is optional enhancement data. Loading it only
+      // when search is actually used keeps the landing page immediately usable.
+      let deepSearchPromise = null;
+
+      function loadScriptOnce(src, readyTest) {
+        if (readyTest()) return Promise.resolve();
+        return new Promise(function (resolve, reject) {
+          const script = document.createElement("script");
+          script.src = src;
+          script.async = true;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
+
+      function ensureDeepSearch() {
+        if (typeof SEARCH_INDEX !== "undefined" && typeof efSearchRank === "function") {
+          return Promise.resolve(true);
+        }
+        if (!deepSearchPromise) {
+          deepSearchPromise = Promise.all([
+            loadScriptOnce("search-index-main.js?v=20260901b", function () {
+              return typeof SEARCH_INDEX !== "undefined";
+            }),
+            loadScriptOnce("search-logic.js?v=20260901b", function () {
+              return typeof efSearchRank === "function";
+            })
+          ]).then(function () {
+            return typeof SEARCH_INDEX !== "undefined" && typeof efSearchRank === "function";
+          }).catch(function () {
+            // Search assets are enhancement-only. The eight main cards remain usable.
+            return false;
+          });
+        }
+        return deepSearchPromise;
+      }
+
+      // Start quietly as soon as the user shows search intent. Typing and the
+      // rest of the landing page never wait for this network request.
+      box.addEventListener("focus", ensureDeepSearch, { once: true });
+      box.addEventListener("pointerdown", ensureDeepSearch, { once: true });
 
       function clearDeepResults() {
         menuList.querySelectorAll("li[data-deepresult]").forEach(function (li) { li.remove(); });
@@ -1390,7 +1467,7 @@
 
       function renderDeepResults(q) {
         clearDeepResults();
-        if (!deepIndex || q.length < 2) return 0;
+        if (typeof SEARCH_INDEX === "undefined" || q.length < 2) return 0;
 
         // efSearchRank (search-logic.js) matches every WORD in the query anywhere in a
         // page's title/breadcrumb — not just an exact contiguous phrase — so multi-word
@@ -1471,15 +1548,67 @@
         noResults.classList.remove("show");
         deepSearchTimer = setTimeout(function () {
           if (box.value.trim() !== q) return;
-          const deepCount = renderDeepResults(q);
-          noResults.classList.toggle("show", visible === 0 && deepCount === 0);
+          ensureDeepSearch().then(function (ready) {
+            if (box.value.trim() !== q) return;
+            const deepCount = ready ? renderDeepResults(q) : 0;
+            noResults.classList.toggle("show", visible === 0 && deepCount === 0);
+          });
         }, 120);
       });
     })();
   </script>
+  <!-- ExamFusion landing counts: start -->
+  <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20038,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5854,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":2961,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"}}</script>
+  <style>
+    body.ef-qcount-landing .ef-qcount-badge{display:block!important;width:max-content;max-width:100%;margin-top:4px!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;position:static!important;transform:none!important;white-space:nowrap;font-size:10px!important;font-weight:750!important;line-height:1.25!important;letter-spacing:.15px!important;color:currentColor!important;opacity:.78!important;text-shadow:none!important;pointer-events:none!important}
+    body.ef-qcount-landing .menu>li>a{min-height:82px!important}
+    .ef-qcount-placeholder{display:block!important;visibility:hidden!important;height:12px!important;margin-top:4px!important;font-size:10px!important;line-height:1.2!important;pointer-events:none!important}
+    @media(max-width:480px){body.ef-qcount-landing .ef-qcount-badge{font-size:9px!important;margin-top:3px!important}body.ef-qcount-landing .menu>li>a{min-height:78px!important}}
+  </style>
+  <script>
+    (function () {
+      "use strict";
+      var node = document.getElementById("efLandingCountsData");
+      var data = {};
+      try { data = JSON.parse(node ? node.textContent : "{}"); } catch (_) {}
+      document.body.classList.add("ef-qcount-landing");
 
-  <!-- ExamFusion automatic book question counts -->
-  <script src="./Books/book-question-counts-display.js?v=20260821f" defer></script>
+      function compactLabel(total, unit) {
+        var value = Number(total).toLocaleString("en-IN");
+        if (unit === "Maps") return value + " Maps";
+        if (unit === "Facts") return value + " Facts";
+        return value + " Q";
+      }
+
+      function fullLabel(total, unit) {
+        var value = Number(total).toLocaleString("en-IN");
+        if (unit === "Maps") return value + (Number(total) === 1 ? " Map" : " Maps");
+        if (unit === "Facts") return value + (Number(total) === 1 ? " Fact" : " Facts");
+        return value + (Number(total) === 1 ? " Question" : " Questions");
+      }
+
+      document.querySelectorAll("#menuList > li > a[href]").forEach(function (link) {
+        var href = link.getAttribute("href");
+        var holder = link.querySelector(".link-text") || link.querySelector(".bilabel");
+        if (!holder) return;
+
+        if (data[href]) {
+          var badge = document.createElement("span");
+          badge.className = "ef-qcount-badge";
+          badge.textContent = compactLabel(data[href].total, data[href].unit);
+          badge.title = fullLabel(data[href].total, data[href].unit);
+          badge.setAttribute("aria-label", badge.title);
+          holder.appendChild(badge);
+        } else if (href === "./Maths Speed Booster/math-speed-booster.html") {
+          var placeholder = document.createElement("span");
+          placeholder.className = "ef-qcount-placeholder";
+          placeholder.textContent = "placeholder";
+          holder.appendChild(placeholder);
+        }
+      });
+    })();
+  </script>
+  <!-- ExamFusion landing counts: end -->
   <script>
     // Enables installability and graceful offline handling for the Windows/PWA app.
     if ("serviceWorker" in navigator && window.isSecureContext) {

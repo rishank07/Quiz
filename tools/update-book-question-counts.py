@@ -2,8 +2,10 @@
 """Generate automatic section counts for ExamFusion Prep.
 
 No AI and no external API are used. The script scans the site content trees,
-counts real question/content items, writes Books/question-counts.json, and
-ensures navigation hub pages load the tiny count-display script.
+counts real question/content items, writes Books/question-counts.json, ensures
+navigation hub pages load the count-display script, and embeds the seven small
+landing-page totals directly in index.html so opening Home never waits for the
+full manifest.
 
 The Maths Speed Booster is intentionally excluded from counting.
 """
@@ -30,6 +32,18 @@ QUESTION_CONTAINER_PRIORITY = (
 DISPLAY_SCRIPT_NAME = "book-question-counts-display.js"
 DISPLAY_SCRIPT_VERSION = "20260821f"
 DISPLAY_MARKER = "ExamFusion automatic book question counts"
+LANDING_COUNTS_START = "<!-- ExamFusion landing counts: start -->"
+LANDING_COUNTS_END = "<!-- ExamFusion landing counts: end -->"
+
+LANDING_TARGETS = (
+    ("Ghatnachakra Purvalokan", "./Books/Ghatnachakra Purvalokan/SubjectName.html"),
+    ("Lucent's Objective", "./Books/Lucent's Objective/SubjectName.html"),
+    ("Pinnacle GS", "./Books/Pinnacle GS/PinnacleParts.html"),
+    ("BlackBook", "./Books/BlackBook/BlackBook.html"),
+    ("Bihar Special", "./Bihar Special/Bihar Special.html"),
+    ("Current Affairs", "./Current Affairs/Topic Names.html"),
+    ("Mind Maps", "./Mind Maps/SubjectName.html"),
+)
 
 
 @dataclass(frozen=True)
@@ -241,6 +255,109 @@ def ensure_display_script(page: Path, books_root: Path) -> bool:
     return True
 
 
+def landing_counts_block(section_summaries: dict[str, dict]) -> str:
+    payload = {
+        href: {
+            "total": int(section_summaries[name]["total"]),
+            "unit": section_summaries[name]["unit"],
+        }
+        for name, href in LANDING_TARGETS
+    }
+    payload_text = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+    payload_text = payload_text.replace("</", "<\\/")
+
+    return (
+        f"  {LANDING_COUNTS_START}\n"
+        f'  <script id="efLandingCountsData" type="application/json">{payload_text}</script>\n'
+        """  <style>
+    body.ef-qcount-landing .ef-qcount-badge{display:block!important;width:max-content;max-width:100%;margin-top:4px!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;position:static!important;transform:none!important;white-space:nowrap;font-size:10px!important;font-weight:750!important;line-height:1.25!important;letter-spacing:.15px!important;color:currentColor!important;opacity:.78!important;text-shadow:none!important;pointer-events:none!important}
+    body.ef-qcount-landing .menu>li>a{min-height:82px!important}
+    .ef-qcount-placeholder{display:block!important;visibility:hidden!important;height:12px!important;margin-top:4px!important;font-size:10px!important;line-height:1.2!important;pointer-events:none!important}
+    @media(max-width:480px){body.ef-qcount-landing .ef-qcount-badge{font-size:9px!important;margin-top:3px!important}body.ef-qcount-landing .menu>li>a{min-height:78px!important}}
+  </style>
+  <script>
+    (function () {
+      "use strict";
+      var node = document.getElementById("efLandingCountsData");
+      var data = {};
+      try { data = JSON.parse(node ? node.textContent : "{}"); } catch (_) {}
+      document.body.classList.add("ef-qcount-landing");
+
+      function compactLabel(total, unit) {
+        var value = Number(total).toLocaleString("en-IN");
+        if (unit === "Maps") return value + " Maps";
+        if (unit === "Facts") return value + " Facts";
+        return value + " Q";
+      }
+
+      function fullLabel(total, unit) {
+        var value = Number(total).toLocaleString("en-IN");
+        if (unit === "Maps") return value + (Number(total) === 1 ? " Map" : " Maps");
+        if (unit === "Facts") return value + (Number(total) === 1 ? " Fact" : " Facts");
+        return value + (Number(total) === 1 ? " Question" : " Questions");
+      }
+
+      document.querySelectorAll("#menuList > li > a[href]").forEach(function (link) {
+        var href = link.getAttribute("href");
+        var holder = link.querySelector(".link-text") || link.querySelector(".bilabel");
+        if (!holder) return;
+
+        if (data[href]) {
+          var badge = document.createElement("span");
+          badge.className = "ef-qcount-badge";
+          badge.textContent = compactLabel(data[href].total, data[href].unit);
+          badge.title = fullLabel(data[href].total, data[href].unit);
+          badge.setAttribute("aria-label", badge.title);
+          holder.appendChild(badge);
+        } else if (href === "./Maths Speed Booster/math-speed-booster.html") {
+          var placeholder = document.createElement("span");
+          placeholder.className = "ef-qcount-placeholder";
+          placeholder.textContent = "placeholder";
+          holder.appendChild(placeholder);
+        }
+      });
+    })();
+  </script>
+"""
+        f"  {LANDING_COUNTS_END}"
+    )
+
+
+def ensure_landing_counts(page: Path, section_summaries: dict[str, dict]) -> bool:
+    raw = page.read_text(encoding="utf-8", errors="replace")
+
+    # The landing page no longer needs the 235 KB all-pages manifest. Hub and
+    # content pages continue using the shared display script unchanged.
+    generic_script = re.compile(
+        r"\s*<!--\s*" + re.escape(DISPLAY_MARKER) + r"\s*-->\s*"
+        r'<script\s+src=["\'][^"\']*' + re.escape(DISPLAY_SCRIPT_NAME)
+        + r'(?:\?[^"\']*)?["\']\s+defer\s*>\s*</script>\s*',
+        re.I,
+    )
+    updated = generic_script.sub("\n", raw)
+    block = landing_counts_block(section_summaries)
+    marker = re.compile(
+        r"[ \t]*" + re.escape(LANDING_COUNTS_START) + r".*?"
+        + re.escape(LANDING_COUNTS_END) + r"[ \t]*(?:\r?\n)?",
+        re.I | re.S,
+    )
+
+    match = marker.search(updated)
+    if match:
+        updated = updated[: match.start()] + block + "\n" + updated[match.end() :]
+    else:
+        closing = re.search(r"</body\s*>", updated, re.I)
+        if closing:
+            updated = updated[: closing.start()] + "\n" + block + "\n" + updated[closing.start() :]
+        else:
+            updated = updated.rstrip() + "\n" + block + "\n"
+
+    if updated == raw:
+        return False
+    page.write_text(updated, encoding="utf-8", newline="\n")
+    return True
+
+
 def build_counts(repo: Path, install_scripts: bool = True) -> tuple[dict, list[Path]]:
     books_root = (repo / "Books").resolve()
     roots: list[tuple[SectionConfig, Path]] = []
@@ -334,9 +451,11 @@ def build_counts(repo: Path, install_scripts: bool = True) -> tuple[dict, list[P
     index_page = (repo / "index.html").resolve()
     changed_pages: list[Path] = []
     if install_scripts:
-        for page in sorted(set(hub_pages + ([index_page] if index_page.exists() else []))):
+        for page in sorted(set(hub_pages)):
             if ensure_display_script(page, books_root):
                 changed_pages.append(page)
+        if index_page.exists() and ensure_landing_counts(index_page, section_summaries):
+            changed_pages.append(index_page)
 
     manifest = {
         "schema": 2,
