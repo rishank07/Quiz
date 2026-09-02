@@ -2,13 +2,26 @@
 <html lang="en">
 
 <head>
-  <script src="./black-mode.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    /* Preserve the saved black-mode state without making the HTML parser wait
+       for the full site-wide enhancement script. The timeout is a fail-safe. */
+    try {
+      if (localStorage.getItem("efp_black_mode") === "on") {
+        document.documentElement.style.visibility = "hidden";
+        window.setTimeout(function () {
+          document.documentElement.style.visibility = "";
+        }, 1500);
+      }
+    } catch (_) {}
+  </script>
+  <script defer src="./black-mode.js?v=20260902b"></script>
 
   <title>Exam Fusion Prep — Free MCQs, Mind Maps & Current Affairs</title>
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="apple-touch-icon" href="./pwa-icons/icon-192.png">
+  <link rel="preload" as="image" href="./pwa-icons/icon-192.png" fetchpriority="high">
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#070a13">
   <meta name="application-name" content="ExamFusion Prep">
@@ -59,10 +72,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Mukta:wght@400;500;600;700&display=swap"
-    rel="stylesheet" />
+    rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Mukta:wght@400;500;600;700&display=swap"
+      rel="stylesheet" />
+  </noscript>
 
   <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  </noscript>
 
   <style>
     :root {
@@ -88,23 +111,39 @@
 
     html {
       scroll-behavior: smooth;
+      min-height: 100%;
+      background-color: var(--bg-deep);
+      overscroll-behavior-y: none;
     }
 
     body {
       font-family: "Plus Jakarta Sans", "Mukta", sans-serif;
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       color: var(--ink);
       position: relative;
       overflow-x: hidden;
+      overscroll-behavior-y: none;
+      background-color: var(--bg-deep);
       background:
         radial-gradient(1100px 560px at 50% -8%, rgba(246, 217, 138, 0.11), transparent 60%),
         radial-gradient(900px 520px at 110% 110%, rgba(58, 92, 168, 0.16), transparent 55%),
         radial-gradient(700px 500px at -10% 30%, rgba(110, 80, 30, 0.12), transparent 60%),
         linear-gradient(165deg, var(--bg-deep) 0%, var(--bg-mid) 48%, #090d1a 100%);
       background-attachment: fixed;
+    }
+
+    /* Android Chrome/WebView can expose a white translucent compositor layer
+       while the page is pulled past a scroll edge. Keep the root canvas dark,
+       suppress root overscroll, and avoid fixed-background repaint glitches on
+       touch/mobile layouts. */
+    @media (max-width: 1119px), (hover: none) and (pointer: coarse) {
+      body {
+        background-attachment: scroll;
+      }
     }
 
     /* Fine grain overlay */
@@ -1197,7 +1236,8 @@
 
   <div class="container">
     <div class="logo-row">
-      <img src="./logo.png" alt="Exam Fusion Prep Logo" class="logo">
+      <img src="./pwa-icons/icon-192.png" alt="Exam Fusion Prep Logo" class="logo" width="192" height="192"
+        decoding="async" fetchpriority="high">
 
       <button type="button" class="black-mode-toggle" id="blackModeBtn" onclick="toggleBlackMode()"
         aria-pressed="false" aria-label="Turn dark mode on">
@@ -1439,7 +1479,7 @@
         }
         if (!deepSearchPromise) {
           deepSearchPromise = Promise.all([
-            loadScriptOnce("search-index-main.js?v=20260901b", function () {
+            loadScriptOnce("search-index-main.js?v=20260901c", function () {
               return typeof SEARCH_INDEX !== "undefined";
             }),
             loadScriptOnce("search-logic.js?v=20260901b", function () {

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "efp-pwa-2026-09-01-latest-index-backfix-v13";
+const CACHE_VERSION = "efp-pwa-2026-09-02-desktop-first-load-v16";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -7,7 +7,6 @@ const APP_SHELL = [
   "/privacy-policy.html",
   "/support.html",
   "/backup-restore.html",
-  "/logo.png",
   "/favicon.png",
   "/pwa-icons/icon-192.png",
   "/pwa-icons/icon-512.png",

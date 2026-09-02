@@ -48,6 +48,9 @@
     var style = document.createElement("style");
     style.id = STYLE_ID;
     style.textContent =
+      /* Suppress Android Chrome/WebView's translucent edge glow in normal as
+         well as black mode. Individual pages keep their own background. */
+      "html,body{overscroll-behavior-y:none;}" +
       /* Path A: page is already dark -> just make the canvas pure black */
       "html.efp-black, html.efp-black body {" +
       "background-color:#000 !important;" +
