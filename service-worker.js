@@ -1,19 +1,12 @@
-const CACHE_VERSION = "efp-pwa-2026-09-02-desktop-first-load-v16";
+const CACHE_VERSION = "efp-pwa-2026-09-02-seo-speed-v17";
 const APP_SHELL = [
   "/",
-  "/index.html",
   "/offline.html",
   "/manifest.webmanifest",
-  "/privacy-policy.html",
-  "/support.html",
   "/backup-restore.html",
   "/favicon.png",
   "/pwa-icons/icon-192.png",
-  "/pwa-icons/icon-512.png",
-  "/pwa-icons/maskable-icon-512.png",
-  "/black-mode.js",
-  "/search-logic.js",
-  "/search-index-main.js"
+  "/black-mode.js"
 ];
 
 self.addEventListener("install", (event) => {
