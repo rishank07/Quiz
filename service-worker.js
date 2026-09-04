@@ -1,5 +1,5 @@
-// v11 Homepage full-text bridge + versioned app-shell offline fallback 20260905
-const CACHE_VERSION = "efp-pwa-2026-09-05-v11-versioned-shell";
+// v12 Crux original-PDF-only reader + versioned app-shell offline fallback 20260905
+const CACHE_VERSION = "efp-pwa-2026-09-05-v12-crux-pdf-only";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
