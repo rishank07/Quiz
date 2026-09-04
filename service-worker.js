@@ -1,5 +1,5 @@
-// v16 Original Practice homepage-controlled dark mode sync 20260905
-const CACHE_VERSION = "efp-pwa-2026-09-05-v16-original-practice-dark-sync";
+// v17 dedicated Crux & Tricks My Pages cache 20260905
+const CACHE_VERSION = "efp-pwa-2026-09-05-v17-crux-my-pages";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -24,6 +24,7 @@ const APP_SHELL = [
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
   "/Crux-Tricks/viewer.html",
+  "/Crux-Tricks/my-pages.html",
   "/Crux-Tricks/crux-manifest.js",
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-tricks.css",
