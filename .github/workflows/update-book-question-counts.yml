@@ -11,6 +11,7 @@ on:
       - "Original Practice/question-counts.json"
       - "Crux-Tricks/crux-manifest.js"
       - "homepage-fulltext-search.js"
+      - "search-worker.js"
       - "service-worker.js"
       - "index.html"
       - "tools/update-book-question-counts.py"
@@ -45,6 +46,7 @@ jobs:
         run: |
           python -m py_compile tools/update-home-integrations.py
           node --check homepage-fulltext-search.js
+          node --check search-worker.js
           node --check service-worker.js
 
       - name: Recalculate section counts
