@@ -10,12 +10,15 @@ on:
       - "Mind Maps/**/*.html"
       - "Original Practice/question-counts.json"
       - "Crux-Tricks/crux-manifest.js"
+      - "Crux-Tricks/crux-search-route.js"
+      - "Crux-Tricks/crux-tricks.js"
       - "homepage-fulltext-search.js"
       - "search-worker.js"
       - "service-worker.js"
       - "index.html"
       - "tools/update-book-question-counts.py"
       - "tools/update-home-integrations.py"
+      - "tools/validate-crux-search-routing.js"
       - "Books/book-question-counts-display.js"
       - ".github/workflows/update-book-question-counts.yml"
   workflow_dispatch:
@@ -49,6 +52,7 @@ jobs:
           node --check homepage-fulltext-search.js
           node --check search-worker.js
           node --check service-worker.js
+          node tools/validate-crux-search-routing.js
 
       - name: Recalculate section counts
         run: python tools/update-book-question-counts.py --repo .

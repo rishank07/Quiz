@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="./Crux-Tricks/crux-search-route.js?v=20260905route1"></script>
   <script>
     /* Preserve the saved black-mode state without making the HTML parser wait
        for the full site-wide enhancement script. The timeout is a fail-safe. */
@@ -1525,7 +1526,7 @@
         if (originalPracticeSearchClient) return originalPracticeSearchClient;
         if (typeof efCreateSearchWorker !== "function") return null;
         originalPracticeSearchClient = efCreateSearchWorker({
-          workerUrl: new URL("search-worker.js?v=20260904v8", document.baseURI).href,
+          workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
           logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
           indexUrl: new URL("search-snippets-original-practice.js?v=20260904v8", document.baseURI).href,
           mode: "snippet",
@@ -1614,9 +1615,9 @@
         if (cruxTricksSearchClient) return cruxTricksSearchClient;
         if (typeof efCreateSearchWorker !== "function") return null;
         cruxTricksSearchClient = efCreateSearchWorker({
-          workerUrl: new URL("search-worker.js?v=20260904v8", document.baseURI).href,
+          workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
           logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
-          indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20260904v8", document.baseURI).href,
+          indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20260905cruxroute1", document.baseURI).href,
           mode: "snippet",
           globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
           sectionPrefix: "./Crux-Tricks/",
@@ -1635,6 +1636,11 @@
           }
         }
         var url = String(hit && hit.f || "");
+        if (typeof efNormalizeCruxSearchUrl === "function") {
+          url = efNormalizeCruxSearchUrl(url);
+        } else {
+          url = url.replace(/^(?:\.\/)?Crux-Tricks\//, "/Crux-Tricks/");
+        }
         url += (url.indexOf("?") === -1 ? "?" : "&") + "page=" + page;
         return { url: url, text: raw, page: page };
       }
@@ -1874,7 +1880,14 @@
     // Enables installability and graceful offline handling for the Windows/PWA app.
     if ("serviceWorker" in navigator && window.isSecureContext) {
       window.addEventListener("load", function () {
-        navigator.serviceWorker.register("./service-worker.js", { scope: "./" })
+        var reloadingForUpdate = false;
+        navigator.serviceWorker.addEventListener("controllerchange", function () {
+          if (reloadingForUpdate) return;
+          reloadingForUpdate = true;
+          window.location.reload();
+        });
+        navigator.serviceWorker.register("./service-worker.js", { scope: "./", updateViaCache: "none" })
+          .then(function (registration) { return registration.update(); })
           .catch(function (error) {
             console.warn("ExamFusion service worker registration failed:", error);
           });

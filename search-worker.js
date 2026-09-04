@@ -1,4 +1,4 @@
-/* ExamFusion Prep fast background full-text search (v8).
+/* ExamFusion Prep fast background full-text search (v9).
  *
  * IMPORTANT: Large Original Practice / Crux indexes must NOT be normalized or
  * warmed in full during worker startup. The previous implementation warmed
@@ -106,6 +106,9 @@
     cruxDocs = null;
     if (!isCruxSearch()) return;
     try {
+      if (typeof self.efNormalizeCruxSearchUrl !== "function") {
+        importScripts("/Crux-Tricks/crux-search-route.js");
+      }
       if (!Array.isArray(self.EF_CRUX_DOCS)) {
         importScripts("/Crux-Tricks/crux-manifest.js");
       }
@@ -179,9 +182,12 @@
   function routeCruxHit(hit) {
     if (!isCruxSearch() || !hit) return hit;
     var doc = resolveCruxDoc(hit);
-    var copy = { f: "./Crux-Tricks/index.html", t: hit.t, b: hit.b, x: hit.x };
+    var normalizeUrl = typeof self.efNormalizeCruxSearchUrl === "function"
+      ? self.efNormalizeCruxSearchUrl
+      : function (value) { return String(value || "").replace(/^(?:\.\/)?Crux-Tricks\//, "/Crux-Tricks/"); };
+    var copy = { f: normalizeUrl("/Crux-Tricks/index.html"), t: hit.t, b: hit.b, x: hit.x };
     if (doc && doc.id) {
-      copy.f = "./Crux-Tricks/viewer.html?id=" + encodeURIComponent(String(doc.id));
+      copy.f = normalizeUrl("/Crux-Tricks/viewer.html?id=" + encodeURIComponent(String(doc.id)));
     }
     return copy;
   }

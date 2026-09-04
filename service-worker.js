@@ -1,5 +1,5 @@
-// v14b Crux search PDF-route fix + Android-safe PDF.js renderer 20260905
-const CACHE_VERSION = "efp-pwa-2026-09-05-v14b-crux-search-router";
+// v15 context-safe Crux search routes + Android-safe PDF.js renderer 20260905
+const CACHE_VERSION = "efp-pwa-2026-09-05-v15-crux-search-route-root";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -25,6 +25,7 @@ const APP_SHELL = [
   "/Crux-Tricks/index.html",
   "/Crux-Tricks/viewer.html",
   "/Crux-Tricks/crux-manifest.js",
+  "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js",
   "/Crux-Tricks/viewer.css",
