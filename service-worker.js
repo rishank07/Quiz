@@ -1,5 +1,5 @@
-// v15 context-safe Crux search routes + Android-safe PDF.js renderer 20260905
-const CACHE_VERSION = "efp-pwa-2026-09-05-v15-crux-search-route-root";
+// v16 Original Practice homepage-controlled dark mode sync 20260905
+const CACHE_VERSION = "efp-pwa-2026-09-05-v16-original-practice-dark-sync";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
