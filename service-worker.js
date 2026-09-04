@@ -1,5 +1,5 @@
-// v9 Crux/Tricks bookmarked-pages UI cache bump 20260904
-const CACHE_VERSION = "efp-pwa-2026-09-04-v9-crux-page-bookmarks";
+// v10 Homepage full-text bridge + Crux/Tricks bookmarked-pages UI cache bump 20260905
+const CACHE_VERSION = "efp-pwa-2026-09-05-v10-home-search";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -17,6 +17,7 @@ const APP_SHELL = [
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
+  "/homepage-fulltext-search.js",
   "/Original%20Practice/index.html",
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/original-practice.js",
