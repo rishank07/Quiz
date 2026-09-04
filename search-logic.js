@@ -407,20 +407,142 @@ function efSnippetSearch(query, options) {
   return output;
 }
 
-// Small main-thread bridge for the background search worker. Large index files
-// are parsed and normalized away from the page, so typing and scrolling remain
-// responsive even on slower Android WebViews.
+// Background-worker bridge with a main-thread fallback.
+//
+// Why the fallback exists: Chromium/WebView blocks Worker() for many file://
+// pages and some restrictive embedded contexts. ExamFusion pages are often
+// tested locally before upload, so full-text search must still work there.
+// On normal https:// hosting the worker remains the preferred fast path.
+var EF_FALLBACK_SCRIPT_PROMISES = {};
+
+function efLoadSearchIndexScript(url, globalName) {
+  if (typeof window !== "undefined" && Array.isArray(window[globalName])) {
+    return Promise.resolve(window[globalName]);
+  }
+  var key = String(globalName || url || "index");
+  if (EF_FALLBACK_SCRIPT_PROMISES[key]) return EF_FALLBACK_SCRIPT_PROMISES[key];
+
+  EF_FALLBACK_SCRIPT_PROMISES[key] = new Promise(function (resolve, reject) {
+    if (typeof document === "undefined") {
+      reject(new Error("Search fallback requires a document"));
+      return;
+    }
+    var triedPlain = false;
+    function attach(src) {
+      var script = document.createElement("script");
+      script.async = true;
+      script.src = src;
+      script.onload = function () {
+        if (Array.isArray(window[globalName])) resolve(window[globalName]);
+        else reject(new Error("Search index did not expose " + globalName));
+      };
+      script.onerror = function () {
+        // Some file:// Chromium builds are happier without cache-bust query strings.
+        if (!triedPlain && String(src).indexOf("?") !== -1) {
+          triedPlain = true;
+          attach(String(src).split("?")[0]);
+          return;
+        }
+        reject(new Error("Search index script could not load"));
+      };
+      (document.head || document.documentElement).appendChild(script);
+    }
+    attach(url);
+  });
+  return EF_FALLBACK_SCRIPT_PROMISES[key];
+}
+
+function efFallbackQueryTerms(query) {
+  var normalized = efNormalizeSearchText(query);
+  var raw = normalized.split(/\s+/), seen = {}, out = [];
+  for (var i = 0; i < raw.length; i++) {
+    if (!raw[i] || seen[raw[i]]) continue;
+    seen[raw[i]] = true;
+    out.push(raw[i]);
+  }
+  return { phrase: normalized, terms: out };
+}
+
+function efFallbackStripMarker(raw) {
+  raw = String(raw == null ? "" : raw);
+  if (raw.length) {
+    var code = raw.charCodeAt(0);
+    if (code >= 0xE000 && code <= 0xF8FF) return raw.slice(1).replace(/^\s+/, "");
+  }
+  return raw;
+}
+
+function efFallbackSnippetSearchAsync(query, records, options) {
+  options = options || {};
+  var parsed = efFallbackQueryTerms(query);
+  var terms = parsed.terms;
+  var phrase = parsed.phrase;
+  if (!terms.length || !Array.isArray(records)) return Promise.resolve([]);
+
+  var prefix = options.sectionPrefix || null;
+  var scored = [];
+  var i = 0, sequence = 0;
+  var limit = options.limit || 40;
+
+  return new Promise(function (resolve) {
+    function step() {
+      var started = Date.now();
+      while (i < records.length && Date.now() - started < 12) {
+        var group = records[i++];
+        if (!group || (prefix && String(group.f || "").indexOf(prefix) !== 0)) continue;
+        var head = (String(group.t || "") + " " + String(group.b || "")).toLowerCase();
+        var snippets = Array.isArray(group.x) ? group.x : [];
+
+        for (var j = 0; j < snippets.length; j++) {
+          var raw = String(snippets[j] == null ? "" : snippets[j]);
+          var visible = efFallbackStripMarker(raw);
+          var body = visible.toLowerCase();
+          var all = true, bodyOnly = true, positionSum = 0;
+          for (var k = 0; k < terms.length; k++) {
+            var pos = body.indexOf(terms[k]);
+            if (pos >= 0) { positionSum += pos; continue; }
+            bodyOnly = false;
+            pos = head.indexOf(terms[k]);
+            if (pos < 0) { all = false; break; }
+            positionSum += 100000 + pos;
+          }
+          if (!all) { sequence++; continue; }
+
+          var phraseBody = phrase ? body.indexOf(phrase) : -1;
+          var phraseHead = phrase ? head.indexOf(phrase) : -1;
+          var score;
+          if (phraseBody >= 0) score = phraseBody * 0.00001;
+          else if (bodyOnly) score = 10 + positionSum * 0.000001;
+          else if (phraseHead >= 0) score = 20 + phraseHead * 0.00001;
+          else score = 30 + positionSum * 0.0000001;
+          scored.push({ score: score, sequence: sequence, f: group.f, t: group.t, b: group.b, x: raw });
+          sequence++;
+        }
+      }
+      if (i < records.length) {
+        setTimeout(step, 0);
+        return;
+      }
+      scored.sort(function (a, b) { return a.score - b.score || a.sequence - b.sequence; });
+      var out = [];
+      for (var n = 0; n < scored.length && n < limit; n++) {
+        out.push({ f: scored[n].f, t: scored[n].t, b: scored[n].b, x: scored[n].x });
+      }
+      resolve(out);
+    }
+    step();
+  });
+}
+
 function efCreateSearchWorker(options) {
   options = options || {};
-  if (typeof Worker !== "function" || !options.workerUrl) return null;
-
   var worker = null;
-  var startPromise = null;
-  var startResolve = null;
-  var startReject = null;
+  var workerStartPromise = null;
+  var workerFailed = false;
   var nextId = 1;
   var latestSearchToken = 0;
   var pending = {};
+  var fallbackRecordsPromise = null;
 
   function rejectPending(error) {
     Object.keys(pending).forEach(function (id) {
@@ -429,22 +551,40 @@ function efCreateSearchWorker(options) {
     });
   }
 
-  function start() {
-    if (startPromise) return startPromise;
-    startPromise = new Promise(function (resolve, reject) {
-      startResolve = resolve;
-      startReject = reject;
+  function canUseWorker() {
+    if (typeof Worker !== "function" || !options.workerUrl) return false;
+    // Local file pages are the exact context in which Chromium commonly blocks
+    // dedicated workers. Skip the doomed attempt and use the reliable fallback.
+    try { if (location && location.protocol === "file:") return false; } catch (_) {}
+    return true;
+  }
+
+  function startWorker() {
+    if (!canUseWorker() || workerFailed) return Promise.reject(new Error("Worker unavailable"));
+    if (workerStartPromise) return workerStartPromise;
+    workerStartPromise = new Promise(function (resolve, reject) {
       try {
         worker = new Worker(options.workerUrl);
       } catch (error) {
+        workerFailed = true;
         reject(error);
         return;
       }
 
+      var settled = false;
+      var timeout = setTimeout(function () {
+        if (settled) return;
+        settled = true;
+        workerFailed = true;
+        try { worker.terminate(); } catch (_) {}
+        worker = null;
+        reject(new Error("Search worker startup timed out"));
+      }, 12000);
+
       worker.onmessage = function (event) {
         var message = event.data || {};
         if (message.type === "ready") {
-          startResolve(true);
+          if (!settled) { settled = true; clearTimeout(timeout); resolve(true); }
           return;
         }
         if (message.type === "result" && pending[message.id]) {
@@ -457,15 +597,16 @@ function efCreateSearchWorker(options) {
           if (message.id && pending[message.id]) {
             pending[message.id].reject(error);
             delete pending[message.id];
-          } else if (startReject) {
-            startReject(error);
+          } else if (!settled) {
+            settled = true; clearTimeout(timeout); workerFailed = true; reject(error);
           }
         }
       };
 
       worker.onerror = function () {
         var error = new Error("Search worker failed to load");
-        if (startReject) startReject(error);
+        workerFailed = true;
+        if (!settled) { settled = true; clearTimeout(timeout); reject(error); }
         rejectPending(error);
       };
 
@@ -475,21 +616,53 @@ function efCreateSearchWorker(options) {
       });
       worker.postMessage({ type: "init", options: initOptions });
     });
-    return startPromise;
+    return workerStartPromise;
+  }
+
+  function getFallbackRecords() {
+    if (fallbackRecordsPromise) return fallbackRecordsPromise;
+    if (!options.indexUrl || !options.globalName) {
+      fallbackRecordsPromise = Promise.reject(new Error("No fallback search index configured"));
+    } else {
+      fallbackRecordsPromise = efLoadSearchIndexScript(options.indexUrl, options.globalName);
+    }
+    return fallbackRecordsPromise;
+  }
+
+  function fallbackSearch(query) {
+    return getFallbackRecords().then(function (records) {
+      if (options.mode === "snippet") return efFallbackSnippetSearchAsync(query, records, options);
+      // Current ExamFusion full-content clients all use snippet mode. Keep a
+      // compact compatibility path for future non-snippet clients.
+      var compact = [];
+      for (var i = 0; i < records.length; i++) compact.push({ file: records[i].f, title: records[i].t, text: records[i].x });
+      return efSearchRecords(query, compact, { fields: options.fields || ["title", "text"], limit: options.limit || 40 });
+    });
   }
 
   function search(query) {
     var token = ++latestSearchToken;
-    return start().then(function () {
-      // If several debounced queries were waiting for a large index to warm,
-      // send only the newest one instead of replaying every intermediate key.
+    if (!canUseWorker() || workerFailed) {
+      return fallbackSearch(query).then(function (rows) { return token === latestSearchToken ? rows : []; });
+    }
+    return startWorker().then(function () {
       if (token !== latestSearchToken) return [];
       return new Promise(function (resolve, reject) {
         var id = nextId++;
         pending[id] = { resolve: resolve, reject: reject };
         worker.postMessage({ type: "search", id: id, query: query });
       });
+    }).catch(function () {
+      workerFailed = true;
+      return fallbackSearch(query).then(function (rows) { return token === latestSearchToken ? rows : []; });
     });
+  }
+
+  function warm() {
+    if (canUseWorker() && !workerFailed) {
+      return startWorker().catch(function () { workerFailed = true; return getFallbackRecords().then(function(){ return true; }); });
+    }
+    return getFallbackRecords().then(function(){ return true; });
   }
 
   function terminate() {
@@ -498,5 +671,8 @@ function efCreateSearchWorker(options) {
     worker = null;
   }
 
-  return { warm: start, search: search, terminate: terminate };
+  // Always return a client when an index is configured. This prevents UI code
+  // from degrading to a misleading "Full-text search unavailable" state.
+  if (!options.indexUrl || !options.globalName) return null;
+  return { warm: warm, search: search, terminate: terminate };
 }

@@ -1,0 +1,2 @@
+window.EF_CRUX_DOC_ID="ct0014";
+window.EF_CRUX_DOC_PAGES=["HIRAKUD DAM — FULL MIND MAP\n🏞️\nTopic-wise · Fully Explained · Hinglish · SSC / BPSC / BSSC / Railway\n Topics in this chapter:\n📑\n1. Hirakud Dam — River, Location & Scale\n1. Hirakud Dam — River, Location & Scale\n●\nHirakud dam Mahanadi river par, Odisha (Sambalpur town se 15km door) bana hai — main dam length\n4801m, 155635 hectares Kharif aur 108385 hectares Rabi irrigation deta hai. [Q1, Q2]"];

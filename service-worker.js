@@ -1,12 +1,33 @@
-const CACHE_VERSION = "efp-pwa-2026-09-02-seo-speed-v17";
+// v9 Crux/Tricks bookmarked-pages UI cache bump 20260904
+const CACHE_VERSION = "efp-pwa-2026-09-04-v9-crux-page-bookmarks";
+// Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
+  "/index.html",
   "/offline.html",
   "/manifest.webmanifest",
+  "/privacy-policy.html",
+  "/support.html",
   "/backup-restore.html",
   "/favicon.png",
   "/pwa-icons/icon-192.png",
-  "/black-mode.js"
+  "/pwa-icons/icon-512.png",
+  "/pwa-icons/maskable-icon-512.png",
+  "/black-mode.js",
+  "/search-logic.js",
+  "/search-worker.js",
+  "/search-index-main.js",
+  "/Original%20Practice/index.html",
+  "/Original%20Practice/original-practice.css",
+  "/Original%20Practice/original-practice.js",
+  "/Original%20Practice/original-practice-index.js",
+  "/Crux-Tricks/index.html",
+  "/Crux-Tricks/viewer.html",
+  "/Crux-Tricks/crux-manifest.js",
+  "/Crux-Tricks/crux-tricks.css",
+  "/Crux-Tricks/crux-tricks.js",
+  "/Crux-Tricks/viewer.css",
+  "/Crux-Tricks/viewer.js",
 ];
 
 self.addEventListener("install", (event) => {

@@ -18,7 +18,7 @@
   </script>
   <script defer src="./black-mode.js?v=20260902b"></script>
 
-  <title>Exam Fusion Prep — Free MCQs, Mind Maps & Current Affairs</title>
+  <title>Exam Fusion Prep — Free MCQs, Original Practice, Mind Maps & Current Affairs</title>
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="apple-touch-icon" href="./pwa-icons/icon-192.png">
   <link rel="preload" as="image" href="./pwa-icons/icon-192.png" fetchpriority="high">
@@ -31,11 +31,11 @@
   <meta name="apple-mobile-web-app-title" content="ExamFusion Prep">
   <meta name="msapplication-TileColor" content="#070a13">
   <meta name="description"
-    content="Free SSC, Railway, BPSC & BSSC preparation — Lucent's Objective MCQs, Pinnacle GS, Blackbook Vocabulary, Bihar Special, Mind Maps and daily Current Affairs. हिंदी + English.">
+    content="Free SSC, Railway, BPSC & BSSC preparation — 38,776 Original Practice questions, 447 revision crux & memory-trick PDFs, Mind Maps and Current Affairs. हिंदी + English.">
 
   <meta property="og:title" content="Exam Fusion Prep — Free Competitive Exam Hub">
   <meta property="og:description"
-    content="Lucent MCQs · Pinnacle GS · Blackbook · Bihar Special · Mind Maps · Current Affairs — 100% free, bilingual (हिंदी + English).">
+    content="Original Practice · Lucent MCQs · Pinnacle GS · Blackbook · Bihar Special · Mind Maps · Current Affairs — 100% free, bilingual (हिंदी + English).">
   <meta property="og:url" content="https://examfusionprep.com">
   <meta property="og:image" content="https://examfusionprep.com/logo.png">
   <meta property="og:type" content="website">
@@ -50,7 +50,7 @@
     "name": "Exam Fusion Prep",
     "url": "https://examfusionprep.com",
     "logo": "https://examfusionprep.com/logo.png",
-    "description": "Free bilingual (Hindi + English) preparation platform for SSC, Railway, BPSC and BSSC exams — MCQs, mind maps and current affairs.",
+    "description": "Free bilingual (Hindi + English) preparation platform for SSC, Railway, BPSC and BSSC exams — including 38,776 ExamFusion Original Practice questions, MCQs, mind maps and current affairs.",
     "sameAs": [
       "https://youtube.com/@examfusionprep",
       "https://telegram.me/examfusionprep"
@@ -1276,10 +1276,10 @@
 
     <span class="kicker">Competitive Exam Hub</span>
     <h1>Exam Fusion Prep</h1>
-    <p class="subtitle">Free MCQs, Mind Maps &amp; Current Affairs for SSC · Railway · BPSC · BSSC</p>
+    <p class="subtitle">Free MCQs, Original Practice, Crux, Memory Tricks, Mind Maps &amp; Current Affairs for SSC · Railway · BPSC · BSSC</p>
 
     <div class="stats" aria-label="Highlights">
-      <span><i class="fa-solid fa-layer-group"></i>8 Study Hubs</span>
+      <span><i class="fa-solid fa-layer-group"></i>10 Study Hubs</span>
       <span><i class="fa-solid fa-language"></i>हिंदी + English</span>
       <span><i class="fa-solid fa-indian-rupee-sign"></i>100% Free</span>
     </div>
@@ -1308,7 +1308,7 @@
     <nav class="menu-container" aria-label="Study sections">
       <div class="search-wrap">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="search" id="searchBox" placeholder="Search — chapter, topic, subject, Bihar, करेंट अफेयर्स…"
+        <input type="search" id="searchBox" placeholder="Search — chapter, topic, Original Practice, Crux, Tricks, Bihar, करेंट अफेयर्स…"
           aria-label="Search study sections" autocomplete="off">
       </div>
 
@@ -1361,6 +1361,24 @@
             <i class="fa-solid fa-chevron-right chevron-icon"></i>
           </a>
         </li>
+        <li>
+          <a href="./Original Practice/index.html" onclick="openPage(event)">
+            <i class="fa-solid fa-pen-to-square menu-icon"></i>
+            <span class="link-text bilabel"><span class="bilabel-en">ExamFusion Original Practice</span><span class="bilabel-hi">मौलिक अभ्यास श्रृंखला</span></span>
+            <span class="badge-new">ORIGINAL</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
+          </a>
+        </li>
+
+        <li>
+          <a href="./Crux-Tricks/index.html" onclick="openPage(event)">
+            <i class="fa-solid fa-lightbulb menu-icon"></i>
+            <span class="link-text bilabel"><span class="bilabel-en">Crux &amp; Memory Tricks</span><span class="bilabel-hi">क्रक्स एवं मेमोरी ट्रिक्स</span></span>
+            <span class="badge-new">REVISION</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
+          </a>
+        </li>
+
         <li>
           <a href="./Maths Speed Booster/math-speed-booster.html" onclick="openPage(event)">
             <i class="fa-solid fa-calculator menu-icon"></i>
@@ -1456,6 +1474,8 @@
         "Books": "fa-book",
         "Bihar Special": "fa-location-dot",
         "Current Affairs": "fa-newspaper",
+        "Original Practice": "fa-pen-to-square",
+        "Crux & Tricks": "fa-lightbulb",
         "Mind Maps": "fa-sitemap"
       };
 
@@ -1481,20 +1501,190 @@
         }
         if (!deepSearchPromise) {
           deepSearchPromise = Promise.all([
-            loadScriptOnce("search-index-main.js?v=20260903a", function () {
+            loadScriptOnce("search-index-main.js?v=20260904op3", function () {
               return typeof SEARCH_INDEX !== "undefined";
             }),
-            loadScriptOnce("search-logic.js?v=20260901b", function () {
+            loadScriptOnce("search-logic.js?v=20260904v8", function () {
               return typeof efSearchRank === "function";
             })
           ]).then(function () {
             return typeof SEARCH_INDEX !== "undefined" && typeof efSearchRank === "function";
           }).catch(function () {
-            // Search assets are enhancement-only. The eight main cards remain usable.
+            // Search assets are enhancement-only. The ten main cards remain usable.
             return false;
           });
         }
         return deepSearchPromise;
+      }
+
+      // Original Practice has 38,776 MCQs, so its full question text is NOT
+      // placed in search-index-main.js. It is loaded only in a background worker
+      // after a real search, preventing the homepage/global search from freezing.
+      let originalPracticeSearchClient = null;
+      function getOriginalPracticeSearchClient() {
+        if (originalPracticeSearchClient) return originalPracticeSearchClient;
+        if (typeof efCreateSearchWorker !== "function") return null;
+        originalPracticeSearchClient = efCreateSearchWorker({
+          workerUrl: new URL("search-worker.js?v=20260904v8", document.baseURI).href,
+          logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+          indexUrl: new URL("search-snippets-original-practice.js?v=20260904v8", document.baseURI).href,
+          mode: "snippet",
+          globalName: "EF_ORIGINAL_PRACTICE_SNIPPET_INDEX",
+          sectionPrefix: "./Original%20Practice/",
+          limit: 24
+        });
+        return originalPracticeSearchClient;
+      }
+
+      function decodeOriginalPracticeHit(hit) {
+        var raw = String(hit && hit.x || "");
+        var qi = -1;
+        if (raw.length) {
+          var code = raw.charCodeAt(0);
+          if (code >= 0xE000 && code <= 0xF8FF) {
+            qi = code - 0xE000;
+            raw = raw.slice(1).replace(/^\s+/, "");
+          }
+        }
+        var url = String(hit && hit.f || "");
+        if (qi >= 0) url += (url.indexOf("?") === -1 ? "?" : "&") + "q=" + (qi + 1);
+        return { url: url, text: raw, qi: qi };
+      }
+
+      function renderOriginalPracticeFullResults(q, hits) {
+        hits = Array.isArray(hits) ? hits : [];
+        if (!hits.length || box.value.trim() !== q) return 0;
+        var terms = (typeof efSearchTerms === "function") ? efSearchTerms(q) : q.toLowerCase().split(/\s+/).filter(Boolean);
+        var seen = {};
+        var rendered = [];
+        hits.forEach(function (hit) {
+          var decoded = decodeOriginalPracticeHit(hit);
+          if (!decoded.url || seen[decoded.url]) return;
+          seen[decoded.url] = true;
+          rendered.push({ hit: hit, decoded: decoded });
+        });
+        rendered = rendered.slice(0, 16);
+        if (!rendered.length) return 0;
+
+        var groupLi = document.createElement("li");
+        groupLi.setAttribute("data-deepresult", "");
+        groupLi.setAttribute("data-opfullresult", "");
+        var groupTitle = document.createElement("div");
+        groupTitle.className = "group-title";
+        groupTitle.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Original Practice — Question Matches (' + rendered.length + (hits.length > rendered.length ? "+" : "") + ")";
+        groupLi.appendChild(groupTitle);
+        menuList.appendChild(groupLi);
+
+        rendered.forEach(function (item) {
+          var hit = item.hit;
+          var decoded = item.decoded;
+          var li = document.createElement("li");
+          li.setAttribute("data-deepresult", "");
+          li.setAttribute("data-opfullresult", "");
+          var a = document.createElement("a");
+          a.href = decoded.url;
+          a.setAttribute("onclick", "openPage(event)");
+
+          var icon = document.createElement("i");
+          icon.className = "fa-solid fa-pen-to-square menu-icon";
+
+          var span = document.createElement("span");
+          span.className = "link-text ef-op-global-result";
+          var snippet = (typeof efSnippetWithHighlight === "function")
+            ? efSnippetWithHighlight(decoded.text, terms)
+            : decoded.text.slice(0, 180);
+          span.innerHTML = '<strong>' + (hit.t || "Original Practice") + '</strong><br>' +
+            '<small class="ef-op-search-breadcrumb">' + (hit.b || "Original Practice") + '</small><br>' +
+            '<small class="ef-op-search-snippet">' + snippet + '</small>';
+
+          var chevron = document.createElement("i");
+          chevron.className = "fa-solid fa-chevron-right chevron-icon";
+          a.appendChild(icon); a.appendChild(span); a.appendChild(chevron);
+          li.appendChild(a); menuList.appendChild(li);
+        });
+        menuList.classList.add("has-deep-results");
+        return rendered.length;
+      }
+
+
+      // Crux & Memory Tricks has 2,073 searchable pages. Keep that text in a
+      // second background worker so it never blocks the homepage UI.
+      let cruxTricksSearchClient = null;
+      function getCruxTricksSearchClient() {
+        if (cruxTricksSearchClient) return cruxTricksSearchClient;
+        if (typeof efCreateSearchWorker !== "function") return null;
+        cruxTricksSearchClient = efCreateSearchWorker({
+          workerUrl: new URL("search-worker.js?v=20260904v8", document.baseURI).href,
+          logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+          indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20260904v8", document.baseURI).href,
+          mode: "snippet",
+          globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
+          sectionPrefix: "./Crux-Tricks/",
+          limit: 24
+        });
+        return cruxTricksSearchClient;
+      }
+      function decodeCruxTricksHit(hit) {
+        var raw = String(hit && hit.x || "");
+        var page = 1;
+        if (raw.length) {
+          var code = raw.charCodeAt(0);
+          if (code >= 0xE000 && code <= 0xF8FF) {
+            page = code - 0xE000 + 1;
+            raw = raw.slice(1).replace(/^\s+/, "");
+          }
+        }
+        var url = String(hit && hit.f || "");
+        url += (url.indexOf("?") === -1 ? "?" : "&") + "page=" + page;
+        return { url: url, text: raw, page: page };
+      }
+      function rerankCruxTricksHits(q, hits) {
+        var phrase = String(q || "").trim().toLowerCase();
+        var terms = phrase.split(/\s+/).filter(Boolean);
+        return (Array.isArray(hits) ? hits.slice() : []).sort(function(a, b) {
+          function score(hit) {
+            var raw = String(hit && hit.x || "");
+            if (raw.length) { var c = raw.charCodeAt(0); if (c >= 0xE000 && c <= 0xF8FF) raw = raw.slice(1); }
+            var text = (String(hit && hit.t || "") + " " + String(hit && hit.b || "") + " " + raw).toLowerCase();
+            if (phrase && text.indexOf(phrase) !== -1) return 0;
+            if (terms.length && terms.every(function(t){ return text.indexOf(t) !== -1; })) return 1;
+            return 2;
+          }
+          return score(a) - score(b);
+        });
+      }
+      function renderCruxTricksFullResults(q, hits) {
+        hits = rerankCruxTricksHits(q, hits);
+        if (!hits.length || box.value.trim() !== q) return 0;
+        var terms = (typeof efSearchTerms === "function") ? efSearchTerms(q) : q.toLowerCase().split(/\s+/).filter(Boolean);
+        var seen = {}, rendered = [];
+        hits.forEach(function (hit) {
+          var decoded = decodeCruxTricksHit(hit);
+          var key = decoded.url;
+          if (!decoded.url || seen[key]) return;
+          seen[key] = true;
+          rendered.push({ hit: hit, decoded: decoded });
+        });
+        rendered = rendered.slice(0, 12);
+        if (!rendered.length) return 0;
+        var groupLi = document.createElement("li");
+        groupLi.setAttribute("data-deepresult", "");
+        var groupTitle = document.createElement("div");
+        groupTitle.className = "group-title";
+        groupTitle.innerHTML = '<i class="fa-solid fa-lightbulb"></i> Crux & Memory Tricks — Page Matches (' + rendered.length + (hits.length > rendered.length ? "+" : "") + ")";
+        groupLi.appendChild(groupTitle); menuList.appendChild(groupLi);
+        rendered.forEach(function (item) {
+          var li = document.createElement("li"); li.setAttribute("data-deepresult", "");
+          var a = document.createElement("a"); a.href = item.decoded.url; a.setAttribute("onclick", "openPage(event)");
+          var icon = document.createElement("i"); icon.className = "fa-solid fa-lightbulb menu-icon";
+          var span = document.createElement("span"); span.className = "link-text ef-op-global-result";
+          var snippet = (typeof efSnippetWithHighlight === "function") ? efSnippetWithHighlight(item.decoded.text, terms) : item.decoded.text.slice(0,180);
+          span.innerHTML = '<strong>' + (item.hit.t || "Revision Crux") + '</strong><br><small class="ef-op-search-breadcrumb">' + (item.hit.b || "Crux & Tricks") + ' · Page ' + item.decoded.page + '</small><br><small class="ef-op-search-snippet">' + snippet + '</small>';
+          var chevron = document.createElement("i"); chevron.className = "fa-solid fa-chevron-right chevron-icon";
+          a.appendChild(icon); a.appendChild(span); a.appendChild(chevron); li.appendChild(a); menuList.appendChild(li);
+        });
+        menuList.classList.add("has-deep-results");
+        return rendered.length;
       }
 
       // Start quietly as soon as the user shows search intent. Typing and the
@@ -1556,8 +1746,10 @@
       }
 
       let deepSearchTimer = null;
+      let deepSearchSequence = 0;
       box.addEventListener("input", function () {
         const q = box.value.trim();
+        const sequence = ++deepSearchSequence;
         clearTimeout(deepSearchTimer);
         let visible = 0;
 
@@ -1584,23 +1776,46 @@
           return;
         }
 
-        // Keep keyboard input fluid. The small visible-menu filter above stays
-        // instant; the 993-record site index runs only after typing pauses.
         clearDeepResults();
         noResults.classList.remove("show");
         deepSearchTimer = setTimeout(function () {
-          if (box.value.trim() !== q) return;
+          if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
           ensureDeepSearch().then(function (ready) {
-            if (box.value.trim() !== q) return;
+            if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
             const deepCount = ready ? renderDeepResults(q) : 0;
-            noResults.classList.toggle("show", visible === 0 && deepCount === 0);
+            const opClient = ready ? getOriginalPracticeSearchClient() : null;
+            const ctClient = ready ? getCruxTricksSearchClient() : null;
+            const jobs = [];
+            if (opClient) jobs.push(opClient.search(q).then(function(hits){
+              if (box.value.trim() !== q || sequence !== deepSearchSequence) return 0;
+              return renderOriginalPracticeFullResults(q, hits);
+            }).catch(function(){ originalPracticeSearchClient = null; return 0; }));
+            if (ctClient) jobs.push(ctClient.search(q).then(function(hits){
+              if (box.value.trim() !== q || sequence !== deepSearchSequence) return 0;
+              return renderCruxTricksFullResults(q, hits);
+            }).catch(function(){ cruxTricksSearchClient = null; return 0; }));
+            if (!jobs.length) {
+              noResults.classList.toggle("show", visible === 0 && deepCount === 0);
+              return;
+            }
+            Promise.all(jobs).then(function(counts){
+              if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
+              var extraCount = counts.reduce(function(a,b){ return a + (b || 0); }, 0);
+              noResults.classList.toggle("show", visible === 0 && deepCount === 0 && extraCount === 0);
+            });
           });
-        }, 120);
+        }, 180);
       });
     })();
   </script>
+  <style id="efOriginalPracticeGlobalSearchStyles">
+    .ef-op-global-result{min-width:0}
+    .ef-op-search-breadcrumb{opacity:.55;font-weight:500;display:block;white-space:normal}
+    .ef-op-search-snippet{opacity:.82;font-weight:500;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;line-height:1.35;margin-top:2px}
+    .ef-op-search-snippet mark{background:#ffe28a;color:inherit;padding:0 1px;border-radius:2px}
+  </style>
   <!-- ExamFusion landing counts: start -->
-  <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5688,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":3041,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"}}</script>
+  <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5688,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":3025,"unit":"Questions"},"./Original Practice/index.html":{"total":38776,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Crux-Tricks/index.html":{"total":447,"unit":"PDFs"}}</script>
   <style>
     body.ef-qcount-landing .ef-qcount-badge{display:block!important;width:max-content;max-width:100%;margin-top:4px!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;position:static!important;transform:none!important;white-space:nowrap;font-size:10px!important;font-weight:750!important;line-height:1.25!important;letter-spacing:.15px!important;color:currentColor!important;opacity:.78!important;text-shadow:none!important;pointer-events:none!important}
     body.ef-qcount-landing .menu>li>a{min-height:82px!important}
