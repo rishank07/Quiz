@@ -1,5 +1,5 @@
-// v12 Crux original-PDF-only reader + versioned app-shell offline fallback 20260905
-const CACHE_VERSION = "efp-pwa-2026-09-05-v12-crux-pdf-only";
+// v13 Android-safe Crux PDF.js renderer + versioned app-shell offline fallback 20260905
+const CACHE_VERSION = "efp-pwa-2026-09-05-v13-crux-pdfjs";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -71,15 +71,14 @@ async function networkFirst(request) {
   }
 }
 
-async function staleWhileRevalidate(event) {
+async function staleWhileRevalidate(event, allowOpaque) {
   const request = event.request;
   const cache = await caches.open(CACHE_VERSION);
   const cached = await matchCachedRequest(request);
   const fresh = fetch(request)
     .then((response) => {
-      if (response.ok && response.type === "basic") {
-        cache.put(request, response.clone());
-      }
+      const cacheable = (response.ok && (response.type === "basic" || response.type === "cors")) || (allowOpaque && response.type === "opaque");
+      if (cacheable) cache.put(request, response.clone());
       return response;
     })
     .catch(() => null);
@@ -94,7 +93,7 @@ async function staleWhileRevalidate(event) {
 
   // Do not serve offline.html as JavaScript/CSS/image bytes. A clean 503 lets
   // the browser fail that optional asset normally instead of producing a
-  // misleading syntax/ MIME error. Navigations are handled by networkFirst().
+  // misleading syntax/MIME error. Navigations are handled by networkFirst().
   return new Response("", { status: 503, statusText: "Offline" });
 }
 
@@ -103,12 +102,19 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
 
   const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
+  if (url.origin !== self.location.origin) {
+    // Cache the PDF.js runtime after its first successful use so the installed
+    // PWA does not need to redownload the renderer every time.
+    if (url.origin === "https://cdn.jsdelivr.net" && url.pathname.includes("/pdfjs-dist@3.11.174/")) {
+      event.respondWith(staleWhileRevalidate(event, true));
+    }
+    return;
+  }
 
   if (request.mode === "navigate" || request.destination === "document") {
     event.respondWith(networkFirst(request));
     return;
   }
 
-  event.respondWith(staleWhileRevalidate(event));
+  event.respondWith(staleWhileRevalidate(event, false));
 });
