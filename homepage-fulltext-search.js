@@ -16,9 +16,10 @@
   var WORKER_URL = new URL("search-worker.js?v=20260905books1", document.baseURI).href;
   var LOGIC_URL = new URL("search-logic.js?v=20260904v8", document.baseURI).href;
 
-  // Search the two major MCQ books first. The remaining sources are started
-  // sequentially so a single query never makes several huge indexes parse at
-  // the same instant. Workers stay alive for subsequent keystrokes/searches.
+  // Search the large indexes sequentially so a single query never makes
+  // several 10–30 MB indexes parse at the same instant. Workers are cancelled
+  // when the query changes and released after a short idle period so mobile
+  // WebViews do not retain every full-text index in memory indefinitely.
   var SOURCES = [
     {
       id: "pinnacle",
@@ -75,6 +76,7 @@
   var clients = {};
   var disabled = {};
   var timer = null;
+  var cleanupTimer = null;
   var sequence = 0;
 
   function escapeHtml(value) {
@@ -99,6 +101,12 @@
     }
     var shortText = text.length > 190 ? text.slice(0, 190) + "..." : text;
     return escapeHtml(shortText);
+  }
+
+  function cancelledError() {
+    var error = new Error("Search cancelled");
+    error.efCancelled = true;
+    return error;
   }
 
   function createClient(source) {
@@ -211,13 +219,41 @@
       });
     }
 
-    return { search: search };
+    function terminate() {
+      latestToken++;
+      failAll(cancelledError());
+      if (worker) {
+        try { worker.terminate(); } catch (_) {}
+      }
+      worker = null;
+      startPromise = null;
+    }
+
+    return { search: search, terminate: terminate };
   }
 
   function getClient(source) {
     if (disabled[source.id]) return null;
     if (!clients[source.id]) clients[source.id] = createClient(source);
     return clients[source.id];
+  }
+
+  function disposeWorkers() {
+    clearTimeout(cleanupTimer);
+    cleanupTimer = null;
+    Object.keys(clients).forEach(function (id) {
+      if (clients[id] && typeof clients[id].terminate === "function") {
+        clients[id].terminate();
+      }
+    });
+    clients = {};
+  }
+
+  function scheduleWorkerCleanup(mySequence) {
+    clearTimeout(cleanupTimer);
+    cleanupTimer = setTimeout(function () {
+      if (mySequence === sequence) disposeWorkers();
+    }, 12000);
   }
 
   function clearOwnResults() {
@@ -305,7 +341,10 @@
     // source while the query remains current.
     function nextSource() {
       if (box.value.trim() !== query || mySequence !== sequence) return;
-      if (index >= SOURCES.length) return;
+      if (index >= SOURCES.length) {
+        scheduleWorkerCleanup(mySequence);
+        return;
+      }
       var source = SOURCES[index++];
       var client = getClient(source);
       if (!client) {
@@ -316,10 +355,11 @@
         if (box.value.trim() !== query || mySequence !== sequence) return;
         appendHits(source, query, hits, seen);
         nextSource();
-      }).catch(function () {
+      }).catch(function (error) {
+        if (error && error.efCancelled) return;
         disabled[source.id] = true;
         clients[source.id] = null;
-        nextSource();
+        if (box.value.trim() === query && mySequence === sequence) nextSource();
       });
     }
     nextSource();
@@ -327,6 +367,7 @@
 
   box.addEventListener("input", function () {
     clearTimeout(timer);
+    disposeWorkers();
     var query = box.value.trim();
     var mySequence = ++sequence;
     if (query.length < 3) {
@@ -345,4 +386,6 @@
   window.addEventListener("pageshow", function (event) {
     if (event.persisted && !box.value.trim()) clearOwnResults();
   });
+
+  window.addEventListener("pagehide", disposeWorkers);
 })();
