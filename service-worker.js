@@ -1,5 +1,5 @@
-// v10 Homepage full-text bridge + Crux/Tricks bookmarked-pages UI cache bump 20260905
-const CACHE_VERSION = "efp-pwa-2026-09-05-v10-home-search";
+// v11 Homepage full-text bridge + versioned app-shell offline fallback 20260905
+const CACHE_VERSION = "efp-pwa-2026-09-05-v11-versioned-shell";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -50,6 +50,13 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+async function matchCachedRequest(request) {
+  // App-shell files are pre-cached without cache-busting query strings while
+  // pages commonly request them as file.js?v=... . ignoreSearch makes the
+  // pre-cached shell usable on the very first offline launch after install.
+  return (await caches.match(request)) || caches.match(request, { ignoreSearch: true });
+}
+
 async function networkFirst(request) {
   const cache = await caches.open(CACHE_VERSION);
   try {
@@ -59,7 +66,7 @@ async function networkFirst(request) {
     }
     return response;
   } catch (error) {
-    const cached = await caches.match(request, { ignoreSearch: true });
+    const cached = await matchCachedRequest(request);
     return cached || caches.match("/offline.html");
   }
 }
@@ -67,7 +74,7 @@ async function networkFirst(request) {
 async function staleWhileRevalidate(event) {
   const request = event.request;
   const cache = await caches.open(CACHE_VERSION);
-  const cached = await caches.match(request);
+  const cached = await matchCachedRequest(request);
   const fresh = fetch(request)
     .then((response) => {
       if (response.ok && response.type === "basic") {
@@ -82,7 +89,13 @@ async function staleWhileRevalidate(event) {
     return cached;
   }
 
-  return (await fresh) || caches.match("/offline.html");
+  const response = await fresh;
+  if (response) return response;
+
+  // Do not serve offline.html as JavaScript/CSS/image bytes. A clean 503 lets
+  // the browser fail that optional asset normally instead of producing a
+  // misleading syntax/ MIME error. Navigations are handled by networkFirst().
+  return new Response("", { status: 503, statusText: "Offline" });
 }
 
 self.addEventListener("fetch", (event) => {
