@@ -8,8 +8,11 @@ on:
       - "Bihar Special/**/*.html"
       - "Current Affairs/**/*.html"
       - "Mind Maps/**/*.html"
+      - "Original Practice/question-counts.json"
+      - "Crux-Tricks/crux-manifest.js"
       - "index.html"
       - "tools/update-book-question-counts.py"
+      - "tools/update-home-integrations.py"
       - "Books/book-question-counts-display.js"
   workflow_dispatch:
 
@@ -39,10 +42,13 @@ jobs:
       - name: Recalculate section counts
         run: python tools/update-book-question-counts.py --repo .
 
+      - name: Restore extended homepage integrations
+        run: python tools/update-home-integrations.py --repo .
+
       - name: Commit updated counts if needed
         run: |
           if git diff --quiet; then
-            echo "Section counts are already current."
+            echo "Section counts and homepage integrations are already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
