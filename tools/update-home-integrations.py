@@ -3,8 +3,9 @@
 
 The generic book-count workflow owns the landing-count block, so it used to
 remove Original Practice and Crux & Tricks every time it regenerated counts.
-This small post-processing step restores those two authoritative totals and
-ensures the homepage full-text bridge remains wired in.
+This small post-processing step restores those two authoritative totals,
+keeps Crux labelled as PDFs instead of questions, and ensures the homepage
+full-text bridge remains wired in.
 """
 from __future__ import annotations
 
@@ -23,6 +24,22 @@ FULLTEXT_TAG = (
     '  <script src="./homepage-fulltext-search.js?v=20260905books2" defer></script>\n'
 )
 LANDING_MARKER = "<!-- ExamFusion landing counts: start -->"
+
+
+COMPACT_LABEL_OLD = '''        if (unit === "Maps") return value + " Maps";
+        if (unit === "Facts") return value + " Facts";
+        return value + " Q";'''
+COMPACT_LABEL_NEW = '''        if (unit === "Maps") return value + " Maps";
+        if (unit === "Facts") return value + " Facts";
+        if (unit === "PDFs") return value + " PDFs";
+        return value + " Q";'''
+FULL_LABEL_OLD = '''        if (unit === "Maps") return value + (Number(total) === 1 ? " Map" : " Maps");
+        if (unit === "Facts") return value + (Number(total) === 1 ? " Fact" : " Facts");
+        return value + (Number(total) === 1 ? " Question" : " Questions");'''
+FULL_LABEL_NEW = '''        if (unit === "Maps") return value + (Number(total) === 1 ? " Map" : " Maps");
+        if (unit === "Facts") return value + (Number(total) === 1 ? " Fact" : " Facts");
+        if (unit === "PDFs") return value + (Number(total) === 1 ? " PDF" : " PDFs");
+        return value + (Number(total) === 1 ? " Question" : " Questions");'''
 
 
 def original_practice_total(repo: Path) -> int:
@@ -82,6 +99,14 @@ def update_index(repo: Path) -> bool:
         raw = updated
         changed = True
 
+    # The generic landing formatter treats every unknown unit as Questions.
+    # Explicitly teach it the PDFs unit so Crux shows "447 PDFs", not "447 Q".
+    updated = raw.replace(COMPACT_LABEL_OLD, COMPACT_LABEL_NEW)
+    updated = updated.replace(FULL_LABEL_OLD, FULL_LABEL_NEW)
+    if updated != raw:
+        raw = updated
+        changed = True
+
     # Remove any older copy/version of the bridge, then place one canonical tag
     # immediately before the landing-count block. This location is after the
     # homepage search listener and before the count-rendering helper.
@@ -103,6 +128,7 @@ def update_index(repo: Path) -> bool:
 
     print(f"Original Practice: {op_total:,} Questions")
     print(f"Crux & Tricks: {crux_total:,} PDFs")
+    print("Crux count label: PDFs")
     print("Homepage full-text bridge: wired")
     return changed
 
