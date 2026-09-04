@@ -20,7 +20,7 @@ COUNT_RE = re.compile(
 FULLTEXT_MARKER = "<!-- ExamFusion homepage full-text bridge -->"
 FULLTEXT_TAG = (
     f"  {FULLTEXT_MARKER}\n"
-    '  <script src="./homepage-fulltext-search.js?v=20260905books1" defer></script>\n'
+    '  <script src="./homepage-fulltext-search.js?v=20260905books2" defer></script>\n'
 )
 LANDING_MARKER = "<!-- ExamFusion landing counts: start -->"
 
