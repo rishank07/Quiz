@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Crux & Memory Tricks | ExamFusion Prep</title>
 <meta name="description" content="Topic-wise revision crux and ExamFusion Original Memory Tricks for History, Polity, Geography, Science and Static GK.">
 <meta name="theme-color" content="#0f172a">
@@ -9,6 +10,70 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
 <link rel="stylesheet" href="crux-tricks.css?v=20260904v9">
+<style>
+/* Simple landing-page layer. Core Crux/Tricks logic stays in crux-tricks.js. */
+.shell{width:min(1040px,calc(100% - 24px));margin:18px auto 46px}
+.topbar{padding:10px max(12px,env(safe-area-inset-right)) 10px max(12px,env(safe-area-inset-left));box-shadow:0 3px 14px rgba(0,0,0,.12)}
+.home-btn,.ghost-btn{border-radius:999px;padding:8px 11px;font-size:12px}
+.brand strong{font-size:14px}.brand span{font-size:10px}
+.hero{display:block;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow);text-align:center}
+.eyebrow{color:var(--accent);font-size:10px;letter-spacing:.13em}
+.hero h1{font-size:clamp(27px,5vw,39px);line-height:1.08;margin:7px 0 7px}
+.hero p{max-width:700px;margin:0 auto;color:var(--muted);font-size:13px}
+.stats{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-top:15px}
+.stat{display:flex;align-items:center;gap:5px;background:var(--soft);border:1px solid var(--line);padding:7px 10px;border-radius:999px;box-shadow:none}
+.stat b{font-size:13px}.stat span{font-size:10px;color:var(--muted)}
+.start-hint{margin:11px 2px 14px;text-align:center;color:var(--muted);font-size:12px}
+.start-hint b{color:var(--text)}
+.controls{position:relative;top:auto;z-index:1;background:transparent;backdrop-filter:none;padding:0;margin:0 0 14px}
+.control-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:0 2px 8px}
+.control-head b{font-size:15px}.control-head span{font-size:10px;color:var(--muted)}
+.search-wrap{border-radius:14px;padding:0 13px;box-shadow:none}
+.search-wrap input{padding:13px 0;font-size:14px}
+.chips{padding:9px 1px 5px;gap:6px}
+.chip{padding:7px 10px;font-size:11px;border-radius:999px}
+.filters{grid-template-columns:1.25fr 1fr 1fr;gap:7px;margin-top:7px}
+.filters select{padding:9px 10px;border-radius:10px;font-size:11px}
+.fold,.notice{margin:10px 0;border:1px solid var(--line);background:var(--card);border-radius:13px;box-shadow:none}
+.fold>summary,.notice>summary{list-style:none;cursor:pointer;padding:11px 13px;font-size:12px;font-weight:850;color:var(--text);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fold>summary::-webkit-details-marker,.notice>summary::-webkit-details-marker{display:none}
+.fold>summary::after,.notice>summary::after{content:'＋';color:var(--muted);font-size:15px;font-weight:500}
+.fold[open]>summary::after,.notice[open]>summary::after{content:'−'}
+.fold>summary span,.notice>summary span{font-size:10px;font-weight:600;color:var(--muted);margin-left:auto}
+.notice{padding:0;color:var(--muted);font-size:11px}
+.notice p{margin:0;padding:0 13px 12px;line-height:1.55}
+.dashboard{grid-template-columns:repeat(5,1fr);gap:7px;margin:0;padding:0 10px 10px}
+.dash-card{border-radius:11px;padding:10px;box-shadow:none;text-align:center}
+.dash-card b{font-size:16px}.dash-card span{font-size:9px}
+.part-map{grid-template-columns:repeat(3,1fr);gap:7px;margin:0;padding:0 10px 10px}
+.part-map-title{display:none}
+.part-group{border-radius:12px;padding:10px;box-shadow:none}
+.part-group-head{margin-bottom:7px}.part-group-head b{font-size:12px}.part-group-head span{font-size:8px}
+.part-buttons{gap:5px}.part-btn{padding:6px 8px;font-size:9px;gap:5px}.part-btn b{min-width:19px;height:19px;font-size:8px}
+.search-status{margin:3px 2px 7px}
+.full-results{border-radius:13px;padding:10px;box-shadow:none}
+.doc-sections{gap:13px}
+.part-section{border-radius:15px;padding:12px;box-shadow:none}
+.part-title{padding:1px 1px 9px}.part-title span{display:none}.part-title h2{font-size:17px;margin:0}.part-title>b{font-size:10px}
+.source-block{padding-top:10px}.source-title{margin-bottom:7px}.source-title b{font-size:12px}
+.doc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.doc-card{gap:7px;border-radius:13px;padding:13px;min-height:0;box-shadow:none}
+.doc-title{font-size:14px}.fav{font-size:19px}.badge{font-size:9px;padding:3px 6px}.meta{font-size:10px}.open{padding:7px 9px;font-size:10px}.pct{font-size:10px}
+.page-bookmark-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.page-bookmark-card{border-radius:13px;padding:13px;box-shadow:none}.page-bookmark-title{font-size:14px}
+footer{padding:5px 12px 28px}
+@media(max-width:760px){
+ .shell{width:min(100% - 16px,1040px);margin-top:10px}
+ .hero{padding:18px 14px;border-radius:15px}.hero h1{font-size:29px}.hero p{font-size:12px}
+ .stat{padding:6px 8px}.stat b{font-size:12px}.stat span{font-size:9px}
+ .filters{grid-template-columns:1fr}.dashboard{grid-template-columns:repeat(2,1fr)}.part-map{grid-template-columns:1fr}.doc-grid,.page-bookmark-grid{grid-template-columns:1fr}
+ .control-head{align-items:flex-start;flex-direction:column;gap:1px}.control-head span{font-size:9px}
+}
+@media(max-width:420px){
+ .topbar{grid-template-columns:auto minmax(0,1fr) auto;padding:8px}.home-btn,.ghost-btn{padding:7px 8px;font-size:11px}.brand strong{font-size:12px}.brand span{font-size:9px}
+ .hero h1{font-size:26px}.stats{gap:5px}.stat{flex:1 1 calc(50% - 5px);justify-content:center}
+ .chip{font-size:10px;padding:7px 9px}.fold>summary,.notice>summary{padding:10px 11px;font-size:11px}.fold>summary span,.notice>summary span{display:none}
+}
+</style>
 </head>
 <body>
 <header class="topbar">
@@ -16,45 +81,60 @@
   <div class="brand"><strong>ExamFusion Prep</strong><span>Crux & Memory Tricks · क्रक्स एवं मेमोरी ट्रिक्स</span></div>
   <button id="darkBtn" class="ghost-btn" type="button" aria-label="Toggle dark mode">Dark</button>
 </header>
+
 <main class="shell">
   <section class="hero">
-    <div><span class="eyebrow">REVISION HUB</span><h1>Crux & Memory Tricks</h1><p>Book-based revision crux + <b>ExamFusion Original Memory Tricks</b>, organized topic-wise for fast revision.</p></div>
+    <span class="eyebrow">QUICK REVISION</span>
+    <h1>Crux & Memory Tricks</h1>
+    <p>Search a topic or choose a subject. Open only the revision sheet you need.</p>
     <div class="stats" id="stats"></div>
   </section>
 
-  <section class="notice">
-    <b>Study-note notice:</b> “Ghatnachakra” and “Pinnacle” are used only as reference-source labels. ExamFusion Prep is not affiliated with those publishers. The Original Memory Tricks section is independently created for ExamFusion Prep.
-  </section>
-
-  <section class="dashboard" id="dashboard"></section>
-
-  <section id="partMap" class="part-map" aria-label="Subject parts"></section>
+  <p class="start-hint"><b>बस खोजें या filter चुनें</b> · Search → choose material → open reader</p>
 
   <section class="controls" aria-label="Filter study documents">
-    <div class="search-wrap"><span>⌕</span><input id="searchBox" type="search" placeholder="Search all titles & 2,073 pages — e.g. Cunningham, अनुच्छेद 32, monsoon…" autocomplete="off"></div>
+    <div class="control-head"><b>Find your revision sheet</b><span>टॉपिक, subject या source से खोजें</span></div>
+    <div class="search-wrap"><span>⌕</span><input id="searchBox" type="search" placeholder="Search topic, chapter or page text / टॉपिक खोजें…" autocomplete="off"></div>
     <div class="chips" id="kindChips">
-      <button class="chip active" data-kind="all">All</button>
+      <button class="chip active" data-kind="all">All Material</button>
       <button class="chip" data-kind="crux">Book Crux</button>
       <button class="chip original" data-kind="tricks">Original Tricks</button>
       <button class="chip" data-kind="favorites">★ Favourites</button>
-      <button class="chip bookmark-chip" data-kind="pagebookmarks">🔖 Bookmarked Pages</button>
+      <button class="chip bookmark-chip" data-kind="pagebookmarks">🔖 Saved Pages</button>
       <button class="chip" data-kind="recent">Continue</button>
     </div>
     <div class="filters">
-      <select id="sourceFilter" aria-label="Source"><option value="">All sources</option></select>
-      <select id="subjectFilter" aria-label="Subject"><option value="">All subjects</option></select>
+      <select id="subjectFilter" aria-label="Subject"><option value="">All subjects / सभी विषय</option></select>
       <select id="branchFilter" aria-label="Part"><option value="">All parts / सभी भाग</option></select>
+      <select id="sourceFilter" aria-label="Source"><option value="">All sources / सभी स्रोत</option></select>
     </div>
   </section>
+
+  <details class="fold">
+    <summary>Subject-part shortcuts <span>History · Science · Geography</span></summary>
+    <section id="partMap" class="part-map" aria-label="Subject parts"></section>
+  </details>
+
+  <details class="fold">
+    <summary>My progress & saved pages <span>Started · Completed · Favourites · Bookmarks · Recent</span></summary>
+    <section class="dashboard" id="dashboard"></section>
+  </details>
+
+  <details class="notice">
+    <summary>Source note / स्रोत सूचना <span>About Ghatnachakra, Pinnacle & Original Tricks</span></summary>
+    <p><b>Study-note notice:</b> “Ghatnachakra” and “Pinnacle” are used only as reference-source labels. ExamFusion Prep is not affiliated with those publishers. The Original Memory Tricks section is independently created for ExamFusion Prep.</p>
+  </details>
 
   <div id="searchStatus" class="search-status" aria-live="polite"></div>
   <section id="fullTextResults" class="full-results" hidden></section>
   <section id="grid" class="doc-sections"></section>
   <div id="empty" class="empty" hidden>No matching revision sheet found.</div>
 </main>
+
 <footer>© 2026 ExamFusion Prep · मेहनत आपकी, साथ हमारा 🎯</footer>
 <script src="crux-search-route.js?v=20260905route1"></script>
 <script src="crux-manifest.js?v=20260904v9"></script>
 <script src="../search-logic.js?v=20260904v9"></script>
 <script src="crux-tricks.js?v=20260905cruxroute1"></script>
-</body></html>
+</body>
+</html>
