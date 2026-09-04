@@ -10,6 +10,8 @@ on:
       - "Mind Maps/**/*.html"
       - "Original Practice/question-counts.json"
       - "Crux-Tricks/crux-manifest.js"
+      - "homepage-fulltext-search.js"
+      - "service-worker.js"
       - "index.html"
       - "tools/update-book-question-counts.py"
       - "tools/update-home-integrations.py"
@@ -38,6 +40,12 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: "3.12"
+
+      - name: Validate homepage integration code
+        run: |
+          python -m py_compile tools/update-home-integrations.py
+          node --check homepage-fulltext-search.js
+          node --check service-worker.js
 
       - name: Recalculate section counts
         run: python tools/update-book-question-counts.py --repo .
