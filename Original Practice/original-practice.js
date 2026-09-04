@@ -12,6 +12,29 @@ var PROGRESS_KEY="efp_visited_originalpractice_"+CFG.slug;
 var BOOKMARK_KEY="efp_bookmarks";
 var bookmarkOnly=false;
 var pendingDeepQuestion=null;
+
+// All Original Practice pages use the same site-wide dark-mode preference as
+// ExamFusion Home. The four Complete Practice HTML files are very large, so
+// guarantee the shared controller here instead of duplicating theme code in
+// every question bank. This also keeps future subjects automatically synced.
+function ensureSharedDarkMode(){
+ try{
+  if(typeof window.toggleBlackMode==="function")return;
+  var scripts=document.scripts||[];
+  for(var i=0;i<scripts.length;i++){
+   if(/(?:^|\/)black-mode\.js(?:[?#]|$)/.test(scripts[i].src||""))return;
+  }
+  var wantsOn=localStorage.getItem("efp_black_mode")==="on";
+  if(wantsOn)document.documentElement.style.visibility="hidden";
+  var s=document.createElement("script");
+  s.src=new URL("../black-mode.js?v=20260905opdark1",document.baseURI).href;
+  s.async=false;
+  s.onerror=function(){document.documentElement.style.visibility=""};
+  (document.head||document.documentElement).appendChild(s);
+ }catch(e){document.documentElement.style.visibility=""}
+}
+ensureSharedDarkMode();
+
 // Keeps attempted answers alive while the user moves between sections of the same chapter.
 // This is deliberately session/in-memory state so a fresh chapter attempt still starts clean.
 if(!state.answerMap) state.answerMap={};
@@ -64,7 +87,7 @@ function norm(s){return String(s||"").toLowerCase().replace(/[’‘`]/g,"'").re
 function allChapters(subjectOnly){var out=[];Object.keys(MASTER).forEach(function(s){if(subjectOnly&&s!==subjectOnly)return;Object.keys(MASTER[s]).forEach(function(c){out.push({subject:s,chapter:c,en:enName(c),hi:hiName(s,c)})})});return out}
 function countVisited(subject){var n=0;Object.keys(MASTER[subject]||{}).forEach(function(c){if(isVisited(subject,c))n++});return n}
 function syncUrl(mode){try{var u=new URL(location.href);u.search="";if(mode!=="home"&&state.subject)u.searchParams.set("subject",state.subject);if(mode==="quiz"&&state.chapterName){u.searchParams.set("chapter",state.chapterName);u.searchParams.set("section",String((state.currentSection||0)+1))}history.replaceState(null,"",u.pathname+u.search+u.hash)}catch(e){}}
-function addTopbar(){var app=document.getElementById("app");if(!app||app.querySelector(".efp-op-topbar"))return;var bar=document.createElement("div");bar.className="efp-op-topbar";bar.innerHTML='<a href="./index.html">Original Practice Home</a><a href="../index.html">ExamFusion Home</a><button type="button" id="efpOpDark">Dark Mode: <span>OFF</span></button>';app.insertBefore(bar,app.firstChild);var btn=bar.querySelector("#efpOpDark");function sync(){var on=false;try{on=localStorage.getItem("efp_black_mode")==="on"}catch(e){}btn.querySelector("span").textContent=on?"ON":"OFF"}sync();btn.addEventListener("click",function(){if(typeof toggleBlackMode==="function")toggleBlackMode();setTimeout(sync,0)});document.addEventListener("efp-black-mode-changed",sync)}
+function addTopbar(){var app=document.getElementById("app");if(!app||app.querySelector(".efp-op-topbar"))return;var bar=document.createElement("div");bar.className="efp-op-topbar";bar.innerHTML='<a href="./index.html">Original Practice Home</a><a href="../index.html">ExamFusion Home</a><button type="button" id="efpOpDark" hidden aria-hidden="true" tabindex="-1">Dark Mode: <span>OFF</span></button>';app.insertBefore(bar,app.firstChild);var btn=bar.querySelector("#efpOpDark");function sync(){var on=false;try{on=localStorage.getItem("efp_black_mode")==="on"}catch(e){}btn.querySelector("span").textContent=on?"ON":"OFF"}sync();document.addEventListener("efp-black-mode-changed",sync)}
 var opFullSearchClient=null;
 function getOpFullSearchClient(){
  if(opFullSearchClient)return opFullSearchClient;
