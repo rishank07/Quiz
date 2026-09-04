@@ -1,5 +1,5 @@
-// v13 Android-safe Crux PDF.js renderer + versioned app-shell offline fallback 20260905
-const CACHE_VERSION = "efp-pwa-2026-09-05-v13-crux-pdfjs";
+// v14 Crux search PDF-route fix + Android-safe PDF.js renderer 20260905
+const CACHE_VERSION = "efp-pwa-2026-09-05-v14-crux-search-router";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
