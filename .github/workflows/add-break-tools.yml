@@ -6,8 +6,10 @@ on:
     paths:
       - "music.html"
       - "chess.html"
+      - "radio-launch.js"
       - "tools/add-break-tools.py"
       - "tools/fix-radio-browser-flow.py"
+      - "tools/fix-radio-browser-launch.py"
       - ".github/workflows/add-break-tools.yml"
   workflow_dispatch:
 
@@ -36,10 +38,12 @@ jobs:
         run: |
           python -m py_compile tools/add-break-tools.py
           python -m py_compile tools/fix-radio-browser-flow.py
+          python -m py_compile tools/fix-radio-browser-launch.py
       - name: Maintain break tools, analytics and PWA cache
         run: |
           python tools/add-break-tools.py
           python tools/fix-radio-browser-flow.py
+          python tools/fix-radio-browser-launch.py
       - name: Commit generated integration changes
         shell: bash
         run: |
@@ -49,6 +53,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html service-worker.js chess.html music.html
+          git add index.html service-worker.js chess.html music.html radio-launch.js
           git commit -m "chore: maintain music and chess break tools"
           git push
