@@ -60,7 +60,7 @@
       </div>
 
       <div class="status" id="status">Loading YouTube player…</div>
-      <div class="note"><span>ℹ️</span><div><b>Playlist source:</b> YouTube. Songs remain hosted by YouTube and their respective rights holders. No audio files are copied or hosted by ExamFusion Prep.</div></div>
+      <div class="note"><span>ℹ️</span><div><b>Playlist source:</b> YouTube. Songs remain hosted by YouTube and their respective rights holders. Tracks that block website embedding are skipped automatically.</div></div>
     </section>
 
     <footer>ExamFusion Prep · Optional break feature · No autoplay on first open</footer>
@@ -70,7 +70,7 @@
     (function(){
       'use strict';
       const PLAYLIST_ID='PLaETHuV8PB7sXxM_MtgCx3Nhj-y6CswT2';
-      const SAVE_KEY='efp_retro_break_v2';
+      const SAVE_KEY='efp_retro_break_v3';
       const cover=document.getElementById('cover');
       const title=document.getElementById('songTitle');
       const artist=document.getElementById('artist');
@@ -83,7 +83,8 @@
       const currentTime=document.getElementById('currentTime');
       const durationEl=document.getElementById('duration');
       const status=document.getElementById('status');
-      let player=null, ready=false, playing=false, ticker=null, pendingSeek=0, metaToken=0;
+      let player=null, ready=false, playing=false, ticker=null, pendingSeek=0, metaToken=0, wantToPlay=false, skipTimer=null;
+      const blockedIndexes=new Set();
 
       function readSaved(){try{return JSON.parse(localStorage.getItem(SAVE_KEY)||'null')}catch(_){return null}}
       const saved=readSaved()||{};
@@ -142,10 +143,42 @@
       function startTicker(){stopTicker();ticker=setInterval(syncProgress,500)}
       function stopTicker(){if(ticker){clearInterval(ticker);ticker=null}}
 
+      function advancePastBlockedTrack(errorCode){
+        if(!ready||!player)return;
+        const list=player.getPlaylist&&player.getPlaylist();
+        const len=Array.isArray(list)?list.length:0;
+        const idx=Math.max(0,player.getPlaylistIndex?player.getPlaylistIndex():0);
+        blockedIndexes.add(idx);
+        pendingSeek=0;
+        currentTime.textContent='0:00';durationEl.textContent='0:00';seek.value='0';updateRangeFill(seek);
+
+        if(len>0&&blockedIndexes.size>=len){
+          setPlaying(false);wantToPlay=false;
+          setStatus('None of the songs in this playlist allow playback on websites. Open the playlist on YouTube instead.',true);
+          return;
+        }
+
+        setStatus('This song blocks website playback · skipping automatically…');
+        if(skipTimer)clearTimeout(skipTimer);
+        skipTimer=setTimeout(function(){
+          try{
+            const now=Math.max(0,player.getPlaylistIndex?player.getPlaylistIndex():idx);
+            const next=len>0?(now+1)%len:now+1;
+            if(len>0){
+              player.cuePlaylist({listType:'playlist',list:PLAYLIST_ID,index:next,startSeconds:0});
+              if(wantToPlay)setTimeout(function(){try{player.playVideo()}catch(_){}},250);
+            }else{
+              player.nextVideo();
+              if(wantToPlay)setTimeout(function(){try{player.playVideo()}catch(_){}},250);
+            }
+          }catch(_){setStatus('Could not skip this unavailable track. Tap Next.',true)}
+        },350);
+      }
+
       playBtn.disabled=prevBtn.disabled=nextBtn.disabled=true;
-      playBtn.addEventListener('click',function(){if(!ready)return;try{playing?player.pauseVideo():player.playVideo()}catch(_){}});
-      prevBtn.addEventListener('click',function(){if(!ready)return;try{if((player.getCurrentTime()||0)>5)player.seekTo(0,true);else player.previousVideo()}catch(_){}});
-      nextBtn.addEventListener('click',function(){if(!ready)return;try{player.nextVideo()}catch(_){}});
+      playBtn.addEventListener('click',function(){if(!ready)return;try{if(playing){wantToPlay=false;player.pauseVideo()}else{wantToPlay=true;player.playVideo()}}catch(_){}});
+      prevBtn.addEventListener('click',function(){if(!ready)return;try{pendingSeek=0;if((player.getCurrentTime()||0)>5)player.seekTo(0,true);else player.previousVideo()}catch(_){}});
+      nextBtn.addEventListener('click',function(){if(!ready)return;try{pendingSeek=0;player.nextVideo()}catch(_){}});
       seek.addEventListener('input',function(){updateRangeFill(seek);if(!ready||!player)return;const d=player.getDuration()||0;currentTime.textContent=fmt(d*(+seek.value/1000))});
       seek.addEventListener('change',function(){if(!ready||!player)return;const d=player.getDuration()||0;if(d>0)player.seekTo(d*(+seek.value/1000),true)});
       volume.addEventListener('input',function(){updateRangeFill(volume);if(ready&&player){try{player.setVolume(+volume.value)}catch(_){}saveState()}});
@@ -165,13 +198,18 @@
               setTimeout(function(){updateMeta();syncProgress()},450);
             },
             onStateChange:function(e){
-              if(e.data===YT.PlayerState.PLAYING){setPlaying(true);setStatus('Playing');if(pendingSeek>0){const p=pendingSeek;pendingSeek=0;setTimeout(function(){try{player.seekTo(p,true)}catch(_){}},220)}startTicker();setTimeout(updateMeta,120)}
+              if(e.data===YT.PlayerState.PLAYING){wantToPlay=true;setPlaying(true);setStatus('Playing');if(pendingSeek>0){const p=pendingSeek;pendingSeek=0;setTimeout(function(){try{player.seekTo(p,true)}catch(_){}},220)}startTicker();setTimeout(updateMeta,120)}
               else if(e.data===YT.PlayerState.PAUSED){setPlaying(false);setStatus('Paused');stopTicker();syncProgress()}
               else if(e.data===YT.PlayerState.BUFFERING){setStatus('Buffering…');setTimeout(updateMeta,180)}
-              else if(e.data===YT.PlayerState.CUED){setPlaying(false);setStatus('Ready · tap Play');setTimeout(function(){updateMeta();syncProgress()},260)}
+              else if(e.data===YT.PlayerState.CUED){setPlaying(false);setStatus(wantToPlay?'Finding playable song…':'Ready · tap Play');setTimeout(function(){updateMeta();syncProgress();if(wantToPlay){try{player.playVideo()}catch(_){}}},260)}
               else if(e.data===YT.PlayerState.ENDED){setPlaying(false);stopTicker();setTimeout(updateMeta,180)}
             },
-            onError:function(){setPlaying(false);stopTicker();setStatus('This track could not play. Tap Next to skip it.',true)}
+            onError:function(e){
+              setPlaying(false);stopTicker();
+              const code=Number(e&&e.data);
+              if(code===100||code===101||code===150){advancePastBlockedTrack(code);return}
+              setStatus('YouTube could not play this track. Tap Next or try again.',true);
+            }
           }
         });
       };
