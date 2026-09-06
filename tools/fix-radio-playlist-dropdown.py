@@ -61,17 +61,21 @@ def patch_music(text: str) -> str:
             raise SystemExit("music.html style end marker not found")
         text = text.replace('</style>', DROPDOWN_CSS + '</style>', 1)
 
-    if 'id="efp-playlist-dropdown-sync"' not in text:
-        if '</body>' not in text:
-            raise SystemExit("music.html body end marker not found")
-        text = text.replace('</body>', DROPDOWN_SYNC + '</body>', 1)
+    # Remove any previous copy first. The page also contains a literal </body>
+    # inside the separate-player HTML string, so always insert before the LAST
+    # </body> tag, which is the real Retro Radio document body.
+    text = text.replace(DROPDOWN_SYNC, '')
+    idx = text.rfind('</body>')
+    if idx == -1:
+        raise SystemExit("music.html real body end marker not found")
+    text = text[:idx] + DROPDOWN_SYNC + text[idx:]
     return text
 
 
 def patch_sw(text: str) -> str:
     text, n = re.subn(
         r'const CACHE_VERSION = "efp-pwa-[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-07-v55-radio-playlist-dropdown";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v56-radio-playlist-dropdown-fix";',
         text,
         count=1,
     )
