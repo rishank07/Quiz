@@ -6,6 +6,7 @@
   var STYLE_ID = "efp-home-button-style";
   var BACK_BUTTON_ID = "efp-app-back-button";
   var CRUX_BACK_CLASS = "efp-crux-back-fallback";
+  var MATHS_FIT_STYLE_ID = "efp-maths-speed-booster-fit";
 
   function normalizedPath(pathname) {
     var path = pathname || "/";
@@ -36,6 +37,19 @@
   function isCruxTricksRoot() {
     var path = normalizedPath(window.location.pathname).toLowerCase();
     return path === "/crux-tricks" || path === "/crux-tricks/index.html";
+  }
+
+  function isMathsSpeedBoosterPage() {
+    return normalizedPath(window.location.pathname).toLowerCase() === "/maths speed booster/math-speed-booster.html";
+  }
+
+  function ensureMathsSpeedBoosterFitStyles() {
+    if (!isMathsSpeedBoosterPage() || !document.head || document.getElementById(MATHS_FIT_STYLE_ID)) return;
+    var link = document.createElement("link");
+    link.id = MATHS_FIT_STYLE_ID;
+    link.rel = "stylesheet";
+    link.href = "/Maths%20Speed%20Booster/math-speed-booster-fit.css?v=20260906fit1";
+    document.head.appendChild(link);
   }
 
   function removeLegacyBackToTop() {
@@ -255,6 +269,7 @@
   function installHomeButton() {
     if (!document.documentElement || !document.head || isMainHomePage()) return;
 
+    ensureMathsSpeedBoosterFitStyles();
     removeLegacyBackToTop();
     watchLegacyOriginalPracticeHome();
     watchLegacyCruxNavigation();
