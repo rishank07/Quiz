@@ -1,36 +1,16 @@
 /* ExamFusion Prep — Retro Radio launcher.
-   Normal browsers keep Study + Radio in two reusable tabs.
-   Installed Android app stays simple: Retro Radio opens normally inside the
-   app with no Chrome redirect, intent handoff or background-study routing. */
+   Normal browsers (desktop/mobile) and the Windows app keep the existing
+   Study + Radio tab behavior. Only the native Android WebView app, identified
+   by its custom ExamFusionPrepAndroid/ user-agent token, uses simple in-app
+   Radio navigation. */
 (function () {
   "use strict";
 
   var STUDY_WINDOW = "efpExamFusionStudy";
   var RADIO_WINDOW = "efpRetroRadio";
-  var APP_SESSION_KEY = "efp_android_app_session";
 
-  function isInstalledAndroid() {
-    var isAndroid = /Android/i.test(navigator.userAgent || "");
-    if (!isAndroid) return false;
-
-    var standalone = false;
-    try { standalone = window.matchMedia("(display-mode: standalone)").matches; } catch (_) {}
-
-    var twa = /^android-app:\/\//i.test(document.referrer || "");
-    var launchMarker = false;
-    try {
-      var source = new URLSearchParams(window.location.search).get("source") || "";
-      launchMarker = source === "windows-pwa" || source === "android-app" || source === "pwa" || source === "android-pwa" || source === "app";
-    } catch (_) {}
-
-    var remembered = false;
-    try { remembered = sessionStorage.getItem(APP_SESSION_KEY) === "1"; } catch (_) {}
-
-    var installed = standalone || twa || launchMarker || remembered;
-    if (installed) {
-      try { sessionStorage.setItem(APP_SESSION_KEY, "1"); } catch (_) {}
-    }
-    return installed;
+  function isExamFusionAndroidApp() {
+    return /ExamFusionPrepAndroid\//i.test(navigator.userAgent || "");
   }
 
   function isRadioLink(anchor) {
@@ -55,9 +35,9 @@
     var anchor = event.target && event.target.closest ? event.target.closest("a[href]") : null;
     if (!isRadioLink(anchor)) return;
 
-    if (isInstalledAndroid()) {
-      /* Hard same-window path for the packaged Android app. Do not let any
-         homepage onclick, target handling or browser-tab logic touch Radio. */
+    if (isExamFusionAndroidApp()) {
+      /* Android APK only: force the Radio into this same WebView. Blocking all
+         other click handlers here prevents window.open/Chrome handoff. */
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
@@ -66,7 +46,7 @@
       return;
     }
 
-    /* Normal browser behavior stays unchanged. */
+    /* Normal mobile/desktop browsers and Windows app: unchanged behavior. */
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
