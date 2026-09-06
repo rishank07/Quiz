@@ -10,6 +10,7 @@ on:
       - "tools/add-break-tools.py"
       - "tools/fix-radio-browser-flow.py"
       - "tools/fix-radio-browser-launch.py"
+      - "tools/reorder-radio-playlist.py"
       - "tools/install-stockfish-assets.py"
       - "tools/fix-chess-open-source.py"
       - "tools/fix-chess-layout.py"
@@ -42,6 +43,7 @@ jobs:
           python -m py_compile tools/add-break-tools.py
           python -m py_compile tools/fix-radio-browser-flow.py
           python -m py_compile tools/fix-radio-browser-launch.py
+          python -m py_compile tools/reorder-radio-playlist.py
           python -m py_compile tools/install-stockfish-assets.py
           python -m py_compile tools/fix-chess-open-source.py
           python -m py_compile tools/fix-chess-layout.py
@@ -55,6 +57,8 @@ jobs:
           # Final Radio routing: browsers keep the two-tab flow; Android APK/TWA
           # stays normal in-app with no browser handoff/background-study mode.
           python tools/fix-radio-browser-launch.py
+          # Keep the main music controls above the playlist selector for clarity.
+          python tools/reorder-radio-playlist.py
       - name: Commit generated integration changes
         shell: bash
         run: |
