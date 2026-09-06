@@ -45,8 +45,11 @@ def validate_chess(text: str) -> None:
 
 def main() -> None:
     chess = CHESS.read_text(encoding="utf-8")
-    validate_chess(chess)
+    if "stockfish-18-lite-single.js" not in chess:
+        print("Open-source chess page not installed yet; skipping final chess patch.")
+        return
 
+    validate_chess(chess)
     old = SW.read_text(encoding="utf-8")
     new = patch_sw(old)
     if new != old:
