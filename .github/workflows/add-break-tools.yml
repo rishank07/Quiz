@@ -12,6 +12,7 @@ on:
       - "tools/fix-radio-browser-launch.py"
       - "tools/reorder-radio-playlist.py"
       - "tools/fix-radio-playlist-dropdown.py"
+      - "tools/fix-radio-next-scroll.py"
       - "tools/install-stockfish-assets.py"
       - "tools/fix-chess-open-source.py"
       - "tools/fix-chess-layout.py"
@@ -46,6 +47,7 @@ jobs:
           python -m py_compile tools/fix-radio-browser-launch.py
           python -m py_compile tools/reorder-radio-playlist.py
           python -m py_compile tools/fix-radio-playlist-dropdown.py
+          python -m py_compile tools/fix-radio-next-scroll.py
           python -m py_compile tools/install-stockfish-assets.py
           python -m py_compile tools/fix-chess-open-source.py
           python -m py_compile tools/fix-chess-layout.py
@@ -63,6 +65,8 @@ jobs:
           python tools/reorder-radio-playlist.py
           # Keep playlists compact in a custom dropdown with the selected name visible.
           python tools/fix-radio-playlist-dropdown.py
+          # Highlight the active song without scrolling the whole document.
+          python tools/fix-radio-next-scroll.py
       - name: Commit generated integration changes
         shell: bash
         run: |
