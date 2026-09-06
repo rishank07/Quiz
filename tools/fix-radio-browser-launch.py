@@ -7,39 +7,13 @@ INDEX = ROOT / "index.html"
 MUSIC = ROOT / "music.html"
 SW = ROOT / "service-worker.js"
 
-APP_BOOTSTRAP = '''  <script id="efp-android-app-bootstrap">
-    /* Mark the packaged Android app before any Radio click/restore logic runs. */
-    try {
-      var efpBootSource = new URLSearchParams(location.search).get("source") || "";
-      if (/Android/i.test(navigator.userAgent || "") && /^(?:windows-pwa|android-app|android-pwa|pwa|app)$/i.test(efpBootSource)) {
-        sessionStorage.setItem("efp_android_app_session", "1");
-      }
-    } catch (_) {}
-  </script>\n'''
-LAUNCH_SCRIPT = '  <script defer src="./radio-launch.js?v=20260907v9"></script>\n'
+LAUNCH_SCRIPT = '  <script defer src="./radio-launch.js?v=20260907v10"></script>\n'
 
 BROWSER_TAB_FLOW = r'''var EFP_STUDY_WINDOW='efpExamFusionStudy';
-var EFP_ANDROID_SESSION_KEY='efp_android_app_session';
 
-function efpDetectAndroidAppSession(){
-  var isAndroid=/Android/i.test(navigator.userAgent||'');
-  if(!isAndroid)return false;
-  var standalone=false;try{standalone=window.matchMedia('(display-mode: standalone)').matches}catch(e){}
-  var twa=/^android-app:\/\//i.test(document.referrer||'');
-  var launchMarker=false;
-  try{
-    var source=new URLSearchParams(location.search).get('source')||'';
-    launchMarker=/^(?:windows-pwa|android-app|android-pwa|pwa|app)$/i.test(source);
-  }catch(e){}
-  var remembered=false;try{remembered=sessionStorage.getItem(EFP_ANDROID_SESSION_KEY)==='1'}catch(e){}
-  var installed=standalone||twa||launchMarker||remembered;
-  if(installed){try{sessionStorage.setItem(EFP_ANDROID_SESSION_KEY,'1')}catch(e){}}
-  return installed;
-}
-
-/* Re-evaluate here because TWA display-mode/referrer are not reliable on every
-   navigation. The app launch bootstrap stores a session-only marker first. */
-efpInstalledAndroid=efpDetectAndroidAppSession();
+/* Only the native Android WebView app uses the simple Radio path. Normal
+   Android Chrome, desktop browsers and the Windows app stay on browser flow. */
+efpInstalledAndroid=/ExamFusionPrepAndroid\//i.test(navigator.userAgent||'');
 
 function efpFindStudyTab(goHome){
   var study=null;
@@ -87,8 +61,7 @@ function efpWireBrowserHomeTargets(){
 }
 
 if(efpInstalledAndroid){
-  /* Android APK/TWA stays intentionally simple: normal in-app Radio page,
-     normal Home/Back navigation, no background-study shell or browser intents. */
+  /* Android APK only: no background-study/Return-to-Study controls. */
   var efpContinuityBox=document.getElementById('efpContinuity');
   if(efpContinuityBox){efpContinuityBox.hidden=true;efpContinuityBox.style.display='none'}
   if(efpStudyShell)efpStudyShell.hidden=true;
@@ -131,32 +104,34 @@ document.addEventListener('click',function(e){
 
 
 def patch_index(text: str) -> str:
-    # Bootstrap the Android-app marker synchronously before the deferred launcher.
-    if 'id="efp-android-app-bootstrap"' not in text:
+    # Remove the old heuristic Android bootstrap; native Android is identified
+    # only by its custom ExamFusionPrepAndroid/ user-agent token.
+    text = re.sub(
+        r'  <script id="efp-android-app-bootstrap">.*?</script>\n',
+        '',
+        text,
+        count=1,
+        flags=re.S,
+    )
+
+    if "radio-launch.js" not in text:
         anchor = '  <script defer src="./black-mode.js?v=20260902b"></script>\n'
         if anchor not in text:
             raise SystemExit("index black-mode anchor not found")
-        text = text.replace(anchor, anchor + APP_BOOTSTRAP, 1)
+        return text.replace(anchor, anchor + LAUNCH_SCRIPT, 1)
 
-    if "radio-launch.js" not in text:
-        marker = APP_BOOTSTRAP
-        if marker not in text:
-            raise SystemExit("Android app bootstrap marker not found")
-        text = text.replace(marker, marker + LAUNCH_SCRIPT, 1)
-    else:
-        text, n = re.subn(
-            r'  <script defer src="\./radio-launch\.js\?v=[^"]+"></script>\n',
-            LAUNCH_SCRIPT,
-            text,
-            count=1,
-        )
-        if n != 1:
-            raise SystemExit("radio-launch script tag found but version marker could not be updated")
+    text, n = re.subn(
+        r'  <script defer src="\./radio-launch\.js\?v=[^"]+"></script>\n',
+        LAUNCH_SCRIPT,
+        text,
+        count=1,
+    )
+    if n != 1:
+        raise SystemExit("radio-launch script tag found but version marker could not be updated")
     return text
 
 
 def patch_music(text: str) -> str:
-    # Collapse any previous Android/browser routing revision into one final block.
     start = text.find("var EFP_STUDY_WINDOW='efpExamFusionStudy';")
     end_marker = "if(efpStudyClose)efpStudyClose.onclick=efpCloseStudyShell;"
     end = text.find(end_marker, start)
@@ -168,7 +143,7 @@ def patch_music(text: str) -> str:
 def patch_sw(text: str) -> str:
     text, n = re.subn(
         r'const CACHE_VERSION = "efp-pwa-[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-07-v52-radio-app-bootstrap";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v53-radio-android-ua";',
         text,
         count=1,
     )
