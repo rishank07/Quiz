@@ -1,11 +1,13 @@
-/* ExamFusion Prep — browser Retro Radio launcher.
-   Browsers keep study and Radio in two reusable tabs so audio survives study navigation.
-   Installed Android app stays in-app. */
+/* ExamFusion Prep — Retro Radio launcher.
+   Normal browsers keep Study + Radio in two reusable tabs.
+   Installed Android app deliberately sends Radio to Chrome so audio can keep
+   playing while ExamFusion stays available as the study app. */
 (function () {
   "use strict";
 
   var STUDY_WINDOW = "efpExamFusionStudy";
   var RADIO_WINDOW = "efpRetroRadio";
+  var CHROME_PACKAGE = "com.android.chrome";
 
   function isInstalledAndroid() {
     var isAndroid = /Android/i.test(navigator.userAgent || "");
@@ -27,8 +29,6 @@
 
   function bindCurrentTabAsStudy() {
     try {
-      /* Deliberately overwrite any stale window.name here. This click is the
-         moment the current ExamFusion tab becomes the reusable Study tab. */
       window.name = STUDY_WINDOW;
       try { sessionStorage.setItem("efp_radio_study_bound", "1"); } catch (_) {}
       return window.name === STUDY_WINDOW;
@@ -37,8 +37,43 @@
     }
   }
 
+  function safeCurrentStudyUrl() {
+    try {
+      var url = new URL(window.location.href);
+      if (url.origin === window.location.origin && !/\/music\.html$/i.test(url.pathname)) return url.href;
+    } catch (_) {}
+    return window.location.origin + "/";
+  }
+
+  function buildAndroidRadioUrl(href) {
+    var url = new URL(href, window.location.href);
+    url.searchParams.set("from", "android-app");
+    url.searchParams.set("return", safeCurrentStudyUrl());
+    return url.href;
+  }
+
+  function buildChromeIntent(httpsUrl) {
+    var url = new URL(httpsUrl);
+    var scheme = url.protocol.replace(":", "") || "https";
+    var data = url.host + url.pathname + url.search + url.hash;
+    return "intent://" + data +
+      "#Intent;scheme=" + scheme +
+      ";package=" + CHROME_PACKAGE +
+      ";S.browser_fallback_url=" + encodeURIComponent(url.href) +
+      ";end";
+  }
+
+  function openRadioOutsideAndroidApp(anchor) {
+    var radioUrl = buildAndroidRadioUrl(anchor.href);
+    try {
+      window.location.href = buildChromeIntent(radioUrl);
+    } catch (_) {
+      try { window.open(radioUrl, "_blank", "noopener"); }
+      catch (_) { window.location.href = radioUrl; }
+    }
+  }
+
   document.addEventListener("click", function (event) {
-    if (isInstalledAndroid()) return;
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
 
     var anchor = event.target && event.target.closest ? event.target.closest("a[href]") : null;
@@ -47,6 +82,11 @@
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
+
+    if (isInstalledAndroid()) {
+      openRadioOutsideAndroidApp(anchor);
+      return;
+    }
 
     bindCurrentTabAsStudy();
 
@@ -68,8 +108,7 @@
       return;
     }
 
-    /* Popup blocking fallback: opening in the same tab cannot preserve music,
-       but the click must still work instead of appearing dead. */
+    /* Popup blocking fallback for normal desktop/mobile browsers. */
     window.location.href = anchor.href;
   }, true);
 })();
