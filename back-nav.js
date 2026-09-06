@@ -4,6 +4,7 @@
 
   var BACK_BUTTON_ID = "efp-app-back-button";
   var CHAIN_KEY = "efp_logical_back_expected_path";
+  var CRUX_RESTORE_KEY = "efp_crux_back_restore_state";
 
   function normalizePath(pathname) {
     var path = pathname || "/";
@@ -18,6 +19,10 @@
     return path === "/crux-tricks" || path === "/crux-tricks/index.html";
   }
 
+  function isCruxViewer() {
+    return normalizePath(window.location.pathname).toLowerCase() === "/crux-tricks/viewer.html";
+  }
+
   function consumeBackEvent(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -29,6 +34,11 @@
     if (!button) return false;
     button.click();
     return true;
+  }
+
+  function isVisibleByHiddenFlag(id) {
+    var element = document.getElementById(id);
+    return Boolean(element && !element.hidden);
   }
 
   /* Crux & Memory Tricks is a multi-step SPA inside one index.html:
@@ -46,26 +56,29 @@
       return true;
     }
 
-    var chapterPane = document.getElementById("chapterPane");
-    if (chapterPane && !chapterPane.hidden) {
+    if (isVisibleByHiddenFlag("chapterPane")) {
       consumeBackEvent(event);
       return clickCruxControl("backParts");
     }
 
-    var partPane = document.getElementById("partPane");
-    if (partPane && !partPane.hidden) {
+    if (isVisibleByHiddenFlag("partPane")) {
       consumeBackEvent(event);
       return clickCruxControl("backSubjects");
     }
 
-    var study = document.getElementById("study");
-    if (study && !study.hidden) {
+    /* Saved Pages / Favourites / Continue results live inside the Study layer.
+       Clear that utility view back to Subjects before leaving the source. */
+    if (isVisibleByHiddenFlag("resultsWrap")) {
+      consumeBackEvent(event);
+      return clickCruxControl("backSubjects");
+    }
+
+    if (isVisibleByHiddenFlag("study")) {
       consumeBackEvent(event);
       return clickCruxControl("backSource");
     }
 
-    var source = document.getElementById("source");
-    if (source && !source.hidden) {
+    if (isVisibleByHiddenFlag("source")) {
       consumeBackEvent(event);
       return clickCruxControl("backMaterial");
     }
@@ -90,9 +103,23 @@
     }
   }
 
+  function clearLogicalChain() {
+    try { sessionStorage.removeItem(CHAIN_KEY); } catch (_) {}
+  }
+
   function isContinuingLogicalChain() {
     var expected = expectedLogicalPath();
-    return Boolean(expected && expected === normalizePath(window.location.pathname));
+    if (!expected) return false;
+
+    if (expected === normalizePath(window.location.pathname)) {
+      return true;
+    }
+
+    /* If the user navigated somewhere else, the old direct-link chain is no
+       longer relevant. Clearing it prevents a stale path from hijacking Back
+       later in the same tab. */
+    clearLogicalChain();
+    return false;
   }
 
   function rememberLogicalDestination(url) {
@@ -119,13 +146,81 @@
     }
   }
 
+  function rememberCruxViewerState(parentUrl) {
+    if (!isCruxViewer()) return;
+    if (normalizePath(parentUrl.pathname).toLowerCase() !== "/crux-tricks/index.html") return;
+
+    var id = new URLSearchParams(window.location.search).get("id");
+    var docs = Array.isArray(window.EF_CRUX_DOCS) ? window.EF_CRUX_DOCS : [];
+    var doc = docs.find(function (item) { return item && item.id === id; });
+    if (!doc) return;
+
+    var state = {
+      kind: doc.kind || "",
+      source: doc.source || "",
+      subject: doc.subject || "",
+      branch: doc.branch || ""
+    };
+
+    try { sessionStorage.setItem(CRUX_RESTORE_KEY, JSON.stringify(state)); } catch (_) {}
+  }
+
+  function readCruxRestoreState() {
+    try {
+      var raw = sessionStorage.getItem(CRUX_RESTORE_KEY);
+      if (!raw) return null;
+      sessionStorage.removeItem(CRUX_RESTORE_KEY);
+      var state = JSON.parse(raw);
+      return state && typeof state === "object" ? state : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function clickButtonByText(selector, wanted) {
+    var buttons = document.querySelectorAll(selector);
+    var needle = String(wanted || "").trim().toLowerCase();
+    if (!needle) return false;
+
+    for (var i = 0; i < buttons.length; i++) {
+      var text = String(buttons[i].textContent || "").trim().toLowerCase();
+      if (text.indexOf(needle) !== -1) {
+        buttons[i].click();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /* A direct shared PDF URL uses one generic viewer.html plus ?id=... . Restore
+     the matching in-page Crux hierarchy after the logical Back lands on index:
+     Material -> Source -> Subject -> Part -> Chapter list. */
+  function restoreCruxIndexState() {
+    if (!isCruxTricksRoot()) return;
+
+    var state = readCruxRestoreState();
+    if (!state || !state.kind || !state.source || !state.subject) return;
+
+    var material = document.querySelector('[data-material="' + state.kind + '"]');
+    if (!material) return;
+    material.click();
+
+    if (!clickButtonByText("#sourceChoices .choice", state.source)) return;
+    if (!clickButtonByText("#subjectChoices .subject", state.subject)) return;
+
+    if (state.branch) {
+      clickButtonByText("#partChoices .part", state.branch);
+    }
+
+    try { window.scrollTo(0, 0); } catch (_) {}
+  }
+
   function useLogicalParent(event) {
     var parentUrl = logicalParentUrl();
     if (!parentUrl) return false;
 
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    consumeBackEvent(event);
+    rememberCruxViewerState(parentUrl);
     rememberLogicalDestination(parentUrl);
 
     /* Replace instead of assign so a direct-link Back chain does not create
@@ -160,4 +255,10 @@
 
     useLogicalParent(event);
   }, true);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", restoreCruxIndexState, { once: true });
+  } else {
+    restoreCruxIndexState();
+  }
 })();
