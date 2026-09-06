@@ -7,46 +7,14 @@ INDEX = ROOT / "index.html"
 MUSIC = ROOT / "music.html"
 SW = ROOT / "service-worker.js"
 
-LAUNCH_SCRIPT = '  <script defer src="./radio-launch.js?v=20260907v4"></script>\n'
+LAUNCH_SCRIPT = '  <script defer src="./radio-launch.js?v=20260907v7"></script>\n'
 
 BROWSER_TAB_FLOW = r'''var EFP_STUDY_WINDOW='efpExamFusionStudy';
-var EFP_ANDROID_APP_PACKAGE='com.examfusionprep.app';
-var EFP_FROM_ANDROID_APP=false;
-try{EFP_FROM_ANDROID_APP=new URLSearchParams(location.search).get('from')==='android-app'}catch(e){}
-
-function efpAndroidReturnTarget(goHome){
-  var fallback=location.origin+'/';
-  if(goHome)return fallback;
-  try{
-    var raw=new URLSearchParams(location.search).get('return');
-    if(!raw)return fallback;
-    var target=new URL(raw,location.origin);
-    if(target.origin!==location.origin)return fallback;
-    if(/\/music\.html$/i.test(target.pathname))return fallback;
-    return target.href;
-  }catch(e){return fallback}
-}
-
-function efpAndroidAppIntent(targetUrl){
-  try{
-    var target=new URL(targetUrl,location.origin);
-    var scheme=(target.protocol||'https:').replace(':','');
-    var data=target.host+target.pathname+target.search+target.hash;
-    return 'intent://'+data+'#Intent;scheme='+scheme+';package='+EFP_ANDROID_APP_PACKAGE+';S.browser_fallback_url='+encodeURIComponent(target.href)+';end';
-  }catch(e){return targetUrl}
-}
-
-function efpOpenAndroidApp(goHome){
-  var target=efpAndroidReturnTarget(!!goHome);
-  try{if(typeof gtag==='function')gtag('event','radio_return_to_android_app',{destination:goHome?'home':'study'})}catch(e){}
-  try{window.location.href=efpAndroidAppIntent(target)}catch(e){window.location.href=target}
-}
 
 function efpFindStudyTab(goHome){
   var study=null;
   try{study=window.open('',EFP_STUDY_WINDOW)}catch(e){}
   if(!study)return null;
-
   try{
     var href='';
     try{href=String(study.location.href||'')}catch(e){}
@@ -77,7 +45,7 @@ function efpBrowserOpenStudyHome(){
 }
 
 function efpWireBrowserHomeTargets(){
-  if(efpInstalledAndroid||EFP_FROM_ANDROID_APP)return;
+  if(efpInstalledAndroid)return;
   var homes=document.querySelectorAll('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
   for(var i=0;i<homes.length;i++){
     try{
@@ -88,10 +56,13 @@ function efpWireBrowserHomeTargets(){
   }
 }
 
-if(EFP_FROM_ANDROID_APP){
-  if(efpKeepStudy)efpKeepStudy.textContent='↩ Return to Study';
-  if(efpKeepStudyHint)efpKeepStudyHint.textContent='ExamFusion app par wapas jao; Radio browser me open rahega aur music chalta rahega.';
-}else if(!efpInstalledAndroid){
+if(efpInstalledAndroid){
+  /* Android APK/TWA stays intentionally simple: normal in-app Radio page,
+     normal Home/Back navigation, no background-study shell or browser intents. */
+  var efpContinuityBox=document.getElementById('efpContinuity');
+  if(efpContinuityBox){efpContinuityBox.hidden=true;efpContinuityBox.style.display='none'}
+  if(efpStudyShell)efpStudyShell.hidden=true;
+}else{
   if(efpKeepStudy)efpKeepStudy.textContent='↩ Return to Study';
   if(efpKeepStudyHint)efpKeepStudyHint.textContent='Radio tab open rakho; Return to Study existing ExamFusion tab ko focus karega. Home bhi usi tab ko landing page par le jayega.';
   efpWireBrowserHomeTargets();
@@ -102,48 +73,26 @@ if(EFP_FROM_ANDROID_APP){
 }
 
 if(efpKeepStudy)efpKeepStudy.onclick=function(){
+  if(efpInstalledAndroid)return;
   save();
-  if(EFP_FROM_ANDROID_APP){
-    efpOpenAndroidApp(false);
-    return;
-  }
-  if(efpInstalledAndroid){
-    if(audio.paused){say('Pehle koi gaana Play karo, phir Keep Playing & Study dabao.',true);return}
-    efpOpenStudyShell();
-    return;
-  }
   efpBrowserReturnToStudy();
 };
 
-/* Home in an Android-launched Radio tab returns to the installed app. Normal
-   desktop/mobile browsers keep their existing reusable Study-tab behavior. */
 document.addEventListener('click',function(e){
+  if(efpInstalledAndroid)return;
   if(!e.target||!e.target.closest)return;
   var home=e.target.closest('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
   if(!home)return;
-  if(EFP_FROM_ANDROID_APP){
-    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
-    save();
-    efpOpenAndroidApp(true);
-    return;
-  }
-  if(efpInstalledAndroid)return;
   e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
   save();
   efpBrowserOpenStudyHome();
 },true);
 
 document.addEventListener('click',function(e){
+  if(efpInstalledAndroid)return;
   if(!e.target||!e.target.closest)return;
   var b=e.target.closest('#efp-app-back-button');
   if(!b)return;
-  if(EFP_FROM_ANDROID_APP){
-    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
-    save();
-    efpOpenAndroidApp(false);
-    return;
-  }
-  if(efpInstalledAndroid)return;
   e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
   save();
   efpBrowserReturnToStudy();
@@ -156,72 +105,38 @@ def patch_index(text: str) -> str:
         anchor = '  <script defer src="./black-mode.js?v=20260902b"></script>\n'
         if anchor not in text:
             raise SystemExit("index black-mode anchor not found")
-        text = text.replace(anchor, anchor + LAUNCH_SCRIPT, 1)
-    else:
-        text, n = re.subn(
-            r'  <script defer src="\./radio-launch\.js\?v=[^"]+"></script>\n',
-            LAUNCH_SCRIPT,
-            text,
-            count=1,
-        )
-        if n != 1:
-            raise SystemExit("radio-launch script tag found but version marker could not be updated")
+        return text.replace(anchor, anchor + LAUNCH_SCRIPT, 1)
+    text, n = re.subn(
+        r'  <script defer src="\./radio-launch\.js\?v=[^"]+"></script>\n',
+        LAUNCH_SCRIPT,
+        text,
+        count=1,
+    )
+    if n != 1:
+        raise SystemExit("radio-launch script tag found but version marker could not be updated")
     return text
 
 
 def patch_music(text: str) -> str:
-    # Replace the installed browser continuity block, regardless of its previous revision.
-    pattern = re.compile(
-        r"(?:var EFP_STUDY_WINDOW='efpExamFusionStudy';\n\n)?"
-        r"function efpFindStudyTab\(goHome\)\{.*?\nif\(efpStudyClose\)",
-        re.S,
-    )
-    text2, n = pattern.subn(BROWSER_TAB_FLOW + "\nif(efpStudyClose)", text, count=1)
-    if n == 1:
-        return text2
-
-    # Current Android-external-aware revision starts at EFP_STUDY_WINDOW and may
-    # include helper declarations before efpFindStudyTab().
-    pattern_android = re.compile(
-        r"var EFP_STUDY_WINDOW='efpExamFusionStudy';\n.*?\nif\(efpStudyClose\)",
-        re.S,
-    )
-    text2, n = pattern_android.subn(BROWSER_TAB_FLOW + "\nif(efpStudyClose)", text, count=1)
-    if n == 1:
-        return text2
-
-    # Older revision started directly at efpBrowserReturnToStudy().
-    pattern2 = re.compile(
-        r"function efpBrowserReturnToStudy\(\)\{.*?\nif\(efpStudyClose\)",
-        re.S,
-    )
-    text2, n = pattern2.subn(BROWSER_TAB_FLOW + "\nif(efpStudyClose)", text, count=1)
-    if n == 1:
-        return text2
-
-    # First-time/fallback path after the old keep-playing installer.
-    old_pattern = re.compile(
-        r"if\(!efpInstalledAndroid\)\{\n"
-        r"  if\(efpKeepStudy\)efpKeepStudy\.textContent='🎧 Keep Playing & Go Back';.*?"
-        r"document\.addEventListener\('click',function\(e\)\{.*?\n\},true\);\n\n",
-        re.S,
-    )
-    text2, n = old_pattern.subn(BROWSER_TAB_FLOW + "\n", text, count=1)
-    if n != 1:
-        raise SystemExit("music browser continuity block not found")
-    return text2
+    # Collapse any previous Android/browser routing revision into one browser-only
+    # continuity block. The study shell itself stays for browser compatibility.
+    start = text.find("var EFP_STUDY_WINDOW='efpExamFusionStudy';")
+    end_marker = "if(efpStudyClose)efpStudyClose.onclick=efpCloseStudyShell;"
+    end = text.find(end_marker, start)
+    if start == -1 or end == -1:
+        raise SystemExit("music continuity block not found")
+    return text[:start] + BROWSER_TAB_FLOW + "\n" + text[end:]
 
 
 def patch_sw(text: str) -> str:
     text, n = re.subn(
         r'const CACHE_VERSION = "efp-pwa-[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-07-v47-radio-android-external";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v50-radio-android-simple";',
         text,
         count=1,
     )
     if n != 1:
         raise SystemExit("service worker cache version marker not found")
-
     if '  "/radio-launch.js",' not in text:
         anchor = '  "/music.html",\n'
         if anchor not in text:
