@@ -7,9 +7,30 @@ INDEX = ROOT / "index.html"
 MUSIC = ROOT / "music.html"
 SW = ROOT / "service-worker.js"
 
-LAUNCH_SCRIPT = '  <script defer src="./radio-launch.js?v=20260907v7"></script>\n'
+LAUNCH_SCRIPT = '  <script defer src="./radio-launch.js?v=20260907v8"></script>\n'
 
 BROWSER_TAB_FLOW = r'''var EFP_STUDY_WINDOW='efpExamFusionStudy';
+var EFP_ANDROID_SESSION_KEY='efp_android_app_session';
+
+function efpDetectAndroidAppSession(){
+  var isAndroid=/Android/i.test(navigator.userAgent||'');
+  if(!isAndroid)return false;
+  var standalone=false;try{standalone=window.matchMedia('(display-mode: standalone)').matches}catch(e){}
+  var twa=/^android-app:\/\//i.test(document.referrer||'');
+  var launchMarker=false;
+  try{
+    var source=new URLSearchParams(location.search).get('source')||'';
+    launchMarker=source==='windows-pwa'||source==='android-app'||source==='pwa';
+  }catch(e){}
+  var remembered=false;try{remembered=sessionStorage.getItem(EFP_ANDROID_SESSION_KEY)==='1'}catch(e){}
+  var installed=standalone||twa||launchMarker||remembered;
+  if(installed){try{sessionStorage.setItem(EFP_ANDROID_SESSION_KEY,'1')}catch(e){}}
+  return installed;
+}
+
+/* Re-evaluate here because some TWA launches do not expose standalone/referrer
+   on every navigation. The launch marker is remembered only in this app tab. */
+efpInstalledAndroid=efpDetectAndroidAppSession();
 
 function efpFindStudyTab(goHome){
   var study=null;
@@ -118,8 +139,7 @@ def patch_index(text: str) -> str:
 
 
 def patch_music(text: str) -> str:
-    # Collapse any previous Android/browser routing revision into one browser-only
-    # continuity block. The study shell itself stays for browser compatibility.
+    # Collapse any previous Android/browser routing revision into one final block.
     start = text.find("var EFP_STUDY_WINDOW='efpExamFusionStudy';")
     end_marker = "if(efpStudyClose)efpStudyClose.onclick=efpCloseStudyShell;"
     end = text.find(end_marker, start)
@@ -131,7 +151,7 @@ def patch_music(text: str) -> str:
 def patch_sw(text: str) -> str:
     text, n = re.subn(
         r'const CACHE_VERSION = "efp-pwa-[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-07-v50-radio-android-simple";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v51-radio-app-detect";',
         text,
         count=1,
     )
