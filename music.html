@@ -212,55 +212,17 @@ function efpBrowserKeepPlayingAndBack(){
   }
 }
 
-function efpFindStudyTab(goHome){
-  var study=null;
-  try{
-    if(window.opener&&!window.opener.closed&&window.opener.location.origin===window.location.origin)study=window.opener;
-  }catch(e){}
-
-  if(!study){
-    try{
-      if(goHome){
-        study=window.open('/','efpExamFusionStudy');
-      }else{
-        study=window.open('','efpExamFusionStudy');
-        if(study){
-          try{if(!study.location.href||study.location.href==='about:blank')study.location.href='/'}catch(e){}
-        }
-      }
-    }catch(e){}
-  }
-
-  if(!study)return null;
-  try{
-    if(goHome)study.location.href='/';
-    study.focus();
-  }catch(e){}
-  return study;
-}
+var EFP_STUDY_WINDOW='efpExamFusionStudy';
 
 function efpFindStudyTab(goHome){
   var study=null;
-  try{
-    if(window.opener&&!window.opener.closed&&window.opener.location.origin===window.location.origin)study=window.opener;
-  }catch(e){}
-
-  if(!study){
-    try{
-      if(goHome){
-        study=window.open('/','efpExamFusionStudy');
-      }else{
-        study=window.open('','efpExamFusionStudy');
-        if(study){
-          try{if(!study.location.href||study.location.href==='about:blank')study.location.href='/'}catch(e){}
-        }
-      }
-    }catch(e){}
-  }
-
+  try{study=window.open('',EFP_STUDY_WINDOW)}catch(e){}
   if(!study)return null;
+
   try{
-    if(goHome)study.location.href='/';
+    var href='';
+    try{href=String(study.location.href||'')}catch(e){}
+    if(goHome||!href||href==='about:blank')study.location.href='/';
     study.focus();
   }catch(e){}
   return study;
@@ -272,7 +234,7 @@ function efpBrowserReturnToStudy(){
     say('Radio yahin chalta rahega — Study tab par wapas chale gaye.');
     try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_return_to_study'})}catch(e){}
   }else{
-    say('Study tab open nahi ho paya. Browser me new tabs allow karke dobara try karo.',true);
+    say('Study tab open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
   }
 }
 
@@ -282,14 +244,32 @@ function efpBrowserOpenStudyHome(){
     say('ExamFusion Home study tab me khul gaya — Radio yahin chalta rahega.');
     try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_home_in_study_tab'})}catch(e){}
   }else{
-    say('ExamFusion Home open nahi ho paya. Browser me new tabs allow karke dobara try karo.',true);
+    say('ExamFusion Home open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
+  }
+}
+
+function efpWireBrowserHomeTargets(){
+  if(efpInstalledAndroid)return;
+  var homes=document.querySelectorAll('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
+  for(var i=0;i<homes.length;i++){
+    try{
+      homes[i].setAttribute('href','/');
+      homes[i].setAttribute('target',EFP_STUDY_WINDOW);
+      homes[i].setAttribute('data-efp-radio-home','1');
+    }catch(e){}
   }
 }
 
 if(!efpInstalledAndroid){
   if(efpKeepStudy)efpKeepStudy.textContent='↩ Return to Study';
-  if(efpKeepStudyHint)efpKeepStudyHint.textContent='Radio tab open rakho; Return to Study se existing ExamFusion tab par wapas jaoge. Home bhi usi tab ko reuse karega.';
+  if(efpKeepStudyHint)efpKeepStudyHint.textContent='Radio tab open rakho; Return to Study existing ExamFusion tab ko focus karega. Home bhi usi tab ko landing page par le jayega.';
+  efpWireBrowserHomeTargets();
+  try{
+    var efpHomeObserver=new MutationObserver(function(){efpWireBrowserHomeTargets()});
+    efpHomeObserver.observe(document.documentElement,{childList:true,subtree:true});
+  }catch(e){}
 }
+
 if(efpKeepStudy)efpKeepStudy.onclick=function(){
   save();
   if(efpInstalledAndroid){
@@ -300,6 +280,8 @@ if(efpKeepStudy)efpKeepStudy.onclick=function(){
   efpBrowserReturnToStudy();
 };
 
+/* Native target on Home is the primary path. This capture fallback keeps the
+   same behavior even if another site script rewrites the Home control later. */
 document.addEventListener('click',function(e){
   if(efpInstalledAndroid||!e.target||!e.target.closest)return;
   var home=e.target.closest('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
