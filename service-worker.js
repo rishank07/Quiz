@@ -1,5 +1,5 @@
-// v23 Crux mobile Back and desktop search repair 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v23-crux-back-search";
+// v24 Crux mobile Back specificity fix 20260906
+const CACHE_VERSION = "efp-pwa-2026-09-06-v24-crux-mobile-back";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
