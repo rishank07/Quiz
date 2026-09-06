@@ -33,7 +33,7 @@ jobs:
           python-version: '3.12'
       - name: Validate installer
         run: python -m py_compile tools/add-break-tools.py
-      - name: Add homepage buttons and PWA cache
+      - name: Maintain break tools, analytics and PWA cache
         run: python tools/add-break-tools.py
       - name: Commit generated integration changes
         shell: bash
@@ -44,6 +44,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html service-worker.js chess.html
-          git commit -m "chore: expose music and chess break tools"
+          git add index.html service-worker.js chess.html music.html
+          git commit -m "chore: maintain music and chess break tools"
           git push
