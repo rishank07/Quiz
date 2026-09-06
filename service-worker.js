@@ -1,5 +1,5 @@
-// v21 Crux global navigation cleanup 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v21-crux-global-nav";
+// v22 Crux header layout repair 20260906
+const CACHE_VERSION = "efp-pwa-2026-09-06-v22-crux-layout-repair";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
