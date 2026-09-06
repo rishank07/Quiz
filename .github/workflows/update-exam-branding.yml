@@ -9,6 +9,7 @@ on:
       - "llms.txt"
       - "README.md"
       - "tools/update-exam-branding.py"
+      - "Crux-Tricks/crux-search-route.js"
       - ".github/workflows/update-exam-branding.yml"
   workflow_dispatch:
 
@@ -41,14 +42,29 @@ jobs:
       - name: Standardize ExamFusion exam identity
         run: python tools/update-exam-branding.py --repo .
 
+      - name: Cache-bust Crux browser-history bridge
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path("Crux-Tricks/index.html")
+          text = path.read_text(encoding="utf-8")
+          old = "crux-search-route.js?v=20260905route1"
+          new = "crux-search-route.js?v=20260906back1"
+          if old in text:
+              path.write_text(text.replace(old, new), encoding="utf-8")
+              print("Updated Crux history asset version.")
+          else:
+              print("Crux history asset version already current.")
+          PY
+
       - name: Commit branding updates if needed
         run: |
           if git diff --quiet; then
-            echo "Exam branding is already current."
+            echo "Exam branding and Crux asset version are already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- ':(glob)**/*.html' manifest.webmanifest llms.txt README.md
-          git commit -m "chore: standardize SSC Railway UPSC BPSC branding"
+          git commit -m "chore: standardize branding and Crux history asset"
           git push
