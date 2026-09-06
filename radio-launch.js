@@ -1,13 +1,12 @@
 /* ExamFusion Prep — Retro Radio launcher.
    Normal browsers keep Study + Radio in two reusable tabs.
-   Installed Android app turns the user's actual Radio tap into a Chrome VIEW
-   intent, so the TWA itself never navigates to music.html. */
+   Installed Android app stays simple: Retro Radio opens normally inside the
+   app with no Chrome redirect, intent handoff or background-study routing. */
 (function () {
   "use strict";
 
   var STUDY_WINDOW = "efpExamFusionStudy";
   var RADIO_WINDOW = "efpRetroRadio";
-  var CHROME_PACKAGE = "com.android.chrome";
 
   function isInstalledAndroid() {
     var isAndroid = /Android/i.test(navigator.userAgent || "");
@@ -33,67 +32,17 @@
     } catch (_) { return false; }
   }
 
-  function safeCurrentStudyUrl() {
-    try {
-      var url = new URL(window.location.href);
-      if (url.origin === window.location.origin && !/\/music\.html$/i.test(url.pathname)) return url.href;
-    } catch (_) {}
-    return window.location.origin + "/";
-  }
-
-  function buildAndroidRadioUrl(href) {
-    var url = new URL(href, window.location.href);
-    url.searchParams.set("from", "android-app");
-    url.searchParams.set("return", safeCurrentStudyUrl());
-    return url.href;
-  }
-
-  function buildChromeIntent(httpsUrl) {
-    var url = new URL(httpsUrl);
-    var scheme = url.protocol.replace(":", "") || "https";
-    var data = url.host + url.pathname + url.search + url.hash;
-    return "intent://" + data +
-      "#Intent;scheme=" + scheme +
-      ";action=android.intent.action.VIEW" +
-      ";category=android.intent.category.BROWSABLE" +
-      ";package=" + CHROME_PACKAGE +
-      ";end";
-  }
-
-  function prepareAndroidChromeClick(anchor) {
-    var oldHref = anchor.getAttribute("href");
-    var oldTarget = anchor.getAttribute("target");
-    var oldRel = anchor.getAttribute("rel");
-    var radioUrl = buildAndroidRadioUrl(anchor.href);
-
-    anchor.setAttribute("href", buildChromeIntent(radioUrl));
-    anchor.setAttribute("target", "_blank");
-    anchor.setAttribute("rel", "noopener noreferrer");
-
-    window.setTimeout(function () {
-      try {
-        if (oldHref == null) anchor.removeAttribute("href"); else anchor.setAttribute("href", oldHref);
-        if (oldTarget == null) anchor.removeAttribute("target"); else anchor.setAttribute("target", oldTarget);
-        if (oldRel == null) anchor.removeAttribute("rel"); else anchor.setAttribute("rel", oldRel);
-      } catch (_) {}
-    }, 250);
-  }
-
   document.addEventListener("click", function (event) {
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
 
     var anchor = event.target && event.target.closest ? event.target.closest("a[href]") : null;
     if (!isRadioLink(anchor)) return;
 
-    if (isInstalledAndroid()) {
-      /* Keep the user's click as the actual navigation gesture. We stop site
-         onclick handlers, but deliberately DO NOT prevent the anchor default. */
-      prepareAndroidChromeClick(anchor);
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      return;
-    }
+    /* Android APK/TWA: leave the link untouched. The existing openPage()/link
+       navigation opens music.html normally inside the app. */
+    if (isInstalledAndroid()) return;
 
+    /* Browser behavior stays unchanged. */
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -113,6 +62,7 @@
       try { player.focus(); } catch (_) {}
       return;
     }
+
     window.location.href = anchor.href;
   }, true);
 })();
