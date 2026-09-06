@@ -1,0 +1,49 @@
+name: Install Break Tools
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "music.html"
+      - "chess.html"
+      - "tools/add-break-tools.py"
+      - ".github/workflows/add-break-tools.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: break-tools-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  install-break-tools:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Validate installer
+        run: python -m py_compile tools/add-break-tools.py
+      - name: Add homepage buttons and PWA cache
+        run: python tools/add-break-tools.py
+      - name: Commit generated integration changes
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No generated changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html service-worker.js
+          git commit -m "chore: expose music and chess break tools"
+          git push
