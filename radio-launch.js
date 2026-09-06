@@ -7,13 +7,30 @@
 
   var STUDY_WINDOW = "efpExamFusionStudy";
   var RADIO_WINDOW = "efpRetroRadio";
+  var APP_SESSION_KEY = "efp_android_app_session";
 
   function isInstalledAndroid() {
     var isAndroid = /Android/i.test(navigator.userAgent || "");
+    if (!isAndroid) return false;
+
     var standalone = false;
     try { standalone = window.matchMedia("(display-mode: standalone)").matches; } catch (_) {}
+
     var twa = /^android-app:\/\//i.test(document.referrer || "");
-    return isAndroid && (standalone || twa);
+    var launchMarker = false;
+    try {
+      var source = new URLSearchParams(window.location.search).get("source") || "";
+      launchMarker = source === "windows-pwa" || source === "android-app" || source === "pwa";
+    } catch (_) {}
+
+    var remembered = false;
+    try { remembered = sessionStorage.getItem(APP_SESSION_KEY) === "1"; } catch (_) {}
+
+    var installed = standalone || twa || launchMarker || remembered;
+    if (installed) {
+      try { sessionStorage.setItem(APP_SESSION_KEY, "1"); } catch (_) {}
+    }
+    return installed;
   }
 
   function isRadioLink(anchor) {
