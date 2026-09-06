@@ -35,10 +35,16 @@
 
   function removeLegacyOriginalPracticeHome() {
     if (!isOriginalPracticePage()) return;
-    var links = document.querySelectorAll(
-      ".topnav > a[href='../index.html'], .efp-op-topbar > a[href='../index.html']"
-    );
-    for (var i = 0; i < links.length; i++) links[i].remove();
+
+    /* Inner Original Practice pages dynamically add a legacy topbar containing
+       Original Practice Home / ExamFusion Home. The shared global Back + Home
+       controls replace that navigation completely, so remove the whole bar. */
+    var topbars = document.querySelectorAll(".efp-op-topbar");
+    for (var i = 0; i < topbars.length; i++) topbars[i].remove();
+
+    /* The Original Practice landing page has its older standalone ← Home link. */
+    var links = document.querySelectorAll(".topnav > a[href='../index.html']");
+    for (var j = 0; j < links.length; j++) links[j].remove();
   }
 
   function watchLegacyOriginalPracticeHome() {
