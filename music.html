@@ -235,6 +235,46 @@ function efpAndroidAppIntent(targetUrl){
     var target=new URL(targetUrl,location.origin);
     var scheme=(target.protocol||'https:').replace(':','');
     var data=target.host+target.pathname+target.search+target.hash;
+    return 'intent://'+data+'#Intent;scheme='+scheme+';action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package='+EFP_ANDROID_APP_PACKAGE+';end';
+  }catch(e){return ''}
+}
+
+function efpOpenAndroidApp(goHome){
+  var target=efpAndroidReturnTarget(!!goHome);
+  var intent=efpAndroidAppIntent(target);
+  try{if(typeof gtag==='function')gtag('event','radio_return_to_android_app',{destination:goHome?'home':'study'})}catch(e){}
+  if(!intent){say('ExamFusion app return link ready nahi ho paya.',true);return}
+  var link=document.createElement('a');
+  link.href=intent;
+  link.style.display='none';
+  document.body.appendChild(link);
+  link.click();
+  setTimeout(function(){try{link.remove()}catch(e){}},1200);
+}
+
+var EFP_STUDY_WINDOW='efpExamFusionStudy';
+var EFP_ANDROID_APP_PACKAGE='com.examfusionprep.app';
+var EFP_FROM_ANDROID_APP=false;
+try{EFP_FROM_ANDROID_APP=new URLSearchParams(location.search).get('from')==='android-app'}catch(e){}
+
+function efpAndroidReturnTarget(goHome){
+  var fallback=location.origin+'/';
+  if(goHome)return fallback;
+  try{
+    var raw=new URLSearchParams(location.search).get('return');
+    if(!raw)return fallback;
+    var target=new URL(raw,location.origin);
+    if(target.origin!==location.origin)return fallback;
+    if(/\/music\.html$/i.test(target.pathname))return fallback;
+    return target.href;
+  }catch(e){return fallback}
+}
+
+function efpAndroidAppIntent(targetUrl){
+  try{
+    var target=new URL(targetUrl,location.origin);
+    var scheme=(target.protocol||'https:').replace(':','');
+    var data=target.host+target.pathname+target.search+target.hash;
     return 'intent://'+data+'#Intent;scheme='+scheme+';package='+EFP_ANDROID_APP_PACKAGE+';S.browser_fallback_url='+encodeURIComponent(target.href)+';end';
   }catch(e){return targetUrl}
 }

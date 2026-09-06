@@ -58,19 +58,28 @@
     var data = url.host + url.pathname + url.search + url.hash;
     return "intent://" + data +
       "#Intent;scheme=" + scheme +
+      ";action=android.intent.action.VIEW" +
+      ";category=android.intent.category.BROWSABLE" +
       ";package=" + CHROME_PACKAGE +
-      ";S.browser_fallback_url=" + encodeURIComponent(url.href) +
       ";end";
+  }
+
+  function fireChromeIntent(intentUrl) {
+    var link = document.createElement("a");
+    link.href = intentUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    window.setTimeout(function () {
+      try { link.remove(); } catch (_) {}
+    }, 1200);
   }
 
   function openRadioOutsideAndroidApp(anchor) {
     var radioUrl = buildAndroidRadioUrl(anchor.href);
-    try {
-      window.location.href = buildChromeIntent(radioUrl);
-    } catch (_) {
-      try { window.open(radioUrl, "_blank", "noopener"); }
-      catch (_) { window.location.href = radioUrl; }
-    }
+    fireChromeIntent(buildChromeIntent(radioUrl));
   }
 
   document.addEventListener("click", function (event) {

@@ -1,5 +1,5 @@
 // v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-07-v47-radio-android-external";
+const CACHE_VERSION = "efp-pwa-2026-09-07-v48-radio-real-chrome-tab";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
