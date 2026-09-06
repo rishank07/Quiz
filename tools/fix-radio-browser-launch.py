@@ -7,30 +7,19 @@ INDEX = ROOT / "index.html"
 MUSIC = ROOT / "music.html"
 SW = ROOT / "service-worker.js"
 
-LAUNCH_SCRIPT = '  <script defer src="./radio-launch.js?v=20260907v2"></script>\n'
+LAUNCH_SCRIPT = '  <script defer src="./radio-launch.js?v=20260907v3"></script>\n'
 
-BROWSER_TAB_FLOW = r'''function efpFindStudyTab(goHome){
+BROWSER_TAB_FLOW = r'''var EFP_STUDY_WINDOW='efpExamFusionStudy';
+
+function efpFindStudyTab(goHome){
   var study=null;
-  try{
-    if(window.opener&&!window.opener.closed&&window.opener.location.origin===window.location.origin)study=window.opener;
-  }catch(e){}
-
-  if(!study){
-    try{
-      if(goHome){
-        study=window.open('/','efpExamFusionStudy');
-      }else{
-        study=window.open('','efpExamFusionStudy');
-        if(study){
-          try{if(!study.location.href||study.location.href==='about:blank')study.location.href='/'}catch(e){}
-        }
-      }
-    }catch(e){}
-  }
-
+  try{study=window.open('',EFP_STUDY_WINDOW)}catch(e){}
   if(!study)return null;
+
   try{
-    if(goHome)study.location.href='/';
+    var href='';
+    try{href=String(study.location.href||'')}catch(e){}
+    if(goHome||!href||href==='about:blank')study.location.href='/';
     study.focus();
   }catch(e){}
   return study;
@@ -42,7 +31,7 @@ function efpBrowserReturnToStudy(){
     say('Radio yahin chalta rahega — Study tab par wapas chale gaye.');
     try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_return_to_study'})}catch(e){}
   }else{
-    say('Study tab open nahi ho paya. Browser me new tabs allow karke dobara try karo.',true);
+    say('Study tab open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
   }
 }
 
@@ -52,14 +41,32 @@ function efpBrowserOpenStudyHome(){
     say('ExamFusion Home study tab me khul gaya — Radio yahin chalta rahega.');
     try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_home_in_study_tab'})}catch(e){}
   }else{
-    say('ExamFusion Home open nahi ho paya. Browser me new tabs allow karke dobara try karo.',true);
+    say('ExamFusion Home open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
+  }
+}
+
+function efpWireBrowserHomeTargets(){
+  if(efpInstalledAndroid)return;
+  var homes=document.querySelectorAll('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
+  for(var i=0;i<homes.length;i++){
+    try{
+      homes[i].setAttribute('href','/');
+      homes[i].setAttribute('target',EFP_STUDY_WINDOW);
+      homes[i].setAttribute('data-efp-radio-home','1');
+    }catch(e){}
   }
 }
 
 if(!efpInstalledAndroid){
   if(efpKeepStudy)efpKeepStudy.textContent='↩ Return to Study';
-  if(efpKeepStudyHint)efpKeepStudyHint.textContent='Radio tab open rakho; Return to Study se existing ExamFusion tab par wapas jaoge. Home bhi usi tab ko reuse karega.';
+  if(efpKeepStudyHint)efpKeepStudyHint.textContent='Radio tab open rakho; Return to Study existing ExamFusion tab ko focus karega. Home bhi usi tab ko landing page par le jayega.';
+  efpWireBrowserHomeTargets();
+  try{
+    var efpHomeObserver=new MutationObserver(function(){efpWireBrowserHomeTargets()});
+    efpHomeObserver.observe(document.documentElement,{childList:true,subtree:true});
+  }catch(e){}
 }
+
 if(efpKeepStudy)efpKeepStudy.onclick=function(){
   save();
   if(efpInstalledAndroid){
@@ -70,6 +77,8 @@ if(efpKeepStudy)efpKeepStudy.onclick=function(){
   efpBrowserReturnToStudy();
 };
 
+/* Native target on Home is the primary path. This capture fallback keeps the
+   same behavior even if another site script rewrites the Home control later. */
 document.addEventListener('click',function(e){
   if(efpInstalledAndroid||!e.target||!e.target.closest)return;
   var home=e.target.closest('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
@@ -109,16 +118,26 @@ def patch_index(text: str) -> str:
 
 
 def patch_music(text: str) -> str:
-    # Preferred path: replace the currently installed browser continuity block.
+    # Replace the installed browser continuity block, regardless of its previous revision.
     pattern = re.compile(
-        r"function efpBrowserReturnToStudy\(\)\{.*?\nif\(efpStudyClose\)",
+        r"(?:var EFP_STUDY_WINDOW='efpExamFusionStudy';\n\n)?"
+        r"function efpFindStudyTab\(goHome\)\{.*?\nif\(efpStudyClose\)",
         re.S,
     )
     text2, n = pattern.subn(BROWSER_TAB_FLOW + "\nif(efpStudyClose)", text, count=1)
     if n == 1:
         return text2
 
-    # First-time/fallback path after the older browser-flow installer.
+    # Older revision started directly at efpBrowserReturnToStudy().
+    pattern2 = re.compile(
+        r"function efpBrowserReturnToStudy\(\)\{.*?\nif\(efpStudyClose\)",
+        re.S,
+    )
+    text2, n = pattern2.subn(BROWSER_TAB_FLOW + "\nif(efpStudyClose)", text, count=1)
+    if n == 1:
+        return text2
+
+    # First-time/fallback path after the old keep-playing installer.
     old_pattern = re.compile(
         r"if\(!efpInstalledAndroid\)\{\n"
         r"  if\(efpKeepStudy\)efpKeepStudy\.textContent='🎧 Keep Playing & Go Back';.*?"
@@ -134,7 +153,7 @@ def patch_music(text: str) -> str:
 def patch_sw(text: str) -> str:
     text, n = re.subn(
         r'const CACHE_VERSION = "efp-pwa-[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-07-v43-radio-two-tabs";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v44-radio-study-bind";',
         text,
         count=1,
     )
