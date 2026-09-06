@@ -24,6 +24,11 @@
 .efp-brand img{width:48px;height:48px;object-fit:cover;border-radius:13px;box-shadow:0 8px 22px rgba(0,0,0,.28)}
 .efp-brand-copy{text-align:left;min-width:0}.efp-brand-name{font-size:17px;font-weight:850;line-height:1.15;letter-spacing:.01em}.efp-brand-tag{margin-top:3px;color:var(--muted);font-size:10.5px;letter-spacing:.055em;white-space:nowrap}
 @media(max-width:390px){.efp-brand img{width:43px;height:43px}.efp-brand-name{font-size:15.5px}.efp-brand-tag{font-size:9.7px}}
+
+/* Keep-playing browser + installed-app study mode */
+.efp-continuity{margin-top:14px;text-align:center}.efp-continuity-btn{width:100%;border:1px solid rgba(245,179,1,.45);background:linear-gradient(135deg,rgba(245,179,1,.18),rgba(62,166,255,.10));color:var(--text);border-radius:13px;padding:12px 14px;font:inherit;font-size:13.5px;font-weight:800;cursor:pointer;box-shadow:0 9px 24px rgba(0,0,0,.18)}.efp-continuity-btn:active{transform:scale(.985)}.efp-continuity-hint{margin-top:7px;color:var(--muted);font-size:10.8px;line-height:1.45}
+html.efp-study-open,html.efp-study-open body{overflow:hidden!important}.efp-study-shell{position:fixed;inset:0;z-index:2147483000;background:#070a13;display:flex;flex-direction:column}.efp-study-shell[hidden]{display:none!important}.efp-study-top{flex:0 0 auto;display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:max(8px,env(safe-area-inset-top)) 9px 8px;background:#0b1120;border-bottom:1px solid #1f2a44;box-shadow:0 6px 20px rgba(0,0,0,.28)}.efp-study-back,.efp-study-mini{border:1px solid #29364f;background:#111827;color:#e8ecf6;border-radius:10px;min-height:40px;padding:0 11px;font:inherit;font-weight:750;cursor:pointer}.efp-study-mini{width:42px;padding:0;font-size:16px}.efp-study-copy{min-width:0}.efp-study-copy strong{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.efp-study-copy span{display:block;margin-top:2px;color:#94a3c4;font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.efp-study-frame{display:block;flex:1 1 auto;width:100%;min-height:0;border:0;background:#070a13}
+@media(max-width:390px){.efp-study-top{grid-template-columns:auto minmax(0,1fr) 38px 38px;gap:5px;padding-left:6px;padding-right:6px}.efp-study-back{padding:0 8px;font-size:11.5px}.efp-study-mini{width:38px}.efp-study-copy strong{font-size:11.5px}}
 </style>
 <script defer src="/home-nav.js?v=20260907"></script>
 <script defer src="/back-parent-map.js?v=20260906hier1"></script>
@@ -67,6 +72,10 @@
     </div>
     <div class="volrow"><span>🔊</span><input type="range" id="vol" min="0" max="100" value="85" aria-label="Volume"></div>
     <div class="status" id="status">Fetching track list…</div>
+    <div class="efp-continuity" id="efpContinuity">
+      <button class="efp-continuity-btn" id="efpKeepStudy" type="button">🎧 Keep Playing &amp; Study</button>
+      <div class="efp-continuity-hint" id="efpKeepStudyHint">Music yahin chalta rahega; ExamFusion study ek new tab me khulega.</div>
+    </div>
   </section>
 
   <section class="card">
@@ -79,6 +88,15 @@
   <div class="foot">ExamFusion Prep · Optional break feature · No autoplay on first open</div>
 </main>
 <audio id="audio" preload="metadata"></audio>
+<div class="efp-study-shell" id="efpStudyShell" hidden>
+  <div class="efp-study-top">
+    <button class="efp-study-back" id="efpStudyClose" type="button">‹ Radio</button>
+    <div class="efp-study-copy"><strong id="efpStudyNow">Retro Radio</strong><span>Music keeps playing while you study</span></div>
+    <button class="efp-study-mini" id="efpStudyPlay" type="button" aria-label="Play or pause">⏸</button>
+    <button class="efp-study-mini" id="efpStudyNext" type="button" aria-label="Next song">⏭</button>
+  </div>
+  <iframe class="efp-study-frame" id="efpStudyFrame" title="ExamFusion Prep Study Mode" src="about:blank"></iframe>
+</div>
 
 <script>
 (function(){
@@ -127,6 +145,40 @@ shuf.onclick=function(){shuffleOn=!shuffleOn;shuf.setAttribute('aria-pressed',sh
 seek.addEventListener('input',function(){seek.dataset.dragging='1';cur.textContent=fmt(+seek.value)});seek.addEventListener('change',function(){if(isFinite(+seek.value))audio.currentTime=+seek.value;seek.dataset.dragging='0';save()});vol.addEventListener('input',function(){audio.volume=(+vol.value||0)/100;save()});
 window.addEventListener('pagehide',save);document.addEventListener('visibilitychange',function(){if(document.hidden)save()});
 if('mediaSession'in navigator){try{navigator.mediaSession.setActionHandler('play',function(){audio.play()});navigator.mediaSession.setActionHandler('pause',function(){audio.pause()});navigator.mediaSession.setActionHandler('previoustrack',function(){step(-1)});navigator.mediaSession.setActionHandler('nexttrack',function(){step(1)});navigator.mediaSession.setActionHandler('seekto',function(d){if(d.seekTime!=null&&isFinite(d.seekTime))audio.currentTime=d.seekTime})}catch(e){}}
+
+function efpIsInstalledAndroid(){
+  var isAndroid=/Android/i.test(navigator.userAgent||'');
+  var standalone=false;try{standalone=window.matchMedia('(display-mode: standalone)').matches}catch(e){}
+  var twa=/^android-app:\/\//i.test(document.referrer||'');
+  return isAndroid&&(standalone||twa);
+}
+var efpKeepStudy=document.getElementById('efpKeepStudy'),efpKeepStudyHint=document.getElementById('efpKeepStudyHint'),efpStudyShell=document.getElementById('efpStudyShell'),efpStudyFrame=document.getElementById('efpStudyFrame'),efpStudyClose=document.getElementById('efpStudyClose'),efpStudyPlay=document.getElementById('efpStudyPlay'),efpStudyNext=document.getElementById('efpStudyNext'),efpStudyNow=document.getElementById('efpStudyNow');
+var efpInstalledAndroid=efpIsInstalledAndroid();
+function efpSyncStudyBar(){if(efpStudyNow)efpStudyNow.textContent=(title&&title.textContent)||'Retro Radio';if(efpStudyPlay)efpStudyPlay.textContent=audio.paused?'▶':'⏸'}
+function efpOpenStudyShell(){
+  if(!efpStudyShell||!efpStudyFrame)return;
+  if(efpStudyFrame.getAttribute('src')==='about:blank')efpStudyFrame.src='/';
+  efpStudyShell.hidden=false;document.documentElement.classList.add('efp-study-open');efpSyncStudyBar();
+  try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'android_study_shell'})}catch(e){}
+}
+function efpCloseStudyShell(){if(!efpStudyShell)return;efpStudyShell.hidden=true;document.documentElement.classList.remove('efp-study-open');}
+if(efpInstalledAndroid){
+  if(efpKeepStudy)efpKeepStudy.textContent='🎵 Keep Playing & Study in App';
+  if(efpKeepStudyHint)efpKeepStudyHint.textContent='Quiz, Crux aur Current Affairs isi app ke Study Mode me khulenge; Radio unload nahi hoga.';
+}
+if(efpKeepStudy)efpKeepStudy.onclick=function(){
+  if(audio.paused){say('Pehle koi gaana Play karo, phir Keep Playing & Study dabao.',true);return}
+  save();
+  if(efpInstalledAndroid){efpOpenStudyShell();return}
+  var w=null;try{w=window.open('/','_blank')}catch(e){}
+  if(w){try{w.opener=null;w.focus()}catch(e){}say('Music yahin chalta rahega — study new tab me khul gaya.');try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_new_tab'})}catch(e){}}
+  else say('New tab block ho gaya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
+};
+if(efpStudyClose)efpStudyClose.onclick=efpCloseStudyShell;
+if(efpStudyPlay)efpStudyPlay.onclick=function(){if(audio.paused)audio.play().catch(function(){});else audio.pause();efpSyncStudyBar()};
+if(efpStudyNext)efpStudyNext.onclick=function(){step(1);setTimeout(efpSyncStudyBar,120)};
+audio.addEventListener('playing',efpSyncStudyBar);audio.addEventListener('pause',efpSyncStudyBar);audio.addEventListener('loadedmetadata',efpSyncStudyBar);
+
 var restoreKey=(saved.collection&&COLLECTIONS.some(function(c){return c.key===saved.collection}))?saved.collection:COLLECTIONS[0].key;buildChips();pickCollection(restoreKey,true);
 })();
 </script>
