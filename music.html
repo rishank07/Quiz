@@ -4,390 +4,109 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#070a13">
-<meta name="description" content="Play the ExamFusion Prep Retro Break YouTube playlist with simple custom controls.">
-<title>Retro Break Music | ExamFusion Prep</title>
+<meta name="description" content="Old Hindi film songs streamed from the Internet Archive — play, skip, shuffle, seek and search.">
+<title>Retro Radio | ExamFusion Prep</title>
 <link rel="icon" type="image/png" href="./favicon.png">
 <style>
-  :root{
-    --bg:#070a13;
-    --panel:#111827;
-    --panel-2:#0d1322;
-    --line:#1f2a44;
-    --text:#e8ecf6;
-    --muted:#94a3c4;
-    --accent:#f5b301;
-    --accent-2:#3ea6ff;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;background:var(--bg);color:var(--text);
-    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    padding:20px 14px 40px;
-  }
-  .wrap{max-width:640px;margin:0 auto}
-  .eyebrow{color:var(--accent);font-size:12px;letter-spacing:.12em;font-weight:700}
-  h1{font-size:26px;margin:8px 0 6px}
-  .sub{color:var(--muted);font-size:14px;line-height:1.6;margin:0 0 18px}
-
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
-
-  .stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}
-  .stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-  .stage .status{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    color:var(--muted);font-size:14px;text-align:center;padding:16px;background:#000;
-  }
-  .stage .status.hide{display:none}
-
-  .now{display:flex;gap:12px;align-items:center;margin-top:12px}
-  .art{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--panel-2);flex:0 0 auto}
-  .now .t{min-width:0}
-  .now .label{font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.08em}
-  .now .title{font-size:15px;font-weight:600;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .now .meta{font-size:12px;color:var(--muted);margin-top:2px}
-
-  .controls{display:flex;align-items:center;justify-content:center;gap:18px;margin:16px 0 10px}
-  button.ctl{
-    background:var(--panel-2);color:var(--text);border:1px solid var(--line);
-    width:48px;height:48px;border-radius:50%;font-size:18px;cursor:pointer;
-  }
-  button.ctl.big{width:62px;height:62px;font-size:24px;background:var(--accent);color:#111;border-color:var(--accent)}
-  button.ctl:disabled{opacity:.4;cursor:not-allowed}
-  button.ctl:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
-
-  .seekrow{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
-  input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
-  .volrow{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:13px;color:var(--muted)}
-
-  a.link{display:inline-block;margin-top:14px;color:var(--accent-2);text-decoration:none;font-size:14px}
-  .note{font-size:12px;color:var(--muted);line-height:1.6}
-  .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:18px}
+:root{color-scheme:dark;--bg:#070a13;--panel:#111827;--panel2:#0d1322;--line:#1f2a44;--text:#e8ecf6;--muted:#94a3c4;--accent:#f5b301;--blue:#3ea6ff;--bad:#ff8a8a}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#15223a 0,#070a13 50%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}body{padding:20px max(14px,env(safe-area-inset-right)) max(42px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}.wrap{max-width:680px;margin:0 auto}.hero{text-align:center;padding:22px 8px 17px}.eyebrow{display:inline-flex;color:var(--accent);border:1px solid rgba(245,179,1,.27);background:rgba(245,179,1,.07);border-radius:999px;padding:6px 10px;font-size:11px;letter-spacing:.13em;font-weight:800}h1{font-size:clamp(28px,7vw,42px);margin:9px 0 6px}.sub{color:var(--muted);font-size:14px;line-height:1.6;margin:0 auto;max-width:580px}.card{background:linear-gradient(155deg,rgba(17,24,39,.97),rgba(9,14,25,.97));border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:14px;box-shadow:0 16px 42px rgba(0,0,0,.25)}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.chip{background:var(--panel2);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:12.5px;cursor:pointer}.chip[aria-pressed="true"]{background:var(--accent);color:#111;border-color:var(--accent);font-weight:750}.now{padding:2px 3px 6px}.now .label{font-size:10.5px;color:var(--accent);font-weight:800;letter-spacing:.1em}.now .title{font-size:clamp(17px,4.8vw,22px);font-weight:750;margin-top:5px;line-height:1.35}.now .meta{font-size:12.5px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.controls{display:flex;align-items:center;justify-content:center;gap:12px;margin:18px 0 13px;flex-wrap:nowrap}.ctl{background:var(--panel2);color:var(--text);border:1px solid var(--line);width:48px;height:48px;border-radius:50%;font-size:18px;cursor:pointer;display:grid;place-items:center}.ctl.big{width:64px;height:64px;font-size:25px;background:var(--accent);color:#111;border-color:var(--accent);box-shadow:0 8px 24px rgba(245,179,1,.18)}.ctl[aria-pressed="true"]{background:var(--blue);color:#04121f;border-color:var(--blue)}.ctl:disabled{opacity:.38;cursor:not-allowed}.ctl:focus-visible,.chip:focus-visible,#search:focus-visible{outline:2px solid var(--blue);outline-offset:2px}.seekrow{display:grid;grid-template-columns:42px minmax(0,1fr) 42px;align-items:center;gap:8px;font-size:11.5px;color:var(--muted)}input[type=range]{width:100%;accent-color:var(--accent);min-width:0}.volrow{display:flex;align-items:center;gap:10px;margin-top:13px;font-size:13px;color:var(--muted)}.status{font-size:12.5px;color:var(--muted);margin-top:13px;min-height:1.35em;text-align:center}.status.err{color:var(--bad)}.listhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}.listhead strong{font-size:14px}.listhead span{font-size:12px;color:var(--muted)}#search{width:100%;margin-bottom:10px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;color:var(--text);font:inherit;font-size:13.5px}.list{max-height:350px;overflow:auto;-webkit-overflow-scrolling:touch}.row{display:flex;gap:10px;align-items:baseline;padding:9px 7px;border-radius:9px;cursor:pointer;border:0;background:none;color:var(--text);width:100%;text-align:left;font:inherit}.row:hover{background:var(--panel2)}.row[aria-current="true"]{background:var(--panel2);color:var(--accent)}.row .n{font-size:11px;color:var(--muted);min-width:29px;flex:0 0 auto}.row .nm{font-size:13.5px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.row[aria-current="true"] .n{color:var(--accent)}.note{font-size:11.5px;color:var(--muted);line-height:1.6}.note a{color:var(--blue)}.foot{text-align:center;color:var(--muted);font-size:11px;margin-top:18px}@media(max-width:390px){.controls{gap:8px}.ctl{width:43px;height:43px}.ctl.big{width:58px;height:58px}.card{padding:12px}.chip{padding:7px 10px;font-size:11.5px}}
 </style>
 <script defer src="/home-nav.js?v=20260907"></script>
 <script defer src="/back-parent-map.js?v=20260906hier1"></script>
 <script defer src="/back-nav.js?v=20260906hier1"></script>
 </head>
 <body>
-<div class="wrap">
-  <div class="eyebrow">BREAK MODE</div>
-  <h1>🎵 Retro Break</h1>
-  <p class="sub">Old Bollywood, one tap away. Play, pause, skip and seek without hunting through the full playlist.</p>
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">BREAK MODE</div>
+    <h1>📻 Retro Radio</h1>
+    <p class="sub">Purane filmi gaane, seedha Internet Archive se. Search, shuffle, repeat aur seek — bina YouTube embed player ke.</p>
+  </section>
 
-  <div class="card">
-    <div class="stage">
-      <div id="player"></div>
-      <div class="status" id="status">Tap play to start the playlist</div>
-    </div>
-
+  <section class="card" aria-label="Retro Radio player">
+    <div class="chips" id="chips"></div>
     <div class="now">
-      <img class="art" id="art" alt="" src="https://examfusionprep.com/pwa-icons/icon-512.png">
-      <div class="t">
-        <div class="label">NOW PLAYING</div>
-        <div class="title" id="trackTitle">Retro Break Playlist</div>
-        <div class="meta" id="trackMeta">YouTube</div>
-      </div>
+      <div class="label">NOW PLAYING</div>
+      <div class="title" id="title">Loading songs…</div>
+      <div class="meta" id="meta">Internet Archive</div>
     </div>
 
     <div class="controls">
-      <button class="ctl" id="prev" disabled aria-label="Previous track">⏮</button>
-      <button class="ctl big" id="play" aria-label="Play">▶</button>
-      <button class="ctl" id="next" disabled aria-label="Next track">⏭</button>
+      <button class="ctl" id="shuffle" aria-pressed="true" aria-label="Shuffle" title="Shuffle">🔀</button>
+      <button class="ctl" id="prev" disabled aria-label="Previous" title="Previous">⏮</button>
+      <button class="ctl big" id="play" disabled aria-label="Play" title="Play">▶</button>
+      <button class="ctl" id="next" disabled aria-label="Next" title="Next">⏭</button>
+      <button class="ctl" id="repeat" aria-pressed="false" aria-label="Repeat one" title="Repeat one">🔁</button>
     </div>
 
     <div class="seekrow">
       <span id="cur">0:00</span>
-      <input type="range" id="seek" value="0" min="0" max="100" step="0.1" disabled aria-label="Seek">
+      <input type="range" id="seek" min="0" max="100" value="0" step="0.1" disabled aria-label="Seek">
       <span id="dur">0:00</span>
     </div>
+    <div class="volrow"><span>🔊</span><input type="range" id="vol" min="0" max="100" value="85" aria-label="Volume"></div>
+    <div class="status" id="status">Fetching track list…</div>
+  </section>
 
-    <div class="volrow">
-      <span>🔊</span>
-      <input type="range" id="vol" min="0" max="100" value="80" aria-label="Volume">
-    </div>
+  <section class="card">
+    <div class="listhead"><strong>Tracks</strong><span id="count">—</span></div>
+    <input type="search" id="search" placeholder="Search songs…" aria-label="Search songs">
+    <div class="list" id="list"></div>
+  </section>
 
-    <a class="link" href="https://youtube.com/playlist?list=PLaETHuV8PB7sXxM_MtgCx3Nhj-y6CswT2" target="_blank" rel="noopener">Open full playlist on YouTube ↗</a>
-  </div>
-
-  <div class="card note">
-    <strong>Playlist source:</strong> YouTube. Songs remain hosted by YouTube and their respective rights holders. Tracks that block website embedding are skipped automatically.
-  </div>
-
+  <section class="card note">Audio is streamed directly from <a href="https://archive.org" target="_blank" rel="noopener noreferrer">archive.org</a>. Files stay hosted there and belong to their respective rights holders. Nothing is copied to ExamFusion Prep.</section>
   <div class="foot">ExamFusion Prep · Optional break feature · No autoplay on first open</div>
-</div>
+</main>
+<audio id="audio" preload="metadata"></audio>
 
 <script>
-(function () {
-  var PLAYLIST_ID = "PLaETHuV8PB7sXxM_MtgCx3Nhj-y6CswT2";
-  var SAVE_KEY = "efp_retro_break_v5";
-  var saved = {};
-  try { saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}") || {}; } catch (err) { saved = {}; }
-  var savedIndex = Math.max(0, parseInt(saved.index, 10) || 0);
-  var savedPosition = Math.max(0, parseFloat(saved.position) || 0);
+(function(){
+'use strict';
+var COLLECTIONS=[
+ {key:'90s',label:'90s Romantic',items:['heartOfABrokenSoul']},
+ {key:'sanu',label:'Kumar Sanu',items:['KumerSunu','KMRSNU']},
+ {key:'kishore',label:'Kishore Kumar',items:['Kskmr']},
+ {key:'rafi',label:'Mohd. Rafi',items:['ChanaJorGaramMohammedRafiKishoreKumarNitinMukeshLataMangeshkarKranti1981','MohammadRafiHitSongs']},
+ {key:'golden',label:'Golden Hits',items:['goldenvoicesfromindia_20200205']}
+];
+var SAVE_KEY='efp_retro_radio_v4',AUDIO_RE=/\.(mp3|ogg|m4a|flac)$/i;
+var tracks=[],pos=-1,shuffleOn=true,repeatOne=false,failStreak=0,loaded={},activeKey=null,filter='',pendingResume=0;
+var audio=document.getElementById('audio'),title=document.getElementById('title'),meta=document.getElementById('meta'),play=document.getElementById('play'),prev=document.getElementById('prev'),next=document.getElementById('next'),shuf=document.getElementById('shuffle'),rep=document.getElementById('repeat'),seek=document.getElementById('seek'),cur=document.getElementById('cur'),dur=document.getElementById('dur'),vol=document.getElementById('vol'),stat=document.getElementById('status'),list=document.getElementById('list'),count=document.getElementById('count'),chips=document.getElementById('chips'),search=document.getElementById('search');
+var saved={};try{saved=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}')||{}}catch(e){}
+if(Number.isFinite(+saved.volume))vol.value=String(Math.max(0,Math.min(100,+saved.volume)));audio.volume=(+vol.value||0)/100;
+if(typeof saved.shuffle==='boolean')shuffleOn=saved.shuffle;if(typeof saved.repeat==='boolean')repeatOne=saved.repeat;
+shuf.setAttribute('aria-pressed',shuffleOn?'true':'false');rep.setAttribute('aria-pressed',repeatOne?'true':'false');
 
-  var player = null, ready = false, timer = null, seeking = false, skipCount = 0;
-  var wantToPlay = false, skipTimer = null;
+function fmt(s){if(!isFinite(s)||s<0)return'0:00';s=Math.floor(s);var m=Math.floor(s/60),r=s%60;return m+':'+(r<10?'0':'')+r}
+function say(msg,bad){stat.textContent=msg;stat.className=bad?'status err':'status'}
+var JUNK=[/\(\s*\d+\s*kbps\s*\)/gi,/\(\s*youtube\s*2?\s*mp3\s*converter\s*\)/gi,/(www\.)?(mp3mad|songspk|songs\.pk|songsdl|raag\.me|pagalworld|djmaza|mp3skull)(\.com|\.me|\.in)?/gi,/\b(full\s+)?(video\s+)?song(s)?\b/gi,/\bfull\s+hd\b|\b720p\b|\b1080p\b|\bhd\b/gi,/\bjhankar\s+beats\b/gi,/\bfilmigaane\b/gi,/[@#]\s*\S+\.com/gi];
+function prettyName(f,item){var n=f.title||f.name||'';n=n.replace(/^.*\//,'').replace(/\.[a-z0-9]+$/i,'').replace(/_+/g,' ');JUNK.forEach(function(re){n=n.replace(re,' ')});return n.replace(/[|\-–—]+\s*$/,'').replace(/^\s*[|\-–—]+/,'').replace(/\s*[|]\s*/g,' – ').replace(/\(\s*\)/g,'').replace(/\s{2,}/g,' ').trim()||item}
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify({collection:activeKey,index:pos,position:audio.currentTime||0,volume:+vol.value||0,shuffle:shuffleOn,repeat:repeatOne,ts:Date.now()}))}catch(e){}}
+function mediaMeta(t){if(!('mediaSession'in navigator)||typeof MediaMetadata==='undefined'||!t)return;try{navigator.mediaSession.metadata=new MediaMetadata({title:t.title,artist:t.album||'Internet Archive',album:'ExamFusion Prep · Retro Radio',artwork:[{src:location.origin+'/pwa-icons/icon-192.png',sizes:'192x192',type:'image/png'},{src:location.origin+'/pwa-icons/icon-512.png',sizes:'512x512',type:'image/png'}]})}catch(e){}}
 
-  var elStatus = document.getElementById("status");
-  var elPlay   = document.getElementById("play");
-  var elPrev   = document.getElementById("prev");
-  var elNext   = document.getElementById("next");
-  var elSeek   = document.getElementById("seek");
-  var elCur    = document.getElementById("cur");
-  var elDur    = document.getElementById("dur");
-  var elVol    = document.getElementById("vol");
-  var elTitle  = document.getElementById("trackTitle");
-  var elMeta   = document.getElementById("trackMeta");
-  var elArt    = document.getElementById("art");
+function loadItem(id){if(loaded[id])return Promise.resolve(loaded[id]);return fetch('https://archive.org/metadata/'+encodeURIComponent(id)).then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(function(data){var out=[],seen={};(data.files||[]).forEach(function(f){if(!f.name||!AUDIO_RE.test(f.name))return;var base=f.name.replace(/\.[a-z0-9]+$/i,'');if(seen[base])return;seen[base]=1;out.push({title:prettyName(f,id),album:(data.metadata&&data.metadata.title)||id,url:'https://archive.org/download/'+encodeURIComponent(id)+'/'+f.name.split('/').map(encodeURIComponent).join('/')})});loaded[id]=out;return out}).catch(function(){loaded[id]=[];return[]})}
+function buildChips(){chips.innerHTML='';COLLECTIONS.forEach(function(c){var b=document.createElement('button');b.className='chip';b.type='button';b.textContent=c.label;b.setAttribute('aria-pressed',c.key===activeKey?'true':'false');b.onclick=function(){pickCollection(c.key,false)};chips.appendChild(b)})}
+function pickCollection(key,restoring){var c=COLLECTIONS.find(function(x){return x.key===key});if(!c)return;activeKey=key;buildChips();say('Loading '+c.label+'…');audio.pause();audio.removeAttribute('src');audio.load();tracks=[];pos=-1;count.textContent='—';list.innerHTML='';play.disabled=prev.disabled=next.disabled=seek.disabled=true;Promise.all(c.items.map(loadItem)).then(function(groups){groups.forEach(function(g){tracks=tracks.concat(g)});if(!tracks.length){say('No playable files in '+c.label+'. Pick another mood.',true);title.textContent='Nothing here';meta.textContent='Internet Archive';return}if(!restoring){for(var i=tracks.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=tracks[i];tracks[i]=tracks[j];tracks[j]=t}}renderList();count.textContent=tracks.length+' songs';play.disabled=prev.disabled=next.disabled=seek.disabled=false;var idx=restoring?Math.max(0,Math.min(tracks.length-1,+saved.index||0)):0;pendingResume=restoring?Math.max(0,+saved.position||0):0;select(idx,false,pendingResume);say(pendingResume>2?'Ready — resume available · tap play':'Ready — tap play');save()})}
+function renderList(){list.innerHTML='';var q=filter.toLowerCase(),shown=0;tracks.forEach(function(t,i){if(q&&t.title.toLowerCase().indexOf(q)===-1)return;if(shown>=300)return;var b=document.createElement('button');b.className='row';b.type='button';b.dataset.i=i;b.innerHTML='<span class="n"></span><span class="nm"></span>';b.querySelector('.n').textContent=i+1;b.querySelector('.nm').textContent=t.title;b.onclick=function(){pendingResume=0;select(+this.dataset.i,true,0)};list.appendChild(b);shown++});if(!shown){var d=document.createElement('div');d.className='note';d.style.padding='10px 6px';d.textContent='No songs match that search.';list.appendChild(d)}markCurrent()}
+function markCurrent(){list.querySelectorAll('.row').forEach(function(r){var on=+r.dataset.i===pos;r.setAttribute('aria-current',on?'true':'false');if(on)r.scrollIntoView({block:'nearest'})})}
+function select(i,autoplay,resumeAt){if(i<0||i>=tracks.length)return;pos=i;var t=tracks[i];title.textContent=t.title;meta.textContent=t.album;pendingResume=Math.max(0,+resumeAt||0);audio.src=t.url;audio.load();markCurrent();mediaMeta(t);save();if(autoplay)audio.play().catch(function(e){say('Playback blocked by the browser — tap play again. ('+e.name+')',true)})}
+function step(delta){if(!tracks.length)return;var i;if(shuffleOn){i=Math.floor(Math.random()*tracks.length);if(tracks.length>1&&i===pos)i=(i+1)%tracks.length}else{i=(pos+delta+tracks.length)%tracks.length}pendingResume=0;select(i,true,0)}
 
-  if (Number.isFinite(parseFloat(saved.volume))) {
-    elVol.value = String(Math.max(0, Math.min(100, parseFloat(saved.volume))));
-  }
-
-  function saveState() {
-    if (!ready || !player) return;
-    try {
-      var idx = player.getPlaylistIndex();
-      var pos = player.getCurrentTime();
-      localStorage.setItem(SAVE_KEY, JSON.stringify({
-        index: idx >= 0 ? idx : savedIndex,
-        position: pos >= 0 ? pos : 0,
-        volume: parseInt(elVol.value, 10) || 0,
-        ts: Date.now()
-      }));
-    } catch (err) {}
-  }
-
-  function fmt(s) {
-    s = Math.max(0, Math.floor(s || 0));
-    var m = Math.floor(s / 60), r = s % 60;
-    return m + ":" + (r < 10 ? "0" : "") + r;
-  }
-
-  var isWeb = /^https?:$/.test(window.location.protocol);
-  if (!isWeb) {
-    elStatus.textContent = "This page must be opened from a web address (https://…). YouTube blocks playback when the file is opened directly from storage.";
-  }
-
-  // Define the global callback BEFORE loading the API script.
-  window.onYouTubeIframeAPIReady = function () {
-    var vars = {
-      listType: "playlist",
-      list: PLAYLIST_ID,
-      controls: 0,
-      modestbranding: 1,
-      rel: 0,
-      playsinline: 1,
-      enablejsapi: 1
-    };
-    if (isWeb) vars.origin = window.location.origin;
-
-    player = new YT.Player("player", {
-      host: "https://www.youtube.com",
-      playerVars: vars,
-      events: {
-        onReady: onReady,
-        onStateChange: onState,
-        onError: onError
-      }
-    });
-  };
-
-  // Load the IFrame API only after the callback exists.
-  var tag = document.createElement("script");
-  tag.src = "https://www.youtube.com/iframe_api";
-  tag.onerror = function () {
-    elStatus.textContent = "YouTube player could not load. Check your connection or any blocker/extension.";
-  };
-  document.head.appendChild(tag);
-
-  function onReady() {
-    ready = true;
-    elPrev.disabled = false;
-    elNext.disabled = false;
-    elSeek.disabled = false;
-    player.setVolume(parseInt(elVol.value, 10));
-    try {
-      player.cuePlaylist({
-        listType: "playlist", list: PLAYLIST_ID,
-        index: savedIndex, startSeconds: savedPosition
-      });
-    } catch (err) {}
-    updateTrack();
-    elStatus.textContent = savedPosition > 2 ? "Ready — resume available · tap play" : "Ready — tap play";
-  }
-
-  function onState(e) {
-    if (e.data === YT.PlayerState.PLAYING) {
-      wantToPlay = true;
-      elStatus.classList.add("hide");
-      elPlay.textContent = "⏸";
-      elPlay.setAttribute("aria-label", "Pause");
-      skipCount = 0;
-      if (savedPosition > 0) {
-        var resumeAt = savedPosition;
-        savedPosition = 0;
-        setTimeout(function () { try { player.seekTo(resumeAt, true); } catch (err) {} }, 180);
-      }
-      startTimer();
-      updateTrack();
-      return;
-    }
-
-    elPlay.textContent = "▶";
-    elPlay.setAttribute("aria-label", "Play");
-
-    if (e.data === YT.PlayerState.PAUSED) {
-      stopTimer();
-      saveState();
-    } else if (e.data === YT.PlayerState.ENDED) {
-      stopTimer();
-    } else if (e.data === YT.PlayerState.CUED) {
-      updateTrack();
-      if (wantToPlay) {
-        elStatus.classList.remove("hide");
-        elStatus.textContent = "Starting next playable song…";
-        setTimeout(function () {
-          if (!wantToPlay) return;
-          try { player.playVideo(); } catch (err) {}
-        }, 140);
-      }
-    } else if (e.data === YT.PlayerState.BUFFERING) {
-      elStatus.classList.remove("hide");
-      elStatus.textContent = "Buffering…";
-      updateTrack();
-    }
-  }
-
-  // Keep the user's Play intent while skipping blocked/unavailable tracks.
-  function onError(e) {
-    stopTimer();
-    skipCount++;
-    savedPosition = 0;
-
-    var list = [], index = -1;
-    try {
-      list = player.getPlaylist() || [];
-      index = player.getPlaylistIndex();
-    } catch (err) {}
-
-    var maxAttempts = list.length || 30;
-    if (skipCount >= maxAttempts) {
-      wantToPlay = false;
-      elStatus.classList.remove("hide");
-      elStatus.textContent = "No playable embedded song was found in this playlist. Open the playlist on YouTube instead.";
-      return;
-    }
-
-    elStatus.classList.remove("hide");
-    elStatus.textContent = "This track blocks website playback — finding the next playable song…";
-
-    if (skipTimer) clearTimeout(skipTimer);
-    skipTimer = setTimeout(function () {
-      if (!ready || !player) return;
-      try {
-        if (list.length && index >= 0 && typeof player.playVideoAt === "function" && wantToPlay) {
-          player.playVideoAt((index + 1) % list.length);
-        } else {
-          player.nextVideo();
-          if (wantToPlay) {
-            setTimeout(function () {
-              if (!wantToPlay) return;
-              try { player.playVideo(); } catch (err) {}
-            }, 180);
-          }
-        }
-      } catch (err) {
-        elStatus.textContent = "Could not move to the next track. Tap Next once.";
-      }
-    }, 350);
-  }
-
-  function updateTrack() {
-    if (!ready) return;
-    var d = {};
-    try { d = player.getVideoData() || {}; } catch (err) {}
-    if (d.title) elTitle.textContent = d.title;
-    if (d.video_id) elArt.src = "https://i.ytimg.com/vi/" + d.video_id + "/hqdefault.jpg";
-
-    var list = [], i = 0;
-    try { list = player.getPlaylist() || []; i = player.getPlaylistIndex(); } catch (err) {}
-    var author = (d.author || "YouTube").trim();
-    elMeta.textContent = list.length ? author + " · Track " + (i + 1) + " of " + list.length : author;
-  }
-
-  function startTimer() {
-    stopTimer();
-    timer = setInterval(function () {
-      if (!ready || seeking) return;
-      var cur = 0, dur = 0;
-      try { cur = player.getCurrentTime(); dur = player.getDuration(); } catch (err) {}
-      if (dur > 0) {
-        elSeek.max = dur;
-        elSeek.value = cur;
-        elDur.textContent = fmt(dur);
-      }
-      elCur.textContent = fmt(cur);
-      saveState();
-    }, 700);
-  }
-  function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
-
-  elPlay.addEventListener("click", function () {
-    if (!ready) { elStatus.textContent = "Player still loading…"; return; }
-    var s = player.getPlayerState();
-    if (s === YT.PlayerState.PLAYING) {
-      wantToPlay = false;
-      player.pauseVideo();
-    } else {
-      wantToPlay = true;
-      skipCount = 0;
-      elStatus.classList.remove("hide");
-      elStatus.textContent = "Starting…";
-      player.playVideo();
-    }
-  });
-
-  elPrev.addEventListener("click", function () {
-    if (!ready) return;
-    savedPosition = 0;
-    var shouldPlay = wantToPlay || player.getPlayerState() === YT.PlayerState.PLAYING;
-    try { player.previousVideo(); } catch (err) {}
-    if (shouldPlay) {
-      wantToPlay = true;
-      setTimeout(function () { try { player.playVideo(); } catch (err) {} }, 160);
-    }
-  });
-
-  elNext.addEventListener("click", function () {
-    if (!ready) return;
-    savedPosition = 0;
-    var shouldPlay = wantToPlay || player.getPlayerState() === YT.PlayerState.PLAYING;
-    try { player.nextVideo(); } catch (err) {}
-    if (shouldPlay) {
-      wantToPlay = true;
-      setTimeout(function () { try { player.playVideo(); } catch (err) {} }, 160);
-    }
-  });
-
-  elSeek.addEventListener("input", function () {
-    seeking = true;
-    elCur.textContent = fmt(parseFloat(elSeek.value));
-  });
-  elSeek.addEventListener("change", function () {
-    if (ready) player.seekTo(parseFloat(elSeek.value), true);
-    seeking = false;
-  });
-
-  window.addEventListener("pagehide", saveState);
-  document.addEventListener("visibilitychange", function () { if (document.hidden) saveState(); });
-
-  elVol.addEventListener("input", function () {
-    if (!ready) return;
-    var v = parseInt(elVol.value, 10);
-    player.setVolume(v);
-    if (v === 0) player.mute(); else player.unMute();
-    saveState();
-  });
+search.addEventListener('input',function(){filter=this.value.trim();renderList()});
+audio.addEventListener('loadedmetadata',function(){seek.max=audio.duration||0;dur.textContent=fmt(audio.duration);if(pendingResume>0&&isFinite(audio.duration)){var p=Math.min(pendingResume,Math.max(0,audio.duration-1));pendingResume=0;try{audio.currentTime=p}catch(e){}cur.textContent=fmt(p);seek.value=p}});
+audio.addEventListener('timeupdate',function(){if(seek.dataset.dragging==='1')return;seek.value=audio.currentTime;cur.textContent=fmt(audio.currentTime);if(Math.floor(audio.currentTime)%5===0)save()});
+audio.addEventListener('playing',function(){failStreak=0;play.textContent='⏸';play.setAttribute('aria-label','Pause');say('Playing')});
+audio.addEventListener('pause',function(){play.textContent='▶';play.setAttribute('aria-label','Play');save()});
+audio.addEventListener('waiting',function(){say('Buffering…')});
+audio.addEventListener('ended',function(){if(repeatOne){audio.currentTime=0;audio.play();return}step(1)});
+audio.addEventListener('error',function(){failStreak++;if(failStreak>8){say('Too many tracks failed to load. Pick another collection or reload.',true);return}say('That file would not load — skipping…',true);setTimeout(function(){step(1)},500)});
+play.onclick=function(){if(play.disabled)return;if(audio.paused)audio.play().catch(function(e){say('Could not start playback: '+e.name,true)});else audio.pause()};
+prev.onclick=function(){if(audio.currentTime>3){audio.currentTime=0;return}step(-1)};next.onclick=function(){step(1)};
+shuf.onclick=function(){shuffleOn=!shuffleOn;shuf.setAttribute('aria-pressed',shuffleOn?'true':'false');save()};rep.onclick=function(){repeatOne=!repeatOne;rep.setAttribute('aria-pressed',repeatOne?'true':'false');save()};
+seek.addEventListener('input',function(){seek.dataset.dragging='1';cur.textContent=fmt(+seek.value)});seek.addEventListener('change',function(){if(isFinite(+seek.value))audio.currentTime=+seek.value;seek.dataset.dragging='0';save()});vol.addEventListener('input',function(){audio.volume=(+vol.value||0)/100;save()});
+window.addEventListener('pagehide',save);document.addEventListener('visibilitychange',function(){if(document.hidden)save()});
+if('mediaSession'in navigator){try{navigator.mediaSession.setActionHandler('play',function(){audio.play()});navigator.mediaSession.setActionHandler('pause',function(){audio.pause()});navigator.mediaSession.setActionHandler('previoustrack',function(){step(-1)});navigator.mediaSession.setActionHandler('nexttrack',function(){step(1)});navigator.mediaSession.setActionHandler('seekto',function(d){if(d.seekTime!=null&&isFinite(d.seekTime))audio.currentTime=d.seekTime})}catch(e){}}
+var restoreKey=(saved.collection&&COLLECTIONS.some(function(c){return c.key===saved.collection}))?saved.collection:COLLECTIONS[0].key;buildChips();pickCollection(restoreKey,true);
 })();
 </script>
 </body>
