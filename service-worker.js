@@ -1,5 +1,5 @@
-// v24 Crux mobile Back specificity fix 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v24-crux-mobile-back";
+// v25 hierarchy-aware Back navigation 20260906
+const CACHE_VERSION = "efp-pwa-2026-09-06-v25-hierarchy-back";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -15,6 +15,8 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/home-nav.js",
+  "/back-parent-map.js",
+  "/back-nav.js",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
