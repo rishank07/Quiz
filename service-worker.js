@@ -1,5 +1,5 @@
-// v28 light-mode Home/Back contrast 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v28-light-nav-contrast";
+// v29 Original Practice multilayer Back navigation 20260906
+const CACHE_VERSION = "efp-pwa-2026-09-06-v29-original-practice-back";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
