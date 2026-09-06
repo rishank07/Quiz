@@ -15,6 +15,12 @@ NEW_STEP = "function step(delta){if(!tracks.length)return;var androidApp=/ExamFu
 ANCHOR_CSS = ".list{max-height:350px;overflow:auto;-webkit-overflow-scrolling:touch}"
 ANCHOR_CSS_NEW = ".list{max-height:350px;overflow:auto;-webkit-overflow-scrolling:touch;overflow-anchor:none;overscroll-behavior:contain}"
 
+RANGE_CSS_OLD = "input[type=range]{width:100%;accent-color:var(--accent);min-width:0}"
+RANGE_CSS_NEW = "input[type=range]{width:100%;accent-color:var(--accent);min-width:0;touch-action:none;overscroll-behavior:contain}"
+
+OLD_RANGE_HANDLERS = "seek.addEventListener('input',function(){seek.dataset.dragging='1';cur.textContent=fmt(+seek.value)});seek.addEventListener('change',function(){if(isFinite(+seek.value))audio.currentTime=+seek.value;seek.dataset.dragging='0';save()});vol.addEventListener('input',function(){audio.volume=(+vol.value||0)/100;save()});"
+NEW_RANGE_HANDLERS = "function lockAndroidRangeViewport(el){var androidApp=/ExamFusionPrepAndroid\\//i.test(navigator.userAgent||'');if(!androidApp)return;var active=false,keepY=0,timer=0;function y(){return window.scrollY||window.pageYOffset||0}function restore(){if(!active)return;window.scrollTo(0,keepY)}function begin(){active=true;keepY=y();clearTimeout(timer)}function end(){if(!active)return;window.scrollTo(0,keepY);timer=setTimeout(function(){window.scrollTo(0,keepY);active=false},80)}el.addEventListener('pointerdown',begin,{passive:true});el.addEventListener('touchstart',begin,{passive:true});el.addEventListener('input',function(){if(active){requestAnimationFrame(restore);setTimeout(restore,20)}},{passive:true});el.addEventListener('pointerup',end,{passive:true});el.addEventListener('pointercancel',end,{passive:true});el.addEventListener('touchend',end,{passive:true});el.addEventListener('touchcancel',end,{passive:true})}lockAndroidRangeViewport(seek);lockAndroidRangeViewport(vol);seek.addEventListener('input',function(){seek.dataset.dragging='1';cur.textContent=fmt(+seek.value)});seek.addEventListener('change',function(){if(isFinite(+seek.value))audio.currentTime=+seek.value;seek.dataset.dragging='0';save()});vol.addEventListener('input',function(){audio.volume=(+vol.value||0)/100;save()});"
+
 
 def patch_music(text: str) -> str:
     if OLD_SCROLL in text:
@@ -31,13 +37,23 @@ def patch_music(text: str) -> str:
         text = text.replace(ANCHOR_CSS, ANCHOR_CSS_NEW, 1)
     elif ANCHOR_CSS_NEW not in text:
         raise SystemExit("Retro Radio list CSS marker not found")
+
+    if RANGE_CSS_OLD in text:
+        text = text.replace(RANGE_CSS_OLD, RANGE_CSS_NEW, 1)
+    elif RANGE_CSS_NEW not in text:
+        raise SystemExit("Retro Radio range CSS marker not found")
+
+    if OLD_RANGE_HANDLERS in text:
+        text = text.replace(OLD_RANGE_HANDLERS, NEW_RANGE_HANDLERS, 1)
+    elif NEW_RANGE_HANDLERS not in text:
+        raise SystemExit("Retro Radio range handlers marker not found")
     return text
 
 
 def patch_sw(text: str) -> str:
     text, n = re.subn(
         r'const CACHE_VERSION = "efp-pwa-[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-07-v58-radio-android-scroll-lock";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v59-radio-android-range-lock";',
         text,
         count=1,
     )
