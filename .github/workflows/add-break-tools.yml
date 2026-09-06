@@ -10,7 +10,6 @@ on:
       - "tools/add-break-tools.py"
       - "tools/fix-radio-browser-flow.py"
       - "tools/fix-radio-browser-launch.py"
-      - "tools/fix-radio-android-external.py"
       - "tools/install-stockfish-assets.py"
       - "tools/fix-chess-open-source.py"
       - "tools/fix-chess-layout.py"
@@ -43,7 +42,6 @@ jobs:
           python -m py_compile tools/add-break-tools.py
           python -m py_compile tools/fix-radio-browser-flow.py
           python -m py_compile tools/fix-radio-browser-launch.py
-          python -m py_compile tools/fix-radio-android-external.py
           python -m py_compile tools/install-stockfish-assets.py
           python -m py_compile tools/fix-chess-open-source.py
           python -m py_compile tools/fix-chess-layout.py
@@ -54,10 +52,9 @@ jobs:
           python tools/fix-radio-browser-flow.py
           python tools/fix-chess-open-source.py
           python tools/fix-chess-layout.py
+          # Final Radio routing: browsers keep the two-tab flow; Android APK/TWA
+          # stays normal in-app with no browser handoff/background-study mode.
           python tools/fix-radio-browser-launch.py
-          # Final Android handoff: use a real intent anchor to Chrome, never
-          # fallback-navigate the TWA itself to music.html.
-          python tools/fix-radio-android-external.py
       - name: Commit generated integration changes
         shell: bash
         run: |
