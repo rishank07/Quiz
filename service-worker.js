@@ -1,5 +1,5 @@
-// v17 dedicated Crux & Tricks My Pages cache 20260905
-const CACHE_VERSION = "efp-pwa-2026-09-05-v17-crux-my-pages";
+// v18 navigation layout refresh 20260906
+const CACHE_VERSION = "efp-pwa-2026-09-06-v18-navigation-layout";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -14,6 +14,7 @@ const APP_SHELL = [
   "/pwa-icons/icon-512.png",
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
+  "/home-nav.js",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
