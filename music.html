@@ -213,6 +213,27 @@ function efpBrowserKeepPlayingAndBack(){
 }
 
 var EFP_STUDY_WINDOW='efpExamFusionStudy';
+var EFP_ANDROID_SESSION_KEY='efp_android_app_session';
+
+function efpDetectAndroidAppSession(){
+  var isAndroid=/Android/i.test(navigator.userAgent||'');
+  if(!isAndroid)return false;
+  var standalone=false;try{standalone=window.matchMedia('(display-mode: standalone)').matches}catch(e){}
+  var twa=/^android-app:\/\//i.test(document.referrer||'');
+  var launchMarker=false;
+  try{
+    var source=new URLSearchParams(location.search).get('source')||'';
+    launchMarker=source==='windows-pwa'||source==='android-app'||source==='pwa';
+  }catch(e){}
+  var remembered=false;try{remembered=sessionStorage.getItem(EFP_ANDROID_SESSION_KEY)==='1'}catch(e){}
+  var installed=standalone||twa||launchMarker||remembered;
+  if(installed){try{sessionStorage.setItem(EFP_ANDROID_SESSION_KEY,'1')}catch(e){}}
+  return installed;
+}
+
+/* Re-evaluate here because some TWA launches do not expose standalone/referrer
+   on every navigation. The launch marker is remembered only in this app tab. */
+efpInstalledAndroid=efpDetectAndroidAppSession();
 
 function efpFindStudyTab(goHome){
   var study=null;
