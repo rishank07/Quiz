@@ -1,5 +1,5 @@
-// v19 Original Practice nav cleanup 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v19-original-practice-nav";
+// v20 Crux viewer theme-toggle cleanup 20260906
+const CACHE_VERSION = "efp-pwa-2026-09-06-v20-crux-viewer-theme";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
