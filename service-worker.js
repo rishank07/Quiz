@@ -1,5 +1,5 @@
 // v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-07-v41-radio-browser-back";
+const CACHE_VERSION = "efp-pwa-2026-09-07-v42-radio-separate-tab";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -10,6 +10,7 @@ const APP_SHELL = [
   "/support.html",
   "/backup-restore.html",
   "/music.html",
+  "/radio-launch.js",
   "/chess.html",
   "/favicon.png",
   "/pwa-icons/icon-192.png",
