@@ -209,7 +209,7 @@
       "}" +
       "#" + BUTTON_ID + " .efp-home-label{display:none!important;}" +
       "#" + BUTTON_ID + " .efp-home-icon{font-size:22px!important;}" +
-      "html #" + BACK_BUTTON_ID + "{" +
+      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + ",html #" + BACK_BUTTON_ID + "{" +
       "top:auto!important;right:auto!important;" +
       "bottom:max(12px,env(safe-area-inset-bottom))!important;left:max(12px,env(safe-area-inset-left))!important;" +
       "width:50px!important;min-width:50px!important;height:50px!important;min-height:50px!important;padding:0!important;" +
@@ -218,9 +218,9 @@
       "border-color:rgba(246,217,138,.50)!important;" +
       "box-shadow:none!important;-webkit-backdrop-filter:blur(9px)!important;backdrop-filter:blur(9px)!important;" +
       "}" +
-      "html #" + BACK_BUTTON_ID + " .efp-back-label{display:none!important;}" +
-      "html #" + BACK_BUTTON_ID + " .efp-back-icon{font-size:22px!important;}" +
-      "html #" + BACK_BUTTON_ID + ":hover,html #" + BACK_BUTTON_ID + ":active{" +
+      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + " .efp-back-label,html #" + BACK_BUTTON_ID + " .efp-back-label{display:none!important;}" +
+      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + " .efp-back-icon,html #" + BACK_BUTTON_ID + " .efp-back-icon{font-size:22px!important;}" +
+      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + ":hover,html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + ":active,html #" + BACK_BUTTON_ID + ":hover,html #" + BACK_BUTTON_ID + ":active{" +
       "background:rgba(8,14,24,.16)!important;box-shadow:none!important;transform:none!important;" +
       "}" +
       "}" +
