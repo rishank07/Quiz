@@ -23,6 +23,10 @@
     return normalizePath(window.location.pathname).toLowerCase() === "/crux-tricks/viewer.html";
   }
 
+  function isOriginalPracticePage() {
+    return normalizePath(window.location.pathname).toLowerCase().indexOf("/original practice/") === 0;
+  }
+
   function consumeBackEvent(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -82,6 +86,61 @@
       consumeBackEvent(event);
       return clickCruxControl("backMaterial");
     }
+
+    return false;
+  }
+
+  function clearOriginalPracticeSearch(event) {
+    var inputs = [];
+    var landing = document.getElementById("chapterSearch");
+    var inApp = document.querySelector(".efp-op-search input[type='search']");
+    if (landing) inputs.push(landing);
+    if (inApp && inApp !== landing) inputs.push(inApp);
+
+    for (var i = 0; i < inputs.length; i++) {
+      if (!String(inputs[i].value || "").trim()) continue;
+      consumeBackEvent(event);
+      inputs[i].value = "";
+      inputs[i].dispatchEvent(new Event("input", { bubbles: true }));
+      return true;
+    }
+    return false;
+  }
+
+  /* Original Practice Complete pages are also SPAs. Their real navigation is:
+     Complete Practice Home -> Subject Chapters -> Chapter Quiz. Keep the global
+     Back button inside that hierarchy first; only the Complete Practice Home is
+     allowed to fall through to browser/logical parent navigation. */
+  function useOriginalPracticeInternalBack(event) {
+    if (!isOriginalPracticePage()) return false;
+
+    if (clearOriginalPracticeSearch(event)) return true;
+
+    try {
+      if (typeof state === "undefined" || !state || !state.screen) return false;
+
+      if (state.screen === "quiz") {
+        if (state.subject && typeof goToChapters === "function") {
+          consumeBackEvent(event);
+          goToChapters(state.subject);
+          try { window.scrollTo(0, 0); } catch (_) {}
+          return true;
+        }
+        if (typeof goHome === "function") {
+          consumeBackEvent(event);
+          goHome();
+          try { window.scrollTo(0, 0); } catch (_) {}
+          return true;
+        }
+      }
+
+      if (state.screen === "chapters" && typeof goHome === "function") {
+        consumeBackEvent(event);
+        goHome();
+        try { window.scrollTo(0, 0); } catch (_) {}
+        return true;
+      }
+    } catch (_) {}
 
     return false;
   }
@@ -231,6 +290,7 @@
 
   /* Capture before black-mode.js/home-nav.js own button listener.
      - Crux SPA: climb its visible in-page hierarchy first.
+     - Original Practice SPA: Quiz -> Chapters -> Complete Practice Home first.
      - Normal internal navigation: preserve real browser history.
      - Direct/external open: climb the generated logical hierarchy.
      - Once a logical climb starts: keep climbing parent-by-parent. */
@@ -241,6 +301,10 @@
     if (!target) return;
 
     if (useCruxInternalBack(event)) {
+      return;
+    }
+
+    if (useOriginalPracticeInternalBack(event)) {
       return;
     }
 
