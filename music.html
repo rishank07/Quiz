@@ -213,44 +213,6 @@ function efpBrowserKeepPlayingAndBack(){
 }
 
 var EFP_STUDY_WINDOW='efpExamFusionStudy';
-var EFP_ANDROID_APP_PACKAGE='com.examfusionprep.app';
-var EFP_FROM_ANDROID_APP=false;
-try{EFP_FROM_ANDROID_APP=new URLSearchParams(location.search).get('from')==='android-app'}catch(e){}
-
-function efpAndroidReturnTarget(goHome){
-  var fallback=location.origin+'/';
-  if(goHome)return fallback;
-  try{
-    var raw=new URLSearchParams(location.search).get('return');
-    if(!raw)return fallback;
-    var target=new URL(raw,location.origin);
-    if(target.origin!==location.origin)return fallback;
-    if(/\/music\.html$/i.test(target.pathname))return fallback;
-    return target.href;
-  }catch(e){return fallback}
-}
-
-function efpAndroidAppIntent(targetUrl){
-  try{
-    var target=new URL(targetUrl,location.origin);
-    var scheme=(target.protocol||'https:').replace(':','');
-    var data=target.host+target.pathname+target.search+target.hash;
-    return 'intent://'+data+'#Intent;scheme='+scheme+';action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package='+EFP_ANDROID_APP_PACKAGE+';end';
-  }catch(e){return ''}
-}
-
-function efpOpenAndroidApp(goHome){
-  var target=efpAndroidReturnTarget(!!goHome);
-  var intent=efpAndroidAppIntent(target);
-  try{if(typeof gtag==='function')gtag('event','radio_return_to_android_app',{destination:goHome?'home':'study'})}catch(e){}
-  if(!intent){say('ExamFusion app return link ready nahi ho paya.',true);return}
-  var link=document.createElement('a');
-  link.href=intent;
-  link.style.display='none';
-  document.body.appendChild(link);
-  link.click();
-  setTimeout(function(){try{link.remove()}catch(e){}},1200);
-}
 
 function efpFindStudyTab(goHome){
   var study=null;
@@ -270,7 +232,9 @@ function efpBrowserReturnToStudy(){
   if(study){
     say('Radio yahin chalta rahega — Study tab par wapas chale gaye.');
     try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_return_to_study'})}catch(e){}
-  }else say('Study tab open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
+  }else{
+    say('Study tab open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
+  }
 }
 
 function efpBrowserOpenStudyHome(){
@@ -278,11 +242,13 @@ function efpBrowserOpenStudyHome(){
   if(study){
     say('ExamFusion Home study tab me khul gaya — Radio yahin chalta rahega.');
     try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_home_in_study_tab'})}catch(e){}
-  }else say('ExamFusion Home open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
+  }else{
+    say('ExamFusion Home open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
+  }
 }
 
 function efpWireBrowserHomeTargets(){
-  if(efpInstalledAndroid||EFP_FROM_ANDROID_APP)return;
+  if(efpInstalledAndroid)return;
   var homes=document.querySelectorAll('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
   for(var i=0;i<homes.length;i++){
     try{
@@ -293,10 +259,13 @@ function efpWireBrowserHomeTargets(){
   }
 }
 
-if(EFP_FROM_ANDROID_APP){
-  if(efpKeepStudy)efpKeepStudy.textContent='↩ Return to Study';
-  if(efpKeepStudyHint)efpKeepStudyHint.textContent='ExamFusion app par wapas jao; Radio browser me open rahega aur music chalta rahega.';
-}else if(!efpInstalledAndroid){
+if(efpInstalledAndroid){
+  /* Android APK/TWA stays intentionally simple: normal in-app Radio page,
+     normal Home/Back navigation, no background-study shell or browser intents. */
+  var efpContinuityBox=document.getElementById('efpContinuity');
+  if(efpContinuityBox){efpContinuityBox.hidden=true;efpContinuityBox.style.display='none'}
+  if(efpStudyShell)efpStudyShell.hidden=true;
+}else{
   if(efpKeepStudy)efpKeepStudy.textContent='↩ Return to Study';
   if(efpKeepStudyHint)efpKeepStudyHint.textContent='Radio tab open rakho; Return to Study existing ExamFusion tab ko focus karega. Home bhi usi tab ko landing page par le jayega.';
   efpWireBrowserHomeTargets();
@@ -307,35 +276,29 @@ if(EFP_FROM_ANDROID_APP){
 }
 
 if(efpKeepStudy)efpKeepStudy.onclick=function(){
+  if(efpInstalledAndroid)return;
   save();
-  if(EFP_FROM_ANDROID_APP){efpOpenAndroidApp(false);return}
-  if(efpInstalledAndroid){
-    if(audio.paused){say('Pehle koi gaana Play karo, phir Keep Playing & Study dabao.',true);return}
-    efpOpenStudyShell();return;
-  }
   efpBrowserReturnToStudy();
 };
 
 document.addEventListener('click',function(e){
+  if(efpInstalledAndroid)return;
   if(!e.target||!e.target.closest)return;
   var home=e.target.closest('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
   if(!home)return;
-  if(EFP_FROM_ANDROID_APP){
-    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();save();efpOpenAndroidApp(true);return;
-  }
-  if(efpInstalledAndroid)return;
-  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();save();efpBrowserOpenStudyHome();
+  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+  save();
+  efpBrowserOpenStudyHome();
 },true);
 
 document.addEventListener('click',function(e){
+  if(efpInstalledAndroid)return;
   if(!e.target||!e.target.closest)return;
   var b=e.target.closest('#efp-app-back-button');
   if(!b)return;
-  if(EFP_FROM_ANDROID_APP){
-    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();save();efpOpenAndroidApp(false);return;
-  }
-  if(efpInstalledAndroid)return;
-  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();save();efpBrowserReturnToStudy();
+  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+  save();
+  efpBrowserReturnToStudy();
 },true);
 
 if(efpStudyClose)efpStudyClose.onclick=efpCloseStudyShell;
