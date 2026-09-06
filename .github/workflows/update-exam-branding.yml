@@ -9,7 +9,9 @@ on:
       - "llms.txt"
       - "README.md"
       - "tools/update-exam-branding.py"
+      - "tools/fix-crux-restore-flash.py"
       - "Crux-Tricks/crux-search-route.js"
+      - "Crux-Tricks/crux-restore-flash.js"
       - ".github/workflows/update-exam-branding.yml"
   workflow_dispatch:
 
@@ -36,11 +38,16 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Validate branding updater
-        run: python -m py_compile tools/update-exam-branding.py
+      - name: Validate maintenance scripts
+        run: |
+          python -m py_compile tools/update-exam-branding.py
+          python -m py_compile tools/fix-crux-restore-flash.py
 
       - name: Standardize ExamFusion exam identity
         run: python tools/update-exam-branding.py --repo .
+
+      - name: Suppress Crux restore flash
+        run: python tools/fix-crux-restore-flash.py
 
       - name: Cache-bust Crux browser-history bridge
         run: |
@@ -57,14 +64,14 @@ jobs:
               print("Crux history asset version already current.")
           PY
 
-      - name: Commit branding updates if needed
+      - name: Commit maintenance updates if needed
         run: |
           if git diff --quiet; then
-            echo "Exam branding and Crux asset version are already current."
+            echo "Exam branding and Crux navigation assets are already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- ':(glob)**/*.html' manifest.webmanifest llms.txt README.md
-          git commit -m "chore: standardize branding and Crux history asset"
+          git commit -m "chore: standardize branding and Crux navigation UI"
           git push
