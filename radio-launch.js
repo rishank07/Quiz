@@ -1,7 +1,7 @@
 /* ExamFusion Prep — Retro Radio launcher.
    Normal browsers keep Study + Radio in two reusable tabs.
-   Installed Android app deliberately sends Radio to Chrome so audio can keep
-   playing while ExamFusion stays available as the study app. */
+   Installed Android app turns the user's actual Radio tap into a Chrome VIEW
+   intent, so the TWA itself never navigates to music.html. */
 (function () {
   "use strict";
 
@@ -22,9 +22,7 @@
     try {
       var url = new URL(anchor.href, window.location.href);
       return url.origin === window.location.origin && /\/music\.html$/i.test(url.pathname);
-    } catch (_) {
-      return false;
-    }
+    } catch (_) { return false; }
   }
 
   function bindCurrentTabAsStudy() {
@@ -32,9 +30,7 @@
       window.name = STUDY_WINDOW;
       try { sessionStorage.setItem("efp_radio_study_bound", "1"); } catch (_) {}
       return window.name === STUDY_WINDOW;
-    } catch (_) {
-      return false;
-    }
+    } catch (_) { return false; }
   }
 
   function safeCurrentStudyUrl() {
@@ -64,22 +60,23 @@
       ";end";
   }
 
-  function fireChromeIntent(intentUrl) {
-    var link = document.createElement("a");
-    link.href = intentUrl;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.style.display = "none";
-    document.body.appendChild(link);
-    link.click();
-    window.setTimeout(function () {
-      try { link.remove(); } catch (_) {}
-    }, 1200);
-  }
-
-  function openRadioOutsideAndroidApp(anchor) {
+  function prepareAndroidChromeClick(anchor) {
+    var oldHref = anchor.getAttribute("href");
+    var oldTarget = anchor.getAttribute("target");
+    var oldRel = anchor.getAttribute("rel");
     var radioUrl = buildAndroidRadioUrl(anchor.href);
-    fireChromeIntent(buildChromeIntent(radioUrl));
+
+    anchor.setAttribute("href", buildChromeIntent(radioUrl));
+    anchor.setAttribute("target", "_blank");
+    anchor.setAttribute("rel", "noopener noreferrer");
+
+    window.setTimeout(function () {
+      try {
+        if (oldHref == null) anchor.removeAttribute("href"); else anchor.setAttribute("href", oldHref);
+        if (oldTarget == null) anchor.removeAttribute("target"); else anchor.setAttribute("target", oldTarget);
+        if (oldRel == null) anchor.removeAttribute("rel"); else anchor.setAttribute("rel", oldRel);
+      } catch (_) {}
+    }, 250);
   }
 
   document.addEventListener("click", function (event) {
@@ -88,36 +85,34 @@
     var anchor = event.target && event.target.closest ? event.target.closest("a[href]") : null;
     if (!isRadioLink(anchor)) return;
 
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-
     if (isInstalledAndroid()) {
-      openRadioOutsideAndroidApp(anchor);
+      /* Keep the user's click as the actual navigation gesture. We stop site
+         onclick handlers, but deliberately DO NOT prevent the anchor default. */
+      prepareAndroidChromeClick(anchor);
+      event.stopPropagation();
+      event.stopImmediatePropagation();
       return;
     }
 
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
     bindCurrentTabAsStudy();
 
     var player = null;
     try { player = window.open("", RADIO_WINDOW); } catch (_) {}
-
     if (player) {
       var alreadyRadio = false;
       try {
         alreadyRadio = player.location.origin === window.location.origin &&
           /\/music\.html$/i.test(player.location.pathname);
       } catch (_) {}
-
       if (!alreadyRadio) {
         try { player.location.href = anchor.href; } catch (_) {}
       }
-
       try { player.focus(); } catch (_) {}
       return;
     }
-
-    /* Popup blocking fallback for normal desktop/mobile browsers. */
     window.location.href = anchor.href;
   }, true);
 })();

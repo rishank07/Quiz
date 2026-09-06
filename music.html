@@ -252,44 +252,10 @@ function efpOpenAndroidApp(goHome){
   setTimeout(function(){try{link.remove()}catch(e){}},1200);
 }
 
-var EFP_STUDY_WINDOW='efpExamFusionStudy';
-var EFP_ANDROID_APP_PACKAGE='com.examfusionprep.app';
-var EFP_FROM_ANDROID_APP=false;
-try{EFP_FROM_ANDROID_APP=new URLSearchParams(location.search).get('from')==='android-app'}catch(e){}
-
-function efpAndroidReturnTarget(goHome){
-  var fallback=location.origin+'/';
-  if(goHome)return fallback;
-  try{
-    var raw=new URLSearchParams(location.search).get('return');
-    if(!raw)return fallback;
-    var target=new URL(raw,location.origin);
-    if(target.origin!==location.origin)return fallback;
-    if(/\/music\.html$/i.test(target.pathname))return fallback;
-    return target.href;
-  }catch(e){return fallback}
-}
-
-function efpAndroidAppIntent(targetUrl){
-  try{
-    var target=new URL(targetUrl,location.origin);
-    var scheme=(target.protocol||'https:').replace(':','');
-    var data=target.host+target.pathname+target.search+target.hash;
-    return 'intent://'+data+'#Intent;scheme='+scheme+';package='+EFP_ANDROID_APP_PACKAGE+';S.browser_fallback_url='+encodeURIComponent(target.href)+';end';
-  }catch(e){return targetUrl}
-}
-
-function efpOpenAndroidApp(goHome){
-  var target=efpAndroidReturnTarget(!!goHome);
-  try{if(typeof gtag==='function')gtag('event','radio_return_to_android_app',{destination:goHome?'home':'study'})}catch(e){}
-  try{window.location.href=efpAndroidAppIntent(target)}catch(e){window.location.href=target}
-}
-
 function efpFindStudyTab(goHome){
   var study=null;
   try{study=window.open('',EFP_STUDY_WINDOW)}catch(e){}
   if(!study)return null;
-
   try{
     var href='';
     try{href=String(study.location.href||'')}catch(e){}
@@ -304,9 +270,7 @@ function efpBrowserReturnToStudy(){
   if(study){
     say('Radio yahin chalta rahega — Study tab par wapas chale gaye.');
     try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_return_to_study'})}catch(e){}
-  }else{
-    say('Study tab open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
-  }
+  }else say('Study tab open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
 }
 
 function efpBrowserOpenStudyHome(){
@@ -314,9 +278,7 @@ function efpBrowserOpenStudyHome(){
   if(study){
     say('ExamFusion Home study tab me khul gaya — Radio yahin chalta rahega.');
     try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_home_in_study_tab'})}catch(e){}
-  }else{
-    say('ExamFusion Home open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
-  }
+  }else say('ExamFusion Home open nahi ho paya. Browser me pop-ups/new tabs allow karke dobara try karo.',true);
 }
 
 function efpWireBrowserHomeTargets(){
@@ -346,34 +308,23 @@ if(EFP_FROM_ANDROID_APP){
 
 if(efpKeepStudy)efpKeepStudy.onclick=function(){
   save();
-  if(EFP_FROM_ANDROID_APP){
-    efpOpenAndroidApp(false);
-    return;
-  }
+  if(EFP_FROM_ANDROID_APP){efpOpenAndroidApp(false);return}
   if(efpInstalledAndroid){
     if(audio.paused){say('Pehle koi gaana Play karo, phir Keep Playing & Study dabao.',true);return}
-    efpOpenStudyShell();
-    return;
+    efpOpenStudyShell();return;
   }
   efpBrowserReturnToStudy();
 };
 
-/* Home in an Android-launched Radio tab returns to the installed app. Normal
-   desktop/mobile browsers keep their existing reusable Study-tab behavior. */
 document.addEventListener('click',function(e){
   if(!e.target||!e.target.closest)return;
   var home=e.target.closest('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
   if(!home)return;
   if(EFP_FROM_ANDROID_APP){
-    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
-    save();
-    efpOpenAndroidApp(true);
-    return;
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();save();efpOpenAndroidApp(true);return;
   }
   if(efpInstalledAndroid)return;
-  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
-  save();
-  efpBrowserOpenStudyHome();
+  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();save();efpBrowserOpenStudyHome();
 },true);
 
 document.addEventListener('click',function(e){
@@ -381,15 +332,10 @@ document.addEventListener('click',function(e){
   var b=e.target.closest('#efp-app-back-button');
   if(!b)return;
   if(EFP_FROM_ANDROID_APP){
-    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
-    save();
-    efpOpenAndroidApp(false);
-    return;
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();save();efpOpenAndroidApp(false);return;
   }
   if(efpInstalledAndroid)return;
-  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
-  save();
-  efpBrowserReturnToStudy();
+  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();save();efpBrowserReturnToStudy();
 },true);
 
 if(efpStudyClose)efpStudyClose.onclick=efpCloseStudyShell;
