@@ -53,7 +53,7 @@ jobs:
       - name: Commit generated integration changes
         shell: bash
         run: |
-          if git diff --quiet; then
+          if [ -z "$(git status --porcelain)" ]; then
             echo "No generated changes."
             exit 0
           fi
