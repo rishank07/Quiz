@@ -220,28 +220,7 @@ function efpBrowserKeepPlayingAndBack(){
 
   try{
     w.document.open();
-    w.document.write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Retro Radio | ExamFusion Prep</title><style>*{box-sizing:border-box}body{margin:0;padding:20px;background:#070a13;color:#e8ecf6;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}.box{max-width:390px;margin:auto}.brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px}.brand img{width:42px;height:42px;border-radius:11px}.brand b{font-size:17px}.card{background:#111827;border:1px solid #1f2a44;border-radius:18px;padding:17px;box-shadow:0 18px 42px #0006}.ey{color:#f5b301;font-size:10px;font-weight:800;letter-spacing:.12em}.title{font-size:18px;font-weight:800;line-height:1.35;margin-top:6px}.meta{font-size:12px;color:#94a3c4;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.controls{display:flex;justify-content:center;gap:11px;margin:22px 0 16px}.controls button{width:52px;height:52px;border-radius:50%;border:1px solid #29364f;background:#0d1322;color:#e8ecf6;font-size:20px;cursor:pointer}.controls .play{width:64px;height:64px;background:#f5b301;color:#111;border-color:#f5b301}.seek{display:grid;grid-template-columns:40px 1fr 40px;gap:7px;align-items:center;color:#94a3c4;font-size:11px}.seek input,.vol input{width:100%;accent-color:#f5b301}.vol{display:flex;align-items:center;gap:9px;margin-top:14px}.status{text-align:center;color:#94a3c4;font-size:11px;margin-top:13px;min-height:16px}.hint{font-size:11.5px;color:#94a3c4;line-height:1.55;text-align:center;margin:16px 4px 0}.links{display:flex;gap:8px;margin-top:15px}.links a{flex:1;text-align:center;text-decoration:none;color:#e8ecf6;border:1px solid #29364f;background:#0d1322;border-radius:10px;padding:10px 8px;font-size:11.5px}</style></head><body><div class="box"><div class="brand"><img src="/logo.png" alt=""><b>ExamFusion Prep</b></div><div class="card"><div class="ey">RETRO RADIO · KEEP PLAYING</div><div class="title" id="kaTitle">Loading…</div><div class="meta" id="kaMeta">ExamFusion Prep</div><div class="controls"><button id="kaPrev">⏮</button><button class="play" id="kaPlay">⏸</button><button id="kaNext">⏭</button></div><div class="seek"><span id="kaCur">0:00</span><input id="kaSeek" type="range" min="0" max="100" value="0" step="0.1"><span id="kaDur">0:00</span></div><div class="vol"><span>🔊</span><input id="kaVol" type="range" min="0" max="100" value="85"></div><div class="status" id="kaStatus">Starting…</div><div class="hint">Is Radio window/tab ko open rakho. ExamFusion ke dusre tab me quiz, Crux aur Current Affairs use kar sakte ho.</div><div class="links"><a href="/" target="_blank">Open ExamFusion</a><a href="/music.html">Full Radio</a></div></div></div><audio id="kaAudio" preload="metadata"></audio><script id="efp-playlist-dropdown-sync">
-(function(){
-  var box=document.getElementById('playlistDropdown');
-  var label=document.getElementById('playlistDropdownLabel');
-  var chips=document.getElementById('chips');
-  if(!box||!label||!chips)return;
-  function syncLabel(){
-    var selected=chips.querySelector('.chip[aria-pressed="true"]');
-    label.textContent=selected?(selected.textContent||'').trim():'Choose a Playlist';
-  }
-  chips.addEventListener('click',function(e){
-    var b=e.target&&e.target.closest?e.target.closest('.chip'):null;
-    if(!b)return;
-    setTimeout(function(){syncLabel();box.open=false},0);
-  });
-  try{
-    new MutationObserver(syncLabel).observe(chips,{subtree:true,childList:true,attributes:true,attributeFilter:['aria-pressed']});
-  }catch(e){}
-  syncLabel();
-})();
-</script>
-</body></html>');
+    w.document.write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Retro Radio | ExamFusion Prep</title><style>*{box-sizing:border-box}body{margin:0;padding:20px;background:#070a13;color:#e8ecf6;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}.box{max-width:390px;margin:auto}.brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px}.brand img{width:42px;height:42px;border-radius:11px}.brand b{font-size:17px}.card{background:#111827;border:1px solid #1f2a44;border-radius:18px;padding:17px;box-shadow:0 18px 42px #0006}.ey{color:#f5b301;font-size:10px;font-weight:800;letter-spacing:.12em}.title{font-size:18px;font-weight:800;line-height:1.35;margin-top:6px}.meta{font-size:12px;color:#94a3c4;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.controls{display:flex;justify-content:center;gap:11px;margin:22px 0 16px}.controls button{width:52px;height:52px;border-radius:50%;border:1px solid #29364f;background:#0d1322;color:#e8ecf6;font-size:20px;cursor:pointer}.controls .play{width:64px;height:64px;background:#f5b301;color:#111;border-color:#f5b301}.seek{display:grid;grid-template-columns:40px 1fr 40px;gap:7px;align-items:center;color:#94a3c4;font-size:11px}.seek input,.vol input{width:100%;accent-color:#f5b301}.vol{display:flex;align-items:center;gap:9px;margin-top:14px}.status{text-align:center;color:#94a3c4;font-size:11px;margin-top:13px;min-height:16px}.hint{font-size:11.5px;color:#94a3c4;line-height:1.55;text-align:center;margin:16px 4px 0}.links{display:flex;gap:8px;margin-top:15px}.links a{flex:1;text-align:center;text-decoration:none;color:#e8ecf6;border:1px solid #29364f;background:#0d1322;border-radius:10px;padding:10px 8px;font-size:11.5px}</style></head><body><div class="box"><div class="brand"><img src="/logo.png" alt=""><b>ExamFusion Prep</b></div><div class="card"><div class="ey">RETRO RADIO · KEEP PLAYING</div><div class="title" id="kaTitle">Loading…</div><div class="meta" id="kaMeta">ExamFusion Prep</div><div class="controls"><button id="kaPrev">⏮</button><button class="play" id="kaPlay">⏸</button><button id="kaNext">⏭</button></div><div class="seek"><span id="kaCur">0:00</span><input id="kaSeek" type="range" min="0" max="100" value="0" step="0.1"><span id="kaDur">0:00</span></div><div class="vol"><span>🔊</span><input id="kaVol" type="range" min="0" max="100" value="85"></div><div class="status" id="kaStatus">Starting…</div><div class="hint">Is Radio window/tab ko open rakho. ExamFusion ke dusre tab me quiz, Crux aur Current Affairs use kar sakte ho.</div><div class="links"><a href="/" target="_blank">Open ExamFusion</a><a href="/music.html">Full Radio</a></div></div></div><audio id="kaAudio" preload="metadata"></audio></body></html>');
     w.document.close();
 
     w.eval(`(function(){
@@ -373,6 +352,27 @@ if(efpStudyNext)efpStudyNext.onclick=function(){step(1);setTimeout(efpSyncStudyB
 audio.addEventListener('playing',efpSyncStudyBar);audio.addEventListener('pause',efpSyncStudyBar);audio.addEventListener('loadedmetadata',efpSyncStudyBar);
 
 var restoreKey=(saved.collection&&COLLECTIONS.some(function(c){return c.key===saved.collection}))?saved.collection:COLLECTIONS[0].key;buildChips();pickCollection(restoreKey,true);
+})();
+</script>
+<script id="efp-playlist-dropdown-sync">
+(function(){
+  var box=document.getElementById('playlistDropdown');
+  var label=document.getElementById('playlistDropdownLabel');
+  var chips=document.getElementById('chips');
+  if(!box||!label||!chips)return;
+  function syncLabel(){
+    var selected=chips.querySelector('.chip[aria-pressed="true"]');
+    label.textContent=selected?(selected.textContent||'').trim():'Choose a Playlist';
+  }
+  chips.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest?e.target.closest('.chip'):null;
+    if(!b)return;
+    setTimeout(function(){syncLabel();box.open=false},0);
+  });
+  try{
+    new MutationObserver(syncLabel).observe(chips,{subtree:true,childList:true,attributes:true,attributeFilter:['aria-pressed']});
+  }catch(e){}
+  syncLabel();
 })();
 </script>
 </body>
