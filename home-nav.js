@@ -4,6 +4,7 @@
 
   var BUTTON_ID = "efp-home-button";
   var STYLE_ID = "efp-home-button-style";
+  var BACK_BUTTON_ID = "efp-app-back-button";
 
   function normalizedPath(pathname) {
     var path = pathname || "/";
@@ -60,9 +61,9 @@
     style.id = STYLE_ID;
     style.textContent =
       "#" + BUTTON_ID + "{" +
-      "position:fixed!important;right:max(14px,env(safe-area-inset-right))!important;" +
-      "bottom:max(14px,env(safe-area-inset-bottom))!important;z-index:2147483647!important;" +
-      "height:48px;min-height:48px;min-width:104px;padding:0 18px;box-sizing:border-box;" +
+      "position:fixed!important;top:max(12px,env(safe-area-inset-top))!important;" +
+      "right:max(12px,env(safe-area-inset-right))!important;bottom:auto!important;left:auto!important;" +
+      "z-index:2147483647!important;height:46px;min-height:46px;min-width:104px;padding:0 18px;box-sizing:border-box;" +
       "display:flex;align-items:center;justify-content:center;gap:8px;" +
       "border:1px solid rgba(246,217,138,.68);border-radius:999px;text-decoration:none!important;" +
       "background:linear-gradient(135deg,rgba(12,18,32,.98),rgba(27,38,59,.97));" +
@@ -76,7 +77,43 @@
       "#" + BUTTON_ID + ":hover{background:linear-gradient(135deg,#1d2a43,#293a59);border-color:#ffe7a6;box-shadow:0 12px 32px rgba(0,0,0,.46);transform:translateY(-1px);}" +
       "#" + BUTTON_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px;}" +
       "#" + BUTTON_ID + ":active{transform:translateY(0);}" +
-      "@media(max-width:1199px){#" + BUTTON_ID + "{width:50px!important;min-width:50px!important;height:50px!important;min-height:50px!important;padding:0!important;border-radius:50%!important;gap:0!important;}#" + BUTTON_ID + " .efp-home-label{display:none!important;}#" + BUTTON_ID + " .efp-home-icon{font-size:22px!important;}}" +
+
+      /* Desktop: force both global controls into the upper corners, including
+         legacy pages that black-mode.js previously classified as bottom-docked. */
+      "@media(min-width:1200px){" +
+      "html #" + BACK_BUTTON_ID + ",html.efp-back-bottom #" + BACK_BUTTON_ID + "{" +
+      "top:max(12px,env(safe-area-inset-top))!important;" +
+      "left:max(12px,env(safe-area-inset-left))!important;right:auto!important;bottom:auto!important;" +
+      "}" +
+      "}" +
+
+      /* Mobile/tablet: keep the familiar lower-corner controls but make them
+         transparent so they do not cover quiz/content underneath. */
+      "@media(max-width:1199px){" +
+      "#" + BUTTON_ID + "{" +
+      "top:auto!important;left:auto!important;" +
+      "right:max(12px,env(safe-area-inset-right))!important;" +
+      "bottom:max(12px,env(safe-area-inset-bottom))!important;" +
+      "width:50px!important;min-width:50px!important;height:50px!important;min-height:50px!important;" +
+      "padding:0!important;border-radius:50%!important;gap:0!important;" +
+      "background:rgba(8,14,24,.10)!important;" +
+      "border-color:rgba(246,217,138,.50)!important;" +
+      "box-shadow:none!important;-webkit-backdrop-filter:blur(9px)!important;backdrop-filter:blur(9px)!important;" +
+      "}" +
+      "#" + BUTTON_ID + ":hover,#" + BUTTON_ID + ":active{" +
+      "background:rgba(8,14,24,.16)!important;box-shadow:none!important;transform:none!important;" +
+      "}" +
+      "#" + BUTTON_ID + " .efp-home-label{display:none!important;}" +
+      "#" + BUTTON_ID + " .efp-home-icon{font-size:22px!important;}" +
+      "html #" + BACK_BUTTON_ID + "{" +
+      "background:rgba(8,14,24,.10)!important;" +
+      "border-color:rgba(246,217,138,.50)!important;" +
+      "box-shadow:none!important;-webkit-backdrop-filter:blur(9px)!important;backdrop-filter:blur(9px)!important;" +
+      "}" +
+      "html #" + BACK_BUTTON_ID + ":hover,html #" + BACK_BUTTON_ID + ":active{" +
+      "background:rgba(8,14,24,.16)!important;box-shadow:none!important;transform:none!important;" +
+      "}" +
+      "}" +
       "@media(prefers-reduced-motion:reduce){#" + BUTTON_ID + "{transition:none!important;}}" +
       "@media(print){#" + BUTTON_ID + "{display:none!important;}}";
     document.head.appendChild(style);
@@ -87,10 +124,9 @@
 
     removeLegacyBackToTop();
     watchLegacyOriginalPracticeHome();
+    injectStyle();
 
     if (document.getElementById(BUTTON_ID)) return;
-
-    injectStyle();
 
     var link = document.createElement("a");
     link.id = BUTTON_ID;
