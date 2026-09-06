@@ -7,9 +7,40 @@ INDEX = ROOT / "index.html"
 MUSIC = ROOT / "music.html"
 SW = ROOT / "service-worker.js"
 
-LAUNCH_SCRIPT = '  <script defer src="./radio-launch.js?v=20260907v3"></script>\n'
+LAUNCH_SCRIPT = '  <script defer src="./radio-launch.js?v=20260907v4"></script>\n'
 
 BROWSER_TAB_FLOW = r'''var EFP_STUDY_WINDOW='efpExamFusionStudy';
+var EFP_ANDROID_APP_PACKAGE='com.examfusionprep.app';
+var EFP_FROM_ANDROID_APP=false;
+try{EFP_FROM_ANDROID_APP=new URLSearchParams(location.search).get('from')==='android-app'}catch(e){}
+
+function efpAndroidReturnTarget(goHome){
+  var fallback=location.origin+'/';
+  if(goHome)return fallback;
+  try{
+    var raw=new URLSearchParams(location.search).get('return');
+    if(!raw)return fallback;
+    var target=new URL(raw,location.origin);
+    if(target.origin!==location.origin)return fallback;
+    if(/\/music\.html$/i.test(target.pathname))return fallback;
+    return target.href;
+  }catch(e){return fallback}
+}
+
+function efpAndroidAppIntent(targetUrl){
+  try{
+    var target=new URL(targetUrl,location.origin);
+    var scheme=(target.protocol||'https:').replace(':','');
+    var data=target.host+target.pathname+target.search+target.hash;
+    return 'intent://'+data+'#Intent;scheme='+scheme+';package='+EFP_ANDROID_APP_PACKAGE+';S.browser_fallback_url='+encodeURIComponent(target.href)+';end';
+  }catch(e){return targetUrl}
+}
+
+function efpOpenAndroidApp(goHome){
+  var target=efpAndroidReturnTarget(!!goHome);
+  try{if(typeof gtag==='function')gtag('event','radio_return_to_android_app',{destination:goHome?'home':'study'})}catch(e){}
+  try{window.location.href=efpAndroidAppIntent(target)}catch(e){window.location.href=target}
+}
 
 function efpFindStudyTab(goHome){
   var study=null;
@@ -46,7 +77,7 @@ function efpBrowserOpenStudyHome(){
 }
 
 function efpWireBrowserHomeTargets(){
-  if(efpInstalledAndroid)return;
+  if(efpInstalledAndroid||EFP_FROM_ANDROID_APP)return;
   var homes=document.querySelectorAll('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
   for(var i=0;i<homes.length;i++){
     try{
@@ -57,7 +88,10 @@ function efpWireBrowserHomeTargets(){
   }
 }
 
-if(!efpInstalledAndroid){
+if(EFP_FROM_ANDROID_APP){
+  if(efpKeepStudy)efpKeepStudy.textContent='↩ Return to Study';
+  if(efpKeepStudyHint)efpKeepStudyHint.textContent='ExamFusion app par wapas jao; Radio browser me open rahega aur music chalta rahega.';
+}else if(!efpInstalledAndroid){
   if(efpKeepStudy)efpKeepStudy.textContent='↩ Return to Study';
   if(efpKeepStudyHint)efpKeepStudyHint.textContent='Radio tab open rakho; Return to Study existing ExamFusion tab ko focus karega. Home bhi usi tab ko landing page par le jayega.';
   efpWireBrowserHomeTargets();
@@ -69,6 +103,10 @@ if(!efpInstalledAndroid){
 
 if(efpKeepStudy)efpKeepStudy.onclick=function(){
   save();
+  if(EFP_FROM_ANDROID_APP){
+    efpOpenAndroidApp(false);
+    return;
+  }
   if(efpInstalledAndroid){
     if(audio.paused){say('Pehle koi gaana Play karo, phir Keep Playing & Study dabao.',true);return}
     efpOpenStudyShell();
@@ -77,21 +115,35 @@ if(efpKeepStudy)efpKeepStudy.onclick=function(){
   efpBrowserReturnToStudy();
 };
 
-/* Native target on Home is the primary path. This capture fallback keeps the
-   same behavior even if another site script rewrites the Home control later. */
+/* Home in an Android-launched Radio tab returns to the installed app. Normal
+   desktop/mobile browsers keep their existing reusable Study-tab behavior. */
 document.addEventListener('click',function(e){
-  if(efpInstalledAndroid||!e.target||!e.target.closest)return;
+  if(!e.target||!e.target.closest)return;
   var home=e.target.closest('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
   if(!home)return;
+  if(EFP_FROM_ANDROID_APP){
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+    save();
+    efpOpenAndroidApp(true);
+    return;
+  }
+  if(efpInstalledAndroid)return;
   e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
   save();
   efpBrowserOpenStudyHome();
 },true);
 
 document.addEventListener('click',function(e){
-  if(efpInstalledAndroid||!e.target||!e.target.closest)return;
+  if(!e.target||!e.target.closest)return;
   var b=e.target.closest('#efp-app-back-button');
   if(!b)return;
+  if(EFP_FROM_ANDROID_APP){
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+    save();
+    efpOpenAndroidApp(false);
+    return;
+  }
+  if(efpInstalledAndroid)return;
   e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
   save();
   efpBrowserReturnToStudy();
@@ -128,6 +180,16 @@ def patch_music(text: str) -> str:
     if n == 1:
         return text2
 
+    # Current Android-external-aware revision starts at EFP_STUDY_WINDOW and may
+    # include helper declarations before efpFindStudyTab().
+    pattern_android = re.compile(
+        r"var EFP_STUDY_WINDOW='efpExamFusionStudy';\n.*?\nif\(efpStudyClose\)",
+        re.S,
+    )
+    text2, n = pattern_android.subn(BROWSER_TAB_FLOW + "\nif(efpStudyClose)", text, count=1)
+    if n == 1:
+        return text2
+
     # Older revision started directly at efpBrowserReturnToStudy().
     pattern2 = re.compile(
         r"function efpBrowserReturnToStudy\(\)\{.*?\nif\(efpStudyClose\)",
@@ -153,7 +215,7 @@ def patch_music(text: str) -> str:
 def patch_sw(text: str) -> str:
     text, n = re.subn(
         r'const CACHE_VERSION = "efp-pwa-[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-07-v44-radio-study-bind";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v47-radio-android-external";',
         text,
         count=1,
     )
