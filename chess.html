@@ -96,7 +96,7 @@
       boardEl.innerHTML='';
       const lm=lastMove();
       const targetSet=new Set(legal.map(m=>m.to));
-      files().forEach((f,fi)=>ranks().forEach((r,ri)=>{
+      ranks().forEach((r,ri)=>files().forEach((f,fi)=>{
         const sq=f+r,p=game.get(sq),b=document.createElement('button');
         b.type='button';b.className='sq '+(((f.charCodeAt(0)-97+r)%2)?'dark':'light');b.dataset.square=sq;
         if(selected===sq)b.classList.add('selected');
