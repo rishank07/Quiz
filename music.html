@@ -212,36 +212,82 @@ function efpBrowserKeepPlayingAndBack(){
   }
 }
 
-function efpBrowserReturnToStudy(){
+function efpFindStudyTab(goHome){
   var study=null;
-  try{if(window.opener&&!window.opener.closed)study=window.opener}catch(e){}
-  if(study){
-    try{study.focus()}catch(e){}
-    say('Radio yahin chalta rahega — Study tab par wapas chale gaye.');
-    try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_return_to_opener'})}catch(e){}
-    return;
+  try{
+    if(window.opener&&!window.opener.closed&&window.opener.location.origin===window.location.origin)study=window.opener;
+  }catch(e){}
+
+  if(!study){
+    try{
+      if(goHome){
+        study=window.open('/','efpExamFusionStudy');
+      }else{
+        study=window.open('','efpExamFusionStudy');
+        if(study){
+          try{if(!study.location.href||study.location.href==='about:blank')study.location.href='/'}catch(e){}
+        }
+      }
+    }catch(e){}
   }
-  var w=null;try{w=window.open('/','efpExamFusionStudy')}catch(e){}
-  if(w){try{w.focus()}catch(e){}say('ExamFusion study tab khul gaya; Radio yahin chalta rahega.');}
-  else say('Study tab open nahi ho paya. Browser me new tabs allow karke dobara try karo.',true);
+
+  if(!study)return null;
+  try{
+    if(goHome)study.location.href='/';
+    study.focus();
+  }catch(e){}
+  return study;
+}
+
+function efpBrowserReturnToStudy(){
+  var study=efpFindStudyTab(false);
+  if(study){
+    say('Radio yahin chalta rahega — Study tab par wapas chale gaye.');
+    try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_return_to_study'})}catch(e){}
+  }else{
+    say('Study tab open nahi ho paya. Browser me new tabs allow karke dobara try karo.',true);
+  }
+}
+
+function efpBrowserOpenStudyHome(){
+  var study=efpFindStudyTab(true);
+  if(study){
+    say('ExamFusion Home study tab me khul gaya — Radio yahin chalta rahega.');
+    try{if(typeof gtag==='function')gtag('event','radio_keep_playing',{mode:'browser_home_in_study_tab'})}catch(e){}
+  }else{
+    say('ExamFusion Home open nahi ho paya. Browser me new tabs allow karke dobara try karo.',true);
+  }
 }
 
 if(!efpInstalledAndroid){
   if(efpKeepStudy)efpKeepStudy.textContent='↩ Return to Study';
-  if(efpKeepStudyHint)efpKeepStudyHint.textContent='Radio tab open rakho; Return to Study se original ExamFusion tab par wapas jaoge aur gaana chalta rahega.';
+  if(efpKeepStudyHint)efpKeepStudyHint.textContent='Radio tab open rakho; Return to Study se existing ExamFusion tab par wapas jaoge. Home bhi usi tab ko reuse karega.';
 }
 if(efpKeepStudy)efpKeepStudy.onclick=function(){
-  if(audio.paused){say('Pehle koi gaana Play karo, phir Return to Study dabao.',true);return}
   save();
-  if(efpInstalledAndroid){efpOpenStudyShell();return}
+  if(efpInstalledAndroid){
+    if(audio.paused){say('Pehle koi gaana Play karo, phir Keep Playing & Study dabao.',true);return}
+    efpOpenStudyShell();
+    return;
+  }
   efpBrowserReturnToStudy();
 };
 
 document.addEventListener('click',function(e){
-  if(efpInstalledAndroid||audio.paused||!e.target||!e.target.closest)return;
+  if(efpInstalledAndroid||!e.target||!e.target.closest)return;
+  var home=e.target.closest('#efp-home-button, .efp-brand[href="/"], .efp-brand[href="/index.html"]');
+  if(!home)return;
+  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+  save();
+  efpBrowserOpenStudyHome();
+},true);
+
+document.addEventListener('click',function(e){
+  if(efpInstalledAndroid||!e.target||!e.target.closest)return;
   var b=e.target.closest('#efp-app-back-button');
   if(!b)return;
   e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+  save();
   efpBrowserReturnToStudy();
 },true);
 
