@@ -5,6 +5,7 @@
   var BUTTON_ID = "efp-home-button";
   var STYLE_ID = "efp-home-button-style";
   var BACK_BUTTON_ID = "efp-app-back-button";
+  var CRUX_BACK_CLASS = "efp-crux-back-fallback";
 
   function normalizedPath(pathname) {
     var path = pathname || "/";
@@ -25,6 +26,16 @@
 
   function isOriginalPracticePage() {
     return normalizedPath(window.location.pathname).toLowerCase().indexOf("/original practice/") === 0;
+  }
+
+  function isCruxTricksPage() {
+    var path = normalizedPath(window.location.pathname).toLowerCase();
+    return path === "/crux-tricks" || path.indexOf("/crux-tricks/") === 0;
+  }
+
+  function isCruxTricksRoot() {
+    var path = normalizedPath(window.location.pathname).toLowerCase();
+    return path === "/crux-tricks" || path === "/crux-tricks/index.html";
   }
 
   function removeLegacyBackToTop() {
@@ -61,6 +72,73 @@
     window.__efpOriginalPracticeHomeCleanupObserver = observer;
   }
 
+  function removeLegacyCruxNavigation() {
+    if (!isCruxTricksPage()) return;
+
+    /* Crux landing page had its own ← Home control. The global Home button now
+       owns that job, so keep the header brand only. */
+    var homeLinks = document.querySelectorAll(
+      ".topbar > a.home-btn[href='../index.html'], .topbar > a.home-btn[href='/index.html'], .topbar > a.home-btn[href='/']"
+    );
+    for (var i = 0; i < homeLinks.length; i++) homeLinks[i].remove();
+
+    /* Viewer and My Pages had separate header Back buttons. Replace only those
+       top-level controls; hierarchy buttons inside the Crux SPA (Sources,
+       Subjects, Parts, etc.) deliberately remain untouched. */
+    var oldBackButtons = document.querySelectorAll(
+      ".reader-head > #backBtn, header.top > #backBtn"
+    );
+    for (var j = 0; j < oldBackButtons.length; j++) oldBackButtons[j].remove();
+  }
+
+  function watchLegacyCruxNavigation() {
+    if (!isCruxTricksPage() || !document.documentElement) return;
+    if (window.__efpCruxNavCleanupObserver) {
+      removeLegacyCruxNavigation();
+      return;
+    }
+    removeLegacyCruxNavigation();
+    var observer = new MutationObserver(function () {
+      removeLegacyCruxNavigation();
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+    window.__efpCruxNavCleanupObserver = observer;
+  }
+
+  function hasSameOriginReferrer() {
+    if (!document.referrer) return false;
+    try {
+      return new URL(document.referrer).origin === window.location.origin;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function navigateCruxBack() {
+    if (window.history.length > 1 && hasSameOriginReferrer()) {
+      window.history.back();
+      return;
+    }
+    window.location.assign(isCruxTricksRoot() ? "/" : "/Crux-Tricks/index.html");
+  }
+
+  function installCruxBackButton() {
+    if (!isCruxTricksPage() || !document.documentElement || !document.head) return;
+    if (document.getElementById(BACK_BUTTON_ID)) return;
+
+    document.documentElement.classList.add(CRUX_BACK_CLASS);
+    var button = document.createElement("button");
+    button.id = BACK_BUTTON_ID;
+    button.type = "button";
+    button.setAttribute("aria-label", "Go back to the previous page");
+    button.setAttribute("aria-keyshortcuts", "Alt+ArrowLeft");
+    button.setAttribute("title", "Back");
+    button.innerHTML = "<span class=\"efp-back-icon\" aria-hidden=\"true\">&#8592;</span>" +
+      "<span class=\"efp-back-label\">Back</span>";
+    button.addEventListener("click", navigateCruxBack);
+    document.documentElement.appendChild(button);
+  }
+
   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
     var style = document.createElement("style");
@@ -83,6 +161,26 @@
       "#" + BUTTON_ID + ":hover{background:linear-gradient(135deg,#1d2a43,#293a59);border-color:#ffe7a6;box-shadow:0 12px 32px rgba(0,0,0,.46);transform:translateY(-1px);}" +
       "#" + BUTTON_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px;}" +
       "#" + BUTTON_ID + ":active{transform:translateY(0);}" +
+
+      /* Crux pages pre-date black-mode.js, so home-nav supplies the same global
+         Back appearance there without importing the theme controller. */
+      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + "{" +
+      "position:fixed!important;top:max(12px,env(safe-area-inset-top))!important;" +
+      "left:max(12px,env(safe-area-inset-left))!important;right:auto!important;bottom:auto!important;" +
+      "z-index:2147483647!important;width:auto;min-width:96px;height:46px;min-height:46px;padding:0 17px;" +
+      "border:1px solid rgba(246,217,138,.62);border-radius:999px;" +
+      "background:linear-gradient(135deg,rgba(12,18,32,.98),rgba(27,38,59,.96));" +
+      "-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);" +
+      "color:#fff;font:700 15px/1.2 system-ui,-apple-system,'Segoe UI',sans-serif;" +
+      "box-shadow:0 10px 28px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.1);cursor:pointer;" +
+      "display:flex;align-items:center;justify-content:center;gap:8px;" +
+      "transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease;" +
+      "-webkit-tap-highlight-color:transparent;touch-action:manipulation;" +
+      "}" +
+      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + " .efp-back-icon{color:#f6d98a;font-size:19px;line-height:1;}" +
+      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + ":hover{background:linear-gradient(135deg,#1d2a43,#293a59);border-color:#ffe7a6;box-shadow:0 12px 32px rgba(0,0,0,.46);transform:translateY(-1px);}" +
+      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px;}" +
+      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + ":active{transform:translateY(0);}" +
 
       /* Desktop: force both global controls into the upper corners, including
          legacy pages that black-mode.js previously classified as bottom-docked. */
@@ -112,16 +210,22 @@
       "#" + BUTTON_ID + " .efp-home-label{display:none!important;}" +
       "#" + BUTTON_ID + " .efp-home-icon{font-size:22px!important;}" +
       "html #" + BACK_BUTTON_ID + "{" +
+      "top:auto!important;right:auto!important;" +
+      "bottom:max(12px,env(safe-area-inset-bottom))!important;left:max(12px,env(safe-area-inset-left))!important;" +
+      "width:50px!important;min-width:50px!important;height:50px!important;min-height:50px!important;padding:0!important;" +
+      "border-radius:50%!important;gap:0!important;" +
       "background:rgba(8,14,24,.10)!important;" +
       "border-color:rgba(246,217,138,.50)!important;" +
       "box-shadow:none!important;-webkit-backdrop-filter:blur(9px)!important;backdrop-filter:blur(9px)!important;" +
       "}" +
+      "html #" + BACK_BUTTON_ID + " .efp-back-label{display:none!important;}" +
+      "html #" + BACK_BUTTON_ID + " .efp-back-icon{font-size:22px!important;}" +
       "html #" + BACK_BUTTON_ID + ":hover,html #" + BACK_BUTTON_ID + ":active{" +
       "background:rgba(8,14,24,.16)!important;box-shadow:none!important;transform:none!important;" +
       "}" +
       "}" +
-      "@media(prefers-reduced-motion:reduce){#" + BUTTON_ID + "{transition:none!important;}}" +
-      "@media(print){#" + BUTTON_ID + "{display:none!important;}}";
+      "@media(prefers-reduced-motion:reduce){#" + BUTTON_ID + ",#" + BACK_BUTTON_ID + "{transition:none!important;}}" +
+      "@media(print){#" + BUTTON_ID + ",#" + BACK_BUTTON_ID + "{display:none!important;}}";
     document.head.appendChild(style);
   }
 
@@ -130,7 +234,9 @@
 
     removeLegacyBackToTop();
     watchLegacyOriginalPracticeHome();
+    watchLegacyCruxNavigation();
     injectStyle();
+    installCruxBackButton();
 
     if (document.getElementById(BUTTON_ID)) return;
 
