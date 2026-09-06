@@ -4,6 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 SW = ROOT / "service-worker.js"
+CHESS = ROOT / "chess.html"
 
 MUSIC_MARKER = 'href="./music.html"'
 CHESS_MARKER = 'href="./chess.html"'
@@ -48,6 +49,16 @@ def patch_sw(text: str) -> str:
     return text
 
 
+def patch_chess(text: str) -> str:
+    old = '''      files().forEach((f,fi)=>ranks().forEach((r,ri)=>{\n        const sq=f+r,p=game.get(sq),b=document.createElement('button');'''
+    new = '''      ranks().forEach((r,ri)=>files().forEach((f,fi)=>{\n        const sq=f+r,p=game.get(sq),b=document.createElement('button');'''
+    if old in text:
+        text = text.replace(old, new, 1)
+    elif new not in text:
+        raise SystemExit("Chess render-order marker not found")
+    return text
+
+
 def write_if_changed(path: Path, new: str) -> bool:
     old = path.read_text(encoding="utf-8")
     if old == new:
@@ -59,11 +70,14 @@ def write_if_changed(path: Path, new: str) -> bool:
 def main():
     index_old = INDEX.read_text(encoding="utf-8")
     sw_old = SW.read_text(encoding="utf-8")
+    chess_old = CHESS.read_text(encoding="utf-8")
     changed = []
     if write_if_changed(INDEX, patch_index(index_old)):
         changed.append("index.html")
     if write_if_changed(SW, patch_sw(sw_old)):
         changed.append("service-worker.js")
+    if write_if_changed(CHESS, patch_chess(chess_old)):
+        changed.append("chess.html")
     print("Updated: " + (", ".join(changed) if changed else "nothing"))
 
 
