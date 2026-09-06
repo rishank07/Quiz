@@ -1,5 +1,5 @@
 // v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-07-v44-radio-study-bind";
+const CACHE_VERSION = "efp-pwa-2026-09-07-v45-stockfish-chess";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -118,7 +118,8 @@ self.addEventListener("fetch", (event) => {
     // PWA does not need to redownload the renderer every time.
     if (url.origin === "https://cdn.jsdelivr.net" && (
         url.pathname.includes("/pdfjs-dist@3.11.174/") ||
-        url.pathname.includes("/chess.js@1.4.0/")
+        url.pathname.includes("/chess.js@1.4.0/") ||
+        url.pathname.includes("/cm-chessboard@8.14.0/")
       )) {
       event.respondWith(staleWhileRevalidate(event, true));
     }
