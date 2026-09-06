@@ -1,5 +1,5 @@
-// v25 hierarchy-aware Back navigation 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v25-hierarchy-back";
+// v26 Crux multilayer Back navigation 20260906
+const CACHE_VERSION = "efp-pwa-2026-09-06-v26-crux-multilayer-back";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
