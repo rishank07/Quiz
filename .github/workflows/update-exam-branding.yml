@@ -1,0 +1,54 @@
+name: Update Exam Branding
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "**/*.html"
+      - "manifest.webmanifest"
+      - "llms.txt"
+      - "README.md"
+      - "tools/update-exam-branding.py"
+      - ".github/workflows/update-exam-branding.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: exam-branding-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update-branding:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Validate branding updater
+        run: python -m py_compile tools/update-exam-branding.py
+
+      - name: Standardize ExamFusion exam identity
+        run: python tools/update-exam-branding.py --repo .
+
+      - name: Commit branding updates if needed
+        run: |
+          if git diff --quiet; then
+            echo "Exam branding is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- ':(glob)**/*.html' manifest.webmanifest llms.txt README.md
+          git commit -m "chore: standardize SSC Railway UPSC BPSC branding"
+          git push
