@@ -18,22 +18,41 @@ CONTROLS_BLOCK_END = '''      <button class="ctl" id="repeat" aria-pressed="fals
 '''
 
 
+def get_playlist_block(text: str):
+    # Original expanded picker.
+    pos = text.find(PLAYLIST_BLOCK)
+    if pos != -1:
+        return pos, pos + len(PLAYLIST_BLOCK), PLAYLIST_BLOCK
+
+    # New compact custom dropdown picker.
+    start = text.find('    <div class="playlist-picker">')
+    if start != -1:
+        end_marker = '      </details>\n    </div>\n'
+        end = text.find(end_marker, start)
+        if end != -1:
+            end += len(end_marker)
+            block = text[start:end]
+            if 'id="playlistDropdown"' in block:
+                return start, end, block
+    return -1, -1, ''
+
+
 def patch_music(text: str) -> str:
-    playlist_pos = text.find(PLAYLIST_BLOCK)
+    playlist_pos, playlist_end, playlist_block = get_playlist_block(text)
     controls_pos = text.find('<div class="controls">')
     if playlist_pos == -1:
         raise SystemExit("Retro Radio playlist block not found")
     if controls_pos == -1 or CONTROLS_BLOCK_END not in text:
         raise SystemExit("Retro Radio controls block not found")
 
-    # Desired order: Now Playing -> player buttons -> Choose a Playlist -> seek/volume.
+    # Desired order: Now Playing -> player buttons -> Playlist -> seek/volume.
     if playlist_pos > controls_pos:
         return text
 
-    text = text.replace(PLAYLIST_BLOCK, "", 1)
+    text = text[:playlist_pos] + text[playlist_end:]
     text = text.replace(
         CONTROLS_BLOCK_END,
-        CONTROLS_BLOCK_END + "\n" + PLAYLIST_BLOCK,
+        CONTROLS_BLOCK_END + "\n" + playlist_block,
         1,
     )
     return text
