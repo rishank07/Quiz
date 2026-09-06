@@ -12,8 +12,15 @@ SCRIPT_SPECS = (
     ("/home-nav.js", '  <script defer src="/home-nav.js?v=20260906nav2"></script>\n'),
 )
 
+MATHS_SPEED_BOOSTER_FILE = Path("Maths Speed Booster/math-speed-booster.html")
+MATHS_FIT_MARKER = "/Maths%20Speed%20Booster/math-speed-booster-fit.css"
+MATHS_FIT_TAG = (
+    '  <link rel="stylesheet" '
+    'href="/Maths%20Speed%20Booster/math-speed-booster-fit.css?v=20260906fit1">\n'
+)
 
-def inject(path: Path) -> bool:
+
+def inject(path: Path, root: Path) -> bool:
     raw = path.read_bytes()
     bom = raw.startswith(b"\xef\xbb\xbf")
     payload = raw[3:] if bom else raw
@@ -23,6 +30,11 @@ def inject(path: Path) -> bool:
         raise RuntimeError(f"Non-UTF-8 HTML file: {path}") from exc
 
     missing = [tag for marker, tag in SCRIPT_SPECS if marker not in text]
+
+    rel = path.relative_to(root)
+    if rel == MATHS_SPEED_BOOSTER_FILE and MATHS_FIT_MARKER not in text:
+        missing.insert(0, MATHS_FIT_TAG)
+
     if not missing:
         return False
 
@@ -60,7 +72,7 @@ def main() -> int:
     )
 
     for path in html_files:
-        if inject(path):
+        if inject(path, root):
             changed.append(path.relative_to(root).as_posix())
 
     print(f"HTML pages scanned: {len(html_files)}")
