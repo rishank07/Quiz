@@ -223,7 +223,7 @@ function efpDetectAndroidAppSession(){
   var launchMarker=false;
   try{
     var source=new URLSearchParams(location.search).get('source')||'';
-    launchMarker=source==='windows-pwa'||source==='android-app'||source==='pwa';
+    launchMarker=/^(?:windows-pwa|android-app|android-pwa|pwa|app)$/i.test(source);
   }catch(e){}
   var remembered=false;try{remembered=sessionStorage.getItem(EFP_ANDROID_SESSION_KEY)==='1'}catch(e){}
   var installed=standalone||twa||launchMarker||remembered;
@@ -231,8 +231,8 @@ function efpDetectAndroidAppSession(){
   return installed;
 }
 
-/* Re-evaluate here because some TWA launches do not expose standalone/referrer
-   on every navigation. The launch marker is remembered only in this app tab. */
+/* Re-evaluate here because TWA display-mode/referrer are not reliable on every
+   navigation. The app launch bootstrap stores a session-only marker first. */
 efpInstalledAndroid=efpDetectAndroidAppSession();
 
 function efpFindStudyTab(goHome){
