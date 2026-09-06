@@ -42,6 +42,28 @@ RADIO_BRAND_HTML = '''  <a class="efp-brand" href="/" aria-label="ExamFusion Pre
 OLD_RADIO_SUB = '    <p class="sub">Purane filmi gaane, seedha Internet Archive se. Search, shuffle, repeat aur seek — bina YouTube embed player ke.</p>'
 NEW_RADIO_SUB = '    <p class="sub">Purane filmi gaane — search, shuffle, repeat aur seek ke saath.</p>'
 
+RADIO_PLAYLIST_CSS = '''
+/* Make the separate music collections unmistakably look like playlists */
+.playlist-picker{margin-bottom:17px;padding:12px;border:1px solid rgba(62,166,255,.22);border-radius:15px;background:rgba(62,166,255,.045)}
+.playlist-picker-title{font-size:14px;font-weight:850;letter-spacing:.01em;color:var(--text)}
+.playlist-picker-help{margin-top:4px;margin-bottom:11px;color:var(--muted);font-size:11.5px;line-height:1.45}
+.playlist-picker .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
+.playlist-picker .chip{min-height:48px;width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:7px;text-align:left;border-radius:12px;padding:8px 10px;font-weight:700;color:var(--text);background:#0d1322}
+.playlist-picker .chip::before{content:"🎵";font-size:15px}
+.playlist-picker .chip::after{content:"PLAYLIST";font-size:8px;letter-spacing:.08em;color:var(--blue);font-weight:900}
+.playlist-picker .chip[aria-pressed="true"]{background:var(--accent);color:#111;border-color:var(--accent);box-shadow:0 7px 18px rgba(245,179,1,.16)}
+.playlist-picker .chip[aria-pressed="true"]::after{content:"SELECTED";color:#111}
+@media(max-width:430px){.playlist-picker .chips{grid-template-columns:1fr}.playlist-picker .chip{min-height:45px}.playlist-picker-title{font-size:13.5px}}
+'''
+RADIO_PLAYLIST_HTML = '''    <div class="playlist-picker">
+      <div class="playlist-picker-title">🎶 Choose a Playlist</div>
+      <div class="playlist-picker-help">Har option ek alag playlist hai. Apni pasand ki playlist select karein:</div>
+      <div class="chips" id="chips"></div>
+    </div>'''
+OLD_RADIO_CHIPS = '    <div class="chips" id="chips"></div>'
+OLD_TRACKS_HEAD = '    <div class="listhead"><strong>Tracks</strong><span id="count">—</span></div>'
+NEW_TRACKS_HEAD = '    <div class="listhead"><strong>🎵 Songs in selected playlist</strong><span id="count">—</span></div>'
+
 RADIO_STUDY_CSS = '''
 /* Keep-playing browser + installed-app study mode */
 .efp-continuity{margin-top:14px;text-align:center}.efp-continuity-btn{width:100%;border:1px solid rgba(245,179,1,.45);background:linear-gradient(135deg,rgba(245,179,1,.18),rgba(62,166,255,.10));color:var(--text);border-radius:13px;padding:12px 14px;font:inherit;font-size:13.5px;font-weight:800;cursor:pointer;box-shadow:0 9px 24px rgba(0,0,0,.18)}.efp-continuity-btn:active{transform:scale(.985)}.efp-continuity-hint{margin-top:7px;color:var(--muted);font-size:10.8px;line-height:1.45}
@@ -128,6 +150,8 @@ def patch_music(text: str) -> str:
         css += RADIO_BRAND_CSS
     if ".efp-continuity{" not in text:
         css += RADIO_STUDY_CSS
+    if ".playlist-picker{" not in text:
+        css += RADIO_PLAYLIST_CSS
     if css:
         if "</style>" not in text:
             raise SystemExit("Could not find Retro Radio style block")
@@ -140,6 +164,13 @@ def patch_music(text: str) -> str:
         if anchor not in text:
             raise SystemExit("Could not find Retro Radio main wrapper")
         text = text.replace(anchor, anchor + RADIO_BRAND_HTML, 1)
+
+    if 'class="playlist-picker"' not in text:
+        if OLD_RADIO_CHIPS not in text:
+            raise SystemExit("Could not find Retro Radio playlist chips")
+        text = text.replace(OLD_RADIO_CHIPS, RADIO_PLAYLIST_HTML, 1)
+
+    text = text.replace(OLD_TRACKS_HEAD, NEW_TRACKS_HEAD, 1)
 
     if 'id="efpKeepStudy"' not in text:
         anchor = '    <div class="status" id="status">Fetching track list…</div>\n'
@@ -164,7 +195,7 @@ def patch_music(text: str) -> str:
 def patch_sw(text: str) -> str:
     text, n = re.subn(
         r'const CACHE_VERSION = "efp-pwa-[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-07-v40-radio-study-mode";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v41-radio-playlist-picker";',
         text,
         count=1,
     )
