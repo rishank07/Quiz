@@ -25,13 +25,17 @@
     }
   }
 
-  function markThisAsStudyTab() {
+  function bindCurrentTabAsStudy() {
     try {
-      if (!window.name || window.name === STUDY_WINDOW) window.name = STUDY_WINDOW;
-    } catch (_) {}
+      /* Deliberately overwrite any stale window.name here. This click is the
+         moment the current ExamFusion tab becomes the reusable Study tab. */
+      window.name = STUDY_WINDOW;
+      try { sessionStorage.setItem("efp_radio_study_bound", "1"); } catch (_) {}
+      return window.name === STUDY_WINDOW;
+    } catch (_) {
+      return false;
+    }
   }
-
-  markThisAsStudyTab();
 
   document.addEventListener("click", function (event) {
     if (isInstalledAndroid()) return;
@@ -44,7 +48,7 @@
     event.stopPropagation();
     event.stopImmediatePropagation();
 
-    markThisAsStudyTab();
+    bindCurrentTabAsStudy();
 
     var player = null;
     try { player = window.open("", RADIO_WINDOW); } catch (_) {}
@@ -64,7 +68,8 @@
       return;
     }
 
-    // Popup blocking fallback: never leave the click dead.
+    /* Popup blocking fallback: opening in the same tab cannot preserve music,
+       but the click must still work instead of appearing dead. */
     window.location.href = anchor.href;
   }, true);
 })();
