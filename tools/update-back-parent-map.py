@@ -80,11 +80,16 @@ def resolve_local_html(source: str, href: str, html_files: set[str]) -> str | No
 def nav_score(path: str) -> int:
     base = posixpath.basename(path).lower()
     stem = base[:-5] if base.endswith(".html") else base
+    directory_name = posixpath.basename(posixpath.dirname(path)).lower()
 
     if base == "index.html":
         return 120
     if base in {"subjectname.html", "chaptername.html"}:
         return 115
+    if directory_name and stem == directory_name:
+        # Many older sections use Folder/Folder.html instead of index.html,
+        # e.g. Bihar Special/Bihar Special.html and BlackBook/BlackBook.html.
+        return 114
     if base in {"topic names.html", "topicnames.html"}:
         return 112
     if stem.endswith("parts") or "parts" in stem:
@@ -226,6 +231,8 @@ def validate(parent_map: dict[str, str]) -> None:
         "/Books/Ghatnachakra Purvalokan/SubjectName.html":
             "/index.html",
         "/Bihar Special/Topic Names/Introducing Bihar.html":
+            "/Bihar Special/Bihar Special.html",
+        "/Bihar Special/Topic Names/1-15 March Bihar Current Affairs.html":
             "/Bihar Special/Bihar Special.html",
         "/Books/BlackBook/Files/All Spelling.html":
             "/Books/BlackBook/BlackBook.html",
