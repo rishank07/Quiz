@@ -1,8 +1,11 @@
 /* ExamFusion Prep — browser Retro Radio launcher.
-   Desktop/mobile browsers keep study and Radio in separate tabs so audio survives
-   navigation in the study tab. Installed Android app stays in-app. */
+   Browsers keep study and Radio in two reusable tabs so audio survives study navigation.
+   Installed Android app stays in-app. */
 (function () {
   "use strict";
+
+  var STUDY_WINDOW = "efpExamFusionStudy";
+  var RADIO_WINDOW = "efpRetroRadio";
 
   function isInstalledAndroid() {
     var isAndroid = /Android/i.test(navigator.userAgent || "");
@@ -22,6 +25,14 @@
     }
   }
 
+  function markThisAsStudyTab() {
+    try {
+      if (!window.name || window.name === STUDY_WINDOW) window.name = STUDY_WINDOW;
+    } catch (_) {}
+  }
+
+  markThisAsStudyTab();
+
   document.addEventListener("click", function (event) {
     if (isInstalledAndroid()) return;
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
@@ -33,9 +44,22 @@
     event.stopPropagation();
     event.stopImmediatePropagation();
 
+    markThisAsStudyTab();
+
     var player = null;
-    try { player = window.open(anchor.href, "efpRetroRadio"); } catch (_) {}
+    try { player = window.open("", RADIO_WINDOW); } catch (_) {}
+
     if (player) {
+      var alreadyRadio = false;
+      try {
+        alreadyRadio = player.location.origin === window.location.origin &&
+          /\/music\.html$/i.test(player.location.pathname);
+      } catch (_) {}
+
+      if (!alreadyRadio) {
+        try { player.location.href = anchor.href; } catch (_) {}
+      }
+
       try { player.focus(); } catch (_) {}
       return;
     }
