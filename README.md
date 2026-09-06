@@ -9,7 +9,7 @@
 ![Language](https://img.shields.io/badge/language-Hindi%20%2B%20English-blue?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-lightgrey?style=for-the-badge)
 
-**SSC • Railway • BPSC • BSSC • UPSC**
+**SSC • Railway • UPSC • BPSC**
 
 </div>
 
