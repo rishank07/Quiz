@@ -224,6 +224,29 @@
       "background:rgba(8,14,24,.16)!important;box-shadow:none!important;transform:none!important;" +
       "}" +
       "}" +
+
+      /* Light mode needs stronger separation from white/pastel page content. */
+      "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BUTTON_ID + "," +
+      "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BACK_BUTTON_ID + "{" +
+      "background:linear-gradient(135deg,rgba(10,19,35,.96),rgba(26,43,70,.94))!important;" +
+      "border-color:rgba(196,146,38,.92)!important;" +
+      "color:#fff!important;" +
+      "box-shadow:0 8px 24px rgba(15,23,42,.30),0 2px 7px rgba(15,23,42,.22),inset 0 1px 0 rgba(255,255,255,.16)!important;" +
+      "-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;" +
+      "}" +
+      "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BUTTON_ID + " .efp-home-icon," +
+      "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BACK_BUTTON_ID + " .efp-back-icon{" +
+      "color:#ffd86b!important;text-shadow:0 1px 3px rgba(0,0,0,.35);" +
+      "}" +
+      "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BUTTON_ID + ":hover," +
+      "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BUTTON_ID + ":active," +
+      "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BACK_BUTTON_ID + ":hover," +
+      "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BACK_BUTTON_ID + ":active{" +
+      "background:linear-gradient(135deg,#13233d,#2b4772)!important;" +
+      "border-color:#e8b84e!important;" +
+      "box-shadow:0 10px 28px rgba(15,23,42,.34),0 3px 9px rgba(15,23,42,.24),inset 0 1px 0 rgba(255,255,255,.18)!important;" +
+      "}" +
+
       "@media(prefers-reduced-motion:reduce){#" + BUTTON_ID + ",#" + BACK_BUTTON_ID + "{transition:none!important;}}" +
       "@media(print){#" + BUTTON_ID + ",#" + BACK_BUTTON_ID + "{display:none!important;}}";
     document.head.appendChild(style);
