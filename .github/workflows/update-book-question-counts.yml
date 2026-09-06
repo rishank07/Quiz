@@ -18,7 +18,10 @@ on:
       - "service-worker.js"
       - "index.html"
       - "home-nav.js"
+      - "back-nav.js"
+      - "back-parent-map.js"
       - "tools/add-home-nav.py"
+      - "tools/update-back-parent-map.py"
       - "tools/update-book-question-counts.py"
       - "tools/update-home-integrations.py"
       - "tools/validate-crux-search-routing.js"
@@ -49,13 +52,15 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Validate homepage integration code
+      - name: Validate homepage and navigation code
         run: |
           python -m py_compile tools/update-home-integrations.py
           python -m py_compile tools/add-home-nav.py
+          python -m py_compile tools/update-back-parent-map.py
           node --check homepage-fulltext-search.js
           node --check search-worker.js
           node --check service-worker.js
+          node --check back-nav.js
           node tools/validate-crux-search-routing.js
 
       - name: Recalculate section counts
@@ -64,18 +69,22 @@ jobs:
       - name: Restore extended homepage integrations
         run: python tools/update-home-integrations.py --repo .
 
-      - name: Ensure Home navigation on every HTML page
+      - name: Generate logical Back parent map
+        run: python tools/update-back-parent-map.py --repo .
+
+      - name: Ensure shared Home and logical Back navigation on every HTML page
         run: python tools/add-home-nav.py --repo .
 
       - name: Commit updated counts and navigation if needed
         run: |
           if git diff --quiet; then
-            echo "Section counts, homepage integrations and Home navigation are already current."
+            echo "Section counts, homepage integrations and navigation are already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add Books "Bihar Special" "Current Affairs" "Mind Maps" index.html
+          git add back-parent-map.js
           git add -- ':(glob)**/*.html'
-          git commit -m "chore: update section counts and home navigation"
+          git commit -m "chore: update section counts and navigation maps"
           git push
