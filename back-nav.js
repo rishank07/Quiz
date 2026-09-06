@@ -13,6 +13,66 @@
     return path || "/";
   }
 
+  function isCruxTricksRoot() {
+    var path = normalizePath(window.location.pathname).toLowerCase();
+    return path === "/crux-tricks" || path === "/crux-tricks/index.html";
+  }
+
+  function consumeBackEvent(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+  }
+
+  function clickCruxControl(id) {
+    var button = document.getElementById(id);
+    if (!button) return false;
+    button.click();
+    return true;
+  }
+
+  /* Crux & Memory Tricks is a multi-step SPA inside one index.html:
+     Material -> Source -> Subject -> Part -> Chapter. Browser history cannot
+     see those in-page layers, so the global Back button must first delegate to
+     the currently visible Crux layer before using document/browser history. */
+  function useCruxInternalBack(event) {
+    if (!isCruxTricksRoot()) return false;
+
+    var searchBox = document.getElementById("searchBox");
+    if (searchBox && searchBox.value.trim()) {
+      consumeBackEvent(event);
+      searchBox.value = "";
+      searchBox.dispatchEvent(new Event("input", { bubbles: true }));
+      return true;
+    }
+
+    var chapterPane = document.getElementById("chapterPane");
+    if (chapterPane && !chapterPane.hidden) {
+      consumeBackEvent(event);
+      return clickCruxControl("backParts");
+    }
+
+    var partPane = document.getElementById("partPane");
+    if (partPane && !partPane.hidden) {
+      consumeBackEvent(event);
+      return clickCruxControl("backSubjects");
+    }
+
+    var study = document.getElementById("study");
+    if (study && !study.hidden) {
+      consumeBackEvent(event);
+      return clickCruxControl("backSource");
+    }
+
+    var source = document.getElementById("source");
+    if (source && !source.hidden) {
+      consumeBackEvent(event);
+      return clickCruxControl("backMaterial");
+    }
+
+    return false;
+  }
+
   function hasSameOriginReferrer() {
     if (!document.referrer) return false;
     try {
@@ -75,6 +135,7 @@
   }
 
   /* Capture before black-mode.js/home-nav.js own button listener.
+     - Crux SPA: climb its visible in-page hierarchy first.
      - Normal internal navigation: preserve real browser history.
      - Direct/external open: climb the generated logical hierarchy.
      - Once a logical climb starts: keep climbing parent-by-parent. */
@@ -83,6 +144,10 @@
       ? event.target.closest("#" + BACK_BUTTON_ID)
       : null;
     if (!target) return;
+
+    if (useCruxInternalBack(event)) {
+      return;
+    }
 
     if (isContinuingLogicalChain()) {
       useLogicalParent(event);
