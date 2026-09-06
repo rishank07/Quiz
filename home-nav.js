@@ -18,6 +18,16 @@
     return path === "/" || path === "/index.html";
   }
 
+  function isMindMapsSubjectDashboard() {
+    return normalizedPath(window.location.pathname).toLowerCase() === "/mind maps/subjectname.html";
+  }
+
+  function removeLegacyBackToTop() {
+    if (!isMindMapsSubjectDashboard()) return;
+    var buttons = document.querySelectorAll(".back-to-top");
+    for (var i = 0; i < buttons.length; i++) buttons[i].remove();
+  }
+
   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
     var style = document.createElement("style");
@@ -48,6 +58,9 @@
 
   function installHomeButton() {
     if (!document.documentElement || !document.head || isMainHomePage()) return;
+
+    removeLegacyBackToTop();
+
     if (document.getElementById(BUTTON_ID)) return;
 
     injectStyle();
