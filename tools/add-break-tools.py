@@ -24,6 +24,24 @@ GA_SNIPPET = '''<!-- Google Analytics -->
 </script>
 '''
 
+RADIO_BRAND_CSS = '''
+/* ExamFusion Prep brand header */
+.efp-brand{display:flex;align-items:center;justify-content:center;gap:11px;width:max-content;max-width:100%;margin:0 auto 4px;padding:7px 11px;border-radius:16px;text-decoration:none;color:var(--text);border:1px solid rgba(245,179,1,.14);background:rgba(255,255,255,.025)}
+.efp-brand img{width:48px;height:48px;object-fit:cover;border-radius:13px;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+.efp-brand-copy{text-align:left;min-width:0}.efp-brand-name{font-size:17px;font-weight:850;line-height:1.15;letter-spacing:.01em}.efp-brand-tag{margin-top:3px;color:var(--muted);font-size:10.5px;letter-spacing:.055em;white-space:nowrap}
+@media(max-width:390px){.efp-brand img{width:43px;height:43px}.efp-brand-name{font-size:15.5px}.efp-brand-tag{font-size:9.7px}}
+'''
+RADIO_BRAND_HTML = '''  <a class="efp-brand" href="/" aria-label="ExamFusion Prep home">
+    <img src="./logo.png" alt="ExamFusion Prep logo">
+    <div class="efp-brand-copy">
+      <div class="efp-brand-name">ExamFusion Prep</div>
+      <div class="efp-brand-tag">STUDY • PRACTICE • REVISE</div>
+    </div>
+  </a>
+'''
+OLD_RADIO_SUB = '    <p class="sub">Purane filmi gaane, seedha Internet Archive se. Search, shuffle, repeat aur seek — bina YouTube embed player ke.</p>'
+NEW_RADIO_SUB = '    <p class="sub">Purane filmi gaane — search, shuffle, repeat aur seek ke saath.</p>'
+
 CARDS = '''        <li>\n          <a href="./music.html" onclick="openPage(event)">\n            <i class="fa-solid fa-music menu-icon"></i>\n            <span class="link-text bilabel"><span class="bilabel-en">Retro Radio</span><span class="bilabel-hi">पुराने फिल्मी गीत</span></span>\n            <span class="badge-new">BREAK</span>\n            <i class="fa-solid fa-chevron-right chevron-icon"></i>\n          </a>\n        </li>\n\n        <li>\n          <a href="./chess.html" onclick="openPage(event)">\n            <i class="fa-solid fa-chess-knight menu-icon"></i>\n            <span class="link-text bilabel"><span class="bilabel-en">Play Chess</span><span class="bilabel-hi">कंप्यूटर के साथ शतरंज</span></span>\n            <span class="badge-new">10 LEVELS</span>\n            <i class="fa-solid fa-chevron-right chevron-icon"></i>\n          </a>\n        </li>\n\n'''
 
 
@@ -40,20 +58,34 @@ def patch_index(text: str) -> str:
 
 
 def patch_music(text: str) -> str:
-    if GA_ID in text:
-        return text
-    favicon = '<link rel="icon" type="image/png" href="./favicon.png">\n'
-    if favicon in text:
-        return text.replace(favicon, favicon + GA_SNIPPET, 1)
-    if "</head>" in text:
-        return text.replace("</head>", GA_SNIPPET + "</head>", 1)
-    raise SystemExit("Could not find a safe GA insertion point in music.html")
+    if GA_ID not in text:
+        favicon = '<link rel="icon" type="image/png" href="./favicon.png">\n'
+        if favicon in text:
+            text = text.replace(favicon, favicon + GA_SNIPPET, 1)
+        elif "</head>" in text:
+            text = text.replace("</head>", GA_SNIPPET + "</head>", 1)
+        else:
+            raise SystemExit("Could not find a safe GA insertion point in music.html")
+
+    if ".efp-brand{" not in text:
+        if "</style>" not in text:
+            raise SystemExit("Could not find Retro Radio style block")
+        text = text.replace("</style>", RADIO_BRAND_CSS + "</style>", 1)
+
+    text = text.replace(OLD_RADIO_SUB, NEW_RADIO_SUB, 1)
+
+    if 'class="efp-brand"' not in text:
+        anchor = '<main class="wrap">\n'
+        if anchor not in text:
+            raise SystemExit("Could not find Retro Radio main wrapper")
+        text = text.replace(anchor, anchor + RADIO_BRAND_HTML, 1)
+    return text
 
 
 def patch_sw(text: str) -> str:
     text, n = re.subn(
         r'const CACHE_VERSION = "efp-pwa-[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-07-v38-radio-ga";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v39-radio-branding";',
         text,
         count=1,
     )
