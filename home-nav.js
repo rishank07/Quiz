@@ -22,10 +22,36 @@
     return normalizedPath(window.location.pathname).toLowerCase() === "/mind maps/subjectname.html";
   }
 
+  function isOriginalPracticePage() {
+    return normalizedPath(window.location.pathname).toLowerCase().indexOf("/original practice/") === 0;
+  }
+
   function removeLegacyBackToTop() {
     if (!isMindMapsSubjectDashboard()) return;
     var buttons = document.querySelectorAll(".back-to-top");
     for (var i = 0; i < buttons.length; i++) buttons[i].remove();
+  }
+
+  function removeLegacyOriginalPracticeHome() {
+    if (!isOriginalPracticePage()) return;
+    var links = document.querySelectorAll(
+      ".topnav > a[href='../index.html'], .efp-op-topbar > a[href='../index.html']"
+    );
+    for (var i = 0; i < links.length; i++) links[i].remove();
+  }
+
+  function watchLegacyOriginalPracticeHome() {
+    if (!isOriginalPracticePage() || !document.documentElement) return;
+    if (window.__efpOriginalPracticeHomeCleanupObserver) {
+      removeLegacyOriginalPracticeHome();
+      return;
+    }
+    removeLegacyOriginalPracticeHome();
+    var observer = new MutationObserver(function () {
+      removeLegacyOriginalPracticeHome();
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+    window.__efpOriginalPracticeHomeCleanupObserver = observer;
   }
 
   function injectStyle() {
@@ -60,6 +86,7 @@
     if (!document.documentElement || !document.head || isMainHomePage()) return;
 
     removeLegacyBackToTop();
+    watchLegacyOriginalPracticeHome();
 
     if (document.getElementById(BUTTON_ID)) return;
 
