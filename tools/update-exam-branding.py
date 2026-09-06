@@ -10,7 +10,9 @@ Rules:
   organized around those two exam categories.
 - Bihar Special remains BPSC/BSSC/Bihar-state focused in SEO.
 - Source/question labels such as "Asked in SSC Exams" are never rewritten.
-- Only selected landing pages get a visible scope line; utility pages do not.
+- Current Affairs header strips use the main four-exam identity; factual content
+  and exam-history references inside questions/explanations are untouched.
+- Only selected landing pages get an extra visible scope line; utility pages do not.
 """
 
 from __future__ import annotations
@@ -40,6 +42,29 @@ GENERIC_SCOPE_REPLACEMENTS = (
     ("BPSC, BSSC, SSC & Railway", BRAND_META_PLAIN),
     ("BPSC, BSSC, SSC and Railway", "SSC, Railway, UPSC and BPSC"),
     ("BPSC, BSSC, SSC, Railway", "SSC, Railway, UPSC, BPSC"),
+)
+
+CURRENT_AFFAIRS_META_REPLACEMENTS = (
+    (
+        "SSC, Railway, BPSC, BSSC, Bank and other competitive exams",
+        "SSC, Railway, UPSC, BPSC and other competitive exams",
+    ),
+    (
+        "SSC, Railway, BPSC, BSSC and other competitive exams",
+        "SSC, Railway, UPSC, BPSC and other competitive exams",
+    ),
+    (
+        "SSC, BPSC, BSSC, Bank, Railway",
+        "SSC, Railway, UPSC, BPSC",
+    ),
+)
+
+CURRENT_AFFAIRS_HEADER_REPLACEMENTS = (
+    ("SSC | BPSC | UPSC | Bank | Railway", "SSC | Railway | UPSC | BPSC"),
+    ("SSC | BPSC | BSSC | Bank | Railway", "SSC | Railway | UPSC | BPSC"),
+    ("SSC | BPSC | BSSC | Railway", "SSC | Railway | UPSC | BPSC"),
+    ("SSC | BPSC | UPSC | Railway", "SSC | Railway | UPSC | BPSC"),
+    ("SSC | Railway | BPSC | BSSC | Bank", "SSC | Railway | UPSC | BPSC"),
 )
 
 COMMON_GENERIC_HTML = (
@@ -109,6 +134,11 @@ def rewrite_description_value(value: str, rel: str) -> str:
         )
         return value
 
+    if rel_lower.startswith("current affairs/"):
+        for old, new in CURRENT_AFFAIRS_META_REPLACEMENTS:
+            value = value.replace(old, new)
+        return replace_generic_scope(value)
+
     return replace_generic_scope(value)
 
 
@@ -145,8 +175,17 @@ def insert_scope_after(text: str, needle: str, *, compact: bool = False) -> str:
     return text.replace(needle, needle + "\n      " + scope, 1)
 
 
+def rewrite_current_affairs_headers(text: str) -> str:
+    for old, new in CURRENT_AFFAIRS_HEADER_REPLACEMENTS:
+        text = text.replace(old, new)
+    return text
+
+
 def rewrite_visible_landing(text: str, rel: str) -> str:
     rel_lower = rel.lower()
+
+    if rel_lower.startswith("current affairs/"):
+        text = rewrite_current_affairs_headers(text)
 
     if rel_lower == "index.html":
         text = text.replace("SSC · Railway · BPSC · BSSC", BRAND_VISIBLE)
@@ -204,6 +243,10 @@ def rewrite_visible_landing(text: str, rel: str) -> str:
         text = text.replace(
             "SSC &middot; Railway &middot; BPSC &middot; BSSC",
             "SSC &bull; Railway &bull; UPSC &bull; BPSC",
+        )
+        text = text.replace(
+            "Math Calculation Speed Booster &middot; SSC / BPSC / BSSC",
+            f"Math Calculation Speed Booster &middot; {BRAND_VISIBLE}",
         )
         return text
 
