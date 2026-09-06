@@ -1,5 +1,5 @@
-// v20 Crux viewer theme-toggle cleanup 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v20-crux-viewer-theme";
+// v21 Crux global navigation cleanup 20260906
+const CACHE_VERSION = "efp-pwa-2026-09-06-v21-crux-global-nav";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
