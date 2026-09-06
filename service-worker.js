@@ -1,5 +1,5 @@
-// v29 Original Practice multilayer Back navigation 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v29-original-practice-back";
+// v30 Maths Speed Booster viewport-fit 20260906
+const CACHE_VERSION = "efp-pwa-2026-09-06-v30-maths-speed-fit";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -21,6 +21,8 @@ const APP_SHELL = [
   "/search-worker.js",
   "/search-index-main.js",
   "/homepage-fulltext-search.js",
+  "/Maths%20Speed%20Booster/math-speed-booster.html",
+  "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/original-practice.js",
