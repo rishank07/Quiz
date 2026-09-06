@@ -213,27 +213,10 @@ function efpBrowserKeepPlayingAndBack(){
 }
 
 var EFP_STUDY_WINDOW='efpExamFusionStudy';
-var EFP_ANDROID_SESSION_KEY='efp_android_app_session';
 
-function efpDetectAndroidAppSession(){
-  var isAndroid=/Android/i.test(navigator.userAgent||'');
-  if(!isAndroid)return false;
-  var standalone=false;try{standalone=window.matchMedia('(display-mode: standalone)').matches}catch(e){}
-  var twa=/^android-app:\/\//i.test(document.referrer||'');
-  var launchMarker=false;
-  try{
-    var source=new URLSearchParams(location.search).get('source')||'';
-    launchMarker=/^(?:windows-pwa|android-app|android-pwa|pwa|app)$/i.test(source);
-  }catch(e){}
-  var remembered=false;try{remembered=sessionStorage.getItem(EFP_ANDROID_SESSION_KEY)==='1'}catch(e){}
-  var installed=standalone||twa||launchMarker||remembered;
-  if(installed){try{sessionStorage.setItem(EFP_ANDROID_SESSION_KEY,'1')}catch(e){}}
-  return installed;
-}
-
-/* Re-evaluate here because TWA display-mode/referrer are not reliable on every
-   navigation. The app launch bootstrap stores a session-only marker first. */
-efpInstalledAndroid=efpDetectAndroidAppSession();
+/* Only the native Android WebView app uses the simple Radio path. Normal
+   Android Chrome, desktop browsers and the Windows app stay on browser flow. */
+efpInstalledAndroid=/ExamFusionPrepAndroid\//i.test(navigator.userAgent||'');
 
 function efpFindStudyTab(goHome){
   var study=null;
@@ -281,8 +264,7 @@ function efpWireBrowserHomeTargets(){
 }
 
 if(efpInstalledAndroid){
-  /* Android APK/TWA stays intentionally simple: normal in-app Radio page,
-     normal Home/Back navigation, no background-study shell or browser intents. */
+  /* Android APK only: no background-study/Return-to-Study controls. */
   var efpContinuityBox=document.getElementById('efpContinuity');
   if(efpContinuityBox){efpContinuityBox.hidden=true;efpContinuityBox.style.display='none'}
   if(efpStudyShell)efpStudyShell.hidden=true;
