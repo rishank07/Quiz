@@ -118,13 +118,14 @@
 <script>
 (function () {
   var PLAYLIST_ID = "PLaETHuV8PB7sXxM_MtgCx3Nhj-y6CswT2";
-  var SAVE_KEY = "efp_retro_break_v4";
+  var SAVE_KEY = "efp_retro_break_v5";
   var saved = {};
   try { saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}") || {}; } catch (err) { saved = {}; }
   var savedIndex = Math.max(0, parseInt(saved.index, 10) || 0);
   var savedPosition = Math.max(0, parseFloat(saved.position) || 0);
 
   var player = null, ready = false, timer = null, seeking = false, skipCount = 0;
+  var wantToPlay = false, skipTimer = null;
 
   var elStatus = document.getElementById("status");
   var elPlay   = document.getElementById("play");
@@ -178,7 +179,6 @@
       playsinline: 1,
       enablejsapi: 1
     };
-    // origin must only be sent for real http/https pages; on file:// or content:// it is "null" and breaks the player
     if (isWeb) vars.origin = window.location.origin;
 
     player = new YT.Player("player", {
@@ -218,6 +218,7 @@
 
   function onState(e) {
     if (e.data === YT.PlayerState.PLAYING) {
+      wantToPlay = true;
       elStatus.classList.add("hide");
       elPlay.textContent = "⏸";
       elPlay.setAttribute("aria-label", "Pause");
@@ -229,29 +230,76 @@
       }
       startTimer();
       updateTrack();
-    } else {
-      elPlay.textContent = "▶";
-      elPlay.setAttribute("aria-label", "Play");
-      if (e.data === YT.PlayerState.ENDED) stopTimer();
-      if (e.data === YT.PlayerState.PAUSED) stopTimer();
-      if (e.data === YT.PlayerState.CUED) updateTrack();
+      return;
+    }
+
+    elPlay.textContent = "▶";
+    elPlay.setAttribute("aria-label", "Play");
+
+    if (e.data === YT.PlayerState.PAUSED) {
+      stopTimer();
+      saveState();
+    } else if (e.data === YT.PlayerState.ENDED) {
+      stopTimer();
+    } else if (e.data === YT.PlayerState.CUED) {
+      updateTrack();
+      if (wantToPlay) {
+        elStatus.classList.remove("hide");
+        elStatus.textContent = "Starting next playable song…";
+        setTimeout(function () {
+          if (!wantToPlay) return;
+          try { player.playVideo(); } catch (err) {}
+        }, 140);
+      }
+    } else if (e.data === YT.PlayerState.BUFFERING) {
+      elStatus.classList.remove("hide");
+      elStatus.textContent = "Buffering…";
+      updateTrack();
     }
   }
 
-  // Non-embeddable tracks (101/150) and unplayable ones: move on automatically.
-  function onError() {
+  // Keep the user's Play intent while skipping blocked/unavailable tracks.
+  function onError(e) {
+    stopTimer();
     skipCount++;
-    if (skipCount > 12) {
+    savedPosition = 0;
+
+    var list = [], index = -1;
+    try {
+      list = player.getPlaylist() || [];
+      index = player.getPlaylistIndex();
+    } catch (err) {}
+
+    var maxAttempts = list.length || 30;
+    if (skipCount >= maxAttempts) {
+      wantToPlay = false;
       elStatus.classList.remove("hide");
-      elStatus.textContent = "These tracks block embedding. Open the playlist on YouTube instead.";
+      elStatus.textContent = "No playable embedded song was found in this playlist. Open the playlist on YouTube instead.";
       return;
     }
-    savedPosition = 0;
+
     elStatus.classList.remove("hide");
-    elStatus.textContent = "Track unavailable here — skipping…";
-    setTimeout(function () {
-      try { player.nextVideo(); } catch (err) {}
-    }, 600);
+    elStatus.textContent = "This track blocks website playback — finding the next playable song…";
+
+    if (skipTimer) clearTimeout(skipTimer);
+    skipTimer = setTimeout(function () {
+      if (!ready || !player) return;
+      try {
+        if (list.length && index >= 0 && typeof player.playVideoAt === "function" && wantToPlay) {
+          player.playVideoAt((index + 1) % list.length);
+        } else {
+          player.nextVideo();
+          if (wantToPlay) {
+            setTimeout(function () {
+              if (!wantToPlay) return;
+              try { player.playVideo(); } catch (err) {}
+            }, 180);
+          }
+        }
+      } catch (err) {
+        elStatus.textContent = "Could not move to the next track. Tap Next once.";
+      }
+    }, 350);
   }
 
   function updateTrack() {
@@ -287,12 +335,39 @@
   elPlay.addEventListener("click", function () {
     if (!ready) { elStatus.textContent = "Player still loading…"; return; }
     var s = player.getPlayerState();
-    if (s === YT.PlayerState.PLAYING) player.pauseVideo();
-    else player.playVideo();
+    if (s === YT.PlayerState.PLAYING) {
+      wantToPlay = false;
+      player.pauseVideo();
+    } else {
+      wantToPlay = true;
+      skipCount = 0;
+      elStatus.classList.remove("hide");
+      elStatus.textContent = "Starting…";
+      player.playVideo();
+    }
   });
 
-  elPrev.addEventListener("click", function () { if (ready) { savedPosition = 0; player.previousVideo(); } });
-  elNext.addEventListener("click", function () { if (ready) { savedPosition = 0; player.nextVideo(); } });
+  elPrev.addEventListener("click", function () {
+    if (!ready) return;
+    savedPosition = 0;
+    var shouldPlay = wantToPlay || player.getPlayerState() === YT.PlayerState.PLAYING;
+    try { player.previousVideo(); } catch (err) {}
+    if (shouldPlay) {
+      wantToPlay = true;
+      setTimeout(function () { try { player.playVideo(); } catch (err) {} }, 160);
+    }
+  });
+
+  elNext.addEventListener("click", function () {
+    if (!ready) return;
+    savedPosition = 0;
+    var shouldPlay = wantToPlay || player.getPlayerState() === YT.PlayerState.PLAYING;
+    try { player.nextVideo(); } catch (err) {}
+    if (shouldPlay) {
+      wantToPlay = true;
+      setTimeout(function () { try { player.playVideo(); } catch (err) {} }, 160);
+    }
+  });
 
   elSeek.addEventListener("input", function () {
     seeking = true;
