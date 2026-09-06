@@ -10,7 +10,7 @@ CHESS = ROOT / "chess.html"
 def patch_sw(text: str) -> str:
     text, n = re.subn(
         r'const CACHE_VERSION = "efp-pwa-[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-07-v45-stockfish-chess";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v46-chess-first-view";',
         text,
         count=1,
     )
