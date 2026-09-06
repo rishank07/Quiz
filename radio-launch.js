@@ -20,7 +20,7 @@
     var launchMarker = false;
     try {
       var source = new URLSearchParams(window.location.search).get("source") || "";
-      launchMarker = source === "windows-pwa" || source === "android-app" || source === "pwa";
+      launchMarker = source === "windows-pwa" || source === "android-app" || source === "pwa" || source === "android-pwa" || source === "app";
     } catch (_) {}
 
     var remembered = false;
@@ -55,11 +55,18 @@
     var anchor = event.target && event.target.closest ? event.target.closest("a[href]") : null;
     if (!isRadioLink(anchor)) return;
 
-    /* Android APK/TWA: leave the link untouched. The existing openPage()/link
-       navigation opens music.html normally inside the app. */
-    if (isInstalledAndroid()) return;
+    if (isInstalledAndroid()) {
+      /* Hard same-window path for the packaged Android app. Do not let any
+         homepage onclick, target handling or browser-tab logic touch Radio. */
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      try { window.location.assign(anchor.href); }
+      catch (_) { window.location.href = anchor.href; }
+      return;
+    }
 
-    /* Browser behavior stays unchanged. */
+    /* Normal browser behavior stays unchanged. */
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
