@@ -1,5 +1,5 @@
 // v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v31-session-restore";
+const CACHE_VERSION = "efp-pwa-2026-09-06-v32-break-tools";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -9,6 +9,8 @@ const APP_SHELL = [
   "/privacy-policy.html",
   "/support.html",
   "/backup-restore.html",
+  "/music.html",
+  "/chess.html",
   "/favicon.png",
   "/pwa-icons/icon-192.png",
   "/pwa-icons/icon-512.png",
@@ -113,7 +115,10 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) {
     // Cache the PDF.js runtime after its first successful use so the installed
     // PWA does not need to redownload the renderer every time.
-    if (url.origin === "https://cdn.jsdelivr.net" && url.pathname.includes("/pdfjs-dist@3.11.174/")) {
+    if (url.origin === "https://cdn.jsdelivr.net" && (
+        url.pathname.includes("/pdfjs-dist@3.11.174/") ||
+        url.pathname.includes("/chess.js@1.4.0/")
+      )) {
       event.respondWith(staleWhileRevalidate(event, true));
     }
     return;
