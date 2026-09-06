@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
@@ -9,8 +10,10 @@ CHESS = ROOT / "chess.html"
 MUSIC_MARKER = 'href="./music.html"'
 CHESS_MARKER = 'href="./chess.html"'
 TELEGRAM_MARKER = "        <!-- Telegram Section -->"
+OLD_MUSIC_LABEL = '<span class="link-text bilabel"><span class="bilabel-en">Retro Break Music</span><span class="bilabel-hi">पुराने बॉलीवुड गीत</span></span>'
+NEW_MUSIC_LABEL = '<span class="link-text bilabel"><span class="bilabel-en">Retro Radio</span><span class="bilabel-hi">पुराने फिल्मी गीत</span></span>'
 
-CARDS = '''        <li>\n          <a href="./music.html" onclick="openPage(event)">\n            <i class="fa-solid fa-music menu-icon"></i>\n            <span class="link-text bilabel"><span class="bilabel-en">Retro Break Music</span><span class="bilabel-hi">पुराने बॉलीवुड गीत</span></span>\n            <span class="badge-new">BREAK</span>\n            <i class="fa-solid fa-chevron-right chevron-icon"></i>\n          </a>\n        </li>\n\n        <li>\n          <a href="./chess.html" onclick="openPage(event)">\n            <i class="fa-solid fa-chess-knight menu-icon"></i>\n            <span class="link-text bilabel"><span class="bilabel-en">Play Chess</span><span class="bilabel-hi">कंप्यूटर के साथ शतरंज</span></span>\n            <span class="badge-new">10 LEVELS</span>\n            <i class="fa-solid fa-chevron-right chevron-icon"></i>\n          </a>\n        </li>\n\n'''
+CARDS = '''        <li>\n          <a href="./music.html" onclick="openPage(event)">\n            <i class="fa-solid fa-music menu-icon"></i>\n            <span class="link-text bilabel"><span class="bilabel-en">Retro Radio</span><span class="bilabel-hi">पुराने फिल्मी गीत</span></span>\n            <span class="badge-new">BREAK</span>\n            <i class="fa-solid fa-chevron-right chevron-icon"></i>\n          </a>\n        </li>\n\n        <li>\n          <a href="./chess.html" onclick="openPage(event)">\n            <i class="fa-solid fa-chess-knight menu-icon"></i>\n            <span class="link-text bilabel"><span class="bilabel-en">Play Chess</span><span class="bilabel-hi">कंप्यूटर के साथ शतरंज</span></span>\n            <span class="badge-new">10 LEVELS</span>\n            <i class="fa-solid fa-chevron-right chevron-icon"></i>\n          </a>\n        </li>\n\n'''
 
 
 def patch_index(text: str) -> str:
@@ -20,18 +23,20 @@ def patch_index(text: str) -> str:
         text = text.replace(TELEGRAM_MARKER, CARDS + TELEGRAM_MARKER, 1)
     elif MUSIC_MARKER not in text or CHESS_MARKER not in text:
         raise SystemExit("Only one break-tool card exists; refusing partial duplicate insertion")
+    else:
+        text = text.replace(OLD_MUSIC_LABEL, NEW_MUSIC_LABEL, 1)
     return text
 
 
 def patch_sw(text: str) -> str:
-    old_versions = [
-        'const CACHE_VERSION = "efp-pwa-2026-09-06-v31-session-restore";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-06-v32-break-tools";'
-    ]
-    for old in old_versions:
-        if old in text:
-            text = text.replace(old, 'const CACHE_VERSION = "efp-pwa-2026-09-06-v32-break-tools";', 1)
-            break
+    text, n = re.subn(
+        r'const CACHE_VERSION = "efp-pwa-[^"]+";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-07-v37-retro-radio";',
+        text,
+        count=1,
+    )
+    if n != 1:
+        raise SystemExit("CACHE_VERSION marker not found")
 
     anchor = '  "/backup-restore.html",\n'
     additions = '  "/music.html",\n  "/chess.html",\n'
