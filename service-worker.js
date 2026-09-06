@@ -1,5 +1,5 @@
 // v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v30-maths-speed-fit";
+const CACHE_VERSION = "efp-pwa-2026-09-06-v31-session-restore";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -15,6 +15,7 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/home-nav.js",
+  "/app-session.js",
   "/back-parent-map.js",
   "/back-nav.js",
   "/search-logic.js",
