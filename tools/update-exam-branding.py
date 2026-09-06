@@ -13,6 +13,7 @@ Rules:
 - Current Affairs header strips use the main four-exam identity; factual content
   and exam-history references inside questions/explanations are untouched.
 - Only selected landing pages get an extra visible scope line; utility pages do not.
+- Shared exam-scope lines are always centered and responsive.
 """
 
 from __future__ import annotations
@@ -76,10 +77,23 @@ COMMON_GENERIC_PLAIN = (
     "exam prep — ExamFusionPrep."
 )
 
-LANDING_SCOPE_STYLE = (
-    ' style="font-size:11px;opacity:.78;margin:-18px 0 22px;'
+OLD_LANDING_SCOPE_STYLE = (
+    'style="font-size:11px;opacity:.78;margin:-18px 0 22px;'
     'letter-spacing:.08em;font-weight:700"'
 )
+CENTERED_LANDING_SCOPE_STYLE = (
+    'style="font-size:11px;opacity:.78;margin:-18px 0 22px;'
+    'letter-spacing:.08em;font-weight:700;text-align:center;width:100%;display:block"'
+)
+OLD_COMPACT_SCOPE_STYLE = (
+    'style="margin-top:6px;color:var(--accent);font-weight:800;'
+    'letter-spacing:.08em;font-size:10px"'
+)
+CENTERED_COMPACT_SCOPE_STYLE = (
+    'style="margin-top:6px;color:var(--accent);font-weight:800;'
+    'letter-spacing:.08em;font-size:10px;text-align:center;width:100%;display:block"'
+)
+LANDING_SCOPE_STYLE = " " + CENTERED_LANDING_SCOPE_STYLE
 
 
 def decode_file(path: Path) -> tuple[str, bool]:
@@ -114,7 +128,6 @@ def rewrite_description_value(value: str, rel: str) -> str:
             COMMON_GENERIC_PLAIN,
             "Free bilingual (Hindi + English) MCQs for SSC & Railway exam prep — ExamFusionPrep.",
         )
-        # Catch custom descriptions that still carry the old four-exam list.
         for old in (
             "SSC, Railway, BPSC &amp; BSSC",
             "SSC, Railway, BPSC & BSSC",
@@ -158,6 +171,12 @@ def rewrite_meta_descriptions(text: str, rel: str) -> str:
     return META_TAG_RE.sub(rewrite_tag, text)
 
 
+def normalize_scope_alignment(text: str) -> str:
+    text = text.replace(OLD_LANDING_SCOPE_STYLE, CENTERED_LANDING_SCOPE_STYLE)
+    text = text.replace(OLD_COMPACT_SCOPE_STYLE, CENTERED_COMPACT_SCOPE_STYLE)
+    return text
+
+
 def insert_scope_after(text: str, needle: str, *, compact: bool = False) -> str:
     if BRAND_VISIBLE in text:
         return text
@@ -166,9 +185,10 @@ def insert_scope_after(text: str, needle: str, *, compact: bool = False) -> str:
     if compact:
         scope = (
             '<p class="efp-exam-scope" '
-            'style="margin-top:6px;color:var(--accent);font-weight:800;'
-            'letter-spacing:.08em;font-size:10px">'
-            f"{BRAND_VISIBLE}</p>"
+            + CENTERED_COMPACT_SCOPE_STYLE
+            + '>'
+            + BRAND_VISIBLE
+            + '</p>'
         )
     else:
         scope = f'<p class="efp-exam-scope"{LANDING_SCOPE_STYLE}>{BRAND_VISIBLE}</p>'
@@ -189,7 +209,6 @@ def rewrite_visible_landing(text: str, rel: str) -> str:
 
     if rel_lower == "index.html":
         text = text.replace("SSC · Railway · BPSC · BSSC", BRAND_VISIBLE)
-        # JSON-LD is not a meta tag, so align its old prose here too.
         text = text.replace(
             "SSC, Railway, BPSC and BSSC exams",
             "SSC, Railway, UPSC and BPSC exams",
@@ -207,6 +226,11 @@ def rewrite_visible_landing(text: str, rel: str) -> str:
         text = text.replace(
             "Current Affairs 2026 | ExamFusion Prep — BPSC, BSSC, SSC, Railway",
             "Current Affairs 2026 | ExamFusion Prep — SSC, Railway, UPSC, BPSC",
+        )
+        text = text.replace(
+            ".ca-toolbar {\n      display: flex;\n      justify-content: flex-end;",
+            ".ca-toolbar {\n      display: flex;\n      justify-content: center;",
+            1,
         )
         return insert_scope_after(
             text,
@@ -270,6 +294,7 @@ def rewrite_html(path: Path, root: Path) -> bool:
     rel = path.relative_to(root).as_posix()
 
     text = rewrite_meta_descriptions(text, rel)
+    text = normalize_scope_alignment(text)
     text = rewrite_visible_landing(text, rel)
 
     if text == original:
