@@ -4,6 +4,7 @@ on:
   push:
     branches: [master]
     paths:
+      - "**/*.html"
       - "Books/**/*.html"
       - "Bihar Special/**/*.html"
       - "Current Affairs/**/*.html"
@@ -16,6 +17,8 @@ on:
       - "search-worker.js"
       - "service-worker.js"
       - "index.html"
+      - "home-nav.js"
+      - "tools/add-home-nav.py"
       - "tools/update-book-question-counts.py"
       - "tools/update-home-integrations.py"
       - "tools/validate-crux-search-routing.js"
@@ -49,6 +52,7 @@ jobs:
       - name: Validate homepage integration code
         run: |
           python -m py_compile tools/update-home-integrations.py
+          python -m py_compile tools/add-home-nav.py
           node --check homepage-fulltext-search.js
           node --check search-worker.js
           node --check service-worker.js
@@ -60,14 +64,18 @@ jobs:
       - name: Restore extended homepage integrations
         run: python tools/update-home-integrations.py --repo .
 
-      - name: Commit updated counts if needed
+      - name: Ensure Home navigation on every HTML page
+        run: python tools/add-home-nav.py --repo .
+
+      - name: Commit updated counts and navigation if needed
         run: |
           if git diff --quiet; then
-            echo "Section counts and homepage integrations are already current."
+            echo "Section counts, homepage integrations and Home navigation are already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add Books "Bihar Special" "Current Affairs" "Mind Maps" index.html
-          git commit -m "chore: update section counts"
+          git add -- ':(glob)**/*.html'
+          git commit -m "chore: update section counts and home navigation"
           git push
