@@ -1,0 +1,215 @@
+/* Maths Speed Booster — viewport-height responsive gameplay.
+   Loaded only on the Speed Booster page by home-nav.js. */
+
+/* Remove browser paragraph margins that unnecessarily consume game height. */
+#screen-practice .q-count,
+#screen-practice .kb-hint {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Laptop / short desktop viewports: keep the entire active keypad comfortably
+   inside the visible browser area while preserving readable controls. */
+@media (min-width: 768px) and (max-height: 900px) {
+  html,
+  body {
+    height: 100%;
+    min-height: 100%;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  #app {
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .topbar {
+    padding-top: 9px;
+    padding-bottom: 9px;
+  }
+
+  .screen.active {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+
+  #screen-practice {
+    padding-top: 2px;
+    padding-bottom: 6px;
+  }
+
+  #screen-practice .hud {
+    padding: 7px 16px 4px;
+    gap: 8px;
+  }
+
+  #screen-practice .hud-box {
+    min-width: 68px;
+    padding: 5px 10px;
+  }
+
+  #screen-practice .hud-box .lbl {
+    font-size: 9px;
+  }
+
+  #screen-practice .hud-box .val {
+    font-size: 16px;
+  }
+
+  #screen-practice .timer-wrap,
+  #screen-practice .timer-wrap svg {
+    width: 52px;
+    height: 52px;
+  }
+
+  #screen-practice .timer-num {
+    font-size: 17px;
+  }
+
+  #screen-practice .progress-outer {
+    margin-top: 3px;
+  }
+
+  #screen-practice .q-count {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 7px;
+    font-size: 11px;
+  }
+
+  #screen-practice .q-card {
+    min-height: 76px;
+    margin-top: 6px;
+    padding: 14px 16px;
+  }
+
+  #screen-practice .q-text {
+    font-size: 31px;
+    line-height: 1.18;
+  }
+
+  #screen-practice .ans-box {
+    min-height: 46px;
+    margin-top: 7px;
+    padding: 5px 8px;
+    font-size: 21px;
+  }
+
+  #screen-practice .ans-box .ph {
+    font-size: 13px;
+  }
+
+  #screen-practice .feedback {
+    min-height: 18px;
+    margin-top: 3px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  #screen-practice .keypad {
+    gap: 5px;
+    padding: 5px 16px 2px;
+  }
+
+  #screen-practice .key {
+    min-height: 42px;
+    padding: 8px 0;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  #screen-practice .key.func {
+    font-size: 11px;
+  }
+
+  #screen-practice .key.del {
+    font-size: 17px;
+  }
+
+  #screen-practice .key.submit {
+    font-size: 14px;
+  }
+
+  #screen-practice .kb-hint {
+    margin-top: 3px;
+    margin-bottom: 0;
+    padding: 0 16px 3px;
+    font-size: 9.5px;
+    line-height: 1.3;
+  }
+
+  #screen-practice .mcq-grid {
+    gap: 7px;
+    padding: 7px 16px 3px;
+  }
+
+  #screen-practice .mcq-opt {
+    padding: 11px 8px;
+    font-size: 18px;
+  }
+
+  #screen-practice .mcq-skip-wrap {
+    padding-top: 5px;
+  }
+
+  #screen-practice .mcq-skip {
+    padding: 8px;
+  }
+
+  #screen-practice .start-wrap {
+    padding: 18px 16px 20px;
+  }
+
+  #screen-practice .countdown {
+    padding: 20px 0;
+    font-size: 48px;
+  }
+}
+
+/* Extra-short laptop windows still remain fully usable; scrolling becomes a
+   fallback only if the browser chrome leaves exceptionally little viewport. */
+@media (min-width: 768px) and (max-height: 680px) {
+  .topbar {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
+  #screen-practice .hud {
+    padding-top: 4px;
+  }
+
+  #screen-practice .timer-wrap,
+  #screen-practice .timer-wrap svg {
+    width: 46px;
+    height: 46px;
+  }
+
+  #screen-practice .q-card {
+    min-height: 66px;
+    padding: 10px 14px;
+  }
+
+  #screen-practice .q-text {
+    font-size: 27px;
+  }
+
+  #screen-practice .ans-box {
+    min-height: 42px;
+  }
+
+  #screen-practice .key {
+    min-height: 38px;
+    padding: 6px 0;
+    font-size: 17px;
+  }
+
+  #screen-practice .kb-hint {
+    display: none;
+  }
+}
