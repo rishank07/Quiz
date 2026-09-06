@@ -1,5 +1,5 @@
-// v27 direct Crux hierarchy restore 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-06-v27-crux-direct-hierarchy";
+// v28 light-mode Home/Back contrast 20260906
+const CACHE_VERSION = "efp-pwa-2026-09-06-v28-light-nav-contrast";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
