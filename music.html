@@ -239,6 +239,33 @@ function efpFindStudyTab(goHome){
   return study;
 }
 
+function efpFindStudyTab(goHome){
+  var study=null;
+  try{
+    if(window.opener&&!window.opener.closed&&window.opener.location.origin===window.location.origin)study=window.opener;
+  }catch(e){}
+
+  if(!study){
+    try{
+      if(goHome){
+        study=window.open('/','efpExamFusionStudy');
+      }else{
+        study=window.open('','efpExamFusionStudy');
+        if(study){
+          try{if(!study.location.href||study.location.href==='about:blank')study.location.href='/'}catch(e){}
+        }
+      }
+    }catch(e){}
+  }
+
+  if(!study)return null;
+  try{
+    if(goHome)study.location.href='/';
+    study.focus();
+  }catch(e){}
+  return study;
+}
+
 function efpBrowserReturnToStudy(){
   var study=efpFindStudyTab(false);
   if(study){
