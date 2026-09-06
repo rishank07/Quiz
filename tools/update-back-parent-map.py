@@ -123,6 +123,12 @@ def candidate_rank(source: str, target: str) -> tuple[int, int, int, int, int]:
     return (ancestor, common, nav_score(source), -distance, -len(source))
 
 
+def is_strict_directory_ancestor(source: str, target: str) -> bool:
+    sdir = directory_parts(source)
+    tdir = directory_parts(target)
+    return len(sdir) < len(tdir) and sdir == tdir[: len(sdir)]
+
+
 def nearest_structural_parent(target: str, html_files: set[str]) -> str | None:
     current = posixpath.dirname(target)
 
@@ -188,7 +194,10 @@ def generate(root: Path) -> tuple[dict[str, str], int]:
         if target == "index.html":
             continue
 
-        nav_candidates = [src for src in incoming.get(target, ()) if nav_score(src) > 0]
+        nav_candidates = [
+            src for src in incoming.get(target, ())
+            if nav_score(src) > 0 or is_strict_directory_ancestor(src, target)
+        ]
         parent: str | None = None
         if nav_candidates:
             parent = max(nav_candidates, key=lambda src: candidate_rank(src, target))
@@ -216,6 +225,10 @@ def validate(parent_map: dict[str, str]) -> None:
             "/Books/Ghatnachakra Purvalokan/SubjectName.html",
         "/Books/Ghatnachakra Purvalokan/SubjectName.html":
             "/index.html",
+        "/Bihar Special/Topic Names/Introducing Bihar.html":
+            "/Bihar Special/Bihar Special.html",
+        "/Books/BlackBook/Files/All Spelling.html":
+            "/Books/BlackBook/BlackBook.html",
     }
     for child, expected in sample.items():
         if child in parent_map and parent_map[child] != expected:
