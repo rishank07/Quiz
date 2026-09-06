@@ -50,9 +50,11 @@ jobs:
           python tools/install-stockfish-assets.py
           python tools/add-break-tools.py
           python tools/fix-radio-browser-flow.py
-          python tools/fix-radio-browser-launch.py
           python tools/fix-chess-open-source.py
           python tools/fix-chess-layout.py
+          # Run radio browser/app routing last so its cache version and return
+          # intents remain the final state after other break-tool maintenance.
+          python tools/fix-radio-browser-launch.py
       - name: Commit generated integration changes
         shell: bash
         run: |
