@@ -141,6 +141,23 @@
 .last-move-note{margin:6px auto 1px;width:max-content;max-width:96%;padding:5px 9px;border-radius:999px;border:1px solid rgba(246,217,138,.22);background:rgba(246,217,138,.07);color:#f6d98a;font-size:10.5px;font-weight:850;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .last-move-note[hidden]{display:none!important}
 @media(max-width:430px){.last-move-note{font-size:9.8px;padding:4px 8px;margin-top:5px}}
+  
+
+/* EFP chess game-over overlay */
+.efp-mated-king{
+  position:absolute;width:12.5%;height:12.5%;transform:translate(-50%,-50%);z-index:10;pointer-events:none;
+  border-radius:12%;border:2px solid rgba(255,92,92,.98);background:rgba(239,68,68,.34);
+  box-shadow:inset 0 0 0 2px rgba(127,29,29,.35),0 0 0 3px rgba(239,68,68,.15),0 0 22px rgba(239,68,68,.78);
+  animation:efpMateKingPulse 1.05s ease-in-out infinite alternate
+}
+@keyframes efpMateKingPulse{from{background:rgba(239,68,68,.28);box-shadow:inset 0 0 0 2px rgba(127,29,29,.32),0 0 0 3px rgba(239,68,68,.12),0 0 14px rgba(239,68,68,.54)}to{background:rgba(239,68,68,.48);box-shadow:inset 0 0 0 2px rgba(127,29,29,.46),0 0 0 4px rgba(239,68,68,.20),0 0 28px rgba(239,68,68,.94)}}
+.game-over-overlay{position:fixed;inset:0;z-index:2147482600;display:grid;place-items:center;padding:18px;background:rgba(2,6,23,.72);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.game-over-overlay[hidden]{display:none!important}
+.game-over-card{width:min(92vw,390px);padding:22px 19px 18px;border-radius:22px;text-align:center;background:linear-gradient(160deg,rgba(24,34,52,.99),rgba(7,12,23,.99));border:1px solid rgba(246,217,138,.28);box-shadow:0 28px 70px rgba(0,0,0,.58)}
+.game-over-kicker{font-size:9px;font-weight:900;letter-spacing:.15em;color:var(--gold2)}
+.game-over-icon{font-size:34px;line-height:1;margin:10px 0 7px}.game-over-title{margin:0;font-size:27px;line-height:1.12}.game-over-reason{margin-top:7px;color:var(--muted);font-size:13px;font-weight:700}.game-over-score{margin:13px auto 0;width:max-content;min-width:92px;padding:8px 12px;border-radius:999px;background:rgba(246,217,138,.09);border:1px solid rgba(246,217,138,.18);color:var(--gold2);font-size:18px;font-weight:900;letter-spacing:.04em}
+.game-over-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:17px}.game-over-actions .btn{width:100%}.game-over-actions .btn.primary{background:linear-gradient(135deg,#473615,#6a4c17)}
+@media(max-width:430px){.game-over-card{padding:20px 16px 16px;border-radius:19px}.game-over-title{font-size:24px}.game-over-icon{font-size:31px}.game-over-actions{grid-template-columns:1fr}.game-over-score{font-size:17px}}
   </style>
 
   <script defer src="/home-nav.js?v=20260907"></script>
@@ -234,6 +251,20 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <div class="game-over-overlay" id="gameOverOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="gameOverTitle">
+    <div class="game-over-card">
+      <div class="game-over-kicker">GAME OVER</div>
+      <div class="game-over-icon" id="gameOverIcon" aria-hidden="true">♚</div>
+      <h2 class="game-over-title" id="gameOverTitle">Game Over</h2>
+      <div class="game-over-reason" id="gameOverReason">Result</div>
+      <div class="game-over-score" id="gameOverScore">½–½</div>
+      <div class="game-over-actions">
+        <button class="btn primary" id="gameOverNew" type="button">New Game</button>
+        <button class="btn" id="gameOverClose" type="button">View Board</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { Chess } from "https://cdn.jsdelivr.net/npm/chess.js@1.4.0/dist/esm/chess.js";
     import { Chessboard, COLOR, INPUT_EVENT_TYPE, BORDER_TYPE } from "https://cdn.jsdelivr.net/npm/cm-chessboard@8.14.0/src/Chessboard.js";
@@ -275,6 +306,13 @@
     const bottomName = document.getElementById("bottomName");
     const sideLabel = document.getElementById("sideLabel");
     const lastMoveNote = document.getElementById("lastMoveNote");
+    const gameOverOverlay = document.getElementById("gameOverOverlay");
+    const gameOverIcon = document.getElementById("gameOverIcon");
+    const gameOverTitle = document.getElementById("gameOverTitle");
+    const gameOverReason = document.getElementById("gameOverReason");
+    const gameOverScore = document.getElementById("gameOverScore");
+    const gameOverNew = document.getElementById("gameOverNew");
+    const gameOverClose = document.getElementById("gameOverClose");
 
     let game = new Chess();
     let human = "w";
@@ -287,6 +325,7 @@
     let queuedAction = null;
     let toastTimer = 0;
     let audioCtx = null;
+    let gameOverModalKey = "";
 
     function toast(message) {
       toastEl.textContent = message;
@@ -464,6 +503,82 @@
       };
     }
 
+
+    function findKingSquare(color) {
+      for (const file of "abcdefgh") {
+        for (let rank = 1; rank <= 8; rank++) {
+          const square = file + rank;
+          const piece = game.get(square);
+          if (piece && piece.type === "k" && piece.color === color) return square;
+        }
+      }
+      return null;
+    }
+
+    function clearMatedKing() {
+      const old = document.getElementById("matedKingGlow");
+      if (old) old.remove();
+    }
+
+    function showMatedKing() {
+      clearMatedKing();
+      if (!game.isCheckmate()) return;
+      const square = findKingSquare(game.turn());
+      const host = document.getElementById("board");
+      if (!square || !host) return;
+      const point = squarePoint(square);
+      const glow = document.createElement("div");
+      glow.id = "matedKingGlow";
+      glow.className = "efp-mated-king";
+      glow.setAttribute("aria-hidden", "true");
+      glow.style.left = point.x + "%";
+      glow.style.top = point.y + "%";
+      host.appendChild(glow);
+    }
+
+    function hideGameOver() {
+      if (!gameOverOverlay) return;
+      gameOverOverlay.hidden = true;
+    }
+
+    function clearGameEndState() {
+      hideGameOver();
+      gameOverModalKey = "";
+      clearMatedKing();
+    }
+
+    function drawReason() {
+      if (game.isStalemate()) return "Stalemate";
+      if (game.isThreefoldRepetition()) return "Threefold repetition";
+      if (game.isInsufficientMaterial()) return "Insufficient material";
+      if (typeof game.isDrawByFiftyMoves === "function" && game.isDrawByFiftyMoves()) return "50-move rule";
+      return "Draw";
+    }
+
+    function showGameOver() {
+      if (!gameOverOverlay || !game.isGameOver()) return;
+      const key = game.fen();
+      if (gameOverModalKey === key) return;
+      gameOverModalKey = key;
+
+      if (game.isCheckmate()) {
+        const winner = game.turn() === "w" ? "b" : "w";
+        const youWon = winner === human;
+        gameOverIcon.textContent = youWon ? "🏆" : "♚";
+        gameOverTitle.textContent = youWon ? "You Win!" : "Stockfish Wins";
+        gameOverReason.textContent = "Checkmate";
+        gameOverScore.textContent = winner === "w" ? "1–0" : "0–1";
+        showMatedKing();
+      } else {
+        clearMatedKing();
+        gameOverIcon.textContent = "½";
+        gameOverTitle.textContent = "Draw";
+        gameOverReason.textContent = drawReason();
+        gameOverScore.textContent = "½–½";
+      }
+      gameOverOverlay.hidden = false;
+    }
+
     function showLastMove() {
       if (board.removeMarkers) board.removeMarkers(MARKER_TYPE.square);
       const hist = game.history({verbose:true});
@@ -508,13 +623,23 @@
       hintBtn.disabled = thinking || game.isGameOver() || game.turn() !== human;
 
       if (game.isCheckmate()) {
-        setStatus(game.turn() === human ? "Checkmate — Stockfish wins." : "Checkmate — You win! 🎉");
+        const winner = game.turn() === "w" ? "b" : "w";
+        setStatus(winner === human ? "Checkmate — You win! 🎉" : "Checkmate — Stockfish wins.");
         board.disableMoveInput();
+        showMatedKing();
+        showGameOver();
+        return;
+      }
+      if (game.isStalemate()) {
+        setStatus("Draw — Stalemate.");
+        board.disableMoveInput();
+        showGameOver();
         return;
       }
       if (isDraw()) {
-        setStatus("Game drawn.");
+        setStatus("Game drawn — " + drawReason() + ".");
         board.disableMoveInput();
+        showGameOver();
         return;
       }
       if (thinking) {
@@ -789,6 +914,7 @@
       pendingMode = null;
       queuedAction = null;
       clearHintMarkers();
+      clearGameEndState();
       if (board.removeMarkers) board.removeMarkers(MARKER_TYPE.square);
       board.setOrientation(colorObj(human), false);
       post("ucinewgame");
@@ -822,6 +948,7 @@
       }
       const count = hist.length - humanIndex;
       for (let i = 0; i < count; i++) game.undo();
+      clearGameEndState();
       syncBoard(true).then(() => {
         persist();
         toast("Last turn undone.");
@@ -837,6 +964,7 @@
       board.setOrientation(next, true).then(() => {
         updatePlayerBars();
         showLastMove();
+        if (game.isCheckmate()) showMatedKing();
         persist();
       });
     });
@@ -846,6 +974,14 @@
       toast(`Computer level ${levelEl.value} selected.`);
     });
     sideEl.addEventListener("change", newGame);
+    if (gameOverNew) gameOverNew.addEventListener("click", newGame);
+    if (gameOverClose) gameOverClose.addEventListener("click", hideGameOver);
+    if (gameOverOverlay) gameOverOverlay.addEventListener("click", event => {
+      if (event.target === gameOverOverlay) hideGameOver();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && gameOverOverlay && !gameOverOverlay.hidden) hideGameOver();
+    });
 
     syncBoard(false).then(() => {
       if (game.turn() === human) enableHumanInput();
