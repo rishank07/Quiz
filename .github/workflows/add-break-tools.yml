@@ -61,7 +61,9 @@ jobs:
           python tools/add-break-tools.py
           python tools/fix-radio-browser-flow.py
           python tools/fix-chess-open-source.py
-          python tools/fix-chess-layout.py
+          # The layout/last-move layer is already installed on current chess.html.
+          # Run its legacy installer only when that layer is actually missing.
+          if ! grep -q "EFP chess last-move arrow" chess.html; then python tools/fix-chess-layout.py; fi
           # Final Radio routing: browsers keep the two-tab flow; Android APK/TWA
           # stays normal in-app with no browser handoff/background-study mode.
           python tools/fix-radio-browser-launch.py
