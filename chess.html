@@ -171,6 +171,23 @@
 .move-entry:hover{background:rgba(255,255,255,.045);color:var(--text)}.move-entry.active{background:rgba(246,217,138,.11);border-color:rgba(246,217,138,.24);color:var(--gold2)}
 .move-entry .move-no{flex:0 0 auto;color:#718096;font-size:9px}.move-entry .move-san{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:430px){.review-btn{font-size:9.4px;padding:6px 5px}.move-entry{font-size:10px;padding:5px 6px}.review-position{font-size:9px}}
+  
+
+/* EFP chess captured-pieces strip */
+.playerbar>span:first-child{display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden}
+.playerbar>span:first-child>.dot{flex:0 0 auto;margin-right:1px}
+.captured-pieces{display:inline-flex;align-items:center;gap:4px;min-width:0;max-width:62%;overflow:hidden;white-space:nowrap;color:#cbd5e1}
+.capture-prefix{flex:0 0 auto;color:#718096;font-size:8px;font-weight:800;letter-spacing:.02em;text-transform:uppercase}
+.capture-glyphs{display:inline-flex;align-items:center;min-width:0;overflow:hidden;font-family:"Segoe UI Symbol","Noto Sans Symbols 2","Arial Unicode MS",serif;font-size:15px;line-height:1;letter-spacing:-1px;color:#e5e7eb;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
+.capture-empty{color:#64748b;font-size:10px;font-weight:750}
+.capture-advantage{flex:0 0 auto;color:#86efac;font-size:9.5px;font-weight:900}
+@media(max-width:430px){
+  .playerbar>span:first-child{gap:4px;max-width:80%}
+  .captured-pieces{gap:3px;max-width:58%}
+  .capture-prefix{display:none}
+  .capture-glyphs{font-size:14px;letter-spacing:-1.2px}
+  .capture-advantage{font-size:9px}
+}
   </style>
 
   <script defer src="/home-nav.js?v=20260907"></script>
@@ -225,13 +242,13 @@
     <section class="game-shell">
       <div class="board-card">
         <div class="playerbar" id="topPlayer">
-          <span><span class="dot"></span><strong id="topName">Stockfish 18</strong></span>
+          <span><span class="dot"></span><strong id="topName">Stockfish 18</strong><span class="captured-pieces" id="topCaptured" aria-label="Captured pieces"></span></span>
           <span class="engine-pill" id="topBadge">ENGINE</span>
         </div>
         <div id="board" aria-label="Interactive chess board"></div>
         <div class="last-move-note" id="lastMoveNote" hidden aria-live="polite"></div>
         <div class="playerbar" id="bottomPlayer">
-          <span><span class="dot"></span><strong id="bottomName">You</strong></span>
+          <span><span class="dot"></span><strong id="bottomName">You</strong><span class="captured-pieces" id="bottomCaptured" aria-label="Captured pieces"></span></span>
           <span id="sideLabel">WHITE</span>
         </div>
       </div>
@@ -336,6 +353,8 @@
     const reviewNext = document.getElementById("reviewNext");
     const reviewLive = document.getElementById("reviewLive");
     const reviewPosition = document.getElementById("reviewPosition");
+    const topCaptured = document.getElementById("topCaptured");
+    const bottomCaptured = document.getElementById("bottomCaptured");
 
     let game = new Chess();
     let human = "w";
@@ -459,6 +478,81 @@
       const turnIsHuman = game.turn() === human;
       topPlayer.classList.toggle("active", engineTop ? !turnIsHuman : turnIsHuman);
       bottomPlayer.classList.toggle("active", engineTop ? turnIsHuman : !turnIsHuman);
+      updateCapturedPieces();
+    }
+
+
+
+    const CAPTURE_GLYPHS = {
+      w:{q:"♕",r:"♖",b:"♗",n:"♘",p:"♙"},
+      b:{q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"}
+    };
+    const CAPTURE_NAMES = {q:"queen",r:"rook",b:"bishop",n:"knight",p:"pawn"};
+    const CAPTURE_VALUES = {q:9,r:5,b:3,n:3,p:1};
+    const CAPTURE_ORDER = {q:0,r:1,b:2,n:3,p:4};
+
+    function capturedState() {
+      const hist = game.history({verbose:true});
+      const limit = reviewPly === null ? hist.length : Math.max(0, Math.min(hist.length, reviewPly));
+      const out = {you:{pieces:[],score:0},computer:{pieces:[],score:0}};
+      for (let i = 0; i < limit; i++) {
+        const m = hist[i];
+        if (!m.captured) continue;
+        const actor = m.color === human ? out.you : out.computer;
+        const color = m.color === "w" ? "b" : "w";
+        actor.pieces.push({type:m.captured,color,index:i});
+        actor.score += CAPTURE_VALUES[m.captured] || 0;
+      }
+      for (const side of [out.you,out.computer]) {
+        side.pieces.sort((a,b) => (CAPTURE_ORDER[a.type] ?? 9) - (CAPTURE_ORDER[b.type] ?? 9) || a.index - b.index);
+      }
+      return out;
+    }
+
+    function renderCaptured(el, actorLabel, data, advantage) {
+      if (!el) return;
+      el.textContent = "";
+      const prefix = document.createElement("span");
+      prefix.className = "capture-prefix";
+      prefix.textContent = "captured";
+      el.appendChild(prefix);
+
+      if (data.pieces.length) {
+        const glyphs = document.createElement("span");
+        glyphs.className = "capture-glyphs";
+        glyphs.textContent = data.pieces.map(p => (CAPTURE_GLYPHS[p.color] || {})[p.type] || "").join("");
+        el.appendChild(glyphs);
+      } else {
+        const empty = document.createElement("span");
+        empty.className = "capture-empty";
+        empty.textContent = "—";
+        el.appendChild(empty);
+      }
+
+      if (advantage > 0) {
+        const adv = document.createElement("span");
+        adv.className = "capture-advantage";
+        adv.textContent = `+${advantage}`;
+        el.appendChild(adv);
+      }
+
+      const names = data.pieces.map(p => `${p.color === "w" ? "white" : "black"} ${CAPTURE_NAMES[p.type] || p.type}`);
+      el.setAttribute("aria-label", `${actorLabel} captured: ${names.length ? names.join(", ") : "none"}${advantage > 0 ? `; material advantage +${advantage}` : ""}`);
+      el.title = `${actorLabel} captured: ${names.length ? names.join(", ") : "none"}${advantage > 0 ? ` · +${advantage}` : ""}`;
+    }
+
+    function updateCapturedPieces() {
+      if (!topCaptured || !bottomCaptured) return;
+      const state = capturedState();
+      const diff = state.you.score - state.computer.score;
+      const engineTop = board.getOrientation() === colorObj(human);
+      if (engineTop) {
+        renderCaptured(topCaptured, "Computer", state.computer, Math.max(0, -diff));
+        renderCaptured(bottomCaptured, "You", state.you, Math.max(0, diff));
+      } else {
+        renderCaptured(topCaptured, "You", state.you, Math.max(0, diff));
+        renderCaptured(bottomCaptured, "Computer", state.computer, Math.max(0, -diff));
+      }
     }
 
     function updateMoves() {
@@ -694,6 +788,7 @@
       return board.setPosition(temp.fen(), animated).then(() => {
         paintMoveArrow(reviewPly > 0 ? hist[reviewPly - 1] : null, "review");
         updateReviewControls();
+        updateCapturedPieces();
         setStatus(`Reviewing move ${reviewPly} of ${total} · tap Live to continue`);
       });
     }
