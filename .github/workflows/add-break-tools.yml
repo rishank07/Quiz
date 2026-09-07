@@ -16,6 +16,7 @@ on:
       - "tools/install-stockfish-assets.py"
       - "tools/fix-chess-open-source.py"
       - "tools/fix-chess-layout.py"
+      - "tools/fix-chess-game-over.py"
       - ".github/workflows/add-break-tools.yml"
   workflow_dispatch:
 
@@ -51,6 +52,7 @@ jobs:
           python -m py_compile tools/install-stockfish-assets.py
           python -m py_compile tools/fix-chess-open-source.py
           python -m py_compile tools/fix-chess-layout.py
+          python -m py_compile tools/fix-chess-game-over.py
       - name: Maintain break tools, analytics, chess engine and PWA cache
         run: |
           python tools/install-stockfish-assets.py
@@ -67,6 +69,9 @@ jobs:
           python tools/fix-radio-playlist-dropdown.py
           # Highlight the active song without scrolling the whole document.
           python tools/fix-radio-next-scroll.py
+          # Show a Chess.com-style result card and red checkmated king highlight.
+          # Run last so this feature also owns the final PWA cache bump.
+          python tools/fix-chess-game-over.py
       - name: Commit generated integration changes
         shell: bash
         run: |
