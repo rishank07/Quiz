@@ -39,10 +39,13 @@ ensureSharedDarkMode();
 // Keeps attempted answers alive while the user moves between sections of the same chapter.
 // This is deliberately session/in-memory state so a fresh chapter attempt still starts clean.
 if(!state.answerMap) state.answerMap={};
+function clearLegacyPersistedAnswers(){try{localStorage.removeItem("efp_quiz_answer_state_v1")}catch(e){}}
+clearLegacyPersistedAnswers();
 function clearTransientAttempt(){
  state.answerMap={};
  state.shuffleMap={};
  state.score={correct:0,wrong:0,attempted:0};
+ clearLegacyPersistedAnswers();
 }
 function isReloadNavigation(){
  try{var entries=performance.getEntriesByType&&performance.getEntriesByType("navigation");return !!(entries&&entries[0]&&entries[0].type==="reload")}catch(e){return false}
@@ -51,10 +54,13 @@ function isReloadNavigation(){
 // Explicitly start a clean attempt after refresh/reopen, while ordinary section renders
 // keep using the same in-memory answerMap.
 window.addEventListener("pageshow",function(event){
+ clearLegacyPersistedAnswers();
  if(!event.persisted&&!isReloadNavigation())return;
  clearTransientAttempt();
  if(state.screen==="quiz")render();
 });
+window.addEventListener("pagehide",clearLegacyPersistedAnswers);
+window.addEventListener("beforeunload",clearLegacyPersistedAnswers);
 function answerStateKey(sectionIndex,qi){return String(sectionIndex)+"-"+String(qi)}
 function restoreAnsweredSection(){
  var secIndex=state.currentSection;

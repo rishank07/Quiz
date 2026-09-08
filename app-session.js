@@ -1,12 +1,14 @@
-/* ExamFusion Prep — installed-app session + quiz answer persistence */
+/* ExamFusion Prep — installed-app session */
 (function () {
   "use strict";
 
   var SESSION_KEY = "efp_app_session_v1";
   var PENDING_KEY = "efp_app_resume_pending_v1";
-  var QUIZ_KEY = "efp_quiz_answer_state_v1";
   var MAX_RESUME_AGE = 24 * 60 * 60 * 1000;
-  var MAX_QUIZ_PAGES = 180;
+
+  // Original Practice answers are intentionally attempt-only. Remove data
+  // written by the retired cross-refresh answer persistence feature.
+  try { localStorage.removeItem("efp_quiz_answer_state_v1"); } catch (_) {}
 
   function safeParse(raw, fallback) {
     try {
@@ -164,146 +166,15 @@
     }, true);
   }
 
-  function isOriginalPracticeQuiz() {
-    var path = normalizedPath(location.pathname).toLowerCase();
-    return path.indexOf("/original practice/") === 0 && /_complete_practice\.html$/.test(path);
-  }
-
-  function quizPageKey() {
-    try {
-      var url = new URL(location.href);
-      var keep = new URLSearchParams();
-      ["subject", "chapter", "section"].forEach(function (name) {
-        if (url.searchParams.has(name)) keep.set(name, url.searchParams.get(name));
-      });
-      var query = keep.toString();
-      return url.pathname + (query ? "?" + query : "");
-    } catch (_) {
-      return location.pathname + location.search;
-    }
-  }
-
-  function normalizedOptionText(text) {
-    return String(text || "")
-      .replace(/^\s*(?:\(?[A-D]\)?[.)\-:]?|[1-4][.)\-:])\s+/i, "")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
-
-  function optionGroup(button) {
-    if (!button || !button.closest) return null;
-    return button.closest('[id^="opts-"]');
-  }
-
-  function quizStore() {
-    var data = safeParse(localStorage.getItem(QUIZ_KEY), {});
-    return data && typeof data === "object" && !Array.isArray(data) ? data : {};
-  }
-
-  function pruneQuizStore(data) {
-    var keys = Object.keys(data || {});
-    if (keys.length <= MAX_QUIZ_PAGES) return data;
-    keys.sort(function (a, b) {
-      return Number((data[b] && data[b].ts) || 0) - Number((data[a] && data[a].ts) || 0);
-    });
-    keys.slice(MAX_QUIZ_PAGES).forEach(function (key) { delete data[key]; });
-    return data;
-  }
-
-  function saveQuizAnswer(button) {
-    if (!isOriginalPracticeQuiz()) return;
-    var group = optionGroup(button);
-    if (!group || !group.id) return;
-    var text = normalizedOptionText(button.textContent);
-    if (!text) return;
-    try {
-      var data = quizStore();
-      var key = quizPageKey();
-      if (!data[key] || typeof data[key] !== "object") data[key] = { ts: Date.now(), answers: {} };
-      if (!data[key].answers || typeof data[key].answers !== "object") data[key].answers = {};
-      data[key].ts = Date.now();
-      data[key].answers[group.id] = { text: text, ts: Date.now() };
-      localStorage.setItem(QUIZ_KEY, JSON.stringify(pruneQuizStore(data)));
-    } catch (_) {}
-  }
-
-  function restoreQuizAnswers() {
-    if (!isOriginalPracticeQuiz()) return false;
-    var data = quizStore();
-    var page = data[quizPageKey()];
-    if (!page || !page.answers) return false;
-    var changed = false;
-
-    Object.keys(page.answers).forEach(function (groupId) {
-      var group = document.getElementById(groupId);
-      if (!group) return;
-      var buttons = group.querySelectorAll(".option-btn");
-      if (!buttons.length) return;
-      var alreadyAnswered = false;
-      for (var i = 0; i < buttons.length; i++) {
-        if (buttons[i].classList.contains("answered") || buttons[i].classList.contains("correct") || buttons[i].classList.contains("incorrect")) {
-          alreadyAnswered = true;
-          break;
-        }
-      }
-      if (alreadyAnswered) return;
-
-      var wanted = normalizedOptionText(page.answers[groupId] && page.answers[groupId].text);
-      if (!wanted) return;
-      for (var j = 0; j < buttons.length; j++) {
-        if (normalizedOptionText(buttons[j].textContent) === wanted) {
-          buttons[j].click();
-          changed = true;
-          break;
-        }
-      }
-    });
-    return changed;
-  }
-
-  function installQuizPersistence() {
-    if (!isOriginalPracticeQuiz()) return;
-
-    document.addEventListener("click", function (event) {
-      var button = event.target && event.target.closest ? event.target.closest(".option-btn") : null;
-      if (!button || !optionGroup(button)) return;
-      setTimeout(function () { saveQuizAnswer(button); }, 0);
-    }, true);
-
-    var queued = false;
-    function queueRestore() {
-      if (queued) return;
-      queued = true;
-      setTimeout(function () {
-        queued = false;
-        restoreQuizAnswers();
-      }, 40);
-    }
-
-    if (document.documentElement) {
-      var observer = new MutationObserver(queueRestore);
-      observer.observe(document.documentElement, { childList: true, subtree: true });
-    }
-
-    var attempts = 0;
-    var timer = setInterval(function () {
-      attempts += 1;
-      restoreQuizAnswers();
-      if (attempts >= 40) clearInterval(timer);
-    }, 200);
-  }
-
   if (maybeResumeFreshLaunch()) return;
 
   installHistoryTracking();
   installLifecycleTracking();
-  installQuizPersistence();
   restorePendingScroll();
   writeSession();
 
   window.EFP_APP_SESSION = {
     save: writeSession,
-    markHome: markIntentionalHome,
-    restoreQuizAnswers: restoreQuizAnswers
+    markHome: markIntentionalHome
   };
 })();

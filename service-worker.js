@@ -1,5 +1,5 @@
 // v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-08-v71-original-practice-answer-reset";
+const CACHE_VERSION = "efp-pwa-2026-09-08-v72-original-practice-answer-reset";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -17,8 +17,8 @@ const APP_SHELL = [
   "/pwa-icons/icon-512.png",
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
-  "/home-nav.js",
-  "/app-session.js",
+  "/home-nav.js?v=20260908answerreset2",
+  "/app-session.js?v=20260908answerreset2",
   "/back-parent-map.js",
   "/back-nav.js",
   "/search-logic.js",
@@ -29,7 +29,7 @@ const APP_SHELL = [
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
   "/Original%20Practice/original-practice.css",
-  "/Original%20Practice/original-practice.js?v=20260908answerreset1",
+  "/Original%20Practice/original-practice.js?v=20260908answerreset2",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
   "/Crux-Tricks/viewer.html",
