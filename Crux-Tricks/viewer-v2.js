@@ -359,7 +359,9 @@
       var b=pg.getViewport({scale:1});
       var landscape=b.width>b.height*1.03;
       lastPageLandscape=landscape;
-      if(isCompactReader()&&landscape){buildContinuous(pg)}else{disableContinuous();renderSinglePage()}
+      document.documentElement.classList.toggle('efp-landscape-page',landscape);
+      document.documentElement.classList.toggle('efp-portrait-page',!landscape);
+      if(isCompactReader())buildContinuous(pg);else{disableContinuous();renderSinglePage()}
     });
   }
   function loadPdf(){
@@ -390,7 +392,13 @@
     clearTimeout(resizeTimer);resizeTimer=setTimeout(function(){
       mobileReader=isCompactReader();autoFit=true;zoom=1;if(devicePortrait())document.documentElement.classList.remove('efp-reader-ui-hidden');updateControls();
       if(!pdfDoc||document.body.classList.contains('mobile-tools-open'))return;
-      pdfDoc.getPage(page).then(function(pg){var b=pg.getViewport({scale:1}),landscape=b.width>b.height*1.03;if(mobileReader&&landscape){if(!continuous)buildContinuous(pg);else reflowContinuous()}else{if(continuous)disableContinuous();renderSinglePage()}});
+      pdfDoc.getPage(page).then(function(pg){
+        var b=pg.getViewport({scale:1}),landscape=b.width>b.height*1.03;
+        lastPageLandscape=landscape;
+        document.documentElement.classList.toggle('efp-landscape-page',landscape);
+        document.documentElement.classList.toggle('efp-portrait-page',!landscape);
+        if(mobileReader){if(!continuous)buildContinuous(pg);else reflowContinuous()}else{if(continuous)disableContinuous();renderSinglePage()}
+      });
     },180);
   }
   window.addEventListener('resize',refitForViewport);
