@@ -108,10 +108,6 @@
       'html:not(.dark).efp-advance-maths-dark-pdf .efp-cont-page canvas{filter:invert(.965) hue-rotate(180deg) saturate(1.02) brightness(1.08) contrast(1.14)!important;background:#fff!important}',
       'html.efp-continuous-mobile-pdf .mobile-reader-bar{transition:opacity .18s ease,transform .22s ease!important}',
       'html.efp-continuous-mobile-pdf .mobile-reader-bar.efp-reader-hidden{opacity:0!important;pointer-events:none!important;transform:translateX(-50%) translateY(calc(100% + 28px))!important}',
-      'html.efp-continuous-mobile-pdf #efp-home-button{top:max(3px,env(safe-area-inset-top))!important;right:max(6px,env(safe-area-inset-right))!important;bottom:auto!important;left:auto!important;width:32px!important;min-width:32px!important;height:32px!important;min-height:32px!important;padding:0!important;border-radius:50%!important;background:rgba(8,14,24,.22)!important;box-shadow:none!important}',
-      'html.efp-continuous-mobile-pdf #efp-app-back-button{top:max(3px,env(safe-area-inset-top))!important;left:max(6px,env(safe-area-inset-left))!important;right:auto!important;bottom:auto!important;width:32px!important;min-width:32px!important;height:32px!important;min-height:32px!important;padding:0!important;border-radius:50%!important;background:rgba(8,14,24,.22)!important;box-shadow:none!important}',
-      'html.efp-continuous-mobile-pdf #efp-home-button .efp-home-label,html.efp-continuous-mobile-pdf #efp-app-back-button .efp-back-label{display:none!important}',
-      'html.efp-continuous-mobile-pdf #efp-home-button .efp-home-icon,html.efp-continuous-mobile-pdf #efp-app-back-button .efp-back-icon{font-size:17px!important}',
       '@media(orientation:landscape){html.efp-continuous-mobile-pdf .reader-head{height:28px!important;min-height:28px!important;padding-top:1px!important;padding-bottom:1px!important}html.efp-continuous-mobile-pdf .reader-title b{font-size:9px!important}html.efp-continuous-mobile-pdf .reader-shell{height:calc(100dvh - 28px)!important}.efp-cont-page{margin-bottom:5px}}'
     ].join('');
     document.head.appendChild(st);
