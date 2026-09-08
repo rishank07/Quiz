@@ -1,0 +1,96 @@
+name: Fix mobile landscape PDF scrolling and rotate fit
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-mobile-pdf-rotate.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch reader mobile rotation behavior
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          js = Path('Crux-Tricks/viewer.js')
+          s = js.read_text(encoding='utf-8')
+
+          old = "function isCompactReader(){return !!(window.matchMedia&&window.matchMedia('(max-width:820px)').matches)}"
+          new = "function isCompactReader(){var coarse=!!(window.matchMedia&&window.matchMedia('(hover:none) and (pointer:coarse)').matches),w=window.innerWidth||document.documentElement.clientWidth||0,h=window.innerHeight||document.documentElement.clientHeight||0,shortSide=Math.min(w,h),longSide=Math.max(w,h);return !!(window.matchMedia&&(window.matchMedia('(max-width:820px)').matches||(coarse&&shortSide<=1024&&longSide<=1400)))}"
+          if old not in s:
+              raise SystemExit('compact reader marker missing')
+          s = s.replace(old, new, 1)
+
+          mobile_media = "@media(max-width:820px),(hover:none) and (pointer:coarse) and (max-width:1024px),(hover:none) and (pointer:coarse) and (max-height:1024px) and (max-width:1400px){"
+          old_focus = "@media(max-width:820px){.reader-head{height:38px!important;"
+          new_focus = mobile_media + ".reader-head{height:38px!important;"
+          if old_focus not in s:
+              raise SystemExit('focus media marker missing')
+          s = s.replace(old_focus, new_focus, 1)
+
+          old_adaptive = "html.efp-landscape-page.efp-compact-reader .pdf-stage{overflow-y:auto!important}html.efp-landscape-page.efp-compact-reader.efp-auto-fit .pdf-stage{overflow-x:hidden!important}"
+          new_adaptive = "html.efp-landscape-page.efp-compact-reader .pdf-stage{overflow-y:auto!important}html.efp-landscape-page.efp-compact-reader.efp-auto-fit .pdf-stage{overflow-x:hidden!important}html.efp-mobile-rotated-page .pdf-stage{overflow-y:scroll!important;overflow-x:hidden!important;touch-action:pan-y pinch-zoom!important}html.efp-mobile-rotated-page #pdfCanvas{margin-left:auto!important;margin-right:auto!important}"
+          if old_adaptive not in s:
+              raise SystemExit('adaptive style marker missing')
+          s = s.replace(old_adaptive, new_adaptive, 1)
+
+          old_render = "pdfDoc.getPage(page).then(function(pdfPage){var base=pdfPage.getViewport({scale:1}),landscape=base.width>base.height*1.03,availableW=Math.max(260,pdfStage.clientWidth-(mobileReader?4:18)),stageTop=pdfStage.getBoundingClientRect().top,visibleH=Math.max(220,window.innerHeight-stageTop-(mobileReader?4:18)),widthFit=availableW/base.width,fit=widthFit;lastPageLandscape=landscape;document.documentElement.classList.toggle('efp-landscape-page',landscape);document.documentElement.classList.toggle('efp-portrait-page',!landscape);document.documentElement.classList.toggle('efp-auto-fit',autoFit);if(!mobileReader&&landscape&&autoFit)fit=Math.min(widthFit,visibleH/base.height);var effectiveZoom=autoFit?(mobileReader&&landscape?1:zoom):zoom,cssScale=fit*effectiveZoom,dpr=Math.min(window.devicePixelRatio||1,mobileReader?3:2),viewport=pdfPage.getViewport({scale:cssScale*dpr}),ctx=pdfCanvas.getContext('2d',{alpha:false});pdfStage.style.overflowY='auto';pdfStage.style.overflowX=(mobileReader&&landscape&&autoFit)?'hidden':'auto';pdfCanvas.width=Math.floor(viewport.width);pdfCanvas.height=Math.floor(viewport.height);pdfCanvas.style.width=Math.floor(viewport.width/dpr)+'px';pdfCanvas.style.height=Math.floor(viewport.height/dpr)+'px';renderTask=pdfPage.render({canvasContext:ctx,viewport:viewport});return renderTask.promise})"
+          new_render = "pdfDoc.getPage(page).then(function(pdfPage){var raw=pdfPage.getViewport({scale:1}),landscape=raw.width>raw.height*1.03,devicePortrait=window.innerHeight>=window.innerWidth,rotateForPortrait=!!(mobileReader&&devicePortrait&&landscape&&autoFit),rotation=((pdfPage.rotate||0)+(rotateForPortrait?90:0))%360,base=pdfPage.getViewport({scale:1,rotation:rotation}),availableW=Math.max(260,pdfStage.clientWidth-(mobileReader?4:18)),stageTop=pdfStage.getBoundingClientRect().top,visibleH=Math.max(220,window.innerHeight-stageTop-(mobileReader?4:18)),widthFit=availableW/base.width,fit=widthFit;lastPageLandscape=landscape;document.documentElement.classList.toggle('efp-landscape-page',landscape);document.documentElement.classList.toggle('efp-portrait-page',!landscape);document.documentElement.classList.toggle('efp-auto-fit',autoFit);document.documentElement.classList.toggle('efp-mobile-rotated-page',rotateForPortrait);if(landscape&&autoFit&&(!mobileReader||!devicePortrait))fit=Math.min(widthFit,visibleH/base.height);var effectiveZoom=autoFit?(landscape?1:zoom):zoom,cssScale=fit*effectiveZoom,dpr=Math.min(window.devicePixelRatio||1,mobileReader?3:2),viewport=pdfPage.getViewport({scale:cssScale*dpr,rotation:rotation}),ctx=pdfCanvas.getContext('2d',{alpha:false});pdfStage.style.overflowY='auto';pdfStage.style.overflowX=(mobileReader&&autoFit)?'hidden':'auto';pdfCanvas.width=Math.floor(viewport.width);pdfCanvas.height=Math.floor(viewport.height);pdfCanvas.style.width=Math.floor(viewport.width/dpr)+'px';pdfCanvas.style.height=Math.floor(viewport.height/dpr)+'px';renderTask=pdfPage.render({canvasContext:ctx,viewport:viewport});return renderTask.promise})"
+          if old_render not in s:
+              raise SystemExit('render marker missing')
+          s = s.replace(old_render, new_render, 1)
+
+          js.write_text(s, encoding='utf-8', newline='\n')
+
+          html = Path('Crux-Tricks/viewer.html')
+          h = html.read_text(encoding='utf-8')
+          old_media = '@media(max-width:820px){\n  html,body{height:100%;overflow:hidden}'
+          new_media = mobile_media + '\n  html,body{height:100%;overflow:hidden}'
+          if old_media not in h:
+              raise SystemExit('viewer html mobile media marker missing')
+          h = h.replace(old_media, new_media, 1)
+
+          old_mq = "var mq=window.matchMedia('(max-width:820px)'),bar=document.getElementById('mobileReaderBar')"
+          mq_query = "(max-width:820px), (hover:none) and (pointer:coarse) and (max-width:1024px), (hover:none) and (pointer:coarse) and (max-height:1024px) and (max-width:1400px)"
+          new_mq = "var mq=window.matchMedia('" + mq_query + "'),bar=document.getElementById('mobileReaderBar')"
+          if old_mq not in h:
+              raise SystemExit('mobile control mq marker missing')
+          h = h.replace(old_mq, new_mq, 1)
+          h = h.replace('viewer.js?v=20260908maths1', 'viewer.js?v=20260909rotate2')
+          html.write_text(h, encoding='utf-8', newline='\n')
+
+          sw = Path('service-worker.js')
+          t = sw.read_text(encoding='utf-8')
+          oldv = 'const CACHE_VERSION = "efp-pwa-2026-09-09-v79-pdf-responsive";'
+          newv = 'const CACHE_VERSION = "efp-pwa-2026-09-09-v80-mobile-pdf-rotate";'
+          if oldv not in t:
+              raise SystemExit('cache version marker missing')
+          t = t.replace(oldv, newv, 1)
+          t = t.replace('/Crux-Tricks/viewer.js?v=20260908maths1', '/Crux-Tricks/viewer.js?v=20260909rotate2')
+          sw.write_text(t, encoding='utf-8', newline='\n')
+          PY
+      - name: Validate reader patch
+        run: |
+          node --check Crux-Tricks/viewer.js
+          grep -q "efp-mobile-rotated-page" Crux-Tricks/viewer.js
+          grep -q "rotateForPortrait" Crux-Tricks/viewer.js
+          grep -q "shortSide<=1024" Crux-Tricks/viewer.js
+          grep -q "viewer.js?v=20260909rotate2" Crux-Tricks/viewer.html
+          grep -q "v80-mobile-pdf-rotate" service-worker.js
+      - name: Commit patch and remove one-off workflow
+        run: |
+          git config user.name "ExamFusion Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git rm .github/workflows/fix-mobile-pdf-rotate.yml
+          git add Crux-Tricks/viewer.js Crux-Tricks/viewer.html service-worker.js
+          git commit -m "Fix mobile landscape PDF vertical scrolling and rotate fit [skip ci]"
+          git push origin master
