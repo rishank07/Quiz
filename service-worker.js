@@ -1,5 +1,5 @@
 // v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-08-v77-original-practice-sticky-score";
+const CACHE_VERSION = "efp-pwa-2026-09-08-v78-maths-crux";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -37,9 +37,9 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-manifest.js",
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260908returnrefresh1",
+  "/Crux-Tricks/crux-tricks.js?v=20260908maths1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer.js?v=20260908progress1",
+  "/Crux-Tricks/viewer.js?v=20260908maths1",
 ];
 
 self.addEventListener("install", (event) => {

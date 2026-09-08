@@ -2,7 +2,7 @@
 var docs=Array.isArray(window.EF_CRUX_DOCS)?window.EF_CRUX_DOCS:[];
 var grid=document.getElementById('grid'),searchBox=document.getElementById('searchBox'),sourceFilter=document.getElementById('sourceFilter'),subjectFilter=document.getElementById('subjectFilter'),branchFilter=document.getElementById('branchFilter'),partMap=document.getElementById('partMap'),full=document.getElementById('fullTextResults'),status=document.getElementById('searchStatus');
 var kind='all', searchClients=null, searchSeq=0;
-var SUBJECT_ORDER=['History','Polity','Geography','Science','Economics','Static GK'];
+var SUBJECT_ORDER=['History','Polity','Geography','Science','Economics','Maths','Static GK'];
 var BRANCH_ORDER={History:['Ancient History','Medieval History','Modern History'],Geography:['Indian Geography','World Geography'],Science:['Physics','Chemistry','Biology']};
 var SOURCE_ORDER=['Ghatnachakra','Pinnacle','ExamFusion Original'];
 function safe(raw,f){try{return JSON.parse(raw)||f}catch(e){return f}}
