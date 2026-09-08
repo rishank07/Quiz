@@ -1,0 +1,35 @@
+name: PDF search highlight v1
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/pdf-search-highlight-v1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Patch viewer
+        run: python .github/scripts/add_pdf_search_highlight.py
+      - name: Validate
+        run: |
+          node --check Crux-Tricks/viewer-v2.js
+          grep -F "function renderSearchHighlights" Crux-Tricks/viewer-v2.js
+          grep -F "matchedTextItemIndexes" Crux-Tricks/viewer-v2.js
+          grep -F "efp-search-mark" Crux-Tricks/viewer-v2.js
+          grep -F "viewer-v2.js?v=20260909searchhighlight1" Crux-Tricks/viewer.html
+          grep -F "v95-pdf-search-highlight" service-worker.js
+      - name: Commit
+        run: |
+          git config user.name "ExamFusion Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add Crux-Tricks/viewer-v2.js Crux-Tricks/viewer.html service-worker.js
+          git rm .github/scripts/add_pdf_search_highlight.py .github/workflows/pdf-search-highlight-v1.yml
+          git commit -m "Highlight PDF text search matches [skip ci]"
+          git push
