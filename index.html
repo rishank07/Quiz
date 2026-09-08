@@ -34,7 +34,7 @@
   <meta name="apple-mobile-web-app-title" content="ExamFusion Prep">
   <meta name="msapplication-TileColor" content="#070a13">
   <meta name="description"
-    content="Free SSC, Railway, UPSC & BPSC preparation — 38,776 Original Practice questions, 447 revision crux & memory-trick PDFs, Mind Maps and Current Affairs. हिंदी + English.">
+    content="Free SSC, Railway, UPSC & BPSC preparation — 40,891 Original Practice questions, 447 revision crux & memory-trick PDFs, Mind Maps and Current Affairs. हिंदी + English.">
 
   <meta property="og:title" content="Exam Fusion Prep — Free Competitive Exam Hub">
   <meta property="og:description"
@@ -53,7 +53,7 @@
     "name": "Exam Fusion Prep",
     "url": "https://examfusionprep.com",
     "logo": "https://examfusionprep.com/logo.png",
-    "description": "Free bilingual (Hindi + English) preparation platform for SSC, Railway, UPSC and BPSC exams — including 38,776 ExamFusion Original Practice questions, MCQs, mind maps and current affairs.",
+    "description": "Free bilingual (Hindi + English) preparation platform for SSC, Railway, UPSC and BPSC exams — including 40,891 ExamFusion Original Practice questions, MCQs, mind maps and current affairs.",
     "sameAs": [
       "https://youtube.com/@examfusionprep",
       "https://telegram.me/examfusionprep"
@@ -1525,7 +1525,7 @@
         }
         if (!deepSearchPromise) {
           deepSearchPromise = Promise.all([
-            loadScriptOnce("search-index-main.js?v=20260904op3", function () {
+            loadScriptOnce("search-index-main.js?v=20260908econ1", function () {
               return typeof SEARCH_INDEX !== "undefined";
             }),
             loadScriptOnce("search-logic.js?v=20260904v8", function () {
@@ -1541,23 +1541,49 @@
         return deepSearchPromise;
       }
 
-      // Original Practice has 38,776 MCQs, so its full question text is NOT
+      // Original Practice has 40,891 MCQs, so its full question text is NOT
       // placed in search-index-main.js. It is loaded only in a background worker
       // after a real search, preventing the homepage/global search from freezing.
-      let originalPracticeSearchClient = null;
-      function getOriginalPracticeSearchClient() {
-        if (originalPracticeSearchClient) return originalPracticeSearchClient;
-        if (typeof efCreateSearchWorker !== "function") return null;
-        originalPracticeSearchClient = efCreateSearchWorker({
-          workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
-          logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
-          indexUrl: new URL("search-snippets-original-practice.js?v=20260904v8", document.baseURI).href,
-          mode: "snippet",
-          globalName: "EF_ORIGINAL_PRACTICE_SNIPPET_INDEX",
-          sectionPrefix: "./Original%20Practice/",
-          limit: 24
-        });
-        return originalPracticeSearchClient;
+      let originalPracticeSearchClients = null;
+      function getOriginalPracticeSearchClients() {
+        if (originalPracticeSearchClients) return originalPracticeSearchClients;
+        if (typeof efCreateSearchWorker !== "function") return [];
+        originalPracticeSearchClients = [
+          efCreateSearchWorker({
+            workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            indexUrl: new URL("search-snippets-original-practice.js?v=20260904v8", document.baseURI).href,
+            mode: "snippet",
+            globalName: "EF_ORIGINAL_PRACTICE_SNIPPET_INDEX",
+            sectionPrefix: "./Original%20Practice/",
+            limit: 24
+          }),
+          efCreateSearchWorker({
+            workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            indexUrl: new URL("search-snippets-economics-original-practice.js?v=20260908econ1", document.baseURI).href,
+            mode: "snippet",
+            globalName: "EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX",
+            sectionPrefix: "./Original%20Practice/",
+            limit: 24
+          })
+        ].filter(Boolean);
+        return originalPracticeSearchClients;
+      }
+
+      function mergeOriginalPracticeHits(groups, limit) {
+        var merged = [], row = 0, added = true;
+        while (merged.length < limit && added) {
+          added = false;
+          groups.forEach(function (group) {
+            if (merged.length < limit && group && group[row]) {
+              merged.push(group[row]);
+              added = true;
+            }
+          });
+          row++;
+        }
+        return merged;
       }
 
       function decodeOriginalPracticeHit(hit) {
@@ -1812,13 +1838,15 @@
           ensureDeepSearch().then(function (ready) {
             if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
             const deepCount = ready ? renderDeepResults(q) : 0;
-            const opClient = ready ? getOriginalPracticeSearchClient() : null;
+            const opClients = ready ? getOriginalPracticeSearchClients() : [];
             const ctClient = ready ? getCruxTricksSearchClient() : null;
             const jobs = [];
-            if (opClient) jobs.push(opClient.search(q).then(function(hits){
+            if (opClients.length) jobs.push(Promise.all(opClients.map(function(client){
+              return client.search(q).catch(function(){ return []; });
+            })).then(function(groups){
               if (box.value.trim() !== q || sequence !== deepSearchSequence) return 0;
-              return renderOriginalPracticeFullResults(q, hits);
-            }).catch(function(){ originalPracticeSearchClient = null; return 0; }));
+              return renderOriginalPracticeFullResults(q, mergeOriginalPracticeHits(groups, 24));
+            }).catch(function(){ originalPracticeSearchClients = null; return 0; }));
             if (ctClient) jobs.push(ctClient.search(q).then(function(hits){
               if (box.value.trim() !== q || sequence !== deepSearchSequence) return 0;
               return renderCruxTricksFullResults(q, hits);
@@ -1846,7 +1874,7 @@
   <!-- ExamFusion homepage full-text bridge -->
   <script src="./homepage-fulltext-search.js?v=20260905books2" defer></script>
   <!-- ExamFusion landing counts: start -->
-  <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5688,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":3041,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":38776,"unit":"Questions"},"./Crux-Tricks/index.html":{"total":447,"unit":"PDFs"}}</script>
+  <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5688,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":3041,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":40891,"unit":"Questions"},"./Crux-Tricks/index.html":{"total":447,"unit":"PDFs"}}</script>
   <style>
     body.ef-qcount-landing .ef-qcount-badge{display:block!important;width:max-content;max-width:100%;margin-top:4px!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;position:static!important;transform:none!important;white-space:nowrap;font-size:10px!important;font-weight:750!important;line-height:1.25!important;letter-spacing:.15px!important;color:currentColor!important;opacity:.78!important;text-shadow:none!important;pointer-events:none!important}
     body.ef-qcount-landing .menu>li>a{min-height:82px!important}

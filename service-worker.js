@@ -1,5 +1,5 @@
 // v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-08-v67-tricks-pdf-clarity";
+const CACHE_VERSION = "efp-pwa-2026-09-08-v68-economics-original-practice";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",

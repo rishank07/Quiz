@@ -5,7 +5,8 @@ var CONFIGS={
  "history_complete_practice.html":{slug:"history",label:"History"},
  "polity_complete_practice.html":{slug:"polity",label:"Polity"},
  "science_complete_practice.html":{slug:"science",label:"Science"},
- "geography_complete_practice.html":{slug:"geography",label:"Geography"}
+ "geography_complete_practice.html":{slug:"geography",label:"Geography"},
+ "economics_complete_practice.html":{slug:"economics",label:"Economics"}
 };
 var CFG=CONFIGS[PAGE_FILE]||{slug:"practice",label:"Practice"};
 var PROGRESS_KEY="efp_visited_originalpractice_"+CFG.slug;
@@ -14,7 +15,7 @@ var bookmarkOnly=false;
 var pendingDeepQuestion=null;
 
 // All Original Practice pages use the same site-wide dark-mode preference as
-// ExamFusion Home. The four Complete Practice HTML files are very large, so
+// ExamFusion Home. The Complete Practice HTML files are very large, so
 // guarantee the shared controller here instead of duplicating theme code in
 // every question bank. This also keeps future subjects automatically synced.
 function ensureSharedDarkMode(){
@@ -92,12 +93,13 @@ var opFullSearchClient=null;
 function getOpFullSearchClient(){
  if(opFullSearchClient)return opFullSearchClient;
  if(typeof efCreateSearchWorker!=="function")return null;
+ var economicsSearch=CFG.slug==="economics";
  opFullSearchClient=efCreateSearchWorker({
   workerUrl:new URL("../search-worker.js?v=20260904v8",document.baseURI).href,
   logicUrl:new URL("../search-logic.js?v=20260904v8",document.baseURI).href,
-  indexUrl:new URL("../search-snippets-original-practice.js?v=20260904v8",document.baseURI).href,
+  indexUrl:new URL(economicsSearch?"../search-snippets-economics-original-practice.js?v=20260908econ1":"../search-snippets-original-practice.js?v=20260904v8",document.baseURI).href,
   mode:"snippet",
-  globalName:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX",
+  globalName:economicsSearch?"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX":"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX",
   sectionPrefix:"./Original%20Practice/",
   limit:30
  });
