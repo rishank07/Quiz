@@ -1,0 +1,31 @@
+name: Fix portrait PDF landscape readability v2
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-portrait-pdf-landscape-readable-v2.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch
+        run: python .github/scripts/fix_portrait_pdf_landscape.py
+      - name: Validate
+        run: |
+          node --check Crux-Tricks/viewer-v2.js
+          grep -q 'pageIsPortrait=ratio>1.03' Crux-Tricks/viewer-v2.js
+          grep -q 'availW\*.96' Crux-Tricks/viewer-v2.js
+          grep -q 'viewer-v2.js?v=20260909portraitlandscape2' Crux-Tricks/viewer.html
+          grep -q 'v89-portrait-landscape-readable' service-worker.js
+      - name: Commit
+        run: |
+          rm -f .github/workflows/fix-portrait-pdf-landscape-readable.yml
+          rm -f .github/workflows/fix-portrait-pdf-landscape-readable-v2.yml
+          rm -f .github/scripts/fix_portrait_pdf_landscape.py
+          git config user.name 'ExamFusion Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add Crux-Tricks/viewer-v2.js Crux-Tricks/viewer.html service-worker.js .github/workflows .github/scripts
+          git commit -m 'Make portrait PDFs readable in landscape mobile [skip ci]'
+          git push
