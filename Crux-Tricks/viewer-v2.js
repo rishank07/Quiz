@@ -408,6 +408,35 @@
   zoomInBtn.addEventListener('click',function(){applyReaderZoom((autoFit?1:zoom)+.10)});
   zoomOutBtn.addEventListener('click',function(){applyReaderZoom((autoFit?1:zoom)-.10)});
 
+  function resetReaderFit(){
+    autoFit=true;zoom=1;
+    document.documentElement.classList.remove('efp-pdf-zoomed');
+    updateControls();
+    if(continuous)reflowContinuous();else renderSinglePage();
+    setTimeout(function(){pdfStage.scrollLeft=0},120);
+  }
+  function keyboardTargetIsEditable(target){
+    if(!target||!target.closest)return false;
+    return !!target.closest('input,textarea,select,button,a,[contenteditable=\"true\"],[role=\"textbox\"]');
+  }
+  function handleReaderKeyboard(e){
+    if(e.defaultPrevented||e.ctrlKey||e.metaKey||e.altKey||keyboardTargetIsEditable(e.target))return;
+    var key=e.key;
+    var max=pdfDoc?pdfDoc.numPages:doc.pages;
+    if(key==='ArrowRight'||key==='PageDown'||(key===' '&&!e.shiftKey)){e.preventDefault();go(page+1,true);return;}
+    if(key==='ArrowLeft'||key==='PageUp'||(key===' '&&e.shiftKey)){e.preventDefault();go(page-1,true);return;}
+    if(key==='+'||key==='='){e.preventDefault();applyReaderZoom((autoFit?1:zoom)+.10);return;}
+    if(key==='-'||key==='_'){e.preventDefault();applyReaderZoom((autoFit?1:zoom)-.10);return;}
+    if(key==='0'||key==='f'||key==='F'){e.preventDefault();resetReaderFit();return;}
+    if(key==='Home'){e.preventDefault();go(1,true);return;}
+    if(key==='End'){e.preventDefault();go(max,true);return;}
+    if(key==='b'||key==='B'){if(e.repeat)return;e.preventDefault();bookmarkPage.click();return;}
+    if(key==='g'||key==='G'){if(e.repeat)return;e.preventDefault();input.focus();input.select();return;}
+    if(key==='/'){if(e.repeat)return;e.preventDefault();if(docSearch&&!docSearch.disabled){docSearch.focus();docSearch.select();}return;}
+    if(key==='?'){if(e.repeat)return;e.preventDefault();toast('←/→ page · +/- zoom · 0/F fit · B bookmark · G page · / search');}
+  }
+  document.addEventListener('keydown',handleReaderKeyboard);
+
   var pinchStartDist=0,pinchStartZoom=1,pinchScale=1,pinchFocusX=0,pinchFocusY=0;
   function touchDistance(t){var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.sqrt(dx*dx+dy*dy)}
   function clearPinchPreview(){
