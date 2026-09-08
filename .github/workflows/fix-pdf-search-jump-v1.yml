@@ -1,0 +1,33 @@
+name: Fix PDF search jump v1
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/fix-pdf-search-jump-v1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Patch viewer
+        run: python .github/scripts/fix_pdf_search_jump.py
+      - name: Validate
+        run: |
+          grep -F 'id="desktopSearchJump"' Crux-Tricks/viewer.html
+          grep -F "focus({preventScroll:true})" Crux-Tricks/viewer.html
+          grep -F 'scroll-margin-top:132px' Crux-Tricks/viewer.css
+          grep -F 'v95-pdf-search-jump' service-worker.js
+      - name: Commit
+        run: |
+          git config user.name "ExamFusion Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add Crux-Tricks/viewer.html Crux-Tricks/viewer.css service-worker.js
+          git rm .github/scripts/fix_pdf_search_jump.py .github/workflows/fix-pdf-search-jump-v1.yml
+          git commit -m "Fix PDF search button hiding search bar [skip ci]"
+          git push
