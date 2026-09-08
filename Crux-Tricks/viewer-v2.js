@@ -142,12 +142,18 @@
   function pageShell(n){return continuousRoot?continuousRoot.querySelector('.efp-cont-page[data-page="'+n+'"]'):null}
   function currentTargetSize(ratio){
     ratio=ratio||defaultRatio;
-    var availW=Math.max(260,pdfStage.clientWidth-(devicePortrait()?8:2));
+    var portraitDevice=devicePortrait();
+    var availW=Math.max(260,pdfStage.clientWidth-(portraitDevice?8:2));
     var width=availW;
-    if(!devicePortrait()){
-      var availH=Math.max(180,pdfStage.clientHeight-4);
-      var fitByHeight=Math.max(240,(availH*.995)/ratio);
-      width=Math.min(availW,fitByHeight);
+    if(!portraitDevice){
+      var pageIsPortrait=ratio>1.03;
+      if(pageIsPortrait){
+        width=Math.max(260,availW*.96);
+      }else{
+        var availH=Math.max(180,pdfStage.clientHeight-4);
+        var fitByHeight=Math.max(240,(availH*.995)/ratio);
+        width=Math.min(availW,fitByHeight);
+      }
     }
     width=Math.floor(width);
     return {width:width,height:Math.max(100,Math.floor(width*ratio))};
