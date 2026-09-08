@@ -1,0 +1,46 @@
+name: Tighten mobile landscape PDF fit
+on:
+  push:
+    paths:
+      - '.github/workflows/tighten-landscape-pdf-fit.yml'
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch landscape fit
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('Crux-Tricks/viewer-v2.js')
+          s = p.read_text(encoding='utf-8')
+          old = s
+          s = s.replace("var availW=Math.max(260,pdfStage.clientWidth-8);", "var availW=Math.max(260,pdfStage.clientWidth-(devicePortrait()?8:2));")
+          s = s.replace("var availH=Math.max(180,pdfStage.clientHeight-12);", "var availH=Math.max(180,pdfStage.clientHeight-4);")
+          s = s.replace("var fitByHeight=Math.max(240,(availH*.94)/ratio);", "var fitByHeight=Math.max(240,(availH*.995)/ratio);")
+          s = s.replace("@media(orientation:landscape){html.efp-continuous-mobile-pdf .reader-head{height:34px!important;min-height:34px!important}html.efp-continuous-mobile-pdf .reader-shell{height:calc(100dvh - 34px)!important}.efp-cont-page{margin-bottom:8px}}", "@media(orientation:landscape){html.efp-continuous-mobile-pdf .reader-head{height:28px!important;min-height:28px!important;padding-top:1px!important;padding-bottom:1px!important}html.efp-continuous-mobile-pdf .reader-title b{font-size:9px!important}html.efp-continuous-mobile-pdf .reader-shell{height:calc(100dvh - 28px)!important}.efp-cont-page{margin-bottom:5px}}")
+          if s == old:
+              raise SystemExit('Expected landscape fit patterns not found')
+          p.write_text(s, encoding='utf-8')
+
+          sw = Path('service-worker.js')
+          t = sw.read_text(encoding='utf-8')
+          t = t.replace('efp-pwa-2026-09-09-v83-acrobat-viewer-v2', 'efp-pwa-2026-09-09-v84-landscape-maxfit')
+          sw.write_text(t, encoding='utf-8')
+      - name: Validate
+        run: |
+          node --check Crux-Tricks/viewer-v2.js
+          grep -q "availH\*.995" Crux-Tricks/viewer-v2.js
+          grep -q "height:28px" Crux-Tricks/viewer-v2.js
+          grep -q "v84-landscape-maxfit" service-worker.js
+      - name: Commit and cleanup
+        run: |
+          git config user.name "ExamFusion Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add Crux-Tricks/viewer-v2.js service-worker.js
+          git commit -m "Maximize mobile landscape PDF fit [skip ci]"
+          git rm .github/workflows/tighten-landscape-pdf-fit.yml
+          git commit -m "Remove temporary landscape fit workflow [skip ci]"
+          git push
