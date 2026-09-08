@@ -1,0 +1,80 @@
+from pathlib import Path
+import re
+
+viewer = Path("Crux-Tricks/viewer-v2.js")
+s = viewer.read_text(encoding="utf-8")
+
+old_css = "      '@media(orientation:landscape){html.efp-continuous-mobile-pdf .reader-head{height:28px!important;min-height:28px!important;padding-top:1px!important;padding-bottom:1px!important}html.efp-continuous-mobile-pdf .reader-title b{font-size:9px!important}html.efp-continuous-mobile-pdf .reader-shell{height:calc(100dvh - 28px)!important}.efp-cont-page{margin-bottom:5px}}'"
+new_css = "      '@media(orientation:landscape){html.efp-continuous-mobile-pdf .reader-head{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:145!important;height:26px!important;min-height:26px!important;padding:1px 48px!important;grid-template-columns:minmax(0,1fr)!important;background:color-mix(in srgb,var(--paper) 88%,transparent)!important;-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;transition:opacity .18s ease,transform .22s ease!important}html.efp-continuous-mobile-pdf .reader-title b{font-size:9px!important}html.efp-continuous-mobile-pdf .reader-shell{height:100dvh!important;width:100%!important;margin:0!important}html.efp-continuous-mobile-pdf.efp-reader-ui-hidden .reader-head{opacity:0!important;pointer-events:none!important;transform:translateY(-110%)!important}html.efp-continuous-mobile-pdf body #efp-home-button,html.efp-continuous-mobile-pdf body #efp-app-back-button{top:auto!important;bottom:max(6px,env(safe-area-inset-bottom))!important;width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;border-radius:50%!important;transition:opacity .18s ease,transform .22s ease,background .18s ease!important}html.efp-continuous-mobile-pdf body #efp-home-button{right:max(8px,env(safe-area-inset-right))!important;left:auto!important}html.efp-continuous-mobile-pdf body #efp-app-back-button{left:max(8px,env(safe-area-inset-left))!important;right:auto!important}html.efp-continuous-mobile-pdf body #efp-home-button .efp-home-icon,html.efp-continuous-mobile-pdf body #efp-app-back-button .efp-back-icon{font-size:19px!important}html.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-home-button,html.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-app-back-button{opacity:0!important;pointer-events:none!important;transform:translateY(calc(100% + 18px))!important}html.efp-continuous-mobile-pdf.efp-reader-ui-hidden .mobile-reader-bar{opacity:0!important;pointer-events:none!important;transform:translateX(-50%) translateY(calc(100% + 28px))!important}.efp-cont-page{margin-bottom:4px}}'"
+if old_css not in s:
+    raise SystemExit("Landscape CSS target not found")
+s = s.replace(old_css, new_css, 1)
+
+pattern = re.compile(
+    r"  function showMobileControlsBriefly\(\)\{\n"
+    r"    var bar=document\.getElementById\('mobileReaderBar'\);if\(!bar\)return;\n"
+    r"    bar\.classList\.remove\('efp-reader-hidden'\);\n"
+    r"    clearTimeout\(controlsTimer\);controlsTimer=setTimeout\(function\(\)\{if\(continuous&&!document\.body\.classList\.contains\('mobile-tools-open'\)\)bar\.classList\.add\('efp-reader-hidden'\)\},1800\);\n"
+    r"  \}\n"
+    r"  function onContinuousScroll\(\)\{\n"
+    r"    var bar=document\.getElementById\('mobileReaderBar'\);if\(bar\)bar\.classList\.add\('efp-reader-hidden'\);\n"
+    r"    clearTimeout\(scrollTimer\);scrollTimer=setTimeout\(showMobileControlsBriefly,520\);\n"
+    r"    if\(!scrollRAF\)scrollRAF=requestAnimationFrame\(function\(\)\{scrollRAF=0;var n=visibleContinuousPage\(\);if\(n!==page\)setCurrent\(n,true\)\}\);\n"
+    r"  \}\n"
+)
+replacement = """  function landscapeReaderUi(){return continuous&&!devicePortrait()}
+  function hideMobileReaderUi(){
+    var bar=document.getElementById('mobileReaderBar');if(bar)bar.classList.add('efp-reader-hidden');
+    if(landscapeReaderUi())document.documentElement.classList.add('efp-reader-ui-hidden');
+  }
+  function showMobileControlsBriefly(){
+    var bar=document.getElementById('mobileReaderBar');
+    if(bar)bar.classList.remove('efp-reader-hidden');
+    document.documentElement.classList.remove('efp-reader-ui-hidden');
+    clearTimeout(controlsTimer);controlsTimer=setTimeout(function(){
+      if(!continuous||document.body.classList.contains('mobile-tools-open'))return;
+      if(bar)bar.classList.add('efp-reader-hidden');
+      if(!devicePortrait())document.documentElement.classList.add('efp-reader-ui-hidden');
+    },landscapeReaderUi()?2400:1800);
+  }
+  function onContinuousScroll(){
+    hideMobileReaderUi();
+    clearTimeout(scrollTimer);
+    if(devicePortrait())scrollTimer=setTimeout(showMobileControlsBriefly,520);
+    if(!scrollRAF)scrollRAF=requestAnimationFrame(function(){scrollRAF=0;var n=visibleContinuousPage();if(n!==page)setCurrent(n,true)});
+  }
+"""
+s, n = pattern.subn(replacement, s, count=1)
+if n != 1:
+    raise SystemExit("Controls JS target not found")
+
+old_disable = "    continuous=false;document.documentElement.classList.remove('efp-continuous-mobile-pdf');"
+new_disable = "    continuous=false;document.documentElement.classList.remove('efp-continuous-mobile-pdf','efp-reader-ui-hidden');"
+if old_disable not in s:
+    raise SystemExit("disableContinuous target not found")
+s = s.replace(old_disable, new_disable, 1)
+
+old_refit = "      mobileReader=isCompactReader();autoFit=true;zoom=1;updateControls();"
+new_refit = "      mobileReader=isCompactReader();autoFit=true;zoom=1;if(devicePortrait())document.documentElement.classList.remove('efp-reader-ui-hidden');updateControls();"
+if old_refit not in s:
+    raise SystemExit("refit target not found")
+s = s.replace(old_refit, new_refit, 1)
+
+viewer.write_text(s, encoding="utf-8")
+
+html = Path("Crux-Tricks/viewer.html")
+h = html.read_text(encoding="utf-8")
+h, n = re.subn(r"viewer-v2\.js\?v=[A-Za-z0-9_-]+", "viewer-v2.js?v=20260909landscapechrome1", h, count=1)
+if n != 1:
+    raise SystemExit("viewer.html script version not found")
+html.write_text(h, encoding="utf-8")
+
+sw = Path("service-worker.js")
+w = sw.read_text(encoding="utf-8")
+w, n = re.subn(r'const CACHE_VERSION = "[^"]+";', 'const CACHE_VERSION = "efp-pwa-2026-09-09-v87-landscape-chrome";', w, count=1)
+if n != 1:
+    raise SystemExit("CACHE_VERSION not found")
+w, n = re.subn(r"/Crux-Tricks/viewer-v2\.js\?v=[A-Za-z0-9_-]+", "/Crux-Tricks/viewer-v2.js?v=20260909landscapechrome1", w, count=1)
+if n != 1:
+    raise SystemExit("service worker viewer version not found")
+sw.write_text(w, encoding="utf-8")
