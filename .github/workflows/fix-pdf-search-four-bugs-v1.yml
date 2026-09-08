@@ -1,0 +1,36 @@
+name: Fix PDF search four bugs v1
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/fix-pdf-search-four-bugs-v1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Patch viewer
+        run: python .github/scripts/fix_pdf_search_four_bugs.py
+      - name: Validate
+        run: |
+          node --check Crux-Tricks/viewer-v2.js
+          grep -F "var cssScale=size.width/base.width;" Crux-Tricks/viewer-v2.js
+          grep -F "matchedTextRanges" Crux-Tricks/viewer-v2.js
+          grep -F "programmaticScrollUntil" Crux-Tricks/viewer-v2.js
+          grep -F "mobile-tools-open'))return" Crux-Tricks/viewer-v2.js
+          grep -F "viewer-v2.js?v=20260909searchfixes1" Crux-Tricks/viewer.html
+          grep -F "v96-pdf-search-fixes" service-worker.js
+      - name: Commit
+        run: |
+          git config user.name "ExamFusion Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add Crux-Tricks/viewer-v2.js Crux-Tricks/viewer.html service-worker.js
+          git rm .github/scripts/fix_pdf_search_four_bugs.py .github/workflows/fix-pdf-search-four-bugs-v1.yml
+          git commit -m "Fix PDF search navigation highlight and page sizing [skip ci]"
+          git push
