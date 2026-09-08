@@ -1,0 +1,34 @@
+name: Polish landscape PDF mobile chrome v3
+on:
+  push:
+    paths:
+      - '.github/workflows/polish-landscape-pdf-chrome-v3.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch reader
+        run: python .github/scripts/polish_landscape_pdf.py
+      - name: Validate
+        run: |
+          node --check Crux-Tricks/viewer-v2.js
+          grep -q 'efp-reader-ui-hidden' Crux-Tricks/viewer-v2.js
+          grep -q 'height:100dvh!important' Crux-Tricks/viewer-v2.js
+          grep -q 'width:40px!important' Crux-Tricks/viewer-v2.js
+          grep -q 'viewer-v2.js?v=20260909landscapechrome1' Crux-Tricks/viewer.html
+          grep -q 'v87-landscape-chrome' service-worker.js
+      - name: Commit patch and cleanup
+        run: |
+          rm -f .github/workflows/polish-landscape-pdf-chrome.yml
+          rm -f .github/workflows/polish-landscape-pdf-chrome-v2.yml
+          rm -f .github/workflows/polish-landscape-pdf-chrome-v3.yml
+          rm -f .github/workflows/fix-pdf-mobile-nav-bottom.yml
+          rm -f .github/scripts/polish_landscape_pdf.py
+          git config user.name 'ExamFusion Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add Crux-Tricks/viewer-v2.js Crux-Tricks/viewer.html service-worker.js .github/workflows .github/scripts
+          git commit -m 'Polish landscape mobile PDF reader chrome [skip ci]'
+          git push
