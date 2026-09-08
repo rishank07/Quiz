@@ -205,37 +205,37 @@
       "}" +
       "}" +
 
-      /* Mobile/tablet: keep the familiar lower-corner controls but make them
-         transparent so they do not cover quiz/content underneath. */
+      /* Mobile/tablet: compact lower-corner controls. Dark mode stays almost
+         transparent; light mode gets the stronger dark filled treatment below. */
       "@media(max-width:1199px){" +
       "#" + BUTTON_ID + "{" +
       "top:auto!important;left:auto!important;" +
-      "right:max(12px,env(safe-area-inset-right))!important;" +
-      "bottom:max(12px,env(safe-area-inset-bottom))!important;" +
-      "width:50px!important;min-width:50px!important;height:50px!important;min-height:50px!important;" +
+      "right:max(10px,env(safe-area-inset-right))!important;" +
+      "bottom:max(10px,env(safe-area-inset-bottom))!important;" +
+      "width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;" +
       "padding:0!important;border-radius:50%!important;gap:0!important;" +
-      "background:rgba(8,14,24,.10)!important;" +
-      "border-color:rgba(246,217,138,.50)!important;" +
-      "box-shadow:none!important;-webkit-backdrop-filter:blur(9px)!important;backdrop-filter:blur(9px)!important;" +
+      "background:rgba(8,14,24,.025)!important;" +
+      "border-color:rgba(246,217,138,.58)!important;" +
+      "box-shadow:none!important;-webkit-backdrop-filter:blur(6px)!important;backdrop-filter:blur(6px)!important;" +
       "}" +
       "#" + BUTTON_ID + ":hover,#" + BUTTON_ID + ":active{" +
-      "background:rgba(8,14,24,.16)!important;box-shadow:none!important;transform:none!important;" +
+      "background:rgba(8,14,24,.08)!important;box-shadow:none!important;transform:none!important;" +
       "}" +
       "#" + BUTTON_ID + " .efp-home-label{display:none!important;}" +
-      "#" + BUTTON_ID + " .efp-home-icon{font-size:22px!important;}" +
+      "#" + BUTTON_ID + " .efp-home-icon{font-size:20px!important;}" +
       "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + ",html #" + BACK_BUTTON_ID + "{" +
       "top:auto!important;right:auto!important;" +
-      "bottom:max(12px,env(safe-area-inset-bottom))!important;left:max(12px,env(safe-area-inset-left))!important;" +
-      "width:50px!important;min-width:50px!important;height:50px!important;min-height:50px!important;padding:0!important;" +
+      "bottom:max(10px,env(safe-area-inset-bottom))!important;left:max(10px,env(safe-area-inset-left))!important;" +
+      "width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;" +
       "border-radius:50%!important;gap:0!important;" +
-      "background:rgba(8,14,24,.10)!important;" +
-      "border-color:rgba(246,217,138,.50)!important;" +
-      "box-shadow:none!important;-webkit-backdrop-filter:blur(9px)!important;backdrop-filter:blur(9px)!important;" +
+      "background:rgba(8,14,24,.025)!important;" +
+      "border-color:rgba(246,217,138,.58)!important;" +
+      "box-shadow:none!important;-webkit-backdrop-filter:blur(6px)!important;backdrop-filter:blur(6px)!important;" +
       "}" +
       "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + " .efp-back-label,html #" + BACK_BUTTON_ID + " .efp-back-label{display:none!important;}" +
-      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + " .efp-back-icon,html #" + BACK_BUTTON_ID + " .efp-back-icon{font-size:22px!important;}" +
+      "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + " .efp-back-icon,html #" + BACK_BUTTON_ID + " .efp-back-icon{font-size:20px!important;}" +
       "html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + ":hover,html." + CRUX_BACK_CLASS + " #" + BACK_BUTTON_ID + ":active,html #" + BACK_BUTTON_ID + ":hover,html #" + BACK_BUTTON_ID + ":active{" +
-      "background:rgba(8,14,24,.16)!important;box-shadow:none!important;transform:none!important;" +
+      "background:rgba(8,14,24,.08)!important;box-shadow:none!important;transform:none!important;" +
       "}" +
       "}" +
 
@@ -245,8 +245,8 @@
       "background:linear-gradient(135deg,rgba(10,19,35,.96),rgba(26,43,70,.94))!important;" +
       "border-color:rgba(196,146,38,.92)!important;" +
       "color:#fff!important;" +
-      "box-shadow:0 8px 24px rgba(15,23,42,.30),0 2px 7px rgba(15,23,42,.22),inset 0 1px 0 rgba(255,255,255,.16)!important;" +
-      "-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;" +
+      "box-shadow:0 6px 18px rgba(15,23,42,.24),0 2px 6px rgba(15,23,42,.18),inset 0 1px 0 rgba(255,255,255,.14)!important;" +
+      "-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important;" +
       "}" +
       "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BUTTON_ID + " .efp-home-icon," +
       "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BACK_BUTTON_ID + " .efp-back-icon{" +
@@ -258,7 +258,7 @@
       "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + BACK_BUTTON_ID + ":active{" +
       "background:linear-gradient(135deg,#13233d,#2b4772)!important;" +
       "border-color:#e8b84e!important;" +
-      "box-shadow:0 10px 28px rgba(15,23,42,.34),0 3px 9px rgba(15,23,42,.24),inset 0 1px 0 rgba(255,255,255,.18)!important;" +
+      "box-shadow:0 8px 22px rgba(15,23,42,.28),0 3px 8px rgba(15,23,42,.20),inset 0 1px 0 rgba(255,255,255,.16)!important;" +
       "}" +
 
       "@media(prefers-reduced-motion:reduce){#" + BUTTON_ID + ",#" + BACK_BUTTON_ID + "{transition:none!important;}}" +
@@ -298,15 +298,15 @@
   }
 
   window.addEventListener("pageshow", installHomeButton);
-})();
 
-/* EFP_APP_SESSION_LOADER — installed-app resume */
-(function () {
-  "use strict";
-  if (typeof document === "undefined" || document.getElementById("efp-app-session-script")) return;
-  var script = document.createElement("script");
-  script.id = "efp-app-session-script";
-  script.src = "/app-session.js?v=20260908answerreset2";
-  script.async = false;
-  (document.head || document.documentElement).appendChild(script);
+  if (window.MutationObserver && document.documentElement) {
+    var observer = new MutationObserver(function () {
+      if (!document.getElementById(BUTTON_ID)) installHomeButton();
+      if (isCruxTricksPage() && !document.getElementById(BACK_BUTTON_ID)) installCruxBackButton();
+      removeLegacyBackToTop();
+      removeLegacyOriginalPracticeHome();
+      removeLegacyCruxNavigation();
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+  }
 })();
