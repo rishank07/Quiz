@@ -34,7 +34,7 @@
   <meta name="apple-mobile-web-app-title" content="ExamFusion Prep">
   <meta name="msapplication-TileColor" content="#070a13">
   <meta name="description"
-    content="Free SSC, Railway, UPSC & BPSC preparation — 40,891 Original Practice questions, 447 revision crux & memory-trick PDFs, Mind Maps and Current Affairs. हिंदी + English.">
+    content="Free SSC, Railway, UPSC & BPSC preparation — 40,891 Original Practice questions, 466 revision crux & memory-trick PDFs, Mind Maps and Current Affairs. हिंदी + English.">
 
   <meta property="og:title" content="Exam Fusion Prep — Free Competitive Exam Hub">
   <meta property="og:description"
@@ -1525,7 +1525,7 @@
         }
         if (!deepSearchPromise) {
           deepSearchPromise = Promise.all([
-            loadScriptOnce("search-index-main.js?v=20260908econ1", function () {
+            loadScriptOnce("search-index-main.js?v=20260908econcrux1", function () {
               return typeof SEARCH_INDEX !== "undefined";
             }),
             loadScriptOnce("search-logic.js?v=20260904v8", function () {
@@ -1657,22 +1657,33 @@
       }
 
 
-      // Crux & Memory Tricks has 2,073 searchable pages. Keep that text in a
-      // second background worker so it never blocks the homepage UI.
-      let cruxTricksSearchClient = null;
-      function getCruxTricksSearchClient() {
-        if (cruxTricksSearchClient) return cruxTricksSearchClient;
-        if (typeof efCreateSearchWorker !== "function") return null;
-        cruxTricksSearchClient = efCreateSearchWorker({
-          workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
-          logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
-          indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20260905cruxroute1", document.baseURI).href,
-          mode: "snippet",
-          globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
-          sectionPrefix: "./Crux-Tricks/",
-          limit: 24
-        });
-        return cruxTricksSearchClient;
+      // Crux & Memory Tricks has 2,196 searchable pages. Keep that text in
+      // background workers so it never blocks the homepage UI.
+      let cruxTricksSearchClients = null;
+      function getCruxTricksSearchClients() {
+        if (cruxTricksSearchClients) return cruxTricksSearchClients;
+        if (typeof efCreateSearchWorker !== "function") return [];
+        cruxTricksSearchClients = [
+          efCreateSearchWorker({
+            workerUrl: new URL("search-worker.js?v=20260908econcrux1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20260905cruxroute1", document.baseURI).href,
+            mode: "snippet",
+            globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
+            sectionPrefix: "./Crux-Tricks/",
+            limit: 24
+          }),
+          efCreateSearchWorker({
+            workerUrl: new URL("search-worker.js?v=20260908econcrux1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            indexUrl: new URL("Crux-Tricks/search-snippets-economics-crux.js?v=20260908econcrux1", document.baseURI).href,
+            mode: "snippet",
+            globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
+            sectionPrefix: "./Crux-Tricks/",
+            limit: 24
+          })
+        ].filter(Boolean);
+        return cruxTricksSearchClients;
       }
       function decodeCruxTricksHit(hit) {
         var raw = String(hit && hit.x || "");
@@ -1839,7 +1850,7 @@
             if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
             const deepCount = ready ? renderDeepResults(q) : 0;
             const opClients = ready ? getOriginalPracticeSearchClients() : [];
-            const ctClient = ready ? getCruxTricksSearchClient() : null;
+            const ctClients = ready ? getCruxTricksSearchClients() : [];
             const jobs = [];
             if (opClients.length) jobs.push(Promise.all(opClients.map(function(client){
               return client.search(q).catch(function(){ return []; });
@@ -1847,10 +1858,12 @@
               if (box.value.trim() !== q || sequence !== deepSearchSequence) return 0;
               return renderOriginalPracticeFullResults(q, mergeOriginalPracticeHits(groups, 24));
             }).catch(function(){ originalPracticeSearchClients = null; return 0; }));
-            if (ctClient) jobs.push(ctClient.search(q).then(function(hits){
+            if (ctClients.length) jobs.push(Promise.all(ctClients.map(function(client){
+              return client.search(q).catch(function(){ return []; });
+            })).then(function(groups){
               if (box.value.trim() !== q || sequence !== deepSearchSequence) return 0;
-              return renderCruxTricksFullResults(q, hits);
-            }).catch(function(){ cruxTricksSearchClient = null; return 0; }));
+              return renderCruxTricksFullResults(q, mergeOriginalPracticeHits(groups, 24));
+            }).catch(function(){ cruxTricksSearchClients = null; return 0; }));
             if (!jobs.length) {
               noResults.classList.toggle("show", visible === 0 && deepCount === 0);
               return;
@@ -1874,7 +1887,7 @@
   <!-- ExamFusion homepage full-text bridge -->
   <script src="./homepage-fulltext-search.js?v=20260905books2" defer></script>
   <!-- ExamFusion landing counts: start -->
-  <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5688,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":3041,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":40891,"unit":"Questions"},"./Crux-Tricks/index.html":{"total":447,"unit":"PDFs"}}</script>
+  <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5688,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":3041,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":40891,"unit":"Questions"},"./Crux-Tricks/index.html":{"total":466,"unit":"PDFs"}}</script>
   <style>
     body.ef-qcount-landing .ef-qcount-badge{display:block!important;width:max-content;max-width:100%;margin-top:4px!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;position:static!important;transform:none!important;white-space:nowrap;font-size:10px!important;font-weight:750!important;line-height:1.25!important;letter-spacing:.15px!important;color:currentColor!important;opacity:.78!important;text-shadow:none!important;pointer-events:none!important}
     body.ef-qcount-landing .menu>li>a{min-height:82px!important}

@@ -65,7 +65,7 @@ def crux_document_total(repo: Path) -> int:
             return total
     except OSError:
         pass
-    return 447
+    return 466
 
 
 def update_index(repo: Path) -> bool:
@@ -100,7 +100,7 @@ def update_index(repo: Path) -> bool:
         changed = True
 
     # The generic landing formatter treats every unknown unit as Questions.
-    # Explicitly teach it the PDFs unit so Crux shows "447 PDFs", not "447 Q".
+    # Explicitly teach it the PDFs unit so Crux shows its PDF count, not a Q count.
     updated = raw.replace(COMPACT_LABEL_OLD, COMPACT_LABEL_NEW)
     updated = updated.replace(FULL_LABEL_OLD, FULL_LABEL_NEW)
     if updated != raw:
