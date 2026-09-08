@@ -1,0 +1,32 @@
+name: PDF search highlight focus v1
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/pdf-search-highlight-focus-v1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Patch viewer
+        run: python .github/scripts/fix_pdf_search_highlight_focus.py
+      - name: Validate
+        run: |
+          node --check Crux-Tricks/viewer-v2.js
+          grep -F "searchJumpPending" Crux-Tricks/viewer-v2.js
+          grep -F "else if(samePage)renderSearchHighlights(n)" Crux-Tricks/viewer-v2.js
+      - name: Commit
+        run: |
+          git config user.name "ExamFusion Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add Crux-Tricks/viewer-v2.js
+          git rm .github/scripts/fix_pdf_search_highlight_focus.py .github/workflows/pdf-search-highlight-focus-v1.yml
+          git commit -m "Keep PDF search highlight focused on match [skip ci]"
+          git push
