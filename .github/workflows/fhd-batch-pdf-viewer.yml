@@ -1,0 +1,95 @@
+name: Upgrade PDF viewer to Full HD batched rendering
+on:
+  push:
+    paths:
+      - '.github/workflows/fhd-batch-pdf-viewer.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch Full HD rendering and 20-page batches
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Crux-Tricks/viewer-v2.js')
+          s=p.read_text()
+
+          old="""  var controlsTimer=null;\n"""
+          new="""  var controlsTimer=null;\n  var PAGE_BATCH_SIZE=20;\n  var BATCH_PREFETCH_THRESHOLD=5;\n  var KEEP_RENDER_RADIUS=4;\n  var loadedBatchStart=1;\n  var loadedBatchEnd=0;\n  var batchPrefetchJobs={};\n  var MOBILE_FULL_HD_WIDTH=1920;\n  var DESKTOP_HD_WIDTH=2560;\n  var MOBILE_MAX_CANVAS_PIXELS=7000000;\n  var DESKTOP_MAX_CANVAS_PIXELS=12000000;\n"""
+          assert old in s, 'controls anchor missing'
+          s=s.replace(old,new,1)
+
+          anchor="""  function sizeShell(el,ratio){if(!el)return;var s=currentTargetSize(ratio);el.style.width=s.width+'px';el.style.height=s.height+'px';el.style.minHeight=s.height+'px'}\n\n"""
+          insert="""  function sizeShell(el,ratio){if(!el)return;var s=currentTargetSize(ratio);el.style.width=s.width+'px';el.style.height=s.height+'px';el.style.minHeight=s.height+'px'}\n\n  function fullHdDensity(cssWidth,cssHeight,compact){\n    cssWidth=Math.max(1,cssWidth||1);cssHeight=Math.max(1,cssHeight||1);\n    var nativeDpr=Math.max(1,window.devicePixelRatio||1);\n    var targetWidth=compact?MOBILE_FULL_HD_WIDTH:DESKTOP_HD_WIDTH;\n    var maxDensity=compact?5.5:3.5;\n    var maxPixels=compact?MOBILE_MAX_CANVAS_PIXELS:DESKTOP_MAX_CANVAS_PIXELS;\n    var density=Math.max(nativeDpr,targetWidth/cssWidth);\n    density=Math.min(maxDensity,density);\n    var pixels=cssWidth*cssHeight*density*density;\n    if(pixels>maxPixels)density=Math.sqrt(maxPixels/(cssWidth*cssHeight));\n    return Math.max(1,density);\n  }\n  function prefetchBatch(start,end){\n    if(!pdfDoc)return;\n    start=Math.max(1,start|0);end=Math.min(pdfDoc.numPages,end|0);if(end<start)return;\n    var key=start+'-'+end;if(batchPrefetchJobs[key])return;batchPrefetchJobs[key]=true;\n    var n=start;\n    function next(){\n      if(!pdfDoc||n>end){delete batchPrefetchJobs[key];return}\n      var current=n++;\n      pdfDoc.getPage(current).catch(function(){}).then(function(){\n        if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:180});else setTimeout(next,12);\n      });\n    }\n    next();\n  }\n  function ensureBatchAround(center){\n    if(!pdfDoc)return;\n    center=Math.max(1,Math.min(pdfDoc.numPages,center|0));\n    var desiredStart=Math.floor((center-1)/PAGE_BATCH_SIZE)*PAGE_BATCH_SIZE+1;\n    if(!loadedBatchEnd||center<loadedBatchStart-2||center>loadedBatchEnd+2){\n      loadedBatchStart=desiredStart;loadedBatchEnd=Math.min(pdfDoc.numPages,desiredStart+PAGE_BATCH_SIZE-1);\n      prefetchBatch(loadedBatchStart,loadedBatchEnd);\n    }\n    if(center>=loadedBatchEnd-BATCH_PREFETCH_THRESHOLD&&loadedBatchEnd<pdfDoc.numPages){\n      var oldEnd=loadedBatchEnd;loadedBatchEnd=Math.min(pdfDoc.numPages,loadedBatchEnd+PAGE_BATCH_SIZE);prefetchBatch(oldEnd+1,loadedBatchEnd);\n    }\n    if(center<=loadedBatchStart+BATCH_PREFETCH_THRESHOLD&&loadedBatchStart>1){\n      var oldStart=loadedBatchStart;loadedBatchStart=Math.max(1,loadedBatchStart-PAGE_BATCH_SIZE);prefetchBatch(loadedBatchStart,oldStart-1);\n    }\n  }\n\n"""
+          assert anchor in s, 'sizeShell anchor missing'
+          s=s.replace(anchor,insert,1)
+
+          old="""      var cssScale=(size.width/base.width)*(autoFit?1:zoom);\n      var dpr=Math.min(window.devicePixelRatio||1,2.25);\n      var vp=pg.getViewport({scale:cssScale*dpr});\n"""
+          new="""      var cssScale=(size.width/base.width)*(autoFit?1:zoom);\n      var cssWidth=Math.max(1,base.width*cssScale),cssHeight=Math.max(1,base.height*cssScale);\n      var dpr=fullHdDensity(cssWidth,cssHeight,true);\n      var vp=pg.getViewport({scale:cssScale*dpr});\n"""
+          assert old in s, 'continuous DPR anchor missing'
+          s=s.replace(old,new,1)
+
+          old="""      if(Math.abs(n-center)>6){var c=list[i].querySelector('canvas');if(c)c.remove();list[i].dataset.rendered='0';sizeShell(list[i],pageRatios[n]||defaultRatio)}\n"""
+          new="""      if(Math.abs(n-center)>KEEP_RENDER_RADIUS){var c=list[i].querySelector('canvas');if(c){c.width=1;c.height=1;c.remove()}list[i].dataset.rendered='0';sizeShell(list[i],pageRatios[n]||defaultRatio)}\n"""
+          assert old in s, 'trim anchor missing'
+          s=s.replace(old,new,1)
+
+          old="""    page=n;updateControls();updateUrl();if(mark!==false)markVisited();trimContinuous(page);\n"""
+          new="""    page=n;ensureBatchAround(page);updateControls();updateUrl();if(mark!==false)markVisited();trimContinuous(page);\n    renderContinuousPage(page,false);if(page>1)renderContinuousPage(page-1,false);if(page<pdfDoc.numPages)renderContinuousPage(page+1,false);\n"""
+          assert old in s, 'setCurrent anchor missing'
+          s=s.replace(old,new,1)
+
+          old="""    continuousObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var n=parseInt(entry.target.dataset.page,10);if(n)renderContinuousPage(n,false)}})},{root:pdfStage,rootMargin:'900px 0px',threshold:.01});\n"""
+          new="""    continuousObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var n=parseInt(entry.target.dataset.page,10);if(n&&n>=loadedBatchStart&&n<=loadedBatchEnd)renderContinuousPage(n,false)}})},{root:pdfStage,rootMargin:'1100px 0px',threshold:.01});\n"""
+          assert old in s, 'observer anchor missing'
+          s=s.replace(old,new,1)
+
+          old="""    continuousRoot.appendChild(frag);\n    if(continuousObserver){try{continuousObserver.disconnect()}catch(e){}}\n"""
+          new="""    continuousRoot.appendChild(frag);\n    loadedBatchStart=Math.floor((page-1)/PAGE_BATCH_SIZE)*PAGE_BATCH_SIZE+1;\n    loadedBatchEnd=Math.min(pdfDoc.numPages,loadedBatchStart+PAGE_BATCH_SIZE-1);\n    prefetchBatch(loadedBatchStart,loadedBatchEnd);\n    if(continuousObserver){try{continuousObserver.disconnect()}catch(e){}}\n"""
+          assert old in s, 'build batch anchor missing'
+          s=s.replace(old,new,1)
+
+          old="""      page=next;updateControls();updateUrl();markVisited();\n      var el=pageShell(page);\n"""
+          new="""      page=next;ensureBatchAround(page);updateControls();updateUrl();markVisited();\n      var el=pageShell(page);\n"""
+          assert old in s, 'go batch anchor missing'
+          s=s.replace(old,new,1)
+
+          old="""      var cssScale=fit*(autoFit?1:zoom);\n      var dpr=Math.min(window.devicePixelRatio||1,mobileReader?3:2);\n      var vp=pg.getViewport({scale:cssScale*dpr});\n"""
+          new="""      var cssScale=fit*(autoFit?1:zoom);\n      var cssWidth=Math.max(1,base.width*cssScale),cssHeight=Math.max(1,base.height*cssScale);\n      var dpr=fullHdDensity(cssWidth,cssHeight,mobileReader);\n      var vp=pg.getViewport({scale:cssScale*dpr});\n"""
+          assert old in s, 'single-page DPR anchor missing'
+          s=s.replace(old,new,1)
+
+          p.write_text(s)
+
+          hp=Path('Crux-Tricks/viewer.html')
+          h=hp.read_text()
+          h=h.replace('viewer-v2.js?v=20260909acrobat4','viewer-v2.js?v=20260909fhd1')
+          hp.write_text(h)
+
+          sw=Path('service-worker.js')
+          t=sw.read_text()
+          import re
+          t=re.sub(r'const CACHE_VERSION = "[^"]+";', 'const CACHE_VERSION = "efp-pwa-2026-09-09-v85-fhd-batch20";', t, count=1)
+          t=t.replace('/Crux-Tricks/viewer-v2.js?v=20260909acrobat4','/Crux-Tricks/viewer-v2.js?v=20260909fhd1')
+          sw.write_text(t)
+          PY
+      - name: Validate viewer
+        run: |
+          node --check Crux-Tricks/viewer-v2.js
+          grep -q 'MOBILE_FULL_HD_WIDTH=1920' Crux-Tricks/viewer-v2.js
+          grep -q 'PAGE_BATCH_SIZE=20' Crux-Tricks/viewer-v2.js
+          grep -q 'fullHdDensity' Crux-Tricks/viewer-v2.js
+          grep -q 'v85-fhd-batch20' service-worker.js
+          grep -q 'viewer-v2.js?v=20260909fhd1' Crux-Tricks/viewer.html
+      - name: Commit patch and remove temporary workflow
+        run: |
+          git config user.name 'ExamFusion Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git rm .github/workflows/fhd-batch-pdf-viewer.yml
+          git add Crux-Tricks/viewer-v2.js Crux-Tricks/viewer.html service-worker.js
+          git commit -m 'Render PDFs in Full HD with 20-page progressive batches [skip ci]'
+          git push
