@@ -446,7 +446,8 @@
     if(continuous){
       page=next;ensureBatchAround(page);updateControls();updateUrl();markVisited();
       var el=pageShell(page);
-      return renderContinuousPage(page,false).then(function(){if(el)pdfStage.scrollTo({top:Math.max(0,el.offsetTop-4),left:0,behavior:smooth===false?'auto':'smooth'});trimContinuous(page)});
+      var searchJumpPending=!!(searchQuery&&page===activeSearchPage&&searchFocusPending);
+      return renderContinuousPage(page,false).then(function(){if(el&&!searchJumpPending)pdfStage.scrollTo({top:Math.max(0,el.offsetTop-4),left:0,behavior:smooth===false?'auto':'smooth'});trimContinuous(page)});
     }
     if(next===page){updateControls();return;}
     page=next;renderSinglePage();pdfStage.scrollTo({top:0,left:0,behavior:'auto'});window.scrollTo({top:0,behavior:'smooth'});
@@ -478,9 +479,11 @@
     hits.slice(0,30).forEach(function(n){
       var b=document.createElement('button');b.textContent='Page '+n;
       b.addEventListener('click',function(){
+        var samePage=n===page;
         activeSearchPage=n;searchFocusPending=true;searchGeneration++;clearSearchHighlightLayers();
         var moved=go(n,true);
         if(continuous)Promise.resolve(moved).then(function(){return renderSearchHighlights(n)});
+        else if(samePage)renderSearchHighlights(n);
       });
       docHits.appendChild(b);
     });
