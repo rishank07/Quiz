@@ -39,6 +39,22 @@ ensureSharedDarkMode();
 // Keeps attempted answers alive while the user moves between sections of the same chapter.
 // This is deliberately session/in-memory state so a fresh chapter attempt still starts clean.
 if(!state.answerMap) state.answerMap={};
+function clearTransientAttempt(){
+ state.answerMap={};
+ state.shuffleMap={};
+ state.score={correct:0,wrong:0,attempted:0};
+}
+function isReloadNavigation(){
+ try{var entries=performance.getEntriesByType&&performance.getEntriesByType("navigation");return !!(entries&&entries[0]&&entries[0].type==="reload")}catch(e){return false}
+}
+// Browsers and installed PWAs may restore a complete page from the back-forward cache.
+// Explicitly start a clean attempt after refresh/reopen, while ordinary section renders
+// keep using the same in-memory answerMap.
+window.addEventListener("pageshow",function(event){
+ if(!event.persisted&&!isReloadNavigation())return;
+ clearTransientAttempt();
+ if(state.screen==="quiz")render();
+});
 function answerStateKey(sectionIndex,qi){return String(sectionIndex)+"-"+String(qi)}
 function restoreAnsweredSection(){
  var secIndex=state.currentSection;
@@ -145,9 +161,9 @@ var baseRender=render;render=function(){baseRender();enhance();if(state.screen==
 var baseSwitchSection=switchSection;switchSection=function(i){pendingDeepQuestion=null;baseSwitchSection(i);syncUrl("quiz")};
 var basePrevSection=prevSection;prevSection=function(){pendingDeepQuestion=null;basePrevSection();if(state.screen==="quiz")syncUrl("quiz")};
 var baseNextSection=nextSection;nextSection=function(){pendingDeepQuestion=null;baseNextSection();if(state.screen==="quiz")syncUrl("quiz")};
-var baseGoHome=goHome;goHome=function(){baseGoHome();syncUrl("home")};
-var baseGoToChapters=goToChapters;goToChapters=function(subject){baseGoToChapters(subject);syncUrl("chapters");track("original_practice_subject_open",{practice:CFG.label,subject:subject})};
-var baseGoToQuiz=goToQuiz;goToQuiz=function(chapterName){state.answerMap={};markVisited(state.subject,chapterName);baseGoToQuiz(chapterName);syncUrl("quiz");track("original_practice_chapter_open",{practice:CFG.label,subject:state.subject,chapter:chapterName})};
+var baseGoHome=goHome;goHome=function(){clearTransientAttempt();baseGoHome();syncUrl("home")};
+var baseGoToChapters=goToChapters;goToChapters=function(subject){clearTransientAttempt();baseGoToChapters(subject);syncUrl("chapters");track("original_practice_subject_open",{practice:CFG.label,subject:subject})};
+var baseGoToQuiz=goToQuiz;goToQuiz=function(chapterName){clearTransientAttempt();markVisited(state.subject,chapterName);baseGoToQuiz(chapterName);syncUrl("quiz");track("original_practice_chapter_open",{practice:CFG.label,subject:state.subject,chapter:chapterName})};
 function applyDeepLink(){try{var p=new URLSearchParams(location.search),s=p.get("subject"),c=p.get("chapter"),sec=Number(p.get("section")||1),q=Number(p.get("q")||0);if(s&&MASTER[s]){state.subject=s;if(c&&MASTER[s][c]){markVisited(s,c);state.screen="quiz";state.chapterName=c;state.quizData=MASTER[s][c];if(!Number.isFinite(sec)||sec<1)sec=1;state.currentSection=Math.min(state.quizData.length-1,Math.max(0,Math.floor(sec)-1));state.score={correct:0,wrong:0,attempted:0};state.shuffleMap={};state.answerMap={};if(Number.isFinite(q)&&q>=1&&state.quizData[state.currentSection]&&q<=state.quizData[state.currentSection].questions.length)pendingDeepQuestion=Math.floor(q)-1}else{state.screen="chapters";state.chapterName=null;state.quizData=null}}}catch(e){}}
 applyDeepLink();render();
 })();
