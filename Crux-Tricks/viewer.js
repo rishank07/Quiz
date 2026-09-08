@@ -35,8 +35,8 @@ document.getElementById('prev').addEventListener('click',function(){go(page-1)})
 document.getElementById('next').addEventListener('click',function(){go(page+1)});
 input.addEventListener('change',function(){go(parseInt(input.value,10)||page)});
 input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go(parseInt(input.value,10)||page);input.blur()}});
-document.getElementById('zoomIn').addEventListener('click',function(){var step=mobileReader?.10:.25;zoom=Math.min(2.5,Math.round((zoom+step)*100)/100);updateControls();renderPage()});
-document.getElementById('zoomOut').addEventListener('click',function(){var step=mobileReader?.10:.25;zoom=Math.max(.75,Math.round((zoom-step)*100)/100);updateControls();renderPage()});
+document.getElementById('zoomIn').addEventListener('click',function(){var step=mobileReader?0.10:0.25;zoom=Math.min(2.5,Math.round((zoom+step)*100)/100);updateControls();renderPage()});
+document.getElementById('zoomOut').addEventListener('click',function(){var step=mobileReader?0.10:0.25;zoom=Math.max(.75,Math.round((zoom-step)*100)/100);updateControls();renderPage()});
 favBtn.addEventListener('click',function(){var b=bms();if(b[fk()])delete b[fk()];else b[fk()]=true;saveB(b);updateControls();toast(b[fk()]?'Added to favourites':'Removed from favourites')});
 bookmarkPage.addEventListener('click',function(){var b=bms();if(b[pk()])delete b[pk()];else b[pk()]=true;saveB(b);updateControls();toast(b[pk()]?'Page bookmarked · Open My Pages to view it':'Page bookmark removed')});
 completeBtn.addEventListener('click',function(){var a=prog(),i=a.indexOf('complete');if(i>=0)a.splice(i,1);else a.push('complete');saveProg(a);updateControls();toast(a.indexOf('complete')>=0?'Marked complete':'Completion removed')});
