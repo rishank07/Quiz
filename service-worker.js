@@ -1,5 +1,5 @@
 // v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-09-v83-acrobat-viewer-v2";
+const CACHE_VERSION = "efp-pwa-2026-09-09-v84-landscape-maxfit";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
