@@ -108,7 +108,7 @@
       'html:not(.dark).efp-advance-maths-dark-pdf .efp-cont-page canvas{filter:invert(.965) hue-rotate(180deg) saturate(1.02) brightness(1.08) contrast(1.14)!important;background:#fff!important}',
       'html.efp-continuous-mobile-pdf .mobile-reader-bar{transition:opacity .18s ease,transform .22s ease!important}',
       'html.efp-continuous-mobile-pdf .mobile-reader-bar.efp-reader-hidden{opacity:0!important;pointer-events:none!important;transform:translateX(-50%) translateY(calc(100% + 28px))!important}',
-      '@media(orientation:landscape){html.efp-continuous-mobile-pdf .reader-head{height:28px!important;min-height:28px!important;padding-top:1px!important;padding-bottom:1px!important}html.efp-continuous-mobile-pdf .reader-title b{font-size:9px!important}html.efp-continuous-mobile-pdf .reader-shell{height:calc(100dvh - 28px)!important}.efp-cont-page{margin-bottom:5px}}'
+      '@media(orientation:landscape){html.efp-continuous-mobile-pdf .reader-head{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:145!important;height:26px!important;min-height:26px!important;padding:1px 48px!important;grid-template-columns:minmax(0,1fr)!important;background:color-mix(in srgb,var(--paper) 88%,transparent)!important;-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;transition:opacity .18s ease,transform .22s ease!important}html.efp-continuous-mobile-pdf .reader-title b{font-size:9px!important}html.efp-continuous-mobile-pdf .reader-shell{height:100dvh!important;width:100%!important;margin:0!important}html.efp-continuous-mobile-pdf.efp-reader-ui-hidden .reader-head{opacity:0!important;pointer-events:none!important;transform:translateY(-110%)!important}html.efp-continuous-mobile-pdf body #efp-home-button,html.efp-continuous-mobile-pdf body #efp-app-back-button{top:auto!important;bottom:max(6px,env(safe-area-inset-bottom))!important;width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;border-radius:50%!important;transition:opacity .18s ease,transform .22s ease,background .18s ease!important}html.efp-continuous-mobile-pdf body #efp-home-button{right:max(8px,env(safe-area-inset-right))!important;left:auto!important}html.efp-continuous-mobile-pdf body #efp-app-back-button{left:max(8px,env(safe-area-inset-left))!important;right:auto!important}html.efp-continuous-mobile-pdf body #efp-home-button .efp-home-icon,html.efp-continuous-mobile-pdf body #efp-app-back-button .efp-back-icon{font-size:19px!important}html.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-home-button,html.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-app-back-button{opacity:0!important;pointer-events:none!important;transform:translateY(calc(100% + 18px))!important}html.efp-continuous-mobile-pdf.efp-reader-ui-hidden .mobile-reader-bar{opacity:0!important;pointer-events:none!important;transform:translateX(-50%) translateY(calc(100% + 28px))!important}.efp-cont-page{margin-bottom:4px}}'
     ].join('');
     document.head.appendChild(st);
   }
@@ -248,14 +248,25 @@
     }
     return best;
   }
+  function landscapeReaderUi(){return continuous&&!devicePortrait()}
+  function hideMobileReaderUi(){
+    var bar=document.getElementById('mobileReaderBar');if(bar)bar.classList.add('efp-reader-hidden');
+    if(landscapeReaderUi())document.documentElement.classList.add('efp-reader-ui-hidden');
+  }
   function showMobileControlsBriefly(){
-    var bar=document.getElementById('mobileReaderBar');if(!bar)return;
-    bar.classList.remove('efp-reader-hidden');
-    clearTimeout(controlsTimer);controlsTimer=setTimeout(function(){if(continuous&&!document.body.classList.contains('mobile-tools-open'))bar.classList.add('efp-reader-hidden')},1800);
+    var bar=document.getElementById('mobileReaderBar');
+    if(bar)bar.classList.remove('efp-reader-hidden');
+    document.documentElement.classList.remove('efp-reader-ui-hidden');
+    clearTimeout(controlsTimer);controlsTimer=setTimeout(function(){
+      if(!continuous||document.body.classList.contains('mobile-tools-open'))return;
+      if(bar)bar.classList.add('efp-reader-hidden');
+      if(!devicePortrait())document.documentElement.classList.add('efp-reader-ui-hidden');
+    },landscapeReaderUi()?2400:1800);
   }
   function onContinuousScroll(){
-    var bar=document.getElementById('mobileReaderBar');if(bar)bar.classList.add('efp-reader-hidden');
-    clearTimeout(scrollTimer);scrollTimer=setTimeout(showMobileControlsBriefly,520);
+    hideMobileReaderUi();
+    clearTimeout(scrollTimer);
+    if(devicePortrait())scrollTimer=setTimeout(showMobileControlsBriefly,520);
     if(!scrollRAF)scrollRAF=requestAnimationFrame(function(){scrollRAF=0;var n=visibleContinuousPage();if(n!==page)setCurrent(n,true)});
   }
   function buildContinuous(firstPg){
@@ -294,7 +305,7 @@
     requestAnimationFrame(function(){go(saved,false);renderContinuousPage(saved,false);if(saved>1)renderContinuousPage(saved-1,false);if(saved<pdfDoc.numPages)renderContinuousPage(saved+1,false)});
   }
   function disableContinuous(){
-    continuous=false;document.documentElement.classList.remove('efp-continuous-mobile-pdf');
+    continuous=false;document.documentElement.classList.remove('efp-continuous-mobile-pdf','efp-reader-ui-hidden');
     if(continuousRoot)continuousRoot.hidden=true;
     pdfStage.removeEventListener('scroll',onContinuousScroll);
     pdfCanvas.style.display='';
@@ -377,7 +388,7 @@
 
   function refitForViewport(){
     clearTimeout(resizeTimer);resizeTimer=setTimeout(function(){
-      mobileReader=isCompactReader();autoFit=true;zoom=1;updateControls();
+      mobileReader=isCompactReader();autoFit=true;zoom=1;if(devicePortrait())document.documentElement.classList.remove('efp-reader-ui-hidden');updateControls();
       if(!pdfDoc||document.body.classList.contains('mobile-tools-open'))return;
       pdfDoc.getPage(page).then(function(pg){var b=pg.getViewport({scale:1}),landscape=b.width>b.height*1.03;if(mobileReader&&landscape){if(!continuous)buildContinuous(pg);else reflowContinuous()}else{if(continuous)disableContinuous();renderSinglePage()}});
     },180);
