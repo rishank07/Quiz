@@ -432,6 +432,8 @@
     var max=pdfDoc?pdfDoc.numPages:doc.pages;
     if(key==='ArrowRight'||key==='PageDown'||(key===' '&&!e.shiftKey)){e.preventDefault();go(page+1,true);return;}
     if(key==='ArrowLeft'||key==='PageUp'||(key===' '&&e.shiftKey)){e.preventDefault();go(page-1,true);return;}
+    if(key==='ArrowDown'){e.preventDefault();pdfStage.scrollBy({top:Math.max(72,Math.round(pdfStage.clientHeight*.12)),left:0,behavior:'auto'});return;}
+    if(key==='ArrowUp'){e.preventDefault();pdfStage.scrollBy({top:-Math.max(72,Math.round(pdfStage.clientHeight*.12)),left:0,behavior:'auto'});return;}
     if(key==='+'||key==='='){e.preventDefault();applyReaderZoom(steppedReaderZoom(1));return;}
     if(key==='-'||key==='_'){e.preventDefault();applyReaderZoom(steppedReaderZoom(-1));return;}
     if(key==='0'||key==='f'||key==='F'){e.preventDefault();resetReaderFit();return;}
