@@ -1,0 +1,33 @@
+name: PDF zoom and pan v1
+on:
+  push:
+    paths:
+      - '.github/workflows/pdf-zoom-pan-v1.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch viewer
+        run: python .github/scripts/patch_pdf_zoom_pan_v1.py
+      - name: Validate
+        run: |
+          node --check Crux-Tricks/viewer-v2.js
+          grep -q "if(!autoFit)width=width\*zoom" Crux-Tricks/viewer-v2.js
+          grep -q "touch-action:pan-x pan-y" Crux-Tricks/viewer-v2.js
+          grep -q "applyReaderZoom" Crux-Tricks/viewer-v2.js
+          grep -q "addEventListener('touchstart'" Crux-Tricks/viewer-v2.js
+          grep -q "addEventListener('wheel'" Crux-Tricks/viewer-v2.js
+          grep -q "addEventListener('pointerdown'" Crux-Tricks/viewer-v2.js
+          grep -q 'viewer-v2.js?v=20260909zoompan1' Crux-Tricks/viewer.html
+          grep -q 'v91-pdf-zoom-pan' service-worker.js
+      - name: Commit
+        run: |
+          rm -f .github/workflows/pdf-zoom-pan-v1.yml .github/scripts/patch_pdf_zoom_pan_v1.py
+          git config user.name 'ExamFusion Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add Crux-Tricks/viewer-v2.js Crux-Tricks/viewer.html service-worker.js .github
+          git commit -m 'Enable PDF pinch zoom and two-axis panning [skip ci]'
+          git push
