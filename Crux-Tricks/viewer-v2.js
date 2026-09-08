@@ -44,6 +44,16 @@
   var scrollRAF=0;
   var resizeTimer=null;
   var controlsTimer=null;
+  var PAGE_BATCH_SIZE=20;
+  var BATCH_PREFETCH_THRESHOLD=5;
+  var KEEP_RENDER_RADIUS=4;
+  var loadedBatchStart=1;
+  var loadedBatchEnd=0;
+  var batchPrefetchJobs={};
+  var MOBILE_FULL_HD_WIDTH=1920;
+  var DESKTOP_HD_WIDTH=2560;
+  var MOBILE_MAX_CANVAS_PIXELS=7000000;
+  var DESKTOP_MAX_CANVAS_PIXELS=12000000;
 
   var title=document.getElementById('title');
   var crumb=document.getElementById('crumb');
@@ -148,6 +158,48 @@
   }
   function sizeShell(el,ratio){if(!el)return;var s=currentTargetSize(ratio);el.style.width=s.width+'px';el.style.height=s.height+'px';el.style.minHeight=s.height+'px'}
 
+  function fullHdDensity(cssWidth,cssHeight,compact){
+    cssWidth=Math.max(1,cssWidth||1);cssHeight=Math.max(1,cssHeight||1);
+    var nativeDpr=Math.max(1,window.devicePixelRatio||1);
+    var targetWidth=compact?MOBILE_FULL_HD_WIDTH:DESKTOP_HD_WIDTH;
+    var maxDensity=compact?5.5:3.5;
+    var maxPixels=compact?MOBILE_MAX_CANVAS_PIXELS:DESKTOP_MAX_CANVAS_PIXELS;
+    var density=Math.max(nativeDpr,targetWidth/cssWidth);
+    density=Math.min(maxDensity,density);
+    var pixels=cssWidth*cssHeight*density*density;
+    if(pixels>maxPixels)density=Math.sqrt(maxPixels/(cssWidth*cssHeight));
+    return Math.max(1,density);
+  }
+  function prefetchBatch(start,end){
+    if(!pdfDoc)return;
+    start=Math.max(1,start|0);end=Math.min(pdfDoc.numPages,end|0);if(end<start)return;
+    var key=start+'-'+end;if(batchPrefetchJobs[key])return;batchPrefetchJobs[key]=true;
+    var n=start;
+    function next(){
+      if(!pdfDoc||n>end){delete batchPrefetchJobs[key];return}
+      var current=n++;
+      pdfDoc.getPage(current).catch(function(){}).then(function(){
+        if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:180});else setTimeout(next,12);
+      });
+    }
+    next();
+  }
+  function ensureBatchAround(center){
+    if(!pdfDoc)return;
+    center=Math.max(1,Math.min(pdfDoc.numPages,center|0));
+    var desiredStart=Math.floor((center-1)/PAGE_BATCH_SIZE)*PAGE_BATCH_SIZE+1;
+    if(!loadedBatchEnd||center<loadedBatchStart-2||center>loadedBatchEnd+2){
+      loadedBatchStart=desiredStart;loadedBatchEnd=Math.min(pdfDoc.numPages,desiredStart+PAGE_BATCH_SIZE-1);
+      prefetchBatch(loadedBatchStart,loadedBatchEnd);
+    }
+    if(center>=loadedBatchEnd-BATCH_PREFETCH_THRESHOLD&&loadedBatchEnd<pdfDoc.numPages){
+      var oldEnd=loadedBatchEnd;loadedBatchEnd=Math.min(pdfDoc.numPages,loadedBatchEnd+PAGE_BATCH_SIZE);prefetchBatch(oldEnd+1,loadedBatchEnd);
+    }
+    if(center<=loadedBatchStart+BATCH_PREFETCH_THRESHOLD&&loadedBatchStart>1){
+      var oldStart=loadedBatchStart;loadedBatchStart=Math.max(1,loadedBatchStart-PAGE_BATCH_SIZE);prefetchBatch(loadedBatchStart,oldStart-1);
+    }
+  }
+
   function renderContinuousPage(n,force){
     if(!continuous||!pdfDoc)return Promise.resolve();
     var el=pageShell(n);if(!el)return Promise.resolve();
@@ -159,7 +211,8 @@
       pageRatios[n]=ratio;
       var size=currentTargetSize(ratio);
       var cssScale=(size.width/base.width)*(autoFit?1:zoom);
-      var dpr=Math.min(window.devicePixelRatio||1,2.25);
+      var cssWidth=Math.max(1,base.width*cssScale),cssHeight=Math.max(1,base.height*cssScale);
+      var dpr=fullHdDensity(cssWidth,cssHeight,true);
       var vp=pg.getViewport({scale:cssScale*dpr});
       var c=el.querySelector('canvas');
       if(!c){c=document.createElement('canvas');c.setAttribute('aria-label','PDF page '+n);el.appendChild(c)}
@@ -176,13 +229,14 @@
     var list=continuousRoot.querySelectorAll('.efp-cont-page[data-rendered="1"]');
     for(var i=0;i<list.length;i++){
       var n=parseInt(list[i].dataset.page,10)||0;
-      if(Math.abs(n-center)>6){var c=list[i].querySelector('canvas');if(c)c.remove();list[i].dataset.rendered='0';sizeShell(list[i],pageRatios[n]||defaultRatio)}
+      if(Math.abs(n-center)>KEEP_RENDER_RADIUS){var c=list[i].querySelector('canvas');if(c){c.width=1;c.height=1;c.remove()}list[i].dataset.rendered='0';sizeShell(list[i],pageRatios[n]||defaultRatio)}
     }
   }
   function setCurrent(n,mark){
     n=Math.max(1,Math.min(pdfDoc?pdfDoc.numPages:doc.pages,n));
     if(n===page){updateControls();return;}
-    page=n;updateControls();updateUrl();if(mark!==false)markVisited();trimContinuous(page);
+    page=n;ensureBatchAround(page);updateControls();updateUrl();if(mark!==false)markVisited();trimContinuous(page);
+    renderContinuousPage(page,false);if(page>1)renderContinuousPage(page-1,false);if(page<pdfDoc.numPages)renderContinuousPage(page+1,false);
   }
   function visibleContinuousPage(){
     if(!continuousRoot)return page;
@@ -223,8 +277,11 @@
       var badge=document.createElement('span');badge.className='efp-page-badge';badge.textContent=String(n);d.appendChild(badge);frag.appendChild(d);
     }
     continuousRoot.appendChild(frag);
+    loadedBatchStart=Math.floor((page-1)/PAGE_BATCH_SIZE)*PAGE_BATCH_SIZE+1;
+    loadedBatchEnd=Math.min(pdfDoc.numPages,loadedBatchStart+PAGE_BATCH_SIZE-1);
+    prefetchBatch(loadedBatchStart,loadedBatchEnd);
     if(continuousObserver){try{continuousObserver.disconnect()}catch(e){}}
-    continuousObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var n=parseInt(entry.target.dataset.page,10);if(n)renderContinuousPage(n,false)}})},{root:pdfStage,rootMargin:'900px 0px',threshold:.01});
+    continuousObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var n=parseInt(entry.target.dataset.page,10);if(n&&n>=loadedBatchStart&&n<=loadedBatchEnd)renderContinuousPage(n,false)}})},{root:pdfStage,rootMargin:'1100px 0px',threshold:.01});
     Array.prototype.forEach.call(continuousRoot.children,function(el){continuousObserver.observe(el)});
     pdfStage.removeEventListener('scroll',onContinuousScroll);pdfStage.addEventListener('scroll',onContinuousScroll,{passive:true});
     pdfStage.addEventListener('pointerdown',showMobileControlsBriefly,{passive:true});
@@ -268,7 +325,8 @@
       var fit=widthFit;
       if(!mobileReader&&landscape&&autoFit)fit=Math.min(widthFit,visibleH/base.height);
       var cssScale=fit*(autoFit?1:zoom);
-      var dpr=Math.min(window.devicePixelRatio||1,mobileReader?3:2);
+      var cssWidth=Math.max(1,base.width*cssScale),cssHeight=Math.max(1,base.height*cssScale);
+      var dpr=fullHdDensity(cssWidth,cssHeight,mobileReader);
       var vp=pg.getViewport({scale:cssScale*dpr});
       var ctx=pdfCanvas.getContext('2d',{alpha:false});
       pdfStage.style.overflowY='auto';pdfStage.style.overflowX=mobileReader&&autoFit?'hidden':'auto';
@@ -281,7 +339,7 @@
     var max=pdfDoc?pdfDoc.numPages:doc.pages;
     var next=Math.max(1,Math.min(max,n));
     if(continuous){
-      page=next;updateControls();updateUrl();markVisited();
+      page=next;ensureBatchAround(page);updateControls();updateUrl();markVisited();
       var el=pageShell(page);
       return renderContinuousPage(page,false).then(function(){if(el)pdfStage.scrollTo({top:Math.max(0,el.offsetTop-4),left:0,behavior:smooth===false?'auto':'smooth'});trimContinuous(page)});
     }

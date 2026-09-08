@@ -1,5 +1,5 @@
 // v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-09-v84-landscape-maxfit";
+const CACHE_VERSION = "efp-pwa-2026-09-09-v85-fhd-batch20";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -39,7 +39,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260908maths1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260909acrobat4",
+  "/Crux-Tricks/viewer-v2.js?v=20260909fhd1",
 ];
 
 self.addEventListener("install", (event) => {
