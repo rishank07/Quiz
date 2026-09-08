@@ -13,7 +13,7 @@ function pageBookmarkKey(id,page){return 'cruxpage:'+id+':'+page}function pageBo
 function progress(id){var a=safe(localStorage.getItem('efp_visited_crux_'+id),[]);return Array.isArray(a)?a:[]}
 function recent(){var a=safe(localStorage.getItem('efp_visited_crux_recent'),[]);return Array.isArray(a)?a:[]}
 function visitedPages(d){var s=new Set;progress(d.id).forEach(function(x){var m=/^p:(\d+)$/.exec(x);if(m)s.add(+m[1])});return s.size}
-function pct(d){return Math.min(100,Math.round(visitedPages(d)*100/Math.max(1,d.pages)))}
+function pct(d){var a=progress(d.id);if(a.indexOf('complete')>=0)return 100;return Math.min(100,Math.round(visitedPages(d)*100/Math.max(1,d.pages)))}
 function escape(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function opt(el,values){values.sort().forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o)})}
 opt(sourceFilter,[...new Set(docs.map(function(d){return d.source}))]);
