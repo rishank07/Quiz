@@ -1,4 +1,4 @@
-name: Install App Session Persistence
+name: Install App Session Resume
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
       - name: Validate installer
         run: python -m py_compile tools/install-app-session.py
 
-      - name: Install app session persistence
+      - name: Install app session resume
         run: python tools/install-app-session.py
 
       - name: Commit generated integration changes
@@ -47,5 +47,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add home-nav.js service-worker.js
-          git commit -m "chore: enable installed-app session persistence"
+          git commit -m "chore: keep installed-app session resume current"
           git push
