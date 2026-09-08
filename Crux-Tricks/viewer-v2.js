@@ -405,8 +405,15 @@
       pdfStage.scrollTop=Math.max(0,(oldTop+focusY)*scaleRatio-focusY);
     },120);
   }
-  zoomInBtn.addEventListener('click',function(){applyReaderZoom((autoFit?1:zoom)+.10)});
-  zoomOutBtn.addEventListener('click',function(){applyReaderZoom((autoFit?1:zoom)-.10)});
+  function steppedReaderZoom(direction){
+    var current=Math.round((autoFit?1:zoom)*100);
+    var next;
+    if(direction>0)next=current%10===0?current+10:Math.ceil(current/10)*10;
+    else next=current%10===0?current-10:Math.floor(current/10)*10;
+    return clampReaderZoom(next/100);
+  }
+  zoomInBtn.addEventListener('click',function(){applyReaderZoom(steppedReaderZoom(1))});
+  zoomOutBtn.addEventListener('click',function(){applyReaderZoom(steppedReaderZoom(-1))});
 
   function resetReaderFit(){
     autoFit=true;zoom=1;
@@ -425,8 +432,8 @@
     var max=pdfDoc?pdfDoc.numPages:doc.pages;
     if(key==='ArrowRight'||key==='PageDown'||(key===' '&&!e.shiftKey)){e.preventDefault();go(page+1,true);return;}
     if(key==='ArrowLeft'||key==='PageUp'||(key===' '&&e.shiftKey)){e.preventDefault();go(page-1,true);return;}
-    if(key==='+'||key==='='){e.preventDefault();applyReaderZoom((autoFit?1:zoom)+.10);return;}
-    if(key==='-'||key==='_'){e.preventDefault();applyReaderZoom((autoFit?1:zoom)-.10);return;}
+    if(key==='+'||key==='='){e.preventDefault();applyReaderZoom(steppedReaderZoom(1));return;}
+    if(key==='-'||key==='_'){e.preventDefault();applyReaderZoom(steppedReaderZoom(-1));return;}
     if(key==='0'||key==='f'||key==='F'){e.preventDefault();resetReaderFit();return;}
     if(key==='Home'){e.preventDefault();go(1,true);return;}
     if(key==='End'){e.preventDefault();go(max,true);return;}
