@@ -19,6 +19,27 @@ MATHS_FIT_TAG = (
     'href="/Maths%20Speed%20Booster/math-speed-booster-fit.css?v=20260906fit1">\n'
 )
 
+RAPID_PRACTICE_DIR = Path("Current Affairs/Topic Names/Rapid Practice")
+RAPID_BACK_BOOTSTRAP_MARKER = 'id="efp-rapid-back-bootstrap"'
+RAPID_BACK_BOOTSTRAP = (
+    '  <script id="efp-rapid-back-bootstrap">'
+    'document.documentElement.classList.add("efp-crux-back-fallback");'
+    '</script>\n'
+)
+RAPID_BACK_BUTTON_MARKER = 'id="efp-app-back-button"'
+RAPID_BACK_BUTTON = (
+    '\n<button id="efp-app-back-button" type="button" '
+    'aria-label="Go back to the previous page" aria-keyshortcuts="Alt+ArrowLeft" '
+    'title="Back" onclick="history.back()">'
+    '<span class="efp-back-icon" aria-hidden="true">&#8592;</span>'
+    '<span class="efp-back-label">Back</span>'
+    '</button>\n'
+)
+
+
+def is_rapid_practice_quiz(rel: Path) -> bool:
+    return RAPID_PRACTICE_DIR in rel.parents
+
 
 def inject(path: Path, root: Path) -> bool:
     raw = path.read_bytes()
@@ -29,28 +50,49 @@ def inject(path: Path, root: Path) -> bool:
     except UnicodeDecodeError as exc:
         raise RuntimeError(f"Non-UTF-8 HTML file: {path}") from exc
 
-    missing = [tag for marker, tag in SCRIPT_SPECS if marker not in text]
-
     rel = path.relative_to(root)
+    head_blocks = [tag for marker, tag in SCRIPT_SPECS if marker not in text]
+
     if rel == MATHS_SPEED_BOOSTER_FILE and MATHS_FIT_MARKER not in text:
-        missing.insert(0, MATHS_FIT_TAG)
+        head_blocks.insert(0, MATHS_FIT_TAG)
 
-    if not missing:
-        return False
+    rapid_quiz = is_rapid_practice_quiz(rel)
+    if rapid_quiz and RAPID_BACK_BOOTSTRAP_MARKER not in text:
+        # Rapid Practice pages already load the shared Home styles. Reuse the
+        # same fallback Back appearance that those styles provide on Crux pages
+        # so the standard fixed Back control is identical on mobile/desktop.
+        head_blocks.append(RAPID_BACK_BOOTSTRAP)
 
-    block = "".join(missing)
-    lower = text.lower()
-    head_end = lower.rfind("</head>")
-    if head_end != -1:
-        text = text[:head_end] + block + text[head_end:]
-    else:
+    changed = False
+    if head_blocks:
+        block = "".join(head_blocks)
+        lower = text.lower()
+        head_end = lower.rfind("</head>")
+        if head_end != -1:
+            text = text[:head_end] + block + text[head_end:]
+        else:
+            body_end = lower.rfind("</body>")
+            if body_end != -1:
+                text = text[:body_end] + block + text[body_end:]
+            else:
+                if text and not text.endswith("\n"):
+                    text += "\n"
+                text += block
+        changed = True
+
+    if rapid_quiz and RAPID_BACK_BUTTON_MARKER not in text:
+        lower = text.lower()
         body_end = lower.rfind("</body>")
         if body_end != -1:
-            text = text[:body_end] + block + text[body_end:]
+            text = text[:body_end] + RAPID_BACK_BUTTON + text[body_end:]
         else:
             if text and not text.endswith("\n"):
                 text += "\n"
-            text += block
+            text += RAPID_BACK_BUTTON
+        changed = True
+
+    if not changed:
+        return False
 
     out = text.encode("utf-8")
     if bom:
