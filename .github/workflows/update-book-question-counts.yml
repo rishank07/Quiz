@@ -92,4 +92,8 @@ jobs:
           git add back-parent-map.js
           git add -- ':(glob)**/*.html'
           git commit -m "chore: update section counts and navigation maps"
+          # Another workflow/user commit can land while the scan is running.
+          # Rebase the generated commit onto the latest master before pushing
+          # instead of failing with a non-fast-forward rejection.
+          git pull --rebase origin master
           git push
