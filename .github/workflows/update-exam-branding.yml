@@ -99,6 +99,85 @@ jobs:
           print(f"Rapid Practice theme bridge added to {changed} quiz files.")
           PY
 
+      - name: Keep practice answers session-only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          root = Path("Current Affairs/Topic Names/Rapid Practice")
+          rapid_candidates = []
+          rapid_changed = 0
+
+          load_old = "try{saved=Object.assign(saved,JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){}"
+          load_new = load_old + "\n" + (
+              "saved.answers={};"
+              "try{localStorage.setItem(STORE,JSON.stringify(Object.assign({},saved,{answers:{}})))}catch(e){}"
+          )
+          save_old = "function save(){saved.section=current;localStorage.setItem(STORE,JSON.stringify(saved));}"
+          save_new = "function save(){saved.section=current;const persist=Object.assign({},saved,{answers:{}});localStorage.setItem(STORE,JSON.stringify(persist));}"
+
+          for path in root.rglob("*.html"):
+              text = path.read_text(encoding="utf-8")
+              if "const STORE=" not in text or "let saved={answers:{}" not in text:
+                  continue
+              rapid_candidates.append(path)
+              original = text
+
+              if "saved.answers={};try{localStorage.setItem(STORE" not in text:
+                  if load_old not in text:
+                      raise RuntimeError(f"Rapid Practice load-state pattern not found: {path}")
+                  text = text.replace(load_old, load_new, 1)
+
+              if save_old in text:
+                  text = text.replace(save_old, save_new, 1)
+
+              if "Object.assign({},saved,{answers:{}})" not in text:
+                  raise RuntimeError(f"Rapid Practice session-only save not installed: {path}")
+
+              if text != original:
+                  path.write_text(text, encoding="utf-8")
+                  rapid_changed += 1
+
+          if not rapid_candidates:
+              raise RuntimeError("No Rapid Practice quiz files found")
+
+          mixed = Path("Original Practice/Mixed_Practice.html")
+          text = mixed.read_text(encoding="utf-8")
+          original = text
+
+          key_old = "var STATE_KEY='efp_mixed_practice_state_v1';\n  var BOOKMARK_KEY='efp_mixed_practice_bookmarks_v1';"
+          key_new = """var STATE_KEY='efp_mixed_practice_state_v1';
+          var BOOKMARK_KEY='efp_mixed_practice_bookmarks_v1';
+          try{
+            var __oldMixedState=JSON.parse(localStorage.getItem(STATE_KEY)||'null');
+            if(__oldMixedState&&typeof __oldMixedState==='object'){
+              __oldMixedState.answers={};
+              localStorage.setItem(STATE_KEY,JSON.stringify(__oldMixedState));
+            }
+          }catch(e){}"""
+
+          if "__oldMixedState" not in text:
+              if key_old not in text:
+                  raise RuntimeError("Mixed Practice state-key pattern not found")
+              text = text.replace(key_old, key_new, 1)
+
+          mixed_save_old = "function saveState(){if(!state)return;state.currentIndex=currentIndex;state.updatedAt=Date.now();try{localStorage.setItem(STATE_KEY,JSON.stringify(state))}catch(e){}}"
+          mixed_save_new = "function saveState(){if(!state)return;state.currentIndex=currentIndex;state.updatedAt=Date.now();try{var persist=Object.assign({},state,{answers:{}});localStorage.setItem(STATE_KEY,JSON.stringify(persist))}catch(e){}}"
+
+          if mixed_save_old in text:
+              text = text.replace(mixed_save_old, mixed_save_new, 1)
+
+          if "Object.assign({},state,{answers:{}})" not in text:
+              raise RuntimeError("Mixed Practice session-only save not installed")
+
+          mixed_changed = 0
+          if text != original:
+              mixed.write_text(text, encoding="utf-8")
+              mixed_changed = 1
+
+          print(f"Session-only answers checked in {len(rapid_candidates)} Rapid Practice files; changed {rapid_changed}. Mixed Practice changed={mixed_changed}.")
+          PY
+
       - name: Cache-bust Crux browser-history bridge
         run: |
           python - <<'PY'
@@ -117,11 +196,11 @@ jobs:
       - name: Commit maintenance updates if needed
         run: |
           if git diff --quiet; then
-            echo "Exam branding, homepage SEO, Rapid Practice theme and Crux navigation assets are already current."
+            echo "Exam branding, practice session state, SEO and navigation assets are already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- ':(glob)**/*.html' sitemap.xml manifest.webmanifest llms.txt README.md
-          git commit -m "chore: standardize branding, SEO, Rapid Practice theme and Crux navigation UI"
+          git commit -m "chore: standardize branding, practice session state and navigation UI"
           git push
