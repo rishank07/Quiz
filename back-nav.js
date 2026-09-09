@@ -48,6 +48,85 @@
     document.head.appendChild(style);
   }
 
+  /* Mixed Practice was originally designed as a dark-only page. Keep that
+     design for site Dark Mode, but supply a real light palette when the Home
+     preference is off. The quiz data/logic remains untouched. */
+  function installMixedPracticeSiteTheme() {
+    if (!isMixedPracticePage()) return;
+
+    var STYLE_ID = "efp-mixed-site-theme";
+    if (!document.getElementById(STYLE_ID)) {
+      var style = document.createElement("style");
+      style.id = STYLE_ID;
+      style.textContent = [
+        "html.efp-mixed-light{--bg:#f5f7fb;--panel:#ffffff;--panel2:#f8fafc;--panel3:#f1f5f9;--gold:#9a6b17;--gold2:#76520f;--text:#172033;--muted:#64748b;--line:#d7dee9;--blue:#2563eb;--good:#15803d;--bad:#dc2626;--warn:#b7791f;background:#f5f7fb!important;color-scheme:light}",
+        "html.efp-mixed-light body{background:radial-gradient(circle at 15% 5%,#eaf2ff 0,transparent 34%),linear-gradient(160deg,#f8fafc,#f3f6fb 50%,#eef2f7)!important;color:#172033!important}",
+        "html.efp-mixed-light .topnav a,html.efp-mixed-light .ghost-btn{background:#fff!important;color:#24324a!important;border-color:#d7dee9!important;box-shadow:0 3px 10px rgba(15,23,42,.05)}",
+        "html.efp-mixed-light .kicker{color:#8a641d!important;border-color:#d8bd7a!important;background:#fffaf0!important}",
+        "html.efp-mixed-light .hero h1,html.efp-mixed-light .finish-panel h2{color:#1f2a3d!important}",
+        "html.efp-mixed-light .hero p,html.efp-mixed-light .panel-sub,html.efp-mixed-light .specific-note,html.efp-mixed-light .resume-copy span,html.efp-mixed-light .fineprint{color:#64748b!important}",
+        "html.efp-mixed-light .panel,html.efp-mixed-light .question-card{background:#fff!important;border-color:#d7dee9!important;box-shadow:0 14px 34px rgba(15,23,42,.08)!important}",
+        "html.efp-mixed-light .panel h2,html.efp-mixed-light .pool-name,html.efp-mixed-light .resume-copy strong{color:#172033!important}",
+        "html.efp-mixed-light .section-title h3,html.efp-mixed-light .pool-hi,html.efp-mixed-light .quiz-title{color:#8a641d!important}",
+        "html.efp-mixed-light .pool-body{background:#fff!important;border-color:#d7dee9!important;color:#172033!important}",
+        "html.efp-mixed-light .pool input:checked+.pool-body{border-color:#c59a3a!important;background:linear-gradient(145deg,#fff8e7,#eef5ff)!important;box-shadow:0 0 0 2px rgba(197,154,58,.10) inset!important}",
+        "html.efp-mixed-light .pool-count{color:#64748b!important}",
+        "html.efp-mixed-light .mini-actions button,html.efp-mixed-light .preset,html.efp-mixed-light .secondary-btn,html.efp-mixed-light .resume-btn,html.efp-mixed-light .bookmark-btn,html.efp-mixed-light .quiz-actions button,html.efp-mixed-light .nav-btn{background:#fff!important;color:#334155!important;border-color:#d7dee9!important}",
+        "html.efp-mixed-light .preset.active{background:#e5c66f!important;border-color:#c59a3a!important;color:#2d250f!important}",
+        "html.efp-mixed-light .config-box{background:#f8fafc!important;border-color:#d7dee9!important}",
+        "html.efp-mixed-light .config-box label{color:#334155!important}",
+        "html.efp-mixed-light .count-input{background:#fff!important;color:#172033!important;border-color:#cbd5e1!important}",
+        "html.efp-mixed-light .dist-pill,html.efp-mixed-light .tag{background:#eff6ff!important;border-color:#bfdbfe!important;color:#1d4ed8!important}",
+        "html.efp-mixed-light .tag.subject{background:#fff8e7!important;border-color:#e6c978!important;color:#805d16!important}",
+        "html.efp-mixed-light .status{background:#f8fafc!important;color:#475569!important;border-color:#d7dee9!important}",
+        "html.efp-mixed-light .status.bad{background:#fff1f2!important;color:#9f1239!important;border-color:#fecdd3!important}",
+        "html.efp-mixed-light .status.good{background:#f0fdf4!important;color:#166534!important;border-color:#bbf7d0!important}",
+        "html.efp-mixed-light .resume-box{background:#eff6ff!important;border-color:#bfdbfe!important}",
+        "html.efp-mixed-light .quiz-head{background:rgba(255,255,255,.95)!important;border-color:#d7dee9!important;box-shadow:0 10px 26px rgba(15,23,42,.08)!important}",
+        "html.efp-mixed-light .stat,html.efp-mixed-light .finish-stat{background:#f8fafc!important;border-color:#e2e8f0!important;color:#172033!important}",
+        "html.efp-mixed-light .stat span,html.efp-mixed-light .finish-stat span{color:#64748b!important}",
+        "html.efp-mixed-light .progress-track{background:#e2e8f0!important}",
+        "html.efp-mixed-light .question-number{color:#64748b!important}",
+        "html.efp-mixed-light .q-en{color:#172033!important}",
+        "html.efp-mixed-light .q-hi{color:#795d22!important}",
+        "html.efp-mixed-light .option-body{background:#fff!important;border-color:#d7dee9!important;color:#172033!important}",
+        "html.efp-mixed-light .option input:checked+.option-body{border-color:#60a5fa!important;background:#eff6ff!important}",
+        "html.efp-mixed-light .option-letter{background:#eef2f7!important;color:#334155!important}",
+        "html.efp-mixed-light .opt-en{color:#172033!important}",
+        "html.efp-mixed-light .opt-hi{color:#795d22!important}",
+        "html.efp-mixed-light .check-btn{background:#fff8e7!important;border-color:#d8bd7a!important;color:#684b12!important}",
+        "html.efp-mixed-light .answer-box{background:#f8fafc!important;border-color:#d7dee9!important}",
+        "html.efp-mixed-light .answer-line.good{color:#166534!important}",
+        "html.efp-mixed-light .answer-line.bad{color:#b91c1c!important}",
+        "html.efp-mixed-light .correct-answer{color:#334155!important}",
+        "html.efp-mixed-light .explanation{color:#475569!important;border-top-color:#e2e8f0!important}",
+        "html.efp-mixed-light .explanation .exp-hi{color:#795d22!important}",
+        "html.efp-mixed-light .nav-btn.primary{background:#eff6ff!important;border-color:#bfdbfe!important;color:#1d4ed8!important}",
+        "html.efp-mixed-light .option.correct .option-body,html.efp-mixed-light .option.correct input:checked+.option-body{border-color:#22c55e!important;background:#ecfdf3!important;color:#14532d!important;box-shadow:0 0 0 1px rgba(34,197,94,.25) inset!important}",
+        "html.efp-mixed-light .option.correct .option-letter{background:#22c55e!important;color:#052e16!important}",
+        "html.efp-mixed-light .option.correct .opt-en,html.efp-mixed-light .option.correct .opt-hi{color:#14532d!important}",
+        "html.efp-mixed-light .option.wrong .option-body,html.efp-mixed-light .option.wrong input:checked+.option-body{border-color:#ef4444!important;background:#fff1f2!important;color:#991b1b!important;box-shadow:0 0 0 1px rgba(239,68,68,.24) inset!important}",
+        "html.efp-mixed-light .option.wrong .option-letter{background:#ef4444!important;color:#fff!important}",
+        "html.efp-mixed-light .option.wrong .opt-en,html.efp-mixed-light .option.wrong .opt-hi{color:#991b1b!important}",
+        "html.efp-mixed-light .q-en td,html.efp-mixed-light .q-en th,html.efp-mixed-light .q-hi td,html.efp-mixed-light .q-hi th,html.efp-mixed-light .explanation td,html.efp-mixed-light .explanation th{border-color:#cbd5e1!important}"
+      ].join("");
+      document.head.appendChild(style);
+    }
+
+    function sync() {
+      var dark = false;
+      try { dark = localStorage.getItem("efp_black_mode") === "on"; } catch (_) {}
+      document.documentElement.classList.toggle("efp-mixed-light", !dark);
+    }
+
+    sync();
+    document.addEventListener("efp-black-mode-changed", sync);
+    window.addEventListener("pageshow", sync);
+    window.addEventListener("storage", function (event) {
+      if (!event || event.key === "efp_black_mode") sync();
+    });
+  }
+
   /* Mixed Practice should behave like a normal exam-practice card: selecting
      an option immediately evaluates it. The existing Check Answer handler is
      reused so scoring, saved state, explanation and green/red classes stay in
@@ -359,6 +438,7 @@
   }, true);
 
   installMixedPracticeFeedbackColors();
+  installMixedPracticeSiteTheme();
   installMixedPracticeInstantCheck();
 
   if (document.readyState === "loading") {
