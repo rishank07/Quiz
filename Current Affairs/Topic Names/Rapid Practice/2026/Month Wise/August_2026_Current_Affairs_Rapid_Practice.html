@@ -29,6 +29,9 @@ body.dark{--bg:#0d1420;--card:#182231;--ink:#edf2f7;--muted:#a9b4c2;--line:#3140
     @media(max-width:520px){.efp-site-nav{padding:0 10px;margin-top:8px}.efp-site-nav a{font-size:11px;padding:7px 10px}.efp-site-nav .efp-nav-label-long{display:none}}
   </style>
 
+  <script defer src="/back-parent-map.js?v=20260906hier1"></script>
+  <script defer src="/back-nav.js?v=20260906hier1"></script>
+  <script defer src="/home-nav.js?v=20260906nav2"></script>
 </head><body>
 <div class="efp-site-nav" aria-label="Rapid Practice navigation">
   <a href="../../../Rapid Practice.html">← <span>Rapid Practice Hub</span></a>
@@ -48,4 +51,7 @@ function renderNav(){document.getElementById('sectionNav').innerHTML=SECTIONS.ma
 function renderQuestions(){const s=SECTIONS[current];document.getElementById('secNo').textContent=`Section ${current+1} of ${SECTIONS.length} · ${s.questions.length} questions`;document.getElementById('secTitle').textContent=s.title.en;document.getElementById('secTitleHi').textContent=s.title.hi;const term=document.getElementById('search').value.trim().toLowerCase();const htmls=[];s.questions.forEach((q,qi)=>{const id=qid(current,qi),book=!!saved.bookmarks[id];if(onlyBookmarks&&!book)return;const hay=(q.q.en+' '+q.q.hi+' '+q.a.en+' '+q.a.hi).toLowerCase();if(term&&!hay.includes(term))return;const picked=saved.answers[id],ci=correctIndex(q);let opts=q.o.map((o,oi)=>{let cl='opt';if(picked!==undefined){if(oi===ci)cl+=' correct';else if(oi===picked)cl+=' wrong';}return `<button class="${cl}" onclick="pick(${qi},${oi})" ${picked!==undefined?'disabled':''}><span>${escapeHtml(o.en)}</span><small>${escapeHtml(o.hi)}</small></button>`}).join('');htmls.push(`<article class="qcard"><button class="book ${book?'on':''}" onclick="bookmark(${qi})" title="Bookmark">${book?'★':'☆'}</button><div class="qnum">Q${globalQNumber(current,qi)} <span class="qtotal">/ ${TOTAL_QUESTIONS}</span></div><p class="qen">${escapeHtml(q.q.en)}</p><p class="qhi">${escapeHtml(q.q.hi)}</p><div class="opts">${opts}</div><div class="exp ${picked!==undefined?'show':''}"><div>${escapeHtml(q.exp.en)}</div><div class="hi">${escapeHtml(q.exp.hi)}</div></div></article>`)});document.getElementById('questions').innerHTML=htmls.join('')||'<div class="empty">No matching questions / कोई matching प्रश्न नहीं मिला</div>';updateTop()}
 function pick(qi,oi){const id=qid(current,qi);if(saved.answers[id]!==undefined)return;saved.answers[id]=oi;save();renderQuestions()}function bookmark(qi){const id=qid(current,qi);saved.bookmarks[id]=!saved.bookmarks[id];if(!saved.bookmarks[id])delete saved.bookmarks[id];save();renderQuestions()}function toggleBookmarkFilter(){onlyBookmarks=!onlyBookmarks;document.getElementById('bookmarkFilter').classList.toggle('primary',onlyBookmarks);renderQuestions()}function openSection(i){current=i;document.getElementById('search').value='';save();renderQuestions();window.scrollTo({top:310,behavior:'smooth'})}function moveSection(d){openSection(Math.max(0,Math.min(SECTIONS.length-1,current+d)))}
 function resetAll(){if(!confirm("Reset all August 2026 Current Affairs Rapid Practice answers and bookmarks?"))return;saved.answers={};saved.bookmarks={};saved.section=0;current=0;save();renderQuestions()}function toggleDark(){saved.dark=!saved.dark;applyDark();save()}function applyDark(){document.body.classList.toggle('dark',!!saved.dark);document.getElementById('darkBtn').textContent=saved.dark?'Light':'Dark'}applyDark();renderQuestions();
-</script></body></html>
+</script>
+  <!-- ExamFusion automatic book question counts -->
+  <script src="../../../../../Books/book-question-counts-display.js?v=20260821f" defer></script>
+</body></html>
