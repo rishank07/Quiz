@@ -27,6 +27,24 @@
     return normalizePath(window.location.pathname).toLowerCase().indexOf("/original practice/") === 0;
   }
 
+  function installMixedPracticeFeedbackColors() {
+    var path = normalizePath(window.location.pathname).toLowerCase();
+    if (path !== "/original practice/mixed_practice.html") return;
+    if (document.getElementById("efp-mixed-feedback-colors")) return;
+
+    var style = document.createElement("style");
+    style.id = "efp-mixed-feedback-colors";
+    style.textContent = [
+      ".option.correct .option-body{border-color:#22c55e!important;background:rgba(34,197,94,.22)!important;box-shadow:0 0 0 1px rgba(34,197,94,.45) inset!important;color:#dcfce7!important}",
+      ".option.correct .option-letter{background:#22c55e!important;color:#052e16!important}",
+      ".option.correct .opt-en,.option.correct .opt-hi{color:#dcfce7!important}",
+      ".option.wrong .option-body{border-color:#ef4444!important;background:rgba(239,68,68,.22)!important;box-shadow:0 0 0 1px rgba(239,68,68,.45) inset!important;color:#fee2e2!important}",
+      ".option.wrong .option-letter{background:#ef4444!important;color:#fff!important}",
+      ".option.wrong .opt-en,.option.wrong .opt-hi{color:#fee2e2!important}"
+    ].join("");
+    document.head.appendChild(style);
+  }
+
   function consumeBackEvent(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -319,6 +337,8 @@
 
     useLogicalParent(event);
   }, true);
+
+  installMixedPracticeFeedbackColors();
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", restoreCruxIndexState, { once: true });
