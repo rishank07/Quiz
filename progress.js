@@ -13,6 +13,33 @@
 (function () {
   var STYLE_ID = "efp-progress-style";
 
+  function normalizePath(pathname) {
+    var path = pathname || "/";
+    try { path = decodeURIComponent(path); } catch (e) {}
+    path = path.replace(/\/{2,}/g, "/");
+    if (path.length > 1) path = path.replace(/\/$/, "");
+    return path || "/";
+  }
+
+  function isCurrentAffairsLanding() {
+    return normalizePath(location.pathname).toLowerCase() === "/current affairs/topic names.html";
+  }
+
+  /* Current Affairs is a top-level section. Its visible Back button should
+     always return Home, not whichever quiz happened to be open previously. */
+  if (isCurrentAffairsLanding()) {
+    document.addEventListener("click", function (event) {
+      var back = event.target && event.target.closest
+        ? event.target.closest("#efp-app-back-button")
+        : null;
+      if (!back) return;
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      window.location.href = "/index.html";
+    }, true);
+  }
+
   function detectBookKey() {
     var path = decodeURIComponent(location.pathname);
     if (path.indexOf("Ghatnachakra Purvalokan") !== -1) return "ghatnachakra";
@@ -52,8 +79,33 @@
       " background: rgba(128,128,128,0.25); border-radius: 20px; height: 8px; overflow: hidden; }" +
       ".efp-progress-fill {" +
       " background: linear-gradient(90deg,#ff6a00,#ee0979); height: 100%; width: 0%;" +
-      " transition: width .4s ease; border-radius: 20px; }";
+      " transition: width .4s ease; border-radius: 20px; }" +
+      ".efp-ca-practice-link {" +
+      " display:flex; align-items:center; justify-content:space-between; gap:12px;" +
+      " margin-top:18px; padding:20px 26px; border-radius:18px; text-decoration:none;" +
+      " color:#fff; font-size:19px; font-weight:700; letter-spacing:.2px;" +
+      " background:linear-gradient(135deg,#ff6a00,#ee0979);" +
+      " border:1px solid rgba(255,179,71,.18); box-shadow:0 10px 30px rgba(0,0,0,.25);" +
+      " transition:.28s ease; }" +
+      ".efp-ca-practice-link:hover { transform:translateY(-2px); box-shadow:0 16px 36px rgba(0,0,0,.32); }" +
+      ".efp-ca-practice-link .efp-ca-practice-arrow { font-size:17px; opacity:.9; }";
     document.head.appendChild(style);
+  }
+
+  function installCurrentAffairsPracticeLink() {
+    if (!isCurrentAffairsLanding()) return;
+
+    var link = document.querySelector('.ca-toolbar a[href*="Rapid Practice"]');
+    if (!link) return;
+
+    link.className = "efp-ca-practice-link";
+    link.setAttribute("href", "./Topic Names/Rapid Practice.html");
+    link.innerHTML = '<span>📝 Practice Quiz MCQ</span><span class="efp-ca-practice-arrow">→</span>';
+
+    var card2025 = document.getElementById("card-2025");
+    if (card2025 && card2025.parentNode) {
+      card2025.insertAdjacentElement("afterend", link);
+    }
   }
 
   function getVisited() {
@@ -157,6 +209,7 @@
 
   function init() {
     injectStyle();
+    installCurrentAffairsPracticeLink();
     hookLinks();
     update();
   }
