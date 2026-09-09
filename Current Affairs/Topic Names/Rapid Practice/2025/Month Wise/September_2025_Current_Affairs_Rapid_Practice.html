@@ -91,9 +91,10 @@ const SECTIONS=MASTER['Current Affairs 2025']['09. September 2025 - सितं
 const STORE='efp_ca_september2025_rapid_v1';
 let saved={answers:{},bookmarks:{},section:0,dark:false};
 try{saved=Object.assign(saved,JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){}
+saved.answers={};try{localStorage.setItem(STORE,JSON.stringify(Object.assign({},saved,{answers:{}})))}catch(e){}
 let current=Math.max(0,Math.min(SECTIONS.length-1,saved.section||0));
 let onlyBookmarks=false;
-function save(){saved.section=current;localStorage.setItem(STORE,JSON.stringify(saved));}
+function save(){saved.section=current;const persist=Object.assign({},saved,{answers:{}});localStorage.setItem(STORE,JSON.stringify(persist));}
 function globalQNumber(si,qi){let n=qi+1;for(let i=0;i<si;i++)n+=SECTIONS[i].questions.length;return n}const TOTAL_QUESTIONS=SECTIONS.reduce((n,s)=>n+s.questions.length,0);function qid(si,qi){return si+'-'+qi}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function correctIndex(q){return q.o.findIndex(o=>o.en===q.a.en)}

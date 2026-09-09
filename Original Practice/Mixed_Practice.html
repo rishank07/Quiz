@@ -98,7 +98,14 @@
   'use strict';
 
   var STATE_KEY='efp_mixed_practice_state_v1';
-  var BOOKMARK_KEY='efp_mixed_practice_bookmarks_v1';
+var BOOKMARK_KEY='efp_mixed_practice_bookmarks_v1';
+try{
+  var __oldMixedState=JSON.parse(localStorage.getItem(STATE_KEY)||'null');
+  if(__oldMixedState&&typeof __oldMixedState==='object'){
+    __oldMixedState.answers={};
+    localStorage.setItem(STATE_KEY,JSON.stringify(__oldMixedState));
+  }
+}catch(e){}
   var MAX_QUESTIONS=500;
   var FILES={history:'History_Complete_Practice.html',polity:'Polity_Complete_Practice.html',science:'Science_Complete_Practice.html',geography:'Geography_Complete_Practice.html',economics:'Economics_Complete_Practice.html'};
   var POOLS={
@@ -129,7 +136,7 @@
   function loadBookmarks(){var v=readJson(BOOKMARK_KEY,[]);return new Set(Array.isArray(v)?v.map(String):[])}
   function saveBookmarks(){try{localStorage.setItem(BOOKMARK_KEY,JSON.stringify(Array.from(bookmarks)))}catch(e){}}
   function loadState(){var v=readJson(STATE_KEY,null);return v&&Array.isArray(v.ids)&&Array.isArray(v.selectedKeys)?v:null}
-  function saveState(){if(!state)return;state.currentIndex=currentIndex;state.updatedAt=Date.now();try{localStorage.setItem(STATE_KEY,JSON.stringify(state))}catch(e){}}
+  function saveState(){if(!state)return;state.currentIndex=currentIndex;state.updatedAt=Date.now();try{var persist=Object.assign({},state,{answers:{}});localStorage.setItem(STATE_KEY,JSON.stringify(persist))}catch(e){}}
   function setStatus(msg,type){var el=$('setupStatus');el.className='status show'+(type?' '+type:'');el.textContent=msg}
   function clearStatus(){var el=$('setupStatus');el.className='status';el.textContent=''}
   function renderPool(container,key){var p=POOLS[key],label=document.createElement('label');label.className='pool';label.innerHTML='<input type="checkbox" data-pool="'+p.key+'"><span class="pool-body"><span class="pool-name">'+p.icon+' '+escapeHtml(p.label)+'</span><span class="pool-hi">'+escapeHtml(p.hi)+'</span><span class="pool-count">'+fmt(p.count)+' questions</span></span>';container.appendChild(label)}
