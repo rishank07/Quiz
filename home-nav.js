@@ -136,6 +136,16 @@
     window.location.assign(isCruxTricksRoot() ? "/" : "/Crux-Tricks/index.html");
   }
 
+  function navigateDefaultBack() {
+    if (window.history.length > 1 && hasSameOriginReferrer()) {
+      window.history.back();
+      return;
+    }
+    /* back-nav.js captures this click first and uses the generated logical
+       parent map for direct/external opens. Home is only a last-resort fallback. */
+    window.location.assign("/");
+  }
+
   function installCruxBackButton() {
     if (!isCruxTricksPage() || !document.documentElement || !document.head) return;
     if (document.getElementById(BACK_BUTTON_ID)) return;
@@ -150,6 +160,29 @@
     button.innerHTML = "<span class=\"efp-back-icon\" aria-hidden=\"true\">&#8592;</span>" +
       "<span class=\"efp-back-label\">Back</span>";
     button.addEventListener("click", navigateCruxBack);
+    document.documentElement.appendChild(button);
+  }
+
+  function installDefaultBackButton() {
+    if (!document.documentElement || !document.head || isMainHomePage()) return;
+    if (document.getElementById(BACK_BUTTON_ID)) return;
+    if (isCruxTricksPage()) {
+      installCruxBackButton();
+      return;
+    }
+
+    /* Reuse the same global Back styling on ordinary pages that do not load a
+       legacy Back provider (for example the Current Affairs Rapid Practice hub). */
+    document.documentElement.classList.add(CRUX_BACK_CLASS);
+    var button = document.createElement("button");
+    button.id = BACK_BUTTON_ID;
+    button.type = "button";
+    button.setAttribute("aria-label", "Go back to the previous page");
+    button.setAttribute("aria-keyshortcuts", "Alt+ArrowLeft");
+    button.setAttribute("title", "Back");
+    button.innerHTML = "<span class=\"efp-back-icon\" aria-hidden=\"true\">&#8592;</span>" +
+      "<span class=\"efp-back-label\">Back</span>";
+    button.addEventListener("click", navigateDefaultBack);
     document.documentElement.appendChild(button);
   }
 
@@ -274,7 +307,7 @@
     watchLegacyOriginalPracticeHome();
     watchLegacyCruxNavigation();
     injectStyle();
-    installCruxBackButton();
+    installDefaultBackButton();
 
     if (document.getElementById(BUTTON_ID)) return;
 
@@ -302,7 +335,7 @@
   if (window.MutationObserver && document.documentElement) {
     var observer = new MutationObserver(function () {
       if (!document.getElementById(BUTTON_ID)) installHomeButton();
-      if (isCruxTricksPage() && !document.getElementById(BACK_BUTTON_ID)) installCruxBackButton();
+      if (!isMainHomePage() && !document.getElementById(BACK_BUTTON_ID)) installDefaultBackButton();
       removeLegacyBackToTop();
       removeLegacyOriginalPracticeHome();
       removeLegacyCruxNavigation();
