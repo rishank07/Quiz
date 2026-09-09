@@ -176,7 +176,7 @@ try{
   function showFinish(){var st=answerStats(),accuracy=st.attempted?Math.round(st.correct/st.attempted*100):0;$('quizView').hidden=true;$('setupView').hidden=true;$('finishView').hidden=false;$('finishScore').textContent=st.correct+' / '+currentQuestions.length;$('finishCopy').textContent=st.wrong+' wrong · '+(currentQuestions.length-st.attempted)+' unattempted';$('finishAttempted').textContent=st.attempted;$('finishAccuracy').textContent=accuracy+'%';$('finishSaved').textContent=currentQuestions.filter(function(q){return bookmarks.has(q.id)}).length;window.scrollTo({top:0,behavior:'auto'})}
   $('finishNewBtn').onclick=function(){if(state)generateSet(state.selectedKeys,state.total||currentQuestions.length)};$('reviewBtn').onclick=function(){currentIndex=0;showQuiz();renderQuestion()};
   function refreshResume(){var saved=loadState(),box=$('resumeBox');if(!saved||!saved.ids||!saved.ids.length){box.classList.remove('show');return}box.classList.add('show');var labels=saved.selectedKeys.map(function(k){return POOLS[k]?POOLS[k].label:k}),attempted=0;if(saved.answers)Object.keys(saved.answers).forEach(function(id){if(saved.answers[id]&&saved.answers[id].checked)attempted++});$('resumeText').textContent=labels.join(' + ')+' · '+saved.ids.length+' questions · '+attempted+' attempted';$('resumeBtn').onclick=function(){restoreState(saved)}}
-  updateDistribution();refreshResume();
+  updateDistribution();var __savedOnLoad=loadState();if(__savedOnLoad&&__savedOnLoad.ids&&__savedOnLoad.ids.length){restoreState(__savedOnLoad)}else{refreshResume();}
 })();
 </script>
 </body>
