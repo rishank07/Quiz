@@ -1,5 +1,5 @@
-// v32 Economics and Geography Original Tricks 20260909
-const CACHE_VERSION = "efp-pwa-2026-09-07-v62-chess-captured-pieces";
+// v33 Mixed Practice Saved Questions 20260909
+const CACHE_VERSION = "efp-pwa-2026-09-09-v63-mixed-saved-questions";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
