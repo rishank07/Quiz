@@ -23,6 +23,7 @@ on:
       - "tools/add-home-nav.py"
       - "tools/update-back-parent-map.py"
       - "tools/update-book-question-counts.py"
+      - "tools/update-rapid-practice-count.py"
       - "tools/update-home-integrations.py"
       - "tools/validate-crux-search-routing.js"
       - "Books/book-question-counts-display.js"
@@ -57,11 +58,15 @@ jobs:
           python -m py_compile tools/update-home-integrations.py
           python -m py_compile tools/add-home-nav.py
           python -m py_compile tools/update-back-parent-map.py
+          python -m py_compile tools/update-rapid-practice-count.py
           node --check homepage-fulltext-search.js
           node --check search-worker.js
           node --check service-worker.js
           node --check back-nav.js
           node tools/validate-crux-search-routing.js
+
+      - name: Update Rapid Practice aggregate count
+        run: python tools/update-rapid-practice-count.py --repo .
 
       - name: Recalculate section counts
         run: python tools/update-book-question-counts.py --repo .
