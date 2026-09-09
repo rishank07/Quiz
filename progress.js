@@ -88,7 +88,9 @@
       " border:1px solid rgba(255,179,71,.18); box-shadow:0 10px 30px rgba(0,0,0,.25);" +
       " transition:.28s ease; }" +
       ".efp-ca-practice-link:hover { transform:translateY(-2px); box-shadow:0 16px 36px rgba(0,0,0,.32); }" +
-      ".efp-ca-practice-link .efp-ca-practice-arrow { font-size:17px; opacity:.9; }";
+      ".efp-ca-practice-main { display:flex; align-items:center; gap:10px; flex-wrap:wrap; min-width:0; }" +
+      ".efp-ca-practice-count { display:inline-flex; align-items:center; justify-content:center; padding:5px 9px; border-radius:999px; white-space:nowrap; font-size:11px; font-weight:800; line-height:1; color:#5b1b00; background:rgba(255,255,255,.88); border:1px solid rgba(255,255,255,.72); box-shadow:0 3px 10px rgba(0,0,0,.12); }" +
+      ".efp-ca-practice-link .efp-ca-practice-arrow { font-size:17px; opacity:.9; flex:0 0 auto; }";
     document.head.appendChild(style);
   }
 
@@ -100,7 +102,7 @@
 
     link.className = "efp-ca-practice-link";
     link.setAttribute("href", "./Topic Names/Rapid Practice.html");
-    link.innerHTML = '<span>📝 Practice Quiz MCQ</span><span class="efp-ca-practice-arrow">→</span>';
+    link.innerHTML = '<span class="efp-ca-practice-main"><span>📝 Practice Quiz MCQ</span><span class="efp-ca-practice-count" title="8,567 practice questions">8.5K+ Qs</span></span><span class="efp-ca-practice-arrow">→</span>';
 
     var card2025 = document.getElementById("card-2025");
     if (card2025 && card2025.parentNode && card2025.nextElementSibling !== link) {
