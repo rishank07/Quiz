@@ -1,5 +1,5 @@
-// v30 Maths Speed Booster viewport-fit 20260906
-const CACHE_VERSION = "efp-pwa-2026-09-09-v96-pdf-search-fixes";
+// v31 Pinnacle Railway exam step 20260909
+const CACHE_VERSION = "efp-pwa-2026-09-09-v97-pinnacle-railway-step";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
