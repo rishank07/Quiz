@@ -52,17 +52,192 @@
       var link = row.querySelector("a.ctxt");
       if (link && link.href) location.href = link.href;
     });
+
+    // Pinnacle now has an exam layer before Subjects. Railway is the only
+    // visible option for now; SSC can be added beside it later without changing
+    // the surrounding navigation hierarchy.
+    function installExamLayer() {
+      var sourcePane = document.getElementById("source");
+      var studyPane = document.getElementById("study");
+      var sourceChoices = document.getElementById("sourceChoices");
+      if (!sourcePane || !studyPane || !sourceChoices || document.getElementById("exam")) return;
+
+      var examPane = document.createElement("section");
+      examPane.id = "exam";
+      examPane.className = "step";
+      examPane.hidden = true;
+      examPane.innerHTML =
+        '<div class="nav">' +
+          '<button id="backExam" class="back" type="button">← Sources</button>' +
+          '<span id="examCrumb" class="crumb">Books Crux › Pinnacle</span>' +
+        '</div>' +
+        '<div class="title"><h2>Choose Exam</h2><p>परीक्षा चुनें</p></div>' +
+        '<div id="examChoices" class="choice-grid source-grid">' +
+          '<button class="choice" type="button" data-exam="Railway">' +
+            '<span class="ico">🚆</span>' +
+            '<span class="copy"><b>Railway</b><span>रेलवे · Pinnacle Crux</span></span>' +
+            '<span class="arrow">›</span>' +
+          '</button>' +
+        '</div>';
+      studyPane.parentNode.insertBefore(examPane, studyPane);
+
+      var backExam = document.getElementById("backExam");
+      var backSource = document.getElementById("backSource");
+      var heroSub = document.getElementById("heroSub");
+      var studyCrumb = document.getElementById("studyCrumb");
+      var activeExam = "";
+      var originalBackSource = backSource && backSource.onclick;
+
+      function sourceLabel(button) {
+        var label = button && button.querySelector ? button.querySelector(".copy b") : null;
+        return label ? String(label.textContent || "").trim() : "";
+      }
+
+      function pinnacleButton() {
+        var buttons = sourceChoices.querySelectorAll(".choice");
+        for (var i = 0; i < buttons.length; i++) {
+          if (sourceLabel(buttons[i]) === "Pinnacle") return buttons[i];
+        }
+        return null;
+      }
+
+      function setHierarchyText() {
+        if (heroSub) heroSub.textContent = "Source → Exam → Subject → Part → Chapter";
+      }
+
+      function ensureExamCrumb(el) {
+        if (!el || activeExam !== "Railway") return;
+        var text = String(el.textContent || "");
+        if (text.indexOf("Pinnacle") === -1 || text.indexOf("Railway") !== -1) return;
+        el.textContent = text.replace("Pinnacle", "Pinnacle › Railway");
+      }
+
+      function syncCrumbs() {
+        ensureExamCrumb(document.getElementById("studyCrumb"));
+        ensureExamCrumb(document.getElementById("partCrumb"));
+        ensureExamCrumb(document.getElementById("chapterCrumb"));
+      }
+
+      function showExam() {
+        activeExam = "";
+        sourcePane.hidden = true;
+        studyPane.hidden = true;
+        examPane.hidden = false;
+        if (backSource) backSource.textContent = "← Sources";
+        setHierarchyText();
+        try { window.scrollTo(0, 0); } catch (_) {}
+      }
+
+      function hideExam() {
+        examPane.hidden = true;
+        activeExam = "";
+        if (backSource) backSource.textContent = "← Sources";
+      }
+
+      function showSources() {
+        hideExam();
+        studyPane.hidden = true;
+        sourcePane.hidden = false;
+        try { window.scrollTo(0, 0); } catch (_) {}
+      }
+
+      function selectExam(name) {
+        if (name !== "Railway") return false;
+        var sourceButton = pinnacleButton();
+        if (!sourceButton || typeof sourceButton.onclick !== "function") return false;
+
+        activeExam = "Railway";
+        examPane.hidden = true;
+        // Calling the source button's assigned onclick directly runs the existing
+        // chooseSource("Pinnacle") logic without re-triggering our source capture.
+        sourceButton.onclick.call(sourceButton);
+        if (backSource) backSource.textContent = "← Exams";
+        setHierarchyText();
+        if (studyCrumb) studyCrumb.textContent = "Books Crux › Pinnacle › Railway";
+        syncCrumbs();
+        try { window.scrollTo(0, 0); } catch (_) {}
+        return true;
+      }
+
+      // History bridge listens on window capture first. We intercept at document
+      // capture so it can record the logical Source -> Exam transition, while the
+      // old inline source handler never skips straight to Subjects.
+      document.addEventListener("click", function (event) {
+        if (!event.target || !event.target.closest) return;
+        var sourceButton = event.target.closest("#sourceChoices .choice");
+        if (sourceButton && sourceLabel(sourceButton) === "Pinnacle") {
+          event.preventDefault();
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+          showExam();
+          return;
+        }
+
+        var examButton = event.target.closest("#examChoices .choice[data-exam]");
+        if (examButton) {
+          event.preventDefault();
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+          selectExam(String(examButton.getAttribute("data-exam") || ""));
+        }
+      }, true);
+
+      if (backExam) {
+        backExam.onclick = function () {
+          showSources();
+        };
+      }
+
+      // Browser-history capture consumes this click when a managed history state
+      // exists. This fallback preserves the same hierarchy in ordinary/unmanaged
+      // navigation too.
+      if (backSource) {
+        backSource.onclick = function (event) {
+          if (activeExam === "Railway") {
+            if (event) event.preventDefault();
+            studyPane.hidden = true;
+            examPane.hidden = false;
+            activeExam = "";
+            backSource.textContent = "← Sources";
+            setHierarchyText();
+            try { window.scrollTo(0, 0); } catch (_) {}
+            return;
+          }
+          if (typeof originalBackSource === "function") originalBackSource.call(backSource, event);
+        };
+      }
+
+      ["studyCrumb", "partCrumb", "chapterCrumb"].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el || typeof MutationObserver === "undefined") return;
+        new MutationObserver(function () { syncCrumbs(); }).observe(el, { childList: true, characterData: true, subtree: true });
+      });
+
+      window.EFP_CRUX_EXAM_LAYER = {
+        showExam: showExam,
+        showSources: showSources,
+        hideExam: hideExam,
+        selectExam: selectExam,
+        getExam: function () { return activeExam; },
+        isVisible: function () { return !examPane.hidden; },
+        syncCrumbs: syncCrumbs
+      };
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", installExamLayer, { once: true });
+    } else {
+      window.setTimeout(installExamLayer, 0);
+    }
   }
 })(typeof self !== "undefined" ? self : this);
 
 /*
  * Crux browser-history bridge
  * ---------------------------
- * Crux & Tricks is a SPA: Material -> Source -> Subject -> Part -> Chapters
- * all live inside one index.html. Android/TWA hardware Back only understands
- * the browser history stack, so each logical SPA step must become a real
- * history entry. This bridge leaves the existing UI code untouched and mirrors
- * its visible state into pushState/popstate.
+ * Crux & Tricks is a SPA: Material -> Source -> Exam (Pinnacle) -> Subject ->
+ * Part -> Chapters all live inside one index.html. Android/TWA hardware Back
+ * therefore needs each logical SPA step mirrored into browser history.
  */
 (function () {
   "use strict";
@@ -84,7 +259,7 @@
   var bootState = history.state;
   var restoring = false;
   var ready = false;
-  var SUBJECTS = ["History", "Polity", "Geography", "Science", "Static GK"];
+  var SUBJECTS = ["History", "Polity", "Geography", "Science", "Economics", "Maths", "Static GK"];
   var BRANCHES = [
     "Ancient History", "Medieval History", "Modern History",
     "Indian Geography", "World Geography", "Physics", "Chemistry", "Biology"
@@ -109,6 +284,7 @@
       depth: Math.max(0, Number(depth) || 0),
       kind: "",
       source: "",
+      exam: "",
       subject: "",
       branch: "",
       utility: ""
@@ -124,7 +300,7 @@
   function sameState(a, b) {
     if (!isManaged(a) || !isManaged(b)) return false;
     return a.level === b.level && a.depth === b.depth &&
-      a.kind === b.kind && a.source === b.source &&
+      a.kind === b.kind && a.source === b.source && a.exam === b.exam &&
       a.subject === b.subject && a.branch === b.branch &&
       a.utility === b.utility;
   }
@@ -193,6 +369,20 @@
     return false;
   }
 
+  function clickExam(exam) {
+    if (window.EFP_CRUX_EXAM_LAYER && typeof window.EFP_CRUX_EXAM_LAYER.selectExam === "function") {
+      return window.EFP_CRUX_EXAM_LAYER.selectExam(exam);
+    }
+    var buttons = document.querySelectorAll("#examChoices .choice[data-exam]");
+    for (var i = 0; i < buttons.length; i++) {
+      if (String(buttons[i].getAttribute("data-exam") || "") === exam) {
+        buttons[i].click();
+        return true;
+      }
+    }
+    return false;
+  }
+
   function clickSubject(subject) {
     var buttons = document.querySelectorAll("#subjectChoices .subject");
     for (var i = 0; i < buttons.length; i++) {
@@ -223,6 +413,9 @@
   }
 
   function resetUiToMaterial() {
+    if (window.EFP_CRUX_EXAM_LAYER && typeof window.EFP_CRUX_EXAM_LAYER.hideExam === "function") {
+      window.EFP_CRUX_EXAM_LAYER.hideExam();
+    }
     // backMaterial is wired directly to root() by the existing Crux SPA. It is
     // safe to invoke even while hidden and gives us one deterministic reset.
     var reset = document.getElementById("backMaterial");
@@ -242,6 +435,11 @@
       if (state.level === "source") return;
       if (!clickSource(state.source)) return;
 
+      if (state.level === "exam") return;
+      if (state.source === "Pinnacle") {
+        if (!clickExam(state.exam || "Railway")) return;
+      }
+
       if (state.level === "subjects") return;
 
       if (state.level === "utility") {
@@ -260,6 +458,9 @@
       // Reinstate the browser-history marker for the entry we just restored.
       history.replaceState(state, "", baseUrl());
       restoring = false;
+      if (window.EFP_CRUX_EXAM_LAYER && typeof window.EFP_CRUX_EXAM_LAYER.syncCrumbs === "function") {
+        window.EFP_CRUX_EXAM_LAYER.syncCrumbs();
+      }
       try { window.scrollTo(0, 0); } catch (_) {}
     }
   }
@@ -288,9 +489,14 @@
     }
 
     var backSource = target.closest("#backSource");
+    if (backSource && state && state.source === "Pinnacle" && state.depth > 0) {
+      consume(event);
+      history.back();
+      return;
+    }
     if (backSource && goToSourceEntry(event, state)) return;
 
-    var oneStepBack = target.closest("#backMaterial, #backSubjects, #backParts");
+    var oneStepBack = target.closest("#backMaterial, #backExam, #backSubjects, #backParts");
     if (oneStepBack && state && state.depth > 0) {
       consume(event);
       history.back();
@@ -314,9 +520,24 @@
       var selectedSource = labelFromChoice(sourceButton);
       scheduleTransition(previousSource, function () {
         var depth = previousSource ? previousSource.depth + 1 : 2;
-        return makeState("subjects", depth, {
+        return makeState(selectedSource === "Pinnacle" ? "exam" : "subjects", depth, {
           kind: previousSource && previousSource.kind,
           source: selectedSource
+        });
+      });
+      return;
+    }
+
+    var examButton = target.closest("#examChoices .choice[data-exam]");
+    if (examButton) {
+      var previousExam = state;
+      var selectedExam = String(examButton.getAttribute("data-exam") || "");
+      scheduleTransition(previousExam, function () {
+        var depth = previousExam ? previousExam.depth + 1 : 3;
+        return makeState("subjects", depth, {
+          kind: previousExam && previousExam.kind,
+          source: previousExam && previousExam.source,
+          exam: selectedExam
         });
       });
       return;
@@ -332,6 +553,7 @@
         return makeState(nextLevel, depth, {
           kind: previousSubject && previousSubject.kind,
           source: previousSubject && previousSubject.source,
+          exam: previousSubject && previousSubject.exam,
           subject: selectedSubject
         });
       });
@@ -347,6 +569,7 @@
         return makeState("chapters", depth, {
           kind: previousPart && previousPart.kind,
           source: previousPart && previousPart.source,
+          exam: previousPart && previousPart.exam,
           subject: previousPart && previousPart.subject,
           branch: selectedBranch
         });
@@ -363,6 +586,7 @@
         return makeState("utility", depth, {
           kind: previousUtility && previousUtility.kind,
           source: previousUtility && previousUtility.source,
+          exam: previousUtility && previousUtility.exam,
           utility: utility
         });
       });
