@@ -1,5 +1,5 @@
-// v33 Mixed Practice Saved Questions 20260909
-const CACHE_VERSION = "efp-pwa-2026-09-09-v63-mixed-saved-questions";
+// v34 Practice UI and backup fixes 20260909
+const CACHE_VERSION = "efp-pwa-2026-09-09-v64-practice-fixes";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",

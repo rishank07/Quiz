@@ -362,6 +362,9 @@
 
       var BOOKMARK_KEY = "efp_bookmarks";
       var PROGRESS_PREFIX = "efp_visited_";
+      var MIXED_STATE_KEY = "efp_mixed_practice_state_v1";
+      var MIXED_BOOKMARK_KEY = "efp_mixed_practice_bookmarks_v1";
+      var RAPID_KEY_PATTERN = /^efp_ca_.+_rapid_v1$/;
       var APP_NAME = "ExamFusion Prep";
       var SCHEMA_VERSION = 1;
       var selectedBackup = null;
@@ -419,6 +422,61 @@
         return progress;
       }
 
+      function isPracticeKey(key) {
+        return key === MIXED_STATE_KEY || key === MIXED_BOOKMARK_KEY || RAPID_KEY_PATTERN.test(key || "");
+      }
+
+      function normalizePracticeData(raw) {
+        var out = { rapid: {}, mixedState: null, mixedBookmarks: [] };
+        if (!raw || typeof raw !== "object" || Array.isArray(raw)) return out;
+        var rapid = raw.rapid;
+        if (rapid && typeof rapid === "object" && !Array.isArray(rapid)) {
+          Object.keys(rapid).forEach(function (key) {
+            var value = rapid[key];
+            if (!RAPID_KEY_PATTERN.test(key) || !value || typeof value !== "object" || Array.isArray(value)) return;
+            var bookmarks = {};
+            var sourceBookmarks = value.bookmarks;
+            if (sourceBookmarks && typeof sourceBookmarks === "object" && !Array.isArray(sourceBookmarks)) {
+              Object.keys(sourceBookmarks).forEach(function (id) {
+                if (sourceBookmarks[id]) bookmarks[id] = true;
+              });
+            }
+            var section = Number(value.section);
+            out.rapid[key] = { section: Number.isFinite(section) ? Math.max(0, Math.floor(section)) : 0, answers: {}, bookmarks: bookmarks };
+          });
+        }
+        if (raw.mixedState && typeof raw.mixedState === "object" && !Array.isArray(raw.mixedState)) {
+          out.mixedState = Object.assign({}, raw.mixedState, { answers: {} });
+        }
+        out.mixedBookmarks = uniqueStrings(Array.isArray(raw.mixedBookmarks) ? raw.mixedBookmarks : []);
+        return out;
+      }
+
+      function getPracticeData() {
+        var raw = { rapid: {}, mixedState: safeParse(localStorage.getItem(MIXED_STATE_KEY), null), mixedBookmarks: safeParse(localStorage.getItem(MIXED_BOOKMARK_KEY), []) };
+        for (var i = 0; i < localStorage.length; i++) {
+          var key = localStorage.key(i);
+          if (RAPID_KEY_PATTERN.test(key || "")) raw.rapid[key] = safeParse(localStorage.getItem(key), {});
+        }
+        return normalizePracticeData(raw);
+      }
+
+      function countPracticeBookmarks(practice) {
+        var total = (practice.mixedBookmarks || []).length;
+        Object.keys(practice.rapid || {}).forEach(function (key) {
+          total += countBookmarks(practice.rapid[key].bookmarks);
+        });
+        return total;
+      }
+
+      function hasPracticeData(practice) {
+        return !!practice.mixedState || (practice.mixedBookmarks || []).length > 0 || Object.keys(practice.rapid || {}).length > 0;
+      }
+
+      function countAllBookmarks(bookmarks, practice) {
+        return countBookmarks(bookmarks) + countPracticeBookmarks(practice || { rapid: {}, mixedBookmarks: [] });
+      }
+
       function countBookmarks(bookmarks) {
         return Object.keys(bookmarks || {}).reduce(function (sum, key) {
           return sum + (bookmarks[key] ? 1 : 0);
@@ -435,12 +493,13 @@
       }
 
       function refreshCounts() {
-        var bookmarkTotal = countBookmarks(getBookmarks());
+        var practice = getPracticeData();
+        var bookmarkTotal = countAllBookmarks(getBookmarks(), practice);
         var progressTotal = countProgress(getProgress());
         bookmarkCountEl.textContent = bookmarkTotal;
         progressCountEl.textContent = progressTotal;
-        resetOpenBtn.disabled = bookmarkTotal + progressTotal === 0;
-        return { bookmarks: bookmarkTotal, progress: progressTotal };
+        resetOpenBtn.disabled = bookmarkTotal + progressTotal === 0 && !hasPracticeData(practice);
+        return { bookmarks: bookmarkTotal, progress: progressTotal, practice: hasPracticeData(practice) };
       }
 
       function showStatus(el, kind, message) {
@@ -464,7 +523,8 @@
           },
           data: {
             bookmarks: getBookmarks(),
-            progress: getProgress()
+            progress: getProgress(),
+            practice: getPracticeData()
           }
         };
       }
@@ -639,6 +699,7 @@
         return {
           bookmarks: bookmarks,
           progress: progress,
+          practice: normalizePracticeData(obj.data.practice),
           exportedAt: obj.exportedAt || "Unknown date"
         };
       }
@@ -662,18 +723,49 @@
         return out;
       }
 
+      function writePracticeData(practice, replace) {
+        practice = normalizePracticeData(practice);
+        Object.keys(practice.rapid).forEach(function (key) {
+          var incoming = practice.rapid[key];
+          if (!replace) {
+            var current = normalizePracticeData({ rapid: (function () {
+              var one = {};
+              one[key] = safeParse(localStorage.getItem(key), {});
+              return one;
+            })() }).rapid[key] || { section: 0, answers: {}, bookmarks: {} };
+            incoming = {
+              section: current.section,
+              answers: {},
+              bookmarks: mergeBookmarks(current.bookmarks, incoming.bookmarks)
+            };
+          }
+          localStorage.setItem(key, JSON.stringify(incoming));
+        });
+        if (practice.mixedState) {
+          var currentMixed = safeParse(localStorage.getItem(MIXED_STATE_KEY), null);
+          var mixedState = !replace && currentMixed && typeof currentMixed === "object" && !Array.isArray(currentMixed) ? currentMixed : practice.mixedState;
+          localStorage.setItem(MIXED_STATE_KEY, JSON.stringify(Object.assign({}, mixedState, { answers: {} })));
+        }
+        if (practice.mixedBookmarks.length || replace) {
+          var saved = replace ? practice.mixedBookmarks : uniqueStrings((safeParse(localStorage.getItem(MIXED_BOOKMARK_KEY), []) || []).concat(practice.mixedBookmarks));
+          if (saved.length) localStorage.setItem(MIXED_BOOKMARK_KEY, JSON.stringify(saved));
+          else localStorage.removeItem(MIXED_BOOKMARK_KEY);
+        }
+      }
+
       function restoreBackup(data, replace) {
         if (replace) {
           var toRemove = [];
           for (var i = 0; i < localStorage.length; i++) {
             var key = localStorage.key(i);
-            if (key && key.indexOf(PROGRESS_PREFIX) === 0) toRemove.push(key);
+            if ((key && key.indexOf(PROGRESS_PREFIX) === 0) || isPracticeKey(key)) toRemove.push(key);
           }
           toRemove.forEach(function (key) { localStorage.removeItem(key); });
           localStorage.setItem(BOOKMARK_KEY, JSON.stringify(data.bookmarks || {}));
           Object.keys(data.progress).forEach(function (key) {
             localStorage.setItem(key, JSON.stringify(uniqueStrings(data.progress[key])));
           });
+          writePracticeData(data.practice, true);
           return;
         }
 
@@ -683,12 +775,14 @@
           var merged = uniqueStrings((currentProgress[key] || []).concat(data.progress[key] || []));
           localStorage.setItem(key, JSON.stringify(merged));
         });
+        writePracticeData(data.practice, false);
       }
 
       function snapshotStudyData() {
         return {
           bookmarks: getBookmarks(),
-          progress: getProgress()
+          progress: getProgress(),
+          practice: getPracticeData()
         };
       }
 
@@ -696,7 +790,7 @@
         var keys = [];
         for (var i = 0; i < localStorage.length; i++) {
           var key = localStorage.key(i);
-          if (key === BOOKMARK_KEY || (key && key.indexOf(PROGRESS_PREFIX) === 0)) keys.push(key);
+          if (key === BOOKMARK_KEY || (key && key.indexOf(PROGRESS_PREFIX) === 0) || isPracticeKey(key)) keys.push(key);
         }
         keys.forEach(function (key) { localStorage.removeItem(key); });
       }
@@ -712,6 +806,7 @@
           if (key.indexOf(PROGRESS_PREFIX) !== 0 || !Array.isArray(progress[key])) return;
           localStorage.setItem(key, JSON.stringify(uniqueStrings(progress[key])));
         });
+        writePracticeData(snapshot && snapshot.practice, true);
       }
 
       function hideUndo(clearSnapshot) {
@@ -735,7 +830,7 @@
         hideUndo(false);
         undoSnapshot = snapshot;
         undoDeadline = Date.now() + 30000;
-        undoMessage.textContent = "Deleted " + bookmarkTotal + " bookmarks and " + progressTotal + " progress entries.";
+        undoMessage.textContent = "Deleted " + bookmarkTotal + " bookmarks and " + progressTotal + " progress entries." + (hasPracticeData(snapshot.practice) ? " Practice data was cleared too." : "");
         undoToast.classList.add("show");
         updateUndoCountdown();
         undoTimer = setInterval(updateUndoCountdown, 1000);
@@ -743,8 +838,8 @@
 
       function openResetModal() {
         var totals = refreshCounts();
-        if (totals.bookmarks + totals.progress === 0) return;
-        resetSummary.textContent = "This will delete " + totals.bookmarks + " bookmarks and " + totals.progress + " chapter-progress entries from this device.";
+        if (totals.bookmarks + totals.progress === 0 && !totals.practice) return;
+        resetSummary.textContent = "This will delete " + totals.bookmarks + " bookmarks and " + totals.progress + " chapter-progress entries from this device." + (totals.practice ? " Saved Rapid/Mixed Practice data will also be cleared." : "");
         resetConfirmCheck.checked = false;
         resetConfirmBtn.disabled = true;
         resetModal.hidden = false;
@@ -765,7 +860,7 @@
         try {
           var payload = backupPayload();
           var result = await saveJson(payload);
-          var b = countBookmarks(payload.data.bookmarks);
+          var b = countAllBookmarks(payload.data.bookmarks, payload.data.practice);
           var p = countProgress(payload.data.progress);
           var where = result.method === "picker" ? "Backup saved" :
             result.method === "code-share" ? "Android Backup Code shared" :
@@ -849,7 +944,7 @@
         clearStatus(resetStatus);
         try {
           var snapshot = snapshotStudyData();
-          var bookmarkTotal = countBookmarks(snapshot.bookmarks);
+          var bookmarkTotal = countAllBookmarks(snapshot.bookmarks, snapshot.practice);
           var progressTotal = countProgress(snapshot.progress);
           clearStudyData();
           closeResetModal();
@@ -885,7 +980,7 @@
           selectedBackup = normalizeBackup(parsed);
           restoreBtn.disabled = false;
           fileName.textContent = "Android Backup Code loaded";
-          showStatus(restoreStatus, "good", "Valid Backup Code: " + countBookmarks(selectedBackup.bookmarks) + " bookmarks, " + countProgress(selectedBackup.progress) + " progress entries. Now tap Restore Loaded Backup.");
+          showStatus(restoreStatus, "good", "Valid Backup Code: " + countAllBookmarks(selectedBackup.bookmarks, selectedBackup.practice) + " bookmarks, " + countProgress(selectedBackup.progress) + " progress entries. Now tap Restore Loaded Backup.");
           restoreBtn.textContent = "Restore Loaded Backup";
         } catch (e) {
           fileName.textContent = "No valid backup loaded";
@@ -915,7 +1010,7 @@
             showStatus(
               restoreStatus,
               "good",
-              "Valid backup: " + countBookmarks(selectedBackup.bookmarks) + " bookmarks, " + countProgress(selectedBackup.progress) + " progress entries. Created: " + selectedBackup.exportedAt
+              "Valid backup: " + countAllBookmarks(selectedBackup.bookmarks, selectedBackup.practice) + " bookmarks, " + countProgress(selectedBackup.progress) + " progress entries. Created: " + selectedBackup.exportedAt
             );
           } catch (e) {
             selectedBackup = null;
@@ -934,7 +1029,7 @@
       restoreBtn.addEventListener("click", function () {
         if (!selectedBackup) return;
         var replace = !!replaceMode.checked;
-        var b = countBookmarks(selectedBackup.bookmarks);
+        var b = countAllBookmarks(selectedBackup.bookmarks, selectedBackup.practice);
         var p = countProgress(selectedBackup.progress);
         var action = replace ? "REPLACE the current ExamFusion bookmarks/progress with" : "MERGE the current ExamFusion bookmarks/progress with";
         var ok = window.confirm(action + " this backup?\n\nBackup contains " + b + " bookmarks and " + p + " chapter-progress entries.");

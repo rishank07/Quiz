@@ -25,7 +25,7 @@ h1{font-size:clamp(1.45rem,3vw,2.2rem);margin:0} .sub{opacity:.82;margin:6px 0 0
 .search{flex:1;min-width:190px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:9px 11px}
 body.dark{--bg:#0d1420;--card:#182231;--ink:#edf2f7;--muted:#a9b4c2;--line:#314052;--deep:#121e2b;--soft:#152334} body.dark .exp{background:#173229} body.dark .opt{background:#182231} body.dark .barcard{box-shadow:none}
 @media(max-width:650px){.stats{grid-template-columns:repeat(2,1fr)}.opts{grid-template-columns:1fr}.wrap{padding:10px 9px 55px}.hero{padding:16px;border-radius:15px}.qcard{padding:13px}.qen,.qhi{font-size:.94rem}.opt{font-size:.9rem}}
-</style>
+body.dark .opt.correct{background:#0b7f5d;color:#fff;border-color:#3fd3a5}body.dark .opt.wrong{background:#b93745;color:#fff;border-color:#ff8390}body.dark .opt.correct small,body.dark .opt.wrong small{color:#fff}body.dark .book{color:#f6d98a;opacity:.82}body.dark .book.on{color:#ffd866;opacity:1}</style>
 
   <!-- ExamFusion Prep analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
@@ -42,14 +42,14 @@ body.dark{--bg:#0d1420;--card:#182231;--ink:#edf2f7;--muted:#a9b4c2;--line:#3140
     .efp-site-nav a:hover{transform:translateY(-1px)}
     .qtotal{opacity:.55;font-size:.82em;font-weight:700}
     @media(max-width:520px){.efp-site-nav{padding:0 10px;margin-top:8px}.efp-site-nav a{font-size:11px;padding:7px 10px}.efp-site-nav .efp-nav-label-long{display:none}}
-  </style>
+  body.dark .opt.correct{background:#0b7f5d;color:#fff;border-color:#3fd3a5}body.dark .opt.wrong{background:#b93745;color:#fff;border-color:#ff8390}body.dark .opt.correct small,body.dark .opt.wrong small{color:#fff}body.dark .book{color:#f6d98a;opacity:.82}body.dark .book.on{color:#ffd866;opacity:1}</style>
 
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
   <script defer src="/back-nav.js?v=20260906hier1"></script>
   <script defer src="/home-nav.js?v=20260906nav2"></script>
 
 <!-- Rapid Practice follows the site-wide Home dark/light preference. -->
-<style id="efp-rapid-site-theme-bridge">#darkBtn{display:none!important}</style>
+<style id="efp-rapid-site-theme-bridge">#darkBtn{display:none!important}body.dark .opt.correct{background:#0b7f5d;color:#fff;border-color:#3fd3a5}body.dark .opt.wrong{background:#b93745;color:#fff;border-color:#ff8390}body.dark .opt.correct small,body.dark .opt.wrong small{color:#fff}body.dark .book{color:#f6d98a;opacity:.82}body.dark .book.on{color:#ffd866;opacity:1}</style>
 <script>
 (function(){
   function syncRapidTheme(){
@@ -86,7 +86,7 @@ body.dark{--bg:#0d1420;--card:#182231;--ink:#edf2f7;--muted:#a9b4c2;--line:#3140
   <div class="toolbar"><div class="barcard">
     <div class="row"><b id="scoreTxt">0/0 attempted</b><div class="progress"><i id="progFill"></i></div><span class="pct" id="pct">0%</span>
       <button class="btn" id="darkBtn" onclick="toggleDark()">Dark</button><button class="btn danger" onclick="resetAll()">Reset</button></div>
-    <div class="row" style="margin-top:8px"><input id="search" class="search" placeholder="Search this section / इस सेक्शन में खोजें" oninput="renderQuestions()"><button class="btn" id="bookmarkFilter" onclick="toggleBookmarkFilter()">★ Bookmarks</button></div>
+    <div class="row" style="margin-top:8px"><input id="search" class="search" placeholder="Search this section / इस सेक्शन में खोजें" oninput="renderQuestions()"><button class="btn" id="bookmarkFilter" onclick="toggleBookmarkFilter()" title="Shows bookmarks in this section">★ Section Bookmarks</button></div>
     <div class="section-nav" id="sectionNav"></div>
   </div></div>
 
@@ -111,7 +111,7 @@ function correctIndex(q){return q.o.findIndex(o=>o.en===q.a.en)}
 function stats(){let attempted=0,correct=0,total=0;SECTIONS.forEach((s,si)=>s.questions.forEach((q,qi)=>{total++;let a=saved.answers[qid(si,qi)];if(a!==undefined){attempted++;if(a===correctIndex(q))correct++;}}));return{attempted,correct,total}}
 function updateTop(){const x=stats(),p=x.total?Math.round(x.attempted*100/x.total):0;document.getElementById('scoreTxt').textContent=`${x.correct} correct · ${x.attempted-x.correct} wrong · ${x.attempted}/${x.total} attempted`;document.getElementById('pct').textContent=p+'%';document.getElementById('progFill').style.width=p+'%';renderNav()}
 function renderNav(){document.getElementById('sectionNav').innerHTML=SECTIONS.map((s,i)=>{const done=s.questions.every((q,qi)=>saved.answers[qid(i,qi)]!==undefined);return `<button class="pill ${i===current?'active':done?'done':''}" onclick="openSection(${i})" title="${escapeHtml(s.title.en)}">${done?'✓':i+1}</button>`}).join('')}
-function renderQuestions(){const s=SECTIONS[current];document.getElementById('secNo').textContent=`Section ${current+1} of ${SECTIONS.length} · ${s.questions.length} questions`;document.getElementById('secTitle').textContent=s.title.en;document.getElementById('secTitleHi').textContent=s.title.hi;const term=document.getElementById('search').value.trim().toLowerCase();let shown=0;const htmls=[];s.questions.forEach((q,qi)=>{const id=qid(current,qi),book=!!saved.bookmarks[id];if(onlyBookmarks&&!book)return;const hay=(q.q.en+' '+q.q.hi+' '+q.a.en+' '+q.a.hi).toLowerCase();if(term&&!hay.includes(term))return;shown++;const picked=saved.answers[id];const ci=correctIndex(q);let opts=q.o.map((o,oi)=>{let cl='opt';if(picked!==undefined){if(oi===ci)cl+=' correct';else if(oi===picked)cl+=' wrong';}return `<button class="${cl}" onclick="pick(${qi},${oi})" ${picked!==undefined?'disabled':''}><span>${escapeHtml(o.en)}</span><small>${escapeHtml(o.hi)}</small></button>`}).join('');htmls.push(`<article class="qcard"><button class="book ${book?'on':''}" onclick="bookmark(${qi})" title="Bookmark">${book?'★':'☆'}</button><div class="qnum">Q${globalQNumber(current,qi)} <span class="qtotal">/ ${TOTAL_QUESTIONS}</span></div><p class="qen">${escapeHtml(q.q.en)}</p><p class="qhi">${escapeHtml(q.q.hi)}</p><div class="opts">${opts}</div><div class="exp ${picked!==undefined?'show':''}"><div>${escapeHtml(q.exp.en)}</div><div class="hi">${escapeHtml(q.exp.hi)}</div></div></article>`); });document.getElementById('questions').innerHTML=htmls.join('')||'<div class="empty">No matching questions / कोई matching प्रश्न नहीं मिला</div>';updateTop()}
+function renderQuestions(){const s=SECTIONS[current];document.getElementById('secNo').textContent=`Section ${current+1} of ${SECTIONS.length} · ${s.questions.length} questions`;document.getElementById('secTitle').textContent=s.title.en;document.getElementById('secTitleHi').textContent=s.title.hi;const term=document.getElementById('search').value.trim().toLowerCase();let shown=0;const htmls=[];s.questions.forEach((q,qi)=>{const id=qid(current,qi),book=!!saved.bookmarks[id];if(onlyBookmarks&&!book)return;const hay=(q.q.en+' '+q.q.hi+' '+q.a.en+' '+q.a.hi).toLowerCase();if(term&&!hay.includes(term))return;shown++;const picked=saved.answers[id];const ci=correctIndex(q);let opts=q.o.map((o,oi)=>{let cl='opt';if(picked!==undefined){if(oi===ci)cl+=' correct';else if(oi===picked)cl+=' wrong';}return `<button class="${cl}" onclick="pick(${qi},${oi})" ${picked!==undefined?'disabled':''}><span>${escapeHtml(o.en)}</span><small>${escapeHtml(o.hi)}</small></button>`}).join('');htmls.push(`<article class="qcard"><button class="book ${book?'on':''}" onclick="bookmark(${qi})" title="Bookmark">${book?'★':'☆'}</button><div class="qnum">Q${globalQNumber(current,qi)} <span class="qtotal">/ ${TOTAL_QUESTIONS}</span></div><p class="qen">${escapeHtml(q.q.en)}</p><p class="qhi">${escapeHtml(q.q.hi)}</p><div class="opts">${opts}</div><div class="exp ${picked!==undefined?'show':''}"><div>${escapeHtml(q.exp.en)}</div><div class="hi">${escapeHtml(q.exp.hi)}</div></div></article>`); });document.getElementById('questions').innerHTML=htmls.join('')||'<div class="empty">'+(onlyBookmarks?'No bookmarks in this section / इस सेक्शन में कोई बुकमार्क नहीं':'No matching questions / कोई matching प्रश्न नहीं मिला')+'</div>';updateTop()}
 function pick(qi,oi){const id=qid(current,qi);if(saved.answers[id]!==undefined)return;saved.answers[id]=oi;save();renderQuestions()}
 function bookmark(qi){const id=qid(current,qi);saved.bookmarks[id]=!saved.bookmarks[id];if(!saved.bookmarks[id])delete saved.bookmarks[id];save();renderQuestions()}
 function toggleBookmarkFilter(){onlyBookmarks=!onlyBookmarks;document.getElementById('bookmarkFilter').classList.toggle('primary',onlyBookmarks);renderQuestions()}
