@@ -188,6 +188,101 @@ jobs:
           print(f"Session-only answers checked in {len(rapid_candidates)} Rapid Practice files; changed {rapid_changed}. Mixed Practice changed={mixed_changed}.")
           PY
 
+      - name: Add Saved Questions view to Mixed Practice
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("Original Practice/Mixed_Practice.html")
+          text = path.read_text(encoding="utf-8")
+          original = text
+          marker = "efp-mixed-saved-view-v1"
+
+          if marker not in text:
+              actions_old = '<div class="quiz-head-top"><div class="quiz-title" id="quizTitle">Random Mixed Set</div><div class="quiz-actions"><button id="setupBtn" type="button">Change Mix</button><button id="newSetBtn" type="button">New Set</button></div></div>'
+              actions_new = '<div class="quiz-head-top"><div class="quiz-title" id="quizTitle">Random Mixed Set</div><div class="quiz-actions"><button id="savedQuestionsBtn" type="button">★ Saved Questions (0)</button><button id="setupBtn" type="button">Change Mix</button><button id="newSetBtn" type="button">New Set</button></div></div>'
+              if actions_old not in text:
+                  raise RuntimeError("Mixed Practice quiz actions pattern not found")
+              text = text.replace(actions_old, actions_new, 1)
+
+              vars_old = "var fileCache={},poolCache={},currentQuestions=[],currentIndex=0,state=null,bookmarks=loadBookmarks();"
+              vars_new = "var fileCache={},poolCache={},currentQuestions=[],currentIndex=0,state=null,bookmarks=loadBookmarks(),savedMode=false,savedReturn=null; /* efp-mixed-saved-view-v1 */"
+              if vars_old not in text:
+                  raise RuntimeError("Mixed Practice runtime vars pattern not found")
+              text = text.replace(vars_old, vars_new, 1)
+
+              save_old = "function saveState(){if(!state)return;state.currentIndex=currentIndex;state.updatedAt=Date.now();try{var persist=Object.assign({},state,{answers:{}});localStorage.setItem(STATE_KEY,JSON.stringify(persist))}catch(e){}}"
+              save_new = "function saveState(){if(!state)return;state.currentIndex=currentIndex;state.updatedAt=Date.now();if(savedMode)return;try{var persist=Object.assign({},state,{answers:{}});localStorage.setItem(STATE_KEY,JSON.stringify(persist))}catch(e){}}"
+              if save_old not in text:
+                  raise RuntimeError("Mixed Practice saveState pattern not found")
+              text = text.replace(save_old, save_new, 1)
+
+              title_old = "function updateQuizTitle(){if(!state)return;var labels=state.selectedKeys.map(function(k){return POOLS[k]?POOLS[k].label:k});$('quizTitle').textContent=labels.join(' + ')+' · '+currentQuestions.length+' Q'}"
+              title_new = "function updateQuizTitle(){if(!state)return;if(savedMode){$('quizTitle').textContent='★ Saved Questions · '+currentQuestions.length+' Q';return}var labels=state.selectedKeys.map(function(k){return POOLS[k]?POOLS[k].label:k});$('quizTitle').textContent=labels.join(' + ')+' · '+currentQuestions.length+' Q'}"
+              if title_old not in text:
+                  raise RuntimeError("Mixed Practice title pattern not found")
+              text = text.replace(title_old, title_new, 1)
+
+              setup_old = "$('setupBtn').onclick=showSetup;$('newSetBtn').onclick=function(){if(state)generateSet(state.selectedKeys,state.total||currentQuestions.length)};"
+              setup_new = """function updateSavedQuestionsButton(){var b=$('savedQuestionsBtn');if(!b)return;b.textContent=savedMode?'← Back to Set':'★ Saved Questions ('+bookmarks.size+')'}
+  async function openSavedQuestions(){
+    if(savedMode){closeSavedQuestions();return}
+    if(!bookmarks.size){alert('No saved questions yet. Tap ☆ Save on any question first.');return}
+    var returnState=state,returnQuestions=currentQuestions.slice(),returnIndex=currentIndex;
+    $('savedQuestionsBtn').disabled=true;
+    try{
+      var pools=await Promise.all(MAJOR.map(buildPool)),map=new Map();
+      pools.forEach(function(list){list.forEach(function(q){if(!map.has(q.id))map.set(q.id,q)})});
+      var savedItems=Array.from(bookmarks).map(function(id){return map.get(id)}).filter(Boolean);
+      if(!savedItems.length){alert('Saved questions could not be found in the current question bank.');return}
+      savedReturn={state:returnState,questions:returnQuestions,index:returnIndex};
+      savedMode=true;currentQuestions=savedItems;currentIndex=0;
+      state={version:1,selectedKeys:[],total:savedItems.length,ids:savedItems.map(function(q){return q.id}),answers:{},currentIndex:0,savedView:true};
+      showQuiz();updateSavedQuestionsButton();renderQuestion();
+    }catch(err){console.error(err);alert('Could not open saved questions right now.')}finally{$('savedQuestionsBtn').disabled=false}
+  }
+  function closeSavedQuestions(){
+    if(!savedMode)return;
+    var old=savedReturn;savedMode=false;savedReturn=null;
+    if(old&&old.state&&old.questions&&old.questions.length){state=old.state;currentQuestions=old.questions;currentIndex=Math.max(0,Math.min(old.questions.length-1,old.index||0));showQuiz();updateSavedQuestionsButton();renderQuestion();return}
+    updateSavedQuestionsButton();showSetup();
+  }
+  $('savedQuestionsBtn').onclick=openSavedQuestions;
+  $('setupBtn').onclick=function(){if(savedMode){closeSavedQuestions();return}showSetup()};$('newSetBtn').onclick=function(){if(savedMode){closeSavedQuestions();return}if(state)generateSet(state.selectedKeys,state.total||currentQuestions.length)};"""
+              if setup_old not in text:
+                  raise RuntimeError("Mixed Practice setup handlers pattern not found")
+              text = text.replace(setup_old, setup_new, 1)
+
+              bookmark_old = "$('bookmarkBtn').onclick=function(){var item=currentQuestions[currentIndex];if(!item)return;if(bookmarks.has(item.id))bookmarks.delete(item.id);else bookmarks.add(item.id);saveBookmarks();renderQuestion()};"
+              bookmark_new = """$('bookmarkBtn').onclick=function(){var item=currentQuestions[currentIndex];if(!item)return;var wasSaved=bookmarks.has(item.id);if(wasSaved)bookmarks.delete(item.id);else bookmarks.add(item.id);saveBookmarks();updateSavedQuestionsButton();if(savedMode&&wasSaved){currentQuestions.splice(currentIndex,1);if(!currentQuestions.length){closeSavedQuestions();return}currentIndex=Math.min(currentIndex,currentQuestions.length-1);state.ids=currentQuestions.map(function(q){return q.id});state.total=currentQuestions.length}renderQuestion()};"""
+              if bookmark_old not in text:
+                  raise RuntimeError("Mixed Practice bookmark handler pattern not found")
+              text = text.replace(bookmark_old, bookmark_new, 1)
+
+              next_old = "$('nextBtn').onclick=function(){if(currentIndex<currentQuestions.length-1){currentIndex++;renderQuestion();window.scrollTo({top:0,behavior:'smooth'})}else{showFinish()}};"
+              next_new = "$('nextBtn').onclick=function(){if(currentIndex<currentQuestions.length-1){currentIndex++;renderQuestion();window.scrollTo({top:0,behavior:'smooth'})}else if(savedMode){closeSavedQuestions()}else{showFinish()}};"
+              if next_old not in text:
+                  raise RuntimeError("Mixed Practice next handler pattern not found")
+              text = text.replace(next_old, next_new, 1)
+
+              next_label_old = "$('nextBtn').textContent=currentIndex===currentQuestions.length-1?'Finish Set →':'Next →';updateStats();saveState()}"
+              next_label_new = "$('nextBtn').textContent=currentIndex===currentQuestions.length-1?(savedMode?'Back to Set →':'Finish Set →'):'Next →';updateSavedQuestionsButton();updateStats();saveState()}"
+              if next_label_old not in text:
+                  raise RuntimeError("Mixed Practice next label pattern not found")
+              text = text.replace(next_label_old, next_label_new, 1)
+
+              startup_old = "updateDistribution();var __savedOnLoad=loadState();if(__savedOnLoad&&__savedOnLoad.ids&&__savedOnLoad.ids.length){restoreState(__savedOnLoad)}else{refreshResume();}"
+              startup_new = "updateDistribution();updateSavedQuestionsButton();var __savedOnLoad=loadState();if(__savedOnLoad&&__savedOnLoad.ids&&__savedOnLoad.ids.length){restoreState(__savedOnLoad)}else{refreshResume();}"
+              if startup_old not in text:
+                  raise RuntimeError("Mixed Practice startup saved-button pattern not found")
+              text = text.replace(startup_old, startup_new, 1)
+
+              path.write_text(text, encoding="utf-8")
+              print("Added Saved Questions view to Mixed Practice.")
+          else:
+              print("Mixed Practice Saved Questions view already current.")
+          PY
+
       - name: Cache-bust Crux browser-history bridge
         run: |
           python - <<'PY'
