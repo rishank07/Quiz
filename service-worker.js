@@ -1,5 +1,5 @@
-// v34 Practice UI and backup fixes 20260909
-const CACHE_VERSION = "efp-pwa-2026-09-09-v64-practice-fixes";
+// v35 Mixed Practice completion return fix 20260909
+const CACHE_VERSION = "efp-pwa-2026-09-09-v65-mixed-completion-return";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
