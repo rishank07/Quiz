@@ -95,7 +95,7 @@
   function installCurrentAffairsPracticeLink() {
     if (!isCurrentAffairsLanding()) return;
 
-    var link = document.querySelector('.ca-toolbar a[href*="Rapid Practice"]');
+    var link = document.querySelector('.ca-toolbar a[href*="Rapid Practice"], .efp-ca-practice-link');
     if (!link) return;
 
     link.className = "efp-ca-practice-link";
@@ -103,7 +103,7 @@
     link.innerHTML = '<span>📝 Practice Quiz MCQ</span><span class="efp-ca-practice-arrow">→</span>';
 
     var card2025 = document.getElementById("card-2025");
-    if (card2025 && card2025.parentNode) {
+    if (card2025 && card2025.parentNode && card2025.nextElementSibling !== link) {
       card2025.insertAdjacentElement("afterend", link);
     }
   }
@@ -220,5 +220,10 @@
     init();
   }
 
-  window.addEventListener("pageshow", update);
+  window.addEventListener("pageshow", function () {
+    injectStyle();
+    installCurrentAffairsPracticeLink();
+    hookLinks();
+    update();
+  });
 })();
