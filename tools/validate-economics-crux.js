@@ -28,7 +28,7 @@ function validateInlineScripts(relativePath) {
 
 const manifest = loadWindowFile("Crux-Tricks/crux-manifest.js").EF_CRUX_DOCS;
 assert(Array.isArray(manifest), "Crux manifest is not an array");
-assert.strictEqual(manifest.length, 466, "Crux manifest document total changed unexpectedly");
+assert(manifest.length >= 466, "Crux manifest lost documents from the Economics baseline");
 
 const economics = manifest.filter((doc) =>
   doc.kind === "crux" && doc.source === "Ghatnachakra" && doc.subject === "Economics"
@@ -101,4 +101,4 @@ validateInlineScripts("index.html");
 validateInlineScripts("Crux-Tricks/index.html");
 validateInlineScripts("Crux-Tricks/viewer.html");
 
-console.log("Economics Crux validation passed: 19 PDFs, 123 searchable pages, 466 total PDFs");
+console.log(`Economics Crux validation passed: 19 PDFs, 123 searchable pages, ${manifest.length} total PDFs`);

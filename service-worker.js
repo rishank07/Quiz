@@ -1,5 +1,5 @@
-// v31 Pinnacle Railway exam step 20260909
-const CACHE_VERSION = "efp-pwa-2026-09-09-v97-pinnacle-railway-step";
+// v32 Economics and Geography Original Tricks 20260909
+const CACHE_VERSION = "efp-pwa-2026-09-09-v98-original-geo-economics-tricks";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -37,9 +37,9 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-manifest.js",
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260908maths1",
+  "/Crux-Tricks/crux-tricks.js?v=20260909geoecotricks1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260909searchfixes1",
+  "/Crux-Tricks/viewer-v2.js?v=20260909geoecotricks1",
 ];
 
 self.addEventListener("install", (event) => {
