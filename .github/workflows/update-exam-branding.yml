@@ -170,6 +170,16 @@ jobs:
           if "Object.assign({},state,{answers:{}})" not in text:
               raise RuntimeError("Mixed Practice session-only save not installed")
 
+          startup_old = "updateDistribution();refreshResume();"
+          startup_new = "updateDistribution();var __savedOnLoad=loadState();if(__savedOnLoad&&__savedOnLoad.ids&&__savedOnLoad.ids.length){restoreState(__savedOnLoad)}else{refreshResume();}"
+          if startup_new not in text:
+              if startup_old not in text:
+                  raise RuntimeError("Mixed Practice startup pattern not found")
+              text = text.replace(startup_old, startup_new, 1)
+
+          if startup_new not in text:
+              raise RuntimeError("Mixed Practice auto-resume after refresh not installed")
+
           mixed_changed = 0
           if text != original:
               mixed.write_text(text, encoding="utf-8")
