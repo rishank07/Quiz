@@ -29,34 +29,6 @@
     } catch (_) { return false; }
   }
 
-  /* Home-page Current Affairs count. Keep it compact so the bilingual menu
-     remains readable on phones; the exact total is shown inside the hub. */
-  function installCurrentAffairsPracticeCount() {
-    var path = (window.location.pathname || "/").replace(/\/{2,}/g, "/");
-    if (!(path === "/" || /\/index\.html$/i.test(path))) return;
-
-    var link = document.querySelector('a[href="./Current Affairs/Topic Names.html"], a[href$="/Current%20Affairs/Topic%20Names.html"]');
-    if (!link || link.querySelector(".efp-ca-home-count")) return;
-
-    var badge = document.createElement("span");
-    badge.className = "efp-ca-home-count";
-    badge.textContent = "8.5K+ Qs";
-    badge.title = "8,567 Current Affairs practice questions";
-    badge.setAttribute("aria-label", "8,500 plus Current Affairs practice questions");
-    badge.style.cssText = "display:inline-flex;align-items:center;justify-content:center;margin-left:auto;margin-right:8px;padding:4px 8px;border-radius:999px;white-space:nowrap;font-size:10px;font-weight:800;line-height:1;letter-spacing:.25px;color:#171006;background:linear-gradient(135deg,#ffeec0,#d9b75f);border:1px solid rgba(255,238,192,.75);box-shadow:0 3px 10px rgba(217,183,95,.18);flex:0 0 auto";
-
-    var chevron = link.querySelector(".chevron-icon");
-    if (chevron) link.insertBefore(badge, chevron);
-    else link.appendChild(badge);
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", installCurrentAffairsPracticeCount);
-  } else {
-    installCurrentAffairsPracticeCount();
-  }
-  window.addEventListener("pageshow", installCurrentAffairsPracticeCount);
-
   document.addEventListener("click", function (event) {
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
 
