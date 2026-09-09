@@ -1,5 +1,5 @@
-// v36 Mixed Practice setup-first return fix 20260909
-const CACHE_VERSION = "efp-pwa-2026-09-09-v66-mixed-setup-first";
+// v37 Rapid Practice opened tracker 20260909
+const CACHE_VERSION = "efp-pwa-2026-09-09-v67-rapid-opened-tracker";
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
