@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Keep the Current Affairs Rapid Practice total in sync with its quiz data.
 
-Rapid Practice pages render questions from <script id="master-data"> JSON, so
-there are no static .question-box elements for the generic section counter to
-see. This helper counts those JSON question records and writes one standard
-<meta name="efp-question-count"> override on the Rapid Practice hub. The
-existing update-book-question-counts.py pipeline then treats that total exactly
-like every other ExamFusion section count.
+Rapid Practice pages currently exist in multiple formats:
+- legacy/self-contained pages with <script id="master-data"> JSON
+- generated pages exposing window.RAPID_CONFIG with a total field
+- generated self-contained pages exposing a TOTAL_COUNT constant
+
+This helper understands all three formats, sums every Rapid Practice quiz page,
+and writes one standard <meta name="efp-question-count"> override on the Rapid
+Practice hub. The existing update-book-question-counts.py pipeline then treats
+that total exactly like every other ExamFusion section count.
 """
 from __future__ import annotations
 
@@ -19,6 +22,11 @@ MASTER_DATA_RE = re.compile(
     r'<script\b[^>]*\bid=["\']master-data["\'][^>]*>(.*?)</script\s*>',
     re.I | re.S,
 )
+RAPID_CONFIG_TOTAL_RE = re.compile(
+    r'window\.RAPID_CONFIG\s*=\s*\{.*?\btotal\s*:\s*(\d+)',
+    re.I | re.S,
+)
+TOTAL_COUNT_RE = re.compile(r'\bTOTAL_COUNT\s*=\s*(\d+)', re.I)
 META_RE = re.compile(
     r'<meta\s+name=["\']efp-question-count["\']\s+content=["\']\d+["\']\s*/?>',
     re.I,
@@ -40,14 +48,30 @@ def count_question_records(node) -> int:
 
 def count_page(path: Path) -> int:
     raw = path.read_text(encoding="utf-8", errors="replace")
-    match = MASTER_DATA_RE.search(raw)
-    if not match:
-        return 0
-    try:
-        data = json.loads(match.group(1).strip())
-    except json.JSONDecodeError as exc:
-        raise SystemExit(f"Invalid Rapid Practice master-data JSON in {path}: {exc}") from exc
-    return count_question_records(data)
+
+    # Original Rapid Practice format: count actual question records from the
+    # embedded master-data JSON so the total cannot drift from the data.
+    master_match = MASTER_DATA_RE.search(raw)
+    if master_match:
+        try:
+            data = json.loads(master_match.group(1).strip())
+        except json.JSONDecodeError as exc:
+            raise SystemExit(f"Invalid Rapid Practice master-data JSON in {path}: {exc}") from exc
+        return count_question_records(data)
+
+    # New generated runtime format, e.g.
+    # window.RAPID_CONFIG={...,total:55};
+    config_match = RAPID_CONFIG_TOTAL_RE.search(raw)
+    if config_match:
+        return int(config_match.group(1))
+
+    # New generated self-contained format, e.g.
+    # const ... TOTAL_COUNT=284;
+    total_match = TOTAL_COUNT_RE.search(raw)
+    if total_match:
+        return int(total_match.group(1))
+
+    return 0
 
 
 def update_hub_meta(hub: Path, total: int) -> bool:
@@ -92,7 +116,7 @@ def main() -> int:
             total += count
 
     if not counted:
-        raise SystemExit("No Rapid Practice master-data questions were found")
+        raise SystemExit("No Rapid Practice questions were found")
 
     changed = update_hub_meta(hub, total)
     print(f"Rapid Practice: {total:,} questions across {len(counted)} quiz files")
