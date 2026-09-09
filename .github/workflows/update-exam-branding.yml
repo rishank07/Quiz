@@ -55,6 +55,50 @@ jobs:
       - name: Suppress Crux restore flash
         run: python tools/fix-crux-restore-flash.py
 
+      - name: Sync Rapid Practice theme with site preference
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          root = Path("Current Affairs/Topic Names/Rapid Practice")
+          marker = 'id="efp-rapid-site-theme-bridge"'
+          bridge = r'''
+          <!-- Rapid Practice follows the site-wide Home dark/light preference. -->
+          <style id="efp-rapid-site-theme-bridge">#darkBtn{display:none!important}</style>
+          <script>
+          (function(){
+            function syncRapidTheme(){
+              var dark = false;
+              try { dark = localStorage.getItem("efp_black_mode") === "on"; } catch (_) {}
+              if (document.body) document.body.classList.toggle("dark", dark);
+            }
+            if (document.readyState === "loading") {
+              document.addEventListener("DOMContentLoaded", syncRapidTheme);
+            } else {
+              syncRapidTheme();
+            }
+            window.addEventListener("pageshow", syncRapidTheme);
+            window.addEventListener("storage", function(e){
+              if (e && e.key === "efp_black_mode") syncRapidTheme();
+            });
+          })();
+          </script>
+          '''
+
+          changed = 0
+          for path in root.rglob("*.html"):
+              text = path.read_text(encoding="utf-8")
+              if 'id="darkBtn"' not in text or marker in text:
+                  continue
+              if "</head>" not in text:
+                  continue
+              text = text.replace("</head>", bridge + "\n</head>", 1)
+              path.write_text(text, encoding="utf-8")
+              changed += 1
+
+          print(f"Rapid Practice theme bridge added to {changed} quiz files.")
+          PY
+
       - name: Cache-bust Crux browser-history bridge
         run: |
           python - <<'PY'
@@ -73,11 +117,11 @@ jobs:
       - name: Commit maintenance updates if needed
         run: |
           if git diff --quiet; then
-            echo "Exam branding, homepage SEO and Crux navigation assets are already current."
+            echo "Exam branding, homepage SEO, Rapid Practice theme and Crux navigation assets are already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- ':(glob)**/*.html' sitemap.xml manifest.webmanifest llms.txt README.md
-          git commit -m "chore: standardize branding, SEO and Crux navigation UI"
+          git commit -m "chore: standardize branding, SEO, Rapid Practice theme and Crux navigation UI"
           git push
