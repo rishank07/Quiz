@@ -1,5 +1,10 @@
-// v37 Rapid Practice opened tracker 20260909
-const CACHE_VERSION = "efp-pwa-2026-09-09-v67-rapid-opened-tracker";
+// v38 Owner Debug analytics guard 20260911
+const CACHE_VERSION = "efp-pwa-2026-09-11-v68-owner-debug";
+const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
+const OWNER_STATE_CACHE = "efp-owner-settings-v1";
+const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
+let ownerDebugState = null;
+
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/",
@@ -17,6 +22,7 @@ const APP_SHELL = [
   "/pwa-icons/icon-512.png",
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
+  "/owner-debug.js",
   "/home-nav.js?v=20260909mobilecompact1",
   "/app-session.js?v=20260908answerreset2",
   "/back-parent-map.js",
@@ -61,6 +67,44 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+async function getOwnerDebugState() {
+  if (ownerDebugState !== null) return ownerDebugState;
+  try {
+    const cache = await caches.open(OWNER_STATE_CACHE);
+    const response = await cache.match(OWNER_STATE_REQUEST);
+    ownerDebugState = !!response && (await response.text()) === "on";
+  } catch (_) {
+    ownerDebugState = false;
+  }
+  return ownerDebugState;
+}
+
+async function setOwnerDebugState(enabled) {
+  ownerDebugState = !!enabled;
+  const cache = await caches.open(OWNER_STATE_CACHE);
+  if (enabled) {
+    await cache.put(OWNER_STATE_REQUEST, new Response("on", {
+      headers: { "content-type": "text/plain" }
+    }));
+  } else {
+    await cache.delete(OWNER_STATE_REQUEST);
+  }
+}
+
+self.addEventListener("message", (event) => {
+  const data = event.data || {};
+  if (data.type !== "EFP_OWNER_DEBUG_SET") return;
+  event.waitUntil(
+    setOwnerDebugState(!!data.enabled)
+      .then(() => {
+        if (event.ports && event.ports[0]) event.ports[0].postMessage({ ok: true });
+      })
+      .catch(() => {
+        if (event.ports && event.ports[0]) event.ports[0].postMessage({ ok: false });
+      })
+  );
+});
+
 async function matchCachedRequest(request) {
   // App-shell files are pre-cached without cache-busting query strings while
   // pages commonly request them as file.js?v=... . ignoreSearch makes the
@@ -68,17 +112,59 @@ async function matchCachedRequest(request) {
   return (await caches.match(request)) || caches.match(request, { ignoreSearch: true });
 }
 
+function isHomeUrl(url) {
+  return url.pathname === "/" || url.pathname === "/index.html";
+}
+
+async function shouldInjectOwnerDebug(url) {
+  if (isHomeUrl(url)) return true;
+  return getOwnerDebugState();
+}
+
+function rebuiltHtmlResponse(response, html) {
+  const headers = new Headers(response.headers);
+  headers.delete("content-length");
+  headers.delete("content-encoding");
+  headers.delete("etag");
+  return new Response(html, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+async function injectOwnerDebug(response) {
+  if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.toLowerCase().includes("text/html")) return response;
+
+  const html = await response.text();
+  if (html.includes("owner-debug.js")) return rebuiltHtmlResponse(response, html);
+
+  const headMatch = html.match(/<head(?:\s[^>]*)?>/i);
+  if (!headMatch) return rebuiltHtmlResponse(response, html);
+
+  const rewritten = html.replace(headMatch[0], headMatch[0] + "\n  " + OWNER_DEBUG_SCRIPT);
+  return rebuiltHtmlResponse(response, rewritten);
+}
+
 async function networkFirst(request) {
   const cache = await caches.open(CACHE_VERSION);
+  const url = new URL(request.url);
+  const injectDebug = await shouldInjectOwnerDebug(url);
   try {
     const response = await fetch(request);
-    if (response.ok && response.type === "basic") {
-      cache.put(request, response.clone());
+    const served = injectDebug ? await injectOwnerDebug(response) : response;
+    if (served && served.ok && (served.type === "basic" || served.type === "default")) {
+      cache.put(request, served.clone());
     }
-    return response;
+    return served;
   } catch (error) {
     const cached = await matchCachedRequest(request);
-    return cached || caches.match("/offline.html");
+    if (cached) return injectDebug ? injectOwnerDebug(cached) : cached;
+    const offline = await caches.match("/offline.html");
+    if (!offline) return new Response("Offline", { status: 503 });
+    return injectDebug ? injectOwnerDebug(offline) : offline;
   }
 }
 
