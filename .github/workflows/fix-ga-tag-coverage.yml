@@ -1,0 +1,96 @@
+name: Fix GA tag coverage
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-ga-tag-coverage.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-ga-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add GA4 to untagged pages
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          GA_ID = "G-Q1WNRY8ECV"
+          SNIPPET = '''
+  <!-- Google Analytics -->
+  <script>
+    try {
+      if (localStorage.getItem("efp_owner_debug_ga4") === "on") {
+        window["ga-disable-G-Q1WNRY8ECV"] = true;
+      }
+    } catch (_) {}
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", "G-Q1WNRY8ECV");
+  </script>
+'''
+
+          targets = [
+              Path("backup-restore.html"),
+              Path("privacy-policy.html"),
+              Path("support.html"),
+              Path("Current Affairs/Rapid Practice.html"),
+          ]
+
+          for path in targets:
+              text = path.read_text(encoding="utf-8")
+              if GA_ID in text:
+                  print(f"already tagged: {path}")
+                  continue
+              updated, count = re.subn(r"(<head\b[^>]*>)", r"\1" + SNIPPET, text, count=1, flags=re.I)
+              if count != 1:
+                  raise RuntimeError(f"Could not find <head> in {path}")
+              path.write_text(updated, encoding="utf-8")
+              print(f"tagged: {path}")
+
+          legacy = Path("Books/Ghatnachakra Purvalokan/index.html")
+          legacy.parent.mkdir(parents=True, exist_ok=True)
+          legacy.write_text(f'''<!doctype html>
+<html lang="en">
+<head>{SNIPPET}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>GhatnaChakra Purvalokan | ExamFusion Prep</title>
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://examfusionprep.com/Books/Ghatnachakra%20Purvalokan/SubjectName.html">
+  <meta http-equiv="refresh" content="0; url=./SubjectName.html">
+  <script>window.location.replace('./SubjectName.html' + window.location.search + window.location.hash);</script>
+</head>
+<body>
+  <p><a href="./SubjectName.html">Open GhatnaChakra Purvalokan</a></p>
+</body>
+</html>
+''', encoding="utf-8")
+          print(f"created redirect: {legacy}")
+          PY
+
+      - name: Commit fixes
+        shell: bash
+        run: |
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git config user.name "ExamFusion Prep Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add backup-restore.html privacy-policy.html support.html "Current Affairs/Rapid Practice.html" "Books/Ghatnachakra Purvalokan/index.html"
+          git commit -m "fix: add GA4 tags to untagged pages"
+          git push
