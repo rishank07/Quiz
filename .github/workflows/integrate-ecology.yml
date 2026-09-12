@@ -1,0 +1,51 @@
+name: Integrate Ecology Original Practice
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - ".github/workflows/integrate-ecology.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: integrate-ecology-original-practice
+  cancel-in-progress: true
+
+jobs:
+  integrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Integrate Environment and Ecology
+        run: python tools/integrate-ecology-original-practice.py
+
+      - name: Validate key integrations
+        run: |
+          grep -q 'Environment_Ecology_Complete_Practice.html' 'Original Practice/index.html'
+          grep -q "ecology:{key:'ecology'" 'Original Practice/Mixed_Practice.html'
+          grep -q 'slug:"ecology"' 'Original Practice/original-practice.js'
+          grep -q 'EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX' search-snippets-ecology-original-practice.js
+          grep -q '41418' 'Original Practice/question-counts.json'
+          grep -q '163' 'Original Practice/question-counts.json'
+
+      - name: Commit integrated Ecology support
+        run: |
+          if git diff --quiet; then
+            echo "Ecology integration already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: integrate Environment and Ecology original practice"
+          git pull --rebase origin master
+          git push
