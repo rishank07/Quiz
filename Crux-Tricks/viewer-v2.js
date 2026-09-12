@@ -514,7 +514,7 @@
     pdfjsLib.getDocument({url:doc.pdf}).promise.then(function(loaded){pdfDoc=loaded;total.textContent=loaded.numPages;if(page>loaded.numPages)page=loaded.numPages;return chooseReaderAfterLoad()}).catch(function(err){showError('Original PDF could not be loaded inside the app.');if(console&&console.error)console.error(err)});
   }
 
-  function loadPagesForSearch(){var s=document.createElement('script');s.src='pages/'+doc.id+'.js?v=20260909geoecotricks1';s.onload=function(){pages=Array.isArray(window.EF_CRUX_DOC_PAGES)?window.EF_CRUX_DOC_PAGES:[];runDocSearch()};s.onerror=function(){docSearch.placeholder='PDF search index unavailable — use page number';docSearch.disabled=true};document.head.appendChild(s)}
+  function loadPagesForSearch(){var s=document.createElement('script');s.src='pages/'+doc.id+'.js?v=20260912ecologytricks1';s.onload=function(){pages=Array.isArray(window.EF_CRUX_DOC_PAGES)?window.EF_CRUX_DOC_PAGES:[];runDocSearch()};s.onerror=function(){docSearch.placeholder='PDF search index unavailable — use page number';docSearch.disabled=true};document.head.appendChild(s)}
   function runDocSearch(){
     var q=normalizeSearchText(docSearch.value);docHits.innerHTML='';
     if(q!==searchQuery){searchQuery=q;activeSearchPage=0;searchFocusPending=false;searchGeneration++;clearSearchHighlightLayers()}

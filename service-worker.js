@@ -1,5 +1,5 @@
-// v38 Owner Debug analytics guard 20260911
-const CACHE_VERSION = "efp-pwa-2026-09-12-v70-ecology-nav-fix";
+// v39 Environment and Ecology Original Tricks 20260912
+const CACHE_VERSION = "efp-pwa-2026-09-12-v71-ecology-tricks";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -43,9 +43,9 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-manifest.js",
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260909geoecotricks1",
+  "/Crux-Tricks/crux-tricks.js?v=20260912ecologytricks1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260909geoecotricks1",
+  "/Crux-Tricks/viewer-v2.js?v=20260912ecologytricks1",
 ];
 
 self.addEventListener("install", (event) => {
