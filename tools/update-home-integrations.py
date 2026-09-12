@@ -51,7 +51,7 @@ def original_practice_total(repo: Path) -> int:
             return total
     except (OSError, ValueError, TypeError, json.JSONDecodeError):
         pass
-    return 40891
+    return 41418
 
 
 def crux_document_total(repo: Path) -> int:

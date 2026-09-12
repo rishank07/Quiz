@@ -1,5 +1,5 @@
 // v38 Owner Debug analytics guard 20260911
-const CACHE_VERSION = "efp-pwa-2026-09-11-v68-owner-debug";
+const CACHE_VERSION = "efp-pwa-2026-09-12-v69-ecology-original-practice";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";

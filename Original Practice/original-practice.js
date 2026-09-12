@@ -6,7 +6,8 @@ var CONFIGS={
  "polity_complete_practice.html":{slug:"polity",label:"Polity"},
  "science_complete_practice.html":{slug:"science",label:"Science"},
  "geography_complete_practice.html":{slug:"geography",label:"Geography"},
- "economics_complete_practice.html":{slug:"economics",label:"Economics"}
+ "economics_complete_practice.html":{slug:"economics",label:"Economics"},
+ "environment_ecology_complete_practice.html":{slug:"ecology",label:"Environment & Ecology"}
 };
 var CFG=CONFIGS[PAGE_FILE]||{slug:"practice",label:"Practice"};
 var PROGRESS_KEY="efp_visited_originalpractice_"+CFG.slug;
@@ -115,13 +116,13 @@ var opFullSearchClient=null;
 function getOpFullSearchClient(){
  if(opFullSearchClient)return opFullSearchClient;
  if(typeof efCreateSearchWorker!=="function")return null;
- var economicsSearch=CFG.slug==="economics";
+ var specialIndex=CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20260912ecology1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20260904v8",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
  opFullSearchClient=efCreateSearchWorker({
   workerUrl:new URL("../search-worker.js?v=20260904v8",document.baseURI).href,
   logicUrl:new URL("../search-logic.js?v=20260904v8",document.baseURI).href,
-  indexUrl:new URL(economicsSearch?"../search-snippets-economics-original-practice.js?v=20260908econ1":"../search-snippets-original-practice.js?v=20260904v8",document.baseURI).href,
+  indexUrl:new URL(specialIndex.file,document.baseURI).href,
   mode:"snippet",
-  globalName:economicsSearch?"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX":"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX",
+  globalName:specialIndex.global,
   sectionPrefix:"./Original%20Practice/",
   limit:30
  });
