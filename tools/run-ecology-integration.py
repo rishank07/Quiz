@@ -94,7 +94,12 @@ sw = sw.replace(
 )
 sw_path.write_text(sw, encoding="utf-8")
 
-# Keep the hub source readable after the compact insertion anchor has done its job.
+# Keep the hub source readable and canonical after the compact insertion anchor
+# has done its job. The underlying integrator used a prefix replacement that
+# could append Ecology again on every rerun, so collapse repeats permanently.
 text = index_path.read_text(encoding="utf-8")
 text = text.replace('</a></section><section class="features">', '</a>\n  </section>\n  <section class="features">', 1)
+repeated = " · Environment & Ecology · Environment & Ecology"
+while repeated in text:
+    text = text.replace(repeated, " · Environment & Ecology")
 index_path.write_text(text, encoding="utf-8")
