@@ -35,6 +35,9 @@ jobs:
           grep -q 'Environment_Ecology_Complete_Practice.html' 'Original Practice/index.html'
           grep -q "ecology:{key:'ecology'" 'Original Practice/Mixed_Practice.html'
           grep -q 'slug:"ecology"' 'Original Practice/original-practice.js'
+          grep -q 'ensureGlobalOriginalPracticeNavigation' 'Original Practice/original-practice.js'
+          grep -q '/home-nav.js' 'Original Practice/original-practice.js'
+          grep -q '/back-nav.js' 'Original Practice/original-practice.js'
           grep -q 'EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX' search-snippets-ecology-original-practice.js
           grep -q '41418' 'Original Practice/question-counts.json'
           grep -q '163' 'Original Practice/question-counts.json'
@@ -48,6 +51,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "feat: integrate Environment and Ecology original practice"
-          git pull --rebase origin master
-          git push
+          git commit -m "fix: restore Ecology Home and Back navigation"
+          git push origin HEAD:master
