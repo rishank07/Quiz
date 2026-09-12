@@ -44,6 +44,36 @@ mixed_path.write_text(mixed, encoding="utf-8")
 
 runpy.run_path(str(root / "tools" / "integrate-ecology-original-practice.py"), run_name="__main__")
 
+# Ecology was originally a standalone generated HTML file, so it did not load
+# the site's global navigation scripts. Without these, Home is missing and the
+# Back control falls back to the legacy placement from black-mode.js.
+ecology_path = practice / "Environment_Ecology_Complete_Practice.html"
+ecology = ecology_path.read_text(encoding="utf-8")
+nav_scripts = [
+    ('/home-nav.js', '<script defer src="/home-nav.js?v=20260909mobilecompact1"></script>'),
+    ('/back-parent-map.js', '<script defer src="/back-parent-map.js?v=20260912ecology1"></script>'),
+    ('/back-nav.js', '<script defer src="/back-nav.js?v=20260912ecology1"></script>'),
+]
+missing_nav = [tag for needle, tag in nav_scripts if needle not in ecology]
+if missing_nav:
+    if '</head>' not in ecology:
+        raise RuntimeError("Ecology HTML closing head tag missing")
+    block = '\n<!-- ExamFusion global Home + Back controls -->\n' + '\n'.join(missing_nav) + '\n'
+    ecology = ecology.replace('</head>', block + '</head>', 1)
+if not all(needle in ecology for needle, _ in nav_scripts):
+    raise RuntimeError("Ecology global navigation patch failed")
+ecology_path.write_text(ecology, encoding="utf-8")
+
+# Force installed/PWA clients to pick up the corrected Ecology HTML instead of
+# keeping the previous cached copy with the missing Home navigation.
+sw_path = root / "service-worker.js"
+sw = sw_path.read_text(encoding="utf-8")
+sw = sw.replace(
+    'const CACHE_VERSION = "efp-pwa-2026-09-12-v69-ecology-original-practice";',
+    'const CACHE_VERSION = "efp-pwa-2026-09-12-v70-ecology-nav-fix";',
+)
+sw_path.write_text(sw, encoding="utf-8")
+
 # Keep the hub source readable after the compact insertion anchor has done its job.
 text = index_path.read_text(encoding="utf-8")
 text = text.replace('</a></section><section class="features">', '</a>\n  </section>\n  <section class="features">', 1)
