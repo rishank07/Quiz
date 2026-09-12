@@ -37,6 +37,31 @@ function ensureSharedDarkMode(){
 }
 ensureSharedDarkMode();
 
+
+function ensureGlobalOriginalPracticeNavigation(){
+ try{
+  var defs=[
+   {needle:"/home-nav.js",src:"/home-nav.js?v=20260909mobilecompact1"},
+   {needle:"/back-parent-map.js",src:"/back-parent-map.js?v=20260912ecology1"},
+   {needle:"/back-nav.js",src:"/back-nav.js?v=20260912ecology1"}
+  ];
+  function alreadyLoaded(needle){
+   var scripts=document.scripts||[];
+   for(var i=0;i<scripts.length;i++)if((scripts[i].src||"").indexOf(needle)>=0)return true;
+   return false;
+  }
+  for(var i=0;i<defs.length;i++){
+   if(alreadyLoaded(defs[i].needle))continue;
+   var s=document.createElement("script");
+   s.src=defs[i].src;
+   s.async=false;
+   (document.head||document.documentElement).appendChild(s);
+  }
+ }catch(e){}
+}
+ensureGlobalOriginalPracticeNavigation();
+
+
 // Keeps attempted answers alive while the user moves between sections of the same chapter.
 // This is deliberately session/in-memory state so a fresh chapter attempt still starts clean.
 if(!state.answerMap) state.answerMap={};
