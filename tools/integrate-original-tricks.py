@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Integrate the Economics and Geography ExamFusion Original Tricks PDFs."""
+"""Integrate the latest ExamFusion Original Tricks PDFs."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 
-VERSION = "20260909geoecotricks1"
+VERSION = "20260912ecologytricks1"
 
 TRICK_BOOKS = [
     {
@@ -47,6 +47,17 @@ TRICK_BOOKS = [
         "source_title": "World Geography Tricks",
         "sort_key": "002",
         "hi": "विश्व भूगोल ट्रिक्स",
+    },
+    {
+        "filename": "Environment_&_Ecology_Tricks.pdf",
+        "target": "pdfs/Tricks/Environment_&_Ecology_Tricks.pdf",
+        "subject": "Environment & Ecology",
+        "branch": "",
+        "title": "01 Environment & Ecology Tricks",
+        "heading": "ENVIRONMENT — MEMORY-TRICK SHEET",
+        "source_title": "Environment & Ecology Tricks",
+        "sort_key": "001",
+        "hi": "पर्यावरण एवं पारिस्थितिकी ट्रिक्स",
     },
 ]
 
@@ -133,6 +144,11 @@ def update_asset_versions(repo: Path) -> None:
         )
     controller_path = crux / "crux-tricks.js"
     controller = controller_path.read_text(encoding="utf-8")
+    controller = controller.replace(
+        "var SUBJECT_ORDER=['History','Polity','Geography','Science','Economics','Maths','Static GK'];",
+        "var SUBJECT_ORDER=['History','Polity','Geography','Environment & Ecology','Science','Economics','Maths','Static GK'];",
+        1,
+    )
     client_function = (
         "function getClients(){if(searchClients)return searchClients;if(typeof efCreateSearchWorker!=='function')return[];"
         "searchClients=["
@@ -159,6 +175,25 @@ def update_asset_versions(repo: Path) -> None:
     if count != 1:
         raise ValueError("Could not update Crux full-text search clients")
     controller_path.write_text(controller, encoding="utf-8", newline="\n")
+
+    hub_path = crux / "index.html"
+    hub = hub_path.read_text(encoding="utf-8")
+    hub = hub.replace(
+        "var SO=['History','Polity','Geography','Science','Economics','Maths','Static GK'];",
+        "var SO=['History','Polity','Geography','Environment & Ecology','Science','Economics','Maths','Static GK'];",
+        1,
+    )
+    hub = hub.replace(
+        "var ICON={History:'🏛️',Polity:'⚖️',Geography:'🌍',Science:'🧪',Economics:'₹',Maths:'➗','Static GK':'🎯'};",
+        "var ICON={History:'🏛️',Polity:'⚖️',Geography:'🌍','Environment & Ecology':'🌿',Science:'🧪',Economics:'₹',Maths:'➗','Static GK':'🎯'};",
+        1,
+    )
+    hub = hub.replace(
+        "var HI={History:'इतिहास',Polity:'राजव्यवस्था',Geography:'भूगोल',Science:'विज्ञान',Economics:'अर्थशास्त्र',Maths:'गणित','Static GK':'सामान्य ज्ञान'};",
+        "var HI={History:'इतिहास',Polity:'राजव्यवस्था',Geography:'भूगोल','Environment & Ecology':'पर्यावरण एवं पारिस्थितिकी',Science:'विज्ञान',Economics:'अर्थशास्त्र',Maths:'गणित','Static GK':'सामान्य ज्ञान'};",
+        1,
+    )
+    hub_path.write_text(hub, encoding="utf-8", newline="\n")
     replace_regex(
         repo / "index.html",
         r"search-index-main\.js\?v=[A-Za-z0-9._-]+",
@@ -168,10 +203,10 @@ def update_asset_versions(repo: Path) -> None:
 
     service_worker = repo / "service-worker.js"
     raw = service_worker.read_text(encoding="utf-8")
-    raw = re.sub(r"^// v\d+.*$", "// v32 Economics and Geography Original Tricks 20260909", raw, count=1, flags=re.M)
+    raw = re.sub(r"^// v\d+.*$", "// v39 Environment and Ecology Original Tricks 20260912", raw, count=1, flags=re.M)
     raw = re.sub(
         r'const CACHE_VERSION = "[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-09-v98-original-geo-economics-tricks";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-12-v71-ecology-tricks";',
         raw,
         count=1,
     )
@@ -307,8 +342,7 @@ def main() -> int:
 
     update_asset_versions(repo)
 
-    # With six visible Original-Tricks subjects, three centered cards per row
-    # retain the generous desktop sizing used by the four-card layout.
+    # Keep every Original-Tricks subject card centered at all viewport widths.
     css_path = crux / "crux-tricks.css"
     css = css_path.read_text(encoding="utf-8")
     css = css.replace(
@@ -322,6 +356,7 @@ def main() -> int:
         "Economics Tricks": 59,
         "Indian Geography Tricks": 101,
         "World Geography Tricks": 93,
+        "Environment & Ecology Tricks": 31,
     }
     actual_pages = {doc["sourceTitle"]: doc["pages"] for doc in new_docs}
     if actual_pages != expected_pages:

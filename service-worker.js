@@ -1,5 +1,5 @@
-// v38 Owner Debug analytics guard 20260911
-const CACHE_VERSION = "efp-pwa-2026-09-12-v70-ecology-nav-fix";
+// v41 English Grammar dashboard parity 20260913
+const CACHE_VERSION = "efp-pwa-2026-09-13-v73-english-dashboard";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -36,6 +36,7 @@ const APP_SHELL = [
   "/Original%20Practice/index.html",
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/original-practice.js?v=20260908answerreset2",
+  "/Original%20Practice/english-practice.js?v=20260913english1",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
   "/Crux-Tricks/viewer.html",
@@ -43,9 +44,9 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-manifest.js",
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260909geoecotricks1",
+  "/Crux-Tricks/crux-tricks.js?v=20260912ecologytricks1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260909geoecotricks1",
+  "/Crux-Tricks/viewer-v2.js?v=20260912ecologytricks1",
 ];
 
 self.addEventListener("install", (event) => {
