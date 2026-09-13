@@ -1,5 +1,5 @@
-// v40 English Grammar Original Practice 20260913
-const CACHE_VERSION = "efp-pwa-2026-09-13-v72-english-practice";
+// v41 English Grammar dashboard parity 20260913
+const CACHE_VERSION = "efp-pwa-2026-09-13-v73-english-dashboard";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";

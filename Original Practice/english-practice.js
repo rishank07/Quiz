@@ -101,12 +101,10 @@ function searchPanel(){
 }
 
 function enhanceChapters(){
- var root=document.querySelector("#app .max-w-5xl");if(!root)return;
- var header=root.querySelector(".text-center.mb-8");
+ var root=document.querySelector("#app .max-w-4xl");if(!root)return;
+ var header=root.querySelector(".mb-6");
  var total=chapterNames().length,done=getVisited().length,pct=total?Math.round(done*100/total):0;
- var existing=header&&header.nextElementSibling;
- if(existing){existing.className="efp-op-progress";existing.innerHTML='<div class="efp-op-progress-head"><span>Chapter progress / अध्याय प्रगति: '+done+' / '+total+'</span><button class="efp-op-progress-reset" type="button">Reset</button></div><div class="efp-op-progress-track"><div class="efp-op-progress-fill" style="width:'+pct+'%"></div></div>';existing.querySelector("button").onclick=function(){if(confirm("Reset opened-chapter progress for English Grammar?")){localStorage.removeItem(PROGRESS_KEY);render()}}}
- if(header){var search=searchPanel();(existing||header).insertAdjacentElement("afterend",search)}
+ if(header){var progress=document.createElement("div");progress.className="efp-op-progress";progress.innerHTML='<div class="efp-op-progress-head"><span>Chapter progress / अध्याय प्रगति: '+done+' / '+total+'</span><button class="efp-op-progress-reset" type="button">Reset</button></div><div class="efp-op-progress-track"><div class="efp-op-progress-fill" style="width:'+pct+'%"></div></div>';progress.querySelector("button").onclick=function(){if(confirm("Reset opened-chapter progress for English Grammar?")){localStorage.removeItem(PROGRESS_KEY);render()}};header.insertAdjacentElement("afterend",progress);progress.insertAdjacentElement("afterend",searchPanel())}
  var cards=root.querySelectorAll('div[onclick^="goToQuiz"]'),names=chapterNames();
  cards.forEach(function(card,index){var chapter=names[index];if(!chapter)return;card.setAttribute("role","button");card.setAttribute("tabindex","0");card.addEventListener("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();markVisited(chapter);goToQuiz(chapter)}});if(isVisited(chapter))card.classList.add("efp-op-visited")});
  var note=document.createElement("div");note.className="efp-op-original-note";note.textContent="यह अभ्यास सामग्री ExamFusion Prep द्वारा प्रतियोगी परीक्षाओं की तैयारी के लिए स्वतंत्र रूप से तैयार की गई है।";root.appendChild(note);

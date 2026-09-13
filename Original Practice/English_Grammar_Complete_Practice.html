@@ -122,37 +122,25 @@ function totalQCount() { return Object.values(MASTER).reduce((t,s)=>t+chapterQCo
 
 function renderChapters() {
     const names=Object.keys(MASTER);
-    const grandAttempted=names.reduce((s,n)=>s+chapterStats(n).attempted,0);
     return `
-    <div class="max-w-5xl mx-auto px-4 pt-9 fade-in">
-        <div class="text-center mb-8">
-            <div class="flex items-center justify-center gap-3 mb-3">
-                <div class="seal">EF</div>
-                <h1 class="text-3xl md:text-4xl font-bold" style="color:var(--ink)">English Grammar Complete Practice</h1>
-            </div>
-            <p class="text-sm md:text-base" style="color:var(--deep2)">16 Chapters · ${totalQCount().toLocaleString()} Questions · Full Example Q&A Practice</p>
-            <p class="text-xs mt-1 text-gray-500">Hinglish + English explanations · progress saved automatically</p>
-        </div>
-        <div class="max-w-xl mx-auto mb-7 bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-            <div class="flex justify-between text-xs mb-2"><span class="font-semibold">Overall progress</span><span>${grandAttempted} / ${totalQCount()}</span></div>
-            <div class="progress-track"><div class="progress-fill" style="width:${totalQCount()?grandAttempted*100/totalQCount():0}%"></div></div>
+    <div class="max-w-4xl mx-auto px-4 pt-6 fade-in">
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold" style="color:var(--ink)">English Grammar</h2>
+            <p class="text-xs text-gray-500">Basics se Narration tak — ${names.length} Chapters</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             ${names.map(name => {
-                const st=chapterStats(name); const pct=st.total?Math.round(st.attempted*100/st.total):0;
+                const total=chapterQCount(MASTER[name]);
                 return `
                 <div onclick="goToQuiz(${JSON.stringify(name).replace(/"/g,'&quot;')})" class="card-hover cursor-pointer bg-white rounded-xl border border-gray-200 shadow p-4 flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0" style="background:var(--gold)">${chapterNum(name)}</div>
-                    <div class="min-w-0 flex-1">
+                    <div class="min-w-0">
                         <div class="font-semibold text-sm" style="color:var(--ink)">${chapterDisplayName(name)}</div>
-                        <div class="text-xs text-gray-500 mt-0.5">${st.total} questions · ${MASTER[name].length} sections</div>
-                        <div class="progress-track mt-2"><div class="progress-fill" style="width:${pct}%"></div></div>
-                        <div class="text-[11px] text-gray-400 mt-1">${st.attempted} attempted · ${st.correct} correct</div>
+                        <div class="text-xs text-gray-500 mt-0.5">${total} questions · ${MASTER[name].length} sections</div>
                     </div>
                 </div>`;
             }).join('')}
         </div>
-        <div class="text-center mt-9 text-xs text-gray-400">ExamFusion Prep Original Practice Series · examfusionprep.com</div>
     </div>`;
 }
 
@@ -171,11 +159,8 @@ function renderQuiz() {
             </div>
         </div>
         <div class="rounded-xl text-white p-4 mb-4" style="background:linear-gradient(135deg,var(--deep),var(--deep2))">
-            <div class="text-xs opacity-75 mb-1">Chapter ${chapterNum(state.chapterName)} · English Grammar</div>
-            <div class="flex justify-between items-start gap-3">
-                <h2 class="font-bold text-lg">${chapterDisplayName(state.chapterName)}</h2>
-                <button onclick="resetChapter()" class="text-[11px] px-2 py-1 rounded border border-white/40 hover:bg-white/10 flex-shrink-0">Reset</button>
-            </div>
+            <div class="text-xs opacity-75 mb-1">${chapterNum(state.chapterName)}. English Grammar</div>
+            <h2 class="font-bold text-lg">${chapterDisplayName(state.chapterName)}</h2>
         </div>
         <div class="flex gap-2 mb-3 overflow-x-auto pb-2 px-1" style="scroll-snap-type:x proximity">
             ${sections.map((s,i) => `
@@ -275,10 +260,6 @@ function goToChapters() { goChapters(); }
 function goToQuiz(chapterName) {
     saved.answers={};state.screen='quiz';state.chapterName=chapterName;state.quizData=MASTER[chapterName];state.currentSection=0;state.shuffleMap={};render();window.scrollTo({top:0});
 }
-function resetChapter() {
-    if(!confirm(`Reset all saved answers for Chapter ${chapterNum(state.chapterName)} - ${chapterDisplayName(state.chapterName)}?`)) return;
-    saved.answers[state.chapterName]={}; saveState(); state.shuffleMap={}; render();
-}
 function render() {
     const app=document.getElementById('app');
     app.innerHTML=state.screen==='quiz'?renderQuiz():renderChapters();
@@ -287,6 +268,6 @@ render();
 </script>
 <footer data-efp-english-footer style="max-width:1100px;margin:30px auto 16px;padding:14px 18px;text-align:center;font:600 12px/1.6 system-ui;color:#64748b">© 2026 ExamFusion Prep. All Rights Reserved. मेहनत आपकी, साथ हमारा 🎯 · <a href="../privacy-policy.html">Privacy Policy</a> · <a href="../support.html">Support</a></footer>
 <script src="../search-logic.js?v=20260904v8"></script>
-<script src="./english-practice.js?v=20260913english1"></script>
+<script src="./english-practice.js?v=20260913english2"></script>
 </body>
 </html>
