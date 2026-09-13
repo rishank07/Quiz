@@ -1,5 +1,5 @@
-// v41 English Grammar dashboard parity 20260913
-const CACHE_VERSION = "efp-pwa-2026-09-13-v73-english-dashboard";
+// v42 English Grammar Golden Rules Tricks 20260913
+const CACHE_VERSION = "efp-pwa-2026-09-13-v74-english-tricks";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -44,9 +44,9 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-manifest.js",
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260912ecologytricks1",
+  "/Crux-Tricks/crux-tricks.js?v=20260913englishtricks1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260912ecologytricks1",
+  "/Crux-Tricks/viewer-v2.js?v=20260913englishtricks1",
 ];
 
 self.addEventListener("install", (event) => {

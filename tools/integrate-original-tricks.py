@@ -12,7 +12,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 
-VERSION = "20260912ecologytricks1"
+VERSION = "20260913englishtricks1"
 
 TRICK_BOOKS = [
     {
@@ -58,6 +58,17 @@ TRICK_BOOKS = [
         "source_title": "Environment & Ecology Tricks",
         "sort_key": "001",
         "hi": "पर्यावरण एवं पारिस्थितिकी ट्रिक्स",
+    },
+    {
+        "filename": "English_Grammar_Golden_Rule.pdf",
+        "target": "pdfs/Tricks/English_Grammar_Golden_Rule.pdf",
+        "subject": "English",
+        "branch": "",
+        "title": "01 English Grammar Golden Rules",
+        "heading": "ENGLISH GRAMMAR - GOLDEN RULES SHEET",
+        "source_title": "English Grammar Golden Rules",
+        "sort_key": "001",
+        "hi": "अंग्रेज़ी व्याकरण गोल्डन रूल्स",
     },
 ]
 
@@ -145,8 +156,8 @@ def update_asset_versions(repo: Path) -> None:
     controller_path = crux / "crux-tricks.js"
     controller = controller_path.read_text(encoding="utf-8")
     controller = controller.replace(
-        "var SUBJECT_ORDER=['History','Polity','Geography','Science','Economics','Maths','Static GK'];",
         "var SUBJECT_ORDER=['History','Polity','Geography','Environment & Ecology','Science','Economics','Maths','Static GK'];",
+        "var SUBJECT_ORDER=['History','Polity','Geography','Environment & Ecology','Science','Economics','English','Maths','Static GK'];",
         1,
     )
     client_function = (
@@ -179,18 +190,18 @@ def update_asset_versions(repo: Path) -> None:
     hub_path = crux / "index.html"
     hub = hub_path.read_text(encoding="utf-8")
     hub = hub.replace(
-        "var SO=['History','Polity','Geography','Science','Economics','Maths','Static GK'];",
         "var SO=['History','Polity','Geography','Environment & Ecology','Science','Economics','Maths','Static GK'];",
+        "var SO=['History','Polity','Geography','Environment & Ecology','Science','Economics','English','Maths','Static GK'];",
         1,
     )
     hub = hub.replace(
-        "var ICON={History:'🏛️',Polity:'⚖️',Geography:'🌍',Science:'🧪',Economics:'₹',Maths:'➗','Static GK':'🎯'};",
         "var ICON={History:'🏛️',Polity:'⚖️',Geography:'🌍','Environment & Ecology':'🌿',Science:'🧪',Economics:'₹',Maths:'➗','Static GK':'🎯'};",
+        "var ICON={History:'🏛️',Polity:'⚖️',Geography:'🌍','Environment & Ecology':'🌿',Science:'🧪',Economics:'₹',English:'🔤',Maths:'➗','Static GK':'🎯'};",
         1,
     )
     hub = hub.replace(
-        "var HI={History:'इतिहास',Polity:'राजव्यवस्था',Geography:'भूगोल',Science:'विज्ञान',Economics:'अर्थशास्त्र',Maths:'गणित','Static GK':'सामान्य ज्ञान'};",
         "var HI={History:'इतिहास',Polity:'राजव्यवस्था',Geography:'भूगोल','Environment & Ecology':'पर्यावरण एवं पारिस्थितिकी',Science:'विज्ञान',Economics:'अर्थशास्त्र',Maths:'गणित','Static GK':'सामान्य ज्ञान'};",
+        "var HI={History:'इतिहास',Polity:'राजव्यवस्था',Geography:'भूगोल','Environment & Ecology':'पर्यावरण एवं पारिस्थितिकी',Science:'विज्ञान',Economics:'अर्थशास्त्र',English:'अंग्रेज़ी व्याकरण',Maths:'गणित','Static GK':'सामान्य ज्ञान'};",
         1,
     )
     hub_path.write_text(hub, encoding="utf-8", newline="\n")
@@ -200,13 +211,19 @@ def update_asset_versions(repo: Path) -> None:
         f"search-index-main.js?v={VERSION}",
         "home search index cache key",
     )
+    replace_regex(
+        repo / "index.html",
+        r"search-snippets-original-geo-economics-tricks\.js\?v=[A-Za-z0-9._-]+",
+        f"search-snippets-original-geo-economics-tricks.js?v={VERSION}",
+        "home Original Tricks full-text cache key",
+    )
 
     service_worker = repo / "service-worker.js"
     raw = service_worker.read_text(encoding="utf-8")
-    raw = re.sub(r"^// v\d+.*$", "// v39 Environment and Ecology Original Tricks 20260912", raw, count=1, flags=re.M)
+    raw = re.sub(r"^// v\d+.*$", "// v42 English Grammar Golden Rules Tricks 20260913", raw, count=1, flags=re.M)
     raw = re.sub(
         r'const CACHE_VERSION = "[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-12-v71-ecology-tricks";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-13-v74-english-tricks";',
         raw,
         count=1,
     )
@@ -262,7 +279,8 @@ def main() -> int:
             raise FileNotFoundError(source_pdf)
         target_pdf = crux / book["target"]
         target_pdf.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source_pdf, target_pdf)
+        if source_pdf.resolve() != target_pdf.resolve():
+            shutil.copy2(source_pdf, target_pdf)
         page_text = extract_pages(target_pdf)
         doc_id = f"ct{max_id + offset:04d}"
         breadcrumb = "Crux & Tricks / Original Memory Tricks / " + book["subject"]
@@ -357,6 +375,7 @@ def main() -> int:
         "Indian Geography Tricks": 101,
         "World Geography Tricks": 93,
         "Environment & Ecology Tricks": 31,
+        "English Grammar Golden Rules": 66,
     }
     actual_pages = {doc["sourceTitle"]: doc["pages"] for doc in new_docs}
     if actual_pages != expected_pages:
