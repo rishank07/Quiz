@@ -12,6 +12,7 @@ const expected = [
   { id: "ct0473", title: "World Geography Tricks", subject: "Geography", branch: "World Geography", pages: 93, query: "HE-ERA-HUM-SAU-THA" },
   { id: "ct0474", title: "Environment & Ecology Tricks", subject: "Environment & Ecology", branch: "", pages: 31, query: "WNGU" },
   { id: "ct0475", title: "English Grammar Golden Rules", subject: "English", branch: "", pages: 66, query: "NAPA Chain Test" },
+  { id: "ct0476", title: "Static GK Tricks", subject: "Static GK", branch: "", pages: 78, query: "Prasad-Purab" },
 ];
 
 function loadWindowFile(relativePath) {
@@ -31,9 +32,9 @@ function validateInlineScripts(relativePath) {
 }
 
 const manifest = loadWindowFile("Crux-Tricks/crux-manifest.js").EF_CRUX_DOCS;
-assert(manifest.length >= 475, "Crux manifest lost documents from the Original Tricks baseline");
+assert(manifest.length >= 476, "Crux manifest lost documents from the Original Tricks baseline");
 const newDocs = manifest.filter((doc) => expected.some((item) => item.id === doc.id));
-assert.strictEqual(newDocs.length, 5, "All five latest Original Tricks documents must be present");
+assert.strictEqual(newDocs.length, 6, "All six latest Original Tricks documents must be present");
 
 for (const item of expected) {
   const doc = newDocs.find((candidate) => candidate.id === item.id);
@@ -55,8 +56,8 @@ for (const item of expected) {
 
 const snippets = loadWindowFile("Crux-Tricks/search-snippets-original-geo-economics-tricks.js").EF_CRUX_TRICKS_SNIPPET_INDEX;
 const newSnippets = snippets.filter((item) => expected.some((entry) => item.f.includes(`id=${entry.id}`)));
-assert.strictEqual(newSnippets.length, 5, "Latest Original Tricks search must contain all five PDFs");
-assert.strictEqual(newSnippets.reduce((sum, item) => sum + item.x.length, 0), 350, "Latest Original Tricks search must contain all 350 pages");
+assert.strictEqual(newSnippets.length, 6, "Latest Original Tricks search must contain all six PDFs");
+assert.strictEqual(newSnippets.reduce((sum, item) => sum + item.x.length, 0), 428, "Latest Original Tricks search must contain all 428 pages");
 
 const messages = [];
 const workerContext = { console, setTimeout, clearTimeout, postMessage(message) { messages.push(message); } };
@@ -93,7 +94,7 @@ for (const item of expected) {
   assert(searchContext.index.some((entry) => entry.url === `./Crux-Tricks/viewer.html?id=${item.id}`), `Main search is missing ${item.id}`);
 }
 
-const version = "20260913englishtricks1";
+const version = "20260915staticgktricks1";
 const hub = fs.readFileSync(path.join(root, "Crux-Tricks/index.html"), "utf8");
 const viewer = fs.readFileSync(path.join(root, "Crux-Tricks/viewer.html"), "utf8");
 const myPages = fs.readFileSync(path.join(root, "Crux-Tricks/my-pages.html"), "utf8");
@@ -106,10 +107,12 @@ assert(myPages.includes(`crux-manifest.js?v=${version}`), "Saved Pages cache key
 assert(controller.includes(`search-snippets-original-geo-economics-tricks.js?v=${version}`), "Full-text search cache key is stale");
 assert(home.includes(`search-snippets-original-geo-economics-tricks.js?v=${version}`), "Homepage full-text search is missing Original Tricks");
 assert(hub.includes("English:'🔤'") && hub.includes("English:'अंग्रेज़ी व्याकरण'"), "English subject card is not wired");
-assert(serviceWorker.includes("v74-english-tricks") && serviceWorker.includes(`viewer-v2.js?v=${version}`), "PWA cache was not refreshed");
+assert(hub.includes("'Static GK':'🎯'") && hub.includes("'Static GK':'सामान्य ज्ञान'"), "Static GK subject card is not wired");
+assert(home.includes('"./Crux-Tricks/index.html":{"total":476,"unit":"PDFs"}'), "Homepage PDF count is stale");
+assert(serviceWorker.includes("v76-static-gk-tricks") && serviceWorker.includes(`viewer-v2.js?v=${version}`), "PWA cache was not refreshed");
 
 validateInlineScripts("index.html");
 validateInlineScripts("Crux-Tricks/index.html");
 validateInlineScripts("Crux-Tricks/viewer.html");
 
-console.log("Original Tricks validation passed: 5 PDFs, 350 searchable pages, viewer/study/PWA wiring complete");
+console.log("Original Tricks validation passed: 6 PDFs, 428 searchable pages, viewer/study/PWA wiring complete");
