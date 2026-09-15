@@ -1,5 +1,5 @@
-// v42 English Grammar Golden Rules Tricks 20260913
-const CACHE_VERSION = "efp-pwa-2026-09-13-v74-english-tricks";
+// v44 Static GK Tricks integration 20260915
+const CACHE_VERSION = "efp-pwa-2026-09-15-v76-static-gk-tricks";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -44,9 +44,9 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-manifest.js",
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260913englishtricks1",
+  "/Crux-Tricks/crux-tricks.js?v=20260915staticgktricks1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260913englishtricks1",
+  "/Crux-Tricks/viewer-v2.js?v=20260915staticgktricks1",
 ];
 
 self.addEventListener("install", (event) => {
@@ -134,6 +134,59 @@ function rebuiltHtmlResponse(response, html) {
   });
 }
 
+// Chrome 135+ on Android can render the page behind the gesture-navigation
+// area, but pages must explicitly opt in with viewport-fit=cover. A large part
+// of this site predates that viewport key, so normalize every HTML navigation
+// centrally instead of editing hundreds of chapter files one by one.
+function ensureEdgeToEdgeViewport(html) {
+  const viewportPattern = /<meta\b[^>]*\bname\s*=\s*(?:"viewport"|'viewport'|viewport)[^>]*>/i;
+  const match = html.match(viewportPattern);
+
+  if (!match) {
+    const headMatch = html.match(/<head(?:\s[^>]*)?>/i);
+    if (!headMatch) return html;
+    return html.replace(
+      headMatch[0],
+      headMatch[0] + '\n  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
+    );
+  }
+
+  const tag = match[0];
+  const contentPattern = /\bcontent\s*=\s*(["'])(.*?)\1/i;
+  const contentMatch = tag.match(contentPattern);
+
+  if (!contentMatch) {
+    const nextTag = tag.replace(
+      /\s*\/?>$/,
+      ' content="width=device-width, initial-scale=1, viewport-fit=cover">'
+    );
+    return html.replace(tag, nextTag);
+  }
+
+  const nextTag = tag.replace(contentPattern, (whole, quote, content) => {
+    let next = content
+      .replace(/(^|,)\s*viewport-fit\s*=\s*[^,\s]+/ig, "$1")
+      .replace(/^\s*,\s*|\s*,\s*$/g, "")
+      .replace(/,\s*,+/g, ",")
+      .trim();
+
+    if (next && !next.endsWith(",")) next += ", ";
+    next += "viewport-fit=cover";
+    return `content=${quote}${next}${quote}`;
+  });
+
+  return html.replace(tag, nextTag);
+}
+
+async function injectEdgeToEdge(response) {
+  if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.toLowerCase().includes("text/html")) return response;
+
+  const html = await response.text();
+  return rebuiltHtmlResponse(response, ensureEdgeToEdgeViewport(html));
+}
+
 async function injectOwnerDebug(response) {
   if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
   const contentType = response.headers.get("content-type") || "";
@@ -149,23 +202,29 @@ async function injectOwnerDebug(response) {
   return rebuiltHtmlResponse(response, rewritten);
 }
 
+async function prepareNavigationResponse(response, injectDebug) {
+  let served = await injectEdgeToEdge(response);
+  if (injectDebug) served = await injectOwnerDebug(served);
+  return served;
+}
+
 async function networkFirst(request) {
   const cache = await caches.open(CACHE_VERSION);
   const url = new URL(request.url);
   const injectDebug = await shouldInjectOwnerDebug(url);
   try {
     const response = await fetch(request);
-    const served = injectDebug ? await injectOwnerDebug(response) : response;
+    const served = await prepareNavigationResponse(response, injectDebug);
     if (served && served.ok && (served.type === "basic" || served.type === "default")) {
       cache.put(request, served.clone());
     }
     return served;
   } catch (error) {
     const cached = await matchCachedRequest(request);
-    if (cached) return injectDebug ? injectOwnerDebug(cached) : cached;
+    if (cached) return prepareNavigationResponse(cached, injectDebug);
     const offline = await caches.match("/offline.html");
     if (!offline) return new Response("Offline", { status: 503 });
-    return injectDebug ? injectOwnerDebug(offline) : offline;
+    return prepareNavigationResponse(offline, injectDebug);
   }
 }
 

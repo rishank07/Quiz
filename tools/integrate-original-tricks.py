@@ -12,7 +12,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 
-VERSION = "20260913englishtricks1"
+VERSION = "20260915staticgktricks1"
 
 TRICK_BOOKS = [
     {
@@ -69,6 +69,17 @@ TRICK_BOOKS = [
         "source_title": "English Grammar Golden Rules",
         "sort_key": "001",
         "hi": "अंग्रेज़ी व्याकरण गोल्डन रूल्स",
+    },
+    {
+        "filename": "Static_G.K._Tricks.pdf",
+        "target": "pdfs/Tricks/Static_G.K._Tricks.pdf",
+        "subject": "Static GK",
+        "branch": "",
+        "title": "01 Static GK Tricks",
+        "heading": "FIRST IN INDIA — MEMORY TRICK SHEET",
+        "source_title": "Static GK Tricks",
+        "sort_key": "001",
+        "hi": "सामान्य ज्ञान ट्रिक्स",
     },
 ]
 
@@ -218,12 +229,25 @@ def update_asset_versions(repo: Path) -> None:
         "home Original Tricks full-text cache key",
     )
 
+    total_pdfs = len(read_js_array(crux / "crux-manifest.js", "EF_CRUX_DOCS"))
+    home_path = repo / "index.html"
+    home = home_path.read_text(encoding="utf-8")
+    home, count = re.subn(
+        r'("\./Crux-Tricks/index\.html":\{"total":)\d+',
+        lambda match: match.group(1) + str(total_pdfs),
+        home,
+    )
+    if count != 1:
+        raise ValueError("Missing or duplicate homepage Crux PDF count")
+    home = re.sub(r"\d+ revision crux & memory-trick PDFs", f"{total_pdfs} revision crux & memory-trick PDFs", home)
+    home_path.write_text(home, encoding="utf-8", newline="\n")
+
     service_worker = repo / "service-worker.js"
     raw = service_worker.read_text(encoding="utf-8")
-    raw = re.sub(r"^// v\d+.*$", "// v42 English Grammar Golden Rules Tricks 20260913", raw, count=1, flags=re.M)
+    raw = re.sub(r"^// v\d+.*$", "// v44 Static GK Tricks integration 20260915", raw, count=1, flags=re.M)
     raw = re.sub(
         r'const CACHE_VERSION = "[^"]+";',
-        'const CACHE_VERSION = "efp-pwa-2026-09-13-v74-english-tricks";',
+        'const CACHE_VERSION = "efp-pwa-2026-09-15-v76-static-gk-tricks";',
         raw,
         count=1,
     )
@@ -376,6 +400,7 @@ def main() -> int:
         "World Geography Tricks": 93,
         "Environment & Ecology Tricks": 31,
         "English Grammar Golden Rules": 66,
+        "Static GK Tricks": 78,
     }
     actual_pages = {doc["sourceTitle"]: doc["pages"] for doc in new_docs}
     if actual_pages != expected_pages:
