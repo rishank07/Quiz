@@ -51,6 +51,13 @@
 <script src="./original-practice-index.js?v=20260915staticgk1"></script>
 <script>
 (function(){
+  document.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest?e.target.closest('#efp-app-back-button'):null;
+    if(!b)return;
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+    try{sessionStorage.removeItem('efp_logical_back_expected_path')}catch(_){}
+    window.location.replace('/index.html');
+  },true);
   var d=document.getElementById('darkBtn');
   function s(){var on=false;try{on=localStorage.getItem('efp_black_mode')==='on'}catch(e){}d.querySelector('span').textContent=on?'ON':'OFF'}
   s();
