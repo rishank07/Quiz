@@ -14,6 +14,11 @@ from urllib.parse import unquote, urlsplit
 
 SITE_HOSTS = {"examfusionprep.com", "www.examfusionprep.com"}
 OUTPUT_NAME = "back-parent-map.js"
+# Redirect-only aliases are not real navigation parents. Using one as a Back
+# target can immediately redirect the user to the same child and create a loop.
+NON_NAV_REDIRECT_STUBS = {
+    "Books/Ghatnachakra Purvalokan/index.html",
+}
 
 
 class LinkParser(HTMLParser):
@@ -142,6 +147,7 @@ def nearest_structural_parent(target: str, html_files: set[str]) -> str | None:
             path
             for path in html_files
             if path != target
+            and path not in NON_NAV_REDIRECT_STUBS
             and posixpath.dirname(path) == current
             and nav_score(path) > 0
         ]
@@ -201,7 +207,8 @@ def generate(root: Path) -> tuple[dict[str, str], int]:
 
         nav_candidates = [
             src for src in incoming.get(target, ())
-            if nav_score(src) > 0 or is_strict_directory_ancestor(src, target)
+            if src not in NON_NAV_REDIRECT_STUBS
+            and (nav_score(src) > 0 or is_strict_directory_ancestor(src, target))
         ]
         parent: str | None = None
         if nav_candidates:
