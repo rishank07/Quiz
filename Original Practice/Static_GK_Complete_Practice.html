@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Static GK Complete Practice - ExamFusionPrep</title>
+<meta name="description" content="2,642 bilingual Static GK practice questions across 20 chapters for SSC, Railway, UPSC and BPSC — with chapter and question search, bookmarks, progress tracking and dark mode.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://examfusionprep.com/Original%20Practice/Static_GK_Complete_Practice.html">
+<script>try{if(localStorage.getItem('efp_black_mode')==='on'){document.documentElement.style.visibility='hidden';setTimeout(function(){document.documentElement.style.visibility=''},1500)}}catch(e){}</script>
+<script defer src="../black-mode.js?v=20260905opdark1"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
     :root {
@@ -41,6 +46,9 @@
         box-shadow: 0 2px 8px rgba(184,134,63,0.4);
     }
 </style>
+<link rel="stylesheet" href="./original-practice.css?v=20260915staticgk1">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
 </head>
 <body>
 
@@ -52,13 +60,14 @@
 
 <script>
 const MASTER = JSON.parse(document.getElementById('master-data').textContent);
+const CHAPTER_HI = {"Static GK":{"01. First in India":"भारत में प्रथम","02. Largest, Highest & Longest in India":"भारत में सबसे बड़ा, ऊँचा और लंबा","03. First in the World":"विश्व में प्रथम","04. Largest, Tallest and Smallest in the World":"विश्व में सबसे बड़ा, ऊँचा और छोटा","05. Places Related to Prominent People":"प्रमुख व्यक्तियों से संबंधित स्थान","06. Popular Nicknames of Famous Personalities":"प्रसिद्ध व्यक्तियों के लोकप्रिय उपनाम","07. Facts Related to Major Countries":"प्रमुख देशों से संबंधित तथ्य","08. Capitals, Currencies and Languages":"राजधानियाँ, मुद्राएँ और भाषाएँ","09. Authors and Their Books":"लेखक और उनकी पुस्तकें","10. Awards":"पुरस्कार","11. Sports Panorama":"खेल जगत","12. Indian Defence and Security":"भारतीय रक्षा और सुरक्षा","13. Indian Nuclear Program":"भारतीय परमाणु कार्यक्रम","14. Space Program in India":"भारत का अंतरिक्ष कार्यक्रम","15. International Organizations":"अंतरराष्ट्रीय संगठन","16. Computer":"कंप्यूटर","17. UNESCO World Heritage Sites in India":"भारत में यूनेस्को विश्व धरोहर स्थल","18. Art and Culture":"कला और संस्कृति","19. Abbreviations":"संक्षिप्त रूप","20. Important Days":"महत्वपूर्ण दिवस"}};
 const SUBJECT_META = {
-    'Static GK': { icon: 'GK', desc: '20 Chapters · Complete Static GK Practice', color: 'from-blue-700 to-indigo-600' },
+    'Static GK': { icon: '🎯', desc: '2,642 Questions · 20 Chapters · Complete Static GK Practice', color: 'from-blue-700 to-indigo-600' },
 };
 
 let state = {
-    screen: 'home', // home | chapters | quiz
-    subject: null,
+    screen: 'chapters', // home | chapters | quiz
+    subject: 'Static GK',
     chapterName: null,
     quizData: null,
     currentSection: 0,
@@ -130,7 +139,7 @@ function renderChapters() {
                 <div onclick="goToQuiz('${name.replace(/'/g,"\\'")}')" class="card-hover cursor-pointer bg-white rounded-xl border border-gray-200 shadow p-4 flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0" style="background:var(--gold)">${chapterNum(name)}</div>
                     <div class="min-w-0">
-                        <div class="font-semibold text-sm" style="color:var(--ink)">${chapterDisplayName(name)}</div>
+                        <div class="font-semibold text-sm" style="color:var(--ink)">${chapterDisplayName(name)} - ${CHAPTER_HI[state.subject][name]}</div>
                         <div class="text-xs text-gray-500 mt-0.5">${chapterQCount(chapters[name])} questions &middot; ${chapters[name].length} sections</div>
                     </div>
                 </div>
@@ -258,8 +267,7 @@ function nextSection() {
 }
 
 function goHome() {
-    state.screen = 'home'; state.subject = null; state.chapterName = null; state.quizData = null;
-    render(); window.scrollTo({top:0});
+    window.location.href = './index.html';
 }
 function goToChapters(subject) {
     state.screen = 'chapters'; state.subject = subject; state.chapterName = null; state.quizData = null;
@@ -284,5 +292,8 @@ function render() {
 
 render();
 </script>
+<footer data-efp-staticgk-footer style="max-width:1100px;margin:30px auto 16px;padding:14px 18px;text-align:center;font:600 12px/1.6 system-ui;color:#64748b">© 2026 ExamFusion Prep. All Rights Reserved. मेहनत आपकी, साथ हमारा 🎯 · <a href="../privacy-policy.html">Privacy Policy</a> · <a href="../support.html">Support</a></footer>
+<script src="../search-logic.js?v=20260904v8"></script>
+<script src="./original-practice.js?v=20260915staticgk1"></script>
 </body>
 </html>

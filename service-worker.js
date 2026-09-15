@@ -1,5 +1,5 @@
-// v44 Static GK Tricks integration 20260915
-const CACHE_VERSION = "efp-pwa-2026-09-15-v76-static-gk-tricks";
+// v45 Static GK Original Practice integration 20260915
+const CACHE_VERSION = "efp-pwa-2026-09-15-v77-static-gk-practice";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -35,7 +35,7 @@ const APP_SHELL = [
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
   "/Original%20Practice/original-practice.css",
-  "/Original%20Practice/original-practice.js?v=20260908answerreset2",
+  "/Original%20Practice/original-practice.js?v=20260915staticgk1",
   "/Original%20Practice/english-practice.js?v=20260913english1",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
