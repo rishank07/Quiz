@@ -1,12 +1,12 @@
-/* ExamFusion Prep landing page — wider desktop grid without shrinking cards. */
-@media (min-width: 1120px) and (max-width: 1279px) {
+/* ExamFusion Prep landing page — wide desktop grid with full viewport fit. */
+@media (min-width: 1120px) and (max-width: 1199px) {
   .container {
-    width: calc(100% - 32px);
-    max-width: 1220px;
-    grid-template-columns: 300px minmax(0, 1fr);
-    column-gap: 40px;
-    padding-left: 40px;
-    padding-right: 40px;
+    width: calc(100% - 24px);
+    max-width: 1160px;
+    grid-template-columns: 270px minmax(0, 1fr);
+    column-gap: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
   }
 
   .menu {
@@ -18,22 +18,131 @@
   }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1200px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .youtube-banner {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 13px;
+  }
+
   .container {
-    width: calc(100% - 32px);
+    width: calc(100% - 16px);
     max-width: 1680px;
-    grid-template-columns: 300px minmax(0, 1fr);
-    column-gap: 44px;
-    padding-left: 42px;
-    padding-right: 42px;
+    margin: 8px auto;
+    padding: 16px 20px 14px;
+    grid-template-columns: 280px minmax(0, 1fr);
+    column-gap: 28px;
+  }
+
+  .logo {
+    width: 112px;
+    height: 112px;
+  }
+
+  .kicker {
+    margin-bottom: 4px;
+  }
+
+  h1 {
+    margin-bottom: 8px;
+  }
+
+  p.subtitle {
+    margin-bottom: 10px;
+  }
+
+  .stats {
+    margin-bottom: 12px;
+  }
+
+  .backup-home-card {
+    margin-top: 6px;
+    margin-bottom: 8px;
+  }
+
+  .footer {
+    margin-top: 10px;
+    padding-top: 8px;
+  }
+
+  .footer .tagline {
+    margin-top: 3px;
+  }
+
+  .footer-links {
+    margin-top: 5px;
+  }
+
+  .search-wrap {
+    margin-bottom: 10px;
+  }
+
+  #searchBox {
+    padding-top: 11px;
+    padding-bottom: 11px;
   }
 
   .menu {
-    grid-template-columns: repeat(3, minmax(240px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 14px;
+    row-gap: 10px;
   }
 
+  .menu > li {
+    margin: 0;
+    min-width: 0;
+  }
+
+  /* Use the two empty cells beside Play Chess for Telegram instead of
+     spending a sixth full-width row. Main study cards keep their size. */
   .menu > li[data-noresult] {
-    grid-column: 1 / -1;
+    grid-column: span 2;
+    min-width: 0;
+    min-height: 82px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    background: var(--glass-strong);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .menu > li[data-noresult] .group-title {
+    margin: 0;
+    padding: 0 8px 0 0;
+    border-top: 0;
+    white-space: nowrap;
+  }
+
+  .menu > li[data-noresult] .sub-menu {
+    min-width: 0;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .menu > li[data-noresult] .sub-menu a {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 48px;
+    padding: 10px 12px;
+  }
+}
+
+/* On normal desktop-height screens everything stays inside one viewport.
+   Short laptop windows keep normal vertical scrolling rather than clipping. */
+@media (min-width: 1200px) and (min-height: 700px) {
+  html,
+  body {
+    height: 100%;
+    overflow-y: hidden;
   }
 }
