@@ -20,18 +20,19 @@
   function fillYears(exam){
     els.year.innerHTML = '<option value="">Select year</option>';
     (exam?.years || []).forEach(y => {
-      const meta = typeof y === 'object' ? y : {year:y};
+      const meta = typeof y === 'object' ? y : {year:y, available:true};
       const o = document.createElement('option');
       o.value = meta.year;
-      o.textContent = meta.count ? `${meta.year} · ${meta.count.toLocaleString()} Q` : meta.year;
+      if (meta.available === false) {
+        o.textContent = `${meta.year} · Pending ingestion`;
+      } else {
+        o.textContent = meta.count ? `${meta.year} · ${meta.count.toLocaleString()} Q` : `${meta.year} · Available`;
+      }
       els.year.appendChild(o);
     });
     els.year.disabled = !(exam?.years || []).length;
-    if (!(exam?.years || []).length) {
-      state.questions = state.filtered = [];
-      render();
-      setStatus(`${exam?.name || 'This exam'} ingestion pipeline is ready. Year files will appear here as they are verified.`);
-    }
+    state.questions = state.filtered = [];
+    render();
   }
 
   function renderStats(){
@@ -51,7 +52,7 @@
   function render(){
     renderStats();
     if (!state.filtered.length) {
-      els.list.innerHTML = '<div class="empty">No loaded questions yet. Choose an available exam and year, or add a verified year chunk to the manifest.</div>';
+      els.list.innerHTML = '<div class="empty">No loaded questions yet. Choose an available exam and year.</div>';
       return;
     }
     els.list.innerHTML = state.filtered.map((q, idx) => {
@@ -84,6 +85,16 @@
     const meta = yearMeta(exam, els.year.value);
     if (!exam || !meta) return;
     const year = typeof meta === 'object' ? meta.year : meta;
+
+    if (typeof meta === 'object' && meta.available === false) {
+      state.exam = exam.id; state.year = year;
+      state.questions = state.filtered = [];
+      render();
+      setStatus(`${exam.name} ${year}: year slot is ready, but verified PYQ data has not been ingested yet.`);
+      history.replaceState(null,'',`?exam=${encodeURIComponent(exam.id)}&year=${encodeURIComponent(year)}`);
+      return;
+    }
+
     const file = (typeof meta === 'object' && meta.file) || `./data/${exam.id}/${year}.json`;
     setStatus(`Loading ${exam.name} ${year}…`);
     els.list.innerHTML = '<div class="empty">Loading only the selected year chunk…</div>';
