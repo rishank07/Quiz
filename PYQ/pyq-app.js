@@ -23,15 +23,6 @@
     return 'Public';
   }
 
-  function viewerUrl(paper, mode = 'paper') {
-    const p = new URLSearchParams();
-    p.set('exam', examEl.value || '');
-    p.set('year', yearEl.value || '');
-    p.set('id', paper?.id || '');
-    if (mode === 'answer') p.set('mode', 'answer');
-    return `./viewer.html?${p.toString()}`;
-  }
-
   function totalPapers() {
     return (catalog?.exams || []).reduce((sum, exam) =>
       sum + (exam.years || []).reduce((s, y) => s + (y.papers || []).length, 0), 0);
@@ -73,8 +64,8 @@
       <div class="qtext">${esc(paper.label || 'PYQ Paper')}</div>
       <div class="source" style="margin-top:10px">Source: ${esc(paper.source || '')}</div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px">
-        <a class="pdf-btn" href="${esc(viewerUrl(paper))}">Open inside ExamFusion</a>
-        ${paper.answer_key ? `<a class="pdf-btn secondary" href="${esc(viewerUrl(paper, 'answer'))}">Answer Key</a>` : ''}
+        <a class="pdf-btn" href="${esc(paper.pdf)}" target="_blank" rel="noopener noreferrer external">Open in Browser ↗</a>
+        ${paper.answer_key ? `<a class="pdf-btn secondary" href="${esc(paper.answer_key)}" target="_blank" rel="noopener noreferrer external">Answer Key ↗</a>` : ''}
       </div>
     </div>`;
   }
@@ -87,12 +78,22 @@
     history.replaceState(null, '', p.toString() ? `?${p.toString()}` : location.pathname);
   }
 
+  function openExternal(url) {
+    if (!url) return false;
+    const opened = window.open(url, '_blank', 'noopener,noreferrer');
+    if (!opened) {
+      window.location.href = url;
+      return false;
+    }
+    return true;
+  }
+
   function openPaper(paper) {
     if (!paper?.pdf) return;
     remember(examEl.value, yearEl.value, paper.id || '');
     paperCard(paper);
-    setStatus(`Opening [${sourceTag(paper)}] ${paper.label || 'PYQ PDF'} inside ExamFusion Prep…`);
-    window.location.assign(viewerUrl(paper));
+    setStatus(`Opening [${sourceTag(paper)}] ${paper.label || 'PYQ PDF'} in browser…`);
+    openExternal(paper.pdf);
   }
 
   function fillPapers(yearMeta, autoOpen) {
