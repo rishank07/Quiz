@@ -1,0 +1,35 @@
+name: Expand PYQ PDF catalog
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'tools/expand-pyq-pdf-catalog.py'
+      - '.github/workflows/expand-pyq-pdf-catalog.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  expand:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Expand and validate catalog
+        run: python tools/expand-pyq-pdf-catalog.py
+      - name: Commit expanded catalog
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add PYQ/data/pdf-catalog.json
+          if git diff --cached --quiet; then
+            echo 'PYQ catalog already current.'
+            exit 0
+          fi
+          git commit -m 'Expand SSC PYQ PDF catalog to 37 2024 bundles'
+          git push
