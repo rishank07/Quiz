@@ -1,5 +1,5 @@
 // v45 Static GK Original Practice integration 20260915
-const CACHE_VERSION = "efp-pwa-2026-09-15-v77-static-gk-practice";
+const CACHE_VERSION = "efp-pwa-2026-09-16-v78-pyq-fresh";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -254,6 +254,17 @@ async function staleWhileRevalidate(event, allowOpaque) {
   return new Response("", { status: 503, statusText: "Offline" });
 }
 
+async function freshPyqAsset(request) {
+  // PYQ is a fast-changing external-link catalog. Never let ignoreSearch return
+  // an older runtime-cached catalog/app asset after a bulk import.
+  try {
+    return await fetch(request, { cache: "no-store" });
+  } catch (_) {
+    const cached = await caches.match(request);
+    return cached || new Response("", { status: 503, statusText: "Offline" });
+  }
+}
+
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   if (request.method !== "GET") return;
@@ -274,6 +285,11 @@ self.addEventListener("fetch", (event) => {
 
   if (request.mode === "navigate" || request.destination === "document") {
     event.respondWith(networkFirst(request));
+    return;
+  }
+
+  if (url.pathname.startsWith("/PYQ/")) {
+    event.respondWith(freshPyqAsset(request));
     return;
   }
 
