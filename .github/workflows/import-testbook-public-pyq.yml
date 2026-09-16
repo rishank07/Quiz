@@ -9,6 +9,7 @@ on:
       - 'tools/import-testbook-public-viewers.py'
       - 'tools/import-adda-pw-public-pyq.py'
       - 'tools/import-adda-public-seeds.py'
+      - 'tools/import-pw-year-specific-pyq.py'
       - '.github/workflows/import-testbook-public-pyq.yml'
 
 permissions:
@@ -27,6 +28,7 @@ jobs:
             tools/import-testbook-public-viewers.py
             tools/import-adda-pw-public-pyq.py
             tools/import-adda-public-seeds.py
+            tools/import-pw-year-specific-pyq.py
           sparse-checkout-cone-mode: false
           fetch-depth: 0
       - uses: actions/setup-python@v5
@@ -42,6 +44,8 @@ jobs:
         run: python tools/import-adda-pw-public-pyq.py
       - name: Import verified public Adda247 shift PDFs
         run: python tools/import-adda-public-seeds.py
+      - name: Import PW year-specific Railway shifts
+        run: python tools/import-pw-year-specific-pyq.py
       - name: Commit expanded PDF catalog
         run: |
           git config user.name 'github-actions[bot]'
