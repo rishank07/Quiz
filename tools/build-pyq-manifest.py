@@ -63,7 +63,13 @@ def validate_chunk(path: Path, payload: dict) -> tuple[int, int]:
 
 def main() -> int:
     base = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    collected = {key: [] for key in EXAM_ORDER}
+    window = base.get("defaultWindow") or {"from": 2021, "to": 2025}
+    start_year = int(window.get("from", 2021))
+    end_year = int(window.get("to", 2025))
+    if start_year > end_year:
+        start_year, end_year = end_year, start_year
+
+    collected = {key: {} for key in EXAM_ORDER}
     total = 0
 
     for path in sorted(DATA.glob("*/*.json")):
@@ -72,30 +78,44 @@ def main() -> int:
         exam = payload["exam"].lower()
         year = payload["year"]
         total += count
-        collected[exam].append({
+        collected[exam][year] = {
             "year": year,
             "count": count,
             "verified": verified,
+            "available": True,
             "file": f"./data/{exam}/{year}.json",
-        })
+        }
 
     exams = []
     for exam in EXAM_ORDER:
-        years = sorted(collected[exam], key=lambda x: x["year"], reverse=True)
+        years_by_year = {
+            y: {
+                "year": y,
+                "count": 0,
+                "verified": 0,
+                "available": False,
+                "status": "pending-ingestion",
+            }
+            for y in range(start_year, end_year + 1)
+        }
+        years_by_year.update(collected[exam])
+        years = [years_by_year[y] for y in sorted(years_by_year, reverse=True)]
         name, hi = NAMES[exam]
+        available_years = [x for x in years if x.get("available")]
         exams.append({
             "id": exam,
             "name": name,
             "hi": hi,
-            "status": "available" if years else "ready-for-ingestion",
+            "status": "available" if available_years else "ready-for-ingestion",
             "years": years,
-            "count": sum(x["count"] for x in years),
+            "count": sum(x["count"] for x in available_years),
         })
 
     base["exams"] = exams
     base["totalQuestions"] = total
     MANIFEST.write_text(json.dumps(base, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"PYQ manifest built: {total:,} questions across {sum(len(x['years']) for x in exams)} year chunks")
+    available_chunks = sum(sum(1 for y in x["years"] if y.get("available")) for x in exams)
+    print(f"PYQ manifest built: {total:,} questions across {available_chunks} available year chunks")
     return 0
 
 
