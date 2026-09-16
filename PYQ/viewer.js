@@ -66,39 +66,143 @@
     return null;
   }
 
-  function isAndroidLike() {
-    return /Android/i.test(navigator.userAgent || '') || window.matchMedia('(display-mode: standalone)').matches;
+  function safeUrl(raw) {
+    try { return new URL(raw, location.href); } catch (_) { return null; }
   }
 
-  function drivePreview(url) {
-    const m = url.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
-    return m ? `https://drive.google.com/file/d/${m[1]}/preview` : url;
+  function unwrapGoogleViewer(raw) {
+    const u = safeUrl(raw);
+    if (!u) return raw || '';
+    const host = u.hostname.toLowerCase();
+    if (host === 'docs.google.com' && (/\/gview$/i.test(u.pathname) || u.pathname.includes('/viewer'))) {
+      const nested = u.searchParams.get('url');
+      if (nested) {
+        try { return decodeURIComponent(nested); } catch (_) { return nested; }
+      }
+    }
+    return raw;
   }
 
-  function chooseEmbed(url) {
-    if (!url) return '';
+  function isDirectPdfLike(raw) {
+    if (!raw) return false;
+    const url = unwrapGoogleViewer(raw);
     const lower = url.toLowerCase();
-    if (lower.includes('drive.google.com')) return drivePreview(url);
-
-    const looksDirectPdf = /\.pdf(?:$|[?#])/i.test(url) ||
+    return /\.pdf(?:$|[?#/])/i.test(url) ||
       lower.includes('static.pw.live/') ||
       lower.includes('cdn.testbook.com/') ||
-      (lower.includes('adda247.com/') && lower.includes('.pdf'));
+      (lower.includes('adda247.com/') && lower.includes('.pdf')) ||
+      (lower.includes('upsc.gov.in/') && lower.includes('.pdf')) ||
+      (lower.includes('bpsc.bihar.gov.in/') && lower.includes('.pdf'));
+  }
 
-    if (looksDirectPdf && isAndroidLike()) {
-      return `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(url)}`;
+  function drivePreview(raw) {
+    const u = safeUrl(raw);
+    if (!u) return '';
+    const host = u.hostname.toLowerCase();
+    if (host !== 'drive.google.com' && host !== 'docs.google.com') return '';
+
+    let id = '';
+    const fileMatch = u.pathname.match(/\/file\/d\/([^/]+)/i);
+    if (fileMatch) id = fileMatch[1];
+    if (!id) id = u.searchParams.get('id') || '';
+    return id ? `https://drive.google.com/file/d/${encodeURIComponent(id)}/preview` : '';
+  }
+
+  function isKnownBlockedPage(raw) {
+    const u = safeUrl(raw);
+    if (!u) return true;
+    const host = u.hostname.toLowerCase();
+    if (host === 'docs.aglasem.com') return true;
+    if (host === 'testbook.com' && u.pathname.includes('/pdf-viewer')) return true;
+    if (host === 'docs.google.com' && !drivePreview(raw) && !isDirectPdfLike(raw)) return true;
+    return false;
+  }
+
+  function norm(v) {
+    return String(v || '')
+      .toLowerCase()
+      .replace(/\b(english|hindi|question|paper|previous|year|official|download|pdf|click|here|shift|tier|cbt|prelims|mains)\b/g, ' ')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function sameValue(a, b) {
+    return String(a ?? '').trim().toLowerCase() === String(b ?? '').trim().toLowerCase();
+  }
+
+  function findDirectAlternative(found) {
+    const selected = found.paper;
+    const pool = (found.year?.papers || []).filter(p => p && p.id !== selected.id && isDirectPdfLike(p.pdf));
+    const selectedPaper = norm(selected.paper);
+    const selectedLabel = norm(selected.label);
+
+    let best = null;
+    let bestScore = -1;
+    for (const candidate of pool) {
+      if (selected.date && candidate.date && !sameValue(selected.date, candidate.date)) continue;
+      if (selected.shift && candidate.shift && !sameValue(selected.shift, candidate.shift)) continue;
+      if (selected.set && candidate.set && !sameValue(selected.set, candidate.set)) continue;
+
+      const candidatePaper = norm(candidate.paper);
+      const candidateLabel = norm(candidate.label);
+      let score = 0;
+
+      if (selectedPaper && candidatePaper && selectedPaper === candidatePaper) score += 8;
+      if (selected.date && candidate.date && sameValue(selected.date, candidate.date)) score += 8;
+      if (selected.shift && candidate.shift && sameValue(selected.shift, candidate.shift)) score += 5;
+      if (selected.set && candidate.set && sameValue(selected.set, candidate.set)) score += 5;
+      if (selectedLabel && candidateLabel && selectedLabel === candidateLabel) score += 7;
+
+      if (!selected.date && !selected.shift && !selected.set) {
+        const a = new Set(selectedLabel.split(' ').filter(Boolean));
+        const b = new Set(candidateLabel.split(' ').filter(Boolean));
+        let overlap = 0;
+        for (const t of a) if (b.has(t)) overlap++;
+        if (overlap >= 3) score += overlap;
+      }
+
+      if (score > bestScore) {
+        bestScore = score;
+        best = candidate;
+      }
     }
-    return url;
+
+    const minimum = (selected.date || selected.shift || selected.set) ? 8 : 10;
+    return bestScore >= minimum ? best : null;
+  }
+
+  function chooseEmbed(found, raw) {
+    if (!raw) return { url: '', alternative: null, blocked: true };
+
+    const unwrapped = unwrapGoogleViewer(raw);
+    if (isDirectPdfLike(unwrapped)) {
+      return { url: unwrapped, alternative: null, blocked: false };
+    }
+
+    const drive = drivePreview(unwrapped);
+    if (drive) return { url: drive, alternative: null, blocked: false };
+
+    if (isKnownBlockedPage(unwrapped)) {
+      const alternative = findDirectAlternative(found);
+      if (alternative) {
+        return { url: unwrapGoogleViewer(alternative.pdf), alternative, blocked: false };
+      }
+      return { url: '', alternative: null, blocked: true };
+    }
+
+    return { url: unwrapped, alternative: null, blocked: false };
   }
 
   function showError(message) {
+    frame.src = 'about:blank';
     loadingEl.hidden = true;
     errorEl.hidden = false;
     if (errorText) errorText.textContent = message || 'Use the source button below.';
   }
 
   function openInFrame() {
-    if (!embedUrl) return showError('No embeddable source is available for this paper.');
+    if (!embedUrl) return showError('This provider does not allow embedded viewing for this paper. Use another source/paper or the source button below.');
     errorEl.hidden = true;
     loadingEl.hidden = false;
     frame.src = 'about:blank';
@@ -117,7 +221,7 @@
 
   frame.addEventListener('load', () => {
     if (frame.src === 'about:blank') return;
-    setTimeout(() => { loadingEl.hidden = true; }, 350);
+    setTimeout(() => { loadingEl.hidden = true; }, 500);
   });
 
   async function init() {
@@ -134,14 +238,27 @@
       const provider = sourceTag(paper);
       const baseTitle = paper.label || paper.paper || 'PYQ Paper';
       titleEl.textContent = mode === 'answer' ? `Answer Key · ${baseTitle}` : baseTitle;
-      metaEl.textContent = `${found.exam.name} · ${found.year.year} · ${provider} · inside ExamFusion Prep`;
-      loadingText.textContent = `${provider} ${mode === 'answer' ? 'answer key' : 'paper'}`;
       sourceBtn.href = sourceUrl;
       sourceBtn.textContent = `Open ${provider} source ↗`;
       document.title = `${mode === 'answer' ? 'Answer Key' : baseTitle} | ExamFusion Prep`;
 
-      embedUrl = chooseEmbed(sourceUrl);
-      openInFrame();
+      const choice = mode === 'paper' ? chooseEmbed(found, sourceUrl) : chooseEmbed({ ...found, paper: { ...paper, pdf: sourceUrl } }, sourceUrl);
+      embedUrl = choice.url;
+
+      if (choice.alternative) {
+        const altProvider = sourceTag(choice.alternative);
+        metaEl.textContent = `${found.exam.name} · ${found.year.year} · ${provider} source blocked · showing ${altProvider} copy inside ExamFusion`;
+        loadingText.textContent = `${altProvider} direct PDF copy`;
+      } else {
+        metaEl.textContent = `${found.exam.name} · ${found.year.year} · ${provider} · inside ExamFusion Prep`;
+        loadingText.textContent = `${provider} ${mode === 'answer' ? 'answer key' : 'paper'}`;
+      }
+
+      if (!embedUrl) {
+        showError('This source blocks embedding and no matching direct-PDF copy is available yet. The rest of ExamFusion remains open here; use the source button only if you want this specific paper.');
+      } else {
+        openInFrame();
+      }
 
       if (typeof gtag === 'function') {
         gtag('event', 'pyq_internal_viewer_open', {
@@ -149,7 +266,8 @@
           year: String(found.year.year),
           paper_id: paper.id,
           provider,
-          mode
+          mode,
+          used_alternative: !!choice.alternative
         });
       }
     } catch (err) {
