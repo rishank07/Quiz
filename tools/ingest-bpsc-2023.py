@@ -27,6 +27,7 @@ POLLUTION = (
     "www.examdhara.com",
     "19–c/fi/cc/pt–2023",
     "19-c/fi/cc/pt-2023",
+    "space for rough work",
 )
 
 
@@ -51,9 +52,6 @@ def english_text(pdf_bytes: bytes) -> str:
     try:
         reader = PdfReader(str(tmp))
         pages: list[str] = []
-        # The bilingual booklet alternates English and Hindi pages after the
-        # cover. Set-A English pages are 1,3,5,...; rough-work pages at the end
-        # contain no question starts and are harmless.
         for page_index in range(1, len(reader.pages), 2):
             text = reader.pages[page_index].extract_text() or ""
             kept = []
@@ -62,7 +60,7 @@ def english_text(pdf_bytes: bytes) -> str:
                 if not line:
                     continue
                 low = line.lower()
-                if any(token in low for token in POLLUTION):
+                if any(token in low for token in POLLUTION[:-1]):
                     continue
                 if re.fullmatch(r"\[?\s*\d+\s*\]?", line):
                     continue
@@ -107,7 +105,8 @@ def parse(text: str) -> list[dict]:
                 raise RuntimeError(f"Q{qno}: could not locate Q{qno+1} after option D")
             block_end = next_q.start()
         else:
-            block_end = len(text)
+            rough = re.search(r"(?i)SPACE\s+FOR\s+ROUGH\s+WORK", text[marks[3].end():])
+            block_end = marks[3].end() + rough.start() if rough else len(text)
 
         stem = normalize_text(text[qmatch.end():marks[0].start()])
         options = [
@@ -120,6 +119,7 @@ def parse(text: str) -> list[dict]:
         def scrub(v: str) -> str:
             v = re.sub(r"\s*19[-–]C/FI/CC/PT[-–]2023.*$", "", v, flags=re.I)
             v = re.sub(r"\s*For More Study Material Please Visit.*$", "", v, flags=re.I)
+            v = re.split(r"(?i)\s*SPACE\s+FOR\s+ROUGH\s+WORK", v, maxsplit=1)[0]
             return v.strip()
 
         stem = scrub(stem)
