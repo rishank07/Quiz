@@ -28,7 +28,7 @@ jobs:
             tools/import-adda-pw-public-pyq.py
             tools/import-adda-public-seeds.py
           sparse-checkout-cone-mode: false
-          fetch-depth: 1
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -52,4 +52,5 @@ jobs:
             exit 0
           fi
           git commit -m 'Expand public PYQ catalog from Testbook Adda247 PW'
-          git push
+          git pull --rebase origin master
+          git push origin master
