@@ -31,6 +31,15 @@ KEYS = [
     "X","A","D","C","C","A","D","B","C","B","C","D","A","C","D","C","B","C","A","D","C","D","C","A","B","B","A","B","A","D"
 ]
 LETTER_TO_INDEX = {"A": 0, "B": 1, "C": 2, "D": 3}
+FOOTER_TOKENS = (
+    "forum learning centre:",
+    "road, patna, bihar 800001",
+    "9311740400",
+    "9311740900",
+    "academy.forumias.com",
+    "admissions@forumias",
+    "helpdesk@forumias",
+)
 
 
 def download(url: str) -> bytes:
@@ -54,9 +63,10 @@ def clean_pdf_text(pdf_bytes: bytes) -> str:
                 line = raw.strip()
                 if not line:
                     continue
-                if "70TH BPSC Prelims 2024" in line or "Forum Learning Centre:" in line:
+                low = line.lower()
+                if "70th bpsc prelims 2024" in low:
                     continue
-                if "academy.forumias.com" in line or "admissions@forumias" in line:
+                if any(token in low for token in FOOTER_TOKENS):
                     continue
                 if re.fullmatch(r"\[?\d+\]?", line):
                     continue
@@ -111,6 +121,11 @@ def parse_questions(text: str) -> list[dict]:
             options[2] = "i, ii and iv"
         if not stem or any(not x for x in options):
             raise RuntimeError(f"Q{number}: empty stem/option after cleanup")
+
+        searchable = " ".join([stem, *options]).lower()
+        leaked = [token for token in FOOTER_TOKENS if token in searchable]
+        if leaked:
+            raise RuntimeError(f"Q{number}: source footer contamination remained: {leaked}")
 
         key = KEYS[number - 1]
         deleted = key == "X"
