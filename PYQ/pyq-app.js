@@ -23,6 +23,20 @@
     return 'Public';
   }
 
+  function examRank(exam) {
+    const key = `${exam?.id || ''} ${exam?.name || ''}`.toLowerCase();
+    if (key.includes('ssc')) return 1;
+    if (key.includes('railway') || key.includes('rrb')) return 2;
+    if (key.includes('upsc')) return 3;
+    if (key.includes('bpsc')) return 4;
+    if (key.includes('bank')) return 5;
+    return 99;
+  }
+
+  function orderedExams() {
+    return [...(catalog?.exams || [])].sort((a, b) => examRank(a) - examRank(b) || String(a.name || '').localeCompare(String(b.name || '')));
+  }
+
   function totalPapers() {
     return (catalog?.exams || []).reduce((sum, exam) =>
       sum + (exam.years || []).reduce((s, y) => s + (y.papers || []).length, 0), 0);
@@ -94,7 +108,7 @@
     if (!paper?.pdf) return;
     remember(examEl.value, yearEl.value, paper.id || '');
     paperCard(paper);
-    setStatus(`Opening [${sourceTag(paper)}] ${paper.label || 'PYQ PDF'} in browser…`);
+    setStatus(`Opening [${sourceTag(paper)}] ${paper.label || 'PYQ PDF'} in your browser…`);
     openExternal(paper.pdf);
   }
 
@@ -105,7 +119,7 @@
     renderStats(exam, yearMeta || null);
 
     if (!papers.length) {
-      setStatus(`${exam ? exam.name : 'Exam'} ${yearMeta ? yearMeta.year : ''}: PDF अभी add नहीं हुआ है.`);
+      setStatus(`${exam ? exam.name : 'Exam'} ${yearMeta ? yearMeta.year : ''}: no PDF has been added yet.`);
       remember(examEl.value, yearMeta ? yearMeta.year : '', '');
       return;
     }
@@ -124,7 +138,7 @@
       setStatus(`${yearMeta.year}: [${sourceTag(papers[0])}] ${papers[0].label}`);
       if (autoOpen) openPaper(papers[0]);
     } else {
-      setStatus(`${yearMeta.year}: ${papers.length} papers available — Set/Paper चुनो.`);
+      setStatus(`${yearMeta.year}: ${papers.length} papers available — select a set or paper.`);
       remember(examEl.value, yearMeta.year, '');
     }
   }
@@ -151,10 +165,10 @@
 
   function populateExams() {
     examEl.innerHTML = '<option value="">Select exam</option>';
-    (catalog.exams || []).forEach(exam => {
+    orderedExams().forEach(exam => {
       const opt = document.createElement('option');
       opt.value = exam.id;
-      opt.textContent = `${exam.name}${exam.hi ? ` · ${exam.hi}` : ''}`;
+      opt.textContent = exam.name;
       examEl.appendChild(opt);
     });
     examEl.disabled = false;
@@ -170,7 +184,7 @@
     examEl.addEventListener('change', () => {
       const exam = getExam(examEl.value);
       fillYears(exam);
-      setStatus(exam ? `${exam.name}: year चुनो.` : 'Exam चुनो.');
+      setStatus(exam ? `${exam.name}: select a year.` : 'Select an exam.');
       remember(exam ? exam.id : '', '', '');
     });
 
@@ -211,11 +225,11 @@
           return;
         }
       }
-      setStatus('Catalog ready. Exam चुनो.');
+      setStatus('Catalog ready. Select an exam.');
     } catch (err) {
       examEl.disabled = false;
       setStatus(`Catalog load failed: ${err.message}`);
-      if (panelEl) panelEl.innerHTML = '<div class="empty">Catalog load नहीं हुआ. Page reload करके फिर try करें.</div>';
+      if (panelEl) panelEl.innerHTML = '<div class="empty">The catalog could not be loaded. Reload the page and try again.</div>';
     }
   }
 
