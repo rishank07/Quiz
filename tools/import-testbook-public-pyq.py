@@ -12,6 +12,14 @@ from bs4 import BeautifulSoup
 CATALOG = Path('PYQ/data/pdf-catalog.json')
 YEARS = {2021, 2022, 2023, 2024, 2025}
 
+GROUP_META = {
+    'bpsc': ('BPSC', 'बीपीएससी'),
+    'upsc': ('UPSC CSE', 'यूपीएससी सिविल सेवा'),
+    'ssc': ('SSC', 'एसएससी'),
+    'railway': ('Railway / RRB', 'रेलवे / आरआरबी'),
+    'banking': ('Banking', 'बैंकिंग'),
+}
+
 SOURCES = [
     # SSC
     ('ssc', 'SSC CGL', 'https://testbook.com/ssc-cgl/previous-year-papers'),
@@ -21,6 +29,16 @@ SOURCES = [
     ('ssc', 'SSC CPO', 'https://testbook.com/ssc-cpo/previous-year-papers'),
     ('ssc', 'SSC Stenographer', 'https://testbook.com/ssc-stenographer/previous-year-papers'),
     ('ssc', 'SSC Selection Post', 'https://testbook.com/ssc-selection-post/previous-year-papers'),
+    ('ssc', 'SSC JE', 'https://testbook.com/ssc-je/previous-year-papers'),
+    ('ssc', 'SSC JHT', 'https://testbook.com/ssc-jht/previous-year-papers'),
+    # Railway / RRB
+    ('railway', 'RRB NTPC', 'https://testbook.com/rrb-ntpc/previous-year-papers'),
+    ('railway', 'RRB Group D', 'https://testbook.com/rrb-group-d/previous-year-papers'),
+    ('railway', 'RRB ALP', 'https://testbook.com/rrb-alp/previous-year-papers'),
+    ('railway', 'RRB JE', 'https://testbook.com/rrb-je/previous-year-papers'),
+    ('railway', 'RRB Technician', 'https://testbook.com/rrb-technician/previous-year-papers'),
+    ('railway', 'RPF Constable', 'https://testbook.com/rpf-constable/previous-year-papers'),
+    ('railway', 'RPF SI', 'https://testbook.com/rpf-si/previous-year-papers'),
     # BPSC
     ('bpsc', 'BPSC', 'https://testbook.com/bpsc-exam/previous-year-papers'),
     # Banking
@@ -34,7 +52,7 @@ SOURCES = [
     ('upsc', 'UPSC CSE', 'https://testbook.com/upsc-civil-services/previous-year-papers'),
 ]
 
-UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140 Safari/537.36 ExamFusionPrep-PYQ-Catalog/1.0'
+UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140 Safari/537.36 ExamFusionPrep-PYQ-Catalog/1.1'
 SESSION = requests.Session()
 SESSION.headers.update({'User-Agent': UA, 'Accept-Language': 'en-US,en;q=0.9'})
 
@@ -58,6 +76,13 @@ def infer_year(anchor, label):
     parent = anchor.parent
     if parent:
         candidates.append(clean_text(parent.get_text(' ', strip=True)))
+    # Testbook often wraps a table under a nearby year heading. Walk a few ancestors/siblings.
+    node = anchor
+    for _ in range(5):
+        node = getattr(node, 'parent', None)
+        if not node:
+            break
+        candidates.append(clean_text(node.get_text(' ', strip=True))[:1500])
     candidates.append(label)
     for text in candidates:
         years = [int(x) for x in re.findall(r'\b20(?:21|22|23|24|25)\b', text)]
@@ -69,6 +94,10 @@ def infer_year(anchor, label):
 
 def infer_stage(text):
     t = text.lower()
+    if 'cbt 2' in t or 'cbt-2' in t or 'cbt ii' in t:
+        return 'CBT 2'
+    if 'cbt 1' in t or 'cbt-1' in t or 'cbt i' in t:
+        return 'CBT 1'
     if 'tier-ii' in t or 'tier ii' in t or 'tier 2' in t:
         return 'Tier II'
     if 'tier-i' in t or 'tier i' in t or 'tier 1' in t:
@@ -79,6 +108,8 @@ def infer_stage(text):
         return 'Prelims'
     if 'paper ii' in t or 'paper 2' in t:
         return 'Paper II'
+    if 'paper i' in t or 'paper 1' in t:
+        return 'Paper I'
     return 'Previous Year Paper'
 
 
@@ -115,6 +146,18 @@ def find_exam(catalog, exam_id):
     return None
 
 
+def ensure_exam(catalog, exam_id):
+    exam = find_exam(catalog, exam_id)
+    name, hi = GROUP_META.get(exam_id, (exam_id.upper(), exam_id))
+    if exam:
+        exam['name'] = name
+        exam['hi'] = hi
+        return exam
+    exam = {'id': exam_id, 'name': name, 'hi': hi, 'years': []}
+    catalog.setdefault('exams', []).append(exam)
+    return exam
+
+
 def get_year_node(exam, year):
     for y in exam.setdefault('years', []):
         if int(y.get('year')) == int(year):
@@ -136,14 +179,10 @@ def main():
         raise SystemExit(f'Missing {CATALOG}')
     catalog = json.loads(CATALOG.read_text(encoding='utf-8'))
 
-    ssc = find_exam(catalog, 'ssc')
-    if ssc:
-        ssc['name'] = 'SSC'
-        ssc['hi'] = 'एसएससी'
-    bank = find_exam(catalog, 'banking')
-    if bank:
-        bank['name'] = 'Banking'
-        bank['hi'] = 'बैंकिंग'
+    for group_id in GROUP_META:
+        # Railway is created only when at least one public PDF is actually found.
+        if group_id != 'railway' or find_exam(catalog, group_id):
+            ensure_exam(catalog, group_id)
 
     existing_urls = set()
     existing_ids = set()
@@ -171,11 +210,10 @@ def main():
         candidates = 0
         page_added = 0
         for a in soup.find_all('a', href=True):
-            href = urljoin(page_url, a.get('href', '').strip())
+            href = urljoin(page_url, a.get('href', '').strip()).split('#')[0]
             if not direct_public_testbook_pdf(href):
                 continue
             candidates += 1
-            href = href.split('#')[0]
             if href in existing_urls:
                 continue
 
@@ -185,7 +223,7 @@ def main():
                 continue
 
             anchor_label = clean_text(a.get_text(' ', strip=True))
-            if not anchor_label or anchor_label.lower() in {'download pdf', 'download link', 'download'}:
+            if not anchor_label or anchor_label.lower() in {'download pdf', 'download link', 'download', 'click here'}:
                 anchor_label = txt or f'{exam_label} {year} Question Paper'
 
             language = infer_language(anchor_label + ' ' + txt)
@@ -203,9 +241,7 @@ def main():
                 pid = f'{base_id}-{n}'
                 n += 1
 
-            exam = find_exam(catalog, group_id)
-            if not exam:
-                continue
+            exam = ensure_exam(catalog, group_id)
             y_node = get_year_node(exam, year)
             paper = {
                 'id': pid,
@@ -226,13 +262,17 @@ def main():
         page_stats.append((exam_label, candidates, page_added))
         print(f'{exam_label}: public CDN candidates={candidates}, added={page_added}')
 
-    # Stable, readable ordering within each year.
+    # Stable, readable ordering within each year and remove empty dynamically-created groups.
+    cleaned_exams = []
     for exam in catalog.get('exams', []):
         for y in exam.get('years', []):
             y['papers'] = sorted(y.get('papers', []), key=lambda p: (p.get('paper',''), p.get('stage',''), p.get('label','')))
+        if any(y.get('papers') for y in exam.get('years', [])):
+            cleaned_exams.append(exam)
+    catalog['exams'] = cleaned_exams
 
     catalog['updated'] = '2026-09-16'
-    catalog['version'] = max(int(catalog.get('version', 1)), 4)
+    catalog['version'] = max(int(catalog.get('version', 1)), 5)
     catalog['testbook_public_import'] = {
         'policy': 'Direct public cdn.testbook.com PDFs only; no Pro/locked bypass; PDFs remain externally hosted.',
         'pages_scanned': len(page_stats),
