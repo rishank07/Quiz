@@ -11,38 +11,40 @@
 
   const esc = (v = '') => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const setStatus = msg => { if (statusEl) statusEl.textContent = msg; };
-  const getExam = id => (catalog && Array.isArray(catalog.exams) ? catalog.exams : []).find(x => x.id === id);
-  const getYear = (exam, year) => ((exam && exam.years) || []).find(x => String(x.year) === String(year));
+  const getExam = id => (catalog?.exams || []).find(x => x.id === id);
+  const getYear = (exam, year) => (exam?.years || []).find(x => String(x.year) === String(year));
 
-  function sourceTag(paper){
-    const src = `${paper && paper.source ? paper.source : ''} ${paper && paper.pdf ? paper.pdf : ''}`.toLowerCase();
+  function sourceTag(paper) {
+    const src = `${paper?.source || ''} ${paper?.pdf || ''}`.toLowerCase();
     if (src.includes('testbook')) return 'Testbook';
+    if (src.includes('adda247') || src.includes('adda247.com')) return 'Adda247';
+    if (src.includes('physics wallah') || src.includes('pw.live')) return 'PW';
     if (src.includes('official') || src.includes('upsc.gov.in') || src.includes('bpsc.bihar.gov.in')) return 'Official';
     return 'Public';
   }
 
-  function totalPapers(){
-    return (catalog && catalog.exams ? catalog.exams : []).reduce((sum, exam) =>
+  function totalPapers() {
+    return (catalog?.exams || []).reduce((sum, exam) =>
       sum + (exam.years || []).reduce((s, y) => s + (y.papers || []).length, 0), 0);
   }
 
-  function renderStats(exam, year){
+  function renderStats(exam, year) {
     const pills = [`${totalPapers()} PDFs catalogued`];
     if (exam) pills.push(`${exam.name}: ${(exam.years || []).reduce((s,y)=>s+(y.papers||[]).length,0)} PDFs`);
     if (year) pills.push(`${year.year}: ${(year.papers || []).length} paper${(year.papers || []).length === 1 ? '' : 's'}`);
     if (statsEl) statsEl.innerHTML = pills.map(x => `<span class="pill">${esc(x)}</span>`).join('');
   }
 
-  function resetPaper(){
+  function resetPaper() {
     paperEl.innerHTML = '<option value="">Select set / paper</option>';
     paperEl.disabled = true;
     if (panelEl) panelEl.innerHTML = '';
   }
 
-  function fillYears(exam){
+  function fillYears(exam) {
     yearEl.innerHTML = '<option value="">Select year</option>';
     resetPaper();
-    ((exam && exam.years) || []).forEach(meta => {
+    (exam?.years || []).forEach(meta => {
       const count = (meta.papers || []).length;
       const opt = document.createElement('option');
       opt.value = String(meta.year);
@@ -53,9 +55,10 @@
     renderStats(exam, null);
   }
 
-  function paperCard(paper){
+  function paperCard(paper) {
     if (!panelEl || !paper) return;
-    const meta = [sourceTag(paper), paper.stage, paper.paper, paper.set ? `Set ${paper.set}` : null, paper.date].filter(Boolean).join(' · ');
+    const meta = [sourceTag(paper), paper.stage, paper.paper, paper.set ? `Set ${paper.set}` : null, paper.date, paper.shift ? `Shift ${paper.shift}` : null]
+      .filter(Boolean).join(' · ');
     panelEl.innerHTML = `<div class="empty">
       <div class="qmeta">${esc(meta)}</div>
       <div class="qtext">${esc(paper.label || 'PYQ Paper')}</div>
@@ -67,7 +70,7 @@
     </div>`;
   }
 
-  function remember(examId, year, paperId){
+  function remember(examId, year, paperId) {
     const p = new URLSearchParams();
     if (examId) p.set('exam', examId);
     if (year) p.set('year', year);
@@ -75,18 +78,18 @@
     history.replaceState(null, '', p.toString() ? `?${p.toString()}` : location.pathname);
   }
 
-  function openPaper(paper){
-    if (!paper || !paper.pdf) return;
+  function openPaper(paper) {
+    if (!paper?.pdf) return;
     remember(examEl.value, yearEl.value, paper.id || '');
     paperCard(paper);
     setStatus(`Opening [${sourceTag(paper)}] ${paper.label || 'PYQ PDF'}…`);
     window.location.assign(paper.pdf);
   }
 
-  function fillPapers(yearMeta, autoOpen){
+  function fillPapers(yearMeta, autoOpen) {
     resetPaper();
     const exam = getExam(examEl.value);
-    const papers = (yearMeta && yearMeta.papers) || [];
+    const papers = yearMeta?.papers || [];
     renderStats(exam, yearMeta || null);
 
     if (!papers.length) {
@@ -109,12 +112,12 @@
       setStatus(`${yearMeta.year}: [${sourceTag(papers[0])}] ${papers[0].label}`);
       if (autoOpen) openPaper(papers[0]);
     } else {
-      setStatus(`${yearMeta.year}: ${papers.length} papers available — Set/Paper चुनो. Source label भी साथ दिख रहा है.`);
+      setStatus(`${yearMeta.year}: ${papers.length} papers available — Set/Paper चुनो.`);
       remember(examEl.value, yearMeta.year, '');
     }
   }
 
-  async function loadCatalog(){
+  async function loadCatalog() {
     const urls = [
       `./data/pdf-catalog.json?v=${Date.now()}`,
       `https://raw.githubusercontent.com/rishank07/Quiz/master/PYQ/data/pdf-catalog.json?v=${Date.now()}`
@@ -134,7 +137,7 @@
     throw lastError || new Error('Catalog unavailable');
   }
 
-  function populateExams(){
+  function populateExams() {
     examEl.innerHTML = '<option value="">Select exam</option>';
     (catalog.exams || []).forEach(exam => {
       const opt = document.createElement('option');
@@ -146,7 +149,7 @@
     renderStats(null, null);
   }
 
-  async function init(){
+  async function init() {
     if (!examEl || !yearEl || !paperEl) return;
     examEl.disabled = true;
     yearEl.disabled = true;
@@ -169,7 +172,7 @@
     paperEl.addEventListener('change', () => {
       const exam = getExam(examEl.value);
       const year = getYear(exam, yearEl.value);
-      const paper = ((year && year.papers) || []).find(x => x.id === paperEl.value);
+      const paper = (year?.papers || []).find(x => x.id === paperEl.value);
       if (paper) openPaper(paper);
     });
 
