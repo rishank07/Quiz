@@ -23,7 +23,7 @@ def fail(msg: str) -> None:
     raise ValueError(msg)
 
 
-def validate_chunk(path: Path, payload: dict) -> tuple[int, int]:
+def validate_chunk(path: Path, payload: dict) -> tuple[int, int, int]:
     exam = str(payload.get("exam", "")).strip().lower()
     year = payload.get("year")
     questions = payload.get("questions")
@@ -38,6 +38,7 @@ def validate_chunk(path: Path, payload: dict) -> tuple[int, int]:
 
     seen = set()
     verified = 0
+    deleted = 0
     for i, q in enumerate(questions, 1):
         if not isinstance(q, dict):
             fail(f"{path}: question #{i} is not an object")
@@ -49,16 +50,21 @@ def validate_chunk(path: Path, payload: dict) -> tuple[int, int]:
         seen.add(qid)
         opts = q.get("options")
         ans = q.get("answer")
+        is_deleted = q.get("deleted") is True
         if not isinstance(opts, list) or len(opts) < 2:
             fail(f"{path}: {qid} has invalid options")
-        if not isinstance(ans, int) or ans < 0 or ans >= len(opts):
+        if is_deleted:
+            if ans is not None:
+                fail(f"{path}: {qid} is deleted but answer is not null")
+            deleted += 1
+        elif not isinstance(ans, int) or ans < 0 or ans >= len(opts):
             fail(f"{path}: {qid} has invalid answer index")
         source = q.get("source")
         if not isinstance(source, dict) or not source.get("type") or not source.get("label"):
             fail(f"{path}: {qid} has incomplete source metadata")
         if source.get("verified") is True:
             verified += 1
-    return len(questions), verified
+    return len(questions), verified, deleted
 
 
 def main() -> int:
@@ -74,7 +80,7 @@ def main() -> int:
 
     for path in sorted(DATA.glob("*/*.json")):
         payload = json.loads(path.read_text(encoding="utf-8"))
-        count, verified = validate_chunk(path, payload)
+        count, verified, deleted = validate_chunk(path, payload)
         exam = payload["exam"].lower()
         year = payload["year"]
         total += count
@@ -82,6 +88,7 @@ def main() -> int:
             "year": year,
             "count": count,
             "verified": verified,
+            "deleted": deleted,
             "available": True,
             "file": f"./data/{exam}/{year}.json",
         }
@@ -93,6 +100,7 @@ def main() -> int:
                 "year": y,
                 "count": 0,
                 "verified": 0,
+                "deleted": 0,
                 "available": False,
                 "status": "pending-ingestion",
             }
