@@ -28,7 +28,7 @@ PYQ_CARD_MARKER = "data-efp-pyq-card"
 PYQ_CARD = '''        <li data-efp-pyq-card>
           <a href="./PYQ/index.html" onclick="openPage(event)">
             <i class="fa-solid fa-file-circle-question menu-icon"></i>
-            <span class="link-text bilabel"><span class="bilabel-en">Previous Year Papers</span><span class="bilabel-hi">पिछले वर्षों के प्रश्नपत्र</span></span>
+            <span class="link-text bilabel"><span class="bilabel-en">Previous Year Papers (PYQ)</span><span class="bilabel-hi">पिछले वर्षों के प्रश्नपत्र</span></span>
             <span class="badge-new">PYQ</span>
             <i class="fa-solid fa-chevron-right chevron-icon"></i>
           </a>
@@ -70,6 +70,8 @@ def crux_document_total(repo: Path) -> int:
     path = repo / "Crux-Tricks" / "crux-manifest.js"
     try:
         raw = path.read_text(encoding="utf-8", errors="replace")
+        # EF_CRUX_DOCS contains one object per source PDF/document. Counting
+        # the stable ct ids stays correct even when a PDF has multiple pages.
         total = len(re.findall(r'\{"id":"ct\d+"', raw))
         if total > 0:
             return total
@@ -113,25 +115,7 @@ def update_index(repo: Path) -> bool:
         raw = updated
         changed = True
 
-    # Keep the PYQ card title one-line-friendly; the golden PYQ badge already
-    # communicates the abbreviation, so repeating (PYQ) in the title is noise.
-    updated = raw.replace(
-        '<span class="bilabel-en">Previous Year Papers (PYQ)</span>',
-        '<span class="bilabel-en">Previous Year Papers</span>',
-    )
-    if updated != raw:
-        raw = updated
-        changed = True
-
-    # Bust the dedicated desktop-layout stylesheet whenever its fit rules change.
-    updated = raw.replace(
-        'landing-desktop.css?v=20260917grid1',
-        'landing-desktop.css?v=20260917fit1',
-    )
-    if updated != raw:
-        raw = updated
-        changed = True
-
+    # Keep the headline copy and hub count aligned with the new landing card.
     replacements = {
         "Free MCQs, Original Practice, Crux, Memory Tricks, Mind Maps &amp; Current Affairs":
             "Free MCQs, Original Practice, PYQs, Crux, Memory Tricks, Mind Maps &amp; Current Affairs",
@@ -177,23 +161,25 @@ def update_index(repo: Path) -> bool:
         raw = updated
         changed = True
 
+    # The generic landing formatter treats every unknown unit as Questions.
+    # Explicitly teach it document-oriented units used by Crux and PYQ.
     updated = raw.replace(COMPACT_LABEL_OLD, COMPACT_LABEL_NEW)
     updated = updated.replace(FULL_LABEL_OLD, FULL_LABEL_NEW)
     if updated != raw:
         raw = updated
         changed = True
 
+    # Let deep-search result groups use the same icon as the PYQ landing card.
     section_icon_anchor = '        "Original Practice": "fa-pen-to-square",\n        "Crux & Tricks": "fa-lightbulb",'
-    section_icon_replacement = '        "Original Practice": "fa-pen-to-square",\n        "Previous Year Papers": "fa-file-circle-question",\n        "Crux & Tricks": "fa-lightbulb",'
+    section_icon_replacement = '        "Original Practice": "fa-pen-to-square",\n        "Previous Year Papers (PYQ)": "fa-file-circle-question",\n        "Crux & Tricks": "fa-lightbulb",'
     updated = raw.replace(section_icon_anchor, section_icon_replacement)
-    updated = updated.replace(
-        '        "Previous Year Papers (PYQ)": "fa-file-circle-question",',
-        '        "Previous Year Papers": "fa-file-circle-question",',
-    )
     if updated != raw:
         raw = updated
         changed = True
 
+    # Remove any older copy/version of the bridge, then place one canonical tag
+    # immediately before the landing-count block. This location is after the
+    # homepage search listener and before the count-rendering helper.
     bridge_re = re.compile(
         r'\s*<!--\s*ExamFusion homepage full-text bridge\s*-->\s*'
         r'<script\s+src=["\'][^"\']*homepage-fulltext-search\.js(?:\?[^"\']*)?["\']\s+defer\s*>\s*</script>\s*',

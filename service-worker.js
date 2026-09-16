@@ -1,5 +1,5 @@
 // v45 Static GK Original Practice integration 20260915
-const CACHE_VERSION = "efp-pwa-2026-09-17-v79-landing-fresh";
+const CACHE_VERSION = "efp-pwa-2026-09-16-v78-pyq-fresh";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -254,16 +254,11 @@ async function staleWhileRevalidate(event, allowOpaque) {
   return new Response("", { status: 503, statusText: "Offline" });
 }
 
-async function freshChangingAsset(request) {
-  // Frequently updated catalog/layout assets must never fall back to an older
-  // ignoreSearch match. Prefer the network and keep only an exact offline copy.
+async function freshPyqAsset(request) {
+  // PYQ is a fast-changing external-link catalog. Never let ignoreSearch return
+  // an older runtime-cached catalog/app asset after a bulk import.
   try {
-    const response = await fetch(request, { cache: "no-store" });
-    if (response && response.ok && (response.type === "basic" || response.type === "default" || response.type === "cors")) {
-      const cache = await caches.open(CACHE_VERSION);
-      cache.put(request, response.clone());
-    }
-    return response;
+    return await fetch(request, { cache: "no-store" });
   } catch (_) {
     const cached = await caches.match(request);
     return cached || new Response("", { status: 503, statusText: "Offline" });
@@ -293,8 +288,8 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (url.pathname === "/landing-desktop.css" || url.pathname.startsWith("/PYQ/")) {
-    event.respondWith(freshChangingAsset(request));
+  if (url.pathname.startsWith("/PYQ/")) {
+    event.respondWith(freshPyqAsset(request));
     return;
   }
 
