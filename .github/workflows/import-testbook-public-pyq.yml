@@ -8,6 +8,7 @@ on:
       - 'tools/import-testbook-public-pyq.py'
       - 'tools/import-testbook-public-viewers.py'
       - 'tools/import-adda-pw-public-pyq.py'
+      - 'tools/import-adda-public-seeds.py'
       - '.github/workflows/import-testbook-public-pyq.yml'
 
 permissions:
@@ -25,6 +26,7 @@ jobs:
             tools/import-testbook-public-pyq.py
             tools/import-testbook-public-viewers.py
             tools/import-adda-pw-public-pyq.py
+            tools/import-adda-public-seeds.py
           sparse-checkout-cone-mode: false
           fetch-depth: 1
       - uses: actions/setup-python@v5
@@ -38,6 +40,8 @@ jobs:
         run: python tools/import-testbook-public-viewers.py
       - name: Import public Adda247 and Physics Wallah PYQs
         run: python tools/import-adda-pw-public-pyq.py
+      - name: Import verified public Adda247 shift PDFs
+        run: python tools/import-adda-public-seeds.py
       - name: Commit expanded PDF catalog
         run: |
           git config user.name 'github-actions[bot]'
