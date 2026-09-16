@@ -15,6 +15,7 @@ on:
       - "Crux-Tricks/crux-search-route.js"
       - "Crux-Tricks/crux-tricks.js"
       - "homepage-fulltext-search.js"
+      - "landing-desktop.css"
       - "search-worker.js"
       - "service-worker.js"
       - "index.html"
@@ -74,6 +75,21 @@ jobs:
 
       - name: Restore extended homepage integrations
         run: python tools/update-home-integrations.py --repo .
+
+      - name: Ensure wide desktop landing stylesheet
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          tag = '  <link rel="stylesheet" href="./landing-desktop.css?v=20260917grid1">\n'
+          if 'landing-desktop.css' not in s:
+              needle = '  <script defer src="/home-nav.js?v=20260906"></script>\n'
+              if needle not in s:
+                  raise SystemExit('Homepage stylesheet insertion point not found')
+              s = s.replace(needle, tag + needle, 1)
+              p.write_text(s, encoding='utf-8')
+          PY
 
       - name: Generate logical Back parent map
         run: python tools/update-back-parent-map.py --repo .
