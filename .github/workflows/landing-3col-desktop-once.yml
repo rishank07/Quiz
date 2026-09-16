@@ -18,8 +18,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: Patch desktop landing layout
-        shell: python
         run: |
+          python - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
@@ -62,8 +62,12 @@ jobs:
       }
     }
 '''
-              s = s.replace('</style>\n  <script defer src="/home-nav.js?v=20260906"></script>', css + '\n</style>\n  <script defer src="/home-nav.js?v=20260906"></script>', 1)
+              needle = '</style>\n  <script defer src="/home-nav.js?v=20260906"></script>'
+              if needle not in s:
+                  raise SystemExit('Landing style insertion point not found')
+              s = s.replace(needle, css + '\n</style>\n  <script defer src="/home-nav.js?v=20260906"></script>', 1)
               p.write_text(s, encoding='utf-8')
+          PY
       - name: Commit
         run: |
           if git diff --quiet -- index.html; then
