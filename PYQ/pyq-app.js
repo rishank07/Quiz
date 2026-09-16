@@ -79,13 +79,15 @@
   }
 
   function openExternal(url) {
-    if (!url) return false;
-    const opened = window.open(url, '_blank', 'noopener,noreferrer');
-    if (!opened) {
-      window.location.href = url;
-      return false;
-    }
-    return true;
+    if (!url) return;
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer external';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   }
 
   function openPaper(paper) {
