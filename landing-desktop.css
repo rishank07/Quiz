@@ -1,4 +1,4 @@
-/* ExamFusion Prep landing page — wide desktop grid with full viewport fit. */
+/* ExamFusion Prep landing page — wide desktop grid with normal vertical scrolling. */
 @media (min-width: 1120px) and (max-width: 1199px) {
   .container {
     width: calc(100% - 24px);
@@ -24,6 +24,7 @@
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .youtube-banner {
@@ -42,7 +43,7 @@
     padding: 16px 20px 14px;
     grid-template-columns: 340px minmax(0, 1fr);
     column-gap: 30px;
-    overflow: hidden;
+    overflow: visible;
   }
 
   /* Give the left information rail enough room so the title, dark-mode
@@ -93,7 +94,7 @@
   }
 
   /* Keep the footer visually attached to the left utility stack instead of
-     pinning it to the bottom of the full-height desktop container. */
+     pinning it to the bottom of the desktop container. */
   .footer {
     align-self: start;
     position: relative;
@@ -164,22 +165,5 @@
     min-width: 0;
     min-height: 48px;
     padding: 10px 12px;
-  }
-}
-
-/* Normal desktop-height windows become a true one-screen landing page.
-   The body is the viewport; the glass container consumes every remaining
-   pixel below the YouTube banner, leaving no dead strip at the bottom. */
-@media (min-width: 1200px) and (min-height: 700px) {
-  html,
-  body {
-    height: 100%;
-    min-height: 100%;
-    overflow-y: hidden;
-  }
-
-  body {
-    height: 100dvh;
-    min-height: 100dvh;
   }
 }
