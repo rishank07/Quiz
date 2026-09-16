@@ -105,6 +105,10 @@ def parse_questions(text: str) -> list[dict]:
 
         stem = re.sub(r"\s+70TH BPSC.*$", "", stem, flags=re.I)
         options = [re.sub(r"\s+70TH BPSC.*$", "", x, flags=re.I).strip() for x in options]
+        # The text-layer reproduction contains a stray glyph rendered as a
+        # literal trailing "x" in Q1 option C. It is not part of the paper.
+        if number == 1 and len(options) >= 3 and options[2].lower() == "i, ii and iv x":
+            options[2] = "i, ii and iv"
         if not stem or any(not x for x in options):
             raise RuntimeError(f"Q{number}: empty stem/option after cleanup")
 
