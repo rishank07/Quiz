@@ -1,0 +1,78 @@
+name: Landing 3-column desktop once
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - ".github/workflows/landing-3col-desktop-once.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Patch desktop landing layout
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '/* ExamFusion desktop 3-column landing layout */'
+          if marker not in s:
+              css = r'''
+    /* ExamFusion desktop 3-column landing layout */
+    @media (min-width: 1120px) and (max-width: 1279px) {
+      .container {
+        width: calc(100% - 32px);
+        max-width: 1220px;
+        grid-template-columns: 300px minmax(0, 1fr);
+        column-gap: 40px;
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+      .menu {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .menu>li[data-noresult] {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .container {
+        width: calc(100% - 32px);
+        max-width: 1680px;
+        grid-template-columns: 300px minmax(0, 1fr);
+        column-gap: 44px;
+        padding-left: 42px;
+        padding-right: 42px;
+      }
+      .menu {
+        grid-template-columns: repeat(3, minmax(240px, 1fr));
+        gap: 14px;
+      }
+      .menu>li[data-noresult] {
+        grid-column: 1 / -1;
+      }
+    }
+'''
+              s = s.replace('</style>\n  <script defer src="/home-nav.js?v=20260906"></script>', css + '\n</style>\n  <script defer src="/home-nav.js?v=20260906"></script>', 1)
+              p.write_text(s, encoding='utf-8')
+      - name: Commit
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Use three landing cards per row on desktop"
+          git pull --rebase origin master
+          git push
