@@ -70,8 +70,6 @@ def clean_pdf_text(pdf_bytes: bytes) -> str:
 def tidy(value: str) -> str:
     value = value.replace("\u00a0", " ")
     value = re.sub(r"\s+", " ", value).strip()
-    # Remove the answer annotation from the text-layer source. Official key is
-    # injected independently below.
     value = re.sub(r"\s*Ans\)\s*[A-Da-d](?:\s+OR\s+[A-Da-d])?.*$", "", value, flags=re.I)
     return value.strip()
 
@@ -88,17 +86,16 @@ def parse_questions(text: str) -> list[dict]:
             raise RuntimeError(f"Question sequence broke at {number}; expected {idx + 1}")
         end = starts[idx + 1].start() if idx + 1 < len(starts) else len(text)
         block = text[m.end():end]
-        # Stop before source's provisional-answer annotation when present.
         block = re.split(r"\bAns\)\s*", block, maxsplit=1, flags=re.I)[0]
 
-        markers = list(re.finditer(r"(?m)(?<![A-Za-z0-9])([a-d])\)\s*", block, flags=re.I))
+        # Only treat a)/b)/c)/d) at the START of a PDF text line as option
+        # markers. This avoids false positives such as Article 102(1)(c).
+        markers = list(re.finditer(r"(?mi)^\s*([a-d])\)\s*", block))
         if len(markers) < 4:
-            raise RuntimeError(f"Q{number}: expected four option markers, found {len(markers)}")
-        # The first four a)-d) markers are the answer options. Statement labels
-        # inside matching questions use a. / b. and therefore do not collide.
+            raise RuntimeError(f"Q{number}: expected four line-start option markers, found {len(markers)}")
         markers = markers[:4]
         if [x.group(1).lower() for x in markers] != list("abcd"):
-            raise RuntimeError(f"Q{number}: option order is not a,b,c,d")
+            raise RuntimeError(f"Q{number}: option order is not a,b,c,d: {[x.group(1) for x in markers]}")
 
         stem = tidy(block[:markers[0].start()])
         options = []
@@ -106,7 +103,6 @@ def parse_questions(text: str) -> list[dict]:
             oe = markers[oi + 1].start() if oi + 1 < 4 else len(block)
             options.append(tidy(block[om.end():oe]))
 
-        # OCR/text-layer cleanup for known cross-page artefacts.
         stem = re.sub(r"\s+70TH BPSC.*$", "", stem, flags=re.I)
         options = [re.sub(r"\s+70TH BPSC.*$", "", x, flags=re.I).strip() for x in options]
         if not stem or any(not x for x in options):
