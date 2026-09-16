@@ -17,6 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            PYQ/data/pdf-catalog.json
+            tools/import-testbook-public-pyq.py
+          sparse-checkout-cone-mode: false
+          fetch-depth: 1
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
