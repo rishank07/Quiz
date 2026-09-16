@@ -10,6 +10,7 @@ on:
       - 'tools/import-adda-pw-public-pyq.py'
       - 'tools/import-adda-public-seeds.py'
       - 'tools/import-pw-year-specific-pyq.py'
+      - 'tools/clean-pyq-catalog.py'
       - '.github/workflows/import-testbook-public-pyq.yml'
 
 permissions:
@@ -29,6 +30,7 @@ jobs:
             tools/import-adda-pw-public-pyq.py
             tools/import-adda-public-seeds.py
             tools/import-pw-year-specific-pyq.py
+            tools/clean-pyq-catalog.py
           sparse-checkout-cone-mode: false
           fetch-depth: 0
       - uses: actions/setup-python@v5
@@ -46,15 +48,17 @@ jobs:
         run: python tools/import-adda-public-seeds.py
       - name: Import PW year-specific Railway shifts
         run: python tools/import-pw-year-specific-pyq.py
+      - name: Clean year buckets and remove non-PYQ resources
+        run: python tools/clean-pyq-catalog.py
       - name: Commit expanded PDF catalog
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add PYQ/data/pdf-catalog.json
           if git diff --cached --quiet; then
-            echo 'No new public PYQ resources found.'
+            echo 'No public PYQ catalog changes found.'
             exit 0
           fi
-          git commit -m 'Expand public PYQ catalog from Testbook Adda247 PW'
+          git commit -m 'Expand and clean public PYQ catalog'
           git pull --rebase origin master
           git push origin master
