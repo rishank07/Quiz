@@ -23,6 +23,15 @@
     return 'Public';
   }
 
+  function viewerUrl(paper, mode = 'paper') {
+    const p = new URLSearchParams();
+    p.set('exam', examEl.value || '');
+    p.set('year', yearEl.value || '');
+    p.set('id', paper?.id || '');
+    if (mode === 'answer') p.set('mode', 'answer');
+    return `./viewer.html?${p.toString()}`;
+  }
+
   function totalPapers() {
     return (catalog?.exams || []).reduce((sum, exam) =>
       sum + (exam.years || []).reduce((s, y) => s + (y.papers || []).length, 0), 0);
@@ -64,8 +73,8 @@
       <div class="qtext">${esc(paper.label || 'PYQ Paper')}</div>
       <div class="source" style="margin-top:10px">Source: ${esc(paper.source || '')}</div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px">
-        <a class="pdf-btn" href="${esc(paper.pdf)}">Open ${esc(sourceTag(paper))} Paper</a>
-        ${paper.answer_key ? `<a class="pdf-btn secondary" href="${esc(paper.answer_key)}" target="_blank" rel="noopener">Answer Key</a>` : ''}
+        <a class="pdf-btn" href="${esc(viewerUrl(paper))}">Open inside ExamFusion</a>
+        ${paper.answer_key ? `<a class="pdf-btn secondary" href="${esc(viewerUrl(paper, 'answer'))}">Answer Key</a>` : ''}
       </div>
     </div>`;
   }
@@ -82,8 +91,8 @@
     if (!paper?.pdf) return;
     remember(examEl.value, yearEl.value, paper.id || '');
     paperCard(paper);
-    setStatus(`Opening [${sourceTag(paper)}] ${paper.label || 'PYQ PDF'}…`);
-    window.location.assign(paper.pdf);
+    setStatus(`Opening [${sourceTag(paper)}] ${paper.label || 'PYQ PDF'} inside ExamFusion Prep…`);
+    window.location.assign(viewerUrl(paper));
   }
 
   function fillPapers(yearMeta, autoOpen) {
