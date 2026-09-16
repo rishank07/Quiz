@@ -11,7 +11,7 @@ from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "PYQ" / "data" / "bpsc" / "2023.json"
-QUESTION_SOURCE = "https://examdhara.com/blog/wp-content/uploads/2025/03/69th-BPSC-Prelims-Question-Paper-Pdf-Bilingual.pdf"
+QUESTION_SOURCE = "https://forumias.com/blog/wp-content/uploads/2023/09/Download-69th-BPSC-Prelims-Question-Paper-set-A-PDF.pdf"
 FINAL_KEY = "https://bpsc.bihar.gov.in/Archive/2023/NB-2023-10-28-03.pdf"
 
 KEYS = """
@@ -64,7 +64,6 @@ def english_text(pdf_bytes: bytes) -> str:
                 low = line.lower()
                 if any(token in low for token in POLLUTION):
                     continue
-                # Isolated printed page numbers / P.T.O. artefacts.
                 if re.fullmatch(r"\[?\s*\d+\s*\]?", line):
                     continue
                 if "p.t.o." in low and len(line) < 40:
@@ -79,16 +78,12 @@ def english_text(pdf_bytes: bytes) -> str:
 def option_markers(text: str, start: int) -> list[re.Match[str]]:
     found: list[re.Match[str]] = []
     for letter in "ABCD":
-        m = re.search(rf"(?m)^\s*\({letter}\)\s*", text[start:])
-        if not m:
+        pat = re.compile(rf"(?m)^\s*\({letter}\)\s*")
+        match = pat.search(text, start)
+        if not match:
             raise RuntimeError(f"Missing option ({letter}) after offset {start}")
-        # Convert sliced match to absolute-position proxy by searching in full
-        # text from the exact absolute offset.
-        abs_m = re.search(rf"(?m)^\s*\({letter}\)\s*", text, pos=start + m.start())
-        if not abs_m:
-            raise RuntimeError(f"Could not resolve option ({letter})")
-        found.append(abs_m)
-        start = abs_m.end()
+        found.append(match)
+        start = match.end()
     return found
 
 
@@ -122,8 +117,6 @@ def parse(text: str) -> list[dict]:
         if not stem or any(not x for x in options):
             raise RuntimeError(f"Q{qno}: empty stem/option")
 
-        # Remove any residual printed footer fragments that shared a line with
-        # a question/option, then reject if a known source watermark survives.
         def scrub(v: str) -> str:
             v = re.sub(r"\s*19[-–]C/FI/CC/PT[-–]2023.*$", "", v, flags=re.I)
             v = re.sub(r"\s*For More Study Material Please Visit.*$", "", v, flags=re.I)
@@ -184,7 +177,7 @@ def main() -> None:
         "provenance": {
             "answer_key": FINAL_KEY,
             "question_paper": QUESTION_SOURCE,
-            "note": "Set-A question/options text extracted from a bilingual reproduction; scoring/deleted status follows the BPSC final answer key."
+            "note": "Set-A question/options text extracted from a public copy of the bilingual question booklet; scoring/deleted status follows the BPSC final answer key."
         },
         "questions": rows
     }
