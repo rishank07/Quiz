@@ -14,6 +14,13 @@
   const getExam = id => (catalog && Array.isArray(catalog.exams) ? catalog.exams : []).find(x => x.id === id);
   const getYear = (exam, year) => ((exam && exam.years) || []).find(x => String(x.year) === String(year));
 
+  function sourceTag(paper){
+    const src = `${paper && paper.source ? paper.source : ''} ${paper && paper.pdf ? paper.pdf : ''}`.toLowerCase();
+    if (src.includes('testbook')) return 'Testbook';
+    if (src.includes('official') || src.includes('upsc.gov.in') || src.includes('bpsc.bihar.gov.in')) return 'Official';
+    return 'Public';
+  }
+
   function totalPapers(){
     return (catalog && catalog.exams ? catalog.exams : []).reduce((sum, exam) =>
       sum + (exam.years || []).reduce((s, y) => s + (y.papers || []).length, 0), 0);
@@ -48,13 +55,13 @@
 
   function paperCard(paper){
     if (!panelEl || !paper) return;
-    const meta = [paper.stage, paper.paper, paper.set ? `Set ${paper.set}` : null, paper.date].filter(Boolean).join(' · ');
+    const meta = [sourceTag(paper), paper.stage, paper.paper, paper.set ? `Set ${paper.set}` : null, paper.date].filter(Boolean).join(' · ');
     panelEl.innerHTML = `<div class="empty">
       <div class="qmeta">${esc(meta)}</div>
       <div class="qtext">${esc(paper.label || 'PYQ Paper')}</div>
-      <div class="source" style="margin-top:10px">${esc(paper.source || '')}</div>
+      <div class="source" style="margin-top:10px">Source: ${esc(paper.source || '')}</div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px">
-        <a class="pdf-btn" href="${esc(paper.pdf)}">Open PDF</a>
+        <a class="pdf-btn" href="${esc(paper.pdf)}">Open ${esc(sourceTag(paper))} Paper</a>
         ${paper.answer_key ? `<a class="pdf-btn secondary" href="${esc(paper.answer_key)}" target="_blank" rel="noopener">Answer Key</a>` : ''}
       </div>
     </div>`;
@@ -72,8 +79,8 @@
     if (!paper || !paper.pdf) return;
     remember(examEl.value, yearEl.value, paper.id || '');
     paperCard(paper);
-    setStatus(`Opening ${paper.label || 'PYQ PDF'}…`);
-    window.location.href = paper.pdf;
+    setStatus(`Opening [${sourceTag(paper)}] ${paper.label || 'PYQ PDF'}…`);
+    window.location.assign(paper.pdf);
   }
 
   function fillPapers(yearMeta, autoOpen){
@@ -91,7 +98,7 @@
     papers.forEach(paper => {
       const opt = document.createElement('option');
       opt.value = paper.id;
-      opt.textContent = paper.label || paper.paper || 'Paper';
+      opt.textContent = `[${sourceTag(paper)}] ${paper.label || paper.paper || 'Paper'}`;
       paperEl.appendChild(opt);
     });
     paperEl.disabled = false;
@@ -99,10 +106,10 @@
     if (papers.length === 1) {
       paperEl.value = papers[0].id;
       paperCard(papers[0]);
-      setStatus(`${yearMeta.year}: ${papers[0].label}`);
+      setStatus(`${yearMeta.year}: [${sourceTag(papers[0])}] ${papers[0].label}`);
       if (autoOpen) openPaper(papers[0]);
     } else {
-      setStatus(`${yearMeta.year}: ${papers.length} papers available — Set/Paper चुनो.`);
+      setStatus(`${yearMeta.year}: ${papers.length} papers available — Set/Paper चुनो. Source label भी साथ दिख रहा है.`);
       remember(examEl.value, yearMeta.year, '');
     }
   }
