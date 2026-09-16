@@ -243,19 +243,19 @@
       "}" +
       "}" +
 
-      /* Mind Maps desktop: keep page headers completely clear. Use compact,
-         icon-only Back/Home controls in the lower corners. */
+      /* Mind Maps desktop: keep the header clear and use equal-size labeled
+         Back/Home buttons at the bottom corners. */
       "@media(min-width:1200px){" +
       "html.efp-mindmaps-page #" + BUTTON_ID + ",html.efp-mindmaps-page #" + BACK_BUTTON_ID + "{" +
       "top:auto!important;bottom:max(16px,env(safe-area-inset-bottom))!important;" +
-      "width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;" +
-      "padding:0!important;border-radius:50%!important;gap:0!important;" +
+      "width:108px!important;min-width:108px!important;height:44px!important;min-height:44px!important;" +
+      "padding:0 14px!important;border-radius:999px!important;gap:8px!important;" +
       "box-shadow:0 6px 18px rgba(0,0,0,.28)!important;" +
       "}" +
-      "html.efp-mindmaps-page #" + BUTTON_ID + "{left:auto!important;right:max(16px,env(safe-area-inset-right))!important;}" +
-      "html.efp-mindmaps-page #" + BACK_BUTTON_ID + "{left:max(16px,env(safe-area-inset-left))!important;right:auto!important;}" +
-      "html.efp-mindmaps-page #" + BUTTON_ID + " .efp-home-label,html.efp-mindmaps-page #" + BACK_BUTTON_ID + " .efp-back-label{display:none!important;}" +
-      "html.efp-mindmaps-page #" + BUTTON_ID + " .efp-home-icon,html.efp-mindmaps-page #" + BACK_BUTTON_ID + " .efp-back-icon{font-size:20px!important;}" +
+      "html.efp-mindmaps-page #" + BUTTON_ID + "{left:auto!important;right:max(18px,env(safe-area-inset-right))!important;}" +
+      "html.efp-mindmaps-page #" + BACK_BUTTON_ID + "{left:max(18px,env(safe-area-inset-left))!important;right:auto!important;}" +
+      "html.efp-mindmaps-page #" + BUTTON_ID + " .efp-home-label,html.efp-mindmaps-page #" + BACK_BUTTON_ID + " .efp-back-label{display:inline!important;}" +
+      "html.efp-mindmaps-page #" + BUTTON_ID + " .efp-home-icon,html.efp-mindmaps-page #" + BACK_BUTTON_ID + " .efp-back-icon{font-size:18px!important;}" +
       "}" +
 
       /* Mobile/tablet: compact lower-corner controls. Dark mode stays almost
