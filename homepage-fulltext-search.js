@@ -90,6 +90,10 @@
     if (raw.length) {
       var code = raw.charCodeAt(0);
       if (code >= 0xE000 && code <= 0xF8FF) return raw.slice(1).replace(/^\s+/, "");
+      if (code === 0x0001) {
+        var sep = raw.indexOf("\u0002");
+        if (sep !== -1) return raw.slice(sep + 1);
+      }
     }
     return raw;
   }

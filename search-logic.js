@@ -383,7 +383,7 @@ function efSnippetSearch(query, options) {
           found.push({
             score: score,
             sequence: sequence,
-            f: group.f,
+            f: efFallbackWithAnchor(group.f, efFallbackExtractAnchor(group.x[j])),
             t: group.t,
             b: group.b,
             x: group.x[j]
@@ -468,8 +468,35 @@ function efFallbackStripMarker(raw) {
   if (raw.length) {
     var code = raw.charCodeAt(0);
     if (code >= 0xE000 && code <= 0xF8FF) return raw.slice(1).replace(/^\s+/, "");
+    if (code === 0x0001) {
+      var sep = raw.indexOf("\u0002");
+      if (sep !== -1) return raw.slice(sep + 1);
+    }
   }
   return raw;
+}
+
+// Mirrors search-worker.js's extractAnchor/withAnchor for the no-Worker
+// fallback path (e.g. file:// pages), so per-question/per-tab deep links
+// still resolve when the fast worker path is unavailable.
+function efFallbackExtractAnchor(raw) {
+  raw = String(raw == null ? "" : raw);
+  if (!raw.length || raw.charCodeAt(0) !== 0x0001) return null;
+  var sep = raw.indexOf("\u0002");
+  if (sep === -1) return null;
+  return raw.slice(1, sep);
+}
+
+function efFallbackWithAnchor(url, anchor) {
+  if (!anchor) return url;
+  var isOriginalPractice = /[?&]subject=/.test(url) && /[?&]chapter=/.test(url) && /[?&]section=/.test(url);
+  if (isOriginalPractice) {
+    var withoutHash = String(url || "").split("#")[0];
+    var sep = withoutHash.indexOf("?") === -1 ? "?" : "&";
+    return withoutHash + sep + "q=" + encodeURIComponent(anchor);
+  }
+  var base = String(url || "").split("#")[0];
+  return base + "#" + anchor;
 }
 
 function efFallbackSnippetSearchAsync(query, records, options) {
@@ -515,7 +542,14 @@ function efFallbackSnippetSearchAsync(query, records, options) {
           else if (bodyOnly) score = 10 + positionSum * 0.000001;
           else if (phraseHead >= 0) score = 20 + phraseHead * 0.00001;
           else score = 30 + positionSum * 0.0000001;
-          scored.push({ score: score, sequence: sequence, f: group.f, t: group.t, b: group.b, x: raw });
+          scored.push({
+            score: score,
+            sequence: sequence,
+            f: efFallbackWithAnchor(group.f, efFallbackExtractAnchor(raw)),
+            t: group.t,
+            b: group.b,
+            x: raw
+          });
           sequence++;
         }
       }

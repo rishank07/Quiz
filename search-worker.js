@@ -59,8 +59,43 @@
     if (raw.length) {
       var code = raw.charCodeAt(0);
       if (code >= 0xE000 && code <= 0xF8FF) return raw.slice(1).replace(/^\s+/, "");
+      if (code === 0x0001) {
+        var sep = raw.indexOf("\u0002");
+        if (sep !== -1) return raw.slice(sep + 1);
+      }
     }
     return raw;
+  }
+
+  // Generic per-snippet anchor marker (added 2026-09-18), independent of the
+  // Crux numeric-page marker above. A snippet may be prefixed with:
+  //   \u0001<anchor>\u0002<visible text...>
+  // where <anchor> is a URL hash fragment (without '#') that should be
+  // appended to the group's f when this exact snippet is the hit — used for
+  // per-question (#q42) and per-tab (#narration) deep links on static pages.
+  // Crux's own \uE000+ numeric marker scheme is untouched and takes priority
+  // if somehow both were present, since Crux routing fully replaces f anyway.
+  function extractAnchor(raw) {
+    raw = String(raw == null ? "" : raw);
+    if (!raw.length || raw.charCodeAt(0) !== 0x0001) return null;
+    var sep = raw.indexOf("\u0002");
+    if (sep === -1) return null;
+    return raw.slice(1, sep);
+  }
+
+  function withAnchor(url, anchor) {
+    if (!anchor) return url;
+    // Original Practice app routes take a query-string ?q=N (already
+    // supported by that app's own deep-link handler); every other static
+    // page takes a URL hash #anchor (per-question / per-tab id).
+    var isOriginalPractice = /[?&]subject=/.test(url) && /[?&]chapter=/.test(url) && /[?&]section=/.test(url);
+    if (isOriginalPractice) {
+      var withoutHash = String(url || "").split("#")[0];
+      var sep = withoutHash.indexOf("?") === -1 ? "?" : "&";
+      return withoutHash + sep + "q=" + encodeURIComponent(anchor);
+    }
+    var base = String(url || "").split("#")[0];
+    return base + "#" + anchor;
   }
 
   function containsAll(terms, body, head) {
@@ -262,7 +297,7 @@
         scored.push({
           score: score,
           sequence: sequence,
-          f: group.f,
+          f: withAnchor(group.f, extractAnchor(raw)),
           t: group.t,
           b: group.b,
           x: raw
