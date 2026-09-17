@@ -31,6 +31,74 @@
     return normalizePath(window.location.pathname).toLowerCase() === "/original practice/mixed_practice.html";
   }
 
+  /* Some older Complete Practice subject headers still describe the page as
+     "offline practice" while newer subjects do not. Keep the actual offline/PWA
+     capability intact and only remove that obsolete visible copy. Because the
+     Complete Practice pages re-render in place, watch #app as well as the first
+     paint so every subject stays consistent. */
+  function removeOriginalPracticeOfflineLabel() {
+    if (!isOriginalPracticePage()) return;
+
+    var root = document.getElementById("app") || document.body;
+    if (!root || typeof document.createTreeWalker !== "function") return;
+
+    var showText = window.NodeFilter ? window.NodeFilter.SHOW_TEXT : 4;
+    var walker = document.createTreeWalker(root, showText);
+    var nodes = [];
+    var node;
+
+    while ((node = walker.nextNode())) {
+      var value = String(node.nodeValue || "");
+      if (!/offline\s+practice/i.test(value)) continue;
+
+      var parentText = node.parentElement
+        ? String(node.parentElement.textContent || "")
+        : value;
+      if (!/exam\s+preparation/i.test(parentText)) continue;
+
+      nodes.push(node);
+    }
+
+    for (var i = 0; i < nodes.length; i++) {
+      nodes[i].nodeValue = String(nodes[i].nodeValue || "")
+        .replace(/\s*(?:—|–|-|·)\s*offline\s+practice\b/ig, "")
+        .replace(/\boffline\s+practice\b/ig, "")
+        .replace(/[ \t]{2,}/g, " ")
+        .replace(/\s+$/g, "");
+    }
+  }
+
+  function installOriginalPracticeCopyCleanup() {
+    if (!isOriginalPracticePage()) return;
+
+    var frame = 0;
+    var requestFrame = window.requestAnimationFrame || function (callback) {
+      return window.setTimeout(callback, 0);
+    };
+
+    function sync() {
+      if (frame) return;
+      frame = requestFrame(function () {
+        frame = 0;
+        removeOriginalPracticeOfflineLabel();
+      });
+    }
+
+    function start() {
+      removeOriginalPracticeOfflineLabel();
+      var root = document.getElementById("app") || document.body;
+      if (!root || typeof MutationObserver === "undefined") return;
+      var observer = new MutationObserver(sync);
+      observer.observe(root, { childList: true, subtree: true, characterData: true });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", start, { once: true });
+    } else {
+      start();
+    }
+  }
+
   function installMixedPracticeFeedbackColors() {
     if (!isMixedPracticePage()) return;
     if (document.getElementById("efp-mixed-feedback-colors")) return;
@@ -438,6 +506,7 @@
     useLogicalParent(event);
   }, true);
 
+  installOriginalPracticeCopyCleanup();
   installMixedPracticeFeedbackColors();
   installMixedPracticeSiteTheme();
   installMixedPracticeInstantCheck();
