@@ -1,5 +1,5 @@
-// v45 Static GK Original Practice integration 20260915
-const CACHE_VERSION = "efp-pwa-2026-09-16-v78-pyq-fresh";
+// v79 Mind Maps navigation cache freshness 20260917
+const CACHE_VERSION = "efp-pwa-2026-09-17-v79-nav-fresh";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -23,7 +23,7 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/owner-debug.js",
-  "/home-nav.js?v=20260909mobilecompact1",
+  "/home-nav.js?v=20260917mindmapbottom2",
   "/app-session.js?v=20260908answerreset2",
   "/back-parent-map.js",
   "/back-nav.js",
@@ -254,6 +254,20 @@ async function staleWhileRevalidate(event, allowOpaque) {
   return new Response("", { status: 503, statusText: "Offline" });
 }
 
+async function freshCoreAsset(request) {
+  const cache = await caches.open(CACHE_VERSION);
+  try {
+    const response = await fetch(request, { cache: "no-store" });
+    if (response && response.ok && (response.type === "basic" || response.type === "cors")) {
+      await cache.put(request, response.clone());
+    }
+    return response;
+  } catch (_) {
+    const cached = await caches.match(request) || await caches.match(request, { ignoreSearch: true });
+    return cached || new Response("", { status: 503, statusText: "Offline" });
+  }
+}
+
 async function freshPyqAsset(request) {
   // PYQ is a fast-changing external-link catalog. Never let ignoreSearch return
   // an older runtime-cached catalog/app asset after a bulk import.
@@ -285,6 +299,13 @@ self.addEventListener("fetch", (event) => {
 
   if (request.mode === "navigate" || request.destination === "document") {
     event.respondWith(networkFirst(request));
+    return;
+  }
+
+  // Navigation chrome changes often; never let an old app-shell copy win on
+  // a normal refresh. Network first, with Cache Storage only as offline fallback.
+  if (url.pathname === "/home-nav.js") {
+    event.respondWith(freshCoreAsset(request));
     return;
   }
 

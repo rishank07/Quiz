@@ -25,6 +25,11 @@
     return normalizedPath(window.location.pathname).toLowerCase() === "/mind maps/subjectname.html";
   }
 
+  function isMindMapsPage() {
+    var path = normalizedPath(window.location.pathname).toLowerCase();
+    return path === "/mind maps" || path.indexOf("/mind maps/") === 0;
+  }
+
   function isOriginalPracticePage() {
     return normalizedPath(window.location.pathname).toLowerCase().indexOf("/original practice/") === 0;
   }
@@ -238,6 +243,21 @@
       "}" +
       "}" +
 
+      /* Mind Maps desktop: keep the header clear and use equal-size labeled
+         Back/Home buttons at the bottom corners. */
+      "@media(min-width:1200px){" +
+      "html.efp-mindmaps-page #" + BUTTON_ID + ",html.efp-mindmaps-page #" + BACK_BUTTON_ID + "{" +
+      "top:auto!important;bottom:max(16px,env(safe-area-inset-bottom))!important;" +
+      "width:108px!important;min-width:108px!important;height:44px!important;min-height:44px!important;" +
+      "padding:0 14px!important;border-radius:999px!important;gap:8px!important;" +
+      "box-shadow:0 6px 18px rgba(0,0,0,.28)!important;" +
+      "}" +
+      "html.efp-mindmaps-page #" + BUTTON_ID + "{left:auto!important;right:max(18px,env(safe-area-inset-right))!important;}" +
+      "html.efp-mindmaps-page #" + BACK_BUTTON_ID + "{left:max(18px,env(safe-area-inset-left))!important;right:auto!important;}" +
+      "html.efp-mindmaps-page #" + BUTTON_ID + " .efp-home-label,html.efp-mindmaps-page #" + BACK_BUTTON_ID + " .efp-back-label{display:inline!important;}" +
+      "html.efp-mindmaps-page #" + BUTTON_ID + " .efp-home-icon,html.efp-mindmaps-page #" + BACK_BUTTON_ID + " .efp-back-icon{font-size:18px!important;}" +
+      "}" +
+
       /* Mobile/tablet: compact lower-corner controls. Dark mode stays almost
          transparent; light mode gets the stronger dark filled treatment below. */
       "@media(max-width:1199px){" +
@@ -301,6 +321,8 @@
 
   function installHomeButton() {
     if (!document.documentElement || !document.head || isMainHomePage()) return;
+
+    if (isMindMapsPage()) document.documentElement.classList.add("efp-mindmaps-page");
 
     ensureMathsSpeedBoosterFitStyles();
     removeLegacyBackToTop();
