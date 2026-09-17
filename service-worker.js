@@ -1,5 +1,5 @@
-// v81 Crux Pinnacle exam-back blank-screen fix 20260917
-const CACHE_VERSION = "efp-pwa-2026-09-17-v81-crux-exam-back";
+// v82 Original Practice soft answer feedback 20260918
+const CACHE_VERSION = "efp-pwa-2026-09-18-v82-original-practice-feedback";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
