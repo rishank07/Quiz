@@ -1,5 +1,5 @@
-// v83 Original Practice answer text contrast fix 20260918
-const CACHE_VERSION = "efp-pwa-2026-09-18-v83-original-practice-text-contrast";
+// v84 Original Practice copy cleanup 20260918
+const CACHE_VERSION = "efp-pwa-2026-09-18-v84-original-practice-copy-cleanup";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -303,9 +303,10 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Navigation chrome and the Original Practice feedback stylesheet change often;
+  // Navigation chrome and Original Practice shared assets change often;
   // never let an old app-shell copy win on a normal refresh.
   if (url.pathname === "/home-nav.js" ||
+      url.pathname === "/back-nav.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
       url.pathname === "/Crux-Tricks/crux-restore-flash.js") {
     event.respondWith(freshCoreAsset(request));
