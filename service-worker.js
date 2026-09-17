@@ -1,5 +1,5 @@
-// v79 Mind Maps navigation cache freshness 20260917
-const CACHE_VERSION = "efp-pwa-2026-09-17-v79-nav-fresh";
+// v80 Crux Ecology + Pinnacle SSC library 20260917
+const CACHE_VERSION = "efp-pwa-2026-09-17-v80-crux-eco-ssc";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -44,9 +44,9 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-manifest.js",
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260915staticgktricks1",
+  "/Crux-Tricks/crux-tricks.js?v=20260917ecossccrux1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260915staticgktricks1",
+  "/Crux-Tricks/viewer-v2.js?v=20260917ecossccrux1",
 ];
 
 self.addEventListener("install", (event) => {

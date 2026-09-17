@@ -53,14 +53,60 @@
       if (link && link.href) location.href = link.href;
     });
 
-    // Pinnacle now has an exam layer before Subjects. Railway is the only
-    // visible option for now; SSC can be added beside it later without changing
-    // the surrounding navigation hierarchy.
+    // Pinnacle has a dedicated Exam layer. The live document array is filtered
+    // in-place so the existing SPA/search/favourites code keeps the same object
+    // reference while Railway and SSC remain completely separated.
     function installExamLayer() {
       var sourcePane = document.getElementById("source");
       var studyPane = document.getElementById("study");
       var sourceChoices = document.getElementById("sourceChoices");
       if (!sourcePane || !studyPane || !sourceChoices || document.getElementById("exam")) return;
+
+      var liveDocs = Array.isArray(window.EF_CRUX_DOCS) ? window.EF_CRUX_DOCS : [];
+      var masterDocs = liveDocs.slice();
+
+      function docExam(doc) {
+        if (!doc || doc.source !== "Pinnacle") return "";
+        if (doc.exam) return String(doc.exam);
+        var pdf = String(doc.pdf || "");
+        if (pdf.indexOf("/Pinnacle/SSC/") !== -1) return "SSC";
+        if (pdf.indexOf("/Pinnacle/Railway/") !== -1) return "Railway";
+        return "";
+      }
+
+      function examCount(name) {
+        return masterDocs.filter(function (doc) {
+          return doc && doc.source === "Pinnacle" && docExam(doc) === name;
+        }).length;
+      }
+
+      function restoreDocs() {
+        liveDocs.splice(0, liveDocs.length);
+        masterDocs.forEach(function (doc) { liveDocs.push(doc); });
+      }
+
+      function applyExamFilter(name) {
+        liveDocs.splice(0, liveDocs.length);
+        masterDocs.forEach(function (doc) {
+          if (!doc || doc.source !== "Pinnacle" || docExam(doc) === name) liveDocs.push(doc);
+        });
+      }
+
+      var railwayCount = examCount("Railway");
+      var sscCount = examCount("SSC");
+      var choices = "";
+      if (railwayCount) {
+        choices += '<button class="choice" type="button" data-exam="Railway">' +
+          '<span class="ico">🚆</span>' +
+          '<span class="copy"><b>Railway</b><span>रेलवे · ' + railwayCount + ' sheets</span></span>' +
+          '<span class="arrow">›</span></button>';
+      }
+      if (sscCount) {
+        choices += '<button class="choice" type="button" data-exam="SSC">' +
+          '<span class="ico">📝</span>' +
+          '<span class="copy"><b>SSC</b><span>एसएससी · ' + sscCount + ' sheets</span></span>' +
+          '<span class="arrow">›</span></button>';
+      }
 
       var examPane = document.createElement("section");
       examPane.id = "exam";
@@ -72,13 +118,7 @@
           '<span id="examCrumb" class="crumb">Books Crux › Pinnacle</span>' +
         '</div>' +
         '<div class="title"><h2>Choose Exam</h2><p>परीक्षा चुनें</p></div>' +
-        '<div id="examChoices" class="choice-grid source-grid">' +
-          '<button class="choice" type="button" data-exam="Railway">' +
-            '<span class="ico">🚆</span>' +
-            '<span class="copy"><b>Railway</b><span>रेलवे · Pinnacle Crux</span></span>' +
-            '<span class="arrow">›</span>' +
-          '</button>' +
-        '</div>';
+        '<div id="examChoices" class="choice-grid source-grid">' + choices + '</div>';
       studyPane.parentNode.insertBefore(examPane, studyPane);
 
       var backExam = document.getElementById("backExam");
@@ -106,10 +146,10 @@
       }
 
       function ensureExamCrumb(el) {
-        if (!el || activeExam !== "Railway") return;
+        if (!el || !activeExam) return;
         var text = String(el.textContent || "");
-        if (text.indexOf("Pinnacle") === -1 || text.indexOf("Railway") !== -1) return;
-        el.textContent = text.replace("Pinnacle", "Pinnacle › Railway");
+        if (text.indexOf("Pinnacle") === -1 || text.indexOf(activeExam) !== -1) return;
+        el.textContent = text.replace("Pinnacle", "Pinnacle › " + activeExam);
       }
 
       function syncCrumbs() {
@@ -119,6 +159,7 @@
       }
 
       function showExam() {
+        restoreDocs();
         activeExam = "";
         sourcePane.hidden = true;
         studyPane.hidden = true;
@@ -129,12 +170,14 @@
       }
 
       function hideExam() {
+        restoreDocs();
         examPane.hidden = true;
         activeExam = "";
         if (backSource) backSource.textContent = "← Sources";
       }
 
       function showSources() {
+        restoreDocs();
         hideExam();
         studyPane.hidden = true;
         sourcePane.hidden = false;
@@ -142,26 +185,23 @@
       }
 
       function selectExam(name) {
-        if (name !== "Railway") return false;
+        if (name !== "Railway" && name !== "SSC") return false;
+        if (!examCount(name)) return false;
         var sourceButton = pinnacleButton();
         if (!sourceButton || typeof sourceButton.onclick !== "function") return false;
 
-        activeExam = "Railway";
+        applyExamFilter(name);
+        activeExam = name;
         examPane.hidden = true;
-        // Calling the source button's assigned onclick directly runs the existing
-        // chooseSource("Pinnacle") logic without re-triggering our source capture.
         sourceButton.onclick.call(sourceButton);
         if (backSource) backSource.textContent = "← Exams";
         setHierarchyText();
-        if (studyCrumb) studyCrumb.textContent = "Books Crux › Pinnacle › Railway";
+        if (studyCrumb) studyCrumb.textContent = "Books Crux › Pinnacle › " + name;
         syncCrumbs();
         try { window.scrollTo(0, 0); } catch (_) {}
         return true;
       }
 
-      // History bridge listens on window capture first. We intercept at document
-      // capture so it can record the logical Source -> Exam transition, while the
-      // old inline source handler never skips straight to Subjects.
       document.addEventListener("click", function (event) {
         if (!event.target || !event.target.closest) return;
         var sourceButton = event.target.closest("#sourceChoices .choice");
@@ -172,7 +212,6 @@
           showExam();
           return;
         }
-
         var examButton = event.target.closest("#examChoices .choice[data-exam]");
         if (examButton) {
           event.preventDefault();
@@ -182,19 +221,12 @@
         }
       }, true);
 
-      if (backExam) {
-        backExam.onclick = function () {
-          showSources();
-        };
-      }
-
-      // Browser-history capture consumes this click when a managed history state
-      // exists. This fallback preserves the same hierarchy in ordinary/unmanaged
-      // navigation too.
+      if (backExam) backExam.onclick = showSources;
       if (backSource) {
         backSource.onclick = function (event) {
-          if (activeExam === "Railway") {
+          if (activeExam) {
             if (event) event.preventDefault();
+            restoreDocs();
             studyPane.hidden = true;
             examPane.hidden = false;
             activeExam = "";
@@ -214,13 +246,10 @@
       });
 
       window.EFP_CRUX_EXAM_LAYER = {
-        showExam: showExam,
-        showSources: showSources,
-        hideExam: hideExam,
-        selectExam: selectExam,
+        showExam: showExam, showSources: showSources, hideExam: hideExam,
+        selectExam: selectExam, restoreDocs: restoreDocs,
         getExam: function () { return activeExam; },
-        isVisible: function () { return !examPane.hidden; },
-        syncCrumbs: syncCrumbs
+        isVisible: function () { return !examPane.hidden; }, syncCrumbs: syncCrumbs
       };
     }
 
@@ -259,7 +288,7 @@
   var bootState = history.state;
   var restoring = false;
   var ready = false;
-  var SUBJECTS = ["History", "Polity", "Geography", "Science", "Economics", "Maths", "Static GK"];
+  var SUBJECTS = ["History", "Polity", "Geography", "Environment & Ecology", "Science", "Economics", "English", "Maths", "Static GK"];
   var BRANCHES = [
     "Ancient History", "Medieval History", "Modern History",
     "Indian Geography", "World Geography", "Physics", "Chemistry", "Biology"

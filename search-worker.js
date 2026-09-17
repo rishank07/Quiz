@@ -192,6 +192,39 @@
     return copy;
   }
 
+  function cruxTopicSearch(query) {
+    if (!isCruxSearch() || !Array.isArray(cruxDocs) || !cruxDocs.length) return [];
+    var parsed = queryTerms(query);
+    if (!parsed.terms.length) return [];
+    var results = [];
+    for (var i = 0; i < cruxDocs.length; i++) {
+      var doc = cruxDocs[i] || {};
+      var title = normalizeQuery(doc.title || "");
+      var sourceTitle = normalizeQuery(doc.sourceTitle || "");
+      var meta = normalizeQuery([doc.subject || "", doc.branch || "", doc.source || "", doc.exam || "", doc.breadcrumb || ""].join(" "));
+      var all = title + " " + sourceTitle + " " + meta;
+      var ok = true;
+      for (var t = 0; t < parsed.terms.length; t++) {
+        if (all.indexOf(parsed.terms[t]) === -1) { ok = false; break; }
+      }
+      if (!ok) continue;
+      var score = 30;
+      if (title === parsed.phrase || sourceTitle === parsed.phrase) score = 0;
+      else if (title.indexOf(parsed.phrase) !== -1 || sourceTitle.indexOf(parsed.phrase) !== -1) score = 4;
+      else {
+        var everyInTitle = true;
+        for (var j = 0; j < parsed.terms.length; j++) {
+          if (title.indexOf(parsed.terms[j]) === -1 && sourceTitle.indexOf(parsed.terms[j]) === -1) { everyInTitle = false; break; }
+        }
+        if (everyInTitle) score = 8;
+        else if (meta.indexOf(parsed.phrase) !== -1) score = 16;
+      }
+      results.push({score:score,sequence:i,f:"/Crux-Tricks/viewer.html?id="+encodeURIComponent(String(doc.id||"")),t:doc.title||doc.sourceTitle||"Crux topic",b:doc.breadcrumb||[doc.source,doc.subject,doc.branch].filter(Boolean).join(" / "),x:"Topic · "+(doc.sourceTitle||doc.title||"Crux revision")});
+    }
+    results.sort(function (a, b) { return a.score - b.score || a.sequence - b.sequence; });
+    return results.slice(0, Math.min(config && config.limit || 40, 40));
+  }
+
   function fastSnippetSearch(query) {
     var parsed = queryTerms(query);
     var terms = parsed.terms;
@@ -243,6 +276,15 @@
     var out = [];
     for (var k = 0; k < scored.length && k < limit; k++) {
       out.push(routeCruxHit({ f: scored[k].f, t: scored[k].t, b: scored[k].b, x: scored[k].x }));
+    }
+    if (isCruxSearch()) {
+      var topics = cruxTopicSearch(query), merged = [], seen = {};
+      topics.concat(out).forEach(function (hit) {
+        var key = String(hit && hit.f || "") + "|" + String(hit && hit.t || "");
+        if (!hit || seen[key]) return;
+        seen[key] = true; merged.push(hit);
+      });
+      return merged.slice(0, limit);
     }
     return out;
   }
