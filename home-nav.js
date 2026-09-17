@@ -7,6 +7,7 @@
   var BACK_BUTTON_ID = "efp-app-back-button";
   var CRUX_BACK_CLASS = "efp-crux-back-fallback";
   var MATHS_FIT_STYLE_ID = "efp-maths-speed-booster-fit";
+  var CA_RAPID_ENHANCER_ID = "efp-ca-rapid-search-enhancer";
 
   function normalizedPath(pathname) {
     var path = pathname || "/";
@@ -46,6 +47,21 @@
 
   function isMathsSpeedBoosterPage() {
     return normalizedPath(window.location.pathname).toLowerCase() === "/maths speed booster/math-speed-booster.html";
+  }
+
+  function isCurrentAffairsRapidPracticePage() {
+    var path = normalizedPath(window.location.pathname).toLowerCase();
+    return path === "/current affairs/topic names/rapid practice.html" ||
+      path.indexOf("/current affairs/topic names/rapid practice/") === 0;
+  }
+
+  function ensureCurrentAffairsRapidEnhancer() {
+    if (!isCurrentAffairsRapidPracticePage() || !document.head || document.getElementById(CA_RAPID_ENHANCER_ID)) return;
+    var script = document.createElement("script");
+    script.id = CA_RAPID_ENHANCER_ID;
+    script.src = "/Current%20Affairs/Topic%20Names/rapid-search-enhancer.js?v=20260918global1";
+    script.async = false;
+    document.head.appendChild(script);
   }
 
   function ensureMathsSpeedBoosterFitStyles() {
@@ -324,6 +340,7 @@
 
     if (isMindMapsPage()) document.documentElement.classList.add("efp-mindmaps-page");
 
+    ensureCurrentAffairsRapidEnhancer();
     ensureMathsSpeedBoosterFitStyles();
     removeLegacyBackToTop();
     watchLegacyOriginalPracticeHome();
@@ -358,6 +375,7 @@
     var observer = new MutationObserver(function () {
       if (!document.getElementById(BUTTON_ID)) installHomeButton();
       if (!isMainHomePage() && !document.getElementById(BACK_BUTTON_ID)) installDefaultBackButton();
+      ensureCurrentAffairsRapidEnhancer();
       removeLegacyBackToTop();
       removeLegacyOriginalPracticeHome();
       removeLegacyCruxNavigation();
