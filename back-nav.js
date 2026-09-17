@@ -163,7 +163,7 @@
   }
 
   /* Crux & Memory Tricks is a multi-step SPA inside one index.html:
-     Material -> Source -> Subject -> Part -> Chapter. Browser history cannot
+     Material -> Source -> Exam -> Subject -> Part -> Chapter. Browser history cannot
      see those in-page layers, so the global Back button must first delegate to
      the currently visible Crux layer before using document/browser history. */
   function useCruxInternalBack(event) {
@@ -197,6 +197,11 @@
     if (isVisibleByHiddenFlag("study")) {
       consumeBackEvent(event);
       return clickCruxControl("backSource");
+    }
+
+    if (isVisibleByHiddenFlag("exam")) {
+      consumeBackEvent(event);
+      return clickCruxControl("backExam");
     }
 
     if (isVisibleByHiddenFlag("source")) {

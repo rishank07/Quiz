@@ -19,6 +19,9 @@
     if (state.level === "source") {
       return visible("source") && !visible("material");
     }
+    if (state.level === "exam") {
+      return visible("exam") && !visible("material") && !visible("source") && !visible("study");
+    }
     if (state.level === "subjects") {
       return visible("study") && visible("subjectPane") && !visible("source");
     }

@@ -1,5 +1,5 @@
-// v80 Crux Ecology + Pinnacle SSC library 20260917
-const CACHE_VERSION = "efp-pwa-2026-09-17-v80-crux-eco-ssc";
+// v81 Crux Pinnacle exam-back blank-screen fix 20260917
+const CACHE_VERSION = "efp-pwa-2026-09-17-v81-crux-exam-back";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -43,6 +43,7 @@ const APP_SHELL = [
   "/Crux-Tricks/my-pages.html",
   "/Crux-Tricks/crux-manifest.js",
   "/Crux-Tricks/crux-search-route.js",
+  "/Crux-Tricks/crux-restore-flash.js?v=20260917examback1",
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260917ecossccrux1",
   "/Crux-Tricks/viewer.css",
@@ -304,7 +305,8 @@ self.addEventListener("fetch", (event) => {
 
   // Navigation chrome changes often; never let an old app-shell copy win on
   // a normal refresh. Network first, with Cache Storage only as offline fallback.
-  if (url.pathname === "/home-nav.js") {
+  if (url.pathname === "/home-nav.js" ||
+      url.pathname === "/Crux-Tricks/crux-restore-flash.js") {
     event.respondWith(freshCoreAsset(request));
     return;
   }
