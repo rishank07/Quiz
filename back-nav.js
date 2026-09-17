@@ -38,12 +38,8 @@
     var style = document.createElement("style");
     style.id = "efp-mixed-feedback-colors";
     style.textContent = [
-      ".option.correct .option-body,.option.correct input:checked+.option-body{border-color:#22c55e!important;background:rgba(34,197,94,.22)!important;box-shadow:0 0 0 1px rgba(34,197,94,.45) inset!important;color:#dcfce7!important}",
-      ".option.correct .option-letter{background:#22c55e!important;color:#052e16!important}",
-      ".option.correct .opt-en,.option.correct .opt-hi{color:#dcfce7!important}",
-      ".option.wrong .option-body,.option.wrong input:checked+.option-body{border-color:#ef4444!important;background:rgba(239,68,68,.24)!important;box-shadow:0 0 0 1px rgba(239,68,68,.5) inset!important;color:#fee2e2!important}",
-      ".option.wrong .option-letter{background:#ef4444!important;color:#fff!important}",
-      ".option.wrong .opt-en,.option.wrong .opt-hi{color:#fee2e2!important}"
+      ".option.correct .option-body,.option.correct input:checked+.option-body{border-color:rgba(74,222,128,.62)!important;background:rgba(74,222,128,.09)!important;box-shadow:none!important}",
+      ".option.wrong .option-body,.option.wrong input:checked+.option-body{border-color:rgba(251,113,133,.62)!important;background:rgba(251,113,133,.09)!important;box-shadow:none!important}"
     ].join("");
     document.head.appendChild(style);
   }
