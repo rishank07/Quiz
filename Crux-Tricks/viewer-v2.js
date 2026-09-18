@@ -57,6 +57,9 @@
   var PAGE_BATCH_SIZE=20;
   var BATCH_PREFETCH_THRESHOLD=5;
   var KEEP_RENDER_RADIUS=4;
+  var PRE_RENDER_BEHIND=2;
+  var PRE_RENDER_AHEAD=3;
+  var neighborWarmGeneration=0;
   var loadedBatchStart=1;
   var loadedBatchEnd=0;
   var batchPrefetchJobs={};
@@ -109,7 +112,8 @@
       'html.efp-pdf-dragging .pdf-stage{cursor:grabbing!important;user-select:none!important}',
       'html.efp-continuous-mobile-pdf #pdfCanvas{display:none!important}',
       '#efpContinuousPages{display:block;width:100%;box-sizing:border-box;padding:6px 0 calc(18px + env(safe-area-inset-bottom))}',
-      '.efp-cont-page{position:relative;display:flex;align-items:flex-start;justify-content:center;margin:0 auto 9px;overflow:hidden;background:transparent}',
+      '.efp-cont-page{position:relative;display:flex;align-items:flex-start;justify-content:center;margin:0 auto 9px;overflow:hidden;background:#fff;isolation:isolate}',
+      'html.dark .efp-cont-page{background:#0a0f18}',
       '.efp-cont-page canvas{display:block;margin:0 auto!important;max-width:none!important;box-shadow:0 1px 5px rgba(0,0,0,.18)!important;background:#fff}',
       '.efp-search-layer{position:absolute;pointer-events:none;z-index:3;overflow:hidden}',
       '.efp-cont-page>.efp-search-layer{left:0;top:0}',
@@ -340,15 +344,56 @@
       var cssWidth=Math.max(1,base.width*cssScale),cssHeight=Math.max(1,base.height*cssScale);
       var dpr=fullHdDensity(cssWidth,cssHeight,true);
       var vp=pg.getViewport({scale:cssScale*dpr});
-      var c=el.querySelector('canvas');
-      if(!c){c=document.createElement('canvas');c.setAttribute('aria-label','PDF page '+n);el.appendChild(c)}
+
+      // Render into a detached canvas first. Keeping a blank canvas out of the
+      // live scroller prevents the bright white/black flash seen on fast mobile
+      // scrolling while PDF.js is still painting the next page.
+      var c=document.createElement('canvas');
+      c.setAttribute('aria-label','PDF page '+n);
       c.width=Math.max(1,Math.floor(vp.width));c.height=Math.max(1,Math.floor(vp.height));
       c.style.width=Math.max(1,Math.floor(vp.width/dpr))+'px';c.style.height=Math.max(1,Math.floor(vp.height/dpr))+'px';
-      el.style.width=c.style.width;el.style.height=c.style.height;el.style.minHeight=c.style.height;
       var ctx=c.getContext('2d',{alpha:false});
-      return pg.render({canvasContext:ctx,viewport:vp}).promise.then(function(){el.dataset.rendered='1';if(searchQuery&&n===activeSearchPage)return renderSearchHighlights(n)});
-    }).catch(function(err){if(console&&console.error)console.error(err)}).then(function(){delete continuousRenders[n]});
+      return pg.render({canvasContext:ctx,viewport:vp}).promise.then(function(){
+        if(!continuous||!continuousRoot||!el.isConnected)return false;
+        if(!force&&Math.abs(n-page)>KEEP_RENDER_RADIUS)return false;
+        var current=el.querySelector('canvas');
+        if(current&&current!==c){current.width=1;current.height=1;current.remove()}
+        var badge=el.querySelector('.efp-page-badge');
+        if(badge)el.insertBefore(c,badge);else el.appendChild(c);
+        el.style.width=c.style.width;el.style.height=c.style.height;el.style.minHeight=c.style.height;
+        el.dataset.rendered='1';
+        if(searchQuery&&n===activeSearchPage)return renderSearchHighlights(n);
+        return true;
+      });
+    }).catch(function(err){if(console&&console.error)console.error(err);return false}).then(function(result){delete continuousRenders[n];return result});
     return continuousRenders[n];
+  }
+  function warmContinuousPages(center){
+    if(!continuous||!pdfDoc)return;
+    center=Math.max(1,Math.min(pdfDoc.numPages,center|0));
+    var generation=++neighborWarmGeneration;
+
+    // Current page and its immediate neighbours render now; farther neighbours
+    // are warmed serially during idle time so fast swipes stay smooth without
+    // loading the whole PDF or spiking mobile memory.
+    renderContinuousPage(center,false);
+    if(center>1)renderContinuousPage(center-1,false);
+    if(center<pdfDoc.numPages)renderContinuousPage(center+1,false);
+
+    var queue=[];
+    for(var ahead=2;ahead<=PRE_RENDER_AHEAD;ahead++)queue.push(center+ahead);
+    for(var behind=2;behind<=PRE_RENDER_BEHIND;behind++)queue.push(center-behind);
+    var i=0;
+    function next(){
+      if(generation!==neighborWarmGeneration||!continuous||!pdfDoc||i>=queue.length)return;
+      var n=queue[i++];
+      if(n<1||n>pdfDoc.numPages){next();return}
+      Promise.resolve(renderContinuousPage(n,false)).then(function(){
+        if(generation!==neighborWarmGeneration)return;
+        if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:160});else setTimeout(next,24);
+      });
+    }
+    if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:100});else setTimeout(next,16);
   }
   function trimContinuous(center){
     if(!continuousRoot)return;
@@ -362,7 +407,7 @@
     n=Math.max(1,Math.min(pdfDoc?pdfDoc.numPages:doc.pages,n));
     if(n===page){updateControls();return;}
     page=n;ensureBatchAround(page);updateControls();updateUrl();if(mark!==false)markVisited();trimContinuous(page);
-    renderContinuousPage(page,false);if(page>1)renderContinuousPage(page-1,false);if(page<pdfDoc.numPages)renderContinuousPage(page+1,false);
+    warmContinuousPages(page);
   }
   function visibleContinuousPage(){
     if(!continuousRoot)return page;
@@ -423,11 +468,11 @@
     loadedBatchEnd=Math.min(pdfDoc.numPages,loadedBatchStart+PAGE_BATCH_SIZE-1);
     prefetchBatch(loadedBatchStart,loadedBatchEnd);
     if(continuousObserver){try{continuousObserver.disconnect()}catch(e){}}
-    continuousObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var n=parseInt(entry.target.dataset.page,10);if(n&&n>=loadedBatchStart&&n<=loadedBatchEnd)renderContinuousPage(n,false)}})},{root:pdfStage,rootMargin:'1100px 0px',threshold:.01});
+    continuousObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var n=parseInt(entry.target.dataset.page,10);if(n&&n>=loadedBatchStart&&n<=loadedBatchEnd)renderContinuousPage(n,false)}})},{root:pdfStage,rootMargin:'1800px 0px',threshold:.01});
     Array.prototype.forEach.call(continuousRoot.children,function(el){continuousObserver.observe(el)});
     pdfStage.removeEventListener('scroll',onContinuousScroll);pdfStage.addEventListener('scroll',onContinuousScroll,{passive:true});
     pdfStage.addEventListener('pointerdown',showMobileControlsBriefly,{passive:true});
-    requestAnimationFrame(function(){go(page,false);renderContinuousPage(page,false);if(page>1)renderContinuousPage(page-1,false);if(page<pdfDoc.numPages)renderContinuousPage(page+1,false);showMobileControlsBriefly()});
+    requestAnimationFrame(function(){go(page,false);warmContinuousPages(page);showMobileControlsBriefly()});
   }
   function reflowContinuous(){
     if(!continuous||!continuousRoot)return;
@@ -437,7 +482,7 @@
       var n=parseInt(list[i].dataset.page,10)||0;sizeShell(list[i],pageRatios[n]||defaultRatio);var c=list[i].querySelector('canvas');if(c)c.remove();var hl=list[i].querySelector('.efp-search-layer');if(hl)hl.remove();list[i].dataset.rendered='0';
     }
     continuousRenders={};
-    requestAnimationFrame(function(){go(saved,false);renderContinuousPage(saved,false);if(saved>1)renderContinuousPage(saved-1,false);if(saved<pdfDoc.numPages)renderContinuousPage(saved+1,false)});
+    requestAnimationFrame(function(){go(saved,false);warmContinuousPages(saved)});
   }
   function disableContinuous(){
     continuous=false;document.documentElement.classList.remove('efp-continuous-mobile-pdf','efp-reader-ui-hidden');
@@ -487,6 +532,7 @@
       var searchJumpPending=!!(searchQuery&&page===activeSearchPage&&searchFocusPending);
       var useSmooth=smooth!==false&&Math.abs(next-from)<=1&&!searchJumpPending;
       if(!searchJumpPending)programmaticScrollUntil=Date.now()+(useSmooth?850:300);
+      warmContinuousPages(page);
       return renderContinuousPage(page,false).then(function(highlighted){
         if(el&&!searchJumpPending){pdfStage.scrollTo({top:Math.max(0,el.offsetTop-4),left:0,behavior:useSmooth?'smooth':'auto'});}
         else if(el&&searchJumpPending&&highlighted!==true){programmaticScrollUntil=Date.now()+300;pdfStage.scrollTo({top:Math.max(0,el.offsetTop-4),left:0,behavior:'auto'});searchFocusPending=false;}
