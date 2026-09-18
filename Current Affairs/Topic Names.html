@@ -966,53 +966,19 @@
     // Uses a pre-built static index (search-index.js) so it works
     // even when the page is opened directly as a local file.
     // =======================================
-    let searchIndex = null;
-    let indexBuildPromise = null;
+    const CA_SNIPPET_PREFIX = "./Current%20Affairs/Topic%20Names/";
     let searchRequestSequence = 0;
     let searchWorkerClient = (typeof efCreateSearchWorker === "function")
       ? efCreateSearchWorker({
-          workerUrl: new URL("../search-worker.js?v=20260901a", document.baseURI).href,
-          logicUrl: new URL("../search-logic.js?v=20260901a", document.baseURI).href,
-          indexUrl: new URL("./Topic Names/search-index.js?v=20260909august1", document.baseURI).href,
-          mode: "records",
-          globalName: "CA_SEARCH_INDEX",
-          mapCompactContent: true,
-          fields: ["title", "text"],
+          workerUrl: new URL("../search-worker.js?v=20260919ca3", document.baseURI).href,
+          logicUrl: new URL("../search-logic.js?v=20260919ca3", document.baseURI).href,
+          indexUrl: new URL("../search-snippets-current-affairs.js?v=20260919ca3", document.baseURI).href,
+          mode: "snippet",
+          globalName: "EF_SNIPPET_INDEX",
+          sectionPrefix: CA_SNIPPET_PREFIX,
           limit: 40
         })
       : null;
-
-    function loadSearchIndexScript() {
-      return new Promise(function (resolve, reject) {
-        if (window.CA_SEARCH_INDEX) return resolve(window.CA_SEARCH_INDEX);
-        const script = document.createElement("script");
-        script.src = "./Topic Names/search-index.js?v=20260909august1";
-        script.onload = function () { resolve(window.CA_SEARCH_INDEX || []); };
-        script.onerror = function () { reject(new Error("Failed to load search index")); };
-        document.body.appendChild(script);
-      });
-    }
-
-    function buildSearchIndex() {
-      if (searchIndex) return Promise.resolve(searchIndex);
-      if (indexBuildPromise) return indexBuildPromise;
-
-      const statusEl = document.getElementById("searchStatus");
-      statusEl.textContent = "⏳ Loading search data... / सामग्री लोड हो रही है...";
-
-      indexBuildPromise = loadSearchIndexScript().then(function (raw) {
-        searchIndex = raw.map(function (e) {
-          return { file: e.f, title: e.t, text: e.x };
-        });
-        statusEl.textContent = "";
-        return searchIndex;
-      }).catch(function () {
-        statusEl.textContent = "⚠️ Could not load search content right now.";
-        return [];
-      });
-
-      return indexBuildPromise;
-    }
 
     function warmCurrentAffairsSearch() {
       if (searchWorkerClient) searchWorkerClient.warm().catch(function () {});
@@ -1025,36 +991,58 @@
           return searchCurrentAffairs(query);
         });
       }
-      return buildSearchIndex().then(function (index) {
-        return (typeof efSearchRecords === "function")
-          ? efSearchRecords(query, index, { fields: ["title", "text"], limit: 40 })
-          : index.filter(function (e) {
-              return e.text.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-            }).slice(0, 40);
-      });
+
+      if (typeof efLoadSearchIndexScript !== "function") return Promise.resolve([]);
+      return efLoadSearchIndexScript(
+        new URL("../search-snippets-current-affairs.js?v=20260919ca3", document.baseURI).href,
+        "EF_SNIPPET_INDEX"
+      ).then(function (records) {
+        if (typeof efFallbackSnippetSearchAsync === "function") {
+          return efFallbackSnippetSearchAsync(query, records, {
+            sectionPrefix: CA_SNIPPET_PREFIX,
+            limit: 40
+          });
+        }
+        return (typeof efSnippetSearch === "function")
+          ? efSnippetSearch(query, { sectionPrefix: CA_SNIPPET_PREFIX, limit: 40 })
+          : [];
+      }).catch(function () { return []; });
     }
 
     function escapeHtml(str) {
-      return str.replace(/[&<>"']/g, function (c) {
+      return String(str == null ? "" : str).replace(/[&<>"']/g, function (c) {
         return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
       });
     }
 
-    function snippetWithHighlight(text, query) {
-      const lower = text.toLowerCase();
-      const idx = lower.indexOf(query.toLowerCase());
-      let raw;
-      if (idx === -1) {
-        raw = text.slice(0, 150) + (text.length > 150 ? "..." : "");
-      } else {
-        const start = Math.max(0, idx - 60);
-        const end = Math.min(text.length, idx + query.length + 80);
-        raw = (start > 0 ? "..." : "") + text.slice(start, end) + (end < text.length ? "..." : "");
+    function stripSearchMarker(raw) {
+      raw = String(raw == null ? "" : raw);
+      if (raw.length && raw.charCodeAt(0) === 1) {
+        var sep = raw.indexOf("\u0002");
+        if (sep !== -1) return raw.slice(sep + 1);
       }
-      const escaped = escapeHtml(raw);
-      const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      const re = new RegExp("(" + safeQuery + ")", "ig");
-      return escaped.replace(re, "<mark>$1</mark>");
+      return raw;
+    }
+
+    function resultHref(value) {
+      var raw = String(value || "");
+      if (!raw) return "#";
+      if (/^(?:https?:)?\/\//i.test(raw) || raw.charAt(0) === "/") return raw;
+      raw = raw.replace(/^\.\//, "");
+      return "/" + raw;
+    }
+
+    function snippetWithHighlight(text, query) {
+      text = stripSearchMarker(text);
+      if (typeof efSnippetWithHighlight === "function") {
+        return efSnippetWithHighlight(text, query);
+      }
+      var lower = text.toLowerCase();
+      var idx = lower.indexOf(query.toLowerCase());
+      var start = idx < 0 ? 0 : Math.max(0, idx - 60);
+      var end = idx < 0 ? Math.min(text.length, 180) : Math.min(text.length, idx + query.length + 100);
+      var raw = (start > 0 ? "..." : "") + text.slice(start, end) + (end < text.length ? "..." : "");
+      return escapeHtml(raw);
     }
 
     const searchInputEl = document.getElementById("globalSearch");
@@ -1065,9 +1053,9 @@
     const mainAccordionEl = document.getElementById("mainAccordion");
     let searchDebounce = null;
 
-    searchInputEl.addEventListener("focus", function () {
-      warmCurrentAffairsSearch();
-    });
+    searchInputEl.placeholder = "Search any Current Affairs question or fact / कोई भी प्रश्न या तथ्य खोजें...";
+
+    searchInputEl.addEventListener("focus", warmCurrentAffairsSearch);
     if (!(navigator.connection && navigator.connection.saveData)) {
       if (typeof requestIdleCallback === "function") {
         requestIdleCallback(warmCurrentAffairsSearch, { timeout: 2500 });
@@ -1099,33 +1087,32 @@
       }
 
       mainAccordionEl.style.display = "none";
-      searchStatusEl.textContent = "⏳ Searching... / खोज जारी है...";
+      searchResultsEl.style.display = "flex";
+      searchStatusEl.textContent = "⏳ Searching exact questions... / सटीक प्रश्न खोजे जा रहे हैं...";
 
       searchDebounce = setTimeout(function () {
         searchCurrentAffairs(query).then(function (matches) {
           if (requestSequence !== searchRequestSequence || searchInputEl.value.trim() !== query) return;
 
           if (!matches.length) {
-            searchResultsEl.style.display = "flex";
-            searchResultsEl.innerHTML = '<div class="search-empty">😕 No results found for "' + escapeHtml(query) + '" / कोई परिणाम नहीं मिला</div>';
+            searchResultsEl.innerHTML = '<div class="search-empty">😕 No exact content match for "' +
+              escapeHtml(query) + '" / कोई सटीक परिणाम नहीं मिला</div>';
             searchStatusEl.textContent = "";
             return;
           }
 
-          searchStatusEl.textContent = matches.length + " result(s) found / परिणाम मिले";
-          searchResultsEl.style.display = "flex";
+          searchStatusEl.textContent = matches.length + " exact result(s) · tap to jump to the matched question";
           searchResultsEl.innerHTML = matches.map(function (m) {
-            return '<a href="' + m.file + '" class="search-result-item" onclick="openPage(event)">' +
-              '<span class="search-result-source">' + escapeHtml(m.title) + '</span>' +
-              '<div class="search-result-snippet">' +
-                ((typeof efSnippetWithHighlight === "function")
-                  ? efSnippetWithHighlight(m.text, query)
-                  : snippetWithHighlight(m.text, query)) +
-              '</div>' +
+            var snippet = stripSearchMarker(m.x || "");
+            var breadcrumb = m.b ? '<div style="font-size:11px;opacity:.62;margin-bottom:5px">' + escapeHtml(m.b) + '</div>' : "";
+            return '<a href="' + escapeHtml(resultHref(m.f)) + '" class="search-result-item" onclick="openPage(event)">' +
+              '<span class="search-result-source">' + escapeHtml(m.t || "Current Affairs") + '</span>' +
+              breadcrumb +
+              '<div class="search-result-snippet">' + snippetWithHighlight(snippet, query) + '</div>' +
               '</a>';
           }).join("");
         });
-      }, 300);
+      }, 220);
     });
 
     // =======================================

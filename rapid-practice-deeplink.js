@@ -1,54 +1,95 @@
-/* ExamFusion Prep — Current Affairs "Rapid Practice" deep-link handler (2026-09-18)
- * Reads a #rp-<section>-<qi> hash (matching each article's id) from the URL,
- * opens that section via the page's own openSection(), then scrolls to and
- * briefly highlights the exact question article.
+/* ExamFusion Prep — Current Affairs Rapid Practice exact-question deep links.
+ *
+ * Search results use #rp-<section>-<question>. This file is intentionally loaded
+ * synchronously in the <head> of Rapid Practice quizzes, so the legacy per-
+ * section search box is hidden before first paint (no refresh-time UI flash).
  */
 (function () {
   "use strict";
 
+  var HIDE_STYLE_ID = "efp-rp-prepaint-search-hide";
+  if (document.head && !document.getElementById(HIDE_STYLE_ID)) {
+    var prepaintStyle = document.createElement("style");
+    prepaintStyle.id = HIDE_STYLE_ID;
+    prepaintStyle.textContent =
+      "input#search.search{display:none!important;visibility:hidden!important}" +
+      ".efp-deep-focus{outline:3px solid #f5a623!important;outline-offset:3px;border-radius:10px;" +
+      "box-shadow:0 0 0 6px rgba(245,166,35,.16)!important;transition:outline-color .25s ease,box-shadow .25s ease}";
+    document.head.appendChild(prepaintStyle);
+  }
+
   function getTarget() {
-    var hash = (window.location.hash || "").replace("#", "");
+    var hash = (window.location.hash || "").replace(/^#/, "");
     var m = /^rp-(\d+)-(\d+)$/.exec(hash);
-    if (m) return { section: parseInt(m[1], 10), q: parseInt(m[2], 10), id: hash };
-    // fallback: ?section=N&q=M
-    var params = new URLSearchParams(window.location.search || "");
-    var section = params.get("section");
-    var q = params.get("q");
-    if (section !== null && q !== null) {
-      return { section: parseInt(section, 10), q: parseInt(q, 10), id: "rp-" + section + "-" + q };
+    if (m) {
+      return {
+        section: parseInt(m[1], 10),
+        q: parseInt(m[2], 10),
+        id: hash
+      };
     }
+    try {
+      var params = new URLSearchParams(window.location.search || "");
+      var section = params.get("section");
+      var q = params.get("q");
+      if (/^\d+$/.test(String(section)) && /^\d+$/.test(String(q))) {
+        return {
+          section: parseInt(section, 10),
+          q: parseInt(q, 10),
+          id: "rp-" + section + "-" + q
+        };
+      }
+    } catch (_) {}
     return null;
   }
 
-  function focusArticle(id) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "center" });
+  function focusArticle(el) {
+    try {
+      el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    } catch (_) {
+      el.scrollIntoView();
+    }
     el.classList.add("efp-deep-focus");
-    setTimeout(function () {
+    clearTimeout(el.__efpDeepFocusTimer);
+    el.__efpDeepFocusTimer = setTimeout(function () {
       el.classList.remove("efp-deep-focus");
-    }, 2600);
+    }, 4200);
   }
 
   function run() {
     var target = getTarget();
     if (!target || isNaN(target.section) || isNaN(target.q)) return;
-    if (typeof openSection === "function") {
-      try {
-        openSection(target.section);
-      } catch (e) {
+
+    var opened = false;
+    var attempt = 0;
+
+    (function seek() {
+      if (!opened && typeof window.openSection === "function") {
+        try {
+          window.openSection(target.section);
+          opened = true;
+        } catch (_) {}
+      }
+
+      var el = document.getElementById(target.id);
+      if (el) {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { focusArticle(el); });
+        });
         return;
       }
-    }
-    setTimeout(function () {
-      focusArticle(target.id);
-    }, 150);
+
+      if (++attempt < 70) setTimeout(seek, 60);
+    })();
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", run);
+    document.addEventListener("DOMContentLoaded", run, { once: true });
   } else {
     setTimeout(run, 0);
   }
   window.addEventListener("hashchange", run);
+  window.addEventListener("pageshow", function () {
+    if (getTarget()) setTimeout(run, 0);
+  });
 })();

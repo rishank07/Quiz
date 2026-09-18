@@ -1,28 +1,26 @@
-/* ExamFusion Prep — Current Affairs Rapid Practice search UX */
+/* ExamFusion Prep — Current Affairs Rapid Practice exact-content search UX.
+ *
+ * Hub search returns question/fact-level hits and links directly to the exact
+ * #rp-section-question anchor. Inner-quiz local search remains hidden because
+ * Rapid Practice now uses the hub/global content search as its discovery path.
+ */
 (function () {
   "use strict";
 
   var HUB_PATH = "/current affairs/topic names/rapid practice.html";
   var INNER_PREFIX = "/current affairs/topic names/rapid practice/";
-  var SEARCH_LOGIC_SRC = "/search-logic.js?v=20260918ca2";
-  var CA_INDEX_SRC = "/Current%20Affairs/Topic%20Names/search-index.js?v=20260918ca2";
+  var LOGIC_SRC = "/search-logic.js?v=20260919ca3";
+  var WORKER_SRC = "/search-worker.js?v=20260919ca3";
+  var INDEX_SRC = "/search-snippets-current-affairs-rapid.js?v=20260919ca5";
+  var EXTRA_INDEX_SRC = "/search-snippets-current-affairs-rapid-extra.js?v=20260919ca5";
+  var INDEX_PREFIX = "./Current%20Affairs/Topic%20Names/Rapid%20Practice/";
   var LOCAL_HIDE_STYLE_ID = "efp-ca-rapid-local-search-hide";
+  var RESULT_STYLE_ID = "efp-ca-rapid-result-style";
+  var RESULT_ID = "efp-ca-rapid-exact-results";
+  var STATUS_ID = "efp-ca-rapid-search-status";
   var debounceTimer = 0;
-
-  var SOURCE_ALIASES = {
-    "appointments": ["appointment2026"],
-    "billsacts": ["billsact2026"],
-    "booksauthors": ["books2026"],
-    "unionbudget202627": ["budget202627"],
-    "economicsurvey202526": ["economicsurvey2026"],
-    "daysthemes": ["daystheme2026"],
-    "militaryexercises": ["exercises2026"],
-    "filmawards": ["filmsawards2026"],
-    "sciencetechnology": ["sciencetech2026"],
-    "stateschemes": ["statescheme2026"],
-    "gitags": ["gitag2026"],
-    "summitsconferences": ["summits2026"]
-  };
+  var requestToken = 0;
+  var searchClients = null;
 
   function normalizedPath() {
     var path = window.location.pathname || "/";
@@ -38,17 +36,17 @@
     return normalizedPath().indexOf(INNER_PREFIX) === 0;
   }
 
+  function ensureInnerHideStyle() {
+    if (!document.head || document.getElementById(LOCAL_HIDE_STYLE_ID)) return;
+    var style = document.createElement("style");
+    style.id = LOCAL_HIDE_STYLE_ID;
+    style.textContent = "input#search.search{display:none!important;visibility:hidden!important}";
+    document.head.appendChild(style);
+  }
+
   function hideInnerSearch() {
     if (!isInnerQuiz()) return;
-
-    if (document.head && !document.getElementById(LOCAL_HIDE_STYLE_ID)) {
-      var style = document.createElement("style");
-      style.id = LOCAL_HIDE_STYLE_ID;
-      style.textContent = "html.efp-ca-rapid-inner input#search.search{display:none!important}";
-      document.head.appendChild(style);
-    }
-    document.documentElement.classList.add("efp-ca-rapid-inner");
-
+    ensureInnerHideStyle();
     var input = document.getElementById("search");
     if (!input) return;
     input.value = "";
@@ -63,6 +61,7 @@
       if (readyTest()) return resolve();
       var old = document.getElementById(id);
       if (old) {
+        if (readyTest()) return resolve();
         old.addEventListener("load", resolve, { once: true });
         old.addEventListener("error", reject, { once: true });
         return;
@@ -73,181 +72,239 @@
       script.async = true;
       script.onload = resolve;
       script.onerror = reject;
-      document.head.appendChild(script);
+      (document.head || document.documentElement).appendChild(script);
     });
   }
 
-  function compact(value) {
-    var text = String(value == null ? "" : value);
-    try { text = decodeURIComponent(text); } catch (_) {}
-    if (typeof window.efNormalizeSearchText === "function") {
-      text = window.efNormalizeSearchText(text);
-    } else {
-      text = text.toLowerCase().replace(/[^a-z0-9\u0900-\u097f]+/g, " ").trim();
-    }
-    return text
-      .replace(/\b(current|affairs|rapid|practice|proper|bilingual|quiz|topic|wise|month|html)\b/g, " ")
-      .replace(/\s+/g, "")
-      .replace(/and/g, "");
-  }
-
-  function fileKey(value) {
-    var raw = String(value || "").replace(/\\/g, "/");
-    var base = raw.split("/").pop() || raw;
-    return compact(base);
-  }
-
-  function cardBucket(card) {
-    var href = "";
-    try { href = decodeURIComponent(card.getAttribute("href") || "").toLowerCase(); } catch (_) {}
-    if (href.indexOf("/2026/month wise/") !== -1) return "2026-month";
-    if (href.indexOf("/2026/topic wise/") !== -1) return "2026-topic";
-    if (href.indexOf("/2025/month wise/") !== -1) return "2025-month";
-    return "";
-  }
-
-  function cardKeys(card) {
-    var name = card.querySelector(".quiz-name");
-    var titleKey = compact(name ? name.textContent : card.textContent);
-    var hrefKey = fileKey(card.getAttribute("href") || "");
-    var keys = [titleKey, hrefKey];
-
-    Object.keys(SOURCE_ALIASES).forEach(function (needle) {
-      if (titleKey.indexOf(needle) !== -1) keys = keys.concat(SOURCE_ALIASES[needle]);
-    });
-
-    return keys.filter(Boolean).filter(function (key, index, arr) {
-      return arr.indexOf(key) === index;
+  function escapeHtml(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
 
-  function fileMatchesCard(sourceKey, keys) {
-    if (!sourceKey) return false;
-    for (var i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      if (!key || key.length < 4) continue;
-      if (sourceKey.indexOf(key) !== -1 || key.indexOf(sourceKey) !== -1) return true;
+  function stripMarker(raw) {
+    raw = String(raw == null ? "" : raw);
+    if (raw.length && raw.charCodeAt(0) === 1) {
+      var sep = raw.indexOf("\u0002");
+      if (sep !== -1) return raw.slice(sep + 1);
     }
-    return false;
+    return raw;
   }
 
-  function setHubEmptyState() {
-    var groups = document.querySelectorAll(".group");
-    var anyVisible = false;
-    for (var i = 0; i < groups.length; i++) {
-      var cards = groups[i].querySelectorAll(".quiz-card");
-      var groupVisible = false;
-      for (var j = 0; j < cards.length; j++) {
-        if (cards[j].style.display !== "none" && !cards[j].hidden) {
-          groupVisible = true;
-          anyVisible = true;
-          break;
-        }
-      }
-      groups[i].style.display = groupVisible ? "" : "none";
+  function resultHref(value) {
+    var raw = String(value || "");
+    if (!raw) return "#";
+    if (/^(?:https?:)?\/\//i.test(raw) || raw.charAt(0) === "/") return raw;
+    return "/" + raw.replace(/^\.\//, "");
+  }
+
+  function ensureResultUi() {
+    if (!document.head || !isHub()) return null;
+
+    if (!document.getElementById(RESULT_STYLE_ID)) {
+      var style = document.createElement("style");
+      style.id = RESULT_STYLE_ID;
+      style.textContent =
+        "#" + STATUS_ID + "{display:none;margin:-8px 0 12px;color:var(--muted);font-size:12px;text-align:center}" +
+        "#" + RESULT_ID + "{display:none;gap:10px;flex-direction:column;margin:0 0 22px}" +
+        "#" + RESULT_ID + ".show{display:flex}" +
+        "#" + RESULT_ID + " .efp-rp-result{display:block;text-decoration:none;color:inherit;padding:14px 16px;" +
+        "border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.075);" +
+        "box-shadow:0 7px 22px rgba(0,0,0,.14);transition:.18s}" +
+        "#" + RESULT_ID + " .efp-rp-result:hover{transform:translateY(-1px);border-color:rgba(255,189,90,.5);" +
+        "background:rgba(255,255,255,.105)}" +
+        "#" + RESULT_ID + " .efp-rp-source{display:inline-block;color:var(--gold);font-size:11px;font-weight:900;" +
+        "letter-spacing:.03em;margin-bottom:5px}" +
+        "#" + RESULT_ID + " .efp-rp-bread{color:var(--muted);font-size:11px;margin-bottom:6px}" +
+        "#" + RESULT_ID + " .efp-rp-snippet{font-size:13px;line-height:1.55}" +
+        "#" + RESULT_ID + " mark{background:#ffbd5a;color:#17212b;border-radius:4px;padding:0 3px}" +
+        "#" + RESULT_ID + " .efp-rp-empty{padding:24px;text-align:center;color:var(--muted);" +
+        "border:1px dashed rgba(255,255,255,.14);border-radius:14px}";
+      document.head.appendChild(style);
     }
+
+    var toolbar = document.querySelector(".toolbar");
+    if (!toolbar) return null;
+
+    var status = document.getElementById(STATUS_ID);
+    if (!status) {
+      status = document.createElement("div");
+      status.id = STATUS_ID;
+      toolbar.insertAdjacentElement("afterend", status);
+    }
+
+    var result = document.getElementById(RESULT_ID);
+    if (!result) {
+      result = document.createElement("div");
+      result.id = RESULT_ID;
+      status.insertAdjacentElement("afterend", result);
+    }
+    return result;
+  }
+
+  function setSearchMode(active) {
+    var groups = document.getElementById("groups");
+    var opened = document.querySelector(".opened-progress");
     var empty = document.getElementById("empty");
-    if (empty) empty.style.display = anyVisible ? "none" : "block";
+    var results = ensureResultUi();
+    var status = document.getElementById(STATUS_ID);
+
+    if (groups) groups.style.display = active ? "none" : "";
+    if (opened) opened.style.display = active ? "none" : "";
+    if (empty) empty.style.display = "none";
+    if (results) {
+      results.classList.toggle("show", active);
+      if (!active) results.innerHTML = "";
+    }
+    if (status) {
+      status.style.display = active ? "block" : "none";
+      if (!active) status.textContent = "";
+    }
   }
 
-  function applyGlobalHubSearch() {
+  function ensureClient() {
+    if (searchClients) return Promise.resolve(searchClients);
+    return loadScript("efp-shared-search-logic", LOGIC_SRC, function () {
+      return typeof window.efCreateSearchWorker === "function";
+    }).then(function () {
+      searchClients = [
+        window.efCreateSearchWorker({
+          workerUrl: WORKER_SRC,
+          logicUrl: LOGIC_SRC,
+          indexUrl: INDEX_SRC,
+          mode: "snippet",
+          globalName: "EF_SNIPPET_INDEX",
+          sectionPrefix: INDEX_PREFIX,
+          limit: 36
+        }),
+        window.efCreateSearchWorker({
+          workerUrl: WORKER_SRC,
+          logicUrl: LOGIC_SRC,
+          indexUrl: EXTRA_INDEX_SRC,
+          mode: "snippet",
+          globalName: "EF_RAPID_EXTRA_INDEX",
+          sectionPrefix: INDEX_PREFIX,
+          limit: 24
+        })
+      ].filter(Boolean);
+      if (!searchClients.length) throw new Error("Rapid Practice search clients unavailable");
+      return searchClients;
+    });
+  }
+
+  function snippetHtml(text, query) {
+    text = stripMarker(text);
+    if (typeof window.efSnippetWithHighlight === "function") {
+      return window.efSnippetWithHighlight(text, query);
+    }
+    var shortText = text.length > 210 ? text.slice(0, 210) + "..." : text;
+    return escapeHtml(shortText);
+  }
+
+  function renderMatches(query, matches, token) {
+    if (token !== requestToken) return;
+    var input = document.getElementById("search");
+    if (!input || input.value.trim() !== query) return;
+
+    var results = ensureResultUi();
+    var status = document.getElementById(STATUS_ID);
+    if (!results || !status) return;
+
+    matches = Array.isArray(matches) ? matches : [];
+    if (!matches.length) {
+      status.textContent = "";
+      results.innerHTML = '<div class="efp-rp-empty">No exact question/fact found / कोई सटीक प्रश्न या तथ्य नहीं मिला</div>';
+      return;
+    }
+
+    status.textContent = matches.length + " exact result(s) · tap to jump straight to the matched question";
+    var seen = {};
+    var html = [];
+
+    for (var i = 0; i < matches.length; i++) {
+      var m = matches[i] || {};
+      var href = resultHref(m.f);
+      var key = href + "\u001f" + String(m.x || "");
+      if (!href || seen[key]) continue;
+      seen[key] = true;
+      html.push(
+        '<a class="efp-rp-result" href="' + escapeHtml(href) + '">' +
+          '<span class="efp-rp-source">' + escapeHtml(m.t || "Rapid Practice") + '</span>' +
+          (m.b ? '<div class="efp-rp-bread">' + escapeHtml(m.b) + '</div>' : '') +
+          '<div class="efp-rp-snippet">' + snippetHtml(m.x || "", query) + '</div>' +
+        '</a>'
+      );
+    }
+    results.innerHTML = html.join("") || '<div class="efp-rp-empty">No exact question/fact found.</div>';
+  }
+
+  function runHubSearch() {
     if (!isHub()) return;
     var input = document.getElementById("search");
     if (!input) return;
+
     var query = input.value.trim();
-    if (query.length < 2) return;
-
-    var cards = Array.prototype.slice.call(document.querySelectorAll(".quiz-card"));
-    if (!cards.length) return;
-
-    var active = document.querySelector(".filter button.active");
-    var activeFilter = active ? (active.getAttribute("data-filter") || "all") : "all";
-    var records = [];
-
-    if (Array.isArray(window.CA_SEARCH_INDEX) && typeof window.efSearchRecords === "function") {
-      records = window.efSearchRecords(query, window.CA_SEARCH_INDEX, {
-        fields: ["f", "t", "x"],
-        limit: Math.min(Math.max(window.CA_SEARCH_INDEX.length, 1000), 12000),
-        fuzzy: true,
-        compact: true
-      });
-    }
-
-    var matchedFiles = [];
-    var fileSeen = {};
-    for (var r = 0; r < records.length; r++) {
-      var key = fileKey(records[r].f || "");
-      if (key && !fileSeen[key]) {
-        fileSeen[key] = true;
-        matchedFiles.push(key);
-      }
-    }
-
-    for (var i = 0; i < cards.length; i++) {
-      var card = cards[i];
-      var categoryOkay = activeFilter === "all" || cardBucket(card) === activeFilter;
-      var titleOkay = typeof window.efTextMatches === "function"
-        ? window.efTextMatches(query, card.textContent, true)
-        : card.textContent.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-      var contentOkay = false;
-
-      if (!titleOkay && matchedFiles.length) {
-        var keys = cardKeys(card);
-        for (var m = 0; m < matchedFiles.length; m++) {
-          if (fileMatchesCard(matchedFiles[m], keys)) {
-            contentOkay = true;
-            break;
-          }
-        }
-      }
-      card.style.display = categoryOkay && (titleOkay || contentOkay) ? "" : "none";
-    }
-    setHubEmptyState();
-  }
-
-  function scheduleHubSearch() {
+    var token = ++requestToken;
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(applyGlobalHubSearch, 120);
+
+    if (query.length < 2) {
+      setSearchMode(false);
+      return;
+    }
+
+    setSearchMode(true);
+    var status = document.getElementById(STATUS_ID);
+    if (status) status.textContent = "⏳ Searching exact questions and facts...";
+
+    debounceTimer = setTimeout(function () {
+      ensureClient().then(function (clients) {
+        if (token !== requestToken) return [];
+        return Promise.all(clients.map(function (client) {
+          return client.search(query).catch(function () { return []; });
+        }));
+      }).then(function (parts) {
+        var matches = [];
+        (parts || []).forEach(function (rows) {
+          if (Array.isArray(rows)) matches = matches.concat(rows);
+        });
+        renderMatches(query, matches, token);
+      }).catch(function () {
+        if (token !== requestToken) return;
+        if (status) status.textContent = "Search data could not load. Please refresh once.";
+        var results = ensureResultUi();
+        if (results) results.innerHTML = "";
+      });
+    }, 180);
   }
 
   function initHub() {
     if (!isHub()) return;
     var input = document.getElementById("search");
-    if (!input || input.dataset.efpRapidGlobalSearch === "1") return;
+    if (!input || input.dataset.efpRapidExactSearch === "1") return;
 
-    input.dataset.efpRapidGlobalSearch = "1";
-    input.placeholder = "Search any month, topic or fact / माह, विषय या तथ्य खोजें";
-    input.setAttribute("aria-label", "Search all Current Affairs Rapid Practice content");
-    input.addEventListener("input", scheduleHubSearch);
+    input.dataset.efpRapidExactSearch = "1";
+    input.placeholder = "Search any question or fact / कोई भी प्रश्न या तथ्य खोजें";
+    input.setAttribute("aria-label", "Search every Current Affairs Rapid Practice question and fact");
+    ensureResultUi();
 
-    var filters = document.querySelectorAll(".filter button");
-    for (var i = 0; i < filters.length; i++) {
-      filters[i].addEventListener("click", function () {
-        setTimeout(scheduleHubSearch, 0);
-      });
-    }
-
-    loadScript("efp-shared-search-logic", SEARCH_LOGIC_SRC, function () {
-      return typeof window.efSearchRecords === "function";
-    }).then(function () {
-      return loadScript("efp-ca-search-index", CA_INDEX_SRC, function () {
-        return Array.isArray(window.CA_SEARCH_INDEX);
-      });
-    }).then(function () {
-      if (input.value.trim().length >= 2) scheduleHubSearch();
-    }).catch(function () {
-      /* The original month/topic search remains available if full-text loading fails. */
+    input.addEventListener("input", function () {
+      setTimeout(runHubSearch, 0);
     });
+
+    input.addEventListener("focus", function () {
+      ensureClient().then(function (clients) {
+        (clients || []).forEach(function (client) {
+          if (client && typeof client.warm === "function") client.warm().catch(function () {});
+        });
+      }).catch(function () {});
+    });
+
+    if (input.value.trim().length >= 2) runHubSearch();
   }
 
   function init() {
     if (isInnerQuiz()) {
       hideInnerSearch();
-      if (window.MutationObserver && document.documentElement && !window.__efpRapidLocalSearchObserver) {
-        var observer = new MutationObserver(hideInnerSearch);
-        observer.observe(document.documentElement, { childList: true, subtree: true });
-        window.__efpRapidLocalSearchObserver = observer;
-      }
       return;
     }
     if (isHub()) initHub();
