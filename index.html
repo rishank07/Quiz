@@ -115,8 +115,9 @@
       --efp-topbar-h: clamp(2.65rem, 4vw, 3rem);
       --efp-page-gutter: clamp(1.25rem, 3vw, 2rem);
       --efp-shell-max: 82.5rem;
+      --efp-shell-half: 41.25rem;
       --efp-hero-gap: clamp(.85rem, 1.7vh, 1.2rem);
-      --efp-rail-w: clamp(17.75rem, 21.5vw, 20.5rem);
+      --efp-rail-w: clamp(18.5rem, 20.5vw, 20.75rem);
       --efp-rail-gap: clamp(1.5rem, 3vw, 3rem);
     }
 
@@ -176,7 +177,7 @@
       position: fixed;
       inset: 0 0 auto 0;
       width: 100%;
-      min-height: var(--efp-topbar-h);
+      height: var(--efp-topbar-h);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -889,7 +890,7 @@
     @media (min-width: 64rem) {
       .container {
         width: min(
-          calc(100% - (2 * var(--efp-page-gutter))),
+          calc(100% - var(--efp-page-gutter) - var(--efp-page-gutter)),
           var(--efp-shell-max)
         );
         display: grid;
@@ -912,7 +913,7 @@
         top: calc(var(--efp-topbar-h) + var(--efp-hero-gap));
         left: max(
           var(--efp-page-gutter),
-          calc((100vw - var(--efp-shell-max)) / 2)
+          calc(50vw - var(--efp-shell-half))
         );
         width: var(--efp-rail-w);
         z-index: 40;
