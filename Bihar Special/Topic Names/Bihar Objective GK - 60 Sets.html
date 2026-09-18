@@ -1332,9 +1332,29 @@ function goNextSet() {
 
 window.addEventListener("DOMContentLoaded", function () {
   var initial = "1";
-  var hashMatch = location.hash.match(/set-(\d+)/);
-  if (hashMatch) initial = hashMatch[1];
+  var rawHash = (location.hash || "").replace(/^#/, "");
+  var deepId = "";
+  try { deepId = new URLSearchParams(location.search).get("efq") || ""; } catch (e) {}
+  if (!/^s\d+-\d+$/.test(deepId) && /^s\d+-\d+$/.test(rawHash)) deepId = rawHash;
+
+  var deepMatch = deepId.match(/^s(\d+)-(\d+)$/);
+  var hashMatch = rawHash.match(/^set-(\d+)$/);
+  if (deepMatch) initial = deepMatch[1];
+  else if (hashMatch) initial = hashMatch[1];
+
   showSet(initial);
+
+  if (deepMatch) {
+    try { history.replaceState(null, "", "#" + deepId); } catch (e) {}
+    setTimeout(function () {
+      var target = document.getElementById(deepId);
+      if (!target) return;
+      try { target.scrollIntoView({ behavior: "smooth", block: "center" }); }
+      catch (e) { target.scrollIntoView(); }
+      target.classList.add("efp-deep-focus");
+      setTimeout(function () { target.classList.remove("efp-deep-focus"); }, 2600);
+    }, 120);
+  }
 });
 
 </script>
@@ -1342,6 +1362,6 @@ window.addEventListener("DOMContentLoaded", function () {
 <style>
 .efp-deep-focus{outline:3px solid #f5a623 !important; outline-offset:3px; border-radius:8px; transition:outline-color .3s ease;}
 </style>
-<script src="../../bihar-objective-gk-deeplink.js"></script>
+<script src="../../bihar-objective-gk-deeplink.js?v=20260919b3"></script>
 </body>
 </html>
