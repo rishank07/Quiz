@@ -176,39 +176,67 @@
       gap: 10px;
       padding: 0 1rem;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.2px;
-      color: var(--muted);
+      color: #d9deea;
       text-decoration: none;
-      background: #080b16;
-      border-bottom: 1px solid var(--border);
+      background:
+        linear-gradient(90deg, #080b16 0%, #0d1020 48%, #080b16 100%);
+      border-bottom: 1px solid rgba(246, 217, 138, .14);
       position: fixed;
       inset: 0 0 auto 0;
       z-index: 50;
-      transition: color .25s, background .25s;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .24);
+      transition: color .25s, background .25s, box-shadow .25s;
+    }
+    .youtube-banner::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -1px;
+      width: min(34rem, 58vw);
+      height: 1px;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, transparent, rgba(225, 29, 42, .55), rgba(246, 217, 138, .45), transparent);
+      pointer-events: none;
     }
     .youtube-banner i {
       display: grid;
       place-items: center;
-      width: 26px;
-      height: 18px;
-      border-radius: 5px;
+      width: 28px;
+      height: 20px;
+      border-radius: 6px;
       font-size: 12px;
       color: #fff;
-      background: #e11d2a;
-      box-shadow: 0 4px 14px rgba(225, 29, 42, 0.35);
+      background: linear-gradient(145deg, #ff3040, #c90f20);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.09), 0 4px 16px rgba(225, 29, 42, .48);
+      transition: transform .25s var(--ease), box-shadow .25s;
     }
     .youtube-banner .yt-cta {
       font-size: 11px;
-      font-weight: 700;
-      color: var(--gold-soft);
-      padding: 3px 10px;
+      font-weight: 800;
+      color: #ffe7a0;
+      padding: 4px 11px;
       border-radius: 999px;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(246, 217, 138, .32);
+      background: rgba(246, 217, 138, .06);
       white-space: nowrap;
+      transition: transform .25s var(--ease), background .25s, border-color .25s;
     }
-    .youtube-banner:hover { color: var(--ink); background: #0e1222; }
-    .youtube-banner:hover .yt-cta { border-color: var(--line-strong); }
+    .youtube-banner:hover {
+      color: #fff;
+      background: linear-gradient(90deg, #090c17 0%, #12172a 48%, #090c17 100%);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .32);
+    }
+    .youtube-banner:hover i {
+      transform: scale(1.06);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 5px 20px rgba(225, 29, 42, .58);
+    }
+    .youtube-banner:hover .yt-cta {
+      transform: translateX(2px);
+      border-color: rgba(246, 217, 138, .58);
+      background: rgba(246, 217, 138, .1);
+    }
 
     /* ===== Page layout ===== */
     .container {
@@ -475,27 +503,59 @@
       gap: 8px;
     }
     .store-button {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
       min-width: 0;
       min-height: 50px;
       display: flex;
       align-items: center;
-      gap: 7px;
-      padding: 8px;
+      gap: 8px;
+      padding: 8px 10px;
       border-radius: 12px;
       text-decoration: none;
       color: var(--ink);
-      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.025));
-      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.028));
+      border: 1px solid rgba(255,255,255,.09);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 8px 18px rgba(0,0,0,.12);
       transition: transform .25s var(--ease), border-color .25s, background .25s, box-shadow .25s;
     }
-    .store-button > i {
-      flex: 0 0 20px;
-      width: 20px;
-      text-align: center;
-      font-size: 19px;
+    .store-button::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .68;
+      pointer-events: none;
+      transition: opacity .25s;
     }
-    .store-button.play-store > i { color: #66e3a4; }
-    .store-button.microsoft-store > i { color: #67aaf9; }
+    .store-button.play-store::before {
+      background: radial-gradient(circle at 0% 50%, rgba(102,227,164,.16), transparent 48%);
+    }
+    .store-button.microsoft-store::before {
+      background: radial-gradient(circle at 0% 50%, rgba(103,170,249,.16), transparent 48%);
+    }
+    .store-button > i {
+      flex: 0 0 28px;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.045);
+      transition: transform .25s var(--ease), box-shadow .25s;
+    }
+    .store-button.play-store > i {
+      color: #78efb5;
+      box-shadow: 0 0 16px rgba(102,227,164,.12);
+    }
+    .store-button.microsoft-store > i {
+      color: #7ebcff;
+      box-shadow: 0 0 16px rgba(103,170,249,.12);
+    }
     .store-copy {
       display: block;
       min-width: 0;
@@ -524,9 +584,18 @@
     @media (hover: hover) {
       .store-button:hover {
         transform: translateY(-2px);
-        border-color: var(--line-strong);
-        background: rgba(246, 217, 138, .07);
-        box-shadow: 0 10px 24px rgba(0,0,0,.28);
+        background: linear-gradient(180deg, rgba(255,255,255,.095), rgba(255,255,255,.04));
+        box-shadow: 0 12px 28px rgba(0,0,0,.3);
+      }
+      .store-button:hover::before { opacity: 1; }
+      .store-button:hover > i { transform: scale(1.06); }
+      .store-button.play-store:hover {
+        border-color: rgba(102,227,164,.38);
+        box-shadow: 0 12px 28px rgba(0,0,0,.3), 0 0 22px rgba(102,227,164,.08);
+      }
+      .store-button.microsoft-store:hover {
+        border-color: rgba(103,170,249,.38);
+        box-shadow: 0 12px 28px rgba(0,0,0,.3), 0 0 22px rgba(103,170,249,.08);
       }
     }
     @media (min-width: 1024px) and (max-width: 1180px) {
