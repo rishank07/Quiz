@@ -239,6 +239,43 @@
       transform: translateY(-2px);
     }
 
+    /* Render the Current Affairs practice entry in its final form before
+       progress.js runs, preventing old Rapid Practice text/position FOUC. */
+    .efp-ca-practice-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+      padding: 20px 26px;
+      border-radius: 18px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      border: 1px solid rgba(255, 179, 71, .18);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+      transition: .28s ease;
+    }
+
+    .efp-ca-practice-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, .32);
+    }
+
+    .efp-ca-practice-link .link-text {
+      display: block;
+      min-width: 0;
+    }
+
+    .efp-ca-practice-link .efp-ca-practice-arrow {
+      font-size: 17px;
+      opacity: .9;
+      flex: 0 0 auto;
+    }
+
     .global-search-wrap {
       position: relative;
       margin-bottom: 8px;
@@ -717,7 +754,6 @@
       <div class="search-results" id="searchResults"></div>
 
       <div class="ca-toolbar">
-        <a href="./Rapid Practice.html">⚡ Rapid Practice</a>
         <button type="button" onclick="expandAllCA()">⬇️ Expand All</button>
         <button type="button" onclick="collapseAllCA()">⬆️ Collapse All</button>
       </div>
@@ -947,6 +983,11 @@
             </div>
           </div>
         </div>
+
+        <a class="efp-ca-practice-link" href="./Topic Names/Rapid Practice.html">
+          <span class="link-text">📝 Practice Quiz MCQ</span>
+          <span class="efp-ca-practice-arrow">→</span>
+        </a>
 
       </div>
 
