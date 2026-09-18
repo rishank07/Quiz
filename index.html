@@ -965,11 +965,12 @@
     /* ===== Desktop ===== */
     @media (min-width: 1024px) {
       .container {
+        --efp-desktop-hero-w: clamp(330px, 29vw, 400px);
         display: grid;
-        grid-template-columns: 310px minmax(0, 1fr);
+        grid-template-columns: var(--efp-desktop-hero-w) minmax(0, 1fr);
         grid-template-areas: "hero main" ". footer";
         align-items: start;
-        column-gap: 28px;
+        column-gap: clamp(28px, 3vw, 48px);
         row-gap: 36px;
         margin: 32px auto 32px;
       }
@@ -985,7 +986,7 @@
         position: fixed;
         top: calc(var(--efp-youtube-h) + var(--efp-hero-clearance));
         left: max(24px, calc((100vw - 1320px) / 2));
-        width: 310px;
+        width: var(--efp-desktop-hero-w);
         z-index: 40;
         padding: clamp(1.2rem, 2.2vh, 1.55rem) 1.5rem clamp(1.05rem, 1.8vh, 1.35rem);
       }
@@ -1039,8 +1040,7 @@
     }
 
     @media (min-width: 1280px) {
-      .container { grid-template-columns: 370px minmax(0, 1fr); column-gap: 48px; }
-      .hero { width: 370px; padding-inline: 1.65rem; }
+      .hero { padding-inline: 1.65rem; }
       h1 { font-size: 34px; }
       .menu { gap: 14px; }
       .menu > li > a { padding: 16px; min-height: 92px; }
@@ -1147,20 +1147,6 @@
         <div class="stat"><strong>Bilingual</strong><small>हिंदी + English</small></div>
       </div>
 
-      <div class="telegram-home-community" aria-label="Telegram Community">
-        <div class="group-title">
-          <i class="fa-brands fa-telegram"></i> Telegram Community
-        </div>
-        <div class="sub-menu">
-          <a href="https://telegram.me/examfusionprep" target="_blank" rel="noopener noreferrer">
-            📚 <span>Notes Channel</span>
-          </a>
-          <a href="https://telegram.me/ExamFusion_prep" target="_blank" rel="noopener noreferrer">
-            👥 <span>Discussion Group</span>
-          </a>
-        </div>
-      </div>
-
       <section class="app-store-links" aria-label="Download ExamFusion Prep apps">
         <div class="app-store-label">Get the app</div>
         <div class="app-store-grid">
@@ -1178,6 +1164,20 @@
           </a>
         </div>
       </section>
+
+      <div class="telegram-home-community" aria-label="Telegram Community">
+        <div class="group-title">
+          <i class="fa-brands fa-telegram"></i> Telegram Community
+        </div>
+        <div class="sub-menu">
+          <a href="https://telegram.me/examfusionprep" target="_blank" rel="noopener noreferrer">
+            📚 <span>Notes Channel</span>
+          </a>
+          <a href="https://telegram.me/ExamFusion_prep" target="_blank" rel="noopener noreferrer">
+            👥 <span>Discussion Group</span>
+          </a>
+        </div>
+      </div>
     </header>
 
     <nav class="menu-container" aria-label="Study sections">
