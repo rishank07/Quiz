@@ -1026,6 +1026,16 @@
       #searchBox { height: 58px; padding-right: 56px; }
       .footer-content { flex-direction: row; justify-content: space-between; flex-wrap: wrap; text-align: left; gap: 8px 18px; }
       .footer-links { margin-top: 0; }
+
+      /* Keep Backup & Restore as its own section and center its card on desktop. */
+      .menu > li.backup-restore-card {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+      }
+      .menu > li.backup-restore-card > a {
+        width: calc((100% - 12px) / 2);
+      }
     }
 
     @media (min-width: 1280px) {
@@ -1034,6 +1044,7 @@
       h1 { font-size: 34px; }
       .menu { gap: 14px; }
       .menu > li > a { padding: 16px; min-height: 92px; }
+      .menu > li.backup-restore-card > a { width: calc((100% - 14px) / 2); }
     }
 
     /* ===== Phones ===== */
@@ -1295,12 +1306,14 @@
           </a>
         </li>
 
+        <li data-group-head class="group-head backup-restore-head"><span class="gh-en">Backup &amp; Restore</span><span class="gh-hi">बैकअप और रिस्टोर</span></li>
+
         <!-- Backup & Restore -->
-        <li style="--a: 246, 217, 138">
+        <li class="backup-restore-card" style="--a: 246, 217, 138">
           <a href="./backup-restore.html" onclick="openPage(event)" aria-label="Backup and Restore bookmarks and chapter progress">
             <i class="fa-solid fa-cloud-arrow-down menu-icon"></i>
             <span class="link-text bilabel"><span class="bilabel-en">Backup &amp; Restore</span><span class="bilabel-hi">बैकअप और रिस्टोर</span></span>
-            <span class="badge-data">DATA</span>
+            <span class="badge-new">DATA</span>
             <i class="fa-solid fa-chevron-right chevron-icon"></i>
           </a>
         </li>
