@@ -45,7 +45,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-restore-flash.js?v=20260917examback1",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260917ecossccrux1",
+  "/Crux-Tricks/crux-tricks.js?v=20260919searchhighlight2",
   "/Crux-Tricks/viewer.css",
   "/Crux-Tricks/viewer-v2.js?v=20260919globalsearch1",
 ];
@@ -309,6 +309,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/back-nav.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
       url.pathname === "/Crux-Tricks/crux-restore-flash.js" ||
+      url.pathname === "/Crux-Tricks/crux-tricks.js" ||
       url.pathname === "/Crux-Tricks/viewer-v2.js") {
     event.respondWith(freshCoreAsset(request));
     return;
