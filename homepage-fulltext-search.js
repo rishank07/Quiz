@@ -85,11 +85,21 @@
       id: "currentaffairsrapid",
       label: "Current Affairs Rapid Practice",
       icon: "fa-bolt",
-      indexUrl: "search-snippets-current-affairs-rapid.js?v=20260918ca1",
+      indexUrl: "search-snippets-current-affairs-rapid.js?v=20260919ca4",
       mode: "snippet",
       globalName: "EF_SNIPPET_INDEX",
       sectionPrefix: "./Current%20Affairs/Topic%20Names/Rapid%20Practice/",
       limit: 8
+    },
+    {
+      id: "currentaffairsrapidextra",
+      label: "Current Affairs Rapid Practice",
+      icon: "fa-bolt",
+      indexUrl: "search-snippets-current-affairs-rapid-extra.js?v=20260919ca4",
+      mode: "snippet",
+      globalName: "EF_RAPID_EXTRA_INDEX",
+      sectionPrefix: "./Current%20Affairs/Topic%20Names/Rapid%20Practice/",
+      limit: 5
     }
   ];
 
