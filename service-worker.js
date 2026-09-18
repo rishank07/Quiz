@@ -47,7 +47,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260917ecossccrux1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260918smoothpdf1",
+  "/Crux-Tricks/viewer-v2.js?v=20260919globalsearch1",
 ];
 
 self.addEventListener("install", (event) => {
