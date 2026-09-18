@@ -11,7 +11,8 @@
   var INNER_PREFIX = "/current affairs/topic names/rapid practice/";
   var LOGIC_SRC = "/search-logic.js?v=20260919ca3";
   var WORKER_SRC = "/search-worker.js?v=20260919ca3";
-  var INDEX_SRC = "/search-snippets-current-affairs-rapid.js?v=20260919ca3";
+  var INDEX_SRC = "/search-snippets-current-affairs-rapid.js?v=20260919ca4";
+  var EXTRA_INDEX_SRC = "/search-snippets-current-affairs-rapid-extra.js?v=20260919ca4";
   var INDEX_PREFIX = "./Current%20Affairs/Topic%20Names/Rapid%20Practice/";
   var LOCAL_HIDE_STYLE_ID = "efp-ca-rapid-local-search-hide";
   var RESULT_STYLE_ID = "efp-ca-rapid-result-style";
@@ -19,7 +20,7 @@
   var STATUS_ID = "efp-ca-rapid-search-status";
   var debounceTimer = 0;
   var requestToken = 0;
-  var searchClient = null;
+  var searchClients = null;
 
   function normalizedPath() {
     var path = window.location.pathname || "/";
@@ -162,21 +163,32 @@
   }
 
   function ensureClient() {
-    if (searchClient) return Promise.resolve(searchClient);
+    if (searchClients) return Promise.resolve(searchClients);
     return loadScript("efp-shared-search-logic", LOGIC_SRC, function () {
       return typeof window.efCreateSearchWorker === "function";
     }).then(function () {
-      searchClient = window.efCreateSearchWorker({
-        workerUrl: WORKER_SRC,
-        logicUrl: LOGIC_SRC,
-        indexUrl: INDEX_SRC,
-        mode: "snippet",
-        globalName: "EF_SNIPPET_INDEX",
-        sectionPrefix: INDEX_PREFIX,
-        limit: 36
-      });
-      if (!searchClient) throw new Error("Rapid Practice search client unavailable");
-      return searchClient;
+      searchClients = [
+        window.efCreateSearchWorker({
+          workerUrl: WORKER_SRC,
+          logicUrl: LOGIC_SRC,
+          indexUrl: INDEX_SRC,
+          mode: "snippet",
+          globalName: "EF_SNIPPET_INDEX",
+          sectionPrefix: INDEX_PREFIX,
+          limit: 36
+        }),
+        window.efCreateSearchWorker({
+          workerUrl: WORKER_SRC,
+          logicUrl: LOGIC_SRC,
+          indexUrl: EXTRA_INDEX_SRC,
+          mode: "snippet",
+          globalName: "EF_RAPID_EXTRA_INDEX",
+          sectionPrefix: INDEX_PREFIX,
+          limit: 24
+        })
+      ].filter(Boolean);
+      if (!searchClients.length) throw new Error("Rapid Practice search clients unavailable");
+      return searchClients;
     });
   }
 
@@ -245,10 +257,16 @@
     if (status) status.textContent = "⏳ Searching exact questions and facts...";
 
     debounceTimer = setTimeout(function () {
-      ensureClient().then(function (client) {
+      ensureClient().then(function (clients) {
         if (token !== requestToken) return [];
-        return client.search(query);
-      }).then(function (matches) {
+        return Promise.all(clients.map(function (client) {
+          return client.search(query).catch(function () { return []; });
+        }));
+      }).then(function (parts) {
+        var matches = [];
+        (parts || []).forEach(function (rows) {
+          if (Array.isArray(rows)) matches = matches.concat(rows);
+        });
         renderMatches(query, matches, token);
       }).catch(function () {
         if (token !== requestToken) return;
@@ -274,8 +292,10 @@
     });
 
     input.addEventListener("focus", function () {
-      ensureClient().then(function (client) {
-        if (client && typeof client.warm === "function") client.warm().catch(function () {});
+      ensureClient().then(function (clients) {
+        (clients || []).forEach(function (client) {
+          if (client && typeof client.warm === "function") client.warm().catch(function () {});
+        });
       }).catch(function () {});
     });
 
