@@ -502,6 +502,20 @@
       return escaped.replace(re, "<mark>$1</mark>");
     }
 
+    function bsResultHref(match, query) {
+      var file = String(match && match.file || "");
+      var isSixtySets = /Bihar Objective GK - 60 Sets\.html(?:$|[?#])/i.test(file);
+      if (isSixtySets) {
+        var qMatch = String(match && match.text || "").match(/^\s*Set\s+(\d+)\s*,\s*Q\s*(\d+)\b/i);
+        if (qMatch) return file.split("#")[0] + "#s" + qMatch[1] + "-" + qMatch[2];
+        return file;
+      }
+      var hash = "";
+      var hashAt = file.indexOf("#");
+      if (hashAt !== -1) { hash = file.slice(hashAt); file = file.slice(0, hashAt); }
+      return file + (file.indexOf("?") === -1 ? "?" : "&") + "efsearch=" + encodeURIComponent(query) + hash;
+    }
+
     const bsSearchInputEl = document.getElementById("globalSearch");
     const bsSearchResultsEl = document.getElementById("searchResults");
     const bsSearchStatusEl = document.getElementById("searchStatus");
@@ -560,7 +574,7 @@
           bsSearchStatusEl.textContent = matches.length + " result(s) found / परिणाम मिले";
           bsSearchResultsEl.style.display = "flex";
           bsSearchResultsEl.innerHTML = matches.map(function (m) {
-            return '<a href="' + m.file + '" class="search-result-item" onclick="openPage(event)">' +
+            return '<a href="' + bsEscapeHtml(bsResultHref(m, query)) + '" class="search-result-item" onclick="openPage(event)">' +
               '<span class="search-result-source">' + bsEscapeHtml(m.title) + '</span>' +
               '<div class="search-result-snippet">' +
                 ((typeof efSnippetWithHighlight === "function")
