@@ -1628,7 +1628,7 @@
         ].filter(Boolean);
         return cruxTricksSearchClients;
       }
-      function decodeCruxTricksHit(hit) {
+      function decodeCruxTricksHit(hit, query) {
         var raw = String(hit && hit.x || "");
         var page = 1;
         if (raw.length) {
@@ -1645,6 +1645,8 @@
           url = url.replace(/^(?:\.\/)?Crux-Tricks\//, "/Crux-Tricks/");
         }
         url += (url.indexOf("?") === -1 ? "?" : "&") + "page=" + page;
+        var search = String(query || "").trim();
+        if (search) url += "&search=" + encodeURIComponent(search);
         return { url: url, text: raw, page: page };
       }
       function rerankCruxTricksHits(q, hits) {
@@ -1668,7 +1670,7 @@
         var terms = (typeof efSearchTerms === "function") ? efSearchTerms(q) : q.toLowerCase().split(/\s+/).filter(Boolean);
         var seen = {}, rendered = [];
         hits.forEach(function (hit) {
-          var decoded = decodeCruxTricksHit(hit);
+          var decoded = decodeCruxTricksHit(hit, q);
           var key = decoded.url;
           if (!decoded.url || seen[key]) return;
           seen[key] = true;
