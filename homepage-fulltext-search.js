@@ -70,26 +70,6 @@
       globalName: "EF_SNIPPET_INDEX",
       sectionPrefix: "./Mind%20Maps/",
       limit: 5
-    },
-    {
-      id: "currentaffairs",
-      label: "Current Affairs",
-      icon: "fa-newspaper",
-      indexUrl: "search-snippets-current-affairs.js?v=20260918ca1",
-      mode: "snippet",
-      globalName: "EF_SNIPPET_INDEX",
-      sectionPrefix: "./Current%20Affairs/Topic%20Names/",
-      limit: 8
-    },
-    {
-      id: "currentaffairsrapid",
-      label: "Current Affairs Rapid Practice",
-      icon: "fa-bolt",
-      indexUrl: "search-snippets-current-affairs-rapid.js?v=20260918ca1",
-      mode: "snippet",
-      globalName: "EF_SNIPPET_INDEX",
-      sectionPrefix: "./Current%20Affairs/Topic%20Names/Rapid%20Practice/",
-      limit: 8
     }
   ];
 
