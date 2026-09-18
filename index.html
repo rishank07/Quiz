@@ -900,9 +900,22 @@
       }
       .hero {
         grid-area: hero;
-        position: sticky;
-        top: 24px;
+        position: sticky !important;
+        top: 24px !important;
+        align-self: start;
         padding: 30px 28px 26px;
+        max-height: calc(100vh - 48px);
+        max-height: calc(100dvh - 48px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+        scrollbar-color: var(--line-strong) transparent;
+      }
+      .hero::-webkit-scrollbar { width: 5px; }
+      .hero::-webkit-scrollbar-track { background: transparent; }
+      .hero::-webkit-scrollbar-thumb {
+        background: var(--line-strong);
+        border-radius: 999px;
       }
       nav.menu-container { grid-area: main; }
       .footer { grid-area: footer; }
@@ -925,9 +938,9 @@
       .menu > li > a { padding: 16px; min-height: 92px; }
     }
 
-    @media (min-width: 1024px) and (max-height: 760px) {
-      .hero { position: relative; top: 0; }
-    }
+    /* Keep the desktop hero pinned even on short laptop windows.
+       max-height + its own overflow above prevents an over-tall sticky box
+       from drifting up/down while the main menu scrolls. */
 
     /* ===== Phones ===== */
     @media (max-width: 639px) {
