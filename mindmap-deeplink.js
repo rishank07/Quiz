@@ -1,13 +1,13 @@
-// ExamFusion Prep — mind-map hash deep-link + highlight (added 2026-09-18)
-// Reads #<tab-id> on load (and on hash change) and shows that tab/panel
-// directly by toggling the same CSS classes the page's own tab-switcher
-// already uses (site-wide mind maps use several different template
-// generations with different container classes and JS function names —
-// switchTab/tab-content, switchTab/tab-panel, st()/tab-panel, show()/panel —
-// so this manipulates classes directly instead of calling a named function).
+// ExamFusion Prep — Mind Maps exact-tab deep-link + highlight.
+// Search indexes store the logical tab key (for example #history, #admin,
+// #t4). Mind-map templates use several generations of markup: some panels
+// have id="history", others id="tab-history", and their native switchers are
+// named switchTab(), st(), show(), etc. Prefer the page's own tab control so
+// its native switcher controls all template-specific state; use class/id
+// fallbacks only when no clickable navigation control can be resolved.
 (function () {
   "use strict";
-  // [containerClass, activeClass] pairs, tried in order.
+
   var SCHEMES = [
     ["tab-content", "active"],
     ["tab-panel", "active"],
@@ -15,50 +15,173 @@
     ["panel", "active"],
     ["tab", "active"]
   ];
-  function findScheme(id) {
-    var el = document.getElementById(id);
-    if (!el || !el.classList) return null;
-    for (var i = 0; i < SCHEMES.length; i++) {
-      if (el.classList.contains(SCHEMES[i][0])) return { el: el, scheme: SCHEMES[i] };
+
+  function hashKey() {
+    var raw = (window.location.hash || "").replace(/^#/, "");
+    if (!raw) return "";
+    try { raw = decodeURIComponent(raw); } catch (_) {}
+    return raw.trim();
+  }
+
+  function candidateIds(key) {
+    var out = [];
+    function add(value) {
+      value = String(value || "").trim();
+      if (value && out.indexOf(value) === -1) out.push(value);
+    }
+    add(key);
+    if (/^tab-/i.test(key)) add(key.replace(/^tab-/i, ""));
+    else add("tab-" + key);
+    if (/^panel-/i.test(key)) add(key.replace(/^panel-/i, ""));
+    else add("panel-" + key);
+    if (/^section-/i.test(key)) add(key.replace(/^section-/i, ""));
+    else add("section-" + key);
+    return out;
+  }
+
+  function onclickTargetsKey(el, key) {
+    var onclick = el.getAttribute("onclick") || "";
+    if (!onclick) return false;
+    var ids = candidateIds(key);
+    for (var i = 0; i < ids.length; i++) {
+      if (onclick.indexOf("'" + ids[i] + "'") !== -1 ||
+          onclick.indexOf('"' + ids[i] + '"') !== -1) return true;
+    }
+    return false;
+  }
+
+  function dataTargetsKey(el, key) {
+    var ids = candidateIds(key);
+    var attrs = ["data-target", "data-tab", "aria-controls"];
+    for (var i = 0; i < attrs.length; i++) {
+      var value = el.getAttribute(attrs[i]);
+      if (value && ids.indexOf(value.replace(/^#/, "")) !== -1) return true;
+    }
+    return false;
+  }
+
+  function matchingNavControl(key) {
+    var controls = document.querySelectorAll(
+      "button, a, .tablink, .tab-btn, .tab"
+    );
+    for (var i = 0; i < controls.length; i++) {
+      if (onclickTargetsKey(controls[i], key) || dataTargetsKey(controls[i], key)) {
+        return controls[i];
+      }
     }
     return null;
   }
-  function openHash() {
-    var id = (location.hash || "").replace(/^#/, "");
-    if (!id) return;
-    var found = findScheme(id);
+
+  function findPanel(key) {
+    var ids = candidateIds(key);
+    for (var i = 0; i < ids.length; i++) {
+      var el = document.getElementById(ids[i]);
+      if (!el || !el.classList) continue;
+      for (var j = 0; j < SCHEMES.length; j++) {
+        if (el.classList.contains(SCHEMES[j][0])) {
+          return { el: el, scheme: SCHEMES[j] };
+        }
+      }
+    }
+    return null;
+  }
+
+  function activatePanelDirectly(found) {
     if (!found) return;
-    var containerClass = found.scheme[0], activeClass = found.scheme[1];
-    var tagName = found.el.tagName; // scope clearing to same-tag siblings only,
-    // so a container class shared with unrelated elements (e.g. "tab" on both
-    // <button> nav items and <div> content panels) never cross-toggles them.
+    var containerClass = found.scheme[0];
+    var activeClass = found.scheme[1];
+    var tagName = found.el.tagName;
     document.querySelectorAll(tagName + "." + containerClass).forEach(function (el) {
       el.classList.remove(activeClass);
     });
     found.el.classList.add(activeClass);
-    // Also try to mark the matching nav button active, matching common
-    // onclick signatures across templates: switchTab('id'), st(event,'id'),
-    // show('id', this) -- best-effort only, cosmetic.
-    document.querySelectorAll("button, .tablink").forEach(function (btn) {
-      var onclick = btn.getAttribute("onclick") || "";
-      if (onclick.indexOf("'" + id + "'") !== -1 || onclick.indexOf('"' + id + '"') !== -1) {
-        var group = btn.parentElement;
-        if (group) {
-          group.querySelectorAll("button, .tablink").forEach(function (b) { b.classList.remove("active"); });
+  }
+
+  function markNavActive(key, preferred) {
+    var control = preferred || matchingNavControl(key);
+    if (!control) return;
+    var parent = control.parentElement;
+    if (parent) {
+      parent.querySelectorAll("button, a, .tablink, .tab-btn, .tab").forEach(function (el) {
+        if (el !== control) el.classList.remove("active", "show", "selected");
+      });
+    }
+    control.classList.add("active");
+  }
+
+  function focusTarget(key, preferredControl) {
+    var found = findPanel(key);
+    var target = found ? found.el : preferredControl;
+    if (!target) return false;
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        try {
+          target.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+        } catch (_) {
+          target.scrollIntoView();
         }
-        btn.classList.add("active");
-      }
+        target.classList.add("efp-deep-focus");
+        clearTimeout(target.__efpDeepFocusTimer);
+        target.__efpDeepFocusTimer = setTimeout(function () {
+          target.classList.remove("efp-deep-focus");
+        }, 3600);
+      });
     });
-    setTimeout(function () {
-      try { found.el.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) { found.el.scrollIntoView(); }
-      found.el.classList.add("efp-deep-focus");
-      setTimeout(function () { found.el.classList.remove("efp-deep-focus"); }, 2200);
-    }, 60);
+    return true;
   }
+
+  function openHash() {
+    var key = hashKey();
+    if (!key) return;
+
+    // Prefer native navigation. This is the most reliable path because pages
+    // vary between id="history" and id="tab-history", and their own functions
+    // may update additional state beyond CSS classes.
+    var control = matchingNavControl(key);
+    if (control) {
+      try { control.click(); } catch (_) {}
+    }
+
+    var found = findPanel(key);
+    if (found) {
+      var activeClass = found.scheme[1];
+      if (!found.el.classList.contains(activeClass)) activatePanelDirectly(found);
+      markNavActive(key, control);
+      focusTarget(key, control);
+      return;
+    }
+
+    // Older pages may expose a logical key only through the native tab control.
+    if (control) {
+      markNavActive(key, control);
+      focusTarget(key, control);
+    }
+  }
+
+  function runWithRetry() {
+    var key = hashKey();
+    if (!key) return;
+    var attempts = 0;
+    (function seek() {
+      var control = matchingNavControl(key);
+      var panel = findPanel(key);
+      if (control || panel) {
+        openHash();
+        return;
+      }
+      if (++attempts < 40) setTimeout(seek, 50);
+    })();
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", openHash);
+    document.addEventListener("DOMContentLoaded", runWithRetry, { once: true });
   } else {
-    openHash();
+    runWithRetry();
   }
-  window.addEventListener("hashchange", openHash);
+
+  window.addEventListener("hashchange", runWithRetry);
+  window.addEventListener("pageshow", function () {
+    if (hashKey()) setTimeout(runWithRetry, 0);
+  });
 })();
