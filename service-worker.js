@@ -1,5 +1,5 @@
-// v84 Original Practice copy cleanup 20260918
-const CACHE_VERSION = "efp-pwa-2026-09-18-v84-original-practice-copy-cleanup";
+// v85 smooth mobile PDF scrolling 20260918
+const CACHE_VERSION = "efp-pwa-2026-09-18-v85-smooth-mobile-pdf";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -47,7 +47,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260917ecossccrux1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260917ecossccrux1",
+  "/Crux-Tricks/viewer-v2.js?v=20260918smoothpdf1",
 ];
 
 self.addEventListener("install", (event) => {
@@ -308,7 +308,8 @@ self.addEventListener("fetch", (event) => {
   if (url.pathname === "/home-nav.js" ||
       url.pathname === "/back-nav.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
-      url.pathname === "/Crux-Tricks/crux-restore-flash.js") {
+      url.pathname === "/Crux-Tricks/crux-restore-flash.js" ||
+      url.pathname === "/Crux-Tricks/viewer-v2.js") {
     event.respondWith(freshCoreAsset(request));
     return;
   }
