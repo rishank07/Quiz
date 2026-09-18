@@ -32,6 +32,7 @@
   if(isAdvanceMaths)document.documentElement.classList.add('efp-advance-maths-dark-pdf');
 
   var page=Math.max(1,Math.min(doc.pages,parseInt(params.get('page')||'1',10)||1));
+  var initialSearch=String(params.get('search')||'').trim();
   var pages=[];
   var pdfDoc=null;
   var renderTask=null;
@@ -80,6 +81,17 @@
   var openPdf2=document.getElementById('openPdf2');
   var docSearch=document.getElementById('docSearch');
   var docHits=document.getElementById('docHits');
+  var mobileSearchInput=document.getElementById('mobileSearchInput');
+  if(initialSearch&&docSearch){
+    docSearch.value=initialSearch;
+    if(mobileSearchInput)mobileSearchInput.value=initialSearch;
+    searchQuery=normalizeSearchText(initialSearch);
+    if(searchQuery.length>=2){
+      activeSearchPage=page;
+      searchFocusPending=true;
+      searchHighlightKeepUntil=Date.now()+2200;
+    }
+  }
   var pdfStage=document.getElementById('pdfStage');
   var pdfCanvas=document.getElementById('pdfCanvas');
   var pdfLoading=document.getElementById('pdfLoading');
