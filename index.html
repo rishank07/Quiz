@@ -111,7 +111,8 @@
       --radius: 18px;
       --ease: cubic-bezier(.2, .8, .2, 1);
       --efp-youtube-h: 2.7rem;
-      --efp-hero-clearance: 1rem;
+      --efp-hero-clearance: clamp(.75rem, 1.6vh, 1rem);
+      --efp-hero-vgap: clamp(.55rem, 1.35vh, .9rem);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -179,7 +180,7 @@
       letter-spacing: 0.2px;
       color: var(--muted);
       text-decoration: none;
-      background: rgba(8, 11, 22, 0.72);
+      background: #080b16;
       border-bottom: 1px solid var(--border);
       position: fixed;
       inset: 0 0 auto 0;
@@ -206,7 +207,7 @@
       border: 1px solid var(--line);
       white-space: nowrap;
     }
-    .youtube-banner:hover { color: var(--ink); background: rgba(14, 18, 34, 0.9); }
+    .youtube-banner:hover { color: var(--ink); background: #0e1222; }
     .youtube-banner:hover .yt-cta { border-color: var(--line-strong); }
 
     /* ===== Page layout ===== */
@@ -917,8 +918,26 @@
         left: max(24px, calc((100vw - 1320px) / 2));
         width: 310px;
         z-index: 40;
-        padding: 1.65rem 1.5rem 1.4rem;
+        padding: clamp(1.2rem, 2.2vh, 1.55rem) 1.5rem clamp(1.05rem, 1.8vh, 1.35rem);
       }
+
+      /* Compact vertically as the usable viewport gets shorter. */
+      .hero .logo-row { margin-bottom: var(--efp-hero-vgap); }
+      .hero .kicker { margin-bottom: clamp(.45rem, 1vh, .7rem); }
+      .hero h1 { margin-bottom: clamp(.45rem, 1vh, .7rem); }
+      .hero p.subtitle {
+        line-height: 1.55;
+        margin-bottom: clamp(.5rem, 1.1vh, .8rem);
+      }
+      .hero .exam-tags { margin-bottom: var(--efp-hero-vgap); }
+      .hero .stats { margin-bottom: var(--efp-hero-vgap); }
+      .hero .stat { padding: clamp(.55rem, 1.15vh, .72rem) .8rem; }
+      .hero .app-store-links {
+        margin-top: var(--efp-hero-vgap);
+        padding-top: var(--efp-hero-vgap);
+      }
+      .hero .app-store-label { margin-bottom: clamp(.4rem, .9vh, .55rem); }
+      .hero .store-button { min-height: clamp(2.7rem, 5.5vh, 3.1rem); }
 
       nav.menu-container { grid-area: main; }
 
@@ -942,7 +961,7 @@
 
     @media (min-width: 1280px) {
       .container { grid-template-columns: 370px minmax(0, 1fr); column-gap: 48px; }
-      .hero { width: 370px; padding: 1.8rem 1.65rem 1.5rem; }
+      .hero { width: 370px; padding-inline: 1.65rem; }
       h1 { font-size: 34px; }
       .menu { gap: 14px; }
       .menu > li > a { padding: 16px; min-height: 92px; }
