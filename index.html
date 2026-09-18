@@ -900,11 +900,9 @@
       }
       .hero {
         grid-area: hero;
-        position: sticky !important;
-        top: 24px !important;
-        align-self: start;
+        position: sticky;
+        top: 24px;
         padding: 30px 28px 26px;
-        overflow: visible;
       }
       nav.menu-container { grid-area: main; }
       .footer { grid-area: footer; }
@@ -927,7 +925,9 @@
       .menu > li > a { padding: 16px; min-height: 92px; }
     }
 
-    /* Keep the desktop hero pinned on short laptop windows too. */
+    @media (min-width: 1024px) and (max-height: 760px) {
+      .hero { position: relative; top: 0; }
+    }
 
     /* ===== Phones ===== */
     @media (max-width: 639px) {
