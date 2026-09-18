@@ -110,6 +110,14 @@
       --line-strong: rgba(246, 217, 138, 0.40);
       --radius: 18px;
       --ease: cubic-bezier(.2, .8, .2, 1);
+
+      /* Responsive landing geometry — rem/vw based, not device-pixel tuned. */
+      --efp-topbar-h: clamp(2.65rem, 4vw, 3rem);
+      --efp-page-gutter: clamp(1.25rem, 3vw, 2rem);
+      --efp-shell-max: 82.5rem;
+      --efp-hero-gap: clamp(.85rem, 1.7vh, 1.2rem);
+      --efp-rail-w: clamp(17.75rem, 21.5vw, 20.5rem);
+      --efp-rail-gap: clamp(1.5rem, 3vw, 3rem);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -140,6 +148,7 @@
         radial-gradient(900px 600px at 105% 105%, rgba(58, 92, 168, 0.15), transparent 58%),
         linear-gradient(170deg, var(--bg-deep) 0%, var(--bg-mid) 52%, #080c18 100%);
       background-attachment: fixed;
+      padding-top: var(--efp-topbar-h);
     }
 
     @media (max-width: 1023px), (hover: none) and (pointer: coarse) {
@@ -164,40 +173,44 @@
 
     /* ===== Top bar (YouTube) ===== */
     .youtube-banner {
+      position: fixed;
+      inset: 0 0 auto 0;
       width: 100%;
+      min-height: var(--efp-topbar-h);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 9px 16px;
-      font-size: 13px;
+      gap: clamp(.45rem, 1vw, .7rem);
+      padding-inline: var(--efp-page-gutter);
+      font-size: clamp(.72rem, .9vw, .82rem);
       font-weight: 600;
-      letter-spacing: 0.2px;
+      letter-spacing: .015em;
       color: var(--muted);
       text-decoration: none;
-      background: rgba(8, 11, 22, 0.72);
+      background: rgba(8, 11, 22, 0.88);
       border-bottom: 1px solid var(--border);
-      position: relative;
-      z-index: 30;
+      backdrop-filter: blur(.8rem);
+      -webkit-backdrop-filter: blur(.8rem);
+      z-index: 50;
       transition: color .25s, background .25s;
     }
     .youtube-banner i {
       display: grid;
       place-items: center;
-      width: 26px;
-      height: 18px;
-      border-radius: 5px;
-      font-size: 12px;
+      width: 1.65rem;
+      height: 1.15rem;
+      border-radius: .32rem;
+      font-size: .75rem;
       color: #fff;
       background: #e11d2a;
-      box-shadow: 0 4px 14px rgba(225, 29, 42, 0.35);
+      box-shadow: 0 .25rem .9rem rgba(225, 29, 42, 0.35);
     }
     .youtube-banner .yt-cta {
-      font-size: 11px;
+      font-size: .7rem;
       font-weight: 700;
       color: var(--gold-soft);
-      padding: 3px 10px;
-      border-radius: 999px;
+      padding: .2rem .65rem;
+      border-radius: 999rem;
       border: 1px solid var(--line);
       white-space: nowrap;
     }
@@ -872,52 +885,47 @@
     .footer-content { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
     .footer .tagline { font-family: "Noto Sans Devanagari", "Manrope", sans-serif; font-size: 12px; color: var(--gold-soft); opacity: .75; }
     .footer-links { display: flex; gap: 18px; margin-top: 4px; }
-    .footer-links a { color: var(--muted); text-decoration: none; padding: 4px 0; }
-    .footer-links a:hover { color: var(--gold-soft); }
-
-    /* ===== Tablet ===== */
-    @media (min-width: 640px) {
-      .container { width: calc(100% - 48px); margin-top: 28px; gap: 26px; }
-      .hero { padding: 30px; }
-      .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .menu { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-      .menu > li.is-featured { grid-column: 1 / -1; }
-      .search-wrap { margin: 0 -24px 8px; padding: 10px 24px; }
-      .search-wrap .fa-magnifying-glass { left: 42px; }
-      .search-kbd { right: 40px; }
-    }
-
-    /* ===== Desktop ===== */
-    @media (min-width: 1024px) {
+    .footer-links a { color: var    /* ===== Desktop ===== */
+    @media (min-width: 64rem) {
       .container {
+        width: min(
+          calc(100% - (2 * var(--efp-page-gutter))),
+          var(--efp-shell-max)
+        );
         display: grid;
-        grid-template-columns: 310px minmax(0, 1fr);
+        grid-template-columns: var(--efp-rail-w) minmax(0, 1fr);
         grid-template-areas: "hero main" ". footer";
         align-items: start;
-        column-gap: 28px;
-        row-gap: 36px;
-        margin: 32px auto 32px;
+        column-gap: var(--efp-rail-gap);
+        row-gap: clamp(1.75rem, 3vw, 2.5rem);
+        margin: var(--efp-hero-gap) auto 2rem;
       }
 
       /*
-       * Desktop identity panel is intentionally FIXED, not sticky.
-       * Sticky is bounded by its grid/container and can move again near the
-       * footer or be disabled by viewport-height rules. Fixed matches the
-       * intended behaviour: the panel never travels with page scrolling.
+       * Both desktop chrome pieces are viewport-fixed. Their relationship is
+       * expressed through shared responsive variables instead of per-device
+       * pixel offsets, so the hero always clears the YouTube bar naturally.
        */
       .hero {
         grid-area: hero;
         position: fixed;
-        top: 24px;
-        left: max(24px, calc((100vw - 1320px) / 2));
-        width: 310px;
+        top: calc(var(--efp-topbar-h) + var(--efp-hero-gap));
+        left: max(
+          var(--efp-page-gutter),
+          calc((100vw - var(--efp-shell-max)) / 2)
+        );
+        width: var(--efp-rail-w);
         z-index: 40;
-        padding: 30px 28px 26px;
+        padding:
+          clamp(1.35rem, 2vw, 1.7rem)
+          clamp(1.25rem, 1.8vw, 1.55rem)
+          clamp(1.25rem, 1.8vw, 1.5rem);
+        border-radius: clamp(1.15rem, 2vw, 1.45rem);
       }
 
       nav.menu-container { grid-area: main; }
 
-      /* Keep footer content completely out from behind the fixed hero. */
+      /* Footer stays in the scrolling content rail, never behind the hero. */
       .footer {
         grid-area: footer;
         grid-column: 2;
@@ -925,9 +933,42 @@
       }
 
       .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .logo { width: 72px; height: 72px; }
-      h1 { font-size: 29px; white-space: nowrap; }
-      .search-wrap { position: relative; margin: 0 0 6px; padding: 0; background: none; }
+      .logo {
+        width: clamp(3.8rem, 5vw, 4.35rem);
+        height: clamp(3.8rem, 5vw, 4.35rem);
+      }
+      .logo-row { margin-bottom: clamp(1rem, 1.7vw, 1.25rem); }
+      h1 {
+        font-size: clamp(1.8rem, 2.15vw, 2.05rem);
+        white-space: nowrap;
+      }
+      p.subtitle {
+        font-size: clamp(.8rem, .95vw, .9rem);
+        line-height: 1.55;
+      }
+      .exam-tags { margin-bottom: clamp(.9rem, 1.5vw, 1.1rem); }
+      .stat { padding: clamp(.65rem, 1vw, .8rem); }
+      .stat strong { font-size: clamp(1.25rem, 1.65vw, 1.5rem); }
+      .app-store-links {
+        margin-top: clamp(.7rem, 1vw, .9rem);
+        padding-top: clamp(.7rem, 1vw, .9rem);
+      }
+
+      .search-wrap { position: relative; margin: 0 0 .4rem; padding: 0; background: none; }
+      .search-wrap .fa-magnifying-glass { left: 1.1rem; }
+      .search-kbd { display: block; right: .9rem; }
+      #searchBox { height: 3.6rem; padding-right: 3.5rem; }
+      .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        text-align: left;
+        gap: .5rem 1.1rem;
+      }
+      .footer-links { margin-top: 0; }
+    }
+
+; }
       .search-wrap .fa-magnifying-glass { left: 18px; }
       .search-kbd { display: block; right: 14px; }
       #searchBox { height: 58px; padding-right: 56px; }
