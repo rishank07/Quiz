@@ -293,67 +293,132 @@
       box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45), 0 0 22px rgba(246, 217, 138, 0.16);
     }
 
-    /* Dark mode toggle */
-    @keyframes efp-glow-pulse {
-      0%, 100% { box-shadow: 0 4px 16px rgba(0, 0, 0, .35); }
-      50% { box-shadow: 0 6px 22px rgba(0, 0, 0, .5), 0 0 16px rgba(246, 217, 138, .22); }
-    }
-    @keyframes efp-icon-flip {
-      0% { transform: rotate(0) scale(1); }
-      45% { transform: rotate(200deg) scale(1.3); }
-      100% { transform: rotate(360deg) scale(1); }
-    }
+    /* Animated day/night theme toggle */
     .black-mode-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 6px 7px 6px 6px;
+      --toggle-w: 66px;
+      --toggle-h: 34px;
+      position: relative;
+      width: var(--toggle-w);
+      height: var(--toggle-h);
+      padding: 0;
+      border: 0;
       border-radius: 999px;
-      font-size: 12.5px;
-      font-weight: 600;
-      line-height: 1;
-      font-family: inherit;
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border);
+      background: transparent;
       cursor: pointer;
-      transition: border-color .25s, background .25s, transform .25s var(--ease);
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .2s ease;
     }
-    .black-mode-toggle:hover { border-color: var(--line-strong); background: rgba(246, 217, 138, 0.07); }
     .black-mode-toggle:active { transform: scale(.96); }
-    .black-mode-toggle .toggle-icon {
-      width: 28px; height: 28px;
-      display: grid; place-items: center;
+    .black-mode-toggle:focus-visible {
+      outline: 2px solid var(--gold-bright);
+      outline-offset: 3px;
+    }
+    .theme-toggle-track {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: inherit;
+      background: linear-gradient(180deg, #75c9ff 0%, #b9e7ff 100%);
+      border: 1px solid rgba(255,255,255,.58);
+      box-shadow:
+        inset 0 2px 5px rgba(32,110,165,.26),
+        0 5px 14px rgba(0,0,0,.24);
+      transition: background .45s ease, border-color .45s ease, box-shadow .45s ease;
+    }
+    .theme-toggle-knob {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      z-index: 4;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 35% 30%, #fff7b2 0 22%, #ffd95a 48%, #f5a623 100%);
+      box-shadow: 0 2px 8px rgba(114,69,0,.35), 0 0 9px rgba(255,213,73,.42);
+      transform: translateX(0) rotate(0deg);
+      transition: transform .5s cubic-bezier(.34,1.56,.64,1), background .4s ease, box-shadow .4s ease;
+    }
+    .theme-toggle-knob i {
+      position: absolute;
       font-size: 12px;
-      color: var(--gold-bright);
-      background: rgba(246, 217, 138, 0.12);
-      border: 1px solid var(--line);
+      transition: opacity .28s ease, transform .45s ease;
     }
-    .black-mode-toggle .toggle-icon.efp-spin { animation: efp-icon-flip .6s cubic-bezier(.34, 1.56, .64, 1); }
-    .black-mode-toggle .toggle-copy { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
-    .black-mode-toggle .toggle-state {
-      min-width: 34px;
-      padding: 5px 8px;
+    .theme-sun { color: #8a5600; opacity: 1; transform: scale(1) rotate(0deg); }
+    .theme-moon { color: #64748b; opacity: 0; transform: scale(.55) rotate(-90deg); }
+
+    .theme-stars {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity .35s ease .08s, transform .45s ease;
+    }
+    .theme-stars::before,
+    .theme-stars::after,
+    .theme-stars span {
+      content: "";
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #fff8c8;
+      box-shadow: 0 0 5px rgba(255,248,200,.8);
+    }
+    .theme-stars::before { left: 10px; top: 8px; }
+    .theme-stars::after { left: 19px; top: 20px; width: 2px; height: 2px; }
+    .theme-stars span { left: 29px; top: 9px; width: 2px; height: 2px; }
+
+    .theme-clouds {
+      position: absolute;
+      z-index: 2;
+      right: -3px;
+      bottom: -7px;
+      width: 34px;
+      height: 15px;
       border-radius: 999px;
-      text-align: center;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .8px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,.88);
+      box-shadow:
+        -12px 3px 0 rgba(255,255,255,.78),
+        8px 2px 0 rgba(255,255,255,.7);
+      transition: transform .45s ease, opacity .35s ease;
     }
-    html.efp-black .black-mode-toggle .toggle-state,
-    html.efp-black-invert .black-mode-toggle .toggle-state {
-      color: #171006;
-      background: linear-gradient(135deg, #ffeec0, #d9b75f);
-      border-color: transparent;
+
+    html.efp-black .theme-toggle-track,
+    html.efp-black-invert .theme-toggle-track {
+      background: linear-gradient(180deg, #101936 0%, #26345d 100%);
+      border-color: rgba(157,176,230,.28);
+      box-shadow:
+        inset 0 2px 6px rgba(0,0,0,.42),
+        0 5px 16px rgba(0,0,0,.36);
     }
-    html.efp-black .black-mode-toggle,
-    html.efp-black-invert .black-mode-toggle {
-      background: linear-gradient(135deg, #1a1a1a, #050505);
-      animation: efp-glow-pulse 2.4s ease-in-out infinite;
+    html.efp-black .theme-toggle-knob,
+    html.efp-black-invert .theme-toggle-knob {
+      transform: translateX(32px) rotate(360deg);
+      background: radial-gradient(circle at 35% 30%, #f7f8fb 0 32%, #dbe2ef 57%, #aeb8cb 100%);
+      box-shadow: 0 2px 9px rgba(0,0,0,.42), 0 0 10px rgba(208,220,255,.22);
+    }
+    html.efp-black .theme-sun,
+    html.efp-black-invert .theme-sun {
+      opacity: 0;
+      transform: scale(.55) rotate(90deg);
+    }
+    html.efp-black .theme-moon,
+    html.efp-black-invert .theme-moon {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+    html.efp-black .theme-stars,
+    html.efp-black-invert .theme-stars {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    html.efp-black .theme-clouds,
+    html.efp-black-invert .theme-clouds {
+      opacity: 0;
+      transform: translateY(18px);
     }
 
     .kicker {
@@ -1058,12 +1123,6 @@
       .menu > li.backup-restore-card > a { width: calc((100% - 14px) / 2); }
     }
 
-    /* Mobile/tablet: keep the theme toggle compact and icon-only. */
-    @media (max-width: 1199px) {
-      .black-mode-toggle { padding: 6px; gap: 0; }
-      .black-mode-toggle .toggle-copy { display: none; }
-    }
-
     /* ===== Phones ===== */
     @media (max-width: 639px) {
       .youtube-banner .yt-handle { display: none; }
@@ -1078,7 +1137,6 @@
     /* ===== Small phones ===== */
     @media (max-width: 380px) {
       .hero { padding: 20px 16px 18px; }
-      .black-mode-toggle #blackModeLabel { display: none; }
       .stat strong { font-size: 19px; }
       .menu > li > a { column-gap: 12px; padding: 12px; }
       .bilabel-en { font-size: 14.5px; }
@@ -1118,34 +1176,28 @@
           decoding="async" fetchpriority="high">
 
         <button type="button" class="black-mode-toggle" id="blackModeBtn" onclick="toggleBlackMode()"
-          aria-pressed="false" aria-label="Turn dark mode on">
-          <span class="toggle-icon" id="blackModeIconWrap"><i class="fa-solid fa-moon"></i></span>
-          <span class="toggle-copy">
-            <span id="blackModeLabel">Dark Mode</span>
-            <span class="toggle-state" id="blackModeState">OFF</span>
+          aria-pressed="false" aria-label="Turn dark mode on" title="Toggle dark mode">
+          <span class="theme-toggle-track" aria-hidden="true">
+            <span class="theme-stars"><span></span></span>
+            <span class="theme-clouds"></span>
+            <span class="theme-toggle-knob">
+              <i class="fa-solid fa-sun theme-sun"></i>
+              <i class="fa-solid fa-moon theme-moon"></i>
+            </span>
           </span>
         </button>
         <script>
-          function syncBlackModeLabel(animate) {
+          function syncBlackModeLabel() {
             var isOn = document.documentElement.classList.contains('efp-black') || document.documentElement.classList.contains('efp-black-invert');
             var button = document.getElementById('blackModeBtn');
-            var state = document.getElementById('blackModeState');
-            var iconWrap = document.getElementById('blackModeIconWrap');
-            var icon = document.querySelector('#blackModeBtn .toggle-icon i');
-            if (state) state.textContent = isOn ? 'ON' : 'OFF';
             if (button) {
               button.setAttribute('aria-pressed', isOn ? 'true' : 'false');
               button.setAttribute('aria-label', isOn ? 'Turn dark mode off' : 'Turn dark mode on');
-            }
-            if (icon) icon.className = isOn ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-            if (animate && iconWrap) {
-              iconWrap.classList.remove('efp-spin');
-              void iconWrap.offsetWidth; /* restart animation every time */
-              iconWrap.classList.add('efp-spin');
+              button.setAttribute('title', isOn ? 'Switch to light mode' : 'Switch to dark mode');
             }
           }
-          syncBlackModeLabel(false);
-          document.addEventListener('efp-black-mode-changed', function () { syncBlackModeLabel(true); });
+          syncBlackModeLabel();
+          document.addEventListener('efp-black-mode-changed', syncBlackModeLabel);
         </script>
       </div>
 
