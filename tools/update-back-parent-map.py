@@ -239,8 +239,6 @@ def validate(parent_map: dict[str, str]) -> None:
             "/index.html",
         "/Bihar Special/Topic Names/Introducing Bihar.html":
             "/Bihar Special/Bihar Special.html",
-        "/Bihar Special/Topic Names/1-15 March Bihar Current Affairs.html":
-            "/Bihar Special/Bihar Special.html",
         "/Books/BlackBook/Files/All Spelling.html":
             "/Books/BlackBook/BlackBook.html",
     }
