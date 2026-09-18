@@ -957,6 +957,17 @@
       .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
       .menu { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
       .menu > li.is-featured { grid-column: 1 / -1; }
+
+      /* In every two-column layout, keep the single Backup & Restore card centered. */
+      .menu > li.backup-restore-card {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+      }
+      .menu > li.backup-restore-card > a {
+        width: calc((100% - 12px) / 2);
+      }
+
       .search-wrap { margin: 0 -24px 8px; padding: 10px 24px; }
       .search-wrap .fa-magnifying-glass { left: 42px; }
       .search-kbd { right: 40px; }
