@@ -85,21 +85,21 @@
       id: "currentaffairsrapid",
       label: "Current Affairs Rapid Practice",
       icon: "fa-bolt",
-      indexUrl: "search-snippets-current-affairs-rapid.js?v=20260919ca5",
+      indexUrl: "search-snippets-current-affairs-rapid.js?v=20260918ca1",
       mode: "snippet",
       globalName: "EF_SNIPPET_INDEX",
       sectionPrefix: "./Current%20Affairs/Topic%20Names/Rapid%20Practice/",
       limit: 8
     },
     {
-      id: "currentaffairsrapidextra",
-      label: "Current Affairs Rapid Practice",
-      icon: "fa-bolt",
-      indexUrl: "search-snippets-current-affairs-rapid-extra.js?v=20260919ca5",
+      id: "bihar60sets",
+      label: "Bihar Objective GK - 60 Sets",
+      icon: "fa-layer-group",
+      indexUrl: "search-snippets-bihar60sets.js?v=20260919b1",
       mode: "snippet",
-      globalName: "EF_RAPID_EXTRA_INDEX",
-      sectionPrefix: "./Current%20Affairs/Topic%20Names/Rapid%20Practice/",
-      limit: 5
+      globalName: "EF_SNIPPET_INDEX",
+      sectionPrefix: "./Bihar%20Special/Topic%20Names/Bihar%20Objective%20GK%20-%2060%20Sets.html",
+      limit: 8
     }
   ];
 
