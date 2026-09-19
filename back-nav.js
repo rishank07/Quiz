@@ -466,6 +466,20 @@
     return false;
   }
 
+  function signalCruxRestoreComplete() {
+    var fire = function () {
+      try { window.dispatchEvent(new Event("efp-crux-restore-complete")); } catch (_) {
+        try {
+          var ev = document.createEvent("Event");
+          ev.initEvent("efp-crux-restore-complete", true, false);
+          window.dispatchEvent(ev);
+        } catch (_) {}
+      }
+    };
+    if (typeof requestAnimationFrame === "function") requestAnimationFrame(fire);
+    else window.setTimeout(fire, 0);
+  }
+
   /* A direct shared PDF URL uses one generic viewer.html plus ?id=... . Restore
      the matching in-page Crux hierarchy after the logical Back lands on index:
      Material -> Source -> Subject -> Part -> Chapter list. */
@@ -473,21 +487,29 @@
     if (!isCruxTricksRoot()) return;
 
     var state = readCruxRestoreState();
-    if (!state || !state.kind || !state.source || !state.subject) return;
+    if (!state || !state.kind || !state.source || !state.subject) {
+      signalCruxRestoreComplete();
+      return;
+    }
 
     var attempts = 0;
+    function retryOrRelease() {
+      if (attempts < 8) window.setTimeout(apply, 40);
+      else signalCruxRestoreComplete();
+    }
+
     function apply() {
       attempts++;
 
       var material = document.querySelector('[data-material="' + state.kind + '"]');
       if (!material) {
-        if (attempts < 8) window.setTimeout(apply, 40);
+        retryOrRelease();
         return;
       }
       material.click();
 
       if (!clickButtonByText("#sourceChoices .choice", state.source)) {
-        if (attempts < 8) window.setTimeout(apply, 40);
+        retryOrRelease();
         return;
       }
 
@@ -499,18 +521,23 @@
           examDone = clickButtonByText("#examChoices .choice", state.exam);
         }
         if (!examDone) {
-          if (attempts < 8) window.setTimeout(apply, 40);
+          retryOrRelease();
           return;
         }
       }
 
       if (!clickButtonByText("#subjectChoices .subject", state.subject)) {
-        if (attempts < 8) window.setTimeout(apply, 40);
+        retryOrRelease();
         return;
       }
 
-      if (state.branch) clickButtonByText("#partChoices .part", state.branch);
+      if (state.branch && !clickButtonByText("#partChoices .part", state.branch)) {
+        retryOrRelease();
+        return;
+      }
+
       try { window.scrollTo(0, 0); } catch (_) {}
+      signalCruxRestoreComplete();
     }
 
     apply();
