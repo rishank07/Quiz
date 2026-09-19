@@ -463,11 +463,85 @@
     for (var i = 0; i < buttons.length; i++) {
       var text = String(buttons[i].textContent || "").trim().toLowerCase();
       if (text.indexOf(needle) !== -1) {
-        buttons[i].click();
+        activateCruxControl(buttons[i]);
         return true;
       }
     }
     return false;
+  }
+
+  function activateCruxControl(button) {
+    if (!button) return false;
+    /* Restore clicks must update only the Crux UI. Dispatching a real click
+       also wakes the browser-history bridge and creates transitions from a
+       stale state while the hierarchy is still being rebuilt. */
+    if (typeof button.onclick === "function") {
+      button.onclick.call(button);
+      return true;
+    }
+    button.click();
+    return true;
+  }
+
+  function makeCruxHistoryState(level, depth, data) {
+    return {
+      efpCruxNav: true,
+      level: level,
+      depth: depth,
+      kind: data.kind || "",
+      source: data.source || "",
+      exam: data.exam || "",
+      subject: data.subject || "",
+      branch: data.branch || "",
+      utility: ""
+    };
+  }
+
+  /* A homepage search opens viewer.html without first visiting the Crux SPA.
+     Once the exact pane is restored, build the missing same-document history
+     entries so every later visible/browser/Android Back press walks the normal
+     hierarchy instead of jumping to Home. */
+  function seedCruxReturnHistory(state) {
+    if (!isCruxTricksRoot() || !state || !state.kind) return;
+
+    var data = {
+      kind: state.kind || "",
+      source: state.source || "",
+      exam: state.exam || "",
+      subject: state.subject || "",
+      branch: state.branch || ""
+    };
+    var chain = [makeCruxHistoryState("material", 0, {})];
+    var depth = 1;
+
+    chain.push(makeCruxHistoryState("source", depth++, { kind: data.kind }));
+    if (data.source === "Pinnacle") {
+      chain.push(makeCruxHistoryState("exam", depth++, data));
+    }
+    if (data.source) {
+      chain.push(makeCruxHistoryState("subjects", depth++, data));
+    }
+    if (data.subject) {
+      if (data.branch) chain.push(makeCruxHistoryState("parts", depth++, data));
+      chain.push(makeCruxHistoryState("chapters", depth++, data));
+    }
+
+    var url = window.location.pathname + window.location.hash;
+    try {
+      history.replaceState(chain[0], "", url);
+      for (var i = 1; i < chain.length; i++) history.pushState(chain[i], "", url);
+    } catch (_) {}
+  }
+
+  function seedCruxReturnHistoryWhenReady(state) {
+    var seed = function () { seedCruxReturnHistory(state); };
+    /* crux-search-route initializes its popstate restorer on DOMContentLoaded.
+       Let that initialize first, then install the reconstructed chain. */
+    if (!window.EFP_CRUX_BROWSER_HISTORY && document.readyState !== "complete") {
+      document.addEventListener("DOMContentLoaded", seed, { once: true });
+    } else {
+      seed();
+    }
   }
 
   function signalCruxRestoreComplete() {
@@ -509,7 +583,7 @@
         retryOrRelease();
         return;
       }
-      material.click();
+      activateCruxControl(material);
 
       if (!clickButtonByText("#sourceChoices .choice", state.source)) {
         retryOrRelease();
@@ -540,6 +614,7 @@
       }
 
       try { window.scrollTo(0, 0); } catch (_) {}
+      seedCruxReturnHistoryWhenReady(state);
       signalCruxRestoreComplete();
     }
 
