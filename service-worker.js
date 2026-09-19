@@ -1,5 +1,5 @@
 // v85 smooth mobile PDF scrolling 20260918
-const CACHE_VERSION = "efp-pwa-2026-09-20-v88-pdf-self-heal";
+const CACHE_VERSION = "efp-pwa-2026-09-20-v89-pdf-search-back";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -26,7 +26,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260917mindmapbottom2",
   "/app-session.js?v=20260908answerreset2",
   "/back-parent-map.js",
-  "/back-nav.js",
+  "/back-nav.js?v=20260920pdfsearchback1",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
