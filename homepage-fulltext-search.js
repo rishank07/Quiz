@@ -138,6 +138,20 @@
     return raw;
   }
 
+  function homeSearchUrl(rawUrl) {
+    if (typeof window.efpHomeSearchUrl === "function") {
+      return window.efpHomeSearchUrl(rawUrl);
+    }
+    try {
+      var url = new URL(rawUrl, document.baseURI);
+      if (url.origin !== window.location.origin) return rawUrl;
+      url.searchParams.set("from", "home-search");
+      return url.href;
+    } catch (_) {
+      return rawUrl;
+    }
+  }
+
   function snippetHtml(text, query) {
     text = stripMarker(text);
     if (typeof efSnippetWithHighlight === "function") {
@@ -345,7 +359,7 @@
       li.setAttribute("data-bookfullitem", "");
 
       var a = document.createElement("a");
-      a.href = url;
+      a.href = homeSearchUrl(url);
       a.setAttribute("onclick", "openPage(event)");
 
       var icon = document.createElement("i");

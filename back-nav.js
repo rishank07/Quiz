@@ -6,6 +6,8 @@
   var CHAIN_KEY = "efp_logical_back_expected_path";
   var CRUX_RESTORE_KEY = "efp_crux_back_restore_state";
   var CRUX_HOME_SEARCH_GUARD = "efpCruxHomeSearchGuard";
+  var HOME_SEARCH_CHAIN_KEY = "efp_home_search_back_chain";
+  var HOME_SEARCH_GUARD = "efpHomeSearchGuard";
 
   function normalizePath(pathname) {
     var path = pathname || "/";
@@ -353,6 +355,26 @@
     }
   }
 
+  function hasHomeSearchMarker() {
+    try {
+      return new URLSearchParams(window.location.search).get("from") === "home-search";
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function hasHomeSearchChain() {
+    try { return sessionStorage.getItem(HOME_SEARCH_CHAIN_KEY) === "1"; } catch (_) { return false; }
+  }
+
+  function rememberHomeSearchChain() {
+    try { sessionStorage.setItem(HOME_SEARCH_CHAIN_KEY, "1"); } catch (_) {}
+  }
+
+  function clearHomeSearchChain() {
+    try { sessionStorage.removeItem(HOME_SEARCH_CHAIN_KEY); } catch (_) {}
+  }
+
   function isCruxViewerFromHomeSearch() {
     if (!isCruxViewer()) return false;
     try {
@@ -635,6 +657,78 @@
     return true;
   }
 
+  function isGenericHomeSearchGuardState(state, phase) {
+    return !!(state && state[HOME_SEARCH_GUARD] === true &&
+      (!phase || state.phase === phase));
+  }
+
+  function copyHistoryState(state) {
+    var copy = {};
+    if (!state || typeof state !== "object") return copy;
+    for (var key in state) {
+      if (Object.prototype.hasOwnProperty.call(state, key)) copy[key] = state[key];
+    }
+    return copy;
+  }
+
+  function armGenericHomeSearchGuard() {
+    if (isCruxViewer()) return false;
+    if (isGenericHomeSearchGuardState(history.state, "top")) return true;
+
+    var url = window.location.pathname + window.location.search + window.location.hash;
+    var base = copyHistoryState(history.state);
+    var top = copyHistoryState(history.state);
+    base[HOME_SEARCH_GUARD] = true;
+    base.phase = "base";
+    top[HOME_SEARCH_GUARD] = true;
+    top.phase = "top";
+
+    try {
+      history.replaceState(base, "", url);
+      history.pushState(top, "", url);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /* Homepage search can open any leaf directly: a quiz, book topic, Current
+     Affairs page or Mind Map. Add a guard at every non-root page in that
+     logical chain. Browser/Android Back reaches the guard, loads the mapped
+     parent, then that parent installs the next guard. This recreates the same
+     hierarchy the user would have traversed manually. */
+  function installGenericHomeSearchHistoryGuard() {
+    if (isCruxViewer()) return;
+
+    var parentUrl = logicalParentUrl();
+    if (!parentUrl) return;
+
+    var current = normalizePath(window.location.pathname);
+    var expected = expectedLogicalPath();
+    var initial = hasHomeSearchMarker() || isHomePageUrl(document.referrer);
+    var continuing = hasHomeSearchChain() && expected === current;
+
+    if (!initial && !continuing) {
+      if (hasHomeSearchChain() && expected && expected !== current) {
+        clearHomeSearchChain();
+        clearLogicalChain();
+      }
+      return;
+    }
+
+    /* The section root already has the real Home entry immediately behind it.
+       Let the ordinary Back handler use that entry instead of adding a second
+       synthetic Home step. */
+    if (isHomePageUrl(parentUrl.href)) {
+      clearHomeSearchChain();
+      if (continuing) clearLogicalChain();
+      return;
+    }
+
+    rememberHomeSearchChain();
+    armGenericHomeSearchGuard();
+  }
+
   function isHomeSearchGuardState(state, phase) {
     return !!(state && state[CRUX_HOME_SEARCH_GUARD] === true &&
       (!phase || state.phase === phase));
@@ -659,15 +753,37 @@
   }
 
   window.addEventListener("popstate", function (event) {
-    if (!isCruxViewer() || !isHomeSearchGuardState(event.state, "base")) return;
+    if (isCruxViewer() && isHomeSearchGuardState(event.state, "base")) {
+      var cruxParentUrl = logicalParentUrl();
+      if (!cruxParentUrl) {
+        window.location.replace("/Crux-Tricks/index.html");
+        return;
+      }
 
-    var parentUrl = logicalParentUrl();
-    if (!parentUrl) {
-      window.location.replace("/Crux-Tricks/index.html");
+      rememberCruxViewerState(cruxParentUrl);
+      rememberLogicalDestination(cruxParentUrl);
+      window.location.replace(cruxParentUrl.href);
       return;
     }
 
-    rememberCruxViewerState(parentUrl);
+    if (!isGenericHomeSearchGuardState(event.state, "base")) return;
+
+    /* Original Practice keeps Quiz -> Chapters -> Complete Practice Home in
+       one document. Re-arm the same browser guard after each in-page step so
+       Android Back and the visible Back button follow an identical route. */
+    if (useOriginalPracticeInternalBack(event)) {
+      window.setTimeout(armGenericHomeSearchGuard, 0);
+      return;
+    }
+
+    var parentUrl = logicalParentUrl();
+    if (!parentUrl) {
+      clearHomeSearchChain();
+      window.location.replace("/");
+      return;
+    }
+
+    rememberHomeSearchChain();
     rememberLogicalDestination(parentUrl);
     window.location.replace(parentUrl.href);
   });
@@ -689,6 +805,12 @@
     }
 
     if (useOriginalPracticeInternalBack(event)) {
+      return;
+    }
+
+    if (isGenericHomeSearchGuardState(history.state, "top")) {
+      consumeBackEvent(event);
+      window.history.back();
       return;
     }
 
@@ -722,6 +844,7 @@
   installMixedPracticeSiteTheme();
   installMixedPracticeInstantCheck();
   installCruxHomeSearchHistoryGuard();
+  installGenericHomeSearchHistoryGuard();
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", restoreCruxIndexState, { once: true });

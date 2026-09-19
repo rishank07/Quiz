@@ -1164,7 +1164,7 @@
   </style>
   <script defer src="/home-nav.js?v=20260906"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
-  <script defer src="/back-nav.js?v=20260920pdfsearchback4"></script>
+  <script defer src="/back-nav.js?v=20260920allsearchback1"></script>
 </head>
 
 <body>
@@ -1465,6 +1465,19 @@
       const noResults = document.getElementById("noResults");
       const menuList = document.getElementById("menuList");
 
+      function homeSearchUrl(rawUrl) {
+        try {
+          const url = new URL(rawUrl, document.baseURI);
+          if (url.origin !== window.location.origin) return rawUrl;
+          url.searchParams.set("from", "home-search");
+          return url.href;
+        } catch (_) {
+          return rawUrl;
+        }
+      }
+      // The deferred full-text bridge uses the same marker for every source.
+      window.efpHomeSearchUrl = homeSearchUrl;
+
       const SECTION_ICON = {
         "Books": "fa-book",
         "Bihar Special": "fa-location-dot",
@@ -1631,7 +1644,7 @@
           li.setAttribute("data-deepresult", "");
           li.setAttribute("data-opfullresult", "");
           var a = document.createElement("a");
-          a.href = decoded.url;
+          a.href = homeSearchUrl(decoded.url);
           a.setAttribute("onclick", "openPage(event)");
 
           var icon = document.createElement("i");
@@ -1756,7 +1769,7 @@
         groupLi.appendChild(groupTitle); menuList.appendChild(groupLi);
         rendered.forEach(function (item) {
           var li = document.createElement("li"); li.setAttribute("data-deepresult", "");
-          var a = document.createElement("a"); a.href = item.decoded.url; a.setAttribute("onclick", "openPage(event)");
+          var a = document.createElement("a"); a.href = homeSearchUrl(item.decoded.url); a.setAttribute("onclick", "openPage(event)");
           var icon = document.createElement("i"); icon.className = "fa-solid fa-lightbulb menu-icon";
           var span = document.createElement("span"); span.className = "link-text ef-op-global-result";
           var snippet = (typeof efSnippetWithHighlight === "function") ? efSnippetWithHighlight(item.decoded.text, terms) : item.decoded.text.slice(0,180);
@@ -1801,7 +1814,7 @@
           const li = document.createElement("li");
           li.setAttribute("data-deepresult", "");
           const a = document.createElement("a");
-          a.href = rec.url;
+          a.href = homeSearchUrl(rec.url);
           a.setAttribute("onclick", "openPage(event)");
 
           const icon = document.createElement("i");
@@ -1902,7 +1915,7 @@
     .ef-op-search-snippet mark{background:#ffe28a;color:inherit;padding:0 1px;border-radius:2px}
   </style>
   <!-- ExamFusion homepage full-text bridge -->
-  <script src="./homepage-fulltext-search.js?v=20260905books2" defer></script>
+  <script src="./homepage-fulltext-search.js?v=20260920allsearchback1" defer></script>
   <!-- ExamFusion landing counts: start -->
   <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5036,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":12101,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":46414,"unit":"Questions"},"./PYQ/index.html":{"total":853,"unit":"PYQs"},"./Crux-Tricks/index.html":{"total":591,"unit":"PDFs"}}</script>
   <style>
