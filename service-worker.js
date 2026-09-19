@@ -1,5 +1,5 @@
 // v85 smooth mobile PDF scrolling 20260918
-const CACHE_VERSION = "efp-pwa-2026-09-20-v89-pdf-search-back";
+const CACHE_VERSION = "efp-pwa-2026-09-20-v90-crux-return-no-flash";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -45,7 +45,7 @@ const APP_SHELL = [
   "/Crux-Tricks/my-pages.html",
   "/Crux-Tricks/crux-manifest.js",
   "/Crux-Tricks/crux-search-route.js",
-  "/Crux-Tricks/crux-restore-flash.js?v=20260920backfreeze1",
+  "/Crux-Tricks/crux-restore-flash.js?v=20260920noflash1",
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260919searchhighlight2",
   "/Crux-Tricks/viewer.css",
