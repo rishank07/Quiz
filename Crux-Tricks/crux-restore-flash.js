@@ -4,8 +4,14 @@
   var CLASS_NAME = "efp-crux-restoring";
   var waitToken = 0;
 
+  var SESSION_RESTORE_KEY = "efp_crux_back_restore_state";
+
   function managed(state) {
     return !!(state && state.efpCruxNav === true && state.level && state.level !== "material");
+  }
+
+  function pendingSessionRestore() {
+    try { return !!sessionStorage.getItem(SESSION_RESTORE_KEY); } catch (_) { return false; }
   }
 
   function visible(id) {
@@ -47,6 +53,10 @@
   function waitUntilCorrectPane(state) {
     var token = ++waitToken;
     if (!managed(state)) {
+      if (pendingSessionRestore()) {
+        document.documentElement.classList.add(CLASS_NAME);
+        return;
+      }
       release();
       return;
     }
@@ -84,15 +94,20 @@
   }
 
   window.addEventListener("popstate", function (event) {
-    if (managed(event.state)) waitUntilCorrectPane(event.state);
+    if (managed(event.state) || pendingSessionRestore()) waitUntilCorrectPane(event.state);
     else release();
   });
 
+  window.addEventListener("efp-crux-restore-complete", function () {
+    waitToken++;
+    release();
+  });
+
   // Back-forward cache restores do not always replay the same lifecycle in
-  // Android app shells. Re-check the active history state whenever this page
-  // becomes visible again so a stale restore guard can never keep body hidden.
+  // Android app shells. Re-check the active history/session state whenever
+  // this page becomes visible again.
   window.addEventListener("pageshow", function () {
-    if (managed(history.state)) waitUntilCorrectPane(history.state);
+    if (managed(history.state) || pendingSessionRestore()) waitUntilCorrectPane(history.state);
     else release();
   });
 })();
