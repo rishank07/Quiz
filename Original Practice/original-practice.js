@@ -137,6 +137,49 @@ function norm(s){return String(s||"").toLowerCase().replace(/[’‘`]/g,"'").re
 function allChapters(subjectOnly){var out=[];Object.keys(MASTER).forEach(function(s){if(subjectOnly&&s!==subjectOnly)return;Object.keys(MASTER[s]).forEach(function(c){out.push({subject:s,chapter:c,en:enName(c),hi:hiName(s,c)})})});return out}
 function countVisited(subject){var n=0;Object.keys(MASTER[subject]||{}).forEach(function(c){if(isVisited(subject,c))n++});return n}
 function syncUrl(mode){try{var u=new URL(location.href);u.search="";if(mode!=="home"&&state.subject)u.searchParams.set("subject",state.subject);if(mode==="quiz"&&state.chapterName){u.searchParams.set("chapter",state.chapterName);u.searchParams.set("section",String((state.currentSection||0)+1))}history.replaceState(null,"",u.pathname+u.search+u.hash)}catch(e){}}
+
+function efpSeoCountQuestions(subject,chapter){
+ var total=0,sections=MASTER&&MASTER[subject]&&MASTER[subject][chapter];
+ (sections||[]).forEach(function(section){total+=(section&&section.questions&&section.questions.length)||0});
+ return total;
+}
+function efpSeoPlainChapter(chapter){
+ return enName(chapter).replace(/^\s*\d+(?:\.[ivx]+(?:\.[a-z])?)?\.?\s*/i,"").trim();
+}
+function efpSeoSetMeta(selector,attr,value){
+ var node=document.head.querySelector(selector);
+ if(!node){node=document.createElement("meta");if(selector.indexOf('property=')>=0)node.setAttribute("property",attr);else node.setAttribute("name",attr);document.head.appendChild(node)}
+ node.setAttribute("content",value);
+}
+function efpApplySeoMeta(){
+ try{
+  var chapter=state.screen==="quiz"&&state.chapterName?state.chapterName:"";
+  var subject=state.subject||CFG.label;
+  var canonical=new URL(location.href);canonical.hash="";canonical.search="";
+  var title,desc;
+  if(chapter){
+   canonical.searchParams.set("subject",subject);canonical.searchParams.set("chapter",chapter);
+   var clean=efpSeoPlainChapter(chapter),count=efpSeoCountQuestions(subject,chapter);
+   title=clean+" MCQ Practice | ExamFusion Prep";
+   desc="Practice "+clean+(count?" with "+count+" questions":"")+" in ExamFusion Prep Original Practice. Bilingual competitive-exam questions with answers and explanations.";
+  }else if(state.screen==="chapters"&&state.subject){
+   canonical.searchParams.set("subject",state.subject);
+   title=state.subject+" Practice Questions | ExamFusion Prep";
+   desc="Practice "+state.subject+" chapter-wise questions in ExamFusion Prep Original Practice with bilingual explanations, bookmarks and progress tracking.";
+  }else{
+   title=CFG.label+" Original Practice | ExamFusion Prep";
+   desc="Practice chapter-wise "+CFG.label+" questions in ExamFusion Prep Original Practice for SSC, Railway, UPSC and BPSC.";
+  }
+  document.title=title;
+  efpSeoSetMeta('meta[name="description"]',"description",desc);
+  efpSeoSetMeta('meta[name="robots"]',"robots","index,follow");
+  efpSeoSetMeta('meta[property="og:title"]',"og:title",title);
+  efpSeoSetMeta('meta[property="og:description"]',"og:description",desc);
+  efpSeoSetMeta('meta[property="og:url"]',"og:url",canonical.href);
+  var link=document.head.querySelector('link[rel="canonical"]');if(!link){link=document.createElement("link");link.rel="canonical";document.head.appendChild(link)}link.href=canonical.href;
+ }catch(e){}
+}
+
 function addTopbar(){var app=document.getElementById("app");if(!app||app.querySelector(".efp-op-topbar"))return;var bar=document.createElement("div");bar.className="efp-op-topbar";bar.innerHTML='<a href="./index.html">Original Practice Home</a><a href="../index.html">ExamFusion Home</a><button type="button" id="efpOpDark" hidden aria-hidden="true" tabindex="-1">Dark Mode: <span>OFF</span></button>';app.insertBefore(bar,app.firstChild);var btn=bar.querySelector("#efpOpDark");function sync(){var on=false;try{on=localStorage.getItem("efp_black_mode")==="on"}catch(e){}btn.querySelector("span").textContent=on?"ON":"OFF"}sync();document.addEventListener("efp-black-mode-changed",sync)}
 var opFullSearchClient=null;
 function getOpFullSearchClient(){
@@ -190,7 +233,7 @@ selectOption=function(qi,displayIdx){
  state.answerMap[k]={selectedOrigIdx:selectedOrigIdx};
  track("original_practice_answer",{practice:CFG.label,subject:state.subject,chapter:state.chapterName,section:state.currentSection+1,question:qi+1,correct:selectedOrigIdx===currentAnswerIndex(state.quizData[state.currentSection].questions[qi])});
 };
-var baseRender=render;render=function(){baseRender();enhance();if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}};
+var baseRender=render;render=function(){baseRender();enhance();efpApplySeoMeta();if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}};
 var baseSwitchSection=switchSection;switchSection=function(i){pendingDeepQuestion=null;baseSwitchSection(i);syncUrl("quiz")};
 var basePrevSection=prevSection;prevSection=function(){pendingDeepQuestion=null;basePrevSection();if(state.screen==="quiz")syncUrl("quiz")};
 var baseNextSection=nextSection;nextSection=function(){pendingDeepQuestion=null;baseNextSection();if(state.screen==="quiz")syncUrl("quiz")};
