@@ -1164,7 +1164,7 @@
   </style>
   <script defer src="/home-nav.js?v=20260906"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
-  <script defer src="/back-nav.js?v=20260906hier1"></script>
+  <script defer src="/back-nav.js?v=20260920pdfsearchback1"></script>
 </head>
 
 <body>
@@ -1712,6 +1712,11 @@
         url += (url.indexOf("?") === -1 ? "?" : "&") + "page=" + page;
         var search = String(query || "").trim();
         if (search) url += "&search=" + encodeURIComponent(search);
+        // Homepage full-text PDF hits should return to their Crux source
+        // hierarchy, not to the landing page's browser-history entry.
+        if (/\/Crux-Tricks\/viewer\.html(?:\?|$)/i.test(url)) {
+          url += "&from=home-search";
+        }
         return { url: url, text: raw, page: page };
       }
       function rerankCruxTricksHits(q, hits) {
