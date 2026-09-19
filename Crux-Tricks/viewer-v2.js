@@ -501,20 +501,15 @@
       if(!devicePortrait())document.documentElement.classList.add('efp-reader-ui-hidden');
     },landscapeReaderUi()?2400:1800);
   }
-  function healVisibleContinuousPages(){
+  function healVisibleContinuousPages(center){
     if(readerSuspended||!continuous||!continuousRoot||!pdfDoc)return;
+    center=center||visibleContinuousPage()||page;
     var stageRect=pdfStage.getBoundingClientRect();
-    var shells=continuousRoot.querySelectorAll('.efp-cont-page');
-    var healed=0;
-    for(var i=0;i<shells.length;i++){
-      var r=shells[i].getBoundingClientRect();
-      if(r.bottom<stageRect.top-220)continue;
-      if(r.top>stageRect.bottom+220)break;
-      if(!pageHasCanvas(shells[i])){
-        var n=parseInt(shells[i].dataset.page,10)||0;
-        if(n){renderContinuousPage(n,true);healed++}
-        if(healed>=4)break;
-      }
+    var from=Math.max(1,center-2),to=Math.min(pdfDoc.numPages,center+2);
+    for(var n=from;n<=to;n++){
+      var shell=pageShell(n);if(!shell||pageHasCanvas(shell))continue;
+      var r=shell.getBoundingClientRect();
+      if(r.bottom>=stageRect.top-260&&r.top<=stageRect.bottom+260)renderContinuousPage(n,true);
     }
   }
   function onContinuousScroll(){
@@ -527,7 +522,7 @@
       scrollRAF=0;
       var n=visibleContinuousPage();
       if(Date.now()>=programmaticScrollUntil&&n!==page)setCurrent(n,true);
-      healVisibleContinuousPages();
+      healVisibleContinuousPages(n);
     });
   }
   function buildContinuous(firstPg){
@@ -695,6 +690,7 @@
       if(generation!==pdfLoadGeneration||readerSuspended)return;
       startPdfDocumentLoad(0,generation);
     }).catch(function(err){
+      pdfRuntimePromise=null;
       if(generation!==pdfLoadGeneration||readerSuspended)return;
       showError('PDF viewer could not start after retrying. Check the connection once, then reopen.');
       if(console&&console.error)console.error(err);
