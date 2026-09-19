@@ -1,5 +1,5 @@
 // v85 smooth mobile PDF scrolling 20260918
-const CACHE_VERSION = "efp-pwa-2026-09-18-v85-smooth-mobile-pdf";
+const CACHE_VERSION = "efp-pwa-2026-09-19-v86-seo-deep-urls";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -34,11 +34,13 @@ const APP_SHELL = [
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
+  "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/original-practice.js?v=20260915staticgk1",
   "/Original%20Practice/english-practice.js?v=20260913english1",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
+  "/Crux-Tricks/all-topics.html",
   "/Crux-Tricks/viewer.html",
   "/Crux-Tricks/my-pages.html",
   "/Crux-Tricks/crux-manifest.js",
@@ -47,7 +49,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260919searchhighlight2",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260919globalsearch1",
+  "/Crux-Tricks/viewer-v2.js?v=20260919seo1",
 ];
 
 self.addEventListener("install", (event) => {
@@ -308,6 +310,8 @@ self.addEventListener("fetch", (event) => {
   if (url.pathname === "/home-nav.js" ||
       url.pathname === "/back-nav.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
+      url.pathname === "/Original%20Practice/original-practice.js" ||
+      url.pathname === "/Original%20Practice/english-practice.js" ||
       url.pathname === "/Crux-Tricks/crux-restore-flash.js" ||
       url.pathname === "/Crux-Tricks/crux-tricks.js" ||
       url.pathname === "/Crux-Tricks/viewer-v2.js") {
