@@ -64,6 +64,40 @@ function syncUrl(mode){
  }catch(e){}
 }
 
+
+function efpSeoCountQuestions(chapter){
+ var total=0;(MASTER[chapter]||[]).forEach(function(section){total+=(section&&section.questions&&section.questions.length)||0});return total;
+}
+function efpSeoPlainChapter(chapter){return String(chapter||"").replace(/^\s*\d+(?:\.[ivx]+(?:\.[a-z])?)?\.?\s*/i,"").trim()}
+function efpSeoSetMeta(selector,attr,value){
+ var node=document.head.querySelector(selector);
+ if(!node){node=document.createElement("meta");if(selector.indexOf('property=')>=0)node.setAttribute("property",attr);else node.setAttribute("name",attr);document.head.appendChild(node)}
+ node.setAttribute("content",value);
+}
+function efpApplySeoMeta(){
+ try{
+  var chapter=state.screen==="quiz"&&state.chapterName?state.chapterName:"";
+  var canonical=new URL(location.href);canonical.hash="";canonical.search="";
+  var title,desc;
+  if(chapter){
+   canonical.searchParams.set("chapter",chapter);
+   var clean=efpSeoPlainChapter(chapter),count=efpSeoCountQuestions(chapter);
+   title=clean+" English Grammar Practice | ExamFusion Prep";
+   desc="Practice "+clean+(count?" with "+count+" questions":"")+" in ExamFusion Prep English Grammar Original Practice, with answers and explanations.";
+  }else{
+   title="English Grammar Original Practice | ExamFusion Prep";
+   desc="Practice chapter-wise English Grammar questions with explanations, bookmarks and progress tracking on ExamFusion Prep.";
+  }
+  document.title=title;
+  efpSeoSetMeta('meta[name="description"]',"description",desc);
+  efpSeoSetMeta('meta[name="robots"]',"robots","index,follow");
+  efpSeoSetMeta('meta[property="og:title"]',"og:title",title);
+  efpSeoSetMeta('meta[property="og:description"]',"og:description",desc);
+  efpSeoSetMeta('meta[property="og:url"]',"og:url",canonical.href);
+  var link=document.head.querySelector('link[rel="canonical"]');if(!link){link=document.createElement("link");link.rel="canonical";document.head.appendChild(link)}link.href=canonical.href;
+ }catch(e){}
+}
+
 function addTopbar(){
  var app=document.getElementById("app");if(!app||app.querySelector(".efp-op-topbar"))return;
  var bar=document.createElement("div");bar.className="efp-op-topbar";
@@ -131,7 +165,7 @@ function enhance(){addTopbar();if(state.screen==="quiz")enhanceQuiz();else enhan
 
 var baseRender=render;
 render=function(){
- baseRender();enhance();
+ baseRender();enhance();efpApplySeoMeta();
  if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}
 };
 var baseSelectOption=selectOption;
