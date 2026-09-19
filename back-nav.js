@@ -340,6 +340,27 @@
     }
   }
 
+  function isHomePageUrl(url) {
+    if (!url) return false;
+    try {
+      var parsed = new URL(url, window.location.href);
+      if (parsed.origin !== window.location.origin) return false;
+      var path = normalizePath(parsed.pathname).toLowerCase();
+      return path === "/" || path === "/index.html";
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function isCruxViewerFromHomeSearch() {
+    if (!isCruxViewer()) return false;
+    try {
+      if (new URLSearchParams(window.location.search).get("from") === "home-search") return true;
+    } catch (_) {}
+    // Referrer fallback keeps older cached homepage/search code working too.
+    return isHomePageUrl(document.referrer);
+  }
+
   function expectedLogicalPath() {
     try {
       return normalizePath(sessionStorage.getItem(CHAIN_KEY) || "");
@@ -400,9 +421,17 @@
     var doc = docs.find(function (item) { return item && item.id === id; });
     if (!doc) return;
 
+    var exam = doc.exam || "";
+    if (!exam && doc.source === "Pinnacle") {
+      var pdf = String(doc.pdf || "");
+      if (pdf.indexOf("/Pinnacle/SSC/") !== -1) exam = "SSC";
+      else if (pdf.indexOf("/Pinnacle/Railway/") !== -1) exam = "Railway";
+    }
+
     var state = {
       kind: doc.kind || "",
       source: doc.source || "",
+      exam: exam,
       subject: doc.subject || "",
       branch: doc.branch || ""
     };
@@ -446,18 +475,45 @@
     var state = readCruxRestoreState();
     if (!state || !state.kind || !state.source || !state.subject) return;
 
-    var material = document.querySelector('[data-material="' + state.kind + '"]');
-    if (!material) return;
-    material.click();
+    var attempts = 0;
+    function apply() {
+      attempts++;
 
-    if (!clickButtonByText("#sourceChoices .choice", state.source)) return;
-    if (!clickButtonByText("#subjectChoices .subject", state.subject)) return;
+      var material = document.querySelector('[data-material="' + state.kind + '"]');
+      if (!material) {
+        if (attempts < 8) window.setTimeout(apply, 40);
+        return;
+      }
+      material.click();
 
-    if (state.branch) {
-      clickButtonByText("#partChoices .part", state.branch);
+      if (!clickButtonByText("#sourceChoices .choice", state.source)) {
+        if (attempts < 8) window.setTimeout(apply, 40);
+        return;
+      }
+
+      if (state.source === "Pinnacle" && state.exam) {
+        var examDone = false;
+        if (window.EFP_CRUX_EXAM_LAYER && typeof window.EFP_CRUX_EXAM_LAYER.selectExam === "function") {
+          examDone = window.EFP_CRUX_EXAM_LAYER.selectExam(state.exam);
+        } else {
+          examDone = clickButtonByText("#examChoices .choice", state.exam);
+        }
+        if (!examDone) {
+          if (attempts < 8) window.setTimeout(apply, 40);
+          return;
+        }
+      }
+
+      if (!clickButtonByText("#subjectChoices .subject", state.subject)) {
+        if (attempts < 8) window.setTimeout(apply, 40);
+        return;
+      }
+
+      if (state.branch) clickButtonByText("#partChoices .part", state.branch);
+      try { window.scrollTo(0, 0); } catch (_) {}
     }
 
-    try { window.scrollTo(0, 0); } catch (_) {}
+    apply();
   }
 
   function useLogicalParent(event) {
@@ -495,6 +551,13 @@
     }
 
     if (isContinuingLogicalChain()) {
+      useLogicalParent(event);
+      return;
+    }
+
+    // Homepage full-text PDF results are content deep-links. Their generic Back
+    // belongs to the PDF's Crux source hierarchy, not to the landing page.
+    if (isCruxViewerFromHomeSearch()) {
       useLogicalParent(event);
       return;
     }
