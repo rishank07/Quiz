@@ -68,6 +68,7 @@
   var DESKTOP_HD_WIDTH=2560;
   var MOBILE_MAX_CANVAS_PIXELS=7000000;
   var DESKTOP_MAX_CANVAS_PIXELS=12000000;
+  var readerSuspended=false;
 
   var title=document.getElementById('title');
   var crumb=document.getElementById('crumb');
@@ -366,7 +367,7 @@
       c.style.width=Math.max(1,Math.floor(vp.width/dpr))+'px';c.style.height=Math.max(1,Math.floor(vp.height/dpr))+'px';
       var ctx=c.getContext('2d',{alpha:false});
       return pg.render({canvasContext:ctx,viewport:vp}).promise.then(function(){
-        if(!continuous||!continuousRoot||!el.isConnected)return false;
+        if(readerSuspended||!continuous||!continuousRoot||!el.isConnected)return false;
         if(!force&&Math.abs(n-page)>KEEP_RENDER_RADIUS)return false;
         var current=el.querySelector('canvas');
         if(current&&current!==c){current.width=1;current.height=1;current.remove()}
@@ -764,5 +765,40 @@
 
   function dark(){document.documentElement.classList.toggle('dark',localStorage.getItem('efp_black_mode')==='on');var d=document.getElementById('darkBtn');if(d)d.textContent=document.documentElement.classList.contains('dark')?'Light':'Dark'}
   var darkBtn=document.getElementById('darkBtn');if(darkBtn)darkBtn.addEventListener('click',function(){localStorage.setItem('efp_black_mode',document.documentElement.classList.contains('dark')?'off':'on');dark()});
+
+  function suspendReaderForNavigation(){
+    readerSuspended=true;
+    neighborWarmGeneration++;
+    searchGeneration++;
+    clearTimeout(scrollTimer);clearTimeout(resizeTimer);clearTimeout(controlsTimer);
+    if(scrollRAF){try{cancelAnimationFrame(scrollRAF)}catch(_){ }scrollRAF=0}
+    if(renderTask){try{renderTask.cancel()}catch(_){ }renderTask=null}
+    if(continuousObserver){try{continuousObserver.disconnect()}catch(_){ }}
+    if(continuousRoot){
+      var canvases=continuousRoot.querySelectorAll('canvas');
+      for(var i=0;i<canvases.length;i++){
+        try{canvases[i].width=1;canvases[i].height=1}catch(_){}
+        canvases[i].remove();
+      }
+      var shells=continuousRoot.querySelectorAll('.efp-cont-page');
+      for(var j=0;j<shells.length;j++)shells[j].dataset.rendered='0';
+    }
+    if(pdfCanvas){
+      try{pdfCanvas.width=1;pdfCanvas.height=1}catch(_){}
+    }
+    clearSearchHighlightLayers();
+  }
+
+  window.addEventListener('pagehide',suspendReaderForNavigation);
+  window.addEventListener('pageshow',function(){
+    if(!readerSuspended)return;
+    readerSuspended=false;
+    continuousRenders={};
+    // If the viewer itself is restored from bfcache/Forward, rebuild only the
+    // current reader state. This keeps Back lightweight while preserving the
+    // user's current page when they return to the PDF.
+    if(pdfDoc)chooseReaderAfterLoad();
+  });
+
   dark();updateControls();loadPdf();loadPagesForSearch();
 })();
