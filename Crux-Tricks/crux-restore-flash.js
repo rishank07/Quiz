@@ -53,9 +53,15 @@
 
     document.documentElement.classList.add(CLASS_NAME);
 
+    var deadline = Date.now() + 1400;
+
     function check() {
       if (token !== waitToken) return;
-      if (stateIsPaintReady(state)) {
+      if (stateIsPaintReady(state) || Date.now() >= deadline) {
+        // Never leave the whole Crux page hidden indefinitely. On some
+        // Android WebView/TWA history restores the SPA state can arrive a
+        // frame late (or an optional pane may not exist yet). A short
+        // fail-safe is preferable to a permanent black/frozen screen.
         release();
         return;
       }
@@ -79,5 +85,14 @@
 
   window.addEventListener("popstate", function (event) {
     if (managed(event.state)) waitUntilCorrectPane(event.state);
+    else release();
+  });
+
+  // Back-forward cache restores do not always replay the same lifecycle in
+  // Android app shells. Re-check the active history state whenever this page
+  // becomes visible again so a stale restore guard can never keep body hidden.
+  window.addEventListener("pageshow", function () {
+    if (managed(history.state)) waitUntilCorrectPane(history.state);
+    else release();
   });
 })();
