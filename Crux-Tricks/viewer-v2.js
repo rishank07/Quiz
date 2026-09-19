@@ -69,6 +69,14 @@
   var MOBILE_MAX_CANVAS_PIXELS=7000000;
   var DESKTOP_MAX_CANVAS_PIXELS=12000000;
   var readerSuspended=false;
+  var pageRenderFailures={};
+  var pageRetryTimers={};
+  var pdfLoadGeneration=0;
+  var pdfRuntimePromise=null;
+  var PDFJS_PRIMARY='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';
+  var PDFJS_PRIMARY_WORKER='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+  var PDFJS_FALLBACK='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  var PDFJS_FALLBACK_WORKER='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
   var title=document.getElementById('title');
   var crumb=document.getElementById('crumb');
@@ -343,10 +351,33 @@
     }
   }
 
+  function pageHasCanvas(el){
+    return !!(el&&el.dataset.rendered==='1'&&el.querySelector('canvas'));
+  }
+  function clearPageRetry(n){
+    if(pageRetryTimers[n]){clearTimeout(pageRetryTimers[n]);delete pageRetryTimers[n]}
+  }
+  function schedulePageRetry(n){
+    if(readerSuspended||!continuous||!pdfDoc)return;
+    var failures=pageRenderFailures[n]||0;
+    if(failures>4||pageRetryTimers[n])return;
+    var delay=failures<=1?180:failures===2?420:failures===3?850:1400;
+    pageRetryTimers[n]=setTimeout(function(){
+      delete pageRetryTimers[n];
+      if(readerSuspended||!continuous||!pdfDoc)return;
+      var el=pageShell(n);
+      if(!el||pageHasCanvas(el))return;
+      if(Math.abs(n-page)>KEEP_RENDER_RADIUS+2)return;
+      Promise.resolve(renderContinuousPage(n,true)).then(function(ok){
+        if(ok!==true&&!pageHasCanvas(el)&&Math.abs(n-page)<=KEEP_RENDER_RADIUS+2)schedulePageRetry(n);
+      });
+    },delay);
+  }
   function renderContinuousPage(n,force){
-    if(!continuous||!pdfDoc)return Promise.resolve();
-    var el=pageShell(n);if(!el)return Promise.resolve();
-    if(!force&&el.dataset.rendered==='1')return Promise.resolve();
+    if(readerSuspended||!continuous||!pdfDoc)return Promise.resolve(false);
+    var el=pageShell(n);if(!el)return Promise.resolve(false);
+    if(pageHasCanvas(el)){pageRenderFailures[n]=0;clearPageRetry(n);return Promise.resolve(true)}
+    if(el.dataset.rendered==='1')el.dataset.rendered='0';
     if(continuousRenders[n])return continuousRenders[n];
     continuousRenders[n]=pdfDoc.getPage(n).then(function(pg){
       var base=pg.getViewport({scale:1});
@@ -356,16 +387,20 @@
       var cssScale=size.width/base.width;
       var cssWidth=Math.max(1,base.width*cssScale),cssHeight=Math.max(1,base.height*cssScale);
       var dpr=fullHdDensity(cssWidth,cssHeight,true);
+      var priorFailures=pageRenderFailures[n]||0;
+      if(priorFailures===1)dpr=Math.max(1,dpr*.82);
+      else if(priorFailures>=2)dpr=Math.max(1,dpr*.68);
       var vp=pg.getViewport({scale:cssScale*dpr});
 
-      // Render into a detached canvas first. Keeping a blank canvas out of the
-      // live scroller prevents the bright white/black flash seen on fast mobile
-      // scrolling while PDF.js is still painting the next page.
+      // Render off-DOM first so an unfinished canvas never flashes on screen.
+      // If Android runs short on canvas/GPU memory, later retries automatically
+      // use a lighter density for this page only rather than leaving a hole.
       var c=document.createElement('canvas');
       c.setAttribute('aria-label','PDF page '+n);
       c.width=Math.max(1,Math.floor(vp.width));c.height=Math.max(1,Math.floor(vp.height));
       c.style.width=Math.max(1,Math.floor(vp.width/dpr))+'px';c.style.height=Math.max(1,Math.floor(vp.height/dpr))+'px';
       var ctx=c.getContext('2d',{alpha:false});
+      if(!ctx)throw new Error('Canvas context unavailable');
       return pg.render({canvasContext:ctx,viewport:vp}).promise.then(function(){
         if(readerSuspended||!continuous||!continuousRoot||!el.isConnected)return false;
         if(!force&&Math.abs(n-page)>KEEP_RENDER_RADIUS)return false;
@@ -375,10 +410,21 @@
         if(badge)el.insertBefore(c,badge);else el.appendChild(c);
         el.style.width=c.style.width;el.style.height=c.style.height;el.style.minHeight=c.style.height;
         el.dataset.rendered='1';
-        if(searchQuery&&n===activeSearchPage)return renderSearchHighlights(n);
+        pageRenderFailures[n]=0;clearPageRetry(n);
+        if(searchQuery&&n===activeSearchPage)return renderSearchHighlights(n).then(function(){return true});
         return true;
       });
-    }).catch(function(err){if(console&&console.error)console.error(err);return false}).then(function(result){delete continuousRenders[n];return result});
+    }).catch(function(err){
+      if(readerSuspended)return false;
+      pageRenderFailures[n]=(pageRenderFailures[n]||0)+1;
+      if(console&&console.error)console.error(err);
+      schedulePageRetry(n);
+      return false;
+    }).then(function(result){
+      delete continuousRenders[n];
+      if(result!==true&&!readerSuspended&&Math.abs(n-page)<=KEEP_RENDER_RADIUS+1)schedulePageRetry(n);
+      return result;
+    });
     return continuousRenders[n];
   }
   function warmContinuousPages(center){
@@ -418,7 +464,11 @@
   }
   function setCurrent(n,mark){
     n=Math.max(1,Math.min(pdfDoc?pdfDoc.numPages:doc.pages,n));
-    if(n===page){updateControls();return;}
+    if(n===page){
+      updateControls();ensureBatchAround(page);
+      var same=pageShell(page);if(same&&!pageHasCanvas(same))renderContinuousPage(page,true);
+      return;
+    }
     page=n;ensureBatchAround(page);updateControls();updateUrl();if(mark!==false)markVisited();trimContinuous(page);
     warmContinuousPages(page);
   }
@@ -451,6 +501,22 @@
       if(!devicePortrait())document.documentElement.classList.add('efp-reader-ui-hidden');
     },landscapeReaderUi()?2400:1800);
   }
+  function healVisibleContinuousPages(){
+    if(readerSuspended||!continuous||!continuousRoot||!pdfDoc)return;
+    var stageRect=pdfStage.getBoundingClientRect();
+    var shells=continuousRoot.querySelectorAll('.efp-cont-page');
+    var healed=0;
+    for(var i=0;i<shells.length;i++){
+      var r=shells[i].getBoundingClientRect();
+      if(r.bottom<stageRect.top-220)continue;
+      if(r.top>stageRect.bottom+220)break;
+      if(!pageHasCanvas(shells[i])){
+        var n=parseInt(shells[i].dataset.page,10)||0;
+        if(n){renderContinuousPage(n,true);healed++}
+        if(healed>=4)break;
+      }
+    }
+  }
   function onContinuousScroll(){
     hideMobileReaderUi();
     clearTimeout(scrollTimer);
@@ -458,8 +524,10 @@
     var now=Date.now();
     if(activeSearchPage&&now>searchHighlightKeepUntil&&now>programmaticScrollUntil)clearSearchHighlightState(true);
     if(!scrollRAF)scrollRAF=requestAnimationFrame(function(){
-      scrollRAF=0;if(Date.now()<programmaticScrollUntil)return;
-      var n=visibleContinuousPage();if(n!==page)setCurrent(n,true);
+      scrollRAF=0;
+      var n=visibleContinuousPage();
+      if(Date.now()>=programmaticScrollUntil&&n!==page)setCurrent(n,true);
+      healVisibleContinuousPages();
     });
   }
   function buildContinuous(firstPg){
@@ -481,7 +549,7 @@
     loadedBatchEnd=Math.min(pdfDoc.numPages,loadedBatchStart+PAGE_BATCH_SIZE-1);
     prefetchBatch(loadedBatchStart,loadedBatchEnd);
     if(continuousObserver){try{continuousObserver.disconnect()}catch(e){}}
-    continuousObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var n=parseInt(entry.target.dataset.page,10);if(n&&n>=loadedBatchStart&&n<=loadedBatchEnd)renderContinuousPage(n,false)}})},{root:pdfStage,rootMargin:'1800px 0px',threshold:.01});
+    continuousObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var n=parseInt(entry.target.dataset.page,10);if(n)renderContinuousPage(n,false)}})},{root:pdfStage,rootMargin:'1800px 0px',threshold:.01});
     Array.prototype.forEach.call(continuousRoot.children,function(el){continuousObserver.observe(el)});
     pdfStage.removeEventListener('scroll',onContinuousScroll);pdfStage.addEventListener('scroll',onContinuousScroll,{passive:true});
     pdfStage.addEventListener('pointerdown',showMobileControlsBriefly,{passive:true});
@@ -566,11 +634,71 @@
       if(isCompactReader())buildContinuous(pg);else{disableContinuous();renderSinglePage()}
     });
   }
+  function injectPdfRuntime(src){
+    return new Promise(function(resolve,reject){
+      if(window.pdfjsLib){resolve(window.pdfjsLib);return}
+      var s=document.createElement('script');
+      s.src=src;s.async=true;s.crossOrigin='anonymous';
+      s.onload=function(){if(window.pdfjsLib)resolve(window.pdfjsLib);else reject(new Error('PDF.js loaded without runtime'))};
+      s.onerror=function(){reject(new Error('PDF.js runtime request failed'))};
+      document.head.appendChild(s);
+    });
+  }
+  function ensurePdfRuntime(){
+    if(window.pdfjsLib)return Promise.resolve(window.pdfjsLib);
+    if(pdfRuntimePromise)return pdfRuntimePromise;
+    pdfRuntimePromise=injectPdfRuntime(PDFJS_PRIMARY).catch(function(){
+      return injectPdfRuntime(PDFJS_FALLBACK);
+    }).catch(function(){
+      return injectPdfRuntime('https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js');
+    });
+    return pdfRuntimePromise;
+  }
+  function pdfSourceForAttempt(attempt){
+    if(attempt<2)return doc.pdf;
+    try{
+      var u=new URL(doc.pdf,location.href);
+      u.searchParams.set('efp_pdf_retry','1');
+      return u.href;
+    }catch(_){return doc.pdf}
+  }
+  function startPdfDocumentLoad(attempt,generation){
+    if(readerSuspended||generation!==pdfLoadGeneration)return;
+    var worker=attempt===0?PDFJS_PRIMARY_WORKER:PDFJS_FALLBACK_WORKER;
+    pdfjsLib.GlobalWorkerOptions.workerSrc=worker;
+    pdfError.hidden=true;pdfLoading.hidden=false;
+    pdfLoading.textContent=attempt?'Retrying PDF…':'Loading original PDF…';
+    var options={url:pdfSourceForAttempt(attempt)};
+    if(attempt>=2){options.disableRange=true;options.disableStream=true}
+    var task;
+    try{task=pdfjsLib.getDocument(options)}catch(err){task={promise:Promise.reject(err)}}
+    task.promise.then(function(loaded){
+      if(readerSuspended||generation!==pdfLoadGeneration){try{loaded.destroy()}catch(_){}return}
+      pdfDoc=loaded;pdfError.hidden=true;total.textContent=loaded.numPages;
+      if(page>loaded.numPages)page=loaded.numPages;
+      return chooseReaderAfterLoad();
+    }).catch(function(err){
+      if(readerSuspended||generation!==pdfLoadGeneration)return;
+      if(attempt<2){
+        var delay=attempt===0?350:900;
+        setTimeout(function(){startPdfDocumentLoad(attempt+1,generation)},delay);
+        return;
+      }
+      showError('PDF could not be loaded after retrying. You can still open the original PDF.');
+      if(console&&console.error)console.error(err);
+    });
+  }
   function loadPdf(){
-    if(!window.pdfjsLib){showError('PDF viewer failed to load. Check your internet connection once, then reopen this page.');return}
-    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
-    pdfLoading.hidden=false;pdfLoading.textContent='Loading original PDF…';
-    pdfjsLib.getDocument({url:doc.pdf}).promise.then(function(loaded){pdfDoc=loaded;total.textContent=loaded.numPages;if(page>loaded.numPages)page=loaded.numPages;return chooseReaderAfterLoad()}).catch(function(err){showError('Original PDF could not be loaded inside the app.');if(console&&console.error)console.error(err)});
+    var generation=++pdfLoadGeneration;
+    pdfError.hidden=true;pdfLoading.hidden=false;pdfLoading.textContent='Loading original PDF…';
+    ensurePdfRuntime().then(function(){
+      if(generation!==pdfLoadGeneration||readerSuspended)return;
+      startPdfDocumentLoad(0,generation);
+    }).catch(function(err){
+      if(generation!==pdfLoadGeneration||readerSuspended)return;
+      showError('PDF viewer could not start after retrying. Check the connection once, then reopen.');
+      if(console&&console.error)console.error(err);
+    });
   }
 
   function loadPagesForSearch(){var s=document.createElement('script');s.src='pages/'+doc.id+'.js?v=20260915staticgktricks1';s.onload=function(){pages=Array.isArray(window.EF_CRUX_DOC_PAGES)?window.EF_CRUX_DOC_PAGES:[];runDocSearch()};s.onerror=function(){docSearch.placeholder='PDF search index unavailable — use page number';docSearch.disabled=true};document.head.appendChild(s)}
@@ -768,8 +896,11 @@
 
   function suspendReaderForNavigation(){
     readerSuspended=true;
+    pdfLoadGeneration++;
     neighborWarmGeneration++;
     searchGeneration++;
+    Object.keys(pageRetryTimers).forEach(function(k){clearTimeout(pageRetryTimers[k])});
+    pageRetryTimers={};
     clearTimeout(scrollTimer);clearTimeout(resizeTimer);clearTimeout(controlsTimer);
     if(scrollRAF){try{cancelAnimationFrame(scrollRAF)}catch(_){ }scrollRAF=0}
     if(renderTask){try{renderTask.cancel()}catch(_){ }renderTask=null}
@@ -793,11 +924,12 @@
   window.addEventListener('pageshow',function(){
     if(!readerSuspended)return;
     readerSuspended=false;
-    continuousRenders={};
-    // If the viewer itself is restored from bfcache/Forward, rebuild only the
-    // current reader state. This keeps Back lightweight while preserving the
-    // user's current page when they return to the PDF.
-    if(pdfDoc)chooseReaderAfterLoad();
+    continuousRenders={};pageRenderFailures={};
+    // If Forward/bfcache revives the viewer, rebuild the current page. If the
+    // document never finished loading before it was backgrounded, start a
+    // fresh controlled load instead of leaving the fallback error stuck.
+    if(pdfDoc)chooseReaderAfterLoad().then(function(){healVisibleContinuousPages()});
+    else loadPdf();
   });
 
   dark();updateControls();loadPdf();loadPagesForSearch();
