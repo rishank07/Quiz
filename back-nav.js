@@ -5,6 +5,7 @@
   var BACK_BUTTON_ID = "efp-app-back-button";
   var CHAIN_KEY = "efp_logical_back_expected_path";
   var CRUX_RESTORE_KEY = "efp_crux_back_restore_state";
+  var CRUX_HOME_SEARCH_GUARD = "efpCruxHomeSearchGuard";
 
   function normalizePath(pathname) {
     var path = pathname || "/";
@@ -355,6 +356,9 @@
   function isCruxViewerFromHomeSearch() {
     if (!isCruxViewer()) return false;
     try {
+      if (history.state && history.state[CRUX_HOME_SEARCH_GUARD]) return true;
+    } catch (_) {}
+    try {
       if (new URLSearchParams(window.location.search).get("from") === "home-search") return true;
     } catch (_) {}
     // Referrer fallback keeps older cached homepage/search code working too.
@@ -467,17 +471,16 @@
   }
 
   function signalCruxRestoreComplete() {
-    var fire = function () {
-      try { window.dispatchEvent(new Event("efp-crux-restore-complete")); } catch (_) {
-        try {
-          var ev = document.createEvent("Event");
-          ev.initEvent("efp-crux-restore-complete", true, false);
-          window.dispatchEvent(ev);
-        } catch (_) {}
-      }
-    };
-    if (typeof requestAnimationFrame === "function") requestAnimationFrame(fire);
-    else window.setTimeout(fire, 0);
+    /* The hierarchy is already applied synchronously. Waiting for another
+       animation frame exposes the dark document background for one frame on
+       Android, which is perceived as a blank black flash. */
+    try { window.dispatchEvent(new Event("efp-crux-restore-complete")); } catch (_) {
+      try {
+        var ev = document.createEvent("Event");
+        ev.initEvent("efp-crux-restore-complete", true, false);
+        window.dispatchEvent(ev);
+      } catch (_) {}
+    }
   }
 
   /* A direct shared PDF URL uses one generic viewer.html plus ?id=... . Restore
@@ -557,6 +560,43 @@
     return true;
   }
 
+  function isHomeSearchGuardState(state, phase) {
+    return !!(state && state[CRUX_HOME_SEARCH_GUARD] === true &&
+      (!phase || state.phase === phase));
+  }
+
+  /* Homepage search opens the shared viewer directly, so the browser's real
+     previous entry is Home. Add one same-document guard entry: Android/system
+     Back first reaches the guarded viewer entry, whose popstate handler then
+     replaces it with the PDF's exact Crux hierarchy. The visible Back button
+     uses this same path. */
+  function installCruxHomeSearchHistoryGuard() {
+    if (!isCruxViewerFromHomeSearch()) return;
+
+    var current = history.state;
+    if (isHomeSearchGuardState(current, "top")) return;
+
+    var url = window.location.pathname + window.location.search + window.location.hash;
+    try {
+      history.replaceState({ efpCruxHomeSearchGuard: true, phase: "base" }, "", url);
+      history.pushState({ efpCruxHomeSearchGuard: true, phase: "top" }, "", url);
+    } catch (_) {}
+  }
+
+  window.addEventListener("popstate", function (event) {
+    if (!isCruxViewer() || !isHomeSearchGuardState(event.state, "base")) return;
+
+    var parentUrl = logicalParentUrl();
+    if (!parentUrl) {
+      window.location.replace("/Crux-Tricks/index.html");
+      return;
+    }
+
+    rememberCruxViewerState(parentUrl);
+    rememberLogicalDestination(parentUrl);
+    window.location.replace(parentUrl.href);
+  });
+
   /* Capture before black-mode.js/home-nav.js own button listener.
      - Crux SPA: climb its visible in-page hierarchy first.
      - Original Practice SPA: Quiz -> Chapters -> Complete Practice Home first.
@@ -583,8 +623,14 @@
     }
 
     // Homepage full-text PDF results are content deep-links. Their generic Back
-    // belongs to the PDF's Crux source hierarchy, not to the landing page.
+    // belongs to the PDF's Crux source hierarchy, not to the landing page. Use
+    // the same history guard as Android/system Back when it is available.
     if (isCruxViewerFromHomeSearch()) {
+      if (isHomeSearchGuardState(history.state, "top")) {
+        consumeBackEvent(event);
+        window.history.back();
+        return;
+      }
       useLogicalParent(event);
       return;
     }
@@ -600,6 +646,7 @@
   installMixedPracticeFeedbackColors();
   installMixedPracticeSiteTheme();
   installMixedPracticeInstantCheck();
+  installCruxHomeSearchHistoryGuard();
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", restoreCruxIndexState, { once: true });

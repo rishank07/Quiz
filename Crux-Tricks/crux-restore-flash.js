@@ -44,10 +44,7 @@
   }
 
   function release() {
-    if (!document.documentElement.classList.contains(CLASS_NAME)) return;
-    requestAnimationFrame(function () {
-      document.documentElement.classList.remove(CLASS_NAME);
-    });
+    document.documentElement.classList.remove(CLASS_NAME);
   }
 
   function waitUntilCorrectPane(state) {
@@ -57,6 +54,14 @@
         document.documentElement.classList.add(CLASS_NAME);
         return;
       }
+      release();
+      return;
+    }
+
+    /* A BFCache return already contains the correct rendered pane. Hiding it
+       again on pageshow created a one-frame black flash even though no restore
+       work was needed. Only guard a DOM that is genuinely out of sync. */
+    if (stateIsPaintReady(state)) {
       release();
       return;
     }
