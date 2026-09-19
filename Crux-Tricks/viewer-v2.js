@@ -593,7 +593,17 @@
     else if(hits.length>30){var more=document.createElement('span');more.textContent=' +'+(hits.length-30)+' more';docHits.appendChild(more)}
   }
 
-  title.textContent=doc.title;crumb.textContent=doc.breadcrumb+' · '+doc.pages+' pages';document.title=doc.title+' | Original PDF | ExamFusion Prep';
+  title.textContent=doc.title;crumb.textContent=doc.breadcrumb+' · '+doc.pages+' pages';
+  (function(){
+    var pageTitle=(doc.title||doc.sourceTitle||'Crux & Tricks')+' | '+(doc.kind==='tricks'?'Memory Trick':'Revision Crux')+' | ExamFusion Prep';
+    var description='Revise '+(doc.sourceTitle||doc.title||'this topic')+' — '+[doc.source,doc.subject,doc.branch].filter(Boolean).join(' · ')+' on ExamFusion Prep. '+doc.pages+' page'+(doc.pages===1?'':'s')+' PDF revision resource.';
+    document.title=pageTitle;
+    var robots=document.head.querySelector('meta[name="robots"]');if(!robots){robots=document.createElement('meta');robots.name='robots';document.head.appendChild(robots)}robots.content='index,follow';
+    var meta=document.head.querySelector('meta[name="description"]');if(!meta){meta=document.createElement('meta');meta.name='description';document.head.appendChild(meta)}meta.content=description;
+    var canonical=new URL(location.href);canonical.hash='';canonical.search='';canonical.searchParams.set('id',doc.id);
+    var link=document.head.querySelector('link[rel="canonical"]');if(!link){link=document.createElement('link');link.rel='canonical';document.head.appendChild(link)}link.href=canonical.href;
+    [['og:title',pageTitle],['og:description',description],['og:url',canonical.href]].forEach(function(pair){var m=document.head.querySelector('meta[property="'+pair[0]+'"]');if(!m){m=document.createElement('meta');m.setAttribute('property',pair[0]);document.head.appendChild(m)}m.content=pair[1]});
+  })();
   var backBtn=document.getElementById('backBtn');if(backBtn)backBtn.addEventListener('click',function(){if(history.length>1)history.back();else location.href='index.html'});
   prevBtn.addEventListener('click',function(){go(page-1,true)});
   nextBtn.addEventListener('click',function(){go(page+1,true)});
