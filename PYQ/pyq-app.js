@@ -117,6 +117,7 @@
         if (/essay/i.test(paperName) || text.includes('mains exam essay')) return 'Mains · Essay';
         if (/general hindi/i.test(paperName) || text.includes('general hindi')) return 'Mains · General Hindi';
         if (/General Studies/i.test(paperName)) return `Mains · ${romanPaper}`;
+        if (paperName && !['UPSC CSE', 'UPPSC PCS'].includes(paperName)) return `Mains · ${paperName}`;
         return 'Mains · Other Paper';
       }
       return 'Other PYQs';
@@ -128,7 +129,9 @@
         if (text.includes('essay')) return 'Mains · Essay';
         if (text.includes('general hindi')) return 'Mains · General Hindi';
         const gs = text.match(/general studies\s+(?:-|paper\s+)?(i{1,3}|iv|v|vi|1|2|3|4|5|6)\b/);
-        return gs ? `Mains · GS Paper ${gs[1].toUpperCase()}` : 'Mains · Other Paper';
+        if (gs) return `Mains · GS Paper ${gs[1].toUpperCase()}`;
+        if (paperName && paperName !== 'BPSC') return `Mains · ${paperName}`;
+        return 'Mains · Other Paper';
       }
       return 'Other PYQs';
     }
