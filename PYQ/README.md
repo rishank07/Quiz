@@ -5,7 +5,7 @@ The PYQ module now uses a PDF-link catalog only. It does not store extracted que
 ## Current model
 
 - `data/pdf-catalog.json` — the single source of truth for exam → year → set/paper links.
-- `pyq-app.js` — loads the catalog, powers instant search and filters, and opens a paper only after an explicit tap.
+- `pyq-app.js` — loads the catalog, normalizes raw paper labels into official exam/stage filters, powers instant search, and opens a paper only after an explicit tap.
 - `index.html` — searchable exam cards → filters → paper-card discovery UI.
 
 Current catalog sections: SSC, Railway/RRB, UPSC CSE, BPSC, UPPCS and Banking.
@@ -21,7 +21,7 @@ Add one object under the correct exam/year in `data/pdf-catalog.json` with:
 - clear `source` note
 - optional `answer_key`
 
-Papers are searchable by exam, title, year, stage, paper, set, date, shift, language and source. No filter or selection auto-opens a PDF.
+Papers are searchable by exam, official exam name, title, year, normalized stage/paper, set, date, shift, language and source. No filter or selection auto-opens a PDF.
 
 ## Source rule
 
