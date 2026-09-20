@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>PYQ PDF Library | ExamFusion Prep</title>
-  <meta name="description" content="ExamFusion Prep year-wise PYQ PDF library for SSC, Railway/RRB, UPSC CSE, BPSC and Banking exams. Select an exam, year and set or paper to open the source PDF in your browser.">
+  <meta name="description" content="Search and open free previous-year question paper PDFs for SSC, Railway/RRB, UPSC CSE, BPSC, UPPCS and Banking exams by exam, year, stage, language and source.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://examfusionprep.com/PYQ/index.html">
   <meta name="theme-color" content="#070a13">
@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./pyq.css?v=20260916g">
+  <link rel="stylesheet" href="./pyq.css?v=20260920discover1">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
@@ -21,40 +21,95 @@
 </head>
 <body>
   <main class="wrap">
-    <div class="top">
+    <nav class="top" aria-label="Page navigation">
       <a class="back" href="../index.html">← Home</a>
-      <a class="home" href="../backup-restore.html">Backup & Restore</a>
-    </div>
+      <a class="home" href="../backup-restore.html">Backup &amp; Restore</a>
+    </nav>
 
-    <section class="hero">
-      <div class="pill" style="display:inline-block;margin-bottom:10px">2021–2025 · Browser PDF Mode</div>
-      <h1>Previous Year Question Papers</h1>
-      <p class="sub">SSC · Railway/RRB · UPSC CSE · BPSC · Banking. Select an exam → select a year → select a set or paper. The source PDF will open in your browser for reliable Android app and PWA compatibility.</p>
+    <header class="hero">
+      <span class="eyebrow">Free · Public · Source-labelled</span>
+      <h1>Find your PYQ in seconds</h1>
+      <p class="sub">Search the complete PDF library or choose an exam, then narrow it by year, stage, language and source. A PDF opens only when you tap its button.</p>
 
-      <div class="toolbar">
-        <div class="field">
-          <label for="examSelect">Exam</label>
-          <select id="examSelect"><option value="">Select exam</option></select>
-        </div>
-        <div class="field">
-          <label for="yearSelect">Year</label>
-          <select id="yearSelect" disabled><option value="">Select year</option></select>
-        </div>
-        <div class="field">
-          <label for="paperSelect">Set / Paper</label>
-          <select id="paperSelect" disabled><option value="">Select set / paper</option></select>
-        </div>
+      <div class="search-box" role="search">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.15A7.5 7.5 0 1 1 4 11.5a7.5 7.5 0 0 1 15 0Z"/></svg>
+        <label class="sr-only" for="paperSearch">Search previous-year papers</label>
+        <input id="paperSearch" type="search" inputmode="search" autocomplete="off" placeholder="Search: SSC CGL 2024, BPSC Prelims, UPPCS GS…">
+        <button id="clearSearch" class="search-clear" type="button" aria-label="Clear search" hidden>×</button>
       </div>
 
       <div id="stats" class="stats" aria-live="polite"></div>
-      <p id="statusText" class="sub">Preparing PDF catalog…</p>
-      <p class="source">Each paper shows its source. Official links are preferred where available. Free public resources from Testbook, Adda247 and Physics Wallah are clearly source-labelled. Banking papers may be memory-based where the exam body does not publish official question papers.</p>
+      <p id="statusText" class="status" role="status">Preparing the PDF catalog…</p>
+    </header>
+
+    <section class="discover" aria-labelledby="examHeading">
+      <div class="section-heading">
+        <div>
+          <span class="step">Step 1</span>
+          <h2 id="examHeading">Choose an exam</h2>
+        </div>
+        <span class="section-hint">Tap again or use All Exams to reset</span>
+      </div>
+      <div id="examGrid" class="exam-grid" aria-label="Exam filters"></div>
     </section>
 
-    <section id="paperPanel" aria-live="polite"></section>
+    <section class="filter-card" aria-labelledby="filterHeading">
+      <div class="section-heading compact">
+        <div>
+          <span class="step">Step 2</span>
+          <h2 id="filterHeading">Refine papers</h2>
+        </div>
+        <button id="resetFilters" class="reset-btn" type="button">Reset filters</button>
+      </div>
+
+      <div class="filters">
+        <div class="field">
+          <label for="yearSelect">Year</label>
+          <select id="yearSelect"><option value="">All years</option></select>
+        </div>
+        <div class="field">
+          <label for="stageSelect">Stage</label>
+          <select id="stageSelect"><option value="">All stages</option></select>
+        </div>
+        <div class="field">
+          <label for="languageSelect">Language</label>
+          <select id="languageSelect"><option value="">All languages</option></select>
+        </div>
+        <div class="field">
+          <label for="sourceSelect">Source</label>
+          <select id="sourceSelect"><option value="">All sources</option></select>
+        </div>
+      </div>
+    </section>
+
+    <section class="results" aria-labelledby="resultsHeading">
+      <div class="results-head">
+        <div>
+          <span class="step">Step 3</span>
+          <h2 id="resultsHeading">Available papers</h2>
+          <p id="resultSummary" class="result-summary"></p>
+        </div>
+        <div class="sort-field">
+          <label for="sortSelect">Sort</label>
+          <select id="sortSelect">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="az">Paper A–Z</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="paperPanel" class="paper-grid" aria-live="polite"></div>
+      <button id="loadMore" class="load-more" type="button" hidden>Show more papers</button>
+    </section>
+
+    <aside class="source-note">
+      <strong>About sources</strong>
+      <p>Official links are preferred where available. Free public resources from Testbook, Adda247 and Physics Wallah are clearly labelled. Banking papers may be memory-based when the exam body does not publish an official paper.</p>
+    </aside>
 
     <footer class="footer">© 2026 ExamFusion Prep. All Rights Reserved.</footer>
   </main>
-  <script src="./pyq-app.js?v=20260917english1" defer></script>
+  <script src="./pyq-app.js?v=20260920discover1" defer></script>
 </body>
 </html>
