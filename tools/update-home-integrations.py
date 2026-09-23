@@ -21,7 +21,8 @@ COUNT_RE = re.compile(
 FULLTEXT_MARKER = "<!-- ExamFusion homepage full-text bridge -->"
 FULLTEXT_TAG = (
     f"  {FULLTEXT_MARKER}\n"
-    '  <script src="./homepage-fulltext-search.js?v=20260905books2" defer></script>\n'
+    '  <script src="./homepage-search-ui.js?v=20260924smartsearch1" defer></script>\n'
+    '  <script src="./homepage-fulltext-search.js?v=20260924smartsearch1" defer></script>\n'
 )
 LANDING_MARKER = "<!-- ExamFusion landing counts: start -->"
 PYQ_CARD_MARKER = "data-efp-pyq-card"
@@ -182,6 +183,7 @@ def update_index(repo: Path) -> bool:
     # homepage search listener and before the count-rendering helper.
     bridge_re = re.compile(
         r'\s*<!--\s*ExamFusion homepage full-text bridge\s*-->\s*'
+        r'(?:<script\s+src=["\'][^"\']*homepage-search-ui\.js(?:\?[^"\']*)?["\']\s+defer\s*>\s*</script>\s*)?'
         r'<script\s+src=["\'][^"\']*homepage-fulltext-search\.js(?:\?[^"\']*)?["\']\s+defer\s*>\s*</script>\s*',
         re.I,
     )
