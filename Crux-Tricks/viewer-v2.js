@@ -543,6 +543,18 @@
     loadedBatchStart=Math.floor((page-1)/PAGE_BATCH_SIZE)*PAGE_BATCH_SIZE+1;
     loadedBatchEnd=Math.min(pdfDoc.numPages,loadedBatchStart+PAGE_BATCH_SIZE-1);
     prefetchBatch(loadedBatchStart,loadedBatchEnd);
+
+    // A deep search link can open directly on a later page. Position its shell
+    // before IntersectionObserver starts, otherwise pages 1–3 become the first
+    // render jobs while the reader remains on black placeholders at the top.
+    // The target canvas still renders off-DOM and search highlighting can refine
+    // the position afterwards, so the existing no-flash/lazy-memory behaviour
+    // remains intact.
+    var initialTarget=pageShell(page);
+    if(initialTarget){
+      programmaticScrollUntil=Date.now()+1200;
+      pdfStage.scrollTop=Math.max(0,initialTarget.offsetTop-4);
+    }
     if(continuousObserver){try{continuousObserver.disconnect()}catch(e){}}
     continuousObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var n=parseInt(entry.target.dataset.page,10);if(n)renderContinuousPage(n,false)}})},{root:pdfStage,rootMargin:'1800px 0px',threshold:.01});
     Array.prototype.forEach.call(continuousRoot.children,function(el){continuousObserver.observe(el)});
