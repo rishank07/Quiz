@@ -115,6 +115,55 @@
     return { bodyOnly: bodyOnly, positionSum: positionSum };
   }
 
+  function wholePhrasePosition(text, phrase) {
+    if (!text || !phrase) return -1;
+    var padded = " " + text + " ";
+    var position = padded.indexOf(" " + phrase + " ");
+    return position < 0 ? -1 : Math.max(0, position - 1);
+  }
+
+  function wholeTermPositions(text, terms) {
+    var padded = " " + text + " ", positions = [];
+    for (var i = 0; i < terms.length; i++) {
+      var position = padded.indexOf(" " + terms[i] + " ");
+      if (position < 0) return null;
+      positions.push(Math.max(0, position - 1));
+    }
+    return positions;
+  }
+
+  // Handwritten OCR contains many plausible-looking fragments. Substring
+  // matching (for example, "mean" inside an unrelated OCR word) produces
+  // misleading pages, so the Maths OCR index uses clean per-page aliases first
+  // and accepts raw OCR only on whole words with sensible proximity.
+  function strictOcrScore(parsed, aliasRaw, bodyRaw) {
+    var alias = normalizeQuery(aliasRaw);
+    var body = normalizeQuery(bodyRaw);
+    var phrase = parsed.phrase;
+    var terms = parsed.terms;
+    var position = wholePhrasePosition(alias, phrase);
+    if (position >= 0) return position * 0.001;
+
+    var positions = wholeTermPositions(alias, terms);
+    if (positions) {
+      var aliasSpan = Math.max.apply(Math, positions) - Math.min.apply(Math, positions);
+      return 5 + aliasSpan * 0.001;
+    }
+
+    // Short OCR-only terms are too collision-prone; they remain searchable
+    // when explicitly present in a curated alias (SI, CI, BPT, etc.).
+    if (terms.length === 1 && terms[0].length < 4) return null;
+
+    position = wholePhrasePosition(body, phrase);
+    if (position >= 0) return 20 + position * 0.00001;
+
+    positions = wholeTermPositions(body, terms);
+    if (!positions) return null;
+    var span = Math.max.apply(Math, positions) - Math.min.apply(Math, positions);
+    if (terms.length > 1 && span > 180) return null;
+    return 35 + span * 0.001 + Math.min.apply(Math, positions) * 0.000001;
+  }
+
   function isCruxSearch() {
     return !!(config && config.globalName === "EF_CRUX_TRICKS_SNIPPET_INDEX");
   }
@@ -276,10 +325,25 @@
       var headRaw = String(group.t || "") + " " + String(group.b || "");
       var head = headRaw.toLowerCase();
       var snippets = Array.isArray(group.x) ? group.x : [];
+      var aliases = Array.isArray(group.a) ? group.a : [];
 
       for (var j = 0; j < snippets.length; j++) {
         var raw = String(snippets[j] == null ? "" : snippets[j]);
         var visible = stripMarker(raw);
+        if (config.strictOcr) {
+          var strictScore = strictOcrScore(parsed, aliases[j] || "", visible);
+          if (strictScore === null) { sequence++; continue; }
+          scored.push({
+            score: strictScore,
+            sequence: sequence,
+            f: withAnchor(group.f, extractAnchor(raw)),
+            t: group.t,
+            b: group.b,
+            x: raw
+          });
+          sequence++;
+          continue;
+        }
         var body = visible.toLowerCase();
         var match = containsAll(terms, body, head);
         if (!match) { sequence++; continue; }

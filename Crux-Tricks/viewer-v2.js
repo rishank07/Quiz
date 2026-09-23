@@ -26,6 +26,7 @@
   var isBookCrux=doc.kind==='crux';
   var isEconomicsCrux=isBookCrux&&doc.subject==='Economics';
   var isAdvanceMaths=doc.id==='ct0468'||doc.sourceTitle==='Advance Maths Formula Book';
+  var isHandwrittenMaths=doc.id==='ct0467'||doc.id==='ct0468';
   if(isTrick)document.documentElement.classList.add('efp-trick-pdf');
   if(isBookCrux)document.documentElement.classList.add('efp-book-crux-pdf');
   if(isEconomicsCrux)document.documentElement.classList.add('efp-economics-crux-pdf');
@@ -34,6 +35,7 @@
   var page=Math.max(1,Math.min(doc.pages,parseInt(params.get('page')||'1',10)||1));
   var initialSearch=String(params.get('search')||'').trim();
   var pages=[];
+  var pageAliases=[];
   var pdfDoc=null;
   var renderTask=null;
   var zoom=mobileReader?1:1;
@@ -204,7 +206,30 @@
   }
   function sizeShell(el,ratio){if(!el)return;var s=currentTargetSize(ratio);el.style.width=s.width+'px';el.style.height=s.height+'px';el.style.minHeight=s.height+'px'}
 
-  function normalizeSearchText(v){return String(v||'').toLowerCase().replace(/\s+/g,' ').trim()}
+  function normalizeSearchText(v){
+    v=String(v||'');
+    if(v.normalize){try{v=v.normalize('NFKC')}catch(e){}}
+    return v.toLowerCase().replace(/[^a-z0-9\u0900-\u097f]+/g,' ').replace(/\s+/g,' ').trim();
+  }
+  function wholePhrasePosition(text,phrase){
+    if(!text||!phrase)return -1;
+    var p=(' '+text+' ').indexOf(' '+phrase+' ');return p<0?-1:Math.max(0,p-1);
+  }
+  function wholeTermPositions(text,terms){
+    var padded=' '+text+' ',out=[];
+    for(var i=0;i<terms.length;i++){var p=padded.indexOf(' '+terms[i]+' ');if(p<0)return null;out.push(Math.max(0,p-1))}
+    return out;
+  }
+  function handwrittenPageScore(text,alias,q){
+    var terms=q.split(' ').filter(Boolean),a=normalizeSearchText(alias),body=normalizeSearchText(text),p=wholePhrasePosition(a,q),positions,span;
+    if(p>=0)return p*.001;
+    positions=wholeTermPositions(a,terms);if(positions){span=Math.max.apply(Math,positions)-Math.min.apply(Math,positions);return 5+span*.001}
+    if(terms.length===1&&terms[0].length<4)return null;
+    p=wholePhrasePosition(body,q);if(p>=0)return 20+p*.00001;
+    positions=wholeTermPositions(body,terms);if(!positions)return null;
+    span=Math.max.apply(Math,positions)-Math.min.apply(Math,positions);if(terms.length>1&&span>180)return null;
+    return 35+span*.001+Math.min.apply(Math,positions)*.000001;
+  }
   function clearSearchHighlightLayers(){
     var layers=document.querySelectorAll('.efp-search-layer');
     for(var i=0;i<layers.length;i++)layers[i].remove();
@@ -619,12 +644,27 @@
       var el=pageShell(page);
       var searchJumpPending=!!(searchQuery&&page===activeSearchPage&&searchFocusPending);
       var useSmooth=smooth!==false&&Math.abs(next-from)<=1&&!searchJumpPending;
-      if(!searchJumpPending)programmaticScrollUntil=Date.now()+(useSmooth?850:300);
+      programmaticScrollUntil=Date.now()+(searchJumpPending?2500:(useSmooth?850:300));
       warmContinuousPages(page);
-      return renderContinuousPage(page,false).then(function(highlighted){
-        if(el&&!searchJumpPending){pdfStage.scrollTo({top:Math.max(0,el.offsetTop-4),left:0,behavior:useSmooth?'smooth':'auto'});}
-        else if(el&&searchJumpPending&&highlighted!==true){programmaticScrollUntil=Date.now()+300;pdfStage.scrollTo({top:Math.max(0,el.offsetTop-4),left:0,behavior:'auto'});searchFocusPending=false;}
-        trimContinuous(page);return highlighted===true;
+      return renderContinuousPage(page,false).then(function(rendered){
+        function exactPageFallback(){
+          if(!el)return;
+          programmaticScrollUntil=Date.now()+500;
+          pdfStage.scrollTo({top:Math.max(0,el.offsetTop-4),left:0,behavior:'auto'});
+          searchFocusPending=false;
+        }
+        if(!searchJumpPending){
+          if(el)pdfStage.scrollTo({top:Math.max(0,el.offsetTop-4),left:0,behavior:useSmooth?'smooth':'auto'});
+          trimContinuous(page);return rendered===true;
+        }
+        // renderContinuousPage() reports canvas success even when this scanned
+        // PDF has no native text coordinates to highlight. Check highlighting
+        // separately; otherwise an OCR deep link updates the counter but never
+        // scrolls away from page 1.
+        return renderSearchHighlights(next).then(function(highlighted){
+          if(highlighted!==true)exactPageFallback();
+          trimContinuous(next);return rendered===true;
+        });
       });
     }
     if(next===page){updateControls();return Promise.resolve(false);}
@@ -709,14 +749,20 @@
     });
   }
 
-  function loadPagesForSearch(){var s=document.createElement('script');s.src='pages/'+doc.id+'.js?v=20260923mathsocr1';s.onload=function(){pages=Array.isArray(window.EF_CRUX_DOC_PAGES)?window.EF_CRUX_DOC_PAGES:[];runDocSearch()};s.onerror=function(){docSearch.placeholder='PDF search index unavailable — use page number';docSearch.disabled=true};document.head.appendChild(s)}
+  function loadPagesForSearch(){var s=document.createElement('script');s.src='pages/'+doc.id+'.js?v=20260923mathsstrict1';s.onload=function(){pages=Array.isArray(window.EF_CRUX_DOC_PAGES)?window.EF_CRUX_DOC_PAGES:[];pageAliases=Array.isArray(window.EF_CRUX_DOC_PAGE_ALIASES)?window.EF_CRUX_DOC_PAGE_ALIASES:[];runDocSearch()};s.onerror=function(){docSearch.placeholder='PDF search index unavailable — use page number';docSearch.disabled=true};document.head.appendChild(s)}
   function runDocSearch(){
     var q=normalizeSearchText(docSearch.value);docHits.innerHTML='';
     if(q!==searchQuery){searchQuery=q;activeSearchPage=0;searchFocusPending=false;searchGeneration++;clearSearchHighlightLayers()}
     if(q.length<2||!pages.length)return;
-    var hits=[];for(var i=0;i<pages.length;i++)if(normalizeSearchText(pages[i]).includes(q))hits.push(i+1);
-    hits.slice(0,30).forEach(function(n){
-      var b=document.createElement('button');b.textContent='Page '+n;
+    var hits=[];for(var i=0;i<pages.length;i++){
+      if(isHandwrittenMaths){var score=handwrittenPageScore(pages[i],pageAliases[i]||'',q);if(score!==null)hits.push({page:i+1,score:score})}
+      else if(normalizeSearchText(pages[i]).includes(q))hits.push({page:i+1,score:i});
+    }
+    hits.sort(function(a,b){return a.score-b.score||a.page-b.page});
+    hits.slice(0,30).forEach(function(hit){
+      var n=hit.page,b=document.createElement('button'),alias=String(pageAliases[n-1]||'').split('\n').filter(Boolean)[0]||'';
+      b.textContent='Page '+n+(alias?' · '+(alias.length>42?alias.slice(0,42)+'…':alias):'');
+      if(alias)b.title=alias;
       b.addEventListener('click',function(){
         var samePage=n===page;
         activeSearchPage=n;searchFocusPending=true;searchGeneration++;searchHighlightKeepUntil=Date.now()+1400;clearSearchHighlightLayers();

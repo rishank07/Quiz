@@ -1,5 +1,5 @@
-// v96 exact mobile deep-link page positioning 20260923
-const CACHE_VERSION = "efp-pwa-2026-09-23-v96-maths-jump";
+// v97 strict handwritten Maths search + exact OCR deep links 20260923
+const CACHE_VERSION = "efp-pwa-2026-09-23-v97-maths-strict";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -47,9 +47,9 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-restore-flash.js?v=20260920noflash1",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260923mathsocr1",
+  "/Crux-Tricks/crux-tricks.js?v=20260923mathsstrict1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260923mathsjump1",
+  "/Crux-Tricks/viewer-v2.js?v=20260923mathsstrict1",
 ];
 
 self.addEventListener("install", (event) => {

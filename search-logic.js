@@ -476,6 +476,39 @@ function efFallbackStripMarker(raw) {
   return raw;
 }
 
+function efFallbackWholePhrasePosition(text, phrase) {
+  text = efNormalizeSearchText(text);
+  phrase = efNormalizeSearchText(phrase);
+  if (!text || !phrase) return -1;
+  var position = (" " + text + " ").indexOf(" " + phrase + " ");
+  return position < 0 ? -1 : Math.max(0, position - 1);
+}
+
+function efFallbackWholeTermPositions(text, terms) {
+  var padded = " " + efNormalizeSearchText(text) + " ", positions = [];
+  for (var i = 0; i < terms.length; i++) {
+    var position = padded.indexOf(" " + terms[i] + " ");
+    if (position < 0) return null;
+    positions.push(Math.max(0, position - 1));
+  }
+  return positions;
+}
+
+function efFallbackStrictOcrScore(parsed, alias, body) {
+  var position = efFallbackWholePhrasePosition(alias, parsed.phrase);
+  if (position >= 0) return position * 0.001;
+  var positions = efFallbackWholeTermPositions(alias, parsed.terms);
+  if (positions) return 5 + (Math.max.apply(Math, positions) - Math.min.apply(Math, positions)) * 0.001;
+  if (parsed.terms.length === 1 && parsed.terms[0].length < 4) return null;
+  position = efFallbackWholePhrasePosition(body, parsed.phrase);
+  if (position >= 0) return 20 + position * 0.00001;
+  positions = efFallbackWholeTermPositions(body, parsed.terms);
+  if (!positions) return null;
+  var span = Math.max.apply(Math, positions) - Math.min.apply(Math, positions);
+  if (parsed.terms.length > 1 && span > 180) return null;
+  return 35 + span * 0.001 + Math.min.apply(Math, positions) * 0.000001;
+}
+
 // Mirrors search-worker.js's extractAnchor/withAnchor for the no-Worker
 // fallback path (e.g. file:// pages), so per-question/per-tab deep links
 // still resolve when the fast worker path is unavailable.
@@ -519,10 +552,25 @@ function efFallbackSnippetSearchAsync(query, records, options) {
         if (!group || (prefix && String(group.f || "").indexOf(prefix) !== 0)) continue;
         var head = (String(group.t || "") + " " + String(group.b || "")).toLowerCase();
         var snippets = Array.isArray(group.x) ? group.x : [];
+        var aliases = Array.isArray(group.a) ? group.a : [];
 
         for (var j = 0; j < snippets.length; j++) {
           var raw = String(snippets[j] == null ? "" : snippets[j]);
           var visible = efFallbackStripMarker(raw);
+          if (options.strictOcr) {
+            var strictScore = efFallbackStrictOcrScore(parsed, aliases[j] || "", visible);
+            if (strictScore === null) { sequence++; continue; }
+            scored.push({
+              score: strictScore,
+              sequence: sequence,
+              f: efFallbackWithAnchor(group.f, efFallbackExtractAnchor(raw)),
+              t: group.t,
+              b: group.b,
+              x: raw
+            });
+            sequence++;
+            continue;
+          }
           var body = visible.toLowerCase();
           var all = true, bodyOnly = true, positionSum = 0;
           for (var k = 0; k < terms.length; k++) {
