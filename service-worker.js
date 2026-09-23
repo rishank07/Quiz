@@ -1,5 +1,5 @@
-// v102 restore full Current Affairs practice count 20260923
-const CACHE_VERSION = "efp-pwa-2026-09-23-v102-ca-full-count";
+// v103 smart ranked and filtered homepage search 20260924
+const CACHE_VERSION = "efp-pwa-2026-09-24-v103-smart-search";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -30,7 +30,8 @@ const APP_SHELL = [
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
-  "/homepage-fulltext-search.js?v=20260920allsearchback1",
+  "/homepage-search-ui.js?v=20260924smartsearch1",
+  "/homepage-fulltext-search.js?v=20260924smartsearch1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
@@ -309,6 +310,8 @@ self.addEventListener("fetch", (event) => {
   // never let an old app-shell copy win on a normal refresh.
   if (url.pathname === "/home-nav.js" ||
       url.pathname === "/back-nav.js" ||
+      url.pathname === "/search-logic.js" ||
+      url.pathname === "/homepage-search-ui.js" ||
       url.pathname === "/homepage-fulltext-search.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
       url.pathname === "/Original%20Practice/original-practice.js" ||

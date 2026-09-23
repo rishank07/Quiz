@@ -943,6 +943,143 @@
     /* Search results inside cards */
     .ef-op-global-result strong { font-weight: 700; }
 
+    /* Smart homepage search controls */
+    .ef-search-tools[hidden], .ef-search-more[hidden] { display: none !important; }
+    .ef-search-tools {
+      display: grid;
+      gap: 9px;
+      margin: -2px 0 12px;
+      padding: 10px 12px 11px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: rgba(10, 15, 29, .82);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, .2);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .ef-search-state {
+      min-height: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 3px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 650;
+      letter-spacing: .1px;
+    }
+    .ef-search-spinner {
+      width: 13px;
+      height: 13px;
+      flex: 0 0 13px;
+      border: 2px solid rgba(246, 217, 138, .18);
+      border-top-color: var(--gold-soft);
+      border-radius: 50%;
+      animation: efSearchSpin .75s linear infinite;
+    }
+    .ef-search-tools:not(.is-searching) .ef-search-spinner {
+      animation: none;
+      border: 0;
+      background: #60d394;
+      box-shadow: 0 0 0 3px rgba(96, 211, 148, .11);
+    }
+    @keyframes efSearchSpin { to { transform: rotate(360deg); } }
+
+    .ef-search-filters {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding: 1px 1px 3px;
+      scrollbar-width: none;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+    .ef-search-filters::-webkit-scrollbar { display: none; }
+    .ef-search-filter {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, .035);
+      font: 700 11px/1 "Manrope", "Noto Sans Devanagari", sans-serif;
+      cursor: pointer;
+      transition: color .2s, border-color .2s, background .2s, opacity .2s;
+    }
+    .ef-search-filter i { font-size: 10px; color: var(--faint); }
+    .ef-search-filter small {
+      min-width: 17px;
+      padding: 3px 5px;
+      border-radius: 999px;
+      color: var(--faint);
+      background: rgba(255, 255, 255, .055);
+      font-size: 9px;
+      text-align: center;
+    }
+    .ef-search-filter[aria-selected="true"] {
+      color: #171006;
+      border-color: transparent;
+      background: linear-gradient(135deg, #ffeec0, #d9b75f);
+      box-shadow: 0 6px 18px rgba(217, 183, 95, .18);
+    }
+    .ef-search-filter[aria-selected="true"] i,
+    .ef-search-filter[aria-selected="true"] small { color: #171006; }
+    .ef-search-filter[aria-selected="true"] small { background: rgba(23, 16, 6, .1); }
+    .ef-search-filter:disabled { opacity: .38; cursor: default; }
+
+    #menuList.ef-smart-search-active > li.ef-search-source-header,
+    #menuList.ef-smart-search-active > li.ef-search-filtered,
+    #menuList.ef-smart-search-active > li.ef-search-overflow,
+    #menuList.ef-smart-search-active > li.ef-search-duplicate,
+    #menuList.ef-smart-search-active > li.ef-search-base-filtered { display: none !important; }
+    #menuList.ef-smart-search-active .ef-search-result-item > a {
+      min-height: 96px;
+      border-color: rgba(255, 255, 255, .09);
+      background: linear-gradient(180deg, rgba(255,255,255,.052), rgba(255,255,255,.025));
+    }
+    .ef-search-type-badge {
+      width: max-content;
+      display: block;
+      margin: 0 0 5px;
+      padding: 3px 7px;
+      border: 1px solid rgba(246, 217, 138, .22);
+      border-radius: 999px;
+      color: var(--gold-soft);
+      background: rgba(246, 217, 138, .07);
+      font-size: 8.5px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: .55px;
+      text-transform: uppercase;
+    }
+    .ef-search-type-current { color: #ffbd73; border-color: rgba(251,146,60,.25); background: rgba(251,146,60,.08); }
+    .ef-search-type-practice { color: #9ee7bd; border-color: rgba(96,211,148,.25); background: rgba(96,211,148,.08); }
+    .ef-search-type-pyq { color: #b8c0ff; border-color: rgba(129,140,248,.27); background: rgba(129,140,248,.08); }
+    .ef-search-type-mindmaps { color: #d8b4fe; border-color: rgba(192,132,252,.27); background: rgba(192,132,252,.08); }
+    .ef-search-type-books { color: #93c5fd; border-color: rgba(96,165,250,.25); background: rgba(96,165,250,.08); }
+
+    .ef-search-more {
+      width: 100%;
+      min-height: 43px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: var(--gold-soft);
+      background: rgba(246, 217, 138, .045);
+      font: 750 12px/1 "Manrope", sans-serif;
+      cursor: pointer;
+    }
+    .ef-search-more i { font-size: 10px; }
+    .ef-search-more:hover { border-color: var(--line-strong); background: rgba(246, 217, 138, .08); }
+
     #menuList.has-deep-results {
       max-height: 70vh;
       overflow-y: auto;
@@ -968,6 +1105,27 @@
       background: rgba(255, 255, 255, 0.02);
     }
     .no-results.show { display: block; }
+    #menuList.ef-search-loading ~ .no-results { display: none !important; }
+    #noResults.show {
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+    }
+    #menuList.ef-smart-search-active ~ #noResults.show { display: flex; }
+    #noResults > i { color: var(--gold); font-size: 18px; margin-bottom: 2px; }
+    #noResults > strong { color: var(--ink); font-size: 14px; }
+    #noResults > span { color: var(--muted); }
+    .ef-search-suggestions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px; margin-top: 6px; }
+    .ef-search-suggestions small { color: var(--faint); }
+    .ef-search-suggestions button {
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--gold-soft);
+      background: rgba(246, 217, 138, .05);
+      font: 700 11px/1 "Manrope", "Noto Sans Devanagari", sans-serif;
+      cursor: pointer;
+    }
 
     /* Telegram + generic group titles (also used by search results) */
     .group-title {
@@ -1465,6 +1623,14 @@
       const noResults = document.getElementById("noResults");
       const menuList = document.getElementById("menuList");
 
+      function reportSearchState(phase, query) {
+        try {
+          window.dispatchEvent(new CustomEvent("efp-search-state", {
+            detail: { phase: phase, query: query }
+          }));
+        } catch (_) {}
+      }
+
       function homeSearchUrl(rawUrl) {
         try {
           const url = new URL(rawUrl, document.baseURI);
@@ -1513,7 +1679,7 @@
             loadScriptOnce("search-index-main.js?v=20260915staticgk1", function () {
               return typeof SEARCH_INDEX !== "undefined";
             }),
-            loadScriptOnce("search-logic.js?v=20260923mathsstrict1", function () {
+            loadScriptOnce("search-logic.js?v=20260924smartsearch1", function () {
               return typeof efSearchRank === "function";
             })
           ]).then(function () {
@@ -1536,7 +1702,7 @@
         originalPracticeSearchClients = [
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-original-practice.js?v=20260904v8", document.baseURI).href,
             mode: "snippet",
             globalName: "EF_ORIGINAL_PRACTICE_SNIPPET_INDEX",
@@ -1545,7 +1711,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-economics-original-practice.js?v=20260908econ1", document.baseURI).href,
             mode: "snippet",
             globalName: "EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX",
@@ -1554,7 +1720,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-ecology-original-practice.js?v=20260912ecology1", document.baseURI).href,
             mode: "snippet",
             globalName: "EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX",
@@ -1563,7 +1729,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-english-original-practice.js?v=20260913english1", document.baseURI).href,
             mode: "snippet",
             globalName: "EF_ENGLISH_ORIGINAL_PRACTICE_SNIPPET_INDEX",
@@ -1572,7 +1738,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-static-gk-original-practice.js?v=20260915staticgk1", document.baseURI).href,
             mode: "snippet",
             globalName: "EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX",
@@ -1678,7 +1844,7 @@
         cruxTricksSearchClients = [
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260908econcrux1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20260905cruxroute1", document.baseURI).href,
             mode: "snippet",
             globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
@@ -1687,7 +1853,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260908econcrux1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-economics-crux.js?v=20260908econcrux1", document.baseURI).href,
             mode: "snippet",
             globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
@@ -1696,7 +1862,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260908econcrux1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260904v8", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-original-geo-economics-tricks.js?v=20260915staticgktricks1", document.baseURI).href,
             mode: "snippet",
             globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
@@ -1705,7 +1871,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260923mathsstrict1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260923mathsstrict1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-maths-ocr.js?v=20260923mathsstrict1", document.baseURI).href,
             mode: "snippet",
             globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
@@ -1906,12 +2072,14 @@
             }).catch(function(){ cruxTricksSearchClients = null; return 0; }));
             if (!jobs.length) {
               noResults.classList.toggle("show", visible === 0 && deepCount === 0);
+              reportSearchState("core-done", q);
               return;
             }
             Promise.all(jobs).then(function(counts){
               if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
               var extraCount = counts.reduce(function(a,b){ return a + (b || 0); }, 0);
               noResults.classList.toggle("show", visible === 0 && deepCount === 0 && extraCount === 0);
+              reportSearchState("core-done", q);
             });
           });
         }, 180);
@@ -1925,7 +2093,8 @@
     .ef-op-search-snippet mark{background:#ffe28a;color:inherit;padding:0 1px;border-radius:2px}
   </style>
   <!-- ExamFusion homepage full-text bridge -->
-  <script src="./homepage-fulltext-search.js?v=20260905books2" defer></script>
+  <script src="./homepage-search-ui.js?v=20260924smartsearch1" defer></script>
+  <script src="./homepage-fulltext-search.js?v=20260924smartsearch1" defer></script>
   <!-- ExamFusion landing counts: start -->
   <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5036,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":12174,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":46414,"unit":"Questions"},"./PYQ/index.html":{"total":2278,"unit":"PYQs"},"./Crux-Tricks/index.html":{"total":591,"unit":"PDFs"}}</script>
   <style>

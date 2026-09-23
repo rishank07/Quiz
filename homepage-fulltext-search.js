@@ -14,7 +14,7 @@
   if (!box || !menuList) return;
 
   var WORKER_URL = new URL("search-worker.js?v=20260905books1", document.baseURI).href;
-  var LOGIC_URL = new URL("search-logic.js?v=20260904v8", document.baseURI).href;
+  var LOGIC_URL = new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href;
 
   // Search the large indexes sequentially so a single query never makes
   // several 10–30 MB indexes parse at the same instant. Workers are cancelled
@@ -394,6 +394,11 @@
     clearOwnResults();
     var seen = {};
     var index = 0;
+    try {
+      window.dispatchEvent(new CustomEvent("efp-search-state", {
+        detail: { phase: "fulltext-start", query: query }
+      }));
+    } catch (_) {}
 
     // Sequential loading prevents CPU/memory spikes. Results appear source by
     // source while the query remains current.
@@ -401,6 +406,11 @@
       if (box.value.trim() !== query || mySequence !== sequence) return;
       if (index >= SOURCES.length) {
         scheduleWorkerCleanup(mySequence);
+        try {
+          window.dispatchEvent(new CustomEvent("efp-search-state", {
+            detail: { phase: "fulltext-done", query: query }
+          }));
+        } catch (_) {}
         return;
       }
       var source = SOURCES[index++];

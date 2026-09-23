@@ -121,9 +121,63 @@ function efAllowedEditDistance(term) {
   return term.length >= 8 ? 2 : 1;
 }
 
+// Common Roman/Hinglish words used by students.  Each entry is an OR-list,
+// not an extra required term: "rashtrapati" can therefore match राष्ट्रपति
+// or president without making an ordinary English/Hindi search broader.
+var EF_SEARCH_ALIASES = {
+  rashtrapati: ["राष्ट्रपति", "president"],
+  pradhanmantri: ["प्रधानमंत्री", "prime minister"],
+  samvidhan: ["संविधान", "constitution"],
+  anuchhed: ["अनुच्छेद", "article"],
+  sansad: ["संसद", "parliament"],
+  nyayalaya: ["न्यायालय", "court"],
+  itihas: ["इतिहास", "history"],
+  bhugol: ["भूगोल", "geography"],
+  rajvyavastha: ["राजव्यवस्था", "polity"],
+  arthvyavastha: ["अर्थव्यवस्था", "economics"],
+  vigyan: ["विज्ञान", "science"],
+  paryavaran: ["पर्यावरण", "environment"],
+  ganit: ["गणित", "maths", "mathematics"],
+  currentaffairs: ["current affairs", "करेंट अफेयर्स", "समसामयिकी"],
+  karent: ["current", "करेंट"],
+  trick: ["tricks", "memory trick", "मेमोरी ट्रिक्स"]
+};
+
+function efSearchTermAlternatives(term) {
+  var aliases = EF_SEARCH_ALIASES[term] || [];
+  var output = [term];
+  var seen = {};
+  seen[term] = true;
+  for (var i = 0; i < aliases.length; i++) {
+    var normalized = efNormalizeSearchText(aliases[i]);
+    if (normalized && !seen[normalized]) {
+      seen[normalized] = true;
+      output.push(normalized);
+    }
+  }
+  return output;
+}
+
 function efBoundedEditDistance(a, b, maximum) {
   if (a === b) return 0;
   if (Math.abs(a.length - b.length) > maximum) return maximum + 1;
+
+  // A very common mobile typo is swapping two neighbouring letters
+  // ("poltiy", "gandih"). Treat that as one edit without paying for a full
+  // Damerau matrix on every token in the large search indexes.
+  if (maximum >= 1 && a.length === b.length) {
+    var firstDifference = -1;
+    var secondDifference = -1;
+    for (var differenceIndex = 0; differenceIndex < a.length; differenceIndex++) {
+      if (a.charAt(differenceIndex) === b.charAt(differenceIndex)) continue;
+      if (firstDifference === -1) firstDifference = differenceIndex;
+      else if (secondDifference === -1) secondDifference = differenceIndex;
+      else { secondDifference = -2; break; }
+    }
+    if (firstDifference >= 0 && secondDifference === firstDifference + 1 &&
+        a.charAt(firstDifference) === b.charAt(secondDifference) &&
+        a.charAt(secondDifference) === b.charAt(firstDifference)) return 1;
+  }
 
   var previous = [];
   var current = [];
@@ -151,9 +205,16 @@ function efBoundedEditDistance(a, b, maximum) {
   return previous[b.length];
 }
 
-function efFindTermInPreparedText(field, term, allowFuzzy, allowCompact) {
+function efFindSingleTermInPreparedText(field, term, allowFuzzy, allowCompact) {
   var position = field.normalized.indexOf(term);
-  if (position !== -1) return { score: 0, position: position, word: term };
+  if (position !== -1) {
+    var before = position === 0 ? " " : field.normalized.charAt(position - 1);
+    var afterPosition = position + term.length;
+    var after = afterPosition >= field.normalized.length ? " " : field.normalized.charAt(afterPosition);
+    var exactWord = before === " " && after === " ";
+    var wordStart = before === " ";
+    return { score: exactWord ? -12 : (wordStart ? -5 : 0), position: position, word: term };
+  }
 
   if (allowCompact !== false) {
     var compactTerm = term.replace(/\s+/g, "");
@@ -184,6 +245,63 @@ function efFindTermInPreparedText(field, term, allowFuzzy, allowCompact) {
   return best ? { score: 120 + best.distance * 10, position: 0, word: best.word } : null;
 }
 
+function efFindTermInPreparedText(field, term, allowFuzzy, allowCompact) {
+  // Prefer the literal query. Aliases carry a small penalty so a genuine
+  // typed-language match always ranks above a translated/Hinglish match.
+  var direct = efFindSingleTermInPreparedText(field, term, false, allowCompact);
+  if (direct) return direct;
+
+  var alternatives = efSearchTermAlternatives(term);
+  for (var i = 1; i < alternatives.length; i++) {
+    var alias = efFindSingleTermInPreparedText(field, alternatives[i], false, allowCompact);
+    if (alias) {
+      alias.score += 18;
+      return alias;
+    }
+  }
+
+  return allowFuzzy
+    ? efFindSingleTermInPreparedText(field, term, true, allowCompact)
+    : null;
+}
+
+function efSearchPhraseBonus(query, fields, weights, alreadyNormalized) {
+  var phrase = alreadyNormalized ? query : efNormalizeSearchText(query);
+  if (!phrase || phrase.length < 2) return 0;
+  var best = 0;
+  for (var i = 0; i < fields.length; i++) {
+    var normalized = fields[i] && fields[i].normalized || "";
+    if (!normalized) continue;
+    var weight = weights && weights[i] != null ? weights[i] : Math.max(40, 180 - i * 55);
+    var bonus = 0;
+    if (normalized === phrase) bonus = -weight;
+    else if (normalized.indexOf(phrase) === 0) bonus = -Math.round(weight * 0.78);
+    else if (normalized.indexOf(phrase) !== -1) bonus = -Math.round(weight * 0.56);
+    if (bonus < best) best = bonus;
+  }
+  return best;
+}
+
+function efSearchSectionIntentBonus(query, record) {
+  var normalized = efNormalizeSearchText(query);
+  var haystack = efNormalizeSearchText((record.section || "") + " " + (record.breadcrumb || "") + " " + (record.url || ""));
+  var intents = [
+    { words: ["pyq", "previous year"], targets: ["previous year", "pyq"] },
+    { words: ["crux", "trick", "memory"], targets: ["crux", "trick"] },
+    { words: ["current affairs", "karent affairs", "समसामयिकी", "करेंट अफेयर्स"], targets: ["current affairs"] },
+    { words: ["original practice", "practice"], targets: ["original practice"] },
+    { words: ["mind map", "mindmap"], targets: ["mind map"] },
+    { words: ["bihar"], targets: ["bihar"] },
+    { words: ["pinnacle", "lucent", "ghatna", "blackbook"], targets: ["books", "pinnacle", "lucent", "ghatna", "blackbook"] }
+  ];
+  for (var i = 0; i < intents.length; i++) {
+    var requested = intents[i].words.some(function (word) { return normalized.indexOf(word) !== -1; });
+    var belongs = intents[i].targets.some(function (word) { return haystack.indexOf(word) !== -1; });
+    if (requested && belongs) return -85;
+  }
+  return 0;
+}
+
 function efMatchPreparedFields(terms, fields, allowFuzzy, allowCompact) {
   var total = 0;
   var earliest = 1000000;
@@ -209,6 +327,7 @@ function efSearchRecords(query, records, options) {
   var limit = options.limit || 40;
   var fieldNames = options.fields || ["title", "breadcrumb", "text"];
   var terms = efSearchTerms(query);
+  var normalizedPhrase = efNormalizeSearchText(query);
   if (!terms.length || !records) return [];
 
   function collect(allowFuzzy, allowCompact) {
@@ -216,7 +335,10 @@ function efSearchRecords(query, records, options) {
     for (var i = 0; i < records.length; i++) {
       var fields = efPreparedRecordFields(records[i], fieldNames);
       var score = efMatchPreparedFields(terms, fields, allowFuzzy, allowCompact);
-      if (score !== null) found.push({ index: i, score: score, record: records[i] });
+      if (score !== null) {
+        score += efSearchPhraseBonus(normalizedPhrase, fields, options.phraseWeights, true);
+        found.push({ index: i, score: score, record: records[i] });
+      }
     }
     return found;
   }
@@ -244,6 +366,7 @@ function efSearchRank(query, options) {
   var excludeTitleMatches = !!options.excludeTitleMatches;
   var limit = options.limit || 40;
   var terms = efSearchTerms(query);
+  var normalizedPhrase = efNormalizeSearchText(query);
   if (!terms.length || typeof SEARCH_INDEX === "undefined") return [];
   var hasContent = typeof CONTENT_INDEX !== "undefined";
 
@@ -263,7 +386,11 @@ function efSearchRank(query, options) {
         efPrepareSearchText(hasContent ? (CONTENT_INDEX[record.url] || "") : "")
       ]);
       var score = efMatchPreparedFields(terms, fields, allowFuzzy, allowCompact);
-      if (score !== null) found.push({ index: i, score: score, record: record });
+      if (score !== null) {
+        score += efSearchPhraseBonus(normalizedPhrase, fields, [300, 300, 125, 65], true);
+        score += efSearchSectionIntentBonus(query, record);
+        found.push({ index: i, score: score, record: record });
+      }
     }
     return found;
   }
@@ -299,12 +426,16 @@ function efSnippetWithHighlight(text, queryOrTerms) {
   var highlightWords = [];
 
   for (var i = 0; i < terms.length; i++) {
-    var directIndex = lower.indexOf(terms[i]);
-    if (directIndex !== -1) {
-      highlightWords.push(text.slice(directIndex, directIndex + terms[i].length));
-      if (bestIndex === -1 || directIndex < bestIndex) {
-        bestIndex = directIndex;
-        bestLength = terms[i].length;
+    var highlightAlternatives = efSearchTermAlternatives(terms[i]);
+    for (var alternativeIndex = 0; alternativeIndex < highlightAlternatives.length; alternativeIndex++) {
+      var highlightTerm = highlightAlternatives[alternativeIndex];
+      var directIndex = lower.indexOf(highlightTerm);
+      if (directIndex !== -1) {
+        highlightWords.push(text.slice(directIndex, directIndex + highlightTerm.length));
+        if (bestIndex === -1 || directIndex < bestIndex) {
+          bestIndex = directIndex;
+          bestLength = highlightTerm.length;
+        }
       }
     }
   }
@@ -361,6 +492,7 @@ function efSnippetSearch(query, options) {
   var excludeTitleMatches = !!options.excludeTitleMatches;
   var limit = options.limit || 40;
   var terms = efSearchTerms(query);
+  var normalizedPhrase = efNormalizeSearchText(query);
   if (!terms.length || typeof EF_SNIPPET_INDEX === "undefined") return [];
 
   function collect(allowFuzzy, allowCompact) {
@@ -380,6 +512,7 @@ function efSnippetSearch(query, options) {
         var fields = [preparedGroup.snippets[j], titleField, breadcrumbField];
         var score = efMatchPreparedFields(terms, fields, allowFuzzy, allowCompact);
         if (score !== null) {
+          score += efSearchPhraseBonus(normalizedPhrase, fields, [175, 230, 105], true);
           found.push({
             score: score,
             sequence: sequence,
