@@ -96,47 +96,6 @@ def pyq_document_total(repo: Path) -> int:
     return 853
 
 
-def current_affairs_mou_rapid_total(repo: Path) -> int:
-    """Return MoU rapid-practice items mirrored from the source MCQs.
-
-    The homepage Current Affairs card is intended to count source questions
-    once. The dedicated Rapid Practice hub still keeps and displays all of its
-    main + explanation-drill items, but those mirrored items should not inflate
-    the homepage Current Affairs total a second time.
-    """
-    path = (
-        repo
-        / "Current Affairs"
-        / "Topic Names"
-        / "Rapid Practice"
-        / "2026"
-        / "Topic Wise"
-        / "MoU_2026_Current_Affairs_Rapid_Practice.html"
-    )
-    try:
-        raw = path.read_text(encoding="utf-8", errors="replace")
-    except OSError:
-        return 0
-
-    match = re.search(
-        r'<script id="master-data" type="application/json">(.*?)</script>',
-        raw,
-        re.S,
-    )
-    if not match:
-        return 0
-    try:
-        data = json.loads(match.group(1))
-    except (TypeError, json.JSONDecodeError):
-        return 0
-
-    return sum(
-        len(section.get("questions", []))
-        for section in data
-        if isinstance(section, dict)
-    )
-
-
 def ensure_pyq_card(raw: str) -> str:
     if PYQ_CARD_MARKER in raw:
         return raw
@@ -183,17 +142,6 @@ def update_index(repo: Path) -> bool:
     op_total = original_practice_total(repo)
     crux_total = crux_document_total(repo)
     pyq_total = pyq_document_total(repo)
-    ca_key = "./Current Affairs/Topic Names.html"
-    ca_entry = payload.get(ca_key)
-    mou_rapid_total = current_affairs_mou_rapid_total(repo)
-    if isinstance(ca_entry, dict) and mou_rapid_total > 0:
-        try:
-            ca_total = int(ca_entry.get("total", 0))
-        except (TypeError, ValueError):
-            ca_total = 0
-        if ca_total > 0:
-            ca_entry["total"] = max(0, ca_total - mou_rapid_total)
-
     payload["./Original Practice/index.html"] = {
         "total": op_total,
         "unit": "Questions",

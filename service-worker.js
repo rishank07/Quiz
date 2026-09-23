@@ -1,5 +1,5 @@
-// v101 keep MoU rapid drills out of homepage unique count 20260923
-const CACHE_VERSION = "efp-pwa-2026-09-23-v101-mou-home-count";
+// v102 restore full Current Affairs practice count 20260923
+const CACHE_VERSION = "efp-pwa-2026-09-23-v102-ca-full-count";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
