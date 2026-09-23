@@ -1,5 +1,5 @@
-// v97 strict handwritten Maths search + exact OCR deep links 20260923
-const CACHE_VERSION = "efp-pwa-2026-09-23-v97-maths-strict";
+// v98 strict Maths search plus verified MoU Science & Technology expansion 20260923
+const CACHE_VERSION = "efp-pwa-2026-09-23-v98-maths-mou-scitech";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
