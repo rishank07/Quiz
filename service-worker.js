@@ -1,5 +1,5 @@
-// v85 smooth mobile PDF scrolling 20260918
-const CACHE_VERSION = "efp-pwa-2026-09-07-v62-chess-captured-pieces";
+// v95 searchable handwritten Maths PDFs 20260923
+const CACHE_VERSION = "efp-pwa-2026-09-23-v95-maths-ocr";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -47,9 +47,9 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-restore-flash.js?v=20260920noflash1",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260919searchhighlight2",
+  "/Crux-Tricks/crux-tricks.js?v=20260923mathsocr1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260920renderheal2",
+  "/Crux-Tricks/viewer-v2.js?v=20260923mathsocr1",
 ];
 
 self.addEventListener("install", (event) => {
