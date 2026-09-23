@@ -1,5 +1,5 @@
-// v100 MoU count and landing sync 20260923
-const CACHE_VERSION = "efp-pwa-2026-09-23-v100-mou-count-sync";
+// v101 keep MoU rapid drills out of homepage unique count 20260923
+const CACHE_VERSION = "efp-pwa-2026-09-23-v101-mou-home-count";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
