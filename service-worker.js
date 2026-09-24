@@ -1,7 +1,7 @@
-// v113 Fix BlackBook and Current Affairs quiz warning detection
-const CACHE_VERSION = "efp-pwa-2026-09-24-v113-quiz-warning-detection";
+// v114 Preserve Android Back history after app resume
+const CACHE_VERSION = "efp-pwa-2026-09-24-v114-android-back-resume";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924quizwarn3"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924backresume1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -24,8 +24,8 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/owner-debug.js",
-  "/home-nav.js?v=20260924quizwarn3",
-  "/app-session.js?v=20260924quizwarn3",
+  "/home-nav.js?v=20260924backresume1",
+  "/app-session.js?v=20260924backresume1",
   "/back-parent-map.js",
   "/back-nav.js?v=20260920allsearchback1",
   "/search-logic.js",
