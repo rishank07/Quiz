@@ -1,5 +1,5 @@
-// v135 Compact Rapid score bar and keep Mixed Practice Back in its builder
-const CACHE_VERSION = "efp-pwa-2026-09-24-v135-rapid-scorebar-mixed-back";
+// v136 Match Current Affairs mobile score badges to Original Practice
+const CACHE_VERSION = "efp-pwa-2026-09-25-v136-ca-original-score";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924mixedback1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
