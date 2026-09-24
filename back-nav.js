@@ -871,6 +871,21 @@
       return;
     }
 
+    /* Crux root/material is the section landing screen. When it was opened
+       directly (shared link, new tab, installed app, external referrer), there
+       may be no useful browser-history entry at all. Its logical parent is
+       always ExamFusion Home, so own this final Crux step explicitly instead
+       of depending on referrer/history heuristics. Deeper Crux panes are
+       already handled above by useCruxInternalBack(). */
+    if (isCruxTricksRoot()) {
+      consumeBackEvent(event);
+      clearLogicalChain();
+      clearHomeSearchChain();
+      if (window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
+      window.location.assign("/");
+      return;
+    }
+
     /* Follow the Practice page's own hierarchy before leaving its section. */
     if (isOriginalPracticePage()) {
       if (useOriginalPracticeInternalBack(event)) return;
