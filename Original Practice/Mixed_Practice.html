@@ -275,12 +275,12 @@
   async function loadMaster(fileKey){if(fileCache[fileKey])return fileCache[fileKey];var filename=FILES[fileKey];var promise=fetch('./'+filename,{cache:'force-cache'}).then(function(r){if(!r.ok)throw new Error('Could not load '+filename+' ('+r.status+')');return r.text()}).then(function(html){var doc=new DOMParser().parseFromString(html,'text/html'),node=doc.getElementById('master-data');if(!node)throw new Error('Question data not found in '+filename);return JSON.parse(node.textContent)});fileCache[fileKey]=promise;try{return await promise}catch(err){delete fileCache[fileKey];throw err}}
   function questionId(fileKey,groupName,chapterIndex,sectionIndex,questionIndex){return fileKey+'|'+encodeURIComponent(groupName)+'|'+chapterIndex+'|'+sectionIndex+'|'+questionIndex}
   function identityText(value){return String(value==null?'':value).replace(/<[^>]*>/g,' ').replace(/&nbsp;/gi,' ').replace(/\s+/g,' ').trim().toLowerCase()}
-  function identityHash(value){var hash=2166136261,text=String(value);for(var i=0;i<text.length;i++){hash^=text.charCodeAt(i);hash=Math.imul(hash,16777619)}return(hash>>>0).toString(36)}
+  function identityHash(value){var first=2166136261,second=5381,text=String(value);for(var i=0;i<text.length;i++){var code=text.charCodeAt(i);first^=code;first=Math.imul(first,16777619);second=Math.imul(second,33)^code}return(first>>>0).toString(36)+'-'+(second>>>0).toString(36)}
   function stableQuestionId(fileKey,groupName,q){
-    var prompt=(q&&q.q)||{},options=(q&&q.o)||[];
-    var identity=[fileKey,groupName,identityText(prompt.en),identityText(prompt.hi)];
+    var prompt=(q&&q.q)||{},answer=(q&&q.a)||{},options=(q&&q.o)||[];
+    var identity=[fileKey,groupName,identityText(prompt.en),identityText(prompt.hi),identityText(answer.en),identityText(answer.hi)];
     options.forEach(function(option){identity.push(identityText(option&&option.en));identity.push(identityText(option&&option.hi))});
-    var raw=identity.join('|');return'qv2|'+fileKey+'|'+identityHash(raw)+'|'+raw.length
+    var raw=identity.join('|');return'qv3|'+fileKey+'|'+identityHash(raw)+'|'+raw.length
   }
   function normalizeEnglishQuestion(q){var options=(q.options||[]).map(function(option){return {en:String(option),hi:''}}),correct=Number.isInteger(q.answer)&&options[q.answer]?options[q.answer].en:'';return {q:{en:(q.prompt||'')+(q.sentence?'<div style="margin-top:10px;padding:10px 12px;border-radius:9px;background:rgba(255,255,255,.05);border-left:4px solid #f0cf77">'+q.sentence+'</div>':''),hi:''},o:options,a:{en:correct,hi:''},exp:{en:'<strong>Hinglish Explanation</strong><div>'+(q.explanation||'')+'</div><div class="exp-hi"><strong>English Explanation</strong><div>'+(q.englishExplanation||'')+'</div></div><div class="exp-hi"><strong>Quick Rule</strong><div>'+(q.rule||'')+'</div></div>',hi:''}}}
   async function buildPool(key){
@@ -316,7 +316,7 @@
   function validOptionOrder(order,count){if(!Array.isArray(order)||order.length!==count)return false;var seen=new Set(order);if(seen.size!==count)return false;for(var i=0;i<count;i++){if(!seen.has(i))return false}return true}
   function ensureOptionOrders(items){if(!state)return;if(!state.optionOrders||typeof state.optionOrders!=='object')state.optionOrders={};var missing=[],positions={};items.forEach(function(item,i){positions[item.id]=i;var count=((item.q||{}).o||[]).length;if(!validOptionOrder(state.optionOrders[item.id],count))missing.push(item)});if(!missing.length)return;var offset=Math.floor(Math.random()*4);missing.forEach(function(item){var count=((item.q||{}).o||[]).length;state.optionOrders[item.id]=shuffledOptionOrder(item.q||{},count?(positions[item.id]+offset)%count:0)})}
   function displayedOptions(item){var q=item.q||{},opts=q.o||[];ensureOptionOrders([item]);var order=state&&state.optionOrders&&state.optionOrders[item.id];return validOptionOrder(order,opts.length)?order.map(function(i){return opts[i]}):opts.slice()}
-  async function generateSet(keys,total){clearStatus();if(keys.length<2){setStatus('Choose at least two subjects or subject groups for a mixed set.','bad');return}total=Math.max(keys.length,Math.min(MAX_QUESTIONS,total));$('generateBtn').disabled=true;$('surpriseBtn').disabled=true;setStatus('Preparing question pools… first load can take a few seconds.');try{var pools=await Promise.all(keys.map(buildPool)),available=pools.reduce(function(s,p){return s+p.length},0);if(total>available)total=available;var quotas=quotaPreview(keys,total),used=new Set(),picked=[];for(var i=0;i<keys.length;i++){var need=quotas[keys[i]]||0;if(need>pools[i].length)throw new Error(POOLS[keys[i]].label+' has fewer than '+need+' available questions.');picked=picked.concat(randomSample(pools[i],need,used))}shuffle(picked);currentQuestions=picked;currentIndex=0;pendingSelections={};historyReviewMode=false;state={version:4,idVersion:2,ownerTab:TAB_ID,setId:'mix-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),selectedKeys:keys.slice(),total:picked.length,ids:picked.map(function(q){return q.id}),answers:{},optionOrders:buildOptionOrders(picked),createdAt:Date.now(),currentIndex:0};saveState();showQuiz();renderQuestion();setStatus('Random set ready.','good')}catch(err){console.error(err);setStatus('Could not prepare the mixed set: '+(err&&err.message?err.message:'Unknown error'),'bad')}finally{$('generateBtn').disabled=false;$('surpriseBtn').disabled=false}}
+  async function generateSet(keys,total){clearStatus();if(keys.length<2){setStatus('Choose at least two subjects or subject groups for a mixed set.','bad');return}total=Math.max(keys.length,Math.min(MAX_QUESTIONS,total));$('generateBtn').disabled=true;$('surpriseBtn').disabled=true;setStatus('Preparing question pools… first load can take a few seconds.');try{var pools=await Promise.all(keys.map(buildPool)),available=pools.reduce(function(s,p){return s+p.length},0);if(total>available)total=available;var quotas=quotaPreview(keys,total),used=new Set(),picked=[];for(var i=0;i<keys.length;i++){var need=quotas[keys[i]]||0;if(need>pools[i].length)throw new Error(POOLS[keys[i]].label+' has fewer than '+need+' available questions.');picked=picked.concat(randomSample(pools[i],need,used))}shuffle(picked);currentQuestions=picked;currentIndex=0;pendingSelections={};historyReviewMode=false;state={version:4,idVersion:3,ownerTab:TAB_ID,setId:'mix-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),selectedKeys:keys.slice(),total:picked.length,ids:picked.map(function(q){return q.id}),answers:{},optionOrders:buildOptionOrders(picked),createdAt:Date.now(),currentIndex:0};saveState();showQuiz();renderQuestion();setStatus('Random set ready.','good')}catch(err){console.error(err);setStatus('Could not prepare the mixed set: '+(err&&err.message?err.message:'Unknown error'),'bad')}finally{$('generateBtn').disabled=false;$('surpriseBtn').disabled=false}}
   $('generateBtn').onclick=function(){generateSet(checkedKeys(),normalizedCount())};
   $('surpriseBtn').onclick=function(){var choices=[['history','polity','english'],['geography','chemistry','biology','ecology'],['history','geography','science','english'],['polity','economics','geography','ecology'],['physics','chemistry','biology','english']],pick=choices[Math.floor(Math.random()*choices.length)];MAJOR.concat(SPECIFIC).forEach(function(k){setChecked(k,false)});pick.forEach(function(k){setChecked(k,true)});$('questionCount').value=[50,60,100][Math.floor(Math.random()*3)];updateDistribution();generateSet(pick,normalizedCount())};
   async function restoreState(saved,reviewMode){
@@ -335,7 +335,7 @@
         if(!historyReviewMode){removeActiveState(saved.setId);try{sessionStorage.setItem(VIEW_KEY,'setup');sessionStorage.removeItem('efp_app_resume_pending_v1')}catch(e){}}
         historyReviewMode=false;showSetup();return false
       }
-      state=snapshotState(saved);state.version=4;state.idVersion=2;state.ownerTab=TAB_ID;state.answers=state.answers||{};ensureSetId(state);
+      state=snapshotState(saved);state.version=4;state.idVersion=3;state.ownerTab=TAB_ID;state.answers=state.answers||{};ensureSetId(state);
       var oldIds=state.ids.slice(),oldAnswers=state.answers||{},oldOrders=state.optionOrders||{},newAnswers={},newOrders={},bookmarksChanged=false;
       restored.forEach(function(question,index){
         var oldId=oldIds[index],newId=question.id;
@@ -397,7 +397,7 @@
       if(migratedBookmarks.size!==bookmarks.size||Array.from(bookmarks).some(function(id){return !migratedBookmarks.has(id)})){bookmarks=migratedBookmarks;saveBookmarks()}
       savedReturn={state:returnState,questions:returnQuestions,index:returnIndex,pending:returnPending};
       savedMode=true;currentQuestions=savedItems;currentIndex=0;pendingSelections={};
-      state={version:4,idVersion:2,ownerTab:TAB_ID,selectedKeys:[],total:savedItems.length,ids:savedItems.map(function(q){return q.id}),answers:{},optionOrders:buildOptionOrders(savedItems),currentIndex:0,savedView:true};
+      state={version:4,idVersion:3,ownerTab:TAB_ID,selectedKeys:[],total:savedItems.length,ids:savedItems.map(function(q){return q.id}),answers:{},optionOrders:buildOptionOrders(savedItems),currentIndex:0,savedView:true};
       showQuiz();updateSavedQuestionsButton();renderQuestion();
     }catch(err){console.error(err);alert('Could not open saved questions right now.')}finally{$('savedQuestionsBtn').disabled=false}
   }
@@ -591,6 +591,9 @@
     if(lastView==='quiz'&&saved&&saved.ids&&saved.ids.length)restoreState(saved,false);
   });
   window.addEventListener('storage',function(event){
+    if(event.key===tabStateKey()&&event.newValue===null&&state&&!state.completed){
+      state=null;currentQuestions=[];currentIndex=0;pendingSelections={};showSetup();setStatus('Mixed Practice data was reset in another tab.','bad');return
+    }
     if(event.key===HISTORY_KEY||event.key===DELETED_KEY){
       if(state&&isSetDeleted(state)){
         var deletedId=state.setId;removeActiveState(deletedId);state=null;currentQuestions=[];currentIndex=0;pendingSelections={};
