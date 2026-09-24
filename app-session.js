@@ -53,6 +53,28 @@
     return false;
   }
 
+  var ANDROID_APP_CONTEXT_KEY = "efp_android_app_context_v1";
+
+  function rememberAndroidAppContext() {
+    if (!isHomePath(location.pathname)) return;
+    var ua = "";
+    try { ua = navigator.userAgent || ""; } catch (_) {}
+
+    var packageReferrer = false;
+    try {
+      packageReferrer = /^android-app:\/\/com\.examfusionprep\.app(?:\/|$)/i.test(document.referrer || "");
+    } catch (_) {}
+
+    /* The Android TWA may launch the same manifest start_url used by other
+       installs. Android UA + a verified app/PWA launch marker is therefore
+       the durable signal; save it before navigating to any internal page,
+       where the android-app:// referrer is no longer available. */
+    if (!/Android/i.test(ua) || (!packageReferrer && !launchMarker())) return;
+    try { sessionStorage.setItem(ANDROID_APP_CONTEXT_KEY, "1"); } catch (_) {}
+  }
+
+  rememberAndroidAppContext();
+
   function relativeUrl() {
     return location.pathname + location.search + location.hash;
   }
