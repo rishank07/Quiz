@@ -383,3 +383,14 @@
     observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 })();
+
+/* EFP_APP_SESSION_LOADER — installed-app resume */
+(function () {
+  "use strict";
+  if (typeof document === "undefined" || document.getElementById("efp-app-session-script")) return;
+  var script = document.createElement("script");
+  script.id = "efp-app-session-script";
+  script.src = "/app-session.js?v=20260924quizresume1";
+  script.async = false;
+  (document.head || document.documentElement).appendChild(script);
+})();

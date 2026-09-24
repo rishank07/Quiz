@@ -4,7 +4,9 @@
 
   var SESSION_KEY = "efp_app_session_v1";
   var PENDING_KEY = "efp_app_resume_pending_v1";
+  var STATIC_QUIZ_KEY = "efp_app_static_quiz_v1";
   var MAX_RESUME_AGE = 24 * 60 * 60 * 1000;
+  var intentionalHome = false;
 
   // Original Practice answers are intentionally attempt-only. Remove data
   // written by the retired cross-refresh answer persistence feature.
@@ -36,7 +38,14 @@
     if (!isHomePath(location.pathname)) return false;
     var source = "";
     try { source = new URLSearchParams(location.search).get("source") || ""; } catch (_) {}
-    return /^(?:windows-pwa|pwa|android-pwa|app)$/i.test(source);
+    if (/^(?:windows-pwa|pwa|android-pwa|app)$/i.test(source)) return true;
+    // The Android package normally opens the plain root URL, without a source
+    // parameter. A relaunched standalone/WebView window is an app launch too.
+    try {
+      if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
+      if (navigator.standalone === true || /; wv\)/i.test(navigator.userAgent || "")) return true;
+    } catch (_) {}
+    return false;
   }
 
   function relativeUrl() {
@@ -64,7 +73,7 @@
 
   function writeSession(urlOverride) {
     try {
-      if (launchMarker()) return;
+      if (intentionalHome || launchMarker()) return;
       var url = sameOriginRelative(urlOverride || relativeUrl());
       if (!url) return;
       localStorage.setItem(SESSION_KEY, JSON.stringify({
@@ -77,6 +86,7 @@
   }
 
   function markIntentionalHome() {
+    intentionalHome = true;
     try {
       localStorage.setItem(SESSION_KEY, JSON.stringify({
         url: "/",
@@ -88,7 +98,8 @@
   }
 
   function readSession() {
-    var data = safeParse(localStorage.getItem(SESSION_KEY), null);
+    var data;
+    try { data = safeParse(localStorage.getItem(SESSION_KEY), null); } catch (_) { return null; }
     if (!data || typeof data !== "object") return null;
     var url = sameOriginRelative(data.url);
     if (!url || isHomePath(new URL(url, location.origin).pathname)) return null;
@@ -97,8 +108,16 @@
     return data;
   }
 
+  function isHistoryTraversal() {
+    try {
+      var entries = performance.getEntriesByType && performance.getEntriesByType("navigation");
+      return !!(entries && entries[0] && entries[0].type === "back_forward");
+    } catch (_) { return false; }
+  }
+
   function maybeResumeFreshLaunch() {
     if (!launchMarker()) return false;
+    if (isHistoryTraversal()) { markIntentionalHome(); return false; }
     var saved = readSession();
     if (!saved) return false;
     try { sessionStorage.setItem(PENDING_KEY, JSON.stringify(saved)); } catch (_) {}
@@ -107,7 +126,8 @@
   }
 
   function pendingForThisPage() {
-    var data = safeParse(sessionStorage.getItem(PENDING_KEY), null);
+    var data;
+    try { data = safeParse(sessionStorage.getItem(PENDING_KEY), null); } catch (_) { return null; }
     if (!data || typeof data !== "object") return null;
     var expected = sameOriginRelative(data.url);
     if (!expected) return null;
@@ -136,6 +156,75 @@
     else window.addEventListener("load", function () { setTimeout(attempt, 0); }, { once: true });
   }
 
+  // Legacy book quizzes use static radio cards and keep their scores only in
+  // JavaScript variables. Replaying checked cards through their own Check
+  // button reconstructs both the feedback and the score after an app restart.
+  function installStaticQuizTracking() {
+    var pending = pendingForThisPage();
+    function cards() { return document.querySelectorAll(".question-box[id] .options[data-correct]"); }
+    function questionText(card) {
+      var text = card.querySelector(".q-text-en, .q-text-hi");
+      return text ? text.textContent.replace(/\s+/g, " ").trim().slice(0, 160) : "";
+    }
+    function save() {
+      var options = cards();
+      if (!options.length) return;
+      var answers = {};
+      Array.prototype.forEach.call(options, function (group) {
+        var card = group.closest(".question-box[id]");
+        var selected = group.querySelector('input[type="radio"]:checked');
+        if (!card || !selected) return;
+        answers[card.id] = {
+          value: selected.value,
+          checked: card.classList.contains("answered"),
+          text: questionText(card)
+        };
+      });
+      try { localStorage.setItem(STATIC_QUIZ_KEY, JSON.stringify({
+        path: location.pathname, ts: Date.now(), answers: answers
+      })); } catch (_) {}
+    }
+    function restore() {
+      if (!pending || !cards().length) return;
+      try {
+        var saved = safeParse(localStorage.getItem(STATIC_QUIZ_KEY), null);
+        if (!saved || saved.path !== location.pathname ||
+            !Number.isFinite(Number(saved.ts)) || Date.now() - Number(saved.ts) > MAX_RESUME_AGE) return;
+        Object.keys(saved.answers || {}).forEach(function (id) {
+          var card = document.getElementById(id);
+          var answer = saved.answers[id];
+          if (!card || !answer || questionText(card) !== answer.text) return;
+          var group = card.querySelector(".options[data-correct]");
+          if (!group) return;
+          var selected = Array.prototype.find.call(group.querySelectorAll('input[type="radio"]'),
+            function (input) { return input.value === answer.value; });
+          if (!selected) return;
+          selected.checked = true;
+          if (answer.checked) {
+            var button = group.querySelector(".check-btn");
+            if (button && !button.disabled) button.click();
+          }
+        });
+      } catch (_) {}
+    }
+    function onReady() { restore(); save(); }
+    if (document.readyState === "complete") setTimeout(onReady, 0);
+    else window.addEventListener("load", onReady, { once: true });
+    document.addEventListener("change", function (event) {
+      if (event.target && event.target.matches &&
+          event.target.matches('.question-box .options[data-correct] input[type="radio"]')) save();
+    });
+    document.addEventListener("click", function (event) {
+      if (event.target && event.target.closest && event.target.closest(".question-box .options[data-correct] .check-btn")) {
+        setTimeout(save, 0);
+      }
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "hidden") save();
+    });
+    window.addEventListener("pagehide", save);
+  }
+
   function installHistoryTracking() {
     ["pushState", "replaceState"].forEach(function (name) {
       var original = history[name];
@@ -158,11 +247,18 @@
     });
     window.addEventListener("pagehide", function () { writeSession(); });
     window.addEventListener("beforeunload", function () { writeSession(); });
-    window.addEventListener("pageshow", function () { writeSession(); });
+    window.addEventListener("pageshow", function (event) {
+      if (event.persisted && isHomePath(location.pathname)) markIntentionalHome();
+      else writeSession();
+    });
 
     document.addEventListener("click", function (event) {
-      var target = event.target && event.target.closest ? event.target.closest("#efp-home-button") : null;
-      if (target) markIntentionalHome();
+      var target = event.target && event.target.closest ? event.target.closest("a[href]") : null;
+      if (!target || event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.button > 0) return;
+      try {
+        var url = new URL(target.href, location.href);
+        if (url.origin === location.origin && isHomePath(url.pathname)) markIntentionalHome();
+      } catch (_) {}
     }, true);
   }
 
@@ -170,6 +266,7 @@
 
   installHistoryTracking();
   installLifecycleTracking();
+  installStaticQuizTracking();
   restorePendingScroll();
   writeSession();
 
