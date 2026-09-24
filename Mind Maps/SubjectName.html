@@ -1947,7 +1947,8 @@
 
     searchInput.addEventListener("input", function () {
       searchClear.classList.toggle("show", this.value.length > 0);
-      const keyword = this.value.trim().toLowerCase();
+      const keyword = typeof efNormalizeSearchText === "function"
+        ? efNormalizeSearchText(this.value) : this.value.trim().toLowerCase().replace(/\s+/g, " ");
 
       // अगर सर्च बॉक्स खाली हो गया है, तो सब कुछ क्लोज कर दो
       if (keyword === "") {
@@ -1972,7 +1973,9 @@
 
       // लिंक को फ़िल्टर करो
       document.querySelectorAll(".submenu a").forEach(link => {
-        if (link.innerText.toLowerCase().indexOf(keyword) > -1) {
+        if ((typeof efTextMatches === "function"
+          ? efTextMatches(keyword, link.innerText, false)
+          : link.innerText.toLowerCase().replace(/\s+/g, " ").indexOf(keyword) > -1)) {
           link.style.display = "flex";
         } else {
           link.style.display = "none";
@@ -2030,7 +2033,7 @@
         contentLabelEl.classList.remove("show");
         var q = qRaw.trim();
         if (q.length < 2 || !ready()) return;
-        var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+        var terms = typeof efSearchTerms === "function" ? efSearchTerms(q) : q.toLowerCase().split(/\s+/).filter(Boolean);
         // efSnippetSearch (search-snippets-mindmaps.js) shows a real highlighted excerpt
         // from inside the mind map page — the same way Current Affairs / Bihar Special
         // already do — instead of just a bare chapter name. excludeTitleMatches skips
@@ -2081,7 +2084,7 @@
 
       var deepClient = (typeof efCreateSearchWorker === "function")
         ? efCreateSearchWorker({
-            workerUrl: new URL(REL_ROOT + "search-worker.js?v=20260901a", document.baseURI).href,
+            workerUrl: new URL(REL_ROOT + "search-worker.js?v=20260924casespace1", document.baseURI).href,
             logicUrl: new URL(REL_ROOT + "search-logic.js?v=20260901a", document.baseURI).href,
             indexUrl: new URL(REL_ROOT + "search-snippets-mindmaps.js", document.baseURI).href,
             mode: "snippet",
