@@ -856,17 +856,13 @@
       return;
     }
 
-    /* Android app rule: the floating/global Back button always exits
-       Original Practice straight to ExamFusion Home. Keep Android/system Back
-       untouched; this applies only to our own #efp-app-back-button. */
-    if (isOriginalPracticePage() && isInstalledAndroidAppContext()) {
+    /* Original Practice global Back is intentionally simple: always exit to
+       ExamFusion Home. Do not involve app detection, referrer, browser history
+       or the in-page quiz/chapter hierarchy. */
+    if (isOriginalPracticePage()) {
       consumeBackEvent(event);
       try { sessionStorage.removeItem("efp_logical_back_expected_path"); } catch (_) {}
-      window.location.assign("/index.html");
-      return;
-    }
-
-    if (useOriginalPracticeInternalBack(event)) {
+      window.location.assign("/");
       return;
     }
 
