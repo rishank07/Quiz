@@ -1,5 +1,5 @@
-// v122 Original Practice Back marks Home exit before navigation
-const CACHE_VERSION = "efp-pwa-2026-09-24-v122-op-back-session-exit";
+// v123 Preserve Original Practice session exit and Crux PDF history
+const CACHE_VERSION = "efp-pwa-2026-09-24-v123-crux-back";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924opbacksession1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -24,10 +24,10 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/owner-debug.js",
-  "/home-nav.js?v=20260924opbacksession1",
+  "/home-nav.js?v=20260924cruxback1",
   "/app-session.js?v=20260924opbacksession1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260924opbackdirect1",
+  "/back-nav.js?v=20260924cruxback1",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
@@ -46,10 +46,9 @@ const APP_SHELL = [
   "/Crux-Tricks/viewer.html",
   "/Crux-Tricks/my-pages.html",
   "/Crux-Tricks/crux-manifest.js",
-  "/Crux-Tricks/crux-search-route.js",
-  "/Crux-Tricks/crux-restore-flash.js?v=20260920noflash1",
+  "/Crux-Tricks/crux-search-route.js?v=20260924cruxback1",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260924casespace1",
+  "/Crux-Tricks/crux-tricks.js?v=20260924cruxback1",
   "/Crux-Tricks/viewer.css",
   "/Crux-Tricks/viewer-v2.js?v=20260923mathsstrict1",
 ];
@@ -324,7 +323,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/Original%20Practice/original-practice.css" ||
       url.pathname === "/Original%20Practice/original-practice.js" ||
       url.pathname === "/Original%20Practice/english-practice.js" ||
-      url.pathname === "/Crux-Tricks/crux-restore-flash.js" ||
+      url.pathname === "/Crux-Tricks/crux-search-route.js" ||
       url.pathname === "/Crux-Tricks/crux-tricks.js" ||
       url.pathname === "/Crux-Tricks/viewer-v2.js") {
     event.respondWith(freshCoreAsset(request));

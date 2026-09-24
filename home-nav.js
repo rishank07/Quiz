@@ -150,7 +150,10 @@
   }
 
   function navigateCruxBack() {
-    if (window.history.length > 1 && hasSameOriginReferrer()) {
+    var source = new URLSearchParams(window.location.search).get("from");
+    var openedFromCrux = isCruxTricksPage() &&
+      (source === "crux-index" || source === "crux-page");
+    if (window.history.length > 1 && (openedFromCrux || hasSameOriginReferrer())) {
       window.history.back();
       return;
     }
