@@ -1,7 +1,7 @@
-// v109 Resume the active quiz after an installed app is recreated
-const CACHE_VERSION = "efp-pwa-2026-09-24-v109-app-quiz-resume";
+// v110 Harden Android quiz resume before process recreation
+const CACHE_VERSION = "efp-pwa-2026-09-24-v110-app-quiz-resume-hardening";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924quizresume1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924quizresume2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -24,8 +24,8 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/owner-debug.js",
-  "/home-nav.js?v=20260924quizresume1",
-  "/app-session.js?v=20260924quizresume1",
+  "/home-nav.js?v=20260924quizresume2",
+  "/app-session.js?v=20260924quizresume2",
   "/back-parent-map.js",
   "/back-nav.js?v=20260920allsearchback1",
   "/search-logic.js",
