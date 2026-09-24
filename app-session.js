@@ -501,11 +501,10 @@
       window.setTimeout(function () { try { stay.focus(); } catch (_) {} }, 0);
     }
 
-    // Original Practice creates its own global Back button and registers a
-    // document capture handler before this script. Handle that one control on
-    // window capture so all of its pages take the same route, including the
-    // landing page's inline Back handler. Mark the exit before navigating:
-    // otherwise the Android app's launch resume immediately reopens Practice.
+    // Original Practice registers its document capture handler before this
+    // script. Handle the visible Back on window capture so confirmation can
+    // return a quiz to its chapters. Mark only a real site Home exit as such;
+    // otherwise the Android app's launch resume reopens Practice immediately.
     window.addEventListener("click", function (event) {
       var path = normalizedPath(location.pathname).toLowerCase();
       if (path.indexOf("/original practice/") !== 0) return;
@@ -517,15 +516,37 @@
       event.stopPropagation();
       if (event.stopImmediatePropagation) event.stopImmediatePropagation();
 
-      function leavePractice() {
+      function leavePractice(confirmedQuizExit) {
         approveOneNavigation();
+        if (confirmedQuizExit) {
+          try {
+            if (typeof state !== "undefined" && state && state.screen === "quiz") {
+              if (state.subject && typeof goToChapters === "function") {
+                goToChapters(state.subject);
+              } else if (typeof goChapters === "function") {
+                goChapters();
+              } else if (typeof goHome === "function") {
+                goHome();
+              } else {
+                throw new Error("No Original Practice quiz parent");
+              }
+              disarm();
+              try { window.scrollTo(0, 0); } catch (_) {}
+              return;
+            }
+          } catch (_) {}
+          // Standalone Original Practice quizzes have no in-page chapters.
+          // Their parent is the Original Practice landing page.
+          location.assign("/Original%20Practice/index.html");
+          return;
+        }
         markIntentionalHome();
         try { sessionStorage.removeItem("efp_logical_back_expected_path"); } catch (_) {}
         location.assign("/");
       }
 
-      if (shouldWarn()) showExitModal(leavePractice);
-      else leavePractice();
+      if (shouldWarn()) showExitModal(function () { leavePractice(true); });
+      else leavePractice(false);
     }, true);
 
     document.addEventListener("click", function (event) {
