@@ -1581,7 +1581,7 @@
       const linkEl = event.currentTarget;
 
       // Ignore if opening in a new tab (Ctrl/Cmd + Click)
-      if (event.ctrlKey || event.metaKey || linkEl.target === "_blank") {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.button > 0 || linkEl.target === "_blank") {
         return;
       }
 
@@ -1598,9 +1598,7 @@
       linkEl.style.opacity = "0.7";
       linkEl.style.pointerEvents = "none"; // Prevent multiple clicks
 
-      setTimeout(function () {
-        window.location.href = link;
-      }, 500);
+      window.location.href = link;
     }
 
     // Reset state when user navigates back to this page
@@ -1644,6 +1642,15 @@
       // The deferred full-text bridge uses the same marker for every source.
       window.efpHomeSearchUrl = homeSearchUrl;
 
+      // Share a single worker slot with the deferred book search. On Android
+      // this avoids parsing two large indexes in separate workers at once.
+      var homeWorkerQueue = Promise.resolve();
+      window.efpWithHomeSearchWorker = function (run) {
+        var job = homeWorkerQueue.then(run, run);
+        homeWorkerQueue = job.catch(function () {});
+        return job;
+      };
+
       const SECTION_ICON = {
         "Books": "fa-book",
         "Bihar Special": "fa-location-dot",
@@ -1679,7 +1686,7 @@
             loadScriptOnce("search-index-main.js?v=20260915staticgk1", function () {
               return typeof SEARCH_INDEX !== "undefined";
             }),
-            loadScriptOnce("search-logic.js?v=20260924smartsearch1", function () {
+            loadScriptOnce("search-logic.js?v=20260924androidperf1", function () {
               return typeof efSearchRank === "function";
             })
           ]).then(function () {
@@ -1702,45 +1709,50 @@
         originalPracticeSearchClients = [
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href,
             indexUrl: new URL("search-snippets-original-practice.js?v=20260904v8", document.baseURI).href,
             mode: "snippet",
+            workerOnly: true,
             globalName: "EF_ORIGINAL_PRACTICE_SNIPPET_INDEX",
             sectionPrefix: "./Original%20Practice/",
             limit: 24
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href,
             indexUrl: new URL("search-snippets-economics-original-practice.js?v=20260908econ1", document.baseURI).href,
             mode: "snippet",
+            workerOnly: true,
             globalName: "EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX",
             sectionPrefix: "./Original%20Practice/",
             limit: 24
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href,
             indexUrl: new URL("search-snippets-ecology-original-practice.js?v=20260912ecology1", document.baseURI).href,
             mode: "snippet",
+            workerOnly: true,
             globalName: "EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX",
             sectionPrefix: "./Original%20Practice/",
             limit: 24
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href,
             indexUrl: new URL("search-snippets-english-original-practice.js?v=20260913english1", document.baseURI).href,
             mode: "snippet",
+            workerOnly: true,
             globalName: "EF_ENGLISH_ORIGINAL_PRACTICE_SNIPPET_INDEX",
             sectionPrefix: "./Original%20Practice/",
             limit: 24
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href,
             indexUrl: new URL("search-snippets-static-gk-original-practice.js?v=20260915staticgk1", document.baseURI).href,
             mode: "snippet",
+            workerOnly: true,
             globalName: "EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX",
             sectionPrefix: "./Original%20Practice/",
             limit: 24
@@ -1831,6 +1843,7 @@
           li.appendChild(a); menuList.appendChild(li);
         });
         menuList.classList.add("has-deep-results");
+        noResults.classList.remove("show");
         return rendered.length;
       }
 
@@ -1844,36 +1857,40 @@
         cruxTricksSearchClients = [
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20260905cruxroute1", document.baseURI).href,
             mode: "snippet",
+            workerOnly: true,
             globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
             sectionPrefix: "./Crux-Tricks/",
             limit: 24
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-economics-crux.js?v=20260908econcrux1", document.baseURI).href,
             mode: "snippet",
+            workerOnly: true,
             globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
             sectionPrefix: "./Crux-Tricks/",
             limit: 24
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-original-geo-economics-tricks.js?v=20260915staticgktricks1", document.baseURI).href,
             mode: "snippet",
+            workerOnly: true,
             globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
             sectionPrefix: "./Crux-Tricks/",
             limit: 24
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-maths-ocr.js?v=20260923mathsstrict1", document.baseURI).href,
             mode: "snippet",
+            workerOnly: true,
             globalName: "EF_CRUX_TRICKS_SNIPPET_INDEX",
             sectionPrefix: "./Crux-Tricks/",
             strictOcr: true,
@@ -1980,12 +1997,13 @@
         if (!rendered.length) return 0;
         var groupLi = document.createElement("li");
         groupLi.setAttribute("data-deepresult", "");
+        groupLi.setAttribute("data-ctfullresult", "");
         var groupTitle = document.createElement("div");
         groupTitle.className = "group-title";
         groupTitle.innerHTML = '<i class="fa-solid fa-lightbulb"></i> Crux & Memory Tricks — Page Matches (' + rendered.length + (hits.length > rendered.length ? "+" : "") + ")";
         groupLi.appendChild(groupTitle); menuList.appendChild(groupLi);
         rendered.forEach(function (item) {
-          var li = document.createElement("li"); li.setAttribute("data-deepresult", "");
+          var li = document.createElement("li"); li.setAttribute("data-deepresult", ""); li.setAttribute("data-ctfullresult", "");
           var a = document.createElement("a"); a.href = homeSearchUrl(item.decoded.url); a.setAttribute("onclick", "openPage(event)");
           var icon = document.createElement("i"); icon.className = "fa-solid fa-lightbulb menu-icon";
           var span = document.createElement("span"); span.className = "link-text ef-op-global-result";
@@ -1995,6 +2013,7 @@
           a.appendChild(icon); a.appendChild(span); a.appendChild(chevron); li.appendChild(a); menuList.appendChild(li);
         });
         menuList.classList.add("has-deep-results");
+        noResults.classList.remove("show");
         return rendered.length;
       }
 
@@ -2072,10 +2091,43 @@
 
       let deepSearchTimer = null;
       let deepSearchSequence = 0;
+      function stopExtraSearchClients() {
+        [originalPracticeSearchClients, cruxTricksSearchClients].forEach(function (clients) {
+          (clients || []).forEach(function (client) { client.terminate(); });
+        });
+        originalPracticeSearchClients = null;
+        cruxTricksSearchClients = null;
+      }
+
+      // Run one index at a time and release it after use. The title results
+      // remain clickable while question and PDF matches arrive progressively.
+      function searchExtraClients(clients, q, sequence, marker, render) {
+        var groups = [];
+        var count = 0;
+        return clients.reduce(function (previous, client) {
+          return previous.then(function () {
+            if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
+            return window.efpWithHomeSearchWorker(function () {
+              if (box.value.trim() !== q || sequence !== deepSearchSequence) return [];
+              return client.search(q).catch(function () { return []; }).then(function (hits) {
+                client.terminate();
+                return hits;
+              });
+            }).then(function (hits) {
+              if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
+              groups.push(hits);
+              menuList.querySelectorAll("li[" + marker + "]").forEach(function (li) { li.remove(); });
+              count = render(q, mergeOriginalPracticeHits(groups, 24));
+            });
+          });
+        }, Promise.resolve()).then(function () { return count; });
+      }
+
       box.addEventListener("input", function (event) {
         const q = box.value.trim();
         const sequence = ++deepSearchSequence;
         clearTimeout(deepSearchTimer);
+        stopExtraSearchClients();
         let visible = 0;
 
         items.forEach(function (li) {
@@ -2113,27 +2165,17 @@
             const deepCount = ready ? renderDeepResults(q) : 0;
             const opClients = ready ? getOriginalPracticeSearchClients() : [];
             const ctClients = ready ? getCruxTricksSearchClients() : [];
-            const jobs = [];
-            if (opClients.length) jobs.push(Promise.all(opClients.map(function(client){
-              return client.search(q).catch(function(){ return []; });
-            })).then(function(groups){
-              if (box.value.trim() !== q || sequence !== deepSearchSequence) return 0;
-              return renderOriginalPracticeFullResults(q, mergeOriginalPracticeHits(groups, 24));
-            }).catch(function(){ originalPracticeSearchClients = null; return 0; }));
-            if (ctClients.length) jobs.push(Promise.all(ctClients.map(function(client){
-              return client.search(q).catch(function(){ return []; });
-            })).then(function(groups){
-              if (box.value.trim() !== q || sequence !== deepSearchSequence) return 0;
-              return renderCruxTricksFullResults(q, mergeOriginalPracticeHits(groups, 24));
-            }).catch(function(){ cruxTricksSearchClients = null; return 0; }));
-            if (!jobs.length) {
+            if (!opClients.length && !ctClients.length) {
               noResults.classList.toggle("show", visible === 0 && deepCount === 0);
               reportSearchState("core-done", q);
               return;
             }
-            Promise.all(jobs).then(function(counts){
+            searchExtraClients(opClients, q, sequence, "data-opfullresult", renderOriginalPracticeFullResults)
+              .then(function (opCount) {
+                return searchExtraClients(ctClients, q, sequence, "data-ctfullresult", renderCruxTricksFullResults)
+                  .then(function (ctCount) { return opCount + ctCount; });
+              }).then(function(extraCount){
               if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
-              var extraCount = counts.reduce(function(a,b){ return a + (b || 0); }, 0);
               noResults.classList.toggle("show", visible === 0 && deepCount === 0 && extraCount === 0);
               reportSearchState("core-done", q);
             });
@@ -2143,6 +2185,7 @@
       window.addEventListener("pagehide", function () {
         clearTimeout(deepSearchTimer);
         ++deepSearchSequence;
+        stopExtraSearchClients();
       });
     })();
   </script>
@@ -2154,7 +2197,7 @@
   </style>
   <!-- ExamFusion homepage full-text bridge -->
   <script src="./homepage-search-ui.js?v=20260924instantreturn1" defer></script>
-  <script src="./homepage-fulltext-search.js?v=20260924instantreturn1" defer></script>
+  <script src="./homepage-fulltext-search.js?v=20260924androidperf1" defer></script>
   <!-- ExamFusion landing counts: start -->
   <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5036,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":12174,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":46414,"unit":"Questions"},"./PYQ/index.html":{"total":2278,"unit":"PYQs"},"./Crux-Tricks/index.html":{"total":591,"unit":"PDFs"}}</script>
   <style>

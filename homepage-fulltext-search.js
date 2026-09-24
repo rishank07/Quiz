@@ -14,12 +14,11 @@
   if (!box || !menuList) return;
 
   var WORKER_URL = new URL("search-worker.js?v=20260924casespace1", document.baseURI).href;
-  var LOGIC_URL = new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href;
+  var LOGIC_URL = new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href;
 
   // Search the large indexes sequentially so a single query never makes
-  // several 10–30 MB indexes parse at the same instant. Workers are cancelled
-  // when the query changes and released after a short idle period so mobile
-  // WebViews do not retain every full-text index in memory indefinitely.
+  // several 10–30 MB indexes parse at the same instant. Share the homepage
+  // worker slot and release each index as soon as its results arrive.
   var SOURCES = [
     {
       id: "pinnacle",
@@ -116,7 +115,6 @@
   var clients = {};
   var disabled = {};
   var timer = null;
-  var cleanupTimer = null;
   var sequence = 0;
 
   function escapeHtml(value) {
@@ -190,6 +188,7 @@
   function createClient(source) {
     var worker = null;
     var startPromise = null;
+    var cancelStartup = null;
     var nextId = 1;
     var latestToken = 0;
     var pending = {};
@@ -226,10 +225,19 @@
         var startupTimer = setTimeout(function () {
           if (settled) return;
           settled = true;
+          cancelStartup = null;
           try { worker.terminate(); } catch (_) {}
           worker = null;
           reject(new Error("Search worker startup timed out"));
         }, 15000);
+
+        cancelStartup = function () {
+          if (settled) return;
+          settled = true;
+          clearTimeout(startupTimer);
+          cancelStartup = null;
+          reject(cancelledError());
+        };
 
         worker.onmessage = function (event) {
           var message = event.data || {};
@@ -237,6 +245,7 @@
             if (!settled) {
               settled = true;
               clearTimeout(startupTimer);
+              cancelStartup = null;
               resolve(true);
             }
             return;
@@ -254,6 +263,7 @@
             } else if (!settled) {
               settled = true;
               clearTimeout(startupTimer);
+              cancelStartup = null;
               reject(error);
             }
           }
@@ -264,6 +274,7 @@
           if (!settled) {
             settled = true;
             clearTimeout(startupTimer);
+            cancelStartup = null;
             reject(error);
           }
           failAll(error);
@@ -299,6 +310,7 @@
 
     function terminate() {
       latestToken++;
+      if (cancelStartup) cancelStartup();
       failAll(cancelledError());
       if (worker) {
         try { worker.terminate(); } catch (_) {}
@@ -317,21 +329,12 @@
   }
 
   function disposeWorkers() {
-    clearTimeout(cleanupTimer);
-    cleanupTimer = null;
     Object.keys(clients).forEach(function (id) {
       if (clients[id] && typeof clients[id].terminate === "function") {
         clients[id].terminate();
       }
     });
     clients = {};
-  }
-
-  function scheduleWorkerCleanup(mySequence) {
-    clearTimeout(cleanupTimer);
-    cleanupTimer = setTimeout(function () {
-      if (mySequence === sequence) disposeWorkers();
-    }, 12000);
   }
 
   function clearOwnResults() {
@@ -425,7 +428,6 @@
     function nextSource() {
       if (box.value.trim() !== query || mySequence !== sequence) return;
       if (index >= SOURCES.length) {
-        scheduleWorkerCleanup(mySequence);
         try {
           window.dispatchEvent(new CustomEvent("efp-search-state", {
             detail: { phase: "fulltext-done", query: query }
@@ -439,7 +441,21 @@
         nextSource();
         return;
       }
-      client.search(query).then(function (hits) {
+      var search = function () {
+        if (box.value.trim() !== query || mySequence !== sequence) return [];
+        return client.search(query).then(function (hits) {
+          client.terminate();
+          if (clients[source.id] === client) clients[source.id] = null;
+          return hits;
+        }, function (error) {
+          client.terminate();
+          if (clients[source.id] === client) clients[source.id] = null;
+          throw error;
+        });
+      };
+      var job = typeof window.efpWithHomeSearchWorker === "function"
+        ? window.efpWithHomeSearchWorker(search) : Promise.resolve().then(search);
+      job.then(function (hits) {
         if (box.value.trim() !== query || mySequence !== sequence) return;
         appendHits(source, query, hits, seen);
         nextSource();

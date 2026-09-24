@@ -753,6 +753,7 @@ function efCreateSearchWorker(options) {
   options = options || {};
   var worker = null;
   var workerStartPromise = null;
+  var cancelStartup = null;
   var workerFailed = false;
   var nextId = 1;
   var latestSearchToken = 0;
@@ -790,16 +791,25 @@ function efCreateSearchWorker(options) {
       var timeout = setTimeout(function () {
         if (settled) return;
         settled = true;
+        cancelStartup = null;
         workerFailed = true;
         try { worker.terminate(); } catch (_) {}
         worker = null;
         reject(new Error("Search worker startup timed out"));
       }, 12000);
 
+      cancelStartup = function () {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        cancelStartup = null;
+        reject(new Error("Search worker terminated"));
+      };
+
       worker.onmessage = function (event) {
         var message = event.data || {};
         if (message.type === "ready") {
-          if (!settled) { settled = true; clearTimeout(timeout); resolve(true); }
+          if (!settled) { settled = true; clearTimeout(timeout); cancelStartup = null; resolve(true); }
           return;
         }
         if (message.type === "result" && pending[message.id]) {
@@ -813,7 +823,7 @@ function efCreateSearchWorker(options) {
             pending[message.id].reject(error);
             delete pending[message.id];
           } else if (!settled) {
-            settled = true; clearTimeout(timeout); workerFailed = true; reject(error);
+            settled = true; clearTimeout(timeout); cancelStartup = null; workerFailed = true; reject(error);
           }
         }
       };
@@ -821,7 +831,7 @@ function efCreateSearchWorker(options) {
       worker.onerror = function () {
         var error = new Error("Search worker failed to load");
         workerFailed = true;
-        if (!settled) { settled = true; clearTimeout(timeout); reject(error); }
+        if (!settled) { settled = true; clearTimeout(timeout); cancelStartup = null; reject(error); }
         rejectPending(error);
       };
 
@@ -858,6 +868,9 @@ function efCreateSearchWorker(options) {
   function search(query) {
     var token = ++latestSearchToken;
     if (!canUseWorker() || workerFailed) {
+      // Homepage indexes can exceed 30 MB. If a WebView cannot start a
+      // worker, injecting those indexes into the page freezes navigation.
+      if (options.workerOnly) return Promise.resolve([]);
       return fallbackSearch(query).then(function (rows) { return token === latestSearchToken ? rows : []; });
     }
     return startWorker().then(function () {
@@ -869,21 +882,30 @@ function efCreateSearchWorker(options) {
       });
     }).catch(function () {
       workerFailed = true;
+      if (options.workerOnly) return [];
       return fallbackSearch(query).then(function (rows) { return token === latestSearchToken ? rows : []; });
     });
   }
 
   function warm() {
     if (canUseWorker() && !workerFailed) {
-      return startWorker().catch(function () { workerFailed = true; return getFallbackRecords().then(function(){ return true; }); });
+      return startWorker().catch(function () {
+        workerFailed = true;
+        if (options.workerOnly) return false;
+        return getFallbackRecords().then(function(){ return true; });
+      });
     }
+    if (options.workerOnly) return Promise.resolve(false);
     return getFallbackRecords().then(function(){ return true; });
   }
 
   function terminate() {
+    ++latestSearchToken;
+    if (cancelStartup) cancelStartup();
     if (worker) worker.terminate();
     rejectPending(new Error("Search worker terminated"));
     worker = null;
+    workerStartPromise = null;
   }
 
   // Always return a client when an index is configured. This prevents UI code

@@ -1,5 +1,5 @@
-// v107 Restore homepage search results without rerunning search 20260924
-const CACHE_VERSION = "efp-pwa-2026-09-24-v107-home-search-return";
+// v108 Keep Android homepage searches responsive when large indexes load
+const CACHE_VERSION = "efp-pwa-2026-09-24-v108-home-search-performance";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -31,7 +31,7 @@ const APP_SHELL = [
   "/search-worker.js",
   "/search-index-main.js",
   "/homepage-search-ui.js?v=20260924instantreturn1",
-  "/homepage-fulltext-search.js?v=20260924instantreturn1",
+  "/homepage-fulltext-search.js?v=20260924androidperf1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
