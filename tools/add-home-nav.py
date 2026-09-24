@@ -60,7 +60,7 @@ def inject(path: Path, root: Path) -> bool:
     # script tag before deciding whether a missing tag must be inserted.
     changed = False
     back_nav_pattern = re.compile(
-        r'(<script\b[^>]*\bsrc=["\'])/back-nav\.js(?:\?[^"\']*)?(["\'][^>]*></script>)',
+        r'(<script\b[^>]*\bsrc=["\'])/back-nav\.js(?:\?[^"\']*)?(["\'][^>]*>\s*</script>)',
         re.IGNORECASE,
     )
     normalized_text, replacements = back_nav_pattern.subn(
