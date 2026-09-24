@@ -52,6 +52,12 @@ def inject(path: Path, root: Path) -> bool:
         raise RuntimeError(f"Non-UTF-8 HTML file: {path}") from exc
 
     rel = path.relative_to(root)
+    # Crux pages need the current Back handler even after the counts workflow
+    # rewrites navigation tags. Other sections keep their existing cache URL.
+    back_nav_version = (
+        "20260924cruxback1" if rel.parts[0] == "Crux-Tricks"
+        else "20260924bookhier3"
+    )
 
     # Keep the shared Back runtime on one fresh URL across the whole site.
     # Existing pages may already contain /back-nav.js with an older query
@@ -64,14 +70,17 @@ def inject(path: Path, root: Path) -> bool:
         re.IGNORECASE,
     )
     normalized_text, replacements = back_nav_pattern.subn(
-        r'\1/back-nav.js?v=20260924bookhier3\2',
+        rf'\1/back-nav.js?v={back_nav_version}\2',
         text,
     )
     if replacements and normalized_text != text:
         text = normalized_text
         changed = True
 
-    head_blocks = [tag for marker, tag in SCRIPT_SPECS if marker not in text]
+    head_blocks = [
+        tag.replace("20260924bookhier3", back_nav_version)
+        for marker, tag in SCRIPT_SPECS if marker not in text
+    ]
 
     if rel == MATHS_SPEED_BOOSTER_FILE and MATHS_FIT_MARKER not in text:
         head_blocks.insert(0, MATHS_FIT_TAG)
