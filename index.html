@@ -2072,7 +2072,7 @@
 
       let deepSearchTimer = null;
       let deepSearchSequence = 0;
-      box.addEventListener("input", function () {
+      box.addEventListener("input", function (event) {
         const q = box.value.trim();
         const sequence = ++deepSearchSequence;
         clearTimeout(deepSearchTimer);
@@ -2092,6 +2092,11 @@
         });
 
         groupHeads.forEach(function (li) { li.classList.toggle("hidden", q.length > 0); });
+
+        if (event.detail && event.detail.efpRestoredSearch) {
+          noResults.classList.remove("show");
+          return;
+        }
 
         if (q.length < 2) {
           clearDeepResults();
@@ -2135,6 +2140,10 @@
           });
         }, 180);
       });
+      window.addEventListener("pagehide", function () {
+        clearTimeout(deepSearchTimer);
+        ++deepSearchSequence;
+      });
     })();
   </script>
   <style id="efOriginalPracticeGlobalSearchStyles">
@@ -2144,8 +2153,8 @@
     .ef-op-search-snippet mark{background:#ffe28a;color:inherit;padding:0 1px;border-radius:2px}
   </style>
   <!-- ExamFusion homepage full-text bridge -->
-  <script src="./homepage-search-ui.js?v=20260924smartsearch1" defer></script>
-  <script src="./homepage-fulltext-search.js?v=20260924blackbook1" defer></script>
+  <script src="./homepage-search-ui.js?v=20260924instantreturn1" defer></script>
+  <script src="./homepage-fulltext-search.js?v=20260924instantreturn1" defer></script>
   <!-- ExamFusion landing counts: start -->
   <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5036,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":12174,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":46414,"unit":"Questions"},"./PYQ/index.html":{"total":2278,"unit":"PYQs"},"./Crux-Tricks/index.html":{"total":591,"unit":"PDFs"}}</script>
   <style>

@@ -69,6 +69,7 @@
   var lastAnalyticsQuery = "";
   var scheduled = false;
   var SEARCH_STATE_KEY = "efp_home_search_query_v1";
+  var SEARCH_RESULTS_KEY = "efp_home_search_results_v1";
 
   function readSavedQuery() {
     try { return localStorage.getItem(SEARCH_STATE_KEY) || ""; }
@@ -82,11 +83,59 @@
     } catch (_) {}
   }
 
+  function clearSavedResults() {
+    try { sessionStorage.removeItem(SEARCH_RESULTS_KEY); } catch (_) {}
+  }
+
+  function saveResults() {
+    if (currentQuery.length < 2) return;
+    try {
+      var rows = Array.prototype.slice.call(menuList.querySelectorAll("li[data-deepresult]"));
+      var html = rows.map(function (row) {
+        var copy = row.cloneNode(true);
+        copy.querySelectorAll(".link-text[data-original-html]").forEach(function (span) {
+          span.innerHTML = span.dataset.originalHtml;
+          delete span.dataset.originalHtml;
+        });
+        copy.querySelectorAll("a[style]").forEach(function (link) {
+          if (link.style.pointerEvents === "none") link.style.pointerEvents = "";
+          if (link.style.opacity === "0.7") link.style.opacity = "";
+        });
+        return copy.outerHTML;
+      }).join("");
+      sessionStorage.setItem(SEARCH_RESULTS_KEY, JSON.stringify({
+        query: currentQuery,
+        html: html,
+        filter: activeFilter,
+        pages: extraPages,
+        scrollTop: menuList.scrollTop
+      }));
+    } catch (_) { clearSavedResults(); }
+  }
+
+  function readSavedResults(query) {
+    try {
+      var saved = JSON.parse(sessionStorage.getItem(SEARCH_RESULTS_KEY) || "null");
+      return saved && saved.query === query && typeof saved.html === "string" ? saved : null;
+    } catch (_) { return null; }
+  }
+
   function restoreSavedQuery() {
     var saved = readSavedQuery().trim();
-    if (!saved || box.value.trim()) return;
+    if (!saved || (box.value.trim() && currentQuery === box.value.trim())) return;
+    var snapshot = readSavedResults(saved);
     box.value = saved;
-    box.dispatchEvent(new Event("input", { bubbles: true }));
+    if (snapshot && saved.length >= 2) {
+      menuList.insertAdjacentHTML("beforeend", snapshot.html);
+      if (snapshot.html) menuList.classList.add("has-deep-results");
+      box.dispatchEvent(new CustomEvent("input", {
+        bubbles: true,
+        detail: { efpRestoredSearch: true, filter: snapshot.filter, pages: snapshot.pages }
+      }));
+      menuList.scrollTop = snapshot.scrollTop || 0;
+    } else {
+      box.dispatchEvent(new Event("input", { bubbles: true }));
+    }
   }
 
   function normalized(value) {
@@ -381,12 +430,14 @@
     }, 80);
   }
 
-  box.addEventListener("input", function () {
+  box.addEventListener("input", function (event) {
     var query = box.value.trim();
+    var restored = !!(event.detail && event.detail.efpRestoredSearch);
+    if (!restored) clearSavedResults();
     saveQuery(query);
     currentQuery = query;
-    activeFilter = "all";
-    extraPages = 0;
+    activeFilter = restored && CATEGORY_META[event.detail.filter] ? event.detail.filter : "all";
+    extraPages = restored ? Math.max(0, Number(event.detail.pages) || 0) : 0;
     clearTimeout(completionTimer);
     clearTimeout(analyticsTimer);
     if (query.length < 2) {
@@ -396,6 +447,15 @@
       moreButton.hidden = true;
       menuList.classList.remove("ef-smart-search-active", "ef-search-loading");
       restoreNoResults();
+      return;
+    }
+    if (restored) {
+      isSearching = false;
+      tools.hidden = false;
+      tools.classList.remove("is-searching");
+      menuList.classList.add("ef-smart-search-active");
+      menuList.classList.remove("ef-search-loading");
+      reconcile();
       return;
     }
     isSearching = true;
@@ -439,6 +499,22 @@
     });
   });
 
+  // Capture before openPage changes the clicked card into a loading label.
+  menuList.addEventListener("click", function (event) {
+    if (event.target.closest("a[href]")) saveResults();
+  }, true);
+
+  window.addEventListener("pagehide", function () {
+    if (isSearching) {
+      isSearching = false;
+      clearTimeout(completionTimer);
+      tools.classList.remove("is-searching");
+      menuList.classList.remove("ef-search-loading");
+      setStatus(totalResultCount());
+    }
+    saveResults();
+  });
+
   window.addEventListener("efp-search-state", function (event) {
     var detail = event.detail || {};
     if (!detail.query || detail.query !== currentQuery) return;
@@ -454,6 +530,7 @@
   });
 
   window.addEventListener("pageshow", function () {
+    if (box.value.trim() && isSearching) finishSearch(currentQuery);
     if (!box.value.trim()) {
       if (readSavedQuery().trim()) {
         setTimeout(restoreSavedQuery, 0);
@@ -465,9 +542,9 @@
     }
   });
 
-  // Returning through browser/app Back or tapping a Home button can create a
-  // fresh homepage document. Re-run the saved query only after all deferred
-  // search bridges are installed, so the complete result set is rebuilt.
+  // A fresh homepage document restores the saved rows without requesting the
+  // same search again. When no snapshot exists, the usual search still runs.
+  if (readSavedResults(readSavedQuery().trim())) restoreSavedQuery();
   if (document.readyState === "complete") {
     setTimeout(restoreSavedQuery, 0);
   } else {
