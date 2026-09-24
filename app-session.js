@@ -5,6 +5,8 @@
   var SESSION_KEY = "efp_app_session_v1";
   var PENDING_KEY = "efp_app_resume_pending_v1";
   var STATIC_QUIZ_KEY = "efp_app_static_quiz_v1";
+  var QUIZ_WARNING_KEY = "efp_app_quiz_warning_v1";
+  var INSTALLED_APP_CONTEXT_KEY = "efp_installed_app_context_v1";
   var MAX_RESUME_AGE = 24 * 60 * 60 * 1000;
   var intentionalHome = false;
 
@@ -76,7 +78,25 @@
     try { sessionStorage.setItem(ANDROID_APP_CONTEXT_KEY, "1"); } catch (_) {}
   }
 
+  function rememberInstalledAppContext() {
+    if (!isHomePath(location.pathname) || !installedAppLaunchMarker()) return;
+    try { sessionStorage.setItem(INSTALLED_APP_CONTEXT_KEY, "1"); } catch (_) {}
+  }
+
+  function isInstalledAppContext() {
+    try {
+      if (sessionStorage.getItem(INSTALLED_APP_CONTEXT_KEY) === "1" ||
+          sessionStorage.getItem(ANDROID_APP_CONTEXT_KEY) === "1") return true;
+    } catch (_) {}
+    try {
+      if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
+      if (navigator.standalone === true) return true;
+    } catch (_) {}
+    return false;
+  }
+
   rememberAndroidAppContext();
+  rememberInstalledAppContext();
 
   function relativeUrl() {
     return location.pathname + location.search + location.hash;
@@ -269,6 +289,51 @@
     var dirty = false;
     var allowNavigation = false;
     var MODAL_ID = "efp-quiz-exit-modal";
+
+    function warningPageKey(value) {
+      try {
+        var url = new URL(String(value || ""), location.origin);
+        if (url.origin !== location.origin) return "";
+        return url.pathname + url.search;
+      } catch (_) {
+        return "";
+      }
+    }
+
+    function clearPersistedWarning() {
+      if (!isInstalledAppContext() && !pendingForThisPage()) return;
+      try { localStorage.removeItem(QUIZ_WARNING_KEY); } catch (_) {}
+    }
+
+    function persistWarning() {
+      if (!dirty || !isInstalledAppContext()) return;
+      try {
+        localStorage.setItem(QUIZ_WARNING_KEY, JSON.stringify({
+          url: relativeUrl(),
+          ts: Date.now()
+        }));
+      } catch (_) {}
+    }
+
+    function restorePersistedWarning() {
+      var pending = pendingForThisPage();
+      if (!pending || dirty) return false;
+      try {
+        var saved = safeParse(localStorage.getItem(QUIZ_WARNING_KEY), null);
+        if (!saved || !Number.isFinite(Number(saved.ts)) ||
+            Date.now() - Number(saved.ts) > MAX_RESUME_AGE) return false;
+        var savedKey = warningPageKey(saved.url);
+        var pendingKey = warningPageKey(pending.url);
+        var currentKey = warningPageKey(relativeUrl());
+        if (!savedKey || savedKey !== pendingKey || savedKey !== currentKey) return false;
+        if (!hasVisibleQuizSurface() || isClearlyFinished()) return false;
+        dirty = true;
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
+
     var QUIZ_SURFACES = [
       ".question-box",
       ".question-card",
@@ -331,12 +396,15 @@
     }
 
     function arm() {
-      if (hasVisibleQuizSurface()) dirty = true;
+      if (!hasVisibleQuizSurface()) return;
+      dirty = true;
+      persistWarning();
     }
 
     function disarm() {
       dirty = false;
       allowNavigation = false;
+      clearPersistedWarning();
     }
 
     function isAnswerInteraction(target) {
@@ -483,6 +551,7 @@
         if (settled) return;
         settled = true;
         close();
+        disarm();
         onLeave();
       }
 
@@ -597,7 +666,16 @@
 
     window.addEventListener("pageshow", function () {
       allowNavigation = false;
+      if (!dirty) restorePersistedWarning();
     });
+
+    // Re-arm only for an installed-app auto-resume. Normal browser visits
+    // never receive PENDING_KEY, so browser navigation cannot resurrect a
+    // warning from an earlier app session.
+    restorePersistedWarning();
+    if (!dirty && document.readyState !== "complete") {
+      window.addEventListener("load", function () { restorePersistedWarning(); }, { once: true });
+    }
 
     window.EFP_QUIZ_PROGRESS_WARNING = {
       arm: arm,
