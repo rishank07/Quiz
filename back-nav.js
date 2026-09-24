@@ -653,51 +653,27 @@
     }
 
     var attempts = 0;
-    function retryOrRelease() {
-      if (attempts < 8) window.setTimeout(apply, 40);
-      else signalCruxRestoreComplete();
-    }
-
     function apply() {
       attempts++;
+      var bridge = window.EFP_CRUX_BROWSER_HISTORY;
 
-      var material = document.querySelector('[data-material="' + state.kind + '"]');
-      if (!material) {
-        retryOrRelease();
-        return;
-      }
-      activateCruxControl(material);
-
-      if (!clickButtonByText("#sourceChoices .choice", state.source)) {
-        retryOrRelease();
+      if (bridge && typeof bridge.restoreExternalHierarchy === "function" &&
+          bridge.restoreExternalHierarchy(state)) {
+        signalCruxRestoreComplete();
         return;
       }
 
-      if (state.source === "Pinnacle" && state.exam) {
-        var examDone = false;
-        if (window.EFP_CRUX_EXAM_LAYER && typeof window.EFP_CRUX_EXAM_LAYER.selectExam === "function") {
-          examDone = window.EFP_CRUX_EXAM_LAYER.selectExam(state.exam);
-        } else {
-          examDone = clickButtonByText("#examChoices .choice", state.exam);
-        }
-        if (!examDone) {
-          retryOrRelease();
-          return;
-        }
-      }
-
-      if (!clickButtonByText("#subjectChoices .subject", state.subject)) {
-        retryOrRelease();
+      if (attempts < 20) {
+        window.setTimeout(apply, 40);
         return;
       }
 
-      if (state.branch && !clickButtonByText("#partChoices .part", state.branch)) {
-        retryOrRelease();
-        return;
+      /* Safe failure mode: show the Material landing page, never a blank Crux
+         shell. The user can still navigate normally from here. */
+      var reset = document.getElementById("backMaterial");
+      if (reset) {
+        try { reset.click(); } catch (_) {}
       }
-
-      try { window.scrollTo(0, 0); } catch (_) {}
-      seedCruxReturnHistoryWhenReady(state);
       signalCruxRestoreComplete();
     }
 

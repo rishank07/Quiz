@@ -1,5 +1,5 @@
 // v129 Preserve quiz-exit warning across installed-app auto-resume
-const CACHE_VERSION = "efp-pwa-2026-09-24-v129-app-resume-quiz-warning";
+const CACHE_VERSION = "efp-pwa-2026-09-24-v130-crux-direct-back-restore";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924appresume4"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -27,7 +27,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260924appresume4",
   "/app-session.js?v=20260924appresume4",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260924ophierarchy1",
+  "/back-nav.js?v=20260924cruxrestore2",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
@@ -46,7 +46,7 @@ const APP_SHELL = [
   "/Crux-Tricks/viewer.html",
   "/Crux-Tricks/my-pages.html",
   "/Crux-Tricks/crux-manifest.js",
-  "/Crux-Tricks/crux-search-route.js?v=20260924cruxback1",
+  "/Crux-Tricks/crux-search-route.js?v=20260924cruxrestore2",
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260924cruxback1",
   "/Crux-Tricks/viewer.css",

@@ -508,6 +508,108 @@
     }
   }
 
+  /* Direct/shared viewer URLs do not have the Crux SPA panes in browser
+     history. Restore the target pane with the bridge in restoring mode, then
+     seed the exact Material -> Source -> Exam -> Subject -> Part -> Chapters
+     history in one transaction. This avoids back-nav.js and this bridge both
+     clicking the SPA at the same time, which could leave every pane hidden. */
+  function buildExternalChain(data) {
+    data = data || {};
+    var kind = String(data.kind || "");
+    var source = String(data.source || "");
+    var exam = String(data.exam || "");
+    var subject = String(data.subject || "");
+    var branch = String(data.branch || "");
+    if (!kind || !source || !subject) return [];
+
+    var chain = [makeState("material", 0)];
+    var depth = 1;
+    chain.push(makeState("source", depth++, { kind: kind }));
+
+    if (source === "Pinnacle") {
+      chain.push(makeState("exam", depth++, {
+        kind: kind, source: source, exam: exam
+      }));
+    }
+
+    chain.push(makeState("subjects", depth++, {
+      kind: kind, source: source, exam: exam
+    }));
+
+    if (branch) {
+      chain.push(makeState("parts", depth++, {
+        kind: kind, source: source, exam: exam,
+        subject: subject, branch: branch
+      }));
+    }
+
+    chain.push(makeState("chapters", depth++, {
+      kind: kind, source: source, exam: exam,
+      subject: subject, branch: branch
+    }));
+    return chain;
+  }
+
+  function renderExternalTarget(state) {
+    if (!isManaged(state)) return false;
+
+    var ok = true;
+    restoring = true;
+    try {
+      resetUiToMaterial();
+
+      if (!clickMaterial(state.kind)) ok = false;
+      if (ok && !clickSource(state.source)) ok = false;
+
+      if (ok && state.source === "Pinnacle" &&
+          !clickExam(state.exam || "Railway")) ok = false;
+
+      if (ok && !clickSubject(state.subject)) ok = false;
+      if (ok && state.branch && !clickBranch(state.branch)) ok = false;
+    } catch (_) {
+      ok = false;
+    } finally {
+      restoring = false;
+    }
+
+    return ok;
+  }
+
+  function restoreExternalHierarchy(data) {
+    if (!ready) return false;
+
+    var chain = buildExternalChain(data);
+    if (!chain.length) return false;
+    var target = chain[chain.length - 1];
+
+    if (!renderExternalTarget(target)) {
+      /* Never leave the SPA with all panes hidden after a failed restore. */
+      restoring = true;
+      try { resetUiToMaterial(); } catch (_) {}
+      restoring = false;
+      history.replaceState(makeState("material", 0), "", baseUrl());
+      syncStudyBackLabel(currentState());
+      return false;
+    }
+
+    try {
+      history.replaceState(chain[0], "", baseUrl());
+      for (var i = 1; i < chain.length; i++) {
+        history.pushState(chain[i], "", baseUrl());
+      }
+    } catch (_) {
+      history.replaceState(target, "", baseUrl());
+    }
+
+    syncStudyBackLabel(currentState());
+    if (window.EFP_CRUX_EXAM_LAYER &&
+        typeof window.EFP_CRUX_EXAM_LAYER.syncCrumbs === "function") {
+      window.EFP_CRUX_EXAM_LAYER.syncCrumbs();
+    }
+    try { window.scrollTo(0, 0); } catch (_) {}
+    return true;
+  }
+
   // Use the window capture phase so this runs before back-nav.js and before
   // target onclick handlers. Android hardware Back does not generate a click;
   // it is handled separately by the popstate listener below.
@@ -662,7 +764,8 @@
         var state = currentState();
         return !!(state && state.level !== "material");
       },
-      state: function () { return currentState(); }
+      state: function () { return currentState(); },
+      restoreExternalHierarchy: restoreExternalHierarchy
     };
   }
 

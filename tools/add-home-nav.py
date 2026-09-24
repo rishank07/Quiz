@@ -55,7 +55,7 @@ def inject(path: Path, root: Path) -> bool:
     # Crux pages need the current Back handler even after the counts workflow
     # rewrites navigation tags. Other sections keep their existing cache URL.
     back_nav_version = (
-        "20260924cruxback1" if rel.parts[0] == "Crux-Tricks"
+        "20260924cruxrestore2" if rel.parts[0] == "Crux-Tricks"
         else "20260924bookhier3"
     )
 
