@@ -1,7 +1,7 @@
-// v134 Keep only the compact Rapid Practice score row sticky on phones
-const CACHE_VERSION = "efp-pwa-2026-09-24-v134-rapid-scorebar";
+// v135 Compact Rapid score bar and keep Mixed Practice Back in its builder
+const CACHE_VERSION = "efp-pwa-2026-09-24-v135-rapid-scorebar-mixed-back";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924appresume4"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924mixedback1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -25,7 +25,7 @@ const APP_SHELL = [
   "/black-mode.js",
   "/owner-debug.js",
   "/home-nav.js?v=20260924cruxdirect3",
-  "/app-session.js?v=20260924appresume4",
+  "/app-session.js?v=20260924mixedback1",
   "/back-parent-map.js",
   "/back-nav.js?v=20260924cruxdirect3",
   "/search-logic.js",

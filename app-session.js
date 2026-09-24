@@ -575,7 +575,8 @@
 
     // Original Practice's document handlers otherwise send every Back straight
     // to the site Home. Handle the click before them while preserving its SPA
-    // hierarchy: Quiz -> Chapters -> All Subjects -> Practice index -> site Home.
+    // hierarchy. Mixed Practice has its own Quiz -> Set Builder step, while the
+    // Complete pages use Quiz -> Chapters -> All Subjects -> Practice index.
     window.addEventListener("click", function (event) {
       var path = normalizedPath(location.pathname).toLowerCase();
       if (path !== "/original practice" && path.indexOf("/original practice/") !== 0) return;
@@ -594,6 +595,23 @@
           try { sessionStorage.removeItem("efp_logical_back_expected_path"); } catch (_) {}
           location.assign("/");
           return;
+        }
+
+        // Mixed Practice is an in-page app. Its state/functions are private to
+        // Mixed_Practice.html, so use the page's own Change Mix control instead
+        // of navigating to the Original Practice dashboard. This also preserves
+        // the exact same one-step behavior after an installed-app auto-resume.
+        if (path === "/original practice/mixed_practice.html") {
+          var mixedQuiz = document.getElementById("quizView");
+          var mixedFinish = document.getElementById("finishView");
+          var mixedSetupButton = document.getElementById("setupBtn");
+          if (mixedSetupButton &&
+              ((mixedQuiz && !mixedQuiz.hidden) || (mixedFinish && !mixedFinish.hidden))) {
+            disarm();
+            mixedSetupButton.click();
+            try { window.scrollTo(0, 0); } catch (_) {}
+            return;
+          }
         }
 
         try {
