@@ -21,8 +21,8 @@ COUNT_RE = re.compile(
 FULLTEXT_MARKER = "<!-- ExamFusion homepage full-text bridge -->"
 FULLTEXT_TAG = (
     f"  {FULLTEXT_MARKER}\n"
-    '  <script src="./homepage-search-ui.js?v=20260924smartsearch1" defer></script>\n'
-    '  <script src="./homepage-fulltext-search.js?v=20260924blackbook1" defer></script>\n'
+    '  <script src="./homepage-search-ui.js?v=20260924instantreturn1" defer></script>\n'
+    '  <script src="./homepage-fulltext-search.js?v=20260924instantreturn1" defer></script>\n'
 )
 LANDING_MARKER = "<!-- ExamFusion landing counts: start -->"
 PYQ_CARD_MARKER = "data-efp-pyq-card"
@@ -187,10 +187,23 @@ def update_index(repo: Path) -> bool:
         r'<script\s+src=["\'][^"\']*homepage-fulltext-search\.js(?:\?[^"\']*)?["\']\s+defer\s*>\s*</script>\s*',
         re.I,
     )
+    existing_bridge = bridge_re.search(raw)
+    bridge_tag = FULLTEXT_TAG
+    if existing_bridge:
+        # Keep the page's current asset versions. The counts workflow must not
+        # roll back a search fix whenever it regenerates the landing block.
+        script_tags = re.findall(
+            r'<script\s+src=["\'][^"\']*homepage-(?:search-ui|fulltext-search)\.js'
+            r'(?:\?[^"\']*)?["\']\s+defer\s*>\s*</script>',
+            existing_bridge.group(0),
+            re.I,
+        )
+        if len(script_tags) == 2:
+            bridge_tag = f"  {FULLTEXT_MARKER}\n  {script_tags[0]}\n  {script_tags[1]}\n"
     without_bridge = bridge_re.sub("\n", raw)
     if LANDING_MARKER not in without_bridge:
         raise SystemExit("Landing-count marker not found in index.html")
-    updated = without_bridge.replace(LANDING_MARKER, FULLTEXT_TAG + "  " + LANDING_MARKER, 1)
+    updated = without_bridge.replace(LANDING_MARKER, bridge_tag + "  " + LANDING_MARKER, 1)
     if updated != raw:
         raw = updated
         changed = True
