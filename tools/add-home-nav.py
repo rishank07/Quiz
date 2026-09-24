@@ -4,11 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
 
 SCRIPT_SPECS = (
     ("/back-parent-map.js", '  <script defer src="/back-parent-map.js?v=20260906hier1"></script>\n'),
-    ("/back-nav.js", '  <script defer src="/back-nav.js?v=20260906hier1"></script>\n'),
+    ("/back-nav.js", '  <script defer src="/back-nav.js?v=20260924bookhier3"></script>\n'),
     ("/home-nav.js", '  <script defer src="/home-nav.js?v=20260906nav2"></script>\n'),
 )
 
@@ -51,6 +52,25 @@ def inject(path: Path, root: Path) -> bool:
         raise RuntimeError(f"Non-UTF-8 HTML file: {path}") from exc
 
     rel = path.relative_to(root)
+
+    # Keep the shared Back runtime on one fresh URL across the whole site.
+    # Existing pages may already contain /back-nav.js with an older query
+    # string, so merely checking for the marker is not enough: browsers can
+    # keep executing that cached build indefinitely. Normalize every existing
+    # script tag before deciding whether a missing tag must be inserted.
+    changed = False
+    back_nav_pattern = re.compile(
+        r'(<script\\b[^>]*\\bsrc=["\\\'])/back-nav\\.js(?:\\?[^"\\\']*)?(["\\\'][^>]*></script>)',
+        re.IGNORECASE,
+    )
+    normalized_text, replacements = back_nav_pattern.subn(
+        r'\\1/back-nav.js?v=20260924bookhier3\\2',
+        text,
+    )
+    if replacements and normalized_text != text:
+        text = normalized_text
+        changed = True
+
     head_blocks = [tag for marker, tag in SCRIPT_SPECS if marker not in text]
 
     if rel == MATHS_SPEED_BOOSTER_FILE and MATHS_FIT_MARKER not in text:
@@ -63,7 +83,6 @@ def inject(path: Path, root: Path) -> bool:
         # so the standard fixed Back control is identical on mobile/desktop.
         head_blocks.append(RAPID_BACK_BOOTSTRAP)
 
-    changed = False
     if head_blocks:
         block = "".join(head_blocks)
         lower = text.lower()
