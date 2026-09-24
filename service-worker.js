@@ -1,7 +1,7 @@
 // v131 Distinguish direct Crux viewer links from real Crux navigation
-const CACHE_VERSION = "efp-pwa-2026-09-24-v131-crux-direct-link-back";
+const CACHE_VERSION = "efp-pwa-2026-09-24-v132-open-in-app-banner";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924appresume4"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924appresume4"></script>';\nconst OPEN_APP_SCRIPT = '<script defer id="efp-open-app-script" src="/open-in-app.js?v=20260924openapp1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -194,6 +194,9 @@ async function injectEdgeToEdge(response) {
   if (!/id=["']efp-app-session-script["']/i.test(updated)) {
     updated = updated.replace(/<head(?:\s[^>]*)?>/i, (head) => head + "\n  " + APP_SESSION_SCRIPT);
   }
+  if (!updated.includes("efp-open-app-script")) {
+    updated = updated.replace(/<head(?:\s[^>]*)?>/i, (head) => head + "\n  " + OPEN_APP_SCRIPT);
+  }
   return rebuiltHtmlResponse(response, updated);
 }
 
@@ -316,6 +319,7 @@ self.addEventListener("fetch", (event) => {
   // never let an old app-shell copy win on a normal refresh.
   if (url.pathname === "/home-nav.js" ||
       url.pathname === "/app-session.js" ||
+      url.pathname === "/open-in-app.js" ||
       url.pathname === "/back-nav.js" ||
       url.pathname === "/search-logic.js" ||
       url.pathname === "/homepage-search-ui.js" ||
