@@ -338,6 +338,34 @@
     return false;
   }
 
+  var ANDROID_APP_CONTEXT_KEY = "efp_android_app_context_v1";
+
+  function isInstalledAndroidAppContext() {
+    try {
+      if (sessionStorage.getItem(ANDROID_APP_CONTEXT_KEY) === "1") return true;
+    } catch (_) {}
+
+    var detected = false;
+    try {
+      detected = /^android-app:\/\/com\.examfusionprep\.app(?:\/|$)/i.test(document.referrer || "");
+    } catch (_) {}
+    if (!detected) {
+      try {
+        detected = !!(window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+      } catch (_) {}
+    }
+    if (!detected) {
+      try {
+        detected = navigator.standalone === true || /; wv\)/i.test(navigator.userAgent || "");
+      } catch (_) {}
+    }
+
+    if (detected) {
+      try { sessionStorage.setItem(ANDROID_APP_CONTEXT_KEY, "1"); } catch (_) {}
+    }
+    return detected;
+  }
+
   function hasSameOriginReferrer() {
     if (!document.referrer) return false;
     try {
@@ -842,6 +870,15 @@
       return;
     }
 
+    /* Android/TWA system Back already follows the real history correctly.
+       The floating global Back must use that same stack on Original Practice,
+       even when the TWA referrer is android-app:// rather than same-origin. */
+    if (isOriginalPracticePage() && isInstalledAndroidAppContext() && window.history.length > 1) {
+      consumeBackEvent(event);
+      window.history.back();
+      return;
+    }
+
     /* Book chapters have a real multi-level hierarchy (Book -> Subject ->
        Part -> Chapter list -> Chapter). Use native Back only when the referrer
        is the exact mapped parent; otherwise recover one level via the map. */
@@ -880,6 +917,7 @@
     useLogicalParent(event);
   }, true);
 
+  isInstalledAndroidAppContext();
   installOriginalPracticeCopyCleanup();
   installMixedPracticeFeedbackColors();
   installMixedPracticeSiteTheme();
