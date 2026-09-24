@@ -270,7 +270,7 @@
     <section class="hero">
       <span class="eyebrow">ExamFusion Prep · Device Backup</span>
       <h1>Backup &amp; Restore</h1>
-      <p>Save your bookmarked questions and chapter progress to one small JSON file, then restore it after clearing browser data, reinstalling the app, or moving to another device.</p>
+      <p>Save your bookmarks, chapter progress, and recent Mixed Practice sets to one backup, then restore them after clearing browser data, reinstalling the app, or moving to another device.</p>
     </section>
 
     <section class="summary" aria-label="Saved data summary">
@@ -341,7 +341,8 @@
           <ul>
             <li>Question bookmarks saved by ExamFusion Prep.</li>
             <li>Visited/completed chapter progress for supported study sections.</li>
-            <li>No passwords, browsing history, quiz answers, or unrelated browser data.</li>
+            <li>Up to 20 recent Mixed Practice sets, including their Resume/Review state.</li>
+            <li>No passwords, browsing history, or unrelated browser data.</li>
           </ul>
         </div>
       </details>
@@ -379,6 +380,9 @@
       var BOOKMARK_KEY = "efp_bookmarks";
       var PROGRESS_PREFIX = "efp_visited_";
       var MIXED_STATE_KEY = "efp_mixed_practice_state_v1";
+      var MIXED_HISTORY_KEY = "efp_mixed_practice_recent_sets_v1";
+      var MIXED_DELETED_KEY = "efp_mixed_practice_deleted_sets_v1";
+      var MIXED_TAB_STATE_PREFIX = "efp_mixed_practice_tab_state_v1:";
       var MIXED_BOOKMARK_KEY = "efp_mixed_practice_bookmarks_v1";
       var RAPID_KEY_PATTERN = /^efp_ca_.+_rapid_v1$/;
       var APP_NAME = "ExamFusion Prep";
@@ -439,11 +443,51 @@
       }
 
       function isPracticeKey(key) {
-        return key === MIXED_STATE_KEY || key === MIXED_BOOKMARK_KEY || RAPID_KEY_PATTERN.test(key || "");
+        return key === MIXED_STATE_KEY || key === MIXED_HISTORY_KEY || key === MIXED_DELETED_KEY || key === MIXED_BOOKMARK_KEY || (key && key.indexOf(MIXED_TAB_STATE_PREFIX) === 0) || RAPID_KEY_PATTERN.test(key || "");
+      }
+
+      function normalizeMixedState(value) {
+        if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+        var ids = uniqueStrings(Array.isArray(value.ids) ? value.ids : []);
+        var selectedKeys = uniqueStrings(Array.isArray(value.selectedKeys) ? value.selectedKeys : []);
+        if (!ids.length || !selectedKeys.length) return null;
+        var answers = {};
+        var sourceAnswers = value.answers && typeof value.answers === "object" && !Array.isArray(value.answers) ? value.answers : {};
+        ids.forEach(function (id) {
+          var answer = sourceAnswers[id];
+          var selected = Number(answer && answer.selected);
+          if (answer && answer.checked && Number.isFinite(selected)) {
+            answers[id] = { selected: Math.max(0, Math.floor(selected)), checked: true, correct: !!answer.correct };
+          }
+        });
+        var optionOrders = {};
+        var sourceOrders = value.optionOrders && typeof value.optionOrders === "object" && !Array.isArray(value.optionOrders) ? value.optionOrders : {};
+        ids.forEach(function (id) {
+          if (Array.isArray(sourceOrders[id])) optionOrders[id] = sourceOrders[id].map(Number).filter(Number.isFinite);
+        });
+        var createdAt = Number(value.createdAt) || Date.now();
+        var normalized = {
+          version: Math.max(3, Number(value.version) || 3),
+          idVersion: Number(value.idVersion) || 1,
+          setId: typeof value.setId === "string" ? value.setId : "",
+          selectedKeys: selectedKeys,
+          total: ids.length,
+          ids: ids,
+          answers: answers,
+          optionOrders: optionOrders,
+          createdAt: createdAt,
+          updatedAt: Number(value.updatedAt) || createdAt,
+          currentIndex: Math.max(0, Math.min(ids.length - 1, Math.floor(Number(value.currentIndex) || 0)))
+        };
+        if (value.completed && Object.keys(answers).length === ids.length) {
+          normalized.completed = true;
+          normalized.completedAt = Number(value.completedAt) || normalized.updatedAt;
+        }
+        return normalized;
       }
 
       function normalizePracticeData(raw) {
-        var out = { rapid: {}, mixedState: null, mixedBookmarks: [] };
+        var out = { rapid: {}, mixedState: null, mixedBookmarks: [], mixedRecentSets: [] };
         if (!raw || typeof raw !== "object" || Array.isArray(raw)) return out;
         var rapid = raw.rapid;
         if (rapid && typeof rapid === "object" && !Array.isArray(rapid)) {
@@ -461,19 +505,39 @@
             out.rapid[key] = { section: Number.isFinite(section) ? Math.max(0, Math.floor(section)) : 0, answers: {}, bookmarks: bookmarks };
           });
         }
-        if (raw.mixedState && typeof raw.mixedState === "object" && !Array.isArray(raw.mixedState)) {
-          out.mixedState = Object.assign({}, raw.mixedState, { answers: {} });
-        }
+        out.mixedState = normalizeMixedState(raw.mixedState);
         out.mixedBookmarks = uniqueStrings(Array.isArray(raw.mixedBookmarks) ? raw.mixedBookmarks : []);
+        var seen = new Set();
+        (Array.isArray(raw.mixedRecentSets) ? raw.mixedRecentSets : [])
+          .map(normalizeMixedState)
+          .filter(Boolean)
+          .sort(function (a, b) { return b.updatedAt - a.updatedAt; })
+          .forEach(function (saved) {
+            var identity = saved.setId || (saved.createdAt + "|" + saved.ids.join(","));
+            if (seen.has(identity) || out.mixedRecentSets.length >= 20) return;
+            seen.add(identity);
+            out.mixedRecentSets.push(saved);
+          });
         return out;
       }
 
       function getPracticeData() {
-        var raw = { rapid: {}, mixedState: safeParse(localStorage.getItem(MIXED_STATE_KEY), null), mixedBookmarks: safeParse(localStorage.getItem(MIXED_BOOKMARK_KEY), []) };
+        var raw = {
+          rapid: {},
+          mixedState: safeParse(localStorage.getItem(MIXED_STATE_KEY), null),
+          mixedBookmarks: safeParse(localStorage.getItem(MIXED_BOOKMARK_KEY), []),
+          mixedRecentSets: safeParse(localStorage.getItem(MIXED_HISTORY_KEY), [])
+        };
+        var tabStates = [];
         for (var i = 0; i < localStorage.length; i++) {
           var key = localStorage.key(i);
           if (RAPID_KEY_PATTERN.test(key || "")) raw.rapid[key] = safeParse(localStorage.getItem(key), {});
+          if (key && key.indexOf(MIXED_TAB_STATE_PREFIX) === 0) {
+            var tabState = safeParse(localStorage.getItem(key), null);
+            if (tabState) tabStates.push(tabState);
+          }
         }
+        raw.mixedRecentSets = (Array.isArray(raw.mixedRecentSets) ? raw.mixedRecentSets : []).concat(tabStates);
         return normalizePracticeData(raw);
       }
 
@@ -486,7 +550,7 @@
       }
 
       function hasPracticeData(practice) {
-        return !!practice.mixedState || (practice.mixedBookmarks || []).length > 0 || Object.keys(practice.rapid || {}).length > 0;
+        return !!practice.mixedState || (practice.mixedBookmarks || []).length > 0 || (practice.mixedRecentSets || []).length > 0 || Object.keys(practice.rapid || {}).length > 0;
       }
 
       function countAllBookmarks(bookmarks, practice) {
@@ -739,6 +803,11 @@
         return out;
       }
 
+      function mergeMixedRecentSets(current, incoming) {
+        var combined = normalizePracticeData({ mixedRecentSets: (current || []).concat(incoming || []) }).mixedRecentSets;
+        return combined.slice(0, 20);
+      }
+
       function writePracticeData(practice, replace) {
         practice = normalizePracticeData(practice);
         Object.keys(practice.rapid).forEach(function (key) {
@@ -758,9 +827,27 @@
           localStorage.setItem(key, JSON.stringify(incoming));
         });
         if (practice.mixedState) {
-          var currentMixed = safeParse(localStorage.getItem(MIXED_STATE_KEY), null);
-          var mixedState = !replace && currentMixed && typeof currentMixed === "object" && !Array.isArray(currentMixed) ? currentMixed : practice.mixedState;
-          localStorage.setItem(MIXED_STATE_KEY, JSON.stringify(Object.assign({}, mixedState, { answers: {} })));
+          var currentMixed = normalizeMixedState(safeParse(localStorage.getItem(MIXED_STATE_KEY), null));
+          var mixedState = !replace && currentMixed ? currentMixed : practice.mixedState;
+          localStorage.setItem(MIXED_STATE_KEY, JSON.stringify(mixedState));
+        } else if (replace) {
+          localStorage.removeItem(MIXED_STATE_KEY);
+        }
+        if (practice.mixedRecentSets.length || replace) {
+          var currentRecent = replace ? [] : safeParse(localStorage.getItem(MIXED_HISTORY_KEY), []);
+          var recent = replace ? practice.mixedRecentSets : mergeMixedRecentSets(currentRecent, practice.mixedRecentSets);
+          if (recent.length) localStorage.setItem(MIXED_HISTORY_KEY, JSON.stringify(recent));
+          else localStorage.removeItem(MIXED_HISTORY_KEY);
+        }
+        var restoredIds = {};
+        practice.mixedRecentSets.concat(practice.mixedState ? [practice.mixedState] : []).forEach(function (saved) {
+          if (saved && saved.setId) restoredIds[saved.setId] = true;
+        });
+        var deleted = safeParse(localStorage.getItem(MIXED_DELETED_KEY), {});
+        if (deleted && typeof deleted === "object" && !Array.isArray(deleted)) {
+          Object.keys(restoredIds).forEach(function (id) { delete deleted[id]; });
+          if (Object.keys(deleted).length) localStorage.setItem(MIXED_DELETED_KEY, JSON.stringify(deleted));
+          else localStorage.removeItem(MIXED_DELETED_KEY);
         }
         if (practice.mixedBookmarks.length || replace) {
           var saved = replace ? practice.mixedBookmarks : uniqueStrings((safeParse(localStorage.getItem(MIXED_BOOKMARK_KEY), []) || []).concat(practice.mixedBookmarks));

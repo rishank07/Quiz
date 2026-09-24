@@ -1,5 +1,5 @@
-// v136 Match Current Affairs mobile score badges to Original Practice
-const CACHE_VERSION = "efp-pwa-2026-09-25-v137-mixed-navigation";
+// v138 Harden Mixed Practice storage, restore, and recent-set history
+const CACHE_VERSION = "efp-pwa-2026-09-25-v138-mixed-state-safety";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925mixededge1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";

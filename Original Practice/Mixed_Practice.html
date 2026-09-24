@@ -119,6 +119,9 @@
   var HISTORY_KEY='efp_mixed_practice_recent_sets_v1';
   var VIEW_KEY='efp_mixed_practice_view_v1';
   var BOOKMARK_KEY='efp_mixed_practice_bookmarks_v1';
+  var DELETED_KEY='efp_mixed_practice_deleted_sets_v1';
+  var TAB_STATE_PREFIX='efp_mixed_practice_tab_state_v1:';
+  var TAB_ID_KEY='efp_mixed_practice_tab_id_v1';
   var HISTORY_VIEW_KEY='efpMixedPracticeView';
   var MAX_RECENT_SETS=20;
   var MAX_QUESTIONS=500;
@@ -144,6 +147,7 @@
   var MAJOR=['history','polity','science','geography','economics','ecology','english','staticgk'];
   var SPECIFIC=['ancient','medieval','modern','physics','chemistry','biology','indianGeo','worldGeo'];
   var DOMAIN_CHILDREN={history:['ancient','medieval','modern'],science:['physics','chemistry','biology'],geography:['indianGeo','worldGeo']};
+  var TAB_ID=getTabId(),tabChannel=null,tabPageToken='page-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);
   var fileCache={},poolCache={},currentQuestions=[],currentIndex=0,state=null,pendingSelections={},bookmarks=loadBookmarks(),savedMode=false,savedReturn=null,historyReviewMode=false,historyExitPending=false; /* efp-mixed-saved-view-v3 */
   function $(id){return document.getElementById(id)}
   function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -151,29 +155,90 @@
   function safeRich(s){return String(s==null?'':s)}
   function fmt(n){return Number(n||0).toLocaleString('en-IN')}
   function readJson(key,fallback){try{var v=JSON.parse(localStorage.getItem(key)||'');return v==null?fallback:v}catch(e){return fallback}}
+  function getTabId(){try{var id=sessionStorage.getItem(TAB_ID_KEY);if(id)return id;id='tab-'+Date.now()+'-'+Math.random().toString(36).slice(2,10);sessionStorage.setItem(TAB_ID_KEY,id);return id}catch(e){return'tab-'+Date.now()+'-'+Math.random().toString(36).slice(2,10)}}
+  function tabStateKey(){return TAB_STATE_PREFIX+TAB_ID}
+  function validSavedState(value){return value&&Array.isArray(value.ids)&&Array.isArray(value.selectedKeys)?value:null}
+  function initTabCoordination(){
+    if(typeof BroadcastChannel!=='function')return;
+    try{
+      tabChannel=new BroadcastChannel('efp-mixed-practice-tabs-v1');
+      tabChannel.onmessage=function(event){
+        var msg=event.data||{};
+        if(msg.tabId!==TAB_ID||msg.token===tabPageToken)return;
+        if(msg.type==='probe'){tabChannel.postMessage({type:'occupied',tabId:TAB_ID,token:tabPageToken,forToken:msg.token});return}
+        if(msg.type!=='occupied'||msg.forToken!==tabPageToken)return;
+        var oldId=TAB_ID;
+        TAB_ID='tab-'+Date.now()+'-'+Math.random().toString(36).slice(2,10);
+        try{sessionStorage.setItem(TAB_ID_KEY,TAB_ID)}catch(e){}
+        if(state&&state.ownerTab===oldId){state.ownerTab=TAB_ID;saveState()}
+      };
+      tabChannel.postMessage({type:'probe',tabId:TAB_ID,token:tabPageToken})
+    }catch(e){tabChannel=null}
+  }
   function loadBookmarks(){var v=readJson(BOOKMARK_KEY,[]);return new Set(Array.isArray(v)?v.map(String):[])}
   function saveBookmarks(){try{localStorage.setItem(BOOKMARK_KEY,JSON.stringify(Array.from(bookmarks)))}catch(e){}}
-  function loadState(){var v=readJson(STATE_KEY,null);return v&&Array.isArray(v.ids)&&Array.isArray(v.selectedKeys)?v:null}
+  function loadState(){return validSavedState(readJson(tabStateKey(),null))||validSavedState(readJson(STATE_KEY,null))}
+  function deletedSets(){var value=readJson(DELETED_KEY,{});return value&&typeof value==='object'&&!Array.isArray(value)?value:{}}
+  function isSetDeleted(obj){var id=obj&&obj.setId;return !!(id&&deletedSets()[id])}
+  function markSetDeleted(id){
+    if(!id)return;
+    try{
+      var value=deletedSets(),cutoff=Date.now()-30*24*60*60*1000;
+      Object.keys(value).forEach(function(key){if(Number(value[key])<cutoff)delete value[key]});
+      value[id]=Date.now();
+      var keys=Object.keys(value).sort(function(a,b){return Number(value[b])-Number(value[a])}).slice(0,100);
+      var clean={};keys.forEach(function(key){clean[key]=value[key]});
+      localStorage.setItem(DELETED_KEY,JSON.stringify(clean))
+    }catch(e){}
+  }
+  function removeActiveState(expectedId){
+    try{
+      var own=readJson(tabStateKey(),null),global=readJson(STATE_KEY,null);
+      if(!expectedId||(own&&own.setId===expectedId))localStorage.removeItem(tabStateKey());
+      if(!expectedId||(global&&global.setId===expectedId))localStorage.removeItem(STATE_KEY)
+    }catch(e){}
+  }
+  function cleanupTabStates(){
+    try{
+      var cutoff=Date.now()-7*24*60*60*1000,remove=[];
+      for(var i=0;i<localStorage.length;i++){
+        var key=localStorage.key(i);if(!key||key.indexOf(TAB_STATE_PREFIX)!==0||key===tabStateKey())continue;
+        var saved=readJson(key,null);if(!saved||Number(saved.updatedAt||saved.createdAt||0)<cutoff)remove.push(key)
+      }
+      remove.forEach(function(key){localStorage.removeItem(key)})
+    }catch(e){}
+  }
   function loadRecentSets(){
     var v=readJson(HISTORY_KEY,[]),out=[],seen=new Set();
     if(!Array.isArray(v))return out;
-    v.filter(function(x){return x&&Array.isArray(x.ids)&&Array.isArray(x.selectedKeys)})
+    v.filter(function(x){return x&&Array.isArray(x.ids)&&Array.isArray(x.selectedKeys)&&!isSetDeleted(x)})
       .sort(function(a,b){return (Number(b.updatedAt)||Number(b.createdAt)||0)-(Number(a.updatedAt)||Number(a.createdAt)||0)})
       .forEach(function(x){
         var fingerprint=String(x.createdAt||'')+'|'+x.ids.join(',');
         if(seen.has(fingerprint))return;
+        var attempted=0;x.ids.forEach(function(id){var answer=(x.answers||{})[id];if(answer&&answer.checked)attempted++});
+        if(x.completed&&attempted<x.ids.length){x.completed=false;delete x.completedAt}
         seen.add(fingerprint);out.push(x);
       });
     return out.slice(0,MAX_RECENT_SETS)
   }
   function ensureSetId(obj){if(!obj)return'';if(!obj.setId)obj.setId='mix-'+String(obj.createdAt||Date.now())+'-'+Math.random().toString(36).slice(2,8);return obj.setId}
   function snapshotState(obj){if(!obj)return null;var copy=JSON.parse(JSON.stringify(obj));ensureSetId(copy);copy.answers=copy.answers||{};copy.updatedAt=Number(copy.updatedAt)||Date.now();return copy}
-  function upsertRecentSet(obj){if(!obj||savedMode)return;var snap=snapshotState(obj);if(!snap)return;try{var list=loadRecentSets(),id=ensureSetId(snap);list=list.filter(function(x){return ensureSetId(x)!==id});list.unshift(snap);list.sort(function(a,b){return (Number(b.updatedAt)||Number(b.createdAt)||0)-(Number(a.updatedAt)||Number(a.createdAt)||0)});localStorage.setItem(HISTORY_KEY,JSON.stringify(list.slice(0,MAX_RECENT_SETS)))}catch(e){}}
-  function saveState(){if(!state)return;state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);if(savedMode)return;try{if(state.completed||historyReviewMode){localStorage.removeItem(STATE_KEY);return}localStorage.setItem(STATE_KEY,JSON.stringify(state))}catch(e){}}
+  function upsertRecentSet(obj){if(!obj||savedMode)return;var snap=snapshotState(obj);if(!snap||isSetDeleted(snap))return;try{var list=loadRecentSets(),id=ensureSetId(snap);list=list.filter(function(x){return ensureSetId(x)!==id});list.unshift(snap);list.sort(function(a,b){return (Number(b.updatedAt)||Number(b.createdAt)||0)-(Number(a.updatedAt)||Number(a.createdAt)||0)});localStorage.setItem(HISTORY_KEY,JSON.stringify(list.slice(0,MAX_RECENT_SETS)))}catch(e){}}
+  function saveState(){
+    if(!state)return;
+    state.currentIndex=currentIndex;state.updatedAt=Date.now();state.ownerTab=TAB_ID;ensureSetId(state);
+    if(savedMode)return;
+    try{
+      if(state.completed||historyReviewMode||isSetDeleted(state)){removeActiveState(state.setId);return}
+      var encoded=JSON.stringify(state);localStorage.setItem(tabStateKey(),encoded);localStorage.setItem(STATE_KEY,encoded)
+    }catch(e){}
+  }
   function archiveCurrentSet(){
     if(!state||savedMode||historyReviewMode||state.completed||!Array.isArray(state.ids)||!state.ids.length)return;
-    state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);upsertRecentSet(state);
-    try{localStorage.removeItem(STATE_KEY);sessionStorage.setItem(VIEW_KEY,'setup');sessionStorage.removeItem('efp_app_resume_pending_v1')}catch(e){}
+    state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);if(!isSetDeleted(state))upsertRecentSet(state);
+    removeActiveState(state.setId);
+    try{sessionStorage.setItem(VIEW_KEY,'setup');sessionStorage.removeItem('efp_app_resume_pending_v1')}catch(e){}
   }
   function copyHistoryState(value){var copy={};if(!value||typeof value!=='object')return copy;Object.keys(value).forEach(function(key){copy[key]=value[key]});return copy}
   function mixedHistoryPhase(value,phase){return !!(value&&value[HISTORY_VIEW_KEY]===phase)}
@@ -209,8 +274,40 @@
   $('questionCount').addEventListener('input',function(){clearStatus();updateDistribution()});$('questionCount').addEventListener('change',function(){$('questionCount').value=normalizedCount();updateDistribution()});document.querySelectorAll('.preset').forEach(function(b){b.onclick=function(){clearStatus();$('questionCount').value=b.dataset.count;updateDistribution()}});
   async function loadMaster(fileKey){if(fileCache[fileKey])return fileCache[fileKey];var filename=FILES[fileKey];var promise=fetch('./'+filename,{cache:'force-cache'}).then(function(r){if(!r.ok)throw new Error('Could not load '+filename+' ('+r.status+')');return r.text()}).then(function(html){var doc=new DOMParser().parseFromString(html,'text/html'),node=doc.getElementById('master-data');if(!node)throw new Error('Question data not found in '+filename);return JSON.parse(node.textContent)});fileCache[fileKey]=promise;try{return await promise}catch(err){delete fileCache[fileKey];throw err}}
   function questionId(fileKey,groupName,chapterIndex,sectionIndex,questionIndex){return fileKey+'|'+encodeURIComponent(groupName)+'|'+chapterIndex+'|'+sectionIndex+'|'+questionIndex}
+  function identityText(value){return String(value==null?'':value).replace(/<[^>]*>/g,' ').replace(/&nbsp;/gi,' ').replace(/\s+/g,' ').trim().toLowerCase()}
+  function identityHash(value){var hash=2166136261,text=String(value);for(var i=0;i<text.length;i++){hash^=text.charCodeAt(i);hash=Math.imul(hash,16777619)}return(hash>>>0).toString(36)}
+  function stableQuestionId(fileKey,groupName,q){
+    var prompt=(q&&q.q)||{},options=(q&&q.o)||[];
+    var identity=[fileKey,groupName,identityText(prompt.en),identityText(prompt.hi)];
+    options.forEach(function(option){identity.push(identityText(option&&option.en));identity.push(identityText(option&&option.hi))});
+    var raw=identity.join('|');return'qv2|'+fileKey+'|'+identityHash(raw)+'|'+raw.length
+  }
   function normalizeEnglishQuestion(q){var options=(q.options||[]).map(function(option){return {en:String(option),hi:''}}),correct=Number.isInteger(q.answer)&&options[q.answer]?options[q.answer].en:'';return {q:{en:(q.prompt||'')+(q.sentence?'<div style="margin-top:10px;padding:10px 12px;border-radius:9px;background:rgba(255,255,255,.05);border-left:4px solid #f0cf77">'+q.sentence+'</div>':''),hi:''},o:options,a:{en:correct,hi:''},exp:{en:'<strong>Hinglish Explanation</strong><div>'+(q.explanation||'')+'</div><div class="exp-hi"><strong>English Explanation</strong><div>'+(q.englishExplanation||'')+'</div></div><div class="exp-hi"><strong>Quick Rule</strong><div>'+(q.rule||'')+'</div></div>',hi:''}}}
-  async function buildPool(key){if(poolCache[key])return poolCache[key];var p=POOLS[key];var master=await loadMaster(p.file),list=[];if(p.schema==='english'){Object.entries(master).forEach(function(entry,ci){var chapter=entry[0],sections=entry[1];if(!Array.isArray(sections))return;sections.forEach(function(section,si){var title=String((section&&section.title)||''),qs=(section&&section.questions)||[];qs.forEach(function(q,qi){list.push({id:questionId(p.file,'English Grammar',ci,si,qi),poolKey:key,poolLabel:p.label,source:'English Grammar',chapter:chapter,sectionEn:title,sectionHi:'',q:normalizeEnglishQuestion(q)})})})})}else{p.groups.forEach(function(groupName){var chapters=master[groupName];if(!chapters)return;Object.entries(chapters).forEach(function(entry,ci){var chapter=entry[0],sections=entry[1];if(!Array.isArray(sections))return;sections.forEach(function(section,si){var sectionTitle=(section&&section.title)||{},qs=(section&&section.questions)||[];qs.forEach(function(q,qi){list.push({id:questionId(p.file,groupName,ci,si,qi),poolKey:key,poolLabel:p.label,source:groupName,chapter:chapter,sectionEn:sectionTitle.en||'',sectionHi:sectionTitle.hi||'',q:q})})})})})}if(!list.length)throw new Error('No questions found for '+p.label);poolCache[key]=list;return list}
+  async function buildPool(key){
+    if(poolCache[key])return poolCache[key];
+    var p=POOLS[key],master=await loadMaster(p.file),list=[];
+    if(p.schema==='english'){
+      Object.entries(master).forEach(function(entry,ci){
+        var chapter=entry[0],sections=entry[1];if(!Array.isArray(sections))return;
+        sections.forEach(function(section,si){
+          var title=String((section&&section.title)||''),qs=(section&&section.questions)||[];
+          qs.forEach(function(raw,qi){var q=normalizeEnglishQuestion(raw);list.push({id:stableQuestionId(p.file,'English Grammar',q),legacyId:questionId(p.file,'English Grammar',ci,si,qi),poolKey:key,poolLabel:p.label,source:'English Grammar',chapter:chapter,sectionEn:title,sectionHi:'',q:q})})
+        })
+      })
+    }else{
+      p.groups.forEach(function(groupName){
+        var chapters=master[groupName];if(!chapters)return;
+        Object.entries(chapters).forEach(function(entry,ci){
+          var chapter=entry[0],sections=entry[1];if(!Array.isArray(sections))return;
+          sections.forEach(function(section,si){
+            var sectionTitle=(section&&section.title)||{},qs=(section&&section.questions)||[];
+            qs.forEach(function(q,qi){list.push({id:stableQuestionId(p.file,groupName,q),legacyId:questionId(p.file,groupName,ci,si,qi),poolKey:key,poolLabel:p.label,source:groupName,chapter:chapter,sectionEn:sectionTitle.en||'',sectionHi:sectionTitle.hi||'',q:q})})
+          })
+        })
+      })
+    }
+    if(!list.length)throw new Error('No questions found for '+p.label);poolCache[key]=list;return list
+  }
   function randomSample(list,n,used){var copy=list.slice(),out=[];for(var i=copy.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=copy[i];copy[i]=copy[j];copy[j]=t}for(var x=0;x<copy.length&&out.length<n;x++){if(!used.has(copy[x].id)){used.add(copy[x].id);out.push(copy[x])}}return out}
   function shuffle(list){for(var i=list.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=list[i];list[i]=list[j];list[j]=t}return list}
   function rawCorrectIndex(q){var opts=(q.o||[]),ans=q.a||{};for(var i=0;i<opts.length;i++){if(sameText(opts[i].en,ans.en))return i}for(var j=0;j<opts.length;j++){if(sameText(opts[j].hi,ans.hi))return j}return -1}
@@ -219,23 +316,35 @@
   function validOptionOrder(order,count){if(!Array.isArray(order)||order.length!==count)return false;var seen=new Set(order);if(seen.size!==count)return false;for(var i=0;i<count;i++){if(!seen.has(i))return false}return true}
   function ensureOptionOrders(items){if(!state)return;if(!state.optionOrders||typeof state.optionOrders!=='object')state.optionOrders={};var missing=[],positions={};items.forEach(function(item,i){positions[item.id]=i;var count=((item.q||{}).o||[]).length;if(!validOptionOrder(state.optionOrders[item.id],count))missing.push(item)});if(!missing.length)return;var offset=Math.floor(Math.random()*4);missing.forEach(function(item){var count=((item.q||{}).o||[]).length;state.optionOrders[item.id]=shuffledOptionOrder(item.q||{},count?(positions[item.id]+offset)%count:0)})}
   function displayedOptions(item){var q=item.q||{},opts=q.o||[];ensureOptionOrders([item]);var order=state&&state.optionOrders&&state.optionOrders[item.id];return validOptionOrder(order,opts.length)?order.map(function(i){return opts[i]}):opts.slice()}
-  async function generateSet(keys,total){clearStatus();if(keys.length<2){setStatus('Choose at least two subjects or subject groups for a mixed set.','bad');return}total=Math.max(keys.length,Math.min(MAX_QUESTIONS,total));$('generateBtn').disabled=true;$('surpriseBtn').disabled=true;setStatus('Preparing question pools… first load can take a few seconds.');try{var pools=await Promise.all(keys.map(buildPool)),available=pools.reduce(function(s,p){return s+p.length},0);if(total>available)total=available;var quotas=quotaPreview(keys,total),used=new Set(),picked=[];for(var i=0;i<keys.length;i++){var need=quotas[keys[i]]||0;if(need>pools[i].length)throw new Error(POOLS[keys[i]].label+' has fewer than '+need+' available questions.');picked=picked.concat(randomSample(pools[i],need,used))}shuffle(picked);currentQuestions=picked;currentIndex=0;pendingSelections={};historyReviewMode=false;state={version:3,setId:'mix-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),selectedKeys:keys.slice(),total:picked.length,ids:picked.map(function(q){return q.id}),answers:{},optionOrders:buildOptionOrders(picked),createdAt:Date.now(),currentIndex:0};saveState();showQuiz();renderQuestion();setStatus('Random set ready.','good')}catch(err){console.error(err);setStatus('Could not prepare the mixed set: '+(err&&err.message?err.message:'Unknown error'),'bad')}finally{$('generateBtn').disabled=false;$('surpriseBtn').disabled=false}}
+  async function generateSet(keys,total){clearStatus();if(keys.length<2){setStatus('Choose at least two subjects or subject groups for a mixed set.','bad');return}total=Math.max(keys.length,Math.min(MAX_QUESTIONS,total));$('generateBtn').disabled=true;$('surpriseBtn').disabled=true;setStatus('Preparing question pools… first load can take a few seconds.');try{var pools=await Promise.all(keys.map(buildPool)),available=pools.reduce(function(s,p){return s+p.length},0);if(total>available)total=available;var quotas=quotaPreview(keys,total),used=new Set(),picked=[];for(var i=0;i<keys.length;i++){var need=quotas[keys[i]]||0;if(need>pools[i].length)throw new Error(POOLS[keys[i]].label+' has fewer than '+need+' available questions.');picked=picked.concat(randomSample(pools[i],need,used))}shuffle(picked);currentQuestions=picked;currentIndex=0;pendingSelections={};historyReviewMode=false;state={version:4,idVersion:2,ownerTab:TAB_ID,setId:'mix-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),selectedKeys:keys.slice(),total:picked.length,ids:picked.map(function(q){return q.id}),answers:{},optionOrders:buildOptionOrders(picked),createdAt:Date.now(),currentIndex:0};saveState();showQuiz();renderQuestion();setStatus('Random set ready.','good')}catch(err){console.error(err);setStatus('Could not prepare the mixed set: '+(err&&err.message?err.message:'Unknown error'),'bad')}finally{$('generateBtn').disabled=false;$('surpriseBtn').disabled=false}}
   $('generateBtn').onclick=function(){generateSet(checkedKeys(),normalizedCount())};
   $('surpriseBtn').onclick=function(){var choices=[['history','polity','english'],['geography','chemistry','biology','ecology'],['history','geography','science','english'],['polity','economics','geography','ecology'],['physics','chemistry','biology','english']],pick=choices[Math.floor(Math.random()*choices.length)];MAJOR.concat(SPECIFIC).forEach(function(k){setChecked(k,false)});pick.forEach(function(k){setChecked(k,true)});$('questionCount').value=[50,60,100][Math.floor(Math.random()*3)];updateDistribution();generateSet(pick,normalizedCount())};
   async function restoreState(saved,reviewMode){
     if(!saved||!saved.ids||!saved.selectedKeys)return false;
+    ensureSetId(saved);
+    if(isSetDeleted(saved)){setStatus('This recent set was deleted and cannot be resumed.','bad');refreshResume();return false}
     historyReviewMode=!!reviewMode;
     setStatus(historyReviewMode?'Opening completed set for review…':'Restoring your mixed set…');
     try{
       var pools=await Promise.all(saved.selectedKeys.map(buildPool)),map=new Map();
-      pools.forEach(function(list){list.forEach(function(q){map.set(q.id,q)})});
+      pools.forEach(function(list){list.forEach(function(q){map.set(q.id,q);if(q.legacyId&&!map.has(q.legacyId))map.set(q.legacyId,q)})});
+      if(isSetDeleted(saved)){setStatus('This recent set was deleted while it was opening.','bad');historyReviewMode=false;showSetup();return false}
       var restored=saved.ids.map(function(id){return map.get(id)}).filter(Boolean);
       if(restored.length!==saved.ids.length){
         setStatus(historyReviewMode?'This old set cannot be reviewed because its question bank changed.':'This saved set can no longer be resumed because its question bank changed. Please generate a new set.','bad');
-        if(!historyReviewMode){try{localStorage.removeItem(STATE_KEY);sessionStorage.setItem(VIEW_KEY,'setup');sessionStorage.removeItem('efp_app_resume_pending_v1')}catch(e){}}
+        if(!historyReviewMode){removeActiveState(saved.setId);try{sessionStorage.setItem(VIEW_KEY,'setup');sessionStorage.removeItem('efp_app_resume_pending_v1')}catch(e){}}
         historyReviewMode=false;showSetup();return false
       }
-      state=snapshotState(saved);state.version=3;state.answers=state.answers||{};ensureSetId(state);
+      state=snapshotState(saved);state.version=4;state.idVersion=2;state.ownerTab=TAB_ID;state.answers=state.answers||{};ensureSetId(state);
+      var oldIds=state.ids.slice(),oldAnswers=state.answers||{},oldOrders=state.optionOrders||{},newAnswers={},newOrders={},bookmarksChanged=false;
+      restored.forEach(function(question,index){
+        var oldId=oldIds[index],newId=question.id;
+        if(oldAnswers[oldId])newAnswers[newId]=oldAnswers[oldId];
+        if(oldOrders[oldId])newOrders[newId]=oldOrders[oldId];
+        if(oldId!==newId&&bookmarks.has(oldId)){bookmarks.delete(oldId);bookmarks.add(newId);bookmarksChanged=true}
+      });
+      state.ids=restored.map(function(question){return question.id});state.answers=newAnswers;state.optionOrders=newOrders;
+      if(bookmarksChanged)saveBookmarks();
       pendingSelections={};currentQuestions=restored;ensureOptionOrders(restored);
       currentIndex=historyReviewMode?0:Math.max(0,Math.min(restored.length-1,Number(saved.currentIndex)||0));
       if(!historyReviewMode)saveState();
@@ -281,12 +390,14 @@
     $('savedQuestionsBtn').disabled=true;
     try{
       var pools=await Promise.all(MAJOR.map(buildPool)),map=new Map();
-      pools.forEach(function(list){list.forEach(function(q){if(!map.has(q.id))map.set(q.id,q)})});
+      pools.forEach(function(list){list.forEach(function(q){if(!map.has(q.id))map.set(q.id,q);if(q.legacyId&&!map.has(q.legacyId))map.set(q.legacyId,q)})});
       var savedItems=Array.from(bookmarks).map(function(id){return map.get(id)}).filter(Boolean);
       if(!savedItems.length){alert('Saved questions could not be found in the current question bank.');return}
+      var migratedBookmarks=new Set();savedItems.forEach(function(item){migratedBookmarks.add(item.id)});
+      if(migratedBookmarks.size!==bookmarks.size||Array.from(bookmarks).some(function(id){return !migratedBookmarks.has(id)})){bookmarks=migratedBookmarks;saveBookmarks()}
       savedReturn={state:returnState,questions:returnQuestions,index:returnIndex,pending:returnPending};
       savedMode=true;currentQuestions=savedItems;currentIndex=0;pendingSelections={};
-      state={version:2,selectedKeys:[],total:savedItems.length,ids:savedItems.map(function(q){return q.id}),answers:{},optionOrders:buildOptionOrders(savedItems),currentIndex:0,savedView:true};
+      state={version:4,idVersion:2,ownerTab:TAB_ID,selectedKeys:[],total:savedItems.length,ids:savedItems.map(function(q){return q.id}),answers:{},optionOrders:buildOptionOrders(savedItems),currentIndex:0,savedView:true};
       showQuiz();updateSavedQuestionsButton();renderQuestion();
     }catch(err){console.error(err);alert('Could not open saved questions right now.')}finally{$('savedQuestionsBtn').disabled=false}
   }
@@ -315,6 +426,7 @@
   function currentPendingSelection(){var item=currentQuestions[currentIndex];if(!item)return null;var v=pendingSelections[item.id];return Number.isInteger(Number(v))?Number(v):null}
   function correctIndex(item){var opts=displayedOptions(item),ans=(item.q||{}).a||{};for(var i=0;i<opts.length;i++){if(sameText(opts[i].en,ans.en))return i}for(var j=0;j<opts.length;j++){if(sameText(opts[j].hi,ans.hi))return j}return -1}
   function answerStats(){var attempted=0,correct=0,wrong=0;if(state&&state.answers)Object.keys(state.answers).forEach(function(id){var a=state.answers[id];if(a&&a.checked){attempted++;if(a.correct)correct++;else wrong++}});return {attempted:attempted,correct:correct,wrong:wrong}}
+  function firstUnansweredIndex(){if(!state)return-1;for(var i=0;i<currentQuestions.length;i++){var answer=state.answers&&state.answers[currentQuestions[i].id];if(!answer||!answer.checked)return i}return-1}
   function updateStats(){var st=answerStats();$('statPosition').textContent=(currentIndex+1)+'/'+currentQuestions.length;$('statAttempted').textContent=st.attempted;$('statCorrect').textContent=st.correct;$('statWrong').textContent=st.wrong;$('progressFill').style.width=((currentIndex+1)/Math.max(1,currentQuestions.length)*100)+'%'}
   function renderQuestion(){
     var item=currentQuestions[currentIndex];if(!item)return;
@@ -333,7 +445,7 @@
     displayedOptions(item).forEach(function(opt,i){
       var label=document.createElement('label');
       label.className='option';
-      // Correct/wrong styling is applied ONLY after Check Answer is pressed.
+      // Correct/wrong styling is applied only after the option is chosen.
       if(ans&&ans.checked){
         if(i===ci)label.classList.add('correct');
         if(i===Number(ans.selected)&&i!==ci)label.classList.add('wrong');
@@ -370,17 +482,25 @@
     $('bookmarkBtn').classList.toggle('on',bookmarks.has(item.id));
     $('bookmarkBtn').textContent=bookmarks.has(item.id)?'★ Saved':'☆ Save';
     $('prevBtn').disabled=currentIndex===0;
-    $('nextBtn').textContent=currentIndex===currentQuestions.length-1?(savedMode?'Back to Set →':'Finish Set →'):'Next →';
+    var unanswered=firstUnansweredIndex();
+    $('nextBtn').textContent=currentIndex===currentQuestions.length-1?(savedMode?'Back to Set →':(unanswered>=0?'Review Unanswered →':'Finish Set →')):'Next →';
     updateSavedQuestionsButton();updateStats();saveState();
   }
   $('bookmarkBtn').onclick=function(){var item=currentQuestions[currentIndex];if(!item)return;var wasSaved=bookmarks.has(item.id);if(wasSaved)bookmarks.delete(item.id);else bookmarks.add(item.id);saveBookmarks();updateSavedQuestionsButton();if(savedMode&&wasSaved){currentQuestions.splice(currentIndex,1);if(!currentQuestions.length){closeSavedQuestions();return}currentIndex=Math.min(currentIndex,currentQuestions.length-1);state.ids=currentQuestions.map(function(q){return q.id});state.total=currentQuestions.length}renderQuestion()};
   $('prevBtn').onclick=function(){if(currentIndex>0){currentIndex--;renderQuestion();focusQuestionAfterStep()}};
-  $('nextBtn').onclick=function(){if(currentIndex<currentQuestions.length-1){currentIndex++;renderQuestion();focusQuestionAfterStep()}else if(savedMode){closeSavedQuestions()}else{showFinish()}};
-  function showFinish(){var st=answerStats(),accuracy=st.attempted?Math.round(st.correct/st.attempted*100):0;state.completed=true;state.completedAt=state.completedAt||Date.now();state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);upsertRecentSet(state);try{localStorage.removeItem(STATE_KEY);sessionStorage.setItem(VIEW_KEY,'finish')}catch(e){}$('quizView').hidden=true;$('setupView').hidden=true;$('finishView').hidden=false;$('finishScore').textContent=st.correct+' / '+currentQuestions.length;$('finishCopy').textContent=st.wrong+' wrong · '+(currentQuestions.length-st.attempted)+' unattempted';$('finishAttempted').textContent=st.attempted;$('finishAccuracy').textContent=accuracy+'%';$('finishSaved').textContent=currentQuestions.filter(function(q){return bookmarks.has(q.id)}).length;window.scrollTo({top:0,behavior:'auto'})}
+  $('nextBtn').onclick=function(){
+    if(currentIndex<currentQuestions.length-1){currentIndex++;renderQuestion();focusQuestionAfterStep();return}
+    if(savedMode){closeSavedQuestions();return}
+    var unanswered=firstUnansweredIndex();
+    if(unanswered>=0){currentIndex=unanswered;renderQuestion();focusQuestionAfterStep();alert('Please answer every question before finishing the set. You can leave and resume it later.');return}
+    showFinish()
+  };
+  function showFinish(){var unanswered=firstUnansweredIndex();if(unanswered>=0){currentIndex=unanswered;renderQuestion();focusQuestionAfterStep();return false}var st=answerStats(),accuracy=st.attempted?Math.round(st.correct/st.attempted*100):0;state.completed=true;state.completedAt=state.completedAt||Date.now();state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);upsertRecentSet(state);removeActiveState(state.setId);try{sessionStorage.setItem(VIEW_KEY,'finish')}catch(e){}$('quizView').hidden=true;$('setupView').hidden=true;$('finishView').hidden=false;$('finishScore').textContent=st.correct+' / '+currentQuestions.length;$('finishCopy').textContent=st.wrong+' wrong · 0 unattempted';$('finishAttempted').textContent=st.attempted;$('finishAccuracy').textContent=accuracy+'%';$('finishSaved').textContent=currentQuestions.filter(function(q){return bookmarks.has(q.id)}).length;window.scrollTo({top:0,behavior:'auto'});return true}
   $('finishNewBtn').onclick=function(){if(state)generateSet(state.selectedKeys,state.total||currentQuestions.length)};$('reviewBtn').onclick=function(){historyReviewMode=true;currentIndex=0;showQuiz();renderQuestion()};
   function deleteRecentSet(saved){
     if(!saved)return;
     var targetId=ensureSetId(saved),targetFingerprint=String(saved.createdAt||'')+'|'+(saved.ids||[]).join(',');
+    markSetDeleted(targetId);removeActiveState(targetId);
     try{
       var list=loadRecentSets().filter(function(x){
         var fp=String(x.createdAt||'')+'|'+(x.ids||[]).join(',');
@@ -388,11 +508,16 @@
       });
       localStorage.setItem(HISTORY_KEY,JSON.stringify(list.slice(0,MAX_RECENT_SETS)));
     }catch(e){}
+    if(state&&state.setId===targetId){state=null;currentQuestions=[];currentIndex=0;pendingSelections={}}
     refreshResume()
+  }
+  function formatSetTime(value){
+    var date=new Date(Number(value)||Date.now());
+    try{return date.toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'numeric',minute:'2-digit',hour12:true})}catch(e){return date.toLocaleString()}
   }
   function refreshResume(){
     var list=loadRecentSets(),section=$('recentSetsSection'),box=$('recentSetsList');
-    try{localStorage.setItem(HISTORY_KEY,JSON.stringify(list))}catch(e){}
+    try{var encoded=JSON.stringify(list);if(localStorage.getItem(HISTORY_KEY)!==encoded)localStorage.setItem(HISTORY_KEY,encoded)}catch(e){}
     box.innerHTML='';
     if(!list.length){section.classList.remove('show');return}
     section.classList.add('show');
@@ -406,8 +531,9 @@
       var copy=document.createElement('div'),title=document.createElement('div'),meta=document.createElement('div'),actions=document.createElement('div'),btn=document.createElement('button'),del=document.createElement('button');
       title.className='recent-set-title';title.textContent=labels.join(' + ')||'Mixed Practice';
       meta.className='recent-set-meta';
-      if(saved.completed)meta.textContent=total+' Q · '+st.correct+' correct · '+st.wrong+' wrong · '+accuracy+'%';
-      else meta.textContent=total+' Q · '+st.attempted+' attempted · Question '+Math.min(total,Math.max(1,(Number(saved.currentIndex)||0)+1));
+      var stamp=formatSetTime(saved.createdAt||saved.updatedAt);
+      if(saved.completed)meta.textContent=stamp+' · '+total+' Q · '+st.correct+' correct · '+st.wrong+' wrong · '+accuracy+'%';
+      else meta.textContent=stamp+' · '+total+' Q · '+st.attempted+' attempted · Question '+Math.min(total,Math.max(1,(Number(saved.currentIndex)||0)+1));
       actions.className='recent-set-actions';
       btn.className='recent-set-action';btn.type='button';btn.textContent=saved.completed?'Review':'Resume';
       btn.onclick=function(){restoreState(snapshotState(saved),!!saved.completed)};
@@ -440,7 +566,7 @@
     if(warning&&typeof warning.confirmLeave==='function')warning.confirmLeave(exitMixedPracticeToSetup);
     else exitMixedPracticeToSetup()
   });
-  // The last question can still be unanswered. Keep the set until Finish is tapped.
+  // Reload only resumes a quiz that was already visible in this tab/app.
   function isReloadNavigation(){
     try{
       var entries=performance.getEntriesByType&&performance.getEntriesByType('navigation');
@@ -448,7 +574,7 @@
       return !!(performance.navigation&&performance.navigation.type===1);
     }catch(e){return false}
   }
-  updateDistribution();updateSavedQuestionsButton();var __savedOnLoad=loadState();refreshResume();
+  initTabCoordination();cleanupTabStates();updateDistribution();updateSavedQuestionsButton();var __savedOnLoad=loadState();refreshResume();
   try{
     var lastView=sessionStorage.getItem(VIEW_KEY)||'setup';
     var appResume=JSON.parse(sessionStorage.getItem('efp_app_resume_pending_v1')||'null');
@@ -463,6 +589,15 @@
     if(lastView==='quiz'&&state&&currentQuestions.length){renderQuestion();syncMobileQuizHead();return}
     var saved=loadState();
     if(lastView==='quiz'&&saved&&saved.ids&&saved.ids.length)restoreState(saved,false);
+  });
+  window.addEventListener('storage',function(event){
+    if(event.key===HISTORY_KEY||event.key===DELETED_KEY){
+      if(state&&isSetDeleted(state)){
+        var deletedId=state.setId;removeActiveState(deletedId);state=null;currentQuestions=[];currentIndex=0;pendingSelections={};
+        showSetup();setStatus('This set was deleted in another tab.','bad');return
+      }
+      if(!$('setupView').hidden)refreshResume()
+    }
   });
 })();
 </script>
