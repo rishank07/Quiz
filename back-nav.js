@@ -34,6 +34,10 @@
     return normalizePath(window.location.pathname).toLowerCase() === "/original practice/mixed_practice.html";
   }
 
+  function isBooksPage() {
+    return normalizePath(window.location.pathname).toLowerCase().indexOf("/books/") === 0;
+  }
+
   /* Some older Complete Practice subject headers still describe the page as
      "offline practice" while newer subjects do not. Keep the actual offline/PWA
      capability intact and only remove that obsolete visible copy. Because the
@@ -806,6 +810,16 @@
 
     if (useOriginalPracticeInternalBack(event)) {
       return;
+    }
+
+    /* Book chapters have a real multi-level hierarchy (Book -> Subject ->
+       Part -> Chapter list -> Chapter). On these pages the visible Back control
+       must follow that hierarchy deterministically instead of trusting browser
+       history/referrer state, which can collapse intermediate entries after
+       redirects, BFCache restores or app/browser lifecycle transitions. The
+       generated parent map is the source of truth for exactly one level up. */
+    if (isBooksPage()) {
+      if (useLogicalParent(event)) return;
     }
 
     if (isGenericHomeSearchGuardState(history.state, "top")) {
