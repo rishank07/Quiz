@@ -906,16 +906,17 @@
       return;
     }
 
-    if (useOriginalPracticeInternalBack(event)) {
+    /* Android app rule: the floating/global Back button always exits
+       Original Practice straight to ExamFusion Home. Keep Android/system Back
+       untouched; this applies only to our own #efp-app-back-button. */
+    if (isOriginalPracticePage() && isInstalledAndroidAppContext()) {
+      consumeBackEvent(event);
+      try { sessionStorage.removeItem("efp_logical_back_expected_path"); } catch (_) {}
+      window.location.assign("/index.html");
       return;
     }
 
-    /* Android/TWA system Back already follows the real history correctly.
-       The floating global Back must use that same stack on Original Practice,
-       even when the TWA referrer is android-app:// rather than same-origin. */
-    if (isOriginalPracticePage() && isInstalledAndroidAppContext() && window.history.length > 1) {
-      consumeBackEvent(event);
-      window.history.back();
+    if (useOriginalPracticeInternalBack(event)) {
       return;
     }
 
