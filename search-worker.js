@@ -317,24 +317,56 @@
 
     var prefix = config.sectionPrefix || null;
     var scored = [];
-    var sequence = 0;
 
-    for (var i = 0; i < records.length; i++) {
-      var group = records[i];
-      if (!group || (prefix && String(group.f || "").indexOf(prefix) !== 0)) continue;
-      var headRaw = String(group.t || "") + " " + String(group.b || "");
-      var head = headRaw.toLowerCase();
-      var snippets = Array.isArray(group.x) ? group.x : [];
-      var aliases = Array.isArray(group.a) ? group.a : [];
+    // Keep the common scan cheap. Only retry with full Unicode/punctuation
+    // normalization (and finally joined words) when it found nothing.
+    function scan(normalized, compact) {
+      var sequence = 0;
+      var searchTerms = compact ? [phrase.replace(/ /g, "")] : terms;
+      var searchPhrase = compact ? searchTerms[0] : phrase;
+      for (var i = 0; i < records.length; i++) {
+        var group = records[i];
+        if (!group || (prefix && String(group.f || "").indexOf(prefix) !== 0)) continue;
+        var headRaw = String(group.t || "") + " " + String(group.b || "");
+        var head = normalized ? normalizeQuery(headRaw) : headRaw.toLowerCase().replace(/\s+/g, " ");
+        if (compact) head = head.replace(/ /g, "");
+        var snippets = Array.isArray(group.x) ? group.x : [];
+        var aliases = Array.isArray(group.a) ? group.a : [];
 
-      for (var j = 0; j < snippets.length; j++) {
-        var raw = String(snippets[j] == null ? "" : snippets[j]);
-        var visible = stripMarker(raw);
-        if (config.strictOcr) {
-          var strictScore = strictOcrScore(parsed, aliases[j] || "", visible);
-          if (strictScore === null) { sequence++; continue; }
+        for (var j = 0; j < snippets.length; j++) {
+          var raw = String(snippets[j] == null ? "" : snippets[j]);
+          var visible = stripMarker(raw);
+          if (config.strictOcr) {
+            var strictScore = strictOcrScore(parsed, aliases[j] || "", visible);
+            if (strictScore === null) { sequence++; continue; }
+            scored.push({
+              score: strictScore,
+              sequence: sequence,
+              f: withAnchor(group.f, extractAnchor(raw)),
+              t: group.t,
+              b: group.b,
+              x: raw
+            });
+            sequence++;
+            continue;
+          }
+          var body = normalized ? normalizeQuery(visible) : visible.toLowerCase().replace(/\s+/g, " ");
+          if (compact) body = body.replace(/ /g, "");
+          var match = containsAll(searchTerms, body, head);
+          if (!match) { sequence++; continue; }
+
+          // Strongly prefer an exact query phrase in actual question/page text,
+          // then all query words in body text, then mixed body/title matches.
+          var phraseBody = searchPhrase ? body.indexOf(searchPhrase) : -1;
+          var phraseHead = searchPhrase ? head.indexOf(searchPhrase) : -1;
+          var score;
+          if (phraseBody >= 0) score = phraseBody * 0.00001;
+          else if (match.bodyOnly) score = 10 + match.positionSum * 0.000001;
+          else if (phraseHead >= 0) score = 20 + phraseHead * 0.00001;
+          else score = 30 + match.positionSum * 0.0000001;
+
           scored.push({
-            score: strictScore,
+            score: score,
             sequence: sequence,
             f: withAnchor(group.f, extractAnchor(raw)),
             t: group.t,
@@ -342,33 +374,13 @@
             x: raw
           });
           sequence++;
-          continue;
         }
-        var body = visible.toLowerCase();
-        var match = containsAll(terms, body, head);
-        if (!match) { sequence++; continue; }
-
-        // Strongly prefer an exact query phrase in actual question/page text,
-        // then all query words in body text, then mixed body/title matches.
-        var phraseBody = phrase ? body.indexOf(phrase) : -1;
-        var phraseHead = phrase ? head.indexOf(phrase) : -1;
-        var score;
-        if (phraseBody >= 0) score = phraseBody * 0.00001;
-        else if (match.bodyOnly) score = 10 + match.positionSum * 0.000001;
-        else if (phraseHead >= 0) score = 20 + phraseHead * 0.00001;
-        else score = 30 + match.positionSum * 0.0000001;
-
-        scored.push({
-          score: score,
-          sequence: sequence,
-          f: withAnchor(group.f, extractAnchor(raw)),
-          t: group.t,
-          b: group.b,
-          x: raw
-        });
-        sequence++;
       }
     }
+
+    scan(false, false);
+    if (!scored.length && !config.strictOcr) scan(true, false);
+    if (!scored.length && !config.strictOcr && phrase.length > 2) scan(true, true);
 
     scored.sort(function (a, b) { return a.score - b.score || a.sequence - b.sequence; });
     var limit = config.limit || 40;

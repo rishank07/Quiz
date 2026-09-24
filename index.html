@@ -1701,7 +1701,7 @@
         if (typeof efCreateSearchWorker !== "function") return [];
         originalPracticeSearchClients = [
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
             logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-original-practice.js?v=20260904v8", document.baseURI).href,
             mode: "snippet",
@@ -1710,7 +1710,7 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
             logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-economics-original-practice.js?v=20260908econ1", document.baseURI).href,
             mode: "snippet",
@@ -1719,7 +1719,7 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
             logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-ecology-original-practice.js?v=20260912ecology1", document.baseURI).href,
             mode: "snippet",
@@ -1728,7 +1728,7 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
             logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-english-original-practice.js?v=20260913english1", document.baseURI).href,
             mode: "snippet",
@@ -1737,7 +1737,7 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20260905cruxroute1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
             logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-static-gk-original-practice.js?v=20260915staticgk1", document.baseURI).href,
             mode: "snippet",
@@ -1843,7 +1843,7 @@
         if (typeof efCreateSearchWorker !== "function") return [];
         cruxTricksSearchClients = [
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20260908econcrux1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
             logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20260905cruxroute1", document.baseURI).href,
             mode: "snippet",
@@ -1852,7 +1852,7 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20260908econcrux1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
             logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-economics-crux.js?v=20260908econcrux1", document.baseURI).href,
             mode: "snippet",
@@ -1861,7 +1861,7 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20260908econcrux1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
             logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-original-geo-economics-tricks.js?v=20260915staticgktricks1", document.baseURI).href,
             mode: "snippet",
@@ -1870,7 +1870,7 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20260923mathsstrict1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20260924casespace1", document.baseURI).href,
             logicUrl: new URL("search-logic.js?v=20260924smartsearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-maths-ocr.js?v=20260923mathsstrict1", document.baseURI).href,
             mode: "snippet",
@@ -2008,6 +2008,20 @@
         menuList.classList.remove("has-deep-results");
       }
 
+      function matchesHomeCard(query, text) {
+        if (typeof efTextMatches === "function") return efTextMatches(query, text, false);
+        // The shared engine loads on demand. Apply its basic case/space rules
+        // to the visible cards even before the index finishes loading.
+        var normalize = function (value) {
+          return String(value || "").toLowerCase()
+            .replace(/[^a-z0-9\u0900-\u097f]+/g, " ").replace(/\s+/g, " ").trim();
+        };
+        var words = normalize(query).split(" ").filter(Boolean);
+        var haystack = normalize(text);
+        return words.every(function (word) { return haystack.indexOf(word) !== -1; }) ||
+          (!!words.length && haystack.replace(/ /g, "").indexOf(words.join("")) !== -1);
+      }
+
       function renderDeepResults(q) {
         clearDeepResults();
         if (typeof SEARCH_INDEX === "undefined" || q.length < 2) return 0;
@@ -2067,16 +2081,12 @@
         items.forEach(function (li) {
           if (li.hasAttribute("data-noresult")) {
             li.classList.toggle("hidden", q.length > 0 &&
-              !((typeof efTextMatches === "function")
-                ? efTextMatches(q, "telegram community notes channel discussion group टेलीग्राम", false)
-                : "telegram community notes channel discussion group टेलीग्राम".includes(q.toLowerCase())));
+              !matchesHomeCard(q, "telegram community notes channel discussion group टेलीग्राम"));
             if (!li.classList.contains("hidden")) visible++;
             return;
           }
           const text = li.textContent;
-          const match = (typeof efTextMatches === "function")
-            ? efTextMatches(q, text, false)
-            : text.toLowerCase().includes(q.toLowerCase());
+          const match = matchesHomeCard(q, text);
           li.classList.toggle("hidden", !match);
           if (match) visible++;
         });

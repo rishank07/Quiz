@@ -1,5 +1,5 @@
-// v105 Persistent homepage search state 20260924
-const CACHE_VERSION = "efp-pwa-2026-09-24-v105-persistent-home-search";
+// v106 Consistent case and spacing in search 20260924
+const CACHE_VERSION = "efp-pwa-2026-09-24-v106-search-case-spacing";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -48,7 +48,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-search-route.js",
   "/Crux-Tricks/crux-restore-flash.js?v=20260920noflash1",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260923mathsstrict1",
+  "/Crux-Tricks/crux-tricks.js?v=20260924casespace1",
   "/Crux-Tricks/viewer.css",
   "/Crux-Tricks/viewer-v2.js?v=20260923mathsstrict1",
 ];

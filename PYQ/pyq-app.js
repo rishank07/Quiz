@@ -54,7 +54,7 @@
   const esc = (value = '') => String(value).replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[char]));
-  const normal = (value = '') => String(value).toLowerCase().replace(/[^a-z0-9\u0900-\u097f]+/g, ' ').trim();
+  const normal = (value = '') => String(value).normalize('NFKC').toLowerCase().replace(/[^a-z0-9\u0900-\u097f]+/g, ' ').replace(/\s+/g, ' ').trim();
   const unique = values => [...new Set(values.filter(Boolean))];
   const countExam = exam => (exam.years || []).reduce((sum, year) => sum + (year.papers || []).length, 0);
 
@@ -270,7 +270,9 @@
     if (state.language && (paper.language || '') !== state.language) return false;
     if (state.source && paper.sourceGroup !== state.source) return false;
     const tokens = normal(state.query).split(' ').filter(Boolean);
-    return tokens.every(token => paper.searchText.includes(token));
+    return tokens.every(token => paper.searchText.includes(token)) ||
+      (tokens.length > 0 && tokens.join('').length >= 4 &&
+        paper.searchText.replace(/ /g, '').includes(tokens.join('')));
   }
 
   function sortedResults() {

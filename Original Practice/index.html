@@ -75,7 +75,7 @@
     {file:"../search-snippets-english-original-practice.js?v=20260913english1",global:"EF_ENGLISH_ORIGINAL_PRACTICE_SNIPPET_INDEX"},
     {file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}
   ];
-  function norm(x){return String(x||'').toLowerCase().replace(/[^a-z0-9ऀ-ॿ]+/g,' ').replace(/\s+/g,' ').trim()}
+  function norm(x){return typeof efNormalizeSearchText==='function'?efNormalizeSearchText(x):String(x||'').toLowerCase().replace(/[^a-z0-9ऀ-ॿ]+/g,' ').replace(/\s+/g,' ').trim()}
   function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function chapterMatches(q){
     var terms=q.split(' ').filter(Boolean);
@@ -149,7 +149,7 @@
   function makeClient(source){
     if(typeof efCreateSearchWorker!=='function')return null;
     return efCreateSearchWorker({
-      workerUrl:new URL('../search-worker.js?v=20260924opsearch1',document.baseURI).href,
+      workerUrl:new URL('../search-worker.js?v=20260924casespace1',document.baseURI).href,
       logicUrl:new URL('../search-logic.js?v=20260924opsearch1',document.baseURI).href,
       indexUrl:new URL(source.file,document.baseURI).href,
       mode:'snippet',globalName:source.global,sectionPrefix:'./Original%20Practice/',limit:16
