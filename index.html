@@ -1900,6 +1900,24 @@
         }
         url += (url.indexOf("?") === -1 ? "?" : "&") + "page=" + page;
         var search = String(query || "").trim();
+        // When a Hinglish alias found the page, hand the actually matched
+        // Hindi/English word to the PDF viewer so its yellow highlight also
+        // works (for example rashtrapati -> President / राष्ट्रपति).
+        if (search && typeof efSearchTerms === "function" && typeof efSearchTermAlternatives === "function") {
+          var searchableText = (String(hit && hit.t || "") + " " + String(hit && hit.b || "") + " " + raw);
+          var normalizedSearchable = typeof efNormalizeSearchText === "function"
+            ? efNormalizeSearchText(searchableText)
+            : searchableText.toLowerCase();
+          var queryTerms = efSearchTerms(search);
+          var resolvedTerms = queryTerms.map(function(term) {
+            var alternatives = efSearchTermAlternatives(term);
+            for (var alternativeIndex = 0; alternativeIndex < alternatives.length; alternativeIndex++) {
+              if (normalizedSearchable.indexOf(alternatives[alternativeIndex]) !== -1) return alternatives[alternativeIndex];
+            }
+            return term;
+          });
+          if (resolvedTerms.length) search = resolvedTerms.join(" ");
+        }
         if (search) url += "&search=" + encodeURIComponent(search);
         // Homepage full-text PDF hits should return to their Crux source
         // hierarchy, not to the landing page's browser-history entry.
@@ -1909,16 +1927,39 @@
         return { url: url, text: raw, page: page };
       }
       function rerankCruxTricksHits(q, hits) {
-        var phrase = String(q || "").trim().toLowerCase();
-        var terms = phrase.split(/\s+/).filter(Boolean);
+        var phrase = typeof efNormalizeSearchText === "function"
+          ? efNormalizeSearchText(q)
+          : String(q || "").trim().toLowerCase();
+        var terms = typeof efSearchTerms === "function"
+          ? efSearchTerms(q)
+          : phrase.split(/\s+/).filter(Boolean);
+        function everyTermMatches(haystack, aliasesAllowed) {
+          return terms.length && terms.every(function(term) {
+            var alternatives = aliasesAllowed && typeof efSearchTermAlternatives === "function"
+              ? efSearchTermAlternatives(term)
+              : [term];
+            return alternatives.some(function(alternative) { return haystack.indexOf(alternative) !== -1; });
+          });
+        }
         return (Array.isArray(hits) ? hits.slice() : []).sort(function(a, b) {
           function score(hit) {
             var raw = String(hit && hit.x || "");
             if (raw.length) { var c = raw.charCodeAt(0); if (c >= 0xE000 && c <= 0xF8FF) raw = raw.slice(1); }
-            var text = (String(hit && hit.t || "") + " " + String(hit && hit.b || "") + " " + raw).toLowerCase();
-            if (phrase && text.indexOf(phrase) !== -1) return 0;
-            if (terms.length && terms.every(function(t){ return text.indexOf(t) !== -1; })) return 1;
-            return 2;
+            var title = String(hit && hit.t || "") + " " + String(hit && hit.b || "");
+            if (typeof efNormalizeSearchText === "function") {
+              title = efNormalizeSearchText(title);
+              raw = efNormalizeSearchText(raw);
+            } else {
+              title = title.toLowerCase();
+              raw = raw.toLowerCase();
+            }
+            if (phrase && title.indexOf(phrase) !== -1) return 0;
+            if (everyTermMatches(title, false)) return 1;
+            if (everyTermMatches(title, true)) return 2;
+            if (phrase && raw.indexOf(phrase) !== -1) return 3;
+            if (everyTermMatches(raw, false)) return 4;
+            if (everyTermMatches(raw, true)) return 5;
+            return 6;
           }
           return score(a) - score(b);
         });
