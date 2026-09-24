@@ -126,7 +126,12 @@
     var saved = readSession();
     if (!saved) return false;
     try { sessionStorage.setItem(PENDING_KEY, JSON.stringify(saved)); } catch (_) {}
-    location.replace(saved.url);
+    /* Preserve the launch Home entry underneath the restored page. Using
+       replace() here erased the only real history entry after an Android
+       process recreation, so system Back could appear dead on any resumed
+       section (Original Practice included). assign() keeps Home behind the
+       restored page; the existing back_forward guard prevents resume loops. */
+    location.assign(saved.url);
     return true;
   }
 
