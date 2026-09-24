@@ -34,22 +34,25 @@
     return path === "/" || path === "/index.html";
   }
 
-  function launchMarker() {
+  function installedAppLaunchMarker() {
     if (!isHomePath(location.pathname)) return false;
     var source = "";
     try { source = new URLSearchParams(location.search).get("source") || ""; } catch (_) {}
     if (/^(?:windows-pwa|pwa|android-pwa|app)$/i.test(source)) return true;
     // TWA / Custom Tab launches can expose the Android package as the referrer.
-    // This is more specific than relying on the Chrome user-agent alone.
     try {
       if (/^android-app:\/\/com\.examfusionprep\.app(?:\/|$)/i.test(document.referrer || "")) return true;
     } catch (_) {}
-    // The Android package can also open the plain root URL without a source
-    // parameter. A relaunched standalone/WebView window is an app launch too.
     try {
       if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
       if (navigator.standalone === true || /; wv\)/i.test(navigator.userAgent || "")) return true;
     } catch (_) {}
+    return false;
+  }
+
+  function launchMarker() {
+    if (!isHomePath(location.pathname)) return false;
+    if (installedAppLaunchMarker()) return true;
 
     /* Regular browsers use the same same-device resume engine as Android/PWA.
        A fresh top-level entry (address bar, new tab, browser relaunch, external
@@ -81,7 +84,7 @@
        installs. Android UA + a verified app/PWA launch marker is therefore
        the durable signal; save it before navigating to any internal page,
        where the android-app:// referrer is no longer available. */
-    if (!/Android/i.test(ua) || (!packageReferrer && !launchMarker())) return;
+    if (!/Android/i.test(ua) || (!packageReferrer && !installedAppLaunchMarker())) return;
     try { sessionStorage.setItem(ANDROID_APP_CONTEXT_KEY, "1"); } catch (_) {}
   }
 
