@@ -138,6 +138,26 @@
     return raw;
   }
 
+  function normalizeSourceUrl(source, rawUrl) {
+    var url = String(rawUrl == null ? "" : rawUrl).replace(/\\/g, "/");
+    if (!url || !source || source.id !== "blackbook") return url;
+
+    // BlackBook's own hub lives in /Books/BlackBook/, so its generated
+    // full-text records can legitimately contain "./Files/...". From the
+    // homepage that same relative URL would resolve to /Files/... and 404.
+    // Normalize every BlackBook full-text hit to the repository-root route.
+    if (/^(?:\.\/)?Files\//i.test(url)) {
+      return "./Books/BlackBook/" + url.replace(/^\.\//, "");
+    }
+    if (/^Books\/BlackBook\//i.test(url)) {
+      return "./" + url;
+    }
+    if (!/^(?:[a-z][a-z0-9+.-]*:|\/|\.\/|\.\.\/)/i.test(url) && /\.html(?:[?#]|$)/i.test(url)) {
+      return "./Books/BlackBook/Files/" + url;
+    }
+    return url;
+  }
+
   function homeSearchUrl(rawUrl) {
     if (typeof window.efpHomeSearchUrl === "function") {
       return window.efpHomeSearchUrl(rawUrl);
@@ -346,7 +366,7 @@
     var added = 0;
     hits.forEach(function (hit) {
       if (added >= source.limit) return;
-      var url = String(hit && hit.f || "");
+      var url = normalizeSourceUrl(source, hit && hit.f || "");
       var text = stripMarker(hit && hit.x || "");
       var key = source.id + "\u001f" + url;
       if (!url || !text || seen[key]) return;
