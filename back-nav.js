@@ -500,14 +500,13 @@
     return useLogicalParent(event);
   }
 
-  function rememberCruxViewerState(parentUrl) {
-    if (!isCruxViewer()) return;
-    if (normalizePath(parentUrl.pathname).toLowerCase() !== "/crux-tricks/index.html") return;
+  function buildCruxViewerState() {
+    if (!isCruxViewer()) return null;
 
     var id = new URLSearchParams(window.location.search).get("id");
     var docs = Array.isArray(window.EF_CRUX_DOCS) ? window.EF_CRUX_DOCS : [];
     var doc = docs.find(function (item) { return item && item.id === id; });
-    if (!doc) return;
+    if (!doc) return null;
 
     var exam = doc.exam || "";
     if (!exam && doc.source === "Pinnacle") {
@@ -516,15 +515,50 @@
       else if (pdf.indexOf("/Pinnacle/Railway/") !== -1) exam = "Railway";
     }
 
-    var state = {
+    return {
       kind: doc.kind || "",
       source: doc.source || "",
       exam: exam,
       subject: doc.subject || "",
       branch: doc.branch || ""
     };
+  }
 
-    try { sessionStorage.setItem(CRUX_RESTORE_KEY, JSON.stringify(state)); } catch (_) {}
+  function saveCruxViewerReturnState() {
+    var state = buildCruxViewerState();
+    if (!state || !state.kind || !state.source || !state.subject) return false;
+    try {
+      sessionStorage.setItem(CRUX_RESTORE_KEY, JSON.stringify(state));
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function rememberCruxViewerState(parentUrl) {
+    if (!isCruxViewer()) return;
+    if (normalizePath(parentUrl.pathname).toLowerCase() !== "/crux-tricks/index.html") return;
+    saveCruxViewerReturnState();
+  }
+
+  /* Every Crux PDF is rendered through the same viewer.html. Save its exact
+     logical path as soon as the viewer opens so Browser Back, Android system
+     Back and the floating Back button all have the same deterministic return
+     target even when index.html is restored from BFCache with stale SPA state. */
+  function primeCruxViewerReturnState() {
+    if (!isCruxViewer()) return;
+
+    var attempts = 0;
+    function prime() {
+      attempts++;
+      if (saveCruxViewerReturnState()) return;
+      if (attempts < 20) window.setTimeout(prime, 50);
+    }
+    prime();
+  }
+
+  function clearCruxViewerReturnState() {
+    try { sessionStorage.removeItem(CRUX_RESTORE_KEY); } catch (_) {}
   }
 
   function readCruxRestoreState() {
@@ -850,6 +884,12 @@
     window.location.replace(parentUrl.href);
   });
 
+  document.addEventListener("click", function (event) {
+    if (!isCruxViewer() || !event.target || !event.target.closest) return;
+    var home = event.target.closest("#efp-home-button, .home-btn[href='../index.html'], .home-btn[href='/'], .home-btn[href='/index.html']");
+    if (home) clearCruxViewerReturnState();
+  }, true);
+
   /* Capture before black-mode.js/home-nav.js own button listener.
      - Crux SPA: climb its visible in-page hierarchy first.
      - Original Practice SPA: Quiz -> Chapters -> Complete Practice Home first.
@@ -922,6 +962,7 @@
   installMixedPracticeFeedbackColors();
   installMixedPracticeSiteTheme();
   installMixedPracticeInstantCheck();
+  primeCruxViewerReturnState();
   installCruxHomeSearchHistoryGuard();
   installGenericHomeSearchHistoryGuard();
 
@@ -930,4 +971,11 @@
   } else {
     restoreCruxIndexState();
   }
+
+  /* Returning from viewer.html often restores Crux index.html from BFCache,
+     where scripts do not execute again. pageshow is therefore the durable
+     place to consume the saved PDF hierarchy and rebuild the exact pane. */
+  window.addEventListener("pageshow", function () {
+    if (isCruxTricksRoot()) restoreCruxIndexState();
+  });
 })();
