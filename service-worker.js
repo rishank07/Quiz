@@ -1,6 +1,7 @@
-// v108 Keep Android homepage searches responsive when large indexes load
-const CACHE_VERSION = "efp-pwa-2026-09-24-v108-home-search-performance";
+// v109 Resume the active quiz after an installed app is recreated
+const CACHE_VERSION = "efp-pwa-2026-09-24-v109-app-quiz-resume";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924quizresume1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -23,8 +24,8 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/owner-debug.js",
-  "/home-nav.js?v=20260917mindmapbottom2",
-  "/app-session.js?v=20260908answerreset2",
+  "/home-nav.js?v=20260924quizresume1",
+  "/app-session.js?v=20260924quizresume1",
   "/back-parent-map.js",
   "/back-nav.js?v=20260920allsearchback1",
   "/search-logic.js",
@@ -188,7 +189,13 @@ async function injectEdgeToEdge(response) {
   if (!contentType.toLowerCase().includes("text/html")) return response;
 
   const html = await response.text();
-  return rebuiltHtmlResponse(response, ensureEdgeToEdgeViewport(html));
+  let updated = ensureEdgeToEdgeViewport(html);
+  // Some quiz pages do not load the shared Home navigation script. Install
+  // session tracking for every app navigation, without adding it twice.
+  if (!/id=["']efp-app-session-script["']/i.test(updated)) {
+    updated = updated.replace(/<head(?:\s[^>]*)?>/i, (head) => head + "\n  " + APP_SESSION_SCRIPT);
+  }
+  return rebuiltHtmlResponse(response, updated);
 }
 
 async function injectOwnerDebug(response) {
@@ -309,6 +316,7 @@ self.addEventListener("fetch", (event) => {
   // Navigation chrome and Original Practice shared assets change often;
   // never let an old app-shell copy win on a normal refresh.
   if (url.pathname === "/home-nav.js" ||
+      url.pathname === "/app-session.js" ||
       url.pathname === "/back-nav.js" ||
       url.pathname === "/search-logic.js" ||
       url.pathname === "/homepage-search-ui.js" ||

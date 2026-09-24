@@ -13,6 +13,8 @@ var CONFIGS={
 var CFG=CONFIGS[PAGE_FILE]||{slug:"practice",label:"Practice"};
 var PROGRESS_KEY="efp_visited_originalpractice_"+CFG.slug;
 var BOOKMARK_KEY="efp_bookmarks";
+var APP_ATTEMPT_KEY="efp_app_original_practice_attempt_v1";
+var APP_RESUME_KEY="efp_app_resume_pending_v1";
 var bookmarkOnly=false;
 var pendingDeepQuestion=null;
 
@@ -64,22 +66,67 @@ ensureGlobalOriginalPracticeNavigation();
 
 
 // Keeps attempted answers alive while the user moves between sections of the same chapter.
-// This is deliberately session/in-memory state so a fresh chapter attempt still starts clean.
+// A fresh attempt stays in memory; only a relaunched installed app restores
+// a matching interrupted attempt from the small local snapshot below.
 if(!state.answerMap) state.answerMap={};
 function clearLegacyPersistedAnswers(){try{localStorage.removeItem("efp_quiz_answer_state_v1")}catch(e){}}
 clearLegacyPersistedAnswers();
+function clearSavedAppAttempt(){try{localStorage.removeItem(APP_ATTEMPT_KEY)}catch(e){}}
+function attemptSignature(){
+ return (state.quizData||[]).map(function(sec){
+  var qs=sec.questions||[];
+  return qs.length+":"+(qs[0]&&qs[0].q.en||"")+":"+(qs[qs.length-1]&&qs[qs.length-1].q.en||"");
+ }).join("|");
+}
+function saveAppAttempt(){
+ if(state.screen!=="quiz"||!state.quizData)return;
+ try{localStorage.setItem(APP_ATTEMPT_KEY,JSON.stringify({
+  path:location.pathname,subject:state.subject,chapter:state.chapterName,
+  signature:attemptSignature(),answerMap:state.answerMap,shuffleMap:state.shuffleMap,
+  ts:Date.now()
+ }))}catch(e){}
+}
+function restoreAppAttempt(){
+ if(state.screen!=="quiz"||!state.quizData)return;
+ try{
+  var pending=JSON.parse(sessionStorage.getItem(APP_RESUME_KEY)||"null");
+  var saved=JSON.parse(localStorage.getItem(APP_ATTEMPT_KEY)||"null");
+  if(!pending||!saved||!pending.url||!saved.ts||Date.now()-saved.ts>86400000)return;
+  var resumeUrl=new URL(pending.url,location.origin);
+  if(resumeUrl.origin!==location.origin||resumeUrl.pathname!==location.pathname||
+     saved.path!==location.pathname||saved.subject!==state.subject||
+     saved.chapter!==state.chapterName||saved.signature!==attemptSignature())return;
+  var answers={},orders={},score={correct:0,wrong:0,attempted:0};
+  Object.keys(saved.answerMap||{}).forEach(function(key){
+   var pair=/^(\d+)-(\d+)$/.exec(key);
+   if(!pair)return;
+   var sec=state.quizData[Number(pair[1])];
+   var q=sec&&sec.questions[Number(pair[2])];
+   var order=saved.shuffleMap&&saved.shuffleMap[key];
+   var selected=Number(saved.answerMap[key]&&saved.answerMap[key].selectedOrigIdx);
+   if(!q||!Array.isArray(order)||order.length!==q.o.length||
+      order.some(function(value,i){return !Number.isInteger(value)||value<0||value>=q.o.length||order.indexOf(value)!==i})||
+      !Number.isInteger(selected)||selected<0||selected>=q.o.length)return;
+   answers[key]={selectedOrigIdx:selected};orders[key]=order;
+   score.attempted++;
+   if(selected===currentAnswerIndex(q))score.correct++;else score.wrong++;
+  });
+  state.answerMap=answers;state.shuffleMap=orders;state.score=score;
+ }catch(e){}
+}
 function clearTransientAttempt(){
  state.answerMap={};
  state.shuffleMap={};
  state.score={correct:0,wrong:0,attempted:0};
  clearLegacyPersistedAnswers();
+ clearSavedAppAttempt();
 }
 function isReloadNavigation(){
  try{var entries=performance.getEntriesByType&&performance.getEntriesByType("navigation");return !!(entries&&entries[0]&&entries[0].type==="reload")}catch(e){return false}
 }
 // Browsers and installed PWAs may restore a complete page from the back-forward cache.
-// Explicitly start a clean attempt after refresh/reopen, while ordinary section renders
-// keep using the same in-memory answerMap.
+// An explicit refresh or back-forward revisit starts a clean attempt; an app
+// relaunch arrives as a new navigation and keeps the restored answerMap.
 window.addEventListener("pageshow",function(event){
  clearLegacyPersistedAnswers();
  if(!event.persisted&&!isReloadNavigation())return;
@@ -88,6 +135,8 @@ window.addEventListener("pageshow",function(event){
 });
 window.addEventListener("pagehide",clearLegacyPersistedAnswers);
 window.addEventListener("beforeunload",clearLegacyPersistedAnswers);
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden")saveAppAttempt()});
+window.addEventListener("pagehide",saveAppAttempt);
 function answerStateKey(sectionIndex,qi){return String(sectionIndex)+"-"+String(qi)}
 function restoreAnsweredSection(){
  var secIndex=state.currentSection;
@@ -231,15 +280,16 @@ selectOption=function(qi,displayIdx){
  baseSelectOption(qi,displayIdx);
  if(!state.answerMap)state.answerMap={};
  state.answerMap[k]={selectedOrigIdx:selectedOrigIdx};
+ saveAppAttempt();
  track("original_practice_answer",{practice:CFG.label,subject:state.subject,chapter:state.chapterName,section:state.currentSection+1,question:qi+1,correct:selectedOrigIdx===currentAnswerIndex(state.quizData[state.currentSection].questions[qi])});
 };
 var baseRender=render;render=function(){baseRender();enhance();efpApplySeoMeta();if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}};
-var baseSwitchSection=switchSection;switchSection=function(i){pendingDeepQuestion=null;baseSwitchSection(i);syncUrl("quiz")};
-var basePrevSection=prevSection;prevSection=function(){pendingDeepQuestion=null;basePrevSection();if(state.screen==="quiz")syncUrl("quiz")};
-var baseNextSection=nextSection;nextSection=function(){pendingDeepQuestion=null;baseNextSection();if(state.screen==="quiz")syncUrl("quiz")};
+var baseSwitchSection=switchSection;switchSection=function(i){pendingDeepQuestion=null;baseSwitchSection(i);syncUrl("quiz");saveAppAttempt()};
+var basePrevSection=prevSection;prevSection=function(){pendingDeepQuestion=null;basePrevSection();if(state.screen==="quiz"){syncUrl("quiz");saveAppAttempt()}};
+var baseNextSection=nextSection;nextSection=function(){pendingDeepQuestion=null;baseNextSection();if(state.screen==="quiz"){syncUrl("quiz");saveAppAttempt()}};
 var baseGoHome=goHome;goHome=function(){clearTransientAttempt();baseGoHome();syncUrl("home")};
 var baseGoToChapters=goToChapters;goToChapters=function(subject){clearTransientAttempt();baseGoToChapters(subject);syncUrl("chapters");track("original_practice_subject_open",{practice:CFG.label,subject:subject})};
 var baseGoToQuiz=goToQuiz;goToQuiz=function(chapterName){clearTransientAttempt();markVisited(state.subject,chapterName);baseGoToQuiz(chapterName);syncUrl("quiz");track("original_practice_chapter_open",{practice:CFG.label,subject:state.subject,chapter:chapterName})};
 function applyDeepLink(){try{var p=new URLSearchParams(location.search),s=p.get("subject"),c=p.get("chapter"),sec=Number(p.get("section")||1),q=Number(p.get("q")||0);if(s&&MASTER[s]){state.subject=s;if(c&&MASTER[s][c]){markVisited(s,c);state.screen="quiz";state.chapterName=c;state.quizData=MASTER[s][c];if(!Number.isFinite(sec)||sec<1)sec=1;state.currentSection=Math.min(state.quizData.length-1,Math.max(0,Math.floor(sec)-1));state.score={correct:0,wrong:0,attempted:0};state.shuffleMap={};state.answerMap={};if(Number.isFinite(q)&&q>=1&&state.quizData[state.currentSection]&&q<=state.quizData[state.currentSection].questions.length)pendingDeepQuestion=Math.floor(q)-1}else{state.screen="chapters";state.chapterName=null;state.quizData=null}}}catch(e){}}
-applyDeepLink();render();
+applyDeepLink();restoreAppAttempt();render();
 })();
