@@ -419,7 +419,7 @@
   if (typeof document === "undefined" || document.getElementById("efp-app-session-script")) return;
   var script = document.createElement("script");
   script.id = "efp-app-session-script";
-  script.src = "/app-session.js?v=20260924androidctx1";
+  script.src = "/app-session.js?v=20260924opbacksession1";
   script.async = false;
   (document.head || document.documentElement).appendChild(script);
 })();
