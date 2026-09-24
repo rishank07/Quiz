@@ -1,5 +1,5 @@
-// v106 Consistent case and spacing in search 20260924
-const CACHE_VERSION = "efp-pwa-2026-09-24-v106-search-case-spacing";
+// v107 Restore homepage search results without rerunning search 20260924
+const CACHE_VERSION = "efp-pwa-2026-09-24-v107-home-search-return";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -30,8 +30,8 @@ const APP_SHELL = [
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
-  "/homepage-search-ui.js?v=20260924persistent1",
-  "/homepage-fulltext-search.js?v=20260924blackbook1",
+  "/homepage-search-ui.js?v=20260924instantreturn1",
+  "/homepage-fulltext-search.js?v=20260924instantreturn1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",

@@ -453,11 +453,12 @@
     nextSource();
   }
 
-  box.addEventListener("input", function () {
+  box.addEventListener("input", function (event) {
     clearTimeout(timer);
     disposeWorkers();
     var query = box.value.trim();
     var mySequence = ++sequence;
+    if (event.detail && event.detail.efpRestoredSearch) return;
     if (query.length < 3) {
       clearOwnResults();
       return;
@@ -475,5 +476,9 @@
     if (event.persisted && !box.value.trim()) clearOwnResults();
   });
 
-  window.addEventListener("pagehide", disposeWorkers);
+  window.addEventListener("pagehide", function () {
+    clearTimeout(timer);
+    ++sequence;
+    disposeWorkers();
+  });
 })();
