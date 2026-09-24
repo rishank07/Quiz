@@ -1,7 +1,7 @@
-// v128 Limit auto-resume to Android and installed web app/PWA
-const CACHE_VERSION = "efp-pwa-2026-09-24-v128-app-resume-only";
+// v129 Preserve quiz-exit warning across installed-app auto-resume
+const CACHE_VERSION = "efp-pwa-2026-09-24-v129-app-resume-quiz-warning";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924appresume3"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924appresume4"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -24,8 +24,8 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/owner-debug.js",
-  "/home-nav.js?v=20260924appresume3",
-  "/app-session.js?v=20260924appresume3",
+  "/home-nav.js?v=20260924appresume4",
+  "/app-session.js?v=20260924appresume4",
   "/back-parent-map.js",
   "/back-nav.js?v=20260924ophierarchy1",
   "/search-logic.js",
