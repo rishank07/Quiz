@@ -677,6 +677,11 @@
             return;
           }
 
+          if (currentPath === "/original practice/mixed_practice.html" &&
+              typeof window.EFP_MIXED_PRACTICE_PREPARE_NAVIGATION === "function") {
+            window.EFP_MIXED_PRACTICE_PREPARE_NAVIGATION();
+          }
+
           window.setTimeout(function () {
             try {
               if (navTarget && navTarget.isConnected && typeof navTarget.click === "function") {
@@ -720,7 +725,16 @@
     window.EFP_QUIZ_PROGRESS_WARNING = {
       arm: arm,
       disarm: disarm,
-      isArmed: function () { return dirty; }
+      isArmed: function () { return dirty; },
+      confirmLeave: function (onLeave) {
+        if (typeof onLeave !== "function") return false;
+        if (shouldWarn()) {
+          showExitModal(onLeave);
+          return true;
+        }
+        onLeave();
+        return false;
+      }
     };
   }
 

@@ -35,9 +35,9 @@
     @media(max-width:850px){.pool-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.specific-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.config-grid{grid-template-columns:1fr}.setup-actions{grid-template-columns:1fr}.secondary-btn{width:100%}}
     @media(max-width:560px){.wrap{width:min(100% - 18px,1080px);padding-top:17px}.panel,.question-card{padding:14px;border-radius:18px}.pool-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.pool-body{min-height:88px;padding:10px}.specific-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.specific-grid .pool-body{min-height:76px}.config-box{padding:12px}.count-row{align-items:flex-start;flex-direction:column}.count-input{width:100%}.stats-row{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.stat{padding:6px 3px;min-width:0}.quiz-head{top:4px;padding:9px}.quiz-head.efp-mobile-compact{padding:2px 3px;border-radius:8px;margin-bottom:7px;box-shadow:0 2px 10px rgba(0,0,0,.22)}.quiz-head.efp-mobile-compact .quiz-head-top,.quiz-head.efp-mobile-compact .progress-track{display:none}.quiz-head.efp-mobile-compact .stats-row{margin-top:0;gap:2px}.quiz-head.efp-mobile-compact .stat{padding:1px 1px;border-radius:6px;min-height:27px;display:flex;flex-direction:column;justify-content:center;border-width:1px;box-shadow:0 1px 4px rgba(0,0,0,.13)}.quiz-head.efp-mobile-compact .stat:nth-child(1){border-color:rgba(59,130,246,.48);background:linear-gradient(135deg,rgba(59,130,246,.16),rgba(96,165,250,.07))}.quiz-head.efp-mobile-compact .stat:nth-child(2){border-color:rgba(245,158,11,.52);background:linear-gradient(135deg,rgba(245,158,11,.17),rgba(251,191,36,.07))}.quiz-head.efp-mobile-compact .stat:nth-child(3){border-color:rgba(34,197,94,.5);background:linear-gradient(135deg,rgba(34,197,94,.16),rgba(74,222,128,.07))}.quiz-head.efp-mobile-compact .stat:nth-child(4){border-color:rgba(239,68,68,.5);background:linear-gradient(135deg,rgba(239,68,68,.16),rgba(251,113,133,.07))}.quiz-head.efp-mobile-compact .stat strong{font-size:10px;line-height:1;font-weight:950;text-shadow:0 1px 0 rgba(0,0,0,.08)}.quiz-head.efp-mobile-compact .stat:nth-child(1) strong{color:#60a5fa}.quiz-head.efp-mobile-compact .stat:nth-child(2) strong{color:#fbbf24}.quiz-head.efp-mobile-compact .stat:nth-child(3) strong{color:#4ade80}.quiz-head.efp-mobile-compact .stat:nth-child(4) strong{color:#fb7185}.quiz-head.efp-mobile-compact .stat span{font-size:6px;line-height:1;margin-top:1px;white-space:nowrap;letter-spacing:0;font-weight:900;color:#cbd5e1}.question-card{padding-bottom:16px}.option-body{padding:10px;grid-template-columns:29px 1fr}.q-en,.q-hi{font-size:15px}.finish-actions{grid-template-columns:1fr}.resume-box{align-items:flex-start;flex-direction:column}.resume-btn{width:100%}}
   </style>
-  <script defer src="/home-nav.js?v=20260925mixedexit2"></script>
+  <script defer src="/home-nav.js?v=20260925mixededge1"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
-  <script defer src="/back-nav.js?v=20260924bookhier3"></script>
+  <script defer src="/back-nav.js?v=20260925mixededge1"></script>
 </head>
 <body>
 <main class="wrap">
@@ -119,6 +119,7 @@
   var HISTORY_KEY='efp_mixed_practice_recent_sets_v1';
   var VIEW_KEY='efp_mixed_practice_view_v1';
   var BOOKMARK_KEY='efp_mixed_practice_bookmarks_v1';
+  var HISTORY_VIEW_KEY='efpMixedPracticeView';
   var MAX_RECENT_SETS=20;
   var MAX_QUESTIONS=500;
   var FILES={history:'History_Complete_Practice.html',polity:'Polity_Complete_Practice.html',science:'Science_Complete_Practice.html',geography:'Geography_Complete_Practice.html',economics:'Economics_Complete_Practice.html',ecology:'Environment_Ecology_Complete_Practice.html',english:'English_Grammar_Complete_Practice.html',staticgk:'Static_GK_Complete_Practice.html'};
@@ -143,7 +144,7 @@
   var MAJOR=['history','polity','science','geography','economics','ecology','english','staticgk'];
   var SPECIFIC=['ancient','medieval','modern','physics','chemistry','biology','indianGeo','worldGeo'];
   var DOMAIN_CHILDREN={history:['ancient','medieval','modern'],science:['physics','chemistry','biology'],geography:['indianGeo','worldGeo']};
-  var fileCache={},poolCache={},currentQuestions=[],currentIndex=0,state=null,pendingSelections={},bookmarks=loadBookmarks(),savedMode=false,savedReturn=null,historyReviewMode=false; /* efp-mixed-saved-view-v3 */
+  var fileCache={},poolCache={},currentQuestions=[],currentIndex=0,state=null,pendingSelections={},bookmarks=loadBookmarks(),savedMode=false,savedReturn=null,historyReviewMode=false,historyExitPending=false; /* efp-mixed-saved-view-v3 */
   function $(id){return document.getElementById(id)}
   function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function sameText(a,b){return String(a||'').trim()===String(b||'').trim()}
@@ -173,6 +174,24 @@
     if(!state||savedMode||historyReviewMode||state.completed||!Array.isArray(state.ids)||!state.ids.length)return;
     state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);upsertRecentSet(state);
     try{localStorage.removeItem(STATE_KEY);sessionStorage.setItem(VIEW_KEY,'setup');sessionStorage.removeItem('efp_app_resume_pending_v1')}catch(e){}
+  }
+  function copyHistoryState(value){var copy={};if(!value||typeof value!=='object')return copy;Object.keys(value).forEach(function(key){copy[key]=value[key]});return copy}
+  function mixedHistoryPhase(value,phase){return !!(value&&value[HISTORY_VIEW_KEY]===phase)}
+  function mixedRelativeUrl(){return location.pathname+location.search+location.hash}
+  function armMixedQuizHistory(){
+    if(mixedHistoryPhase(history.state,'quiz'))return;
+    var base=copyHistoryState(history.state),top;
+    base[HISTORY_VIEW_KEY]='builder';top=copyHistoryState(base);top[HISTORY_VIEW_KEY]='quiz';
+    try{
+      if(!mixedHistoryPhase(history.state,'builder'))history.replaceState(base,'',mixedRelativeUrl());
+      history.pushState(top,'',mixedRelativeUrl());
+    }catch(e){}
+  }
+  function finishMixedExitToSetup(){historyExitPending=false;clearStatus();showSetup()}
+  function moveMixedHistoryToBuilder(){
+    if(!mixedHistoryPhase(history.state,'quiz'))return false;
+    historyExitPending=true;
+    try{history.back();return true}catch(e){historyExitPending=false;return false}
   }
   function setStatus(msg,type){var el=$('setupStatus');el.className='status show'+(type?' '+type:'');el.textContent=msg}
   function clearStatus(){var el=$('setupStatus');el.className='status';el.textContent=''}
@@ -225,7 +244,7 @@
       console.error(err);setStatus('Could not open this recent set.','bad');historyReviewMode=false;return false
     }finally{document.documentElement.classList.remove('efp-mixed-restoring')}
   }
-  function showQuiz(){try{sessionStorage.setItem(VIEW_KEY,'quiz')}catch(e){}$('setupView').hidden=true;$('finishView').hidden=true;$('quizView').hidden=false;var head=document.querySelector('.quiz-head');if(head){head.classList.remove('efp-mobile-compact');head.removeAttribute('data-sticky-start')}window.scrollTo({top:0,behavior:'auto'});updateQuizTitle();requestAnimationFrame(syncMobileQuizHead)}
+  function showQuiz(){try{sessionStorage.setItem(VIEW_KEY,'quiz')}catch(e){}armMixedQuizHistory();$('setupView').hidden=true;$('finishView').hidden=true;$('quizView').hidden=false;var head=document.querySelector('.quiz-head');if(head){head.classList.remove('efp-mobile-compact');head.removeAttribute('data-sticky-start')}window.scrollTo({top:0,behavior:'auto'});updateQuizTitle();requestAnimationFrame(syncMobileQuizHead)}
   function showSetup(){historyReviewMode=false;try{sessionStorage.setItem(VIEW_KEY,'setup')}catch(e){}$('quizView').hidden=true;$('finishView').hidden=true;$('setupView').hidden=false;window.scrollTo({top:0,behavior:'auto'});refreshResume()}
   function isMobileQuiz(){
     return !!(window.matchMedia&&window.matchMedia('(max-width:560px)').matches);
@@ -280,9 +299,16 @@
   $('savedQuestionsBtn').onclick=openSavedQuestions;
   function exitMixedPracticeToSetup(){
     if(savedMode){closeSavedQuestions();return}
+    if(historyExitPending)return;
+    archiveCurrentSet();
+    if(!moveMixedHistoryToBuilder())finishMixedExitToSetup()
+  }
+  function prepareMixedPracticeNavigation(){
+    if(savedMode)closeSavedQuestions();
     archiveCurrentSet();clearStatus();showSetup()
   }
   window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP=exitMixedPracticeToSetup;
+  window.EFP_MIXED_PRACTICE_PREPARE_NAVIGATION=prepareMixedPracticeNavigation;
   $('setupBtn').onclick=exitMixedPracticeToSetup;
   $('newSetBtn').onclick=function(){if(savedMode){closeSavedQuestions();return}if(state){archiveCurrentSet();generateSet(state.selectedKeys,state.total||currentQuestions.length)}};
   function currentAnswer(){if(!state||!currentQuestions[currentIndex])return null;var a=state.answers[currentQuestions[currentIndex].id]||null;return a&&a.checked?a:null}
@@ -390,12 +416,30 @@
       copy.appendChild(title);copy.appendChild(meta);actions.appendChild(btn);actions.appendChild(del);card.appendChild(copy);card.appendChild(actions);box.appendChild(card);
     })
   }
-  // Archive an in-progress generated set only when the user intentionally leaves/goes back.
+  // Archive external navigation only after an armed warning is accepted. This
+  // keeps "Stay on Quiz" lossless while still covering Home and top navigation.
   document.addEventListener('click',function(event){
-    if(!state||$('quizView').hidden||savedMode||historyReviewMode)return;
-    var target=event.target&&event.target.closest?event.target.closest('#efp-app-back-button,.topnav a'):null;
-    if(target)archiveCurrentSet();
+    if(!state||($('quizView').hidden&&$('finishView').hidden))return;
+    var target=event.target&&event.target.closest?event.target.closest('#efp-home-button,.topnav a'):null;
+    if(!target)return;
+    var warning=window.EFP_QUIZ_PROGRESS_WARNING;
+    if(warning&&typeof warning.isArmed==='function'&&warning.isArmed())return;
+    prepareMixedPracticeNavigation();
   },true);
+  window.addEventListener('popstate',function(event){
+    if(!mixedHistoryPhase(event.state,'builder'))return;
+    if(historyExitPending){finishMixedExitToSetup();return}
+    var mixedVisible=!( $('quizView').hidden&&$('finishView').hidden );
+    if(!mixedVisible){try{history.back()}catch(e){}return}
+    // The Back press has reached the builder guard. Re-arm the quiz entry while
+    // the confirmation is open; Stay keeps it, Leave consumes it deliberately.
+    armMixedQuizHistory();
+    var openModal=document.getElementById('efp-quiz-exit-modal');
+    if(openModal&&openModal.classList.contains('show'))return;
+    var warning=window.EFP_QUIZ_PROGRESS_WARNING;
+    if(warning&&typeof warning.confirmLeave==='function')warning.confirmLeave(exitMixedPracticeToSetup);
+    else exitMixedPracticeToSetup()
+  });
   // The last question can still be unanswered. Keep the set until Finish is tapped.
   function isReloadNavigation(){
     try{

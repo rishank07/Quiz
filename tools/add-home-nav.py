@@ -14,6 +14,7 @@ SCRIPT_SPECS = (
 )
 
 MATHS_SPEED_BOOSTER_FILE = Path("Maths Speed Booster/math-speed-booster.html")
+MIXED_PRACTICE_FILE = Path("Original Practice/Mixed_Practice.html")
 MATHS_FIT_MARKER = "/Maths%20Speed%20Booster/math-speed-booster-fit.css"
 MATHS_FIT_TAG = (
     '  <link rel="stylesheet" '
@@ -52,10 +53,12 @@ def inject(path: Path, root: Path) -> bool:
         raise RuntimeError(f"Non-UTF-8 HTML file: {path}") from exc
 
     rel = path.relative_to(root)
-    # Crux pages need the current Back handler even after the counts workflow
-    # rewrites navigation tags. Other sections keep their existing cache URL.
+    # Crux and Mixed Practice need their current Back handlers even after the
+    # counts workflow rewrites navigation tags. Other sections keep the shared
+    # default cache URL.
     back_nav_version = (
         "20260924cruxdirect3" if rel.parts[0] == "Crux-Tricks"
+        else "20260925mixededge1" if rel == MIXED_PRACTICE_FILE
         else "20260924bookhier3"
     )
 
