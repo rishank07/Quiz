@@ -36,6 +36,11 @@
     return normalizePath(window.location.pathname).toLowerCase().indexOf("/original practice/") === 0;
   }
 
+  function isOriginalPracticeIndex() {
+    var path = normalizePath(window.location.pathname).toLowerCase();
+    return path === "/original practice" || path === "/original practice/index.html";
+  }
+
   function isMixedPracticePage() {
     return normalizePath(window.location.pathname).toLowerCase() === "/original practice/mixed_practice.html";
   }
@@ -318,6 +323,12 @@
         if (state.subject && typeof goToChapters === "function") {
           consumeBackEvent(event);
           goToChapters(state.subject);
+          try { window.scrollTo(0, 0); } catch (_) {}
+          return true;
+        }
+        if (typeof goChapters === "function") {
+          consumeBackEvent(event);
+          goChapters();
           try { window.scrollTo(0, 0); } catch (_) {}
           return true;
         }
@@ -860,13 +871,17 @@
       return;
     }
 
-    /* Original Practice global Back is intentionally simple: always exit to
-       ExamFusion Home. Do not involve app detection, referrer, browser history
-       or the in-page quiz/chapter hierarchy. */
+    /* Follow the Practice page's own hierarchy before leaving its section. */
     if (isOriginalPracticePage()) {
+      if (useOriginalPracticeInternalBack(event)) return;
       consumeBackEvent(event);
       try { sessionStorage.removeItem("efp_logical_back_expected_path"); } catch (_) {}
-      window.location.assign("/");
+      if (isOriginalPracticeIndex()) {
+        if (window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
+        window.location.assign("/");
+      } else {
+        window.location.assign("/Original%20Practice/index.html");
+      }
       return;
     }
 

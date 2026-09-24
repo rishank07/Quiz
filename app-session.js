@@ -501,13 +501,12 @@
       window.setTimeout(function () { try { stay.focus(); } catch (_) {} }, 0);
     }
 
-    // Original Practice registers its document capture handler before this
-    // script. Handle the visible Back on window capture so confirmation can
-    // return a quiz to its chapters. Mark only a real site Home exit as such;
-    // otherwise the Android app's launch resume reopens Practice immediately.
+    // Original Practice's document handlers otherwise send every Back straight
+    // to the site Home. Handle the click before them while preserving its SPA
+    // hierarchy: Quiz -> Chapters -> All Subjects -> Practice index -> site Home.
     window.addEventListener("click", function (event) {
       var path = normalizedPath(location.pathname).toLowerCase();
-      if (path.indexOf("/original practice/") !== 0) return;
+      if (path !== "/original practice" && path.indexOf("/original practice/") !== 0) return;
       var back = event.target && event.target.closest
         ? event.target.closest("#efp-app-back-button") : null;
       if (!back) return;
@@ -516,37 +515,43 @@
       event.stopPropagation();
       if (event.stopImmediatePropagation) event.stopImmediatePropagation();
 
-      function leavePractice(confirmedQuizExit) {
+      function leavePractice() {
         approveOneNavigation();
-        if (confirmedQuizExit) {
-          try {
-            if (typeof state !== "undefined" && state && state.screen === "quiz") {
+        if (path === "/original practice" || path === "/original practice/index.html") {
+          markIntentionalHome();
+          try { sessionStorage.removeItem("efp_logical_back_expected_path"); } catch (_) {}
+          location.assign("/");
+          return;
+        }
+
+        try {
+          if (typeof state !== "undefined" && state && state.screen) {
+            if (state.screen === "quiz") {
               if (state.subject && typeof goToChapters === "function") {
                 goToChapters(state.subject);
               } else if (typeof goChapters === "function") {
                 goChapters();
-              } else if (typeof goHome === "function") {
-                goHome();
               } else {
                 throw new Error("No Original Practice quiz parent");
               }
-              disarm();
-              try { window.scrollTo(0, 0); } catch (_) {}
-              return;
+            } else if (state.screen === "chapters" && typeof goHome === "function") {
+              goHome();
+            } else {
+              throw new Error("Practice index is the next parent");
             }
-          } catch (_) {}
-          // Standalone Original Practice quizzes have no in-page chapters.
-          // Their parent is the Original Practice landing page.
-          location.assign("/Original%20Practice/index.html");
-          return;
-        }
-        markIntentionalHome();
-        try { sessionStorage.removeItem("efp_logical_back_expected_path"); } catch (_) {}
-        location.assign("/");
+            disarm();
+            try { window.scrollTo(0, 0); } catch (_) {}
+            return;
+          }
+        } catch (_) {}
+
+        // Subject Home, English chapters and standalone practice pages all
+        // return to the Original Practice index, without clearing app resume.
+        location.assign("/Original%20Practice/index.html");
       }
 
-      if (shouldWarn()) showExitModal(function () { leavePractice(true); });
-      else leavePractice(false);
+      if (shouldWarn()) showExitModal(leavePractice);
+      else leavePractice();
     }, true);
 
     document.addEventListener("click", function (event) {

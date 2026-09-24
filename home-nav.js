@@ -35,6 +35,11 @@
     return normalizedPath(window.location.pathname).toLowerCase().indexOf("/original practice/") === 0;
   }
 
+  function isOriginalPracticeIndex() {
+    var path = normalizedPath(window.location.pathname).toLowerCase();
+    return path === "/original practice" || path === "/original practice/index.html";
+  }
+
   function isCruxTricksPage() {
     var path = normalizedPath(window.location.pathname).toLowerCase();
     return path === "/crux-tricks" || path.indexOf("/crux-tricks/") === 0;
@@ -161,12 +166,11 @@
   }
 
   function navigateDefaultBack() {
-    /* Original Practice uses the global Back button as a direct exit to the
-       ExamFusion home page on every surface, including the Android app. Keep
-       this self-contained here so it does not depend on referrer/history/app
-       detection or back-nav.js being current. */
+    /* The Practice index exits to site Home. Inner pages retain their
+       hierarchy; back-nav.js handles their in-page steps first. */
     if (isOriginalPracticePage()) {
-      window.location.assign("/");
+      if (isOriginalPracticeIndex() && window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
+      window.location.assign(isOriginalPracticeIndex() ? "/" : "/Original%20Practice/index.html");
       return;
     }
 
@@ -200,16 +204,16 @@
     if (window.__efpOriginalPracticeDirectBackCaptureInstalled) return;
     window.__efpOriginalPracticeDirectBackCaptureInstalled = true;
 
-    /* Register on document from home-nav.js so this wins before the generic
-       back-nav.js capture handler. Original Practice's global Back is a direct
-       exit to ExamFusion Home, full stop. */
+    /* Only the Practice index exits directly to site Home. Inner Practice
+       screens need their Quiz -> Chapters -> All Subjects Back hierarchy. */
     document.addEventListener("click", function (event) {
-      if (!isOriginalPracticePage() || !event.target || !event.target.closest) return;
+      if (!isOriginalPracticeIndex() || !event.target || !event.target.closest) return;
       var button = event.target.closest("#" + BACK_BUTTON_ID);
       if (!button) return;
       event.preventDefault();
       event.stopPropagation();
       if (typeof event.stopImmediatePropagation === "function") event.stopImmediatePropagation();
+      if (window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
       window.location.assign("/");
     }, true);
   }
@@ -422,7 +426,7 @@
   if (typeof document === "undefined" || document.getElementById("efp-app-session-script")) return;
   var script = document.createElement("script");
   script.id = "efp-app-session-script";
-  script.src = "/app-session.js?v=20260924opbackchapter1";
+  script.src = "/app-session.js?v=20260924ophierarchy1";
   script.async = false;
   (document.head || document.documentElement).appendChild(script);
 })();
