@@ -136,6 +136,7 @@ window.addEventListener("pageshow",function(event){
 window.addEventListener("pagehide",clearLegacyPersistedAnswers);
 window.addEventListener("beforeunload",clearLegacyPersistedAnswers);
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden")saveAppAttempt()});
+document.addEventListener("freeze",saveAppAttempt);
 window.addEventListener("pagehide",saveAppAttempt);
 function answerStateKey(sectionIndex,qi){return String(sectionIndex)+"-"+String(qi)}
 function restoreAnsweredSection(){

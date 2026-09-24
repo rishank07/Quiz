@@ -39,7 +39,12 @@
     var source = "";
     try { source = new URLSearchParams(location.search).get("source") || ""; } catch (_) {}
     if (/^(?:windows-pwa|pwa|android-pwa|app)$/i.test(source)) return true;
-    // The Android package normally opens the plain root URL, without a source
+    // TWA / Custom Tab launches can expose the Android package as the referrer.
+    // This is more specific than relying on the Chrome user-agent alone.
+    try {
+      if (/^android-app:\/\/com\.examfusionprep\.app(?:\/|$)/i.test(document.referrer || "")) return true;
+    } catch (_) {}
+    // The Android package can also open the plain root URL without a source
     // parameter. A relaunched standalone/WebView window is an app launch too.
     try {
       if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
@@ -222,6 +227,7 @@
     document.addEventListener("visibilitychange", function () {
       if (document.visibilityState === "hidden") save();
     });
+    document.addEventListener("freeze", save);
     window.addEventListener("pagehide", save);
   }
 
@@ -245,6 +251,7 @@
     document.addEventListener("visibilitychange", function () {
       if (document.visibilityState === "hidden") writeSession();
     });
+    document.addEventListener("freeze", function () { writeSession(); });
     window.addEventListener("pagehide", function () { writeSession(); });
     window.addEventListener("beforeunload", function () { writeSession(); });
     window.addEventListener("pageshow", function (event) {
