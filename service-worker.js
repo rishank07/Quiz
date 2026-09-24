@@ -1,5 +1,5 @@
-// v129 Preserve quiz-exit warning across installed-app auto-resume
-const CACHE_VERSION = "efp-pwa-2026-09-24-v130-crux-direct-back-restore";
+// v131 Distinguish direct Crux viewer links from real Crux navigation
+const CACHE_VERSION = "efp-pwa-2026-09-24-v131-crux-direct-link-back";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924appresume4"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -24,10 +24,10 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/owner-debug.js",
-  "/home-nav.js?v=20260924appresume4",
+  "/home-nav.js?v=20260924cruxdirect3",
   "/app-session.js?v=20260924appresume4",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260924cruxrestore2",
+  "/back-nav.js?v=20260924cruxdirect3",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",

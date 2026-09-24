@@ -154,11 +154,33 @@
     }
   }
 
+  function hasExpectedCruxViewerReferrer() {
+    if (!document.referrer) return false;
+    try {
+      var referrer = new URL(document.referrer, window.location.href);
+      if (referrer.origin !== window.location.origin) return false;
+      var path = normalizedPath(referrer.pathname).toLowerCase();
+      var source = new URLSearchParams(window.location.search).get("from");
+      if (source === "crux-index") {
+        return path === "/crux-tricks" || path === "/crux-tricks/index.html";
+      }
+      if (source === "crux-page") {
+        return path === "/crux-tricks/my-pages.html";
+      }
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   function navigateCruxBack() {
     var source = new URLSearchParams(window.location.search).get("from");
-    var openedFromCrux = isCruxTricksPage() &&
+    var hasCruxMarker = isCruxTricksPage() &&
       (source === "crux-index" || source === "crux-page");
-    if (window.history.length > 1 && (openedFromCrux || hasSameOriginReferrer())) {
+    var canUseHistory = hasCruxMarker
+      ? hasExpectedCruxViewerReferrer()
+      : hasSameOriginReferrer();
+    if (window.history.length > 1 && canUseHistory) {
       window.history.back();
       return;
     }

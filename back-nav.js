@@ -388,6 +388,25 @@
     }
   }
 
+  function hasExpectedCruxViewerReferrer() {
+    if (!document.referrer) return false;
+    try {
+      var referrer = new URL(document.referrer, window.location.href);
+      if (referrer.origin !== window.location.origin) return false;
+      var path = normalizePath(referrer.pathname).toLowerCase();
+      var source = new URLSearchParams(window.location.search).get("from");
+      if (source === "crux-index") {
+        return path === "/crux-tricks" || path === "/crux-tricks/index.html";
+      }
+      if (source === "crux-page") {
+        return path === "/crux-tricks/my-pages.html";
+      }
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   function isHomePageUrl(url) {
     if (!url) return false;
     try {
@@ -882,13 +901,18 @@
       return;
     }
 
-    /* The Crux SPA already placed each pane in real browser history before
-       opening this PDF. Android app shells can omit document.referrer; the
-       explicit link marker lets the floating Back return to that chapter
-       entry without replacing the viewer with a second Crux index. */
-    if (isCruxViewerFromCruxPage() && window.history.length > 1) {
-      consumeBackEvent(event);
-      window.history.back();
+    /* `from=crux-index` is part of the shareable viewer URL, so it cannot by
+       itself prove that the current history entry was opened from the Crux
+       SPA. Only reuse browser history when the actual referrer matches the
+       marked internal Crux page. A direct/shared URL must use the reconstructed
+       logical parent; otherwise history.back() can leave ExamFusion entirely. */
+    if (isCruxViewerFromCruxPage()) {
+      if (window.history.length > 1 && hasExpectedCruxViewerReferrer()) {
+        consumeBackEvent(event);
+        window.history.back();
+      } else {
+        useLogicalParent(event);
+      }
       return;
     }
 
