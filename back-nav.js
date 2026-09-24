@@ -34,10 +34,6 @@
     return normalizePath(window.location.pathname).toLowerCase() === "/original practice/mixed_practice.html";
   }
 
-  function isBooksPage() {
-    return normalizePath(window.location.pathname).toLowerCase().indexOf("/books/") === 0;
-  }
-
   /* Some older Complete Practice subject headers still describe the page as
      "offline practice" while newer subjects do not. Keep the actual offline/PWA
      capability intact and only remove that obsolete visible copy. Because the
@@ -470,36 +466,6 @@
     }
   }
 
-  function referrerMatchesLogicalParent(parentUrl) {
-    if (!parentUrl || !document.referrer) return false;
-    try {
-      var referrerUrl = new URL(document.referrer, window.location.href);
-      return referrerUrl.origin === window.location.origin &&
-        normalizePath(referrerUrl.pathname) === normalizePath(parentUrl.pathname);
-    } catch (_) {
-      return false;
-    }
-  }
-
-  function useBooksHierarchyBack(event) {
-    if (!isBooksPage()) return false;
-
-    var parentUrl = logicalParentUrl();
-    if (!parentUrl) return false;
-
-    /* Keep real browser history when it already contains the exact parent.
-       This avoids duplicate parent entries after normal click-through browsing. */
-    if (window.history.length > 1 && referrerMatchesLogicalParent(parentUrl)) {
-      consumeBackEvent(event);
-      window.history.back();
-      return true;
-    }
-
-    /* If history/referrer skipped one or more Book levels, fall back to the
-       generated hierarchy so a Back press can never jump straight to Home. */
-    return useLogicalParent(event);
-  }
-
   function buildCruxViewerState() {
     if (!isCruxViewer()) return null;
 
@@ -917,13 +883,6 @@
     }
 
     if (useOriginalPracticeInternalBack(event)) {
-      return;
-    }
-
-    /* Book chapters have a real multi-level hierarchy (Book -> Subject ->
-       Part -> Chapter list -> Chapter). Use native Back only when the referrer
-       is the exact mapped parent; otherwise recover one level via the map. */
-    if (useBooksHierarchyBack(event)) {
       return;
     }
 
