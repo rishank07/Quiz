@@ -158,6 +158,15 @@
   }
 
   function navigateDefaultBack() {
+    /* Original Practice uses the global Back button as a direct exit to the
+       ExamFusion home page on every surface, including the Android app. Keep
+       this self-contained here so it does not depend on referrer/history/app
+       detection or back-nav.js being current. */
+    if (isOriginalPracticePage()) {
+      window.location.assign("/");
+      return;
+    }
+
     if (window.history.length > 1 && hasSameOriginReferrer()) {
       window.history.back();
       return;
