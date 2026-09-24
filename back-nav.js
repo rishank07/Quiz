@@ -316,6 +316,27 @@
 
     if (clearOriginalPracticeSearch(event)) return true;
 
+    // Mixed Practice keeps Quiz -> Set Builder inside one document. This is a
+    // fallback for cases where app-session.js has not finished loading yet
+    // (common on a cold Android app start). Never let global Back skip the
+    // builder and fall through to Original Practice/Home.
+    if (isMixedPracticePage()) {
+      var mixedQuiz = document.getElementById("quizView");
+      var mixedFinish = document.getElementById("finishView");
+      var mixedVisible = !!((mixedQuiz && !mixedQuiz.hidden) || (mixedFinish && !mixedFinish.hidden));
+      if (mixedVisible) {
+        consumeBackEvent(event);
+        if (typeof window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP === "function") {
+          window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP();
+        } else {
+          var mixedSetupButton = document.getElementById("setupBtn");
+          if (mixedSetupButton) mixedSetupButton.click();
+        }
+        try { window.scrollTo(0, 0); } catch (_) {}
+        return true;
+      }
+    }
+
     try {
       if (typeof state === "undefined" || !state || !state.screen) return false;
 
