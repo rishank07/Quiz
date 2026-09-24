@@ -378,9 +378,9 @@
       var style = document.createElement("style");
       style.id = MODAL_ID + "-style";
       style.textContent = [
-        "#" + MODAL_ID + "{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,7,18,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}",
+        "#" + MODAL_ID + "{position:fixed;inset:0;z-index:2147483647;display:none;align-items:center;justify-content:center;overflow:auto;padding:max(18px,env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) max(18px,env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));background:rgba(3,7,18,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}",
         "#" + MODAL_ID + ".show{display:flex}",
-        "#" + MODAL_ID + " .efp-qw-card{width:min(430px,100%);border-radius:20px;background:#fff;color:#172033;border:1px solid rgba(15,23,42,.10);box-shadow:0 28px 80px rgba(2,6,23,.34);overflow:hidden;transform:translateY(8px) scale(.985);opacity:0;transition:transform .18s ease,opacity .18s ease}",
+        "#" + MODAL_ID + " .efp-qw-card{width:min(430px,100%);max-height:calc(100vh - 36px);max-height:calc(100dvh - 36px);border-radius:20px;background:#fff;color:#172033;border:1px solid rgba(15,23,42,.10);box-shadow:0 28px 80px rgba(2,6,23,.34);overflow:auto;overscroll-behavior:contain;transform:translateY(8px) scale(.985);opacity:0;transition:transform .18s ease,opacity .18s ease}",
         "#" + MODAL_ID + ".show .efp-qw-card{transform:none;opacity:1}",
         "#" + MODAL_ID + " .efp-qw-body{padding:24px 24px 18px}",
         "#" + MODAL_ID + " .efp-qw-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;font:700 22px/1 Arial,sans-serif}",
@@ -400,7 +400,9 @@
         "html.efp-black #" + MODAL_ID + " .efp-qw-actions,html.efp-black-invert #" + MODAL_ID + " .efp-qw-actions{border-top-color:#263244}",
         "html.efp-black #" + MODAL_ID + " .efp-qw-stay,html.efp-black-invert #" + MODAL_ID + " .efp-qw-stay{background:#f8fafc;color:#0f172a;border-color:#f8fafc}",
         "html.efp-black #" + MODAL_ID + " .efp-qw-leave,html.efp-black-invert #" + MODAL_ID + " .efp-qw-leave{background:#111827;color:#fca5a5;border-color:#7f1d1d}",
-        "@media(max-width:520px){#" + MODAL_ID + "{align-items:flex-end;padding:14px}#" + MODAL_ID + " .efp-qw-card{border-radius:18px}#" + MODAL_ID + " .efp-qw-body{padding:22px 20px 16px}#" + MODAL_ID + " .efp-qw-actions{padding:14px 20px 20px;flex-direction:column}#" + MODAL_ID + " .efp-qw-leave{order:2}#" + MODAL_ID + " .efp-qw-stay{order:1;width:100%}}",
+        "html.efp-quiz-modal-open #efp-app-back-button,html.efp-quiz-modal-open #efp-home-button{visibility:hidden!important;pointer-events:none!important}",
+        "@media(max-width:520px){#" + MODAL_ID + "{align-items:center;padding:max(14px,env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px))}#" + MODAL_ID + " .efp-qw-card{width:min(430px,100%);border-radius:18px}#" + MODAL_ID + " .efp-qw-body{padding:20px 20px 15px}#" + MODAL_ID + " .efp-qw-actions{padding:13px 20px 18px;flex-direction:column}#" + MODAL_ID + " .efp-qw-leave{order:2}#" + MODAL_ID + " .efp-qw-stay{order:1;width:100%}}",
+        "@media(max-height:600px){#" + MODAL_ID + "{align-items:center}#" + MODAL_ID + " .efp-qw-body{padding:16px 18px 12px}#" + MODAL_ID + " .efp-qw-icon{width:38px;height:38px;margin-bottom:10px;border-radius:12px;font-size:19px}#" + MODAL_ID + " h2{font-size:18px;margin-bottom:6px}#" + MODAL_ID + " p{font-size:13px;line-height:1.45}#" + MODAL_ID + " .efp-qw-note{margin-top:8px;padding:9px 10px}#" + MODAL_ID + " .efp-qw-actions{padding:10px 18px 14px}}",
         "@media(prefers-reduced-motion:reduce){#" + MODAL_ID + " .efp-qw-card{transition:none}}"
       ].join("");
       document.head.appendChild(style);
@@ -437,6 +439,7 @@
 
       function close() {
         modal.classList.remove("show");
+        document.documentElement.classList.remove("efp-quiz-modal-open");
         document.removeEventListener("keydown", onKey, true);
         window.setTimeout(function () {
           if (previousFocus && previousFocus.focus) {
@@ -471,6 +474,7 @@
         if (event.target === modal) keepQuiz();
       };
       document.addEventListener("keydown", onKey, true);
+      document.documentElement.classList.add("efp-quiz-modal-open");
       modal.classList.add("show");
       window.setTimeout(function () { try { stay.focus(); } catch (_) {} }, 0);
     }
