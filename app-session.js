@@ -250,6 +250,8 @@
       ".mcq-item",
       ".question-item",
       ".q-card",
+      ".qcard",
+      ".quiz-option",
       "#kbArea",
       "#mcqArea",
       ".option-btn",
@@ -309,14 +311,34 @@
 
     function isAnswerInteraction(target) {
       if (!target || !target.closest || !hasVisibleQuizSurface()) return false;
-      var direct = target.closest(
-        ".option-btn,.option,.options li,.choice,.choice-btn,.answer-btn,.check-btn,#checkBtn," +
-        "#kbArea button,#mcqArea button,[data-answer],[data-option]," +
-        "button,[role='button'],label,input,select,textarea"
-      );
-      if (!direct) return false;
-      return !!direct.closest(QUIZ_SURFACES) ||
-        direct.matches(".option-btn,#kbArea button,#mcqArea button,[data-answer],[data-option]");
+      var direct = target.closest([
+        ".quiz-option",
+        ".qcard .opt",
+        ".option-btn",
+        "#options .option",
+        "#options input[name='mixedOption']",
+        ".question-box .options[data-correct] label",
+        ".question-box .options[data-correct] input[type='radio']",
+        ".question-card .options label",
+        ".question-card .options input",
+        ".question-card .options li",
+        ".quiz-item .options label",
+        ".quiz-item .options input",
+        ".quiz-item .options li",
+        ".mcq-item .options label",
+        ".mcq-item .options input",
+        ".mcq-item .options li",
+        ".question-item .options label",
+        ".question-item .options input",
+        ".question-item .options li",
+        ".choice-btn",
+        ".answer-btn",
+        "[data-answer]",
+        "[data-option]",
+        "#kbArea button",
+        "#mcqArea button"
+      ].join(","));
+      return !!direct;
     }
 
     function navigationTarget(target) {
@@ -451,7 +473,6 @@
     document.addEventListener("click", function (event) {
       var target = event.target;
       if (!target) return;
-      var hadQuizSurface = hasVisibleQuizSurface();
 
       var navTarget = shouldWarn() ? navigationTarget(target) : null;
       if (navTarget) {
@@ -473,16 +494,7 @@
         return;
       }
 
-      if (isAnswerInteraction(target)) {
-        arm();
-        return;
-      }
-
-      // SPA-style quizzes often reveal the live question/timer after a Start
-      // or Generate click. Arm as soon as that surface becomes visible.
-      window.setTimeout(function () {
-        if (!hadQuizSurface && hasVisibleQuizSurface() && !isClearlyFinished()) dirty = true;
-      }, 0);
+      if (isAnswerInteraction(target)) arm();
     }, true);
 
     document.addEventListener("change", function (event) {
