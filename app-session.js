@@ -344,6 +344,7 @@
     document.addEventListener("click", function (event) {
       var target = event.target;
       if (!target) return;
+      var hadQuizSurface = hasVisibleQuizSurface();
 
       if (shouldWarn() && navigationTarget(target)) {
         var leave = false;
@@ -358,7 +359,16 @@
         return;
       }
 
-      if (isAnswerInteraction(target)) arm();
+      if (isAnswerInteraction(target)) {
+        arm();
+        return;
+      }
+
+      // SPA-style quizzes often reveal the live question/timer after a Start
+      // or Generate click. Arm as soon as that surface becomes visible.
+      window.setTimeout(function () {
+        if (!hadQuizSurface && hasVisibleQuizSurface() && !isClearlyFinished()) dirty = true;
+      }, 0);
     }, true);
 
     document.addEventListener("change", function (event) {
