@@ -66,8 +66,8 @@ ensureGlobalOriginalPracticeNavigation();
 
 
 // Keeps attempted answers alive while the user moves between sections of the same chapter.
-// A fresh attempt stays in memory; only a relaunched installed app restores
-// a matching interrupted attempt from the small local snapshot below.
+// A fresh attempt stays in memory; a same-device browser, PWA or Android relaunch
+// restores a matching interrupted attempt through the shared session-resume engine.
 if(!state.answerMap) state.answerMap={};
 function clearLegacyPersistedAnswers(){try{localStorage.removeItem("efp_quiz_answer_state_v1")}catch(e){}}
 clearLegacyPersistedAnswers();
