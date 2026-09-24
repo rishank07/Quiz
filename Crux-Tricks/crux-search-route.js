@@ -358,6 +358,18 @@
     return !!(el && !el.hidden);
   }
 
+  function syncStudyBackLabel(state) {
+    var button = document.getElementById("backSource");
+    if (!button || !isManaged(state)) return;
+    if (state.level === "chapters" && state.branch) button.textContent = "← Parts";
+    else if (state.level === "utility") button.textContent = "← Back";
+    else if (state.level === "chapters" || state.level === "parts") {
+      button.textContent = "← Subjects";
+    } else {
+      button.textContent = state.source === "Pinnacle" ? "← Exams" : "← Sources";
+    }
+  }
+
   function commitTransition(previous, next) {
     if (restoring || !next) return;
 
@@ -370,6 +382,7 @@
 
     if (sameState(previous, next)) return;
     history.pushState(next, "", baseUrl());
+    syncStudyBackLabel(next);
   }
 
   function scheduleTransition(previous, builder) {
@@ -487,18 +500,12 @@
       // Reinstate the browser-history marker for the entry we just restored.
       history.replaceState(state, "", baseUrl());
       restoring = false;
+      syncStudyBackLabel(state);
       if (window.EFP_CRUX_EXAM_LAYER && typeof window.EFP_CRUX_EXAM_LAYER.syncCrumbs === "function") {
         window.EFP_CRUX_EXAM_LAYER.syncCrumbs();
       }
       try { window.scrollTo(0, 0); } catch (_) {}
     }
-  }
-
-  function goToSourceEntry(event, state) {
-    if (!isManaged(state) || state.depth <= 1) return false;
-    consume(event);
-    history.go(1 - state.depth);
-    return true;
   }
 
   // Use the window capture phase so this runs before back-nav.js and before
@@ -517,15 +524,7 @@
       return;
     }
 
-    var backSource = target.closest("#backSource");
-    if (backSource && state && state.source === "Pinnacle" && state.depth > 0) {
-      consume(event);
-      history.back();
-      return;
-    }
-    if (backSource && goToSourceEntry(event, state)) return;
-
-    var oneStepBack = target.closest("#backMaterial, #backExam, #backSubjects, #backParts");
+    var oneStepBack = target.closest("#backMaterial, #backExam, #backSource, #backSubjects, #backParts");
     if (oneStepBack && state && state.depth > 0) {
       consume(event);
       history.back();
@@ -628,6 +627,21 @@
     }
   });
 
+  /* Android can resume index.html from BFCache after the PDF closes without
+     running the index scripts again. Keep the pane aligned with the existing
+     history entry; never add another entry during this restore. */
+  window.addEventListener("pageshow", function (event) {
+    if (!event.persisted || !ready) return;
+    var state = currentState();
+    if (!state) return;
+    var pane = {
+      material: "material", source: "source", exam: "exam",
+      subjects: "subjectPane", parts: "partPane",
+      chapters: "chapterPane", utility: "resultsWrap"
+    }[state.level];
+    if (pane && !visible(pane)) restoreState(state);
+  });
+
   function initialize() {
     if (ready) return;
     ready = true;
@@ -640,6 +654,8 @@
     } else {
       history.replaceState(makeState("material", 0), "", baseUrl());
     }
+
+    syncStudyBackLabel(currentState());
 
     window.EFP_CRUX_BROWSER_HISTORY = {
       canGoBackInsideCrux: function () {

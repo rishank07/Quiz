@@ -26,6 +26,12 @@
     return normalizePath(window.location.pathname).toLowerCase() === "/crux-tricks/viewer.html";
   }
 
+  function isCruxViewerFromCruxPage() {
+    if (!isCruxViewer()) return false;
+    var source = new URLSearchParams(window.location.search).get("from");
+    return source === "crux-index" || source === "crux-page";
+  }
+
   function isOriginalPracticePage() {
     return normalizePath(window.location.pathname).toLowerCase().indexOf("/original practice/") === 0;
   }
@@ -603,13 +609,11 @@
 
   function seedCruxReturnHistoryWhenReady(state) {
     var seed = function () { seedCruxReturnHistory(state); };
-    /* crux-search-route initializes its popstate restorer on DOMContentLoaded.
-       Let that initialize first, then install the reconstructed chain. */
-    if (!window.EFP_CRUX_BROWSER_HISTORY && document.readyState !== "complete") {
-      document.addEventListener("DOMContentLoaded", seed, { once: true });
-    } else {
-      seed();
-    }
+    /* The index bridge also initializes on DOMContentLoaded. A new listener
+       added while that event is firing can race its initial replaceState;
+       queue the direct-search chain until those listeners have finished. */
+    if (window.EFP_CRUX_BROWSER_HISTORY) seed();
+    else window.setTimeout(seed, 0);
   }
 
   function signalCruxRestoreComplete() {
@@ -867,6 +871,16 @@
     }
 
     if (isGenericHomeSearchGuardState(history.state, "top")) {
+      consumeBackEvent(event);
+      window.history.back();
+      return;
+    }
+
+    /* The Crux SPA already placed each pane in real browser history before
+       opening this PDF. Android app shells can omit document.referrer; the
+       explicit link marker lets the floating Back return to that chapter
+       entry without replacing the viewer with a second Crux index. */
+    if (isCruxViewerFromCruxPage() && window.history.length > 1) {
       consumeBackEvent(event);
       window.history.back();
       return;
