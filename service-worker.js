@@ -1,5 +1,5 @@
 // v118 Android global Back exits Original Practice to Home
-const CACHE_VERSION = "efp-pwa-2026-09-24-v117-crux-pdf-back-generic";
+const CACHE_VERSION = "efp-pwa-2026-09-24-v118-crux-pdf-back-final";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924quizmodal1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -27,7 +27,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260924quizmodal1",
   "/app-session.js?v=20260924quizmodal1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260924opbackhome1",
+  "/back-nav.js?v=20260924cruxpdfback3",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
