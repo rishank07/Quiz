@@ -27,16 +27,19 @@
       "padding:0!important;margin:0!important;background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
       ".toolbar>.barcard,.toolbar>.bar{display:contents!important}" +
       ".toolbar>.barcard>.row:first-child,.toolbar>.bar>.row:first-child{" +
-      "position:sticky;top:8px;z-index:130;margin:10px 0 8px!important;padding:7px 8px;gap:6px;" +
+      "position:sticky;top:8px;z-index:130;margin:10px 0 8px!important;padding:7px 8px;gap:4px;" +
       "display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:nowrap!important;" +
       "background:rgba(255,255,255,.96);border:1px solid rgba(184,134,63,.22);border-radius:12px;" +
       "box-shadow:0 3px 14px rgba(26,31,46,.10);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}" +
       ".toolbar>.barcard>.row:first-child #scoreTxt,.toolbar>.bar>.row:first-child #scoreTxt{display:none!important}" +
-      ".toolbar>.barcard>.row:first-child .progress,.toolbar>.bar>.row:first-child .progress," +
       ".toolbar>.barcard>.row:first-child .pct,.toolbar>.bar>.row:first-child .pct{display:none!important}" +
-      ".efp-rp-score-badges{display:flex!important;align-items:center;gap:4px;min-width:0;flex:1 1 auto}" +
+      ".efp-rp-score-badges{display:flex!important;align-items:center;gap:3px;min-width:0;flex:0 1 auto}" +
+      ".toolbar>.barcard>.row:first-child .progress,.toolbar>.bar>.row:first-child .progress{" +
+      "display:block!important;flex:1 1 46px;min-width:28px;max-width:72px;height:8px;margin:0!important;border-radius:999px;overflow:hidden}" +
       ".efp-rp-score-badge{display:inline-flex;align-items:center;white-space:nowrap;padding:5px 6px;border-radius:6px;" +
       "font:700 11px/1.15 Arial,sans-serif}" +
+      "@media(max-width:370px){.efp-rp-score-badge{padding:5px 5px;font-size:10px}" +
+      ".toolbar>.barcard>.row:first-child .progress,.toolbar>.bar>.row:first-child .progress{min-width:24px;max-width:52px}}" +
       ".efp-rp-score-total{background:#f3f4f6;color:#374151}" +
       ".efp-rp-score-correct{background:#d1fae5;color:#047857}" +
       ".efp-rp-score-wrong{background:#fee2e2;color:#b91c1c}" +
