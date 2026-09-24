@@ -501,6 +501,33 @@
       window.setTimeout(function () { try { stay.focus(); } catch (_) {} }, 0);
     }
 
+    // Original Practice creates its own global Back button and registers a
+    // document capture handler before this script. Handle that one control on
+    // window capture so all of its pages take the same route, including the
+    // landing page's inline Back handler. Mark the exit before navigating:
+    // otherwise the Android app's launch resume immediately reopens Practice.
+    window.addEventListener("click", function (event) {
+      var path = normalizedPath(location.pathname).toLowerCase();
+      if (path.indexOf("/original practice/") !== 0) return;
+      var back = event.target && event.target.closest
+        ? event.target.closest("#efp-app-back-button") : null;
+      if (!back) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+
+      function leavePractice() {
+        approveOneNavigation();
+        markIntentionalHome();
+        try { sessionStorage.removeItem("efp_logical_back_expected_path"); } catch (_) {}
+        location.assign("/");
+      }
+
+      if (shouldWarn()) showExitModal(leavePractice);
+      else leavePractice();
+    }, true);
+
     document.addEventListener("click", function (event) {
       var target = event.target;
       if (!target) return;
