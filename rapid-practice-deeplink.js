@@ -15,6 +15,7 @@
       "input#search.search{display:none!important;visibility:hidden!important}" +
       ".efp-deep-focus{outline:3px solid #f5a623!important;outline-offset:3px;border-radius:10px;" +
       "box-shadow:0 0 0 6px rgba(245,166,35,.16)!important;transition:outline-color .25s ease,box-shadow .25s ease}" +
+      ".efp-rp-score-badges{display:none}" +
       /* On phones, keep only the score row sticky.  The legacy quiz pages put
        * the score, bookmark controls and section pills inside one sticky
        * toolbar, which consumes too much of the viewport while answering.
@@ -25,7 +26,6 @@
       ".toolbar{position:static!important;top:auto!important;z-index:auto!important;display:contents!important;" +
       "padding:0!important;margin:0!important;background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
       ".toolbar>.barcard,.toolbar>.bar{display:contents!important}" +
-      ".efp-rp-score-badges{display:none}" +
       ".toolbar>.barcard>.row:first-child,.toolbar>.bar>.row:first-child{" +
       "position:sticky;top:8px;z-index:130;margin:10px 0 8px!important;padding:7px 8px;gap:6px;" +
       "display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:nowrap!important;" +
