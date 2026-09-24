@@ -9,13 +9,13 @@ SERVICE_WORKER = ROOT / "service-worker.js"
 LOADER_MARK = "EFP_APP_SESSION_LOADER"
 LOADER = r'''
 
-/* EFP_APP_SESSION_LOADER — same-device resume */
+/* EFP_APP_SESSION_LOADER — installed-app resume */
 (function () {
   "use strict";
   if (typeof document === "undefined" || document.getElementById("efp-app-session-script")) return;
   var script = document.createElement("script");
   script.id = "efp-app-session-script";
-  script.src = "/app-session.js?v=20260924genericresume2";
+  script.src = "/app-session.js?v=20260924appresume3";
   script.async = false;
   (document.head || document.documentElement).appendChild(script);
 })();
@@ -39,7 +39,7 @@ def patch_home_nav():
 def patch_service_worker():
     text = SERVICE_WORKER.read_text(encoding="utf-8-sig")
     original = text
-    asset = '  "/app-session.js?v=20260924genericresume2",\n'
+    asset = '  "/app-session.js?v=20260924appresume3",\n'
     pattern = r'^\s*"/app-session\.js(?:\?[^"\n]*)?",\s*$'
     if re.search(pattern, text, flags=re.MULTILINE):
         text = re.sub(pattern, asset.rstrip(), text, count=1, flags=re.MULTILINE)
