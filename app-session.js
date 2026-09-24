@@ -1,4 +1,4 @@
-/* ExamFusion Prep — installed-app session */
+/* ExamFusion Prep — same-device session resume (Android + browser + installed web app) */
 (function () {
   "use strict";
 
@@ -50,6 +50,18 @@
       if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
       if (navigator.standalone === true || /; wv\)/i.test(navigator.userAgent || "")) return true;
     } catch (_) {}
+
+    /* Regular browsers use the same same-device resume engine as Android/PWA.
+       A fresh top-level entry (address bar, new tab, browser relaunch, external
+       link) has no same-origin referrer. Internal Home navigation keeps its
+       same-origin referrer and markIntentionalHome() also clears the saved
+       resume target, so normal Back/Home hierarchy is not hijacked. */
+    try {
+      var referrer = document.referrer || "";
+      if (!referrer || new URL(referrer).origin !== location.origin) return true;
+    } catch (_) {
+      return true;
+    }
     return false;
   }
 
@@ -142,7 +154,7 @@
     } catch (_) { return false; }
   }
 
-  function maybeResumeFreshLaunch() {
+  function maybeResumeSameDeviceLaunch() {
     if (!launchMarker()) return false;
     if (isHistoryTraversal()) { markIntentionalHome(); return false; }
     var saved = readSession();
@@ -641,7 +653,7 @@
     }, true);
   }
 
-  if (maybeResumeFreshLaunch()) return;
+  if (maybeResumeSameDeviceLaunch()) return;
 
   installHistoryTracking();
   installQuizProgressWarning();
