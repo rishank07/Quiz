@@ -153,11 +153,26 @@
   function loadBookmarks(){var v=readJson(BOOKMARK_KEY,[]);return new Set(Array.isArray(v)?v.map(String):[])}
   function saveBookmarks(){try{localStorage.setItem(BOOKMARK_KEY,JSON.stringify(Array.from(bookmarks)))}catch(e){}}
   function loadState(){var v=readJson(STATE_KEY,null);return v&&Array.isArray(v.ids)&&Array.isArray(v.selectedKeys)?v:null}
-  function loadRecentSets(){var v=readJson(HISTORY_KEY,[]);return Array.isArray(v)?v.filter(function(x){return x&&Array.isArray(x.ids)&&Array.isArray(x.selectedKeys)}).slice(0,MAX_RECENT_SETS):[]}
+  function loadRecentSets(){
+    var v=readJson(HISTORY_KEY,[]),out=[],seen=new Set();
+    if(!Array.isArray(v))return out;
+    v.filter(function(x){return x&&Array.isArray(x.ids)&&Array.isArray(x.selectedKeys)})
+      .sort(function(a,b){return (Number(b.updatedAt)||Number(b.createdAt)||0)-(Number(a.updatedAt)||Number(a.createdAt)||0)})
+      .forEach(function(x){
+        var fingerprint=String(x.createdAt||'')+'|'+x.ids.join(',');
+        if(seen.has(fingerprint))return;
+        seen.add(fingerprint);out.push(x);
+      });
+    return out.slice(0,MAX_RECENT_SETS)
+  }
   function ensureSetId(obj){if(!obj)return'';if(!obj.setId)obj.setId='mix-'+String(obj.createdAt||Date.now())+'-'+Math.random().toString(36).slice(2,8);return obj.setId}
   function snapshotState(obj){if(!obj)return null;var copy=JSON.parse(JSON.stringify(obj));ensureSetId(copy);copy.answers=copy.answers||{};copy.updatedAt=Number(copy.updatedAt)||Date.now();return copy}
   function upsertRecentSet(obj){if(!obj||savedMode)return;var snap=snapshotState(obj);if(!snap)return;try{var list=loadRecentSets(),id=ensureSetId(snap);list=list.filter(function(x){return ensureSetId(x)!==id});list.unshift(snap);list.sort(function(a,b){return (Number(b.updatedAt)||Number(b.createdAt)||0)-(Number(a.updatedAt)||Number(a.createdAt)||0)});localStorage.setItem(HISTORY_KEY,JSON.stringify(list.slice(0,MAX_RECENT_SETS)))}catch(e){}}
-  function saveState(){if(!state)return;state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);if(savedMode)return;upsertRecentSet(state);try{if(state.completed||historyReviewMode){localStorage.removeItem(STATE_KEY);return}localStorage.setItem(STATE_KEY,JSON.stringify(state))}catch(e){}}
+  function saveState(){if(!state)return;state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);if(savedMode)return;try{if(state.completed||historyReviewMode){localStorage.removeItem(STATE_KEY);return}localStorage.setItem(STATE_KEY,JSON.stringify(state))}catch(e){}}
+  function archiveCurrentSet(){
+    if(!state||savedMode||historyReviewMode||state.completed||!Array.isArray(state.ids)||!state.ids.length)return;
+    state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);upsertRecentSet(state);
+  }
   function setStatus(msg,type){var el=$('setupStatus');el.className='status show'+(type?' '+type:'');el.textContent=msg}
   function clearStatus(){var el=$('setupStatus');el.className='status';el.textContent=''}
   function renderPool(container,key){var p=POOLS[key],label=document.createElement('label');label.className='pool';label.innerHTML='<input type="checkbox" data-pool="'+p.key+'"><span class="pool-body"><span class="pool-name">'+p.icon+' '+escapeHtml(p.label)+'</span><span class="pool-hi">'+escapeHtml(p.hi)+'</span><span class="pool-count">'+fmt(p.count)+' questions</span></span>';container.appendChild(label)}
@@ -262,7 +277,8 @@
     updateSavedQuestionsButton();showSetup();
   }
   $('savedQuestionsBtn').onclick=openSavedQuestions;
-  $('setupBtn').onclick=function(){if(savedMode){closeSavedQuestions();return}clearStatus();showSetup()};$('newSetBtn').onclick=function(){if(savedMode){closeSavedQuestions();return}if(state)generateSet(state.selectedKeys,state.total||currentQuestions.length)};
+  $('setupBtn').onclick=function(){if(savedMode){closeSavedQuestions();return}archiveCurrentSet();clearStatus();showSetup()};
+  $('newSetBtn').onclick=function(){if(savedMode){closeSavedQuestions();return}if(state){archiveCurrentSet();generateSet(state.selectedKeys,state.total||currentQuestions.length)}};
   function currentAnswer(){if(!state||!currentQuestions[currentIndex])return null;var a=state.answers[currentQuestions[currentIndex].id]||null;return a&&a.checked?a:null}
   function currentPendingSelection(){var item=currentQuestions[currentIndex];if(!item)return null;var v=pendingSelections[item.id];return Number.isInteger(Number(v))?Number(v):null}
   function correctIndex(item){var opts=displayedOptions(item),ans=(item.q||{}).a||{};for(var i=0;i<opts.length;i++){if(sameText(opts[i].en,ans.en))return i}for(var j=0;j<opts.length;j++){if(sameText(opts[j].hi,ans.hi))return j}return -1}
@@ -331,8 +347,8 @@
   function showFinish(){var st=answerStats(),accuracy=st.attempted?Math.round(st.correct/st.attempted*100):0;state.completed=true;state.completedAt=state.completedAt||Date.now();state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);upsertRecentSet(state);try{localStorage.removeItem(STATE_KEY);sessionStorage.setItem(VIEW_KEY,'finish')}catch(e){}$('quizView').hidden=true;$('setupView').hidden=true;$('finishView').hidden=false;$('finishScore').textContent=st.correct+' / '+currentQuestions.length;$('finishCopy').textContent=st.wrong+' wrong · '+(currentQuestions.length-st.attempted)+' unattempted';$('finishAttempted').textContent=st.attempted;$('finishAccuracy').textContent=accuracy+'%';$('finishSaved').textContent=currentQuestions.filter(function(q){return bookmarks.has(q.id)}).length;window.scrollTo({top:0,behavior:'auto'})}
   $('finishNewBtn').onclick=function(){if(state)generateSet(state.selectedKeys,state.total||currentQuestions.length)};$('reviewBtn').onclick=function(){historyReviewMode=true;currentIndex=0;showQuiz();renderQuestion()};
   function refreshResume(){
-    var active=loadState();if(active){ensureSetId(active);upsertRecentSet(active)}
     var list=loadRecentSets(),section=$('recentSetsSection'),box=$('recentSetsList');
+    try{localStorage.setItem(HISTORY_KEY,JSON.stringify(list))}catch(e){}
     box.innerHTML='';
     if(!list.length){section.classList.remove('show');return}
     section.classList.add('show');
@@ -353,6 +369,12 @@
       copy.appendChild(title);copy.appendChild(meta);card.appendChild(copy);card.appendChild(btn);box.appendChild(card);
     })
   }
+  // Archive an in-progress generated set only when the user intentionally leaves/goes back.
+  document.addEventListener('click',function(event){
+    if(!state||$('quizView').hidden||savedMode||historyReviewMode)return;
+    var target=event.target&&event.target.closest?event.target.closest('#efp-app-back-button,.topnav a'):null;
+    if(target)archiveCurrentSet();
+  },true);
   // The last question can still be unanswered. Keep the set until Finish is tapped.
   function isReloadNavigation(){
     try{
