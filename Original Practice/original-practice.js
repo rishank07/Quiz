@@ -186,7 +186,52 @@ function enName(chapter){var parts=String(chapter).split(" - ");if(parts.length>
 function norm(s){return String(s||"").toLowerCase().replace(/[’‘`]/g,"'").replace(/[^a-z0-9\u0900-\u097f]+/g," ").replace(/\s+/g," ").trim()}
 function allChapters(subjectOnly){var out=[];Object.keys(MASTER).forEach(function(s){if(subjectOnly&&s!==subjectOnly)return;Object.keys(MASTER[s]).forEach(function(c){out.push({subject:s,chapter:c,en:enName(c),hi:hiName(s,c)})})});return out}
 function countVisited(subject){var n=0;Object.keys(MASTER[subject]||{}).forEach(function(c){if(isVisited(subject,c))n++});return n}
-function syncUrl(mode){try{var u=new URL(location.href);u.search="";if(mode!=="home"&&state.subject)u.searchParams.set("subject",state.subject);if(mode==="quiz"&&state.chapterName){u.searchParams.set("chapter",state.chapterName);u.searchParams.set("section",String((state.currentSection||0)+1))}history.replaceState(null,"",u.pathname+u.search+u.hash)}catch(e){}}
+var OP_HISTORY_KEY="efpOriginalPracticeNav";
+var opHistoryRestoring=false;
+function opHistoryEntry(mode,hasParent){
+ return {
+  efpOriginalPracticeNav:true,
+  screen:mode,
+  hasParent:!!hasParent,
+  subject:mode==="home"?"":String(state.subject||""),
+  chapter:mode==="quiz"?String(state.chapterName||""):"",
+  section:mode==="quiz"?Math.max(0,Number(state.currentSection)||0):0
+ };
+}
+function opHasManagedParent(){
+ try{return !!(history.state&&history.state[OP_HISTORY_KEY]===true&&history.state.hasParent)}catch(e){return false}
+}
+function syncUrl(mode,push){
+ try{
+  var u=new URL(location.href);u.search="";
+  if(mode!=="home"&&state.subject)u.searchParams.set("subject",state.subject);
+  if(mode==="quiz"&&state.chapterName){u.searchParams.set("chapter",state.chapterName);u.searchParams.set("section",String((state.currentSection||0)+1))}
+  var previous=history.state,hasParent=push?true:!!(previous&&previous[OP_HISTORY_KEY]===true&&previous.hasParent);
+  var entry=opHistoryEntry(mode,hasParent);
+  if(push)history.pushState(entry,"",u.pathname+u.search+u.hash);
+  else history.replaceState(entry,"",u.pathname+u.search+u.hash);
+ }catch(e){}
+}
+function restoreOriginalPracticeHistory(entry){
+ if(!entry||entry[OP_HISTORY_KEY]!==true)return;
+ opHistoryRestoring=true;
+ try{
+  clearTransientAttempt();
+  if(entry.screen==="home"){
+   if(typeof baseGoHome==="function")baseGoHome();
+  }else if(entry.screen==="chapters"){
+   if(typeof baseGoToChapters==="function")baseGoToChapters(entry.subject);
+  }else if(entry.screen==="quiz"&&entry.subject&&entry.chapter){
+   if(typeof baseGoToChapters==="function")baseGoToChapters(entry.subject);
+   if(typeof baseGoToQuiz==="function")baseGoToQuiz(entry.chapter);
+   if(Number.isInteger(Number(entry.section))&&Number(entry.section)>0&&typeof baseSwitchSection==="function")baseSwitchSection(Number(entry.section));
+  }
+  try{window.scrollTo(0,0)}catch(_){}
+ }catch(e){}finally{opHistoryRestoring=false}
+}
+window.addEventListener("popstate",function(event){
+ if(event.state&&event.state[OP_HISTORY_KEY]===true)restoreOriginalPracticeHistory(event.state);
+});
 
 function efpSeoCountQuestions(subject,chapter){
  var total=0,sections=MASTER&&MASTER[subject]&&MASTER[subject][chapter];
@@ -285,12 +330,20 @@ selectOption=function(qi,displayIdx){
  track("original_practice_answer",{practice:CFG.label,subject:state.subject,chapter:state.chapterName,section:state.currentSection+1,question:qi+1,correct:selectedOrigIdx===currentAnswerIndex(state.quizData[state.currentSection].questions[qi])});
 };
 var baseRender=render;render=function(){baseRender();enhance();efpApplySeoMeta();if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}};
-var baseSwitchSection=switchSection;switchSection=function(i){pendingDeepQuestion=null;baseSwitchSection(i);syncUrl("quiz");saveAppAttempt()};
-var basePrevSection=prevSection;prevSection=function(){pendingDeepQuestion=null;basePrevSection();if(state.screen==="quiz"){syncUrl("quiz");saveAppAttempt()}};
-var baseNextSection=nextSection;nextSection=function(){pendingDeepQuestion=null;baseNextSection();if(state.screen==="quiz"){syncUrl("quiz");saveAppAttempt()}};
-var baseGoHome=goHome;goHome=function(){clearTransientAttempt();baseGoHome();syncUrl("home")};
-var baseGoToChapters=goToChapters;goToChapters=function(subject){clearTransientAttempt();baseGoToChapters(subject);syncUrl("chapters");track("original_practice_subject_open",{practice:CFG.label,subject:subject})};
-var baseGoToQuiz=goToQuiz;goToQuiz=function(chapterName){clearTransientAttempt();markVisited(state.subject,chapterName);baseGoToQuiz(chapterName);syncUrl("quiz");track("original_practice_chapter_open",{practice:CFG.label,subject:state.subject,chapter:chapterName})};
+var baseSwitchSection=switchSection;switchSection=function(i){pendingDeepQuestion=null;baseSwitchSection(i);syncUrl("quiz",false);saveAppAttempt()};
+var basePrevSection=prevSection;prevSection=function(){pendingDeepQuestion=null;basePrevSection();if(state.screen==="quiz"){syncUrl("quiz",false);saveAppAttempt()}};
+var baseNextSection=nextSection;nextSection=function(){pendingDeepQuestion=null;baseNextSection();if(state.screen==="quiz"){syncUrl("quiz",false);saveAppAttempt()}};
+var baseGoHome=goHome;goHome=function(){
+ if(!opHistoryRestoring&&state.screen==="chapters"&&opHasManagedParent()){clearTransientAttempt();history.back();return}
+ clearTransientAttempt();baseGoHome();syncUrl("home",false)
+};
+var baseGoToChapters=goToChapters;goToChapters=function(subject){
+ if(!opHistoryRestoring&&state.screen==="quiz"&&opHasManagedParent()){clearTransientAttempt();history.back();return}
+ var from=state.screen;clearTransientAttempt();baseGoToChapters(subject);syncUrl("chapters",!opHistoryRestoring&&from==="home");track("original_practice_subject_open",{practice:CFG.label,subject:subject})
+};
+var baseGoToQuiz=goToQuiz;goToQuiz=function(chapterName){
+ var from=state.screen;clearTransientAttempt();markVisited(state.subject,chapterName);baseGoToQuiz(chapterName);syncUrl("quiz",!opHistoryRestoring&&from!=="quiz");track("original_practice_chapter_open",{practice:CFG.label,subject:state.subject,chapter:chapterName})
+};
 function applyDeepLink(){try{var p=new URLSearchParams(location.search),s=p.get("subject"),c=p.get("chapter"),sec=Number(p.get("section")||1),q=Number(p.get("q")||0);if(s&&MASTER[s]){state.subject=s;if(c&&MASTER[s][c]){markVisited(s,c);state.screen="quiz";state.chapterName=c;state.quizData=MASTER[s][c];if(!Number.isFinite(sec)||sec<1)sec=1;state.currentSection=Math.min(state.quizData.length-1,Math.max(0,Math.floor(sec)-1));state.score={correct:0,wrong:0,attempted:0};state.shuffleMap={};state.answerMap={};if(Number.isFinite(q)&&q>=1&&state.quizData[state.currentSection]&&q<=state.quizData[state.currentSection].questions.length)pendingDeepQuestion=Math.floor(q)-1}else{state.screen="chapters";state.chapterName=null;state.quizData=null}}}catch(e){}}
-applyDeepLink();restoreAppAttempt();render();
+applyDeepLink();restoreAppAttempt();syncUrl(state.screen||"home",false);render();
 })();
