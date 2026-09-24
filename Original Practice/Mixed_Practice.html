@@ -278,7 +278,12 @@
     updateSavedQuestionsButton();showSetup();
   }
   $('savedQuestionsBtn').onclick=openSavedQuestions;
-  $('setupBtn').onclick=function(){if(savedMode){closeSavedQuestions();return}archiveCurrentSet();clearStatus();showSetup()};
+  function exitMixedPracticeToSetup(){
+    if(savedMode){closeSavedQuestions();return}
+    archiveCurrentSet();clearStatus();showSetup()
+  }
+  window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP=exitMixedPracticeToSetup;
+  $('setupBtn').onclick=exitMixedPracticeToSetup;
   $('newSetBtn').onclick=function(){if(savedMode){closeSavedQuestions();return}if(state){archiveCurrentSet();generateSet(state.selectedKeys,state.total||currentQuestions.length)}};
   function currentAnswer(){if(!state||!currentQuestions[currentIndex])return null;var a=state.answers[currentQuestions[currentIndex].id]||null;return a&&a.checked?a:null}
   function currentPendingSelection(){var item=currentQuestions[currentIndex];if(!item)return null;var v=pendingSelections[item.id];return Number.isInteger(Number(v))?Number(v):null}
