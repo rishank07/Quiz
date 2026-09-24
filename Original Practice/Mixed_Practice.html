@@ -13,7 +13,12 @@
   <script>
     (function(){
       try{
-        var saved=JSON.parse(localStorage.getItem('efp_mixed_practice_state_v1')||'null');
+        var saved=JSON.parse(localStorage.getItem('efp_mixed_practice_state_v1')||'null'),prefix='efp_mixed_practice_tab_state_v1:';
+        for(var i=0;i<localStorage.length;i++){
+          var key=localStorage.key(i);if(!key||key.indexOf(prefix)!==0)continue;
+          var candidate=JSON.parse(localStorage.getItem(key)||'null');
+          if(candidate&&(!saved||Number(candidate.updatedAt||candidate.createdAt||0)>Number(saved.updatedAt||saved.createdAt||0)))saved=candidate
+        }
         var entries=performance.getEntriesByType&&performance.getEntriesByType('navigation');
         var isReload=!!(entries&&entries[0]&&entries[0].type==='reload')||!!(performance.navigation&&performance.navigation.type===1);
         var lastView=sessionStorage.getItem('efp_mixed_practice_view_v1')||'setup';
@@ -117,6 +122,7 @@
 
   var STATE_KEY='efp_mixed_practice_state_v1';
   var HISTORY_KEY='efp_mixed_practice_recent_sets_v1';
+  var HISTORY_ITEM_PREFIX='efp_mixed_practice_recent_set_v2:';
   var VIEW_KEY='efp_mixed_practice_view_v1';
   var BOOKMARK_KEY='efp_mixed_practice_bookmarks_v1';
   var DELETED_KEY='efp_mixed_practice_deleted_sets_v1';
@@ -148,7 +154,7 @@
   var SPECIFIC=['ancient','medieval','modern','physics','chemistry','biology','indianGeo','worldGeo'];
   var DOMAIN_CHILDREN={history:['ancient','medieval','modern'],science:['physics','chemistry','biology'],geography:['indianGeo','worldGeo']};
   var TAB_ID=getTabId(),tabChannel=null,tabPageToken='page-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);
-  var fileCache={},poolCache={},currentQuestions=[],currentIndex=0,state=null,pendingSelections={},bookmarks=loadBookmarks(),savedMode=false,savedReturn=null,historyReviewMode=false,historyExitPending=false; /* efp-mixed-saved-view-v3 */
+  var fileCache={},poolCache={},currentQuestions=[],currentIndex=0,state=null,pendingSelections={},bookmarks=loadBookmarks(),savedMode=false,savedReturn=null,historyReviewMode=false,historyExitPending=false,storageWarningShown=false; /* efp-mixed-saved-view-v3 */
   function $(id){return document.getElementById(id)}
   function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function sameText(a,b){return String(a||'').trim()===String(b||'').trim()}
@@ -176,8 +182,53 @@
     }catch(e){tabChannel=null}
   }
   function loadBookmarks(){var v=readJson(BOOKMARK_KEY,[]);return new Set(Array.isArray(v)?v.map(String):[])}
-  function saveBookmarks(){try{localStorage.setItem(BOOKMARK_KEY,JSON.stringify(Array.from(bookmarks)))}catch(e){}}
-  function loadState(){return validSavedState(readJson(tabStateKey(),null))||validSavedState(readJson(STATE_KEY,null))}
+  function saveBookmarks(){writeStorageWithRecovery(BOOKMARK_KEY,JSON.stringify(Array.from(bookmarks)),'bookmarks')}
+  function loadState(){
+    var best=validSavedState(readJson(tabStateKey(),null))||validSavedState(readJson(STATE_KEY,null));
+    try{
+      for(var i=0;i<localStorage.length;i++){
+        var key=localStorage.key(i);if(!key||key.indexOf(TAB_STATE_PREFIX)!==0)continue;
+        var candidate=validSavedState(readJson(key,null));
+        if(candidate&&(!best||Number(candidate.updatedAt||candidate.createdAt||0)>Number(best.updatedAt||best.createdAt||0)))best=candidate
+      }
+    }catch(e){}
+    return best
+  }
+  function isQuotaError(error){return !!(error&&(error.name==='QuotaExceededError'||error.name==='NS_ERROR_DOM_QUOTA_REACHED'||error.code===22||error.code===1014))}
+  function reportStorageIssue(message){
+    if(storageWarningShown)return;storageWarningShown=true;
+    try{console.warn('[Mixed Practice storage]',message)}catch(e){}
+    setTimeout(function(){alert(message)},0)
+  }
+  function recentItemKey(obj){var id=typeof obj==='string'?obj:ensureSetId(obj);return HISTORY_ITEM_PREFIX+encodeURIComponent(id)}
+  function removeRecentStorageRecord(saved){
+    if(!saved)return;
+    var id=ensureSetId(saved),fingerprint=String(saved.createdAt||'')+'|'+(saved.ids||[]).join(',');
+    try{localStorage.removeItem(recentItemKey(id))}catch(e){}
+    try{
+      var legacy=readJson(HISTORY_KEY,[]);
+      if(Array.isArray(legacy)){
+        legacy=legacy.filter(function(item){var fp=String((item&&item.createdAt)||'')+'|'+((item&&item.ids)||[]).join(',');return ensureSetId(item)!==id&&fp!==fingerprint});
+        if(legacy.length)localStorage.setItem(HISTORY_KEY,JSON.stringify(legacy));else localStorage.removeItem(HISTORY_KEY)
+      }
+    }catch(e){}
+  }
+  function writeStorageWithRecovery(key,value,label){
+    try{localStorage.setItem(key,value);return true}catch(error){
+      if(!isQuotaError(error)){reportStorageIssue('Could not save Mixed Practice '+label+'. Browser storage is unavailable.');return false}
+    }
+    var candidates=loadRecentSets().filter(function(saved){return recentItemKey(saved)!==key}).sort(function(a,b){return (Number(a.updatedAt)||Number(a.createdAt)||0)-(Number(b.updatedAt)||Number(b.createdAt)||0)}),removed=0;
+    for(var i=0;i<candidates.length;i++){
+      removeRecentStorageRecord(candidates[i]);removed++;
+      try{
+        localStorage.setItem(key,value);
+        reportStorageIssue('Device storage was nearly full. '+removed+' oldest Recent Mixed set'+(removed===1?' was':'s were')+' removed so your current progress could be saved.');
+        return true
+      }catch(retryError){if(!isQuotaError(retryError))break}
+    }
+    reportStorageIssue('Device storage is full, so the latest Mixed Practice progress could not be saved. Create a backup, then remove old study data.');
+    return false
+  }
   function deletedSets(){var value=readJson(DELETED_KEY,{});return value&&typeof value==='object'&&!Array.isArray(value)?value:{}}
   function isSetDeleted(obj){var id=obj&&obj.setId;return !!(id&&deletedSets()[id])}
   function markSetDeleted(id){
@@ -188,7 +239,7 @@
       value[id]=Date.now();
       var keys=Object.keys(value).sort(function(a,b){return Number(value[b])-Number(value[a])}).slice(0,100);
       var clean={};keys.forEach(function(key){clean[key]=value[key]});
-      localStorage.setItem(DELETED_KEY,JSON.stringify(clean))
+      writeStorageWithRecovery(DELETED_KEY,JSON.stringify(clean),'deleted-set protection')
     }catch(e){}
   }
   function removeActiveState(expectedId){
@@ -209,36 +260,46 @@
     }catch(e){}
   }
   function loadRecentSets(){
-    var v=readJson(HISTORY_KEY,[]),out=[],seen=new Set();
-    if(!Array.isArray(v))return out;
-    v.filter(function(x){return x&&Array.isArray(x.ids)&&Array.isArray(x.selectedKeys)&&!isSetDeleted(x)})
+    var legacy=readJson(HISTORY_KEY,[]),items=Array.isArray(legacy)?legacy.slice():[],out=[],seen=new Set();
+    try{
+      for(var i=0;i<localStorage.length;i++){
+        var key=localStorage.key(i);if(!key||key.indexOf(HISTORY_ITEM_PREFIX)!==0)continue;
+        var item=readJson(key,null);if(item)items.push(item)
+      }
+    }catch(e){}
+    items.filter(function(x){return x&&Array.isArray(x.ids)&&Array.isArray(x.selectedKeys)&&!isSetDeleted(x)})
       .sort(function(a,b){return (Number(b.updatedAt)||Number(b.createdAt)||0)-(Number(a.updatedAt)||Number(a.createdAt)||0)})
       .forEach(function(x){
-        var fingerprint=String(x.createdAt||'')+'|'+x.ids.join(',');
-        if(seen.has(fingerprint))return;
+        var fingerprint=String(x.createdAt||'')+'|'+x.ids.join(','),identity=x.setId||fingerprint;
+        if(seen.has(identity)||seen.has(fingerprint))return;
         var attempted=0;x.ids.forEach(function(id){var answer=(x.answers||{})[id];if(answer&&answer.checked)attempted++});
         if(x.completed&&attempted<x.ids.length){x.completed=false;delete x.completedAt}
-        seen.add(fingerprint);out.push(x);
+        seen.add(identity);seen.add(fingerprint);out.push(x);
       });
     return out.slice(0,MAX_RECENT_SETS)
   }
   function ensureSetId(obj){if(!obj)return'';if(!obj.setId)obj.setId='mix-'+String(obj.createdAt||Date.now())+'-'+Math.random().toString(36).slice(2,8);return obj.setId}
   function snapshotState(obj){if(!obj)return null;var copy=JSON.parse(JSON.stringify(obj));ensureSetId(copy);copy.answers=copy.answers||{};copy.updatedAt=Number(copy.updatedAt)||Date.now();return copy}
-  function upsertRecentSet(obj){if(!obj||savedMode)return;var snap=snapshotState(obj);if(!snap||isSetDeleted(snap))return;try{var list=loadRecentSets(),id=ensureSetId(snap);list=list.filter(function(x){return ensureSetId(x)!==id});list.unshift(snap);list.sort(function(a,b){return (Number(b.updatedAt)||Number(b.createdAt)||0)-(Number(a.updatedAt)||Number(a.createdAt)||0)});localStorage.setItem(HISTORY_KEY,JSON.stringify(list.slice(0,MAX_RECENT_SETS)))}catch(e){}}
+  function trimRecentItems(){
+    var keep=new Set(loadRecentSets().map(function(saved){return recentItemKey(saved)})),remove=[];
+    try{for(var i=0;i<localStorage.length;i++){var key=localStorage.key(i);if(key&&key.indexOf(HISTORY_ITEM_PREFIX)===0&&!keep.has(key))remove.push(key)}remove.forEach(function(key){localStorage.removeItem(key)})}catch(e){}
+  }
+  function upsertRecentSet(obj){if(!obj||savedMode)return false;var snap=snapshotState(obj);if(!snap||isSetDeleted(snap))return false;var saved=writeStorageWithRecovery(recentItemKey(snap),JSON.stringify(snap),'recent set');if(saved)trimRecentItems();return saved}
   function saveState(){
     if(!state)return;
     state.currentIndex=currentIndex;state.updatedAt=Date.now();state.ownerTab=TAB_ID;ensureSetId(state);
     if(savedMode)return;
-    try{
-      if(state.completed||historyReviewMode||isSetDeleted(state)){removeActiveState(state.setId);return}
-      var encoded=JSON.stringify(state);localStorage.setItem(tabStateKey(),encoded);localStorage.setItem(STATE_KEY,encoded)
-    }catch(e){}
+    if(state.completed||historyReviewMode||isSetDeleted(state)){removeActiveState(state.setId);return}
+    try{localStorage.removeItem(STATE_KEY)}catch(e){}
+    return writeStorageWithRecovery(tabStateKey(),JSON.stringify(state),'progress')
   }
   function archiveCurrentSet(){
     if(!state||savedMode||historyReviewMode||state.completed||!Array.isArray(state.ids)||!state.ids.length)return;
-    state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);if(!isSetDeleted(state))upsertRecentSet(state);
-    removeActiveState(state.setId);
+    state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);
+    var archived=!isSetDeleted(state)&&upsertRecentSet(state);
+    if(archived)removeActiveState(state.setId);else saveState();
     try{sessionStorage.setItem(VIEW_KEY,'setup');sessionStorage.removeItem('efp_app_resume_pending_v1')}catch(e){}
+    return archived
   }
   function copyHistoryState(value){var copy={};if(!value||typeof value!=='object')return copy;Object.keys(value).forEach(function(key){copy[key]=value[key]});return copy}
   function mixedHistoryPhase(value,phase){return !!(value&&value[HISTORY_VIEW_KEY]===phase)}
@@ -323,6 +384,10 @@
     if(!saved||!saved.ids||!saved.selectedKeys)return false;
     ensureSetId(saved);
     if(isSetDeleted(saved)){setStatus('This recent set was deleted and cannot be resumed.','bad');refreshResume();return false}
+    var legacyIds=saved.ids.some(function(id){return String(id).indexOf('qv3|')!==0});
+    if(legacyIds&&!window.confirm('This set was created with the older question-ID system, so it cannot be automatically verified after question-bank updates.\n\nContinue with a one-time best-effort migration? Cancel keeps the set unchanged.')){
+      document.documentElement.classList.remove('efp-mixed-restoring');setStatus('Older set kept unchanged. Generate a new set for fully verified question mapping.','bad');return false
+    }
     historyReviewMode=!!reviewMode;
     setStatus(historyReviewMode?'Opening completed set for review…':'Restoring your mixed set…');
     try{
@@ -347,7 +412,7 @@
       if(bookmarksChanged)saveBookmarks();
       pendingSelections={};currentQuestions=restored;ensureOptionOrders(restored);
       currentIndex=historyReviewMode?0:Math.max(0,Math.min(restored.length-1,Number(saved.currentIndex)||0));
-      if(!historyReviewMode)saveState();
+      if(!historyReviewMode)saveState();else upsertRecentSet(state);
       showQuiz();renderQuestion();return true
     }catch(err){
       console.error(err);setStatus('Could not open this recent set.','bad');historyReviewMode=false;return false
@@ -386,6 +451,7 @@
   async function openSavedQuestions(){
     if(savedMode){closeSavedQuestions();return}
     if(!bookmarks.size){alert('No saved questions yet. Tap ☆ Save on any question first.');return}
+    if(Array.from(bookmarks).some(function(id){return String(id).indexOf('qv3|')!==0})&&!window.confirm('Some saved questions use the older positional-ID system and cannot be automatically verified after question-bank updates.\n\nContinue with a one-time best-effort migration?'))return;
     var returnState=state,returnQuestions=currentQuestions.slice(),returnIndex=currentIndex,returnPending=Object.assign({},pendingSelections);
     $('savedQuestionsBtn').disabled=true;
     try{
@@ -495,19 +561,13 @@
     if(unanswered>=0){currentIndex=unanswered;renderQuestion();focusQuestionAfterStep();alert('Please answer every question before finishing the set. You can leave and resume it later.');return}
     showFinish()
   };
-  function showFinish(){var unanswered=firstUnansweredIndex();if(unanswered>=0){currentIndex=unanswered;renderQuestion();focusQuestionAfterStep();return false}var st=answerStats(),accuracy=st.attempted?Math.round(st.correct/st.attempted*100):0;state.completed=true;state.completedAt=state.completedAt||Date.now();state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);upsertRecentSet(state);removeActiveState(state.setId);try{sessionStorage.setItem(VIEW_KEY,'finish')}catch(e){}$('quizView').hidden=true;$('setupView').hidden=true;$('finishView').hidden=false;$('finishScore').textContent=st.correct+' / '+currentQuestions.length;$('finishCopy').textContent=st.wrong+' wrong · 0 unattempted';$('finishAttempted').textContent=st.attempted;$('finishAccuracy').textContent=accuracy+'%';$('finishSaved').textContent=currentQuestions.filter(function(q){return bookmarks.has(q.id)}).length;window.scrollTo({top:0,behavior:'auto'});return true}
+  function showFinish(){var unanswered=firstUnansweredIndex();if(unanswered>=0){currentIndex=unanswered;renderQuestion();focusQuestionAfterStep();return false}var st=answerStats(),accuracy=st.attempted?Math.round(st.correct/st.attempted*100):0;state.completed=true;state.completedAt=state.completedAt||Date.now();state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);if(!upsertRecentSet(state)){state.completed=false;delete state.completedAt;saveState();return false}removeActiveState(state.setId);try{sessionStorage.setItem(VIEW_KEY,'finish')}catch(e){}$('quizView').hidden=true;$('setupView').hidden=true;$('finishView').hidden=false;$('finishScore').textContent=st.correct+' / '+currentQuestions.length;$('finishCopy').textContent=st.wrong+' wrong · 0 unattempted';$('finishAttempted').textContent=st.attempted;$('finishAccuracy').textContent=accuracy+'%';$('finishSaved').textContent=currentQuestions.filter(function(q){return bookmarks.has(q.id)}).length;window.scrollTo({top:0,behavior:'auto'});return true}
   $('finishNewBtn').onclick=function(){if(state)generateSet(state.selectedKeys,state.total||currentQuestions.length)};$('reviewBtn').onclick=function(){historyReviewMode=true;currentIndex=0;showQuiz();renderQuestion()};
   function deleteRecentSet(saved){
     if(!saved)return;
-    var targetId=ensureSetId(saved),targetFingerprint=String(saved.createdAt||'')+'|'+(saved.ids||[]).join(',');
+    var targetId=ensureSetId(saved);
     markSetDeleted(targetId);removeActiveState(targetId);
-    try{
-      var list=loadRecentSets().filter(function(x){
-        var fp=String(x.createdAt||'')+'|'+(x.ids||[]).join(',');
-        return ensureSetId(x)!==targetId&&fp!==targetFingerprint
-      });
-      localStorage.setItem(HISTORY_KEY,JSON.stringify(list.slice(0,MAX_RECENT_SETS)));
-    }catch(e){}
+    removeRecentStorageRecord(saved);
     if(state&&state.setId===targetId){state=null;currentQuestions=[];currentIndex=0;pendingSelections={}}
     refreshResume()
   }
@@ -517,7 +577,6 @@
   }
   function refreshResume(){
     var list=loadRecentSets(),section=$('recentSetsSection'),box=$('recentSetsList');
-    try{var encoded=JSON.stringify(list);if(localStorage.getItem(HISTORY_KEY)!==encoded)localStorage.setItem(HISTORY_KEY,encoded)}catch(e){}
     box.innerHTML='';
     if(!list.length){section.classList.remove('show');return}
     section.classList.add('show');
@@ -594,7 +653,7 @@
     if(event.key===tabStateKey()&&event.newValue===null&&state&&!state.completed){
       state=null;currentQuestions=[];currentIndex=0;pendingSelections={};showSetup();setStatus('Mixed Practice data was reset in another tab.','bad');return
     }
-    if(event.key===HISTORY_KEY||event.key===DELETED_KEY){
+    if(event.key===HISTORY_KEY||event.key===DELETED_KEY||(event.key&&event.key.indexOf(HISTORY_ITEM_PREFIX)===0)){
       if(state&&isSetDeleted(state)){
         var deletedId=state.setId;removeActiveState(deletedId);state=null;currentQuestions=[];currentIndex=0;pendingSelections={};
         showSetup();setStatus('This set was deleted in another tab.','bad');return

@@ -281,11 +281,11 @@
     <section class="grid">
       <article class="card">
         <h2>⬇️ Create Backup</h2>
-        <p>On Android, this creates a Backup Code that you can share or copy—no file download is required. On desktop, it saves a JSON file.</p>
+        <p>On Android, this creates a compressed Backup Code; very large backups are shared as a JSON file when supported. On desktop, it saves a JSON file.</p>
         <button class="btn btn-primary" type="button" id="backupBtn">Create / Share Backup</button>
         <div class="status" id="backupStatus" role="status" aria-live="polite"></div>
         <div class="backup-code-box" id="backupCodeBox" hidden>
-          <p><strong>Android Backup Code:</strong> save this complete <code>EFP1…</code> code in Notes, WhatsApp, Telegram, email, or any safe place.</p>
+          <p><strong>Android Backup Code:</strong> save this complete <code>EFP2…</code> code in Notes, WhatsApp, Telegram, email, or any safe place.</p>
           <textarea class="backup-code" id="backupCodeText" readonly aria-label="Generated backup code"></textarea>
           <div class="backup-code-actions">
             <button class="small-action" type="button" id="copyBackupCodeBtn">📋 Copy Code</button>
@@ -305,7 +305,7 @@
         <div class="file-name" id="fileName">No file selected</div>
 
         <div class="restore-divider">OR PASTE ANDROID BACKUP CODE</div>
-        <textarea class="restore-code" id="restoreCode" placeholder="Paste the complete EFP1… backup code here" aria-label="Paste Android backup code"></textarea>
+        <textarea class="restore-code" id="restoreCode" placeholder="Paste the complete EFP2… backup code here" aria-label="Paste Android backup code"></textarea>
         <button class="small-action" type="button" id="loadBackupCodeBtn">Load Pasted Backup Code</button>
 
         <label class="restore-options">
@@ -381,6 +381,7 @@
       var PROGRESS_PREFIX = "efp_visited_";
       var MIXED_STATE_KEY = "efp_mixed_practice_state_v1";
       var MIXED_HISTORY_KEY = "efp_mixed_practice_recent_sets_v1";
+      var MIXED_HISTORY_ITEM_PREFIX = "efp_mixed_practice_recent_set_v2:";
       var MIXED_DELETED_KEY = "efp_mixed_practice_deleted_sets_v1";
       var MIXED_TAB_STATE_PREFIX = "efp_mixed_practice_tab_state_v1:";
       var MIXED_BOOKMARK_KEY = "efp_mixed_practice_bookmarks_v1";
@@ -443,7 +444,7 @@
       }
 
       function isPracticeKey(key) {
-        return key === MIXED_STATE_KEY || key === MIXED_HISTORY_KEY || key === MIXED_DELETED_KEY || key === MIXED_BOOKMARK_KEY || (key && key.indexOf(MIXED_TAB_STATE_PREFIX) === 0) || RAPID_KEY_PATTERN.test(key || "");
+        return key === MIXED_STATE_KEY || key === MIXED_HISTORY_KEY || key === MIXED_DELETED_KEY || key === MIXED_BOOKMARK_KEY || (key && (key.indexOf(MIXED_TAB_STATE_PREFIX) === 0 || key.indexOf(MIXED_HISTORY_ITEM_PREFIX) === 0)) || RAPID_KEY_PATTERN.test(key || "");
       }
 
       function normalizeMixedState(value) {
@@ -529,6 +530,7 @@
           mixedRecentSets: safeParse(localStorage.getItem(MIXED_HISTORY_KEY), [])
         };
         var tabStates = [];
+        var recentItems = [];
         for (var i = 0; i < localStorage.length; i++) {
           var key = localStorage.key(i);
           if (RAPID_KEY_PATTERN.test(key || "")) raw.rapid[key] = safeParse(localStorage.getItem(key), {});
@@ -536,8 +538,12 @@
             var tabState = safeParse(localStorage.getItem(key), null);
             if (tabState) tabStates.push(tabState);
           }
+          if (key && key.indexOf(MIXED_HISTORY_ITEM_PREFIX) === 0) {
+            var recentState = safeParse(localStorage.getItem(key), null);
+            if (recentState) recentItems.push(recentState);
+          }
         }
-        raw.mixedRecentSets = (Array.isArray(raw.mixedRecentSets) ? raw.mixedRecentSets : []).concat(tabStates);
+        raw.mixedRecentSets = (Array.isArray(raw.mixedRecentSets) ? raw.mixedRecentSets : []).concat(recentItems, tabStates);
         return normalizePracticeData(raw);
       }
 
@@ -620,41 +626,62 @@
         return typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent || "");
       }
 
-      function utf8ToBase64(value) {
-        if (typeof TextEncoder === "function") {
-          var bytes = new TextEncoder().encode(value);
-          var binary = "";
-          for (var i = 0; i < bytes.length; i += 32768) {
-            binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 32768));
-          }
-          return btoa(binary);
+      function bytesToBase64(bytes) {
+        var binary = "";
+        for (var i = 0; i < bytes.length; i += 32768) {
+          binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 32768));
         }
+        return btoa(binary);
+      }
+
+      function base64ToBytes(value) {
+        var binary = atob(value);
+        var bytes = new Uint8Array(binary.length);
+        for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        return bytes;
+      }
+
+      function utf8ToBase64(value) {
+        if (typeof TextEncoder === "function") return bytesToBase64(new TextEncoder().encode(value));
         return btoa(unescape(encodeURIComponent(value)));
       }
 
       function base64ToUtf8(value) {
-        var binary = atob(value);
-        if (typeof TextDecoder === "function") {
-          var bytes = new Uint8Array(binary.length);
-          for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-          return new TextDecoder().decode(bytes);
-        }
+        var bytes = base64ToBytes(value);
+        if (typeof TextDecoder === "function") return new TextDecoder().decode(bytes);
+        var binary = "";
+        for (var i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
         return decodeURIComponent(escape(binary));
       }
 
-      function encodeBackupCode(payload) {
-        return "EFP1." + utf8ToBase64(JSON.stringify(payload))
-          .replace(/\+/g, "-")
-          .replace(/\//g, "_")
-          .replace(/=+$/g, "");
+      async function encodeBackupCode(payload) {
+        var text = JSON.stringify(payload);
+        if (typeof CompressionStream === "function" && typeof TextEncoder === "function") {
+          try {
+            var stream = new Blob([new TextEncoder().encode(text)]).stream().pipeThrough(new CompressionStream("gzip"));
+            var compressed = new Uint8Array(await new Response(stream).arrayBuffer());
+            return "EFP2." + bytesToBase64(compressed).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+          } catch (e) {
+            // Fall back to the original portable code below.
+          }
+        }
+        return "EFP1." + utf8ToBase64(text).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
       }
 
-      function decodeBackupText(value) {
+      async function decodeBackupText(value) {
         var input = String(value || "").trim();
         if (!input) throw new Error("Paste the complete Backup Code first.");
-        var match = input.match(/EFP1\.([A-Za-z0-9_-]+)/);
-        if (!match) return JSON.parse(input);
-        var encoded = match[1].replace(/-/g, "+").replace(/_/g, "/");
+        var compressedMatch = input.match(/EFP2\.([A-Za-z0-9_-]+)/);
+        if (compressedMatch) {
+          if (typeof DecompressionStream !== "function") throw new Error("This compressed backup needs a newer Chrome, Edge, or Android app version.");
+          var compressedValue = compressedMatch[1].replace(/-/g, "+").replace(/_/g, "/");
+          while (compressedValue.length % 4) compressedValue += "=";
+          var stream = new Blob([base64ToBytes(compressedValue)]).stream().pipeThrough(new DecompressionStream("gzip"));
+          return JSON.parse(await new Response(stream).text());
+        }
+        var legacyMatch = input.match(/EFP1\.([A-Za-z0-9_-]+)/);
+        if (!legacyMatch) return JSON.parse(input);
+        var encoded = legacyMatch[1].replace(/-/g, "+").replace(/_/g, "/");
         while (encoded.length % 4) encoded += "=";
         return JSON.parse(base64ToUtf8(encoded));
       }
@@ -663,8 +690,8 @@
         return "ExamFusion Prep Backup Code\n\nKeep this complete code safe. To restore, paste it on the Backup & Restore page:\n\n" + code;
       }
 
-      function revealBackupCode(payload) {
-        lastBackupCode = encodeBackupCode(payload);
+      function revealBackupCode(code) {
+        lastBackupCode = code;
         backupCodeText.value = lastBackupCode;
         backupCodeBox.hidden = false;
         return lastBackupCode;
@@ -694,6 +721,18 @@
         });
       }
 
+      async function shareBackupFile(text, fileName) {
+        if (typeof File !== "function" || typeof navigator.share !== "function" || typeof navigator.canShare !== "function") return false;
+        var file = new File([text], fileName, { type: "application/json;charset=utf-8" });
+        if (!navigator.canShare({ files: [file] })) return false;
+        await navigator.share({
+          title: "ExamFusion Prep backup",
+          text: "ExamFusion Prep bookmarks, progress, and recent Mixed Practice sets.",
+          files: [file]
+        });
+        return true;
+      }
+
       async function saveJson(payload) {
         var text = JSON.stringify(payload, null, 2);
         var fileName = backupFileName();
@@ -701,8 +740,18 @@
         // Android app path: never request a file download. Some wrappers cannot
         // download Blob URLs or share File objects, so use portable text instead.
         if (isAndroidDevice()) {
-          var code = revealBackupCode(payload);
-          if (typeof navigator.share === "function") {
+          var code = await encodeBackupCode(payload);
+          revealBackupCode(code);
+          if (code.length > 60000) {
+            try {
+              if (await shareBackupFile(text, fileName)) return { method: "file-share", fileName: fileName };
+            } catch (fileShareError) {
+              if (fileShareError && fileShareError.name === "AbortError") {
+                return { method: "code-ready", fileName: "Android Backup Code", cancelled: true };
+              }
+              // Fall through to the compressed-code copy fallback.
+            }
+          } else if (typeof navigator.share === "function") {
             try {
               await shareCode(code);
               return { method: "code-share", fileName: "Android Backup Code" };
@@ -803,9 +852,41 @@
         return out;
       }
 
+      function mixedStorageId(saved) {
+        if (saved.setId) return saved.setId;
+        var text = String(saved.createdAt || "") + "|" + (saved.ids || []).join(",");
+        var hash = 2166136261;
+        for (var i = 0; i < text.length; i++) {
+          hash ^= text.charCodeAt(i);
+          hash = Math.imul(hash, 16777619);
+        }
+        saved.setId = "restored-" + String(saved.createdAt || Date.now()) + "-" + (hash >>> 0).toString(36);
+        return saved.setId;
+      }
+
+      function mixedRecentItemKey(saved) {
+        return MIXED_HISTORY_ITEM_PREFIX + encodeURIComponent(mixedStorageId(saved));
+      }
+
       function mergeMixedRecentSets(current, incoming) {
         var combined = normalizePracticeData({ mixedRecentSets: (current || []).concat(incoming || []) }).mixedRecentSets;
         return combined.slice(0, 20);
+      }
+
+      function writeMixedRecentSets(recent) {
+        var keep = {};
+        recent.slice(0, 20).forEach(function (saved) {
+          var key = mixedRecentItemKey(saved);
+          keep[key] = true;
+          localStorage.setItem(key, JSON.stringify(saved));
+        });
+        var remove = [];
+        for (var i = 0; i < localStorage.length; i++) {
+          var key = localStorage.key(i);
+          if (key && key.indexOf(MIXED_HISTORY_ITEM_PREFIX) === 0 && !keep[key]) remove.push(key);
+        }
+        remove.forEach(function (key) { localStorage.removeItem(key); });
+        localStorage.removeItem(MIXED_HISTORY_KEY);
       }
 
       function writePracticeData(practice, replace) {
@@ -834,14 +915,13 @@
           localStorage.removeItem(MIXED_STATE_KEY);
         }
         if (practice.mixedRecentSets.length || replace) {
-          var currentRecent = replace ? [] : safeParse(localStorage.getItem(MIXED_HISTORY_KEY), []);
+          var currentRecent = replace ? [] : getPracticeData().mixedRecentSets;
           var recent = replace ? practice.mixedRecentSets : mergeMixedRecentSets(currentRecent, practice.mixedRecentSets);
-          if (recent.length) localStorage.setItem(MIXED_HISTORY_KEY, JSON.stringify(recent));
-          else localStorage.removeItem(MIXED_HISTORY_KEY);
+          writeMixedRecentSets(recent);
         }
         var restoredIds = {};
         practice.mixedRecentSets.concat(practice.mixedState ? [practice.mixedState] : []).forEach(function (saved) {
-          if (saved && saved.setId) restoredIds[saved.setId] = true;
+          if (saved) restoredIds[mixedStorageId(saved)] = true;
         });
         var deleted = safeParse(localStorage.getItem(MIXED_DELETED_KEY), {});
         if (deleted && typeof deleted === "object" && !Array.isArray(deleted)) {
@@ -966,6 +1046,7 @@
           var b = countAllBookmarks(payload.data.bookmarks, payload.data.practice);
           var p = countProgress(payload.data.progress);
           var where = result.method === "picker" ? "Backup saved" :
+            result.method === "file-share" ? "Android backup file shared" :
             result.method === "code-share" ? "Android Backup Code shared" :
             result.method === "code-copy" ? "Android Backup Code copied" :
             result.method === "code-ready" ? "Android Backup Code ready below" :
@@ -1015,7 +1096,7 @@
         shareBackupCodeBtn.disabled = true;
         try {
           await shareCode(lastBackupCode);
-          showStatus(backupStatus, "good", "Backup Code shared. Keep the complete EFP1 code safe.");
+          showStatus(backupStatus, "good", "Backup Code shared. Keep the complete EFP2 code safe.");
         } catch (e) {
           if (e && e.name === "AbortError") {
             showStatus(backupStatus, "warn", "Share panel closed. Your Backup Code is still available below.");
@@ -1074,12 +1155,12 @@
         }
       });
 
-      loadBackupCodeBtn.addEventListener("click", function () {
+      loadBackupCodeBtn.addEventListener("click", async function () {
         clearStatus(restoreStatus);
         selectedBackup = null;
         restoreBtn.disabled = true;
         try {
-          var parsed = decodeBackupText(restoreCode.value);
+          var parsed = await decodeBackupText(restoreCode.value);
           selectedBackup = normalizeBackup(parsed);
           restoreBtn.disabled = false;
           fileName.textContent = "Android Backup Code loaded";
