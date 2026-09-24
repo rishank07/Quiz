@@ -1,5 +1,5 @@
-// v115 Center responsive quiz exit modal
-const CACHE_VERSION = "efp-pwa-2026-09-24-v115-centered-quiz-modal";
+// v116 Original Practice Android Back history bridge
+const CACHE_VERSION = "efp-pwa-2026-09-24-v116-original-practice-android-back";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924quizmodal1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -38,8 +38,8 @@ const APP_SHELL = [
   "/Original%20Practice/index.html",
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
-  "/Original%20Practice/original-practice.js?v=20260915staticgk1",
-  "/Original%20Practice/english-practice.js?v=20260913english1",
+  "/Original%20Practice/original-practice.js?v=20260924androidback1",
+  "/Original%20Practice/english-practice.js?v=20260924androidback1",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
   "/Crux-Tricks/all-topics.html",
