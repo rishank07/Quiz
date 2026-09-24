@@ -1,4 +1,4 @@
-/* ExamFusion Prep — same-device session resume (Android + browser + installed web app) */
+/* ExamFusion Prep — installed-app session resume (Android + installed web app/PWA) */
 (function () {
   "use strict";
 
@@ -51,21 +51,9 @@
   }
 
   function launchMarker() {
-    if (!isHomePath(location.pathname)) return false;
-    if (installedAppLaunchMarker()) return true;
-
-    /* Regular browsers use the same same-device resume engine as Android/PWA.
-       A fresh top-level entry (address bar, new tab, browser relaunch, external
-       link) has no same-origin referrer. Internal Home navigation keeps its
-       same-origin referrer and markIntentionalHome() also clears the saved
-       resume target, so normal Back/Home hierarchy is not hijacked. */
-    try {
-      var referrer = document.referrer || "";
-      if (!referrer || new URL(referrer).origin !== location.origin) return true;
-    } catch (_) {
-      return true;
-    }
-    return false;
+    // Auto-resume is deliberately limited to installed surfaces. Normal
+    // browser visits must remain ordinary URL/search navigations.
+    return installedAppLaunchMarker();
   }
 
   var ANDROID_APP_CONTEXT_KEY = "efp_android_app_context_v1";
