@@ -507,22 +507,6 @@
     saveCruxViewerReturnState();
   }
 
-  /* Every Crux PDF is rendered through the same viewer.html. Save its exact
-     logical path as soon as the viewer opens so Browser Back, Android system
-     Back and the floating Back button all have the same deterministic return
-     target even when index.html is restored from BFCache with stale SPA state. */
-  function primeCruxViewerReturnState() {
-    if (!isCruxViewer()) return;
-
-    var attempts = 0;
-    function prime() {
-      attempts++;
-      if (saveCruxViewerReturnState()) return;
-      if (attempts < 20) window.setTimeout(prime, 50);
-    }
-    prime();
-  }
-
   function clearCruxViewerReturnState() {
     try { sessionStorage.removeItem(CRUX_RESTORE_KEY); } catch (_) {}
   }
@@ -922,8 +906,7 @@
   installMixedPracticeFeedbackColors();
   installMixedPracticeSiteTheme();
   installMixedPracticeInstantCheck();
-  primeCruxViewerReturnState();
-  installCruxHomeSearchHistoryGuard();
+installCruxHomeSearchHistoryGuard();
   installGenericHomeSearchHistoryGuard();
 
   if (document.readyState === "loading") {
@@ -932,10 +915,4 @@
     restoreCruxIndexState();
   }
 
-  /* Returning from viewer.html often restores Crux index.html from BFCache,
-     where scripts do not execute again. pageshow is therefore the durable
-     place to consume the saved PDF hierarchy and rebuild the exact pane. */
-  window.addEventListener("pageshow", function () {
-    if (isCruxTricksRoot()) restoreCruxIndexState();
-  });
 })();
