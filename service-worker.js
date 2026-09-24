@@ -1,7 +1,7 @@
-// v111 Warn before leaving in-progress quizzes
-const CACHE_VERSION = "efp-pwa-2026-09-24-v111-quiz-exit-warning";
+// v112 Professional English quiz exit warning
+const CACHE_VERSION = "efp-pwa-2026-09-24-v112-professional-quiz-warning";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924quizwarn1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924quizwarn2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -24,8 +24,8 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/owner-debug.js",
-  "/home-nav.js?v=20260924quizwarn1",
-  "/app-session.js?v=20260924quizwarn1",
+  "/home-nav.js?v=20260924quizwarn2",
+  "/app-session.js?v=20260924quizwarn2",
   "/back-parent-map.js",
   "/back-nav.js?v=20260920allsearchback1",
   "/search-logic.js",

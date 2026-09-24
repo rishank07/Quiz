@@ -238,7 +238,7 @@
   function installQuizProgressWarning() {
     var dirty = false;
     var allowNavigation = false;
-    var MESSAGE = "Refresh ya Back karne par current quiz progress reset/lost ho sakti hai.\n\nKya aap page chhodna chahte hain?";
+    var MODAL_ID = "efp-quiz-exit-modal";
     var QUIZ_SURFACES = [
       ".question-box",
       ".question-card",
@@ -344,21 +344,132 @@
       window.setTimeout(function () { allowNavigation = false; }, 1800);
     }
 
+    function ensureExitModal() {
+      var existing = document.getElementById(MODAL_ID);
+      if (existing) return existing;
+
+      var style = document.createElement("style");
+      style.id = MODAL_ID + "-style";
+      style.textContent = [
+        "#" + MODAL_ID + "{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,7,18,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}",
+        "#" + MODAL_ID + ".show{display:flex}",
+        "#" + MODAL_ID + " .efp-qw-card{width:min(430px,100%);border-radius:20px;background:#fff;color:#172033;border:1px solid rgba(15,23,42,.10);box-shadow:0 28px 80px rgba(2,6,23,.34);overflow:hidden;transform:translateY(8px) scale(.985);opacity:0;transition:transform .18s ease,opacity .18s ease}",
+        "#" + MODAL_ID + ".show .efp-qw-card{transform:none;opacity:1}",
+        "#" + MODAL_ID + " .efp-qw-body{padding:24px 24px 18px}",
+        "#" + MODAL_ID + " .efp-qw-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;font:700 22px/1 Arial,sans-serif}",
+        "#" + MODAL_ID + " h2{margin:0 0 9px;font:700 20px/1.25 Arial,system-ui,sans-serif;letter-spacing:-.2px;color:#111827}",
+        "#" + MODAL_ID + " p{margin:0;font:400 14px/1.6 Arial,system-ui,sans-serif;color:#64748b}",
+        "#" + MODAL_ID + " .efp-qw-note{margin-top:13px;padding:11px 12px;border-radius:11px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:12.5px;line-height:1.45}",
+        "#" + MODAL_ID + " .efp-qw-actions{display:flex;gap:10px;padding:16px 24px 22px;border-top:1px solid #eef2f7}",
+        "#" + MODAL_ID + " button{appearance:none;-webkit-appearance:none;min-height:44px;border-radius:11px;padding:10px 16px;font:700 14px/1 Arial,system-ui,sans-serif;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}",
+        "#" + MODAL_ID + " button:active{transform:scale(.985)}",
+        "#" + MODAL_ID + " .efp-qw-stay{flex:1;background:#111827;color:#fff;border:1px solid #111827;box-shadow:0 6px 16px rgba(15,23,42,.18)}",
+        "#" + MODAL_ID + " .efp-qw-leave{background:#fff;color:#b42318;border:1px solid #fecaca}",
+        "#" + MODAL_ID + " button:focus-visible{outline:3px solid rgba(59,130,246,.28);outline-offset:2px}",
+        "html.efp-black #" + MODAL_ID + " .efp-qw-card,html.efp-black-invert #" + MODAL_ID + " .efp-qw-card{background:#111827;color:#f8fafc;border-color:#334155}",
+        "html.efp-black #" + MODAL_ID + " h2,html.efp-black-invert #" + MODAL_ID + " h2{color:#f8fafc}",
+        "html.efp-black #" + MODAL_ID + " p,html.efp-black-invert #" + MODAL_ID + " p{color:#cbd5e1}",
+        "html.efp-black #" + MODAL_ID + " .efp-qw-note,html.efp-black-invert #" + MODAL_ID + " .efp-qw-note{background:#0f172a;border-color:#334155;color:#cbd5e1}",
+        "html.efp-black #" + MODAL_ID + " .efp-qw-actions,html.efp-black-invert #" + MODAL_ID + " .efp-qw-actions{border-top-color:#263244}",
+        "html.efp-black #" + MODAL_ID + " .efp-qw-stay,html.efp-black-invert #" + MODAL_ID + " .efp-qw-stay{background:#f8fafc;color:#0f172a;border-color:#f8fafc}",
+        "html.efp-black #" + MODAL_ID + " .efp-qw-leave,html.efp-black-invert #" + MODAL_ID + " .efp-qw-leave{background:#111827;color:#fca5a5;border-color:#7f1d1d}",
+        "@media(max-width:520px){#" + MODAL_ID + "{align-items:flex-end;padding:14px}#" + MODAL_ID + " .efp-qw-card{border-radius:18px}#" + MODAL_ID + " .efp-qw-body{padding:22px 20px 16px}#" + MODAL_ID + " .efp-qw-actions{padding:14px 20px 20px;flex-direction:column}#" + MODAL_ID + " .efp-qw-leave{order:2}#" + MODAL_ID + " .efp-qw-stay{order:1;width:100%}}",
+        "@media(prefers-reduced-motion:reduce){#" + MODAL_ID + " .efp-qw-card{transition:none}}"
+      ].join("");
+      document.head.appendChild(style);
+
+      var modal = document.createElement("div");
+      modal.id = MODAL_ID;
+      modal.setAttribute("role", "dialog");
+      modal.setAttribute("aria-modal", "true");
+      modal.setAttribute("aria-labelledby", MODAL_ID + "-title");
+      modal.setAttribute("aria-describedby", MODAL_ID + "-desc");
+      modal.innerHTML =
+        '<div class="efp-qw-card">' +
+          '<div class="efp-qw-body">' +
+            '<div class="efp-qw-icon" aria-hidden="true">!</div>' +
+            '<h2 id="' + MODAL_ID + '-title">Leave this quiz?</h2>' +
+            '<p id="' + MODAL_ID + '-desc">Your current quiz progress may be lost if you refresh, go back, or leave this page before finishing.</p>' +
+            '<div class="efp-qw-note">Stay on this page to continue the quiz from your current position.</div>' +
+          '</div>' +
+          '<div class="efp-qw-actions">' +
+            '<button type="button" class="efp-qw-leave">Leave Quiz</button>' +
+            '<button type="button" class="efp-qw-stay">Stay on Quiz</button>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(modal);
+      return modal;
+    }
+
+    function showExitModal(onLeave) {
+      var modal = ensureExitModal();
+      var stay = modal.querySelector(".efp-qw-stay");
+      var leave = modal.querySelector(".efp-qw-leave");
+      var previousFocus = document.activeElement;
+      var settled = false;
+
+      function close() {
+        modal.classList.remove("show");
+        document.removeEventListener("keydown", onKey, true);
+        window.setTimeout(function () {
+          if (previousFocus && previousFocus.focus) {
+            try { previousFocus.focus({ preventScroll: true }); } catch (_) { try { previousFocus.focus(); } catch (_) {} }
+          }
+        }, 0);
+      }
+
+      function keepQuiz() {
+        if (settled) return;
+        settled = true;
+        close();
+      }
+
+      function leaveQuiz() {
+        if (settled) return;
+        settled = true;
+        close();
+        onLeave();
+      }
+
+      function onKey(event) {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          keepQuiz();
+        }
+      }
+
+      stay.onclick = keepQuiz;
+      leave.onclick = leaveQuiz;
+      modal.onclick = function (event) {
+        if (event.target === modal) keepQuiz();
+      };
+      document.addEventListener("keydown", onKey, true);
+      modal.classList.add("show");
+      window.setTimeout(function () { try { stay.focus(); } catch (_) {} }, 0);
+    }
+
     document.addEventListener("click", function (event) {
       var target = event.target;
       if (!target) return;
       var hadQuizSurface = hasVisibleQuizSurface();
 
-      if (shouldWarn() && navigationTarget(target)) {
-        var leave = false;
-        try { leave = window.confirm(MESSAGE); } catch (_) { leave = true; }
-        if (!leave) {
-          event.preventDefault();
-          event.stopPropagation();
-          if (event.stopImmediatePropagation) event.stopImmediatePropagation();
-          return;
-        }
-        approveOneNavigation();
+      var navTarget = shouldWarn() ? navigationTarget(target) : null;
+      if (navTarget) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+        showExitModal(function () {
+          approveOneNavigation();
+          window.setTimeout(function () {
+            try {
+              if (navTarget && navTarget.isConnected && typeof navTarget.click === "function") {
+                navTarget.click();
+                return;
+              }
+              if (navTarget && navTarget.href) window.location.assign(navTarget.href);
+            } catch (_) {}
+          }, 0);
+        });
         return;
       }
 
