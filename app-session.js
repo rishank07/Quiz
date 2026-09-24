@@ -246,6 +246,9 @@
       ".quiz-view",
       ".quiz-container",
       ".question-container",
+      ".quiz-item",
+      ".mcq-item",
+      ".question-item",
       ".q-card",
       "#kbArea",
       "#mcqArea",
@@ -309,7 +312,7 @@
       var direct = target.closest(
         ".option-btn,.option,.options li,.choice,.choice-btn,.answer-btn,.check-btn,#checkBtn," +
         "#kbArea button,#mcqArea button,[data-answer],[data-option]," +
-        "input[type='radio'],input[type='checkbox'],select"
+        "button,[role='button'],label,input,select,textarea"
       );
       if (!direct) return false;
       return !!direct.closest(QUIZ_SURFACES) ||
