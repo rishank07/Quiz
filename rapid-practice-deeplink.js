@@ -25,24 +25,84 @@
       ".toolbar{position:static!important;top:auto!important;z-index:auto!important;display:contents!important;" +
       "padding:0!important;margin:0!important;background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
       ".toolbar>.barcard,.toolbar>.bar{display:contents!important}" +
+      ".efp-rp-score-badges{display:none}" +
       ".toolbar>.barcard>.row:first-child,.toolbar>.bar>.row:first-child{" +
       "position:sticky;top:8px;z-index:130;margin:10px 0 8px!important;padding:7px 8px;gap:6px;" +
+      "display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:nowrap!important;" +
       "background:rgba(255,255,255,.96);border:1px solid rgba(184,134,63,.22);border-radius:12px;" +
       "box-shadow:0 3px 14px rgba(26,31,46,.10);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}" +
-      ".toolbar>.barcard>.row:first-child #scoreTxt,.toolbar>.bar>.row:first-child #scoreTxt{font-size:12px;line-height:1.25}" +
-      ".toolbar>.barcard>.row:first-child .progress,.toolbar>.bar>.row:first-child .progress{min-width:64px}" +
-      ".toolbar>.barcard>.row:first-child .btn,.toolbar>.bar>.row:first-child .btn{padding:6px 8px;font-size:11px}" +
+      ".toolbar>.barcard>.row:first-child #scoreTxt,.toolbar>.bar>.row:first-child #scoreTxt{display:none!important}" +
+      ".toolbar>.barcard>.row:first-child .progress,.toolbar>.bar>.row:first-child .progress," +
+      ".toolbar>.barcard>.row:first-child .pct,.toolbar>.bar>.row:first-child .pct{display:none!important}" +
+      ".efp-rp-score-badges{display:flex!important;align-items:center;gap:4px;min-width:0;flex:1 1 auto}" +
+      ".efp-rp-score-badge{display:inline-flex;align-items:center;white-space:nowrap;padding:5px 6px;border-radius:6px;" +
+      "font:700 11px/1.15 Arial,sans-serif}" +
+      ".efp-rp-score-total{background:#f3f4f6;color:#374151}" +
+      ".efp-rp-score-correct{background:#d1fae5;color:#047857}" +
+      ".efp-rp-score-wrong{background:#fee2e2;color:#b91c1c}" +
+      ".toolbar>.barcard>.row:first-child .btn,.toolbar>.bar>.row:first-child .btn{" +
+      "flex:0 0 auto;padding:5px 7px;font-size:10px;border-radius:8px}" +
       ".toolbar>.barcard>.row:nth-child(2),.toolbar>.bar>.row:nth-child(2){margin-top:0!important;padding:10px 10px 4px;" +
       "background:var(--card,#fff);border:1px solid var(--line,#d9d5cc);border-bottom:0;border-radius:14px 14px 0 0}" +
       ".toolbar>.barcard>.section-nav,.toolbar>.bar>.section-nav{padding:8px 10px 10px;background:var(--card,#fff);" +
       "border:1px solid var(--line,#d9d5cc);border-top:0;border-radius:0 0 14px 14px}" +
       "body.dark .toolbar>.barcard>.row:first-child,body.dark .toolbar>.bar>.row:first-child{" +
       "background:rgba(24,34,49,.96);border-color:#314052;box-shadow:none}" +
+      "body.dark .efp-rp-score-total{background:#263445;color:#e5e7eb}" +
+      "body.dark .efp-rp-score-correct{background:#123d32;color:#8be0bd}" +
+      "body.dark .efp-rp-score-wrong{background:#4a2229;color:#ffacb6}" +
       "body.dark .toolbar>.barcard>.row:nth-child(2),body.dark .toolbar>.bar>.row:nth-child(2)," +
       "body.dark .toolbar>.barcard>.section-nav,body.dark .toolbar>.bar>.section-nav{" +
       "background:#182231;border-color:#314052}" +
       "}";
     document.head.appendChild(prepaintStyle);
+  }
+
+
+  function installOriginalPracticeScoreLook() {
+    var rows = document.querySelectorAll(
+      ".toolbar > .barcard > .row:first-child, .toolbar > .bar > .row:first-child"
+    );
+    rows.forEach(function (row) {
+      var score = row.querySelector("#scoreTxt");
+      if (!score || score.__efpOriginalPracticeScore) return;
+      score.__efpOriginalPracticeScore = true;
+
+      var badges = document.createElement("div");
+      badges.className = "efp-rp-score-badges";
+      badges.setAttribute("aria-hidden", "true");
+      badges.innerHTML =
+        '<span class="efp-rp-score-badge efp-rp-score-total">Total: 0/0</span>' +
+        '<span class="efp-rp-score-badge efp-rp-score-correct">Correct: 0</span>' +
+        '<span class="efp-rp-score-badge efp-rp-score-wrong">Wrong: 0</span>';
+      row.insertBefore(badges, score);
+
+      var totalBadge = badges.querySelector(".efp-rp-score-total");
+      var correctBadge = badges.querySelector(".efp-rp-score-correct");
+      var wrongBadge = badges.querySelector(".efp-rp-score-wrong");
+
+      function syncBadges() {
+        var value = (score.textContent || "").replace(/\s+/g, " ").trim();
+        var attemptedMatch = value.match(/(\d+)\s*\/\s*(\d+)\s*attempted/i);
+        var correctMatch = value.match(/(\d+)\s*correct/i);
+        var wrongMatch = value.match(/(\d+)\s*wrong/i);
+        var attempted = attemptedMatch ? attemptedMatch[1] : "0";
+        var total = attemptedMatch ? attemptedMatch[2] : "0";
+        var correct = correctMatch ? correctMatch[1] : "0";
+        var wrong = wrongMatch ? wrongMatch[1] : "0";
+
+        totalBadge.textContent = "Total: " + attempted + "/" + total;
+        correctBadge.textContent = "Correct: " + correct;
+        wrongBadge.textContent = "Wrong: " + wrong;
+      }
+
+      syncBadges();
+      new MutationObserver(syncBadges).observe(score, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+    });
   }
 
   function getTarget() {
@@ -111,12 +171,17 @@
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", run, { once: true });
+    document.addEventListener("DOMContentLoaded", function () {
+      installOriginalPracticeScoreLook();
+      run();
+    }, { once: true });
   } else {
+    installOriginalPracticeScoreLook();
     setTimeout(run, 0);
   }
   window.addEventListener("hashchange", run);
   window.addEventListener("pageshow", function () {
+    installOriginalPracticeScoreLook();
     if (getTarget()) setTimeout(run, 0);
   });
 })();
