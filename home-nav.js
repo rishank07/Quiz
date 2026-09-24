@@ -420,13 +420,13 @@
   }
 })();
 
-/* EFP_APP_SESSION_LOADER — installed-app resume */
+/* EFP_APP_SESSION_LOADER — same-device resume */
 (function () {
   "use strict";
   if (typeof document === "undefined" || document.getElementById("efp-app-session-script")) return;
   var script = document.createElement("script");
   script.id = "efp-app-session-script";
-  script.src = "/app-session.js?v=20260924ophierarchy1";
+  script.src = "/app-session.js?v=20260924genericresume1";
   script.async = false;
   (document.head || document.documentElement).appendChild(script);
 })();
