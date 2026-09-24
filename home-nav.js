@@ -193,6 +193,26 @@
     document.documentElement.appendChild(button);
   }
 
+  function installOriginalPracticeDirectBackCapture() {
+    if (window.__efpOriginalPracticeDirectBackCaptureInstalled) return;
+    window.__efpOriginalPracticeDirectBackCaptureInstalled = true;
+
+    /* Register on document from home-nav.js so this wins before the generic
+       back-nav.js capture handler. Original Practice's global Back is a direct
+       exit to ExamFusion Home, full stop. */
+    document.addEventListener("click", function (event) {
+      if (!isOriginalPracticePage() || !event.target || !event.target.closest) return;
+      var button = event.target.closest("#" + BACK_BUTTON_ID);
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (typeof event.stopImmediatePropagation === "function") event.stopImmediatePropagation();
+      window.location.assign("/");
+    }, true);
+  }
+
+  installOriginalPracticeDirectBackCapture();
+
   function installDefaultBackButton() {
     if (!document.documentElement || !document.head || isMainHomePage()) return;
     if (document.getElementById(BACK_BUTTON_ID)) return;
