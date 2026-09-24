@@ -308,8 +308,8 @@
       var good=!!ans.correct;
       $('answerLine').className='answer-line '+(good?'good':'bad');
       $('answerLine').textContent=good?'✅ Correct / सही':'❌ Incorrect / गलत';
-      var ca=q.a||{};
-      $('correctAnswer').innerHTML='<strong>Correct Answer:</strong> '+safeRich(ca.en||'')+(ca.hi&&!sameText(ca.hi,ca.en)?'<br><strong>सही उत्तर:</strong> '+safeRich(ca.hi):'');
+      var correctLetter=ci>=0?String.fromCharCode(65+ci):'—';
+      $('correctAnswer').innerHTML='<strong>Correct Answer / सही उत्तर:</strong> '+correctLetter;
       var exp=q.exp||{};
       $('explanation').innerHTML='<strong>Explanation</strong><div>'+safeRich(exp.en||'')+'</div>'+(exp.hi&&!sameText(exp.hi,exp.en)?'<div class="exp-hi"><strong>व्याख्या</strong><div>'+safeRich(exp.hi)+'</div></div>':'');
     }else{
