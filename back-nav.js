@@ -957,13 +957,3 @@ installCruxHomeSearchHistoryGuard();
 
 })();
 
-
-/* Site-wide transient Open-in-App banner loader. */
-(function () {
-  if (document.getElementById("efp-open-app-script")) return;
-  var script = document.createElement("script");
-  script.id = "efp-open-app-script";
-  script.src = "/open-in-app.js?v=20260924openapp1";
-  script.defer = true;
-  (document.head || document.documentElement).appendChild(script);
-})();
