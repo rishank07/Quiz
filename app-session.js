@@ -231,6 +231,158 @@
     window.addEventListener("pagehide", save);
   }
 
+  // Warn only after the learner has actually interacted with a quiz.
+  // Browsers ignore custom beforeunload text, so refresh / device Back uses
+  // the native leave-page dialog while in-page Back/Home controls get our
+  // explicit ExamFusion message.
+  function installQuizProgressWarning() {
+    var dirty = false;
+    var allowNavigation = false;
+    var MESSAGE = "Refresh ya Back karne par current quiz progress reset/lost ho sakti hai.\n\nKya aap page chhodna chahte hain?";
+    var QUIZ_SURFACES = [
+      ".question-box",
+      ".question-card",
+      "#quizView",
+      ".quiz-view",
+      ".quiz-container",
+      ".question-container",
+      ".q-card",
+      "#kbArea",
+      "#mcqArea",
+      ".option-btn",
+      "[data-correct]"
+    ].join(",");
+
+    function isVisible(node) {
+      if (!node || node.hidden) return false;
+      try {
+        var style = window.getComputedStyle ? window.getComputedStyle(node) : null;
+        if (style && (style.display === "none" || style.visibility === "hidden")) return false;
+      } catch (_) {}
+      try { return !node.getClientRects || node.getClientRects().length > 0; } catch (_) { return true; }
+    }
+
+    function hasVisibleQuizSurface() {
+      var nodes;
+      try { nodes = document.querySelectorAll(QUIZ_SURFACES); } catch (_) { return false; }
+      for (var i = 0; i < nodes.length; i += 1) {
+        if (isVisible(nodes[i])) return true;
+      }
+      return false;
+    }
+
+    function isClearlyFinished() {
+      var finishSelectors = [
+        "#finishView",
+        ".finish-view",
+        ".finish-panel",
+        "#resultScreen",
+        ".result-screen",
+        ".quiz-result",
+        ".results-screen"
+      ];
+      for (var i = 0; i < finishSelectors.length; i += 1) {
+        var node = document.querySelector(finishSelectors[i]);
+        if (node && isVisible(node)) {
+          var quizView = document.getElementById("quizView");
+          if (!quizView || !isVisible(quizView)) return true;
+        }
+      }
+      return false;
+    }
+
+    function shouldWarn() {
+      return dirty && !allowNavigation && hasVisibleQuizSurface() && !isClearlyFinished();
+    }
+
+    function arm() {
+      if (hasVisibleQuizSurface()) dirty = true;
+    }
+
+    function disarm() {
+      dirty = false;
+      allowNavigation = false;
+    }
+
+    function isAnswerInteraction(target) {
+      if (!target || !target.closest || !hasVisibleQuizSurface()) return false;
+      var direct = target.closest(
+        ".option-btn,.option,.options li,.choice,.choice-btn,.answer-btn,.check-btn,#checkBtn," +
+        "#kbArea button,#mcqArea button,[data-answer],[data-option]," +
+        "input[type='radio'],input[type='checkbox'],select"
+      );
+      if (!direct) return false;
+      return !!direct.closest(QUIZ_SURFACES) ||
+        direct.matches(".option-btn,#kbArea button,#mcqArea button,[data-answer],[data-option]");
+    }
+
+    function navigationTarget(target) {
+      if (!target || !target.closest) return null;
+      var control = target.closest(
+        "#efp-app-back-button,#efp-home-button,.home-btn,a.back-btn,button.back-btn,[data-nav='back'],[data-nav='home']"
+      );
+      if (control) return control;
+
+      var anchor = target.closest("a[href]");
+      if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return null;
+      var raw = anchor.getAttribute("href") || "";
+      if (!raw || raw.charAt(0) === "#" || /^javascript:/i.test(raw)) return null;
+      try {
+        var url = new URL(anchor.href, location.href);
+        if (url.origin === location.origin &&
+            url.pathname === location.pathname &&
+            url.search === location.search) return null;
+      } catch (_) {}
+      return anchor;
+    }
+
+    function approveOneNavigation() {
+      allowNavigation = true;
+      window.setTimeout(function () { allowNavigation = false; }, 1800);
+    }
+
+    document.addEventListener("click", function (event) {
+      var target = event.target;
+      if (!target) return;
+
+      if (shouldWarn() && navigationTarget(target)) {
+        var leave = false;
+        try { leave = window.confirm(MESSAGE); } catch (_) { leave = true; }
+        if (!leave) {
+          event.preventDefault();
+          event.stopPropagation();
+          if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+          return;
+        }
+        approveOneNavigation();
+        return;
+      }
+
+      if (isAnswerInteraction(target)) arm();
+    }, true);
+
+    document.addEventListener("change", function (event) {
+      if (isAnswerInteraction(event.target)) arm();
+    }, true);
+
+    window.addEventListener("beforeunload", function (event) {
+      if (!shouldWarn()) return;
+      event.preventDefault();
+      event.returnValue = "";
+      return "";
+    });
+
+    window.addEventListener("pageshow", function () {
+      allowNavigation = false;
+    });
+
+    window.EFP_QUIZ_PROGRESS_WARNING = {
+      arm: arm,
+      disarm: disarm,
+      isArmed: function () { return dirty; }
+    };
+  }
+
   function installHistoryTracking() {
     ["pushState", "replaceState"].forEach(function (name) {
       var original = history[name];
@@ -272,6 +424,7 @@
   if (maybeResumeFreshLaunch()) return;
 
   installHistoryTracking();
+  installQuizProgressWarning();
   installLifecycleTracking();
   installStaticQuizTracking();
   restorePendingScroll();
