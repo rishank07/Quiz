@@ -597,18 +597,22 @@
           return;
         }
 
-        // Mixed Practice is an in-page app. Its state/functions are private to
-        // Mixed_Practice.html, so use the page's own Change Mix control instead
-        // of navigating to the Original Practice dashboard. This also preserves
-        // the exact same one-step behavior after an installed-app auto-resume.
+        // Mixed Practice owns an in-page Quiz -> Set Builder hierarchy.
+        // Call the page-owned exit function directly instead of replaying the
+        // global Back button. Replaying the button can race with home/back
+        // handlers in installed Android WebViews and occasionally jump Home.
         if (path === "/original practice/mixed_practice.html") {
           var mixedQuiz = document.getElementById("quizView");
           var mixedFinish = document.getElementById("finishView");
-          var mixedSetupButton = document.getElementById("setupBtn");
-          if (mixedSetupButton &&
-              ((mixedQuiz && !mixedQuiz.hidden) || (mixedFinish && !mixedFinish.hidden))) {
+          var mixedVisible = !!((mixedQuiz && !mixedQuiz.hidden) || (mixedFinish && !mixedFinish.hidden));
+          if (mixedVisible) {
             disarm();
-            mixedSetupButton.click();
+            if (typeof window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP === "function") {
+              window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP();
+            } else {
+              var mixedSetupButton = document.getElementById("setupBtn");
+              if (mixedSetupButton) mixedSetupButton.click();
+            }
             try { window.scrollTo(0, 0); } catch (_) {}
             return;
           }
@@ -653,8 +657,26 @@
         event.preventDefault();
         event.stopPropagation();
         if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+
+        var currentPath = normalizedPath(location.pathname).toLowerCase();
+        var mixedBack = currentPath === "/original practice/mixed_practice.html" &&
+          navTarget.closest && navTarget.closest("#efp-app-back-button");
+
         showExitModal(function () {
           approveOneNavigation();
+
+          if (mixedBack) {
+            disarm();
+            if (typeof window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP === "function") {
+              window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP();
+            } else {
+              var mixedSetupButton = document.getElementById("setupBtn");
+              if (mixedSetupButton) mixedSetupButton.click();
+            }
+            try { window.scrollTo(0, 0); } catch (_) {}
+            return;
+          }
+
           window.setTimeout(function () {
             try {
               if (navTarget && navTarget.isConnected && typeof navTarget.click === "function") {
