@@ -27,7 +27,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260924quizmodal1",
   "/app-session.js?v=20260924quizmodal1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260920allsearchback1",
+  "/back-nav.js?v=20260924bookhier1",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
