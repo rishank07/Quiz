@@ -1,5 +1,5 @@
-// v133 Publish verified app links and remove the ineffective transient banner
-const CACHE_VERSION = "efp-pwa-2026-09-24-v133-verified-app-links";
+// v134 Keep only the compact Rapid Practice score row sticky on phones
+const CACHE_VERSION = "efp-pwa-2026-09-24-v134-rapid-scorebar";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260924appresume4"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -320,6 +320,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/search-logic.js" ||
       url.pathname === "/homepage-search-ui.js" ||
       url.pathname === "/homepage-fulltext-search.js" ||
+      url.pathname === "/rapid-practice-deeplink.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
       url.pathname === "/Original%20Practice/original-practice.js" ||
       url.pathname === "/Original%20Practice/english-practice.js" ||

@@ -14,7 +14,34 @@
     prepaintStyle.textContent =
       "input#search.search{display:none!important;visibility:hidden!important}" +
       ".efp-deep-focus{outline:3px solid #f5a623!important;outline-offset:3px;border-radius:10px;" +
-      "box-shadow:0 0 0 6px rgba(245,166,35,.16)!important;transition:outline-color .25s ease,box-shadow .25s ease}";
+      "box-shadow:0 0 0 6px rgba(245,166,35,.16)!important;transition:outline-color .25s ease,box-shadow .25s ease}" +
+      /* On phones, keep only the score row sticky.  The legacy quiz pages put
+       * the score, bookmark controls and section pills inside one sticky
+       * toolbar, which consumes too much of the viewport while answering.
+       * display:contents lets the score row use the page as its sticky
+       * container while the remaining controls scroll away normally, matching
+       * the compact Original Practice score-card behaviour. */
+      "@media(max-width:650px){" +
+      ".toolbar{position:static!important;top:auto!important;z-index:auto!important;display:contents!important;" +
+      "padding:0!important;margin:0!important;background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
+      ".toolbar>.barcard,.toolbar>.bar{display:contents!important}" +
+      ".toolbar>.barcard>.row:first-child,.toolbar>.bar>.row:first-child{" +
+      "position:sticky;top:8px;z-index:130;margin:10px 0 8px!important;padding:7px 8px;gap:6px;" +
+      "background:rgba(255,255,255,.96);border:1px solid rgba(184,134,63,.22);border-radius:12px;" +
+      "box-shadow:0 3px 14px rgba(26,31,46,.10);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}" +
+      ".toolbar>.barcard>.row:first-child #scoreTxt,.toolbar>.bar>.row:first-child #scoreTxt{font-size:12px;line-height:1.25}" +
+      ".toolbar>.barcard>.row:first-child .progress,.toolbar>.bar>.row:first-child .progress{min-width:64px}" +
+      ".toolbar>.barcard>.row:first-child .btn,.toolbar>.bar>.row:first-child .btn{padding:6px 8px;font-size:11px}" +
+      ".toolbar>.barcard>.row:nth-child(2),.toolbar>.bar>.row:nth-child(2){margin-top:0!important;padding:10px 10px 4px;" +
+      "background:var(--card,#fff);border:1px solid var(--line,#d9d5cc);border-bottom:0;border-radius:14px 14px 0 0}" +
+      ".toolbar>.barcard>.section-nav,.toolbar>.bar>.section-nav{padding:8px 10px 10px;background:var(--card,#fff);" +
+      "border:1px solid var(--line,#d9d5cc);border-top:0;border-radius:0 0 14px 14px}" +
+      "body.dark .toolbar>.barcard>.row:first-child,body.dark .toolbar>.bar>.row:first-child{" +
+      "background:rgba(24,34,49,.96);border-color:#314052;box-shadow:none}" +
+      "body.dark .toolbar>.barcard>.row:nth-child(2),body.dark .toolbar>.bar>.row:nth-child(2)," +
+      "body.dark .toolbar>.barcard>.section-nav,body.dark .toolbar>.bar>.section-nav{" +
+      "background:#182231;border-color:#314052}" +
+      "}";
     document.head.appendChild(prepaintStyle);
   }
 
