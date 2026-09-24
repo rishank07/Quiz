@@ -1,0 +1,77 @@
+name: Android App Links Build
+
+on:
+  push:
+    branches:
+      - android-applink-v1.0.1-build
+    paths:
+      - 'android-build/**'
+      - '.github/workflows/android-applink-build.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 36
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Restore Android source
+        run: |
+          cat android-build/source.b64.part* | base64 --decode > /tmp/examfusion-android.zip
+          mkdir -p android-build/work
+          unzip -q /tmp/examfusion-android.zip -d android-build/work
+
+      - name: Restore app artwork
+        run: |
+          ROOT="android-build/work/ExamFusionPrepAndroid/app/src/main/res"
+          ICON_URL="https://examfusionprep.com/pwa-icons/icon-512.png"
+          for dst in \
+            "$ROOT/drawable/ic_launcher_foreground.png" \
+            "$ROOT/drawable/splash_logo.png" \
+            "$ROOT/mipmap-mdpi/ic_launcher.png" \
+            "$ROOT/mipmap-mdpi/ic_launcher_round.png" \
+            "$ROOT/mipmap-hdpi/ic_launcher.png" \
+            "$ROOT/mipmap-hdpi/ic_launcher_round.png" \
+            "$ROOT/mipmap-xhdpi/ic_launcher.png" \
+            "$ROOT/mipmap-xhdpi/ic_launcher_round.png" \
+            "$ROOT/mipmap-xxhdpi/ic_launcher.png" \
+            "$ROOT/mipmap-xxhdpi/ic_launcher_round.png" \
+            "$ROOT/mipmap-xxxhdpi/ic_launcher.png" \
+            "$ROOT/mipmap-xxxhdpi/ic_launcher_round.png"
+          do
+            mkdir -p "$(dirname "$dst")"
+            curl -fsSL "$ICON_URL" -o "$dst"
+          done
+
+      - name: Verify Android App Link
+        run: |
+          grep -n 'autoVerify="true"' android-build/work/ExamFusionPrepAndroid/app/src/main/AndroidManifest.xml
+          grep -n 'android:host="examfusionprep.com"' android-build/work/ExamFusionPrepAndroid/app/src/main/AndroidManifest.xml
+
+      - name: Build unsigned release bundle
+        working-directory: android-build/work/ExamFusionPrepAndroid
+        run: gradle --no-daemon :app:bundleRelease
+
+      - name: Upload unsigned AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: ExamFusion-Prep-v1.0.1-unsigned
+          path: android-build/work/ExamFusionPrepAndroid/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
