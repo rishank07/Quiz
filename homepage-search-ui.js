@@ -68,6 +68,26 @@
   var analyticsTimer = null;
   var lastAnalyticsQuery = "";
   var scheduled = false;
+  var SEARCH_STATE_KEY = "efp_home_search_query_v1";
+
+  function readSavedQuery() {
+    try { return localStorage.getItem(SEARCH_STATE_KEY) || ""; }
+    catch (_) { return ""; }
+  }
+
+  function saveQuery(query) {
+    try {
+      if (query) localStorage.setItem(SEARCH_STATE_KEY, query);
+      else localStorage.removeItem(SEARCH_STATE_KEY);
+    } catch (_) {}
+  }
+
+  function restoreSavedQuery() {
+    var saved = readSavedQuery().trim();
+    if (!saved || box.value.trim()) return;
+    box.value = saved;
+    box.dispatchEvent(new Event("input", { bubbles: true }));
+  }
 
   function normalized(value) {
     if (typeof efNormalizeSearchText === "function") return efNormalizeSearchText(value);
@@ -363,6 +383,7 @@
 
   box.addEventListener("input", function () {
     var query = box.value.trim();
+    saveQuery(query);
     currentQuery = query;
     activeFilter = "all";
     extraPages = 0;
@@ -434,9 +455,24 @@
 
   window.addEventListener("pageshow", function () {
     if (!box.value.trim()) {
+      if (readSavedQuery().trim()) {
+        setTimeout(restoreSavedQuery, 0);
+        return;
+      }
       tools.hidden = true;
       moreButton.hidden = true;
       menuList.classList.remove("ef-smart-search-active", "ef-search-loading");
     }
   });
+
+  // Returning through browser/app Back or tapping a Home button can create a
+  // fresh homepage document. Re-run the saved query only after all deferred
+  // search bridges are installed, so the complete result set is rebuilt.
+  if (document.readyState === "complete") {
+    setTimeout(restoreSavedQuery, 0);
+  } else {
+    window.addEventListener("load", function () {
+      setTimeout(restoreSavedQuery, 0);
+    }, { once: true });
+  }
 })();
