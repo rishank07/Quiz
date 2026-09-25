@@ -381,18 +381,37 @@
     var goLandscape = !shownLandscape();
     requestedLandscape = goLandscape;
 
-    /* The installed Android app uses a portrait WebView shell. Calling the
-       browser Screen Orientation / fullscreen APIs there produces Android UI
-       prompts and a broken virtual viewport. Use a self-contained rotated
-       reader instead, with its own correctly-sized scroll area. */
+    /* Android app: never fake-rotate the WebView with CSS. The device's real
+       orientation already lays the PDF out correctly, including scrolling and
+       safe areas. Try the native Screen Orientation API only; if Android does
+       not grant it, leave the page untouched and let the system Auto-rotate /
+       rotation suggestion handle it. */
     if (appContext) {
-      unlockOrientation();
+      if (manualMode) setManualMode('');
       if (document.fullscreenElement && document.exitFullscreen) {
         try { await document.exitFullscreen(); } catch (_) {}
       }
       forcedFullscreen = false;
-      setManualMode(goLandscape ? 'landscape' : '');
-      await wait(100);
+      unlockOrientation();
+
+      var appRotated = false;
+      if (orientationApiAvailable()) {
+        try {
+          await lockOrientation(goLandscape ? 'landscape' : 'portrait');
+          appRotated = await waitForOrientation(goLandscape, 1000);
+        } catch (_) {}
+      }
+
+      if (!appRotated) {
+        unlockOrientation();
+        requestedLandscape = actualLandscape();
+        syncButton();
+        showToast('Use phone Auto-rotate');
+        busy = false;
+        return;
+      }
+
+      requestedLandscape = goLandscape;
       syncButton();
       showToast(goLandscape ? 'Landscape view' : 'Portrait view');
       busy = false;
@@ -425,51 +444,6 @@
     showToast(goLandscape ? 'Landscape view' : 'Portrait view');
     busy = false;
   }
-
-  /* Android app fallback landscape is a CSS-rotated portrait WebView.
-     Native touch panning keeps using the unrotated screen axes on some
-     WebViews, so an apparently vertical swipe cannot reach earlier PDF
-     content. Bridge physical landscape gestures to the PDF stage's logical
-     scroll axes. One finger scrolls; two-finger pinch stays owned by viewer-v2. */
-  (function bindManualLandscapePan(){
-    if (!appContext) return;
-    var stage = document.getElementById('pdfStage');
-    if (!stage || !stage.addEventListener) return;
-
-    var pan = null;
-    function endPan(){ pan = null; }
-
-    stage.addEventListener('touchstart', function(event){
-      if (manualMode !== 'landscape' || !event.touches || event.touches.length !== 1) {
-        pan = null;
-        return;
-      }
-      var t = event.touches[0];
-      pan = {
-        x: t.clientX,
-        y: t.clientY,
-        top: stage.scrollTop || 0,
-        left: stage.scrollLeft || 0
-      };
-    }, { passive:true });
-
-    stage.addEventListener('touchmove', function(event){
-      if (!pan || manualMode !== 'landscape' || !event.touches || event.touches.length !== 1) return;
-      var t = event.touches[0];
-      var dx = t.clientX - pan.x;
-      var dy = t.clientY - pan.y;
-      if (Math.abs(dx) < 2 && Math.abs(dy) < 2) return;
-
-      /* With body rotated +90deg, local PDF Y points toward physical screen
-         right and local PDF X points toward physical screen down. */
-      if (event.cancelable) event.preventDefault();
-      stage.scrollTop = Math.max(0, pan.top + dx);
-      stage.scrollLeft = Math.max(0, pan.left - dy);
-    }, { passive:false });
-
-    stage.addEventListener('touchend', endPan, { passive:true });
-    stage.addEventListener('touchcancel', endPan, { passive:true });
-  })();
 
   Array.prototype.forEach.call(buttons, function(btn){
     btn.addEventListener('click', function(event){
@@ -516,6 +490,10 @@
   document.addEventListener('fullscreenchange', function(){
     if (!document.fullscreenElement) forcedFullscreen = false;
     syncButton();
+  });
+
+  window.addEventListener('pagehide', function(){
+    if (appContext) unlockOrientation();
   });
 
   if (appContext) {
