@@ -58,7 +58,7 @@
     'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf.efp-reader-ui-hidden .reader-head{opacity:1!important;transform:none!important;pointer-events:auto!important}' +
     'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-home-button,html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-app-back-button{opacity:1!important;pointer-events:auto!important;transform:none!important}' +
     'html.efp-manual-pdf-landscape .pdf-mode{height:100%!important;padding:0!important}' +
-    'html.efp-manual-pdf-landscape .pdf-stage{height:100%!important;min-height:0!important;max-height:none!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x pan-y!important;scroll-behavior:auto!important;overflow-anchor:none!important}' +
+    'html.efp-manual-pdf-landscape .pdf-stage{height:100%!important;min-height:0!important;max-height:none!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;touch-action:none!important;scroll-behavior:auto!important;overflow-anchor:none!important}' +
     'html.efp-manual-pdf-landscape #efpContinuousPages{width:100%!important;min-height:100%!important;overflow-anchor:none!important}' +
     'html.efp-manual-pdf-landscape .shell{width:100%!important;height:100dvw!important;min-height:0!important;grid-template-rows:46px minmax(0,1fr)!important}' +
     'html.efp-manual-pdf-landscape .viewer{min-height:0!important;height:auto!important;overflow:hidden!important}' +
@@ -110,7 +110,52 @@
   function syncButton(){
     var land = shownLandscape();
     var targetLandscape = !land;
-    Array.prototype.forEach.call(buttons, function(btn){
+    /* Android app fallback landscape is a CSS-rotated portrait WebView.
+     Native touch panning keeps using the unrotated screen axes on some
+     WebViews, so an apparently vertical swipe cannot reach earlier PDF
+     content. Bridge physical landscape gestures to the PDF stage's logical
+     scroll axes. One finger scrolls; two-finger pinch stays owned by viewer-v2. */
+  (function bindManualLandscapePan(){
+    if (!appContext) return;
+    var stage = document.getElementById('pdfStage');
+    if (!stage || !stage.addEventListener) return;
+
+    var pan = null;
+    function endPan(){ pan = null; }
+
+    stage.addEventListener('touchstart', function(event){
+      if (manualMode !== 'landscape' || !event.touches || event.touches.length !== 1) {
+        pan = null;
+        return;
+      }
+      var t = event.touches[0];
+      pan = {
+        x: t.clientX,
+        y: t.clientY,
+        top: stage.scrollTop || 0,
+        left: stage.scrollLeft || 0
+      };
+    }, { passive:true });
+
+    stage.addEventListener('touchmove', function(event){
+      if (!pan || manualMode !== 'landscape' || !event.touches || event.touches.length !== 1) return;
+      var t = event.touches[0];
+      var dx = t.clientX - pan.x;
+      var dy = t.clientY - pan.y;
+      if (Math.abs(dx) < 2 && Math.abs(dy) < 2) return;
+
+      /* With body rotated +90deg, local PDF Y points toward physical screen
+         right and local PDF X points toward physical screen down. */
+      if (event.cancelable) event.preventDefault();
+      stage.scrollTop = Math.max(0, pan.top + dx);
+      stage.scrollLeft = Math.max(0, pan.left - dy);
+    }, { passive:false });
+
+    stage.addEventListener('touchend', endPan, { passive:true });
+    stage.addEventListener('touchcancel', endPan, { passive:true });
+  })();
+
+  Array.prototype.forEach.call(buttons, function(btn){
       var label = targetLandscape ? 'Rotate PDF to landscape' : 'Rotate PDF to portrait';
       btn.setAttribute('aria-label', label);
       btn.setAttribute('title', label);
@@ -271,6 +316,12 @@
     root.classList.remove('efp-reader-ui-hidden');
     dispatchResize();
     if (manualMode === 'landscape') {
+      /* A CSS-rotated Android WebView can retain an outer viewport offset even
+         after the PDF stage itself is re-anchored. Clear every outer scroll
+         owner before reflowing the reader. */
+      try { window.scrollTo(0, 0); } catch (_) {}
+      try { if (document.scrollingElement) document.scrollingElement.scrollTop = 0; } catch (_) {}
+      try { document.body.scrollTop = 0; } catch (_) {}
       /* viewer-v2 reflows canvases asynchronously after resize. Preserve the
          page that was visible when Rotate was pressed and re-anchor it after
          each likely WebView layout point. */
