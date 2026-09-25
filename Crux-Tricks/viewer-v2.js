@@ -16,6 +16,11 @@
     return !!(mq&&(mq('(max-width:900px)').matches||(coarse&&shortSide<=1100&&longSide<=1600)));
   }
   function devicePortrait(){
+    var root=document.documentElement;
+    if(root&&root.classList){
+      if(root.classList.contains('efp-manual-pdf-landscape'))return false;
+      if(root.classList.contains('efp-manual-pdf-portrait'))return true;
+    }
     var mq=window.matchMedia;
     if(mq){try{return mq('(orientation: portrait)').matches}catch(e){}}
     return window.innerHeight>=window.innerWidth;
