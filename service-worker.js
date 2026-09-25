@@ -1,5 +1,5 @@
-// v159 hide PDF rotate control in Android app
-const CACHE_VERSION = "efp-pwa-2026-09-26-v159-hide-android-pdf-rotate";
+// v160 flicker-free Crux PDF return
+const CACHE_VERSION = "efp-pwa-2026-09-26-v160-crux-back-no-flicker";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -30,7 +30,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260925refreshnormal2",
   "/app-session.js?v=20260925refreshnormal2",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260926cruxreturn3",
+  "/back-nav.js?v=20260926cruxreturn4",
   "/pdf-mobile-rotate.js?v=20260926rotate12",
   "/search-logic.js",
   "/search-worker.js",
@@ -55,7 +55,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260924cruxback1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260926cruxreturn3",
+  "/Crux-Tricks/viewer-v2.js?v=20260926cruxreturn4",
 ];
 
 self.addEventListener("install", (event) => {
