@@ -569,13 +569,26 @@
   function navigateCruxViewerToHierarchy() {
     if (!isCruxViewer()) return false;
 
+    /* Normal browser navigation already has the exact Crux Chapter state
+       immediately behind the viewer. Use that real entry instead of reloading
+       index.html and rebuilding the SPA, which caused the brief Source flash. */
+    if (!isInstalledAndroidAppContext() &&
+        isCruxViewerFromCruxPage() &&
+        hasExpectedCruxViewerReferrer() &&
+        window.history.length > 1) {
+      clearCruxViewerReturnState();
+      clearLogicalChain();
+      clearHomeSearchChain();
+      window.history.back();
+      return true;
+    }
+
     var id = "";
     try { id = new URLSearchParams(window.location.search).get("id") || ""; } catch (_) {}
     var saved = saveCruxViewerReturnState();
 
-    /* Do not depend on the WebView's history stack for PDF -> Chapter. The
-       document id is a durable return token, and the index rebuilds the exact
-       Material -> Source -> Exam -> Subject -> Part -> Chapter state. */
+    /* Android app/direct URLs use a durable document-id return token. The
+       index reconstructs the exact hierarchy without trusting WebView history. */
     try {
       var url = new URL("/Crux-Tricks/index.html", window.location.origin);
       if (id) url.searchParams.set("returnPdf", id);
@@ -711,9 +724,9 @@
   }
 
   function signalCruxRestoreComplete() {
-    /* The hierarchy is already applied synchronously. Waiting for another
-       animation frame exposes the dark document background for one frame on
-       Android, which is perceived as a blank black flash. */
+    /* Keep deterministic returns hidden until the exact Chapter hierarchy has
+       been applied, so Source/Subject intermediate panes never flash on screen. */
+    try { document.documentElement.classList.remove("efp-crux-restoring"); } catch (_) {}
     try { window.dispatchEvent(new Event("efp-crux-restore-complete")); } catch (_) {
       try {
         var ev = document.createEvent("Event");
