@@ -89,6 +89,33 @@
             backdrop-filter: blur(12px);
             background-color: rgba(255, 255, 255, 0.9);
         }
+
+        /* Keep the live score visible while desktop users scroll through a quiz. */
+        .desktop-sticky-score {
+            display: none;
+        }
+
+        @media (min-width: 640px) {
+            .desktop-sticky-score {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 0.5rem;
+                margin-top: 0.4rem;
+                padding: 0.45rem 0.25rem 0;
+                border-top: 1px solid rgb(226 232 240);
+                color: rgb(71 85 105);
+                font-weight: 600;
+            }
+
+            .desktop-sticky-score .score-value {
+                min-width: 2ch;
+                color: rgb(37 99 235);
+                font-size: 1.125rem;
+                font-weight: 800;
+                text-align: right;
+            }
+        }
     </style>
   <script defer src="/home-nav.js?v=20260925blackbookedge2"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
@@ -122,6 +149,10 @@
         <div class="max-w-4xl mx-auto px-2 py-3">
             <div class="flex items-center gap-2 overflow-x-auto alphabet-nav pb-1" id="alphabet-container">
                 <!-- A-Z Buttons will be injected here -->
+            </div>
+            <div class="desktop-sticky-score" aria-live="polite">
+                <span>Current Score:</span>
+                <span class="score-value" id="desktop-sticky-score">0</span>
             </div>
         </div>
     </nav>
@@ -3149,6 +3180,7 @@
                 currentScore = Math.max(0, Number(value) || 0);
                 document.getElementById('total-score').textContent = currentScore;
                 document.getElementById('mobile-score').textContent = currentScore;
+                document.getElementById('desktop-sticky-score').textContent = currentScore;
             },
             getScore() {
                 return currentScore;
@@ -3463,6 +3495,7 @@ if (activeLetter && navButtons[activeLetter]) {
                 currentScore++;
                 document.getElementById('total-score').textContent = currentScore;
                 document.getElementById('mobile-score').textContent = currentScore;
+                document.getElementById('desktop-sticky-score').textContent = currentScore;
             } else {
                 btn.classList.add('option-incorrect');
                 btn.classList.remove('hover:bg-blue-50', 'hover:border-blue-300');
