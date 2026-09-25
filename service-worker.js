@@ -1,5 +1,5 @@
-// v155 native Android PDF rotation and deterministic Crux return
-const CACHE_VERSION = "efp-pwa-2026-09-26-v155-native-crux-return";
+// v156 native Android PDF rotation and deterministic Crux return
+const CACHE_VERSION = "efp-pwa-2026-09-26-v156-native-crux-return";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
