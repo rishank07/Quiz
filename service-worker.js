@@ -1,5 +1,5 @@
 // v150 Normal refresh; no native browser leave warning
-const CACHE_VERSION = "efp-pwa-2026-09-25-v150-refresh-normal";
+const CACHE_VERSION = "efp-pwa-2026-09-25-v151-bookmarks";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -15,6 +15,7 @@ const APP_SHELL = [
   "/privacy-policy.html",
   "/support.html",
   "/backup-restore.html",
+  "/all-bookmarks.html",
   "/music.html",
   "/radio-launch.js",
   "/chess.html",
@@ -23,6 +24,8 @@ const APP_SHELL = [
   "/pwa-icons/icon-512.png",
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
+  "/ca-question-deeplink.js",
+  "/blackbook-quiz-bookmarks.js",
   "/owner-debug.js",
   "/home-nav.js?v=20260925refreshnormal2",
   "/app-session.js?v=20260925refreshnormal2",
@@ -322,6 +325,8 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/homepage-search-ui.js" ||
       url.pathname === "/homepage-fulltext-search.js" ||
       url.pathname === "/rapid-practice-deeplink.js" ||
+      url.pathname === "/ca-question-deeplink.js" ||
+      url.pathname === "/blackbook-quiz-bookmarks.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
       url.pathname === "/Original%20Practice/original-practice.js" ||
       url.pathname === "/Original%20Practice/english-practice.js" ||
