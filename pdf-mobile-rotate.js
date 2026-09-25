@@ -10,6 +10,26 @@
   var busy = false;
   var requestedLandscape = false;
 
+  function isInstalledAndroidAppContext(){
+    var detected = false;
+    try {
+      detected = /^android-app:\/\/com\.examfusionprep\.app(?:\/|$)/i.test(document.referrer || '');
+    } catch (_) {}
+    if (!detected) {
+      try { detected = /;\s*wv\)/i.test(navigator.userAgent || ''); } catch (_) {}
+    }
+    if (!detected) {
+      try {
+        detected = /Android/i.test(navigator.userAgent || '') &&
+          !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+      } catch (_) {}
+    }
+    return detected;
+  }
+
+  var appContext = isInstalledAndroidAppContext();
+  if (appContext) root.classList.add('efp-pdf-app-context');
+
   function actualLandscape(){
     try {
       return !!(window.matchMedia && window.matchMedia('(orientation: landscape)').matches);
@@ -23,9 +43,17 @@
   var style = document.createElement('style');
   style.id = 'efp-pdf-mobile-rotate-style';
   style.textContent =
-    'html.efp-manual-pdf-landscape,html.efp-manual-pdf-landscape body,html.efp-manual-pdf-portrait,html.efp-manual-pdf-portrait body{overflow:hidden!important;width:100%!important;height:100%!important}' +
-    'html.efp-manual-pdf-landscape body{position:fixed!important;top:0!important;left:0!important;width:100vh!important;height:100vw!important;max-width:none!important;max-height:none!important;transform:rotate(90deg) translateY(-100%)!important;transform-origin:top left!important}' +
-    'html.efp-manual-pdf-portrait body{position:fixed!important;top:0!important;left:0!important;width:100vh!important;height:100vw!important;max-width:none!important;max-height:none!important;transform:rotate(-90deg) translateX(-100%)!important;transform-origin:top left!important}' +
+    'html.efp-manual-pdf-landscape,html.efp-manual-pdf-landscape body,html.efp-manual-pdf-portrait,html.efp-manual-pdf-portrait body{overflow:hidden!important;width:100%!important;height:100%!important;overscroll-behavior:none!important}' +
+    'html.efp-manual-pdf-landscape body{position:fixed!important;top:0!important;left:0!important;width:100dvh!important;height:100dvw!important;max-width:none!important;max-height:none!important;transform:rotate(90deg) translateY(-100%)!important;transform-origin:top left!important}' +
+    'html.efp-manual-pdf-landscape .reader-head{position:relative!important;top:auto!important;left:auto!important;right:auto!important;width:100%!important;max-width:none!important}' +
+    'html.efp-manual-pdf-landscape .reader-shell{width:100%!important;height:calc(100dvw - 38px)!important;margin:0!important;max-width:none!important}' +
+    'html.efp-manual-pdf-landscape .pdf-mode{height:100%!important;padding:0!important}' +
+    'html.efp-manual-pdf-landscape .pdf-stage{height:100%!important;min-height:0!important;max-height:none!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x pan-y!important}' +
+    'html.efp-manual-pdf-landscape #efpContinuousPages{width:100%!important;min-height:100%!important}' +
+    'html.efp-manual-pdf-landscape .shell{width:100%!important;height:100dvw!important;min-height:0!important;grid-template-rows:46px minmax(0,1fr)!important}' +
+    'html.efp-manual-pdf-landscape .viewer{min-height:0!important;height:auto!important;overflow:hidden!important}' +
+    'html.efp-manual-pdf-landscape .viewer iframe{width:100%!important;height:100%!important}' +
+    'html.efp-manual-pdf-portrait body{position:fixed!important;top:0!important;left:0!important;width:100dvh!important;height:100dvw!important;max-width:none!important;max-height:none!important;transform:rotate(-90deg) translateX(-100%)!important;transform-origin:top left!important}' +
     '[data-efp-pdf-rotate] .efp-orientation-icon{display:block;width:27px;height:27px;pointer-events:none}' +
     '[data-efp-pdf-rotate].efp-rotate-ready{opacity:1;pointer-events:auto}' +
     '[data-efp-pdf-rotate] .efp-orientation-icon *{vector-effect:non-scaling-stroke}' +
@@ -171,10 +199,31 @@
     }, 70);
   }
 
+  function syncGlobalControlsForManual(on){
+    function move(){
+      var ids = ['efp-home-button','efp-app-back-button'];
+      for (var i=0;i<ids.length;i++) {
+        var el = document.getElementById(ids[i]);
+        if (!el) continue;
+        if (on) {
+          if (el.parentNode !== document.body) document.body.appendChild(el);
+        } else if (el.parentNode === document.body && document.documentElement) {
+          document.documentElement.appendChild(el);
+        }
+      }
+    }
+    move();
+    if (on) {
+      window.setTimeout(move, 80);
+      window.setTimeout(move, 260);
+    }
+  }
+
   function setManualMode(mode){
     manualMode = mode || '';
     root.classList.toggle('efp-manual-pdf-landscape', manualMode === 'landscape');
     root.classList.toggle('efp-manual-pdf-portrait', manualMode === 'portrait');
+    syncGlobalControlsForManual(!!manualMode);
     dispatchResize();
     syncButton();
   }
@@ -265,6 +314,24 @@
     var goLandscape = !shownLandscape();
     requestedLandscape = goLandscape;
 
+    /* The installed Android app uses a portrait WebView shell. Calling the
+       browser Screen Orientation / fullscreen APIs there produces Android UI
+       prompts and a broken virtual viewport. Use a self-contained rotated
+       reader instead, with its own correctly-sized scroll area. */
+    if (appContext) {
+      unlockOrientation();
+      if (document.fullscreenElement && document.exitFullscreen) {
+        try { await document.exitFullscreen(); } catch (_) {}
+      }
+      forcedFullscreen = false;
+      setManualMode(goLandscape ? 'landscape' : '');
+      await wait(100);
+      syncButton();
+      showToast(goLandscape ? 'Landscape view' : 'Portrait view');
+      busy = false;
+      return;
+    }
+
     /* Remove any previous CSS fallback before trying the real Screen
        Orientation API again. */
     if (manualMode) setManualMode('');
@@ -338,6 +405,13 @@
     if (!document.fullscreenElement) forcedFullscreen = false;
     syncButton();
   });
+
+  if (appContext) {
+    unlockOrientation();
+    if (document.fullscreenElement && document.exitFullscreen) {
+      try { document.exitFullscreen(); } catch (_) {}
+    }
+  }
 
   syncButton();
 })();
