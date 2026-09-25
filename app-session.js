@@ -714,26 +714,12 @@
   }
 
   // Warn only after the learner has actually interacted with a quiz.
-  // Browser / Windows PWA refresh, tab/window close and other real unloads use
-  // the browser's native confirmation. The packaged Android app is excluded.
-  // In-page Back/Home controls keep the explicit ExamFusion quit dialog.
+  // Refresh/reload is intentionally allowed because quiz progress is saved.
+  // In-page Back/Home controls still use the explicit ExamFusion quit dialog.
   function installQuizProgressWarning() {
     var dirty = false;
     var allowNavigation = false;
     var MODAL_ID = "efp-quiz-exit-modal";
-
-    function isAndroidInstalledSurface() {
-      try {
-        if (sessionStorage.getItem(ANDROID_APP_CONTEXT_KEY) === "1") return true;
-      } catch (_) {}
-      try {
-        var ua = navigator.userAgent || "";
-        if (!/Android/i.test(ua)) return false;
-        if (/^android-app:\/\/com\.examfusionprep\.app(?:\/|$)/i.test(document.referrer || "")) return true;
-        if (/; wv\)/i.test(ua)) return true;
-      } catch (_) {}
-      return false;
-    }
 
     function warningPageKey(value) {
       try {
@@ -1163,16 +1149,6 @@
     document.addEventListener("change", function (event) {
       if (isAnswerInteraction(event.target)) arm();
     }, true);
-
-    window.addEventListener("beforeunload", function (event) {
-      if (!shouldWarn() || isAndroidInstalledSurface()) return;
-      // Modern Chromium/Edge intentionally replace custom text with their own
-      // native wording. Keeping a neutral fallback also covers older engines.
-      var message = "Do you want to leave or reload this page?";
-      event.preventDefault();
-      event.returnValue = message;
-      return message;
-    });
 
     window.addEventListener("pageshow", function () {
       allowNavigation = false;
