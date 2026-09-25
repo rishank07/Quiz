@@ -1,5 +1,5 @@
-// v139 Complete Mixed Practice quota, multi-tab, legacy, and backup hardening
-const CACHE_VERSION = "efp-pwa-2026-09-25-v139-mixed-edge-complete";
+// v140 Open Saved Questions directly from the Mixed Practice builder
+const CACHE_VERSION = "efp-pwa-2026-09-25-v140-mixed-saved-direct";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925mixededge1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
