@@ -5,6 +5,26 @@
   <script src="../../../black-mode.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html.efp-android-app [data-efp-browser-download] {
+      display: none !important;
+    }
+  </style>
+  <script>
+    (function () {
+      try {
+        var ua = navigator.userAgent || "";
+        var isAndroid = /Android/i.test(ua);
+        var stored = sessionStorage.getItem("efp_android_app_context_v1") === "1";
+        var packageReferrer = /^android-app:\/\/com\.examfusionprep\.app(?:\/|$)/i.test(document.referrer || "");
+        var webView = isAndroid && /; wv\)/i.test(ua);
+        var standalone = isAndroid && window.matchMedia && window.matchMedia("(display-mode: standalone)").matches;
+        if (stored || packageReferrer || webView || standalone) {
+          document.documentElement.classList.add("efp-android-app");
+        }
+      } catch (_) {}
+    })();
+  </script>
   <title>Blackbook Synonyms &amp; Antonyms • ExamFusion Prep</title>
   <meta name="description" content="Blackbook Synonyms &amp; Antonyms • ExamFusion Prep: Synonyms + Antonyms. Free bilingual (Hindi + English) MCQs for SSC, Railway, UPSC &amp; BPSC exam prep — ExamFusionPrep.">
   <meta property="og:title" content="Blackbook Synonyms &amp; Antonyms • ExamFusion Prep">
@@ -319,7 +339,7 @@
           <i class="fa-solid fa-copy"></i>
           <span class="hidden sm:inline">Copy Visible</span>
         </button>
-        <button onclick="exportToCSV()"
+        <button data-efp-browser-download onclick="exportToCSV()"
           class="flex-1 md:flex-none px-5 py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 transition-colors text-white font-semibold rounded-3xl flex items-center justify-center gap-x-2 text-sm shadow-sm">
           <i class="fa-solid fa-download"></i>
           <span class="hidden sm:inline">Export CSV</span>
