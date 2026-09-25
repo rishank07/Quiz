@@ -48,7 +48,7 @@ function rapidSource(key){
  if(m&&MONTHS[m[1]])return{title:MONTHS[m[1]]+" "+m[2]+" Current Affairs Rapid Practice",url:"./Current Affairs/Topic Names/Rapid Practice/"+m[2]+"/Month Wise/"+MONTHS[m[1]]+"_"+m[2]+"_Current_Affairs_Rapid_Practice.html"};
  if(key==="efp_ca_sports2026_updated_rapid_v1")return{title:"Sports 2026 Current Affairs Rapid Practice",url:"./Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/Sports_2026_Current_Affairs_Rapid_Practice.html"};
  m=/^efp_ca_topic_(.+)_rapid_v1$/.exec(key);
- if(m&&TOPIC_FILES[m[1]])return{title:pretty(m[1])+" Rapid Practice",url:"./Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/"+TOPIC_FILES[m[1]]};
+ if(m&&TOPIC_FILES[m[1]]){var u="./Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/"+TOPIC_FILES[m[1]];return{title:fileTitle(u),url:u}}
  return{title:pretty(key.replace(/^efp_ca_/,"").replace(/_rapid_v1$/,""))+" Rapid Practice",url:"./Current Affairs/Topic Names/Rapid Practice.html"};
 }
 function sharedItems(){
