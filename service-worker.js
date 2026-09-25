@@ -1,5 +1,5 @@
 // v152 Android PDF landscape alignment and exact Crux Back restore
-const CACHE_VERSION = "efp-pwa-2026-09-26-v153-android-pdf-scroll";
+const CACHE_VERSION = "efp-pwa-2026-09-26-v154-android-pdf-scroll";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -31,7 +31,7 @@ const APP_SHELL = [
   "/app-session.js?v=20260925refreshnormal2",
   "/back-parent-map.js",
   "/back-nav.js?v=20260926androidpdf1",
-  "/pdf-mobile-rotate.js?v=20260926rotate8",
+  "/pdf-mobile-rotate.js?v=20260926rotate9",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
