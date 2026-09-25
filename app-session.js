@@ -375,7 +375,7 @@
       if (document.getElementById("efp-quiz-reset-style")) return;
       var style = document.createElement("style");
       style.id = "efp-quiz-reset-style";
-      style.textContent = ".efp-quiz-reset-btn{appearance:none;border:1px solid rgba(220,38,38,.28);background:#fff;color:#b42318;border-radius:999px;padding:6px 10px;font:800 11px/1.1 Arial,sans-serif;cursor:pointer;white-space:nowrap}.efp-quiz-reset-btn:hover{background:#fff1f2;border-color:#ef4444}.efp-quiz-reset-btn:focus-visible{outline:3px solid rgba(239,68,68,.25);outline-offset:2px}html.efp-black .efp-quiz-reset-btn,html.efp-black-invert .efp-quiz-reset-btn{background:#111827;color:#fca5a5;border-color:#7f1d1d}.efp-bihar-reset-row{display:flex!important;align-items:center!important;gap:clamp(6px,1.8vw,14px)!important;flex-wrap:nowrap!important}.efp-bihar-reset-row .efp-bihar-reset-btn{margin:0!important;flex:0 0 auto!important;min-width:74px;padding:9px 11px!important;font-size:12px!important;line-height:1!important}.efp-bihar-reset-row .efp-bihar-reset-btn .efp-bihar-reset-icon{margin-right:3px}@media(max-width:480px){.efp-bihar-reset-row{gap:6px!important}.efp-bihar-reset-row input[type=number]{width:60px!important;min-width:0!important;max-width:60px!important;flex:0 0 60px!important}.efp-bihar-reset-row .efp-bihar-reset-btn{min-width:58px!important;padding:8px 7px!important;font-size:11px!important}.efp-bihar-reset-row .efp-bihar-reset-btn .efp-bihar-reset-icon{display:none}}";
+      style.textContent = ".efp-quiz-reset-btn{appearance:none;border:1px solid rgba(220,38,38,.28);background:#fff;color:#b42318;border-radius:999px;padding:6px 10px;font:800 11px/1.1 Arial,sans-serif;cursor:pointer;white-space:nowrap}.efp-quiz-reset-btn:hover{background:#fff1f2;border-color:#ef4444}.efp-quiz-reset-btn:focus-visible{outline:3px solid rgba(239,68,68,.25);outline-offset:2px}html.efp-black .efp-quiz-reset-btn,html.efp-black-invert .efp-quiz-reset-btn{background:#111827;color:#fca5a5;border-color:#7f1d1d}.efp-bihar-reset-row{display:flex!important;align-items:center!important;gap:clamp(6px,1.8vw,14px)!important;flex-wrap:nowrap!important}.efp-bihar-reset-row .efp-bihar-reset-btn{margin:0!important;flex:0 0 auto!important;min-width:74px;padding:0 11px!important;font-size:12px!important;line-height:1!important;background:#fff1f2!important;color:#b42318!important;border-color:#ef4444!important;box-shadow:none!important;-webkit-tap-highlight-color:transparent!important}.efp-bihar-reset-row .efp-bihar-reset-btn:hover{background:#ffe4e6!important;color:#991b1b!important;border-color:#dc2626!important}.efp-bihar-reset-row .efp-bihar-reset-btn:active,.efp-bihar-reset-row .efp-bihar-reset-btn:focus{background:#fecdd3!important;color:#881337!important;border-color:#be123c!important}.efp-bihar-reset-row .efp-bihar-reset-btn .efp-bihar-reset-icon{margin-right:3px}html.efp-black .efp-bihar-reset-row .efp-bihar-reset-btn,html.efp-black-invert .efp-bihar-reset-row .efp-bihar-reset-btn{background:#2a1115!important;color:#fecaca!important;border-color:#ef4444!important}@media(max-width:480px){.efp-bihar-reset-row{gap:6px!important}.efp-bihar-reset-row input[type=number]{width:60px!important;min-width:0!important;max-width:60px!important;flex:0 0 60px!important}.efp-bihar-reset-row .efp-bihar-reset-btn{min-width:58px!important;padding:0 7px!important;font-size:11px!important}.efp-bihar-reset-row .efp-bihar-reset-btn .efp-bihar-reset-icon{display:none}}";
       document.head.appendChild(style);
     }
     function currentBiharSetPanel() {
@@ -443,6 +443,13 @@
       goButton.parentElement.classList.add("efp-bihar-reset-row");
       if (button.previousElementSibling !== goButton) {
         goButton.insertAdjacentElement("afterend", button);
+      }
+      // Match the actual Go button height instead of guessing with padding.
+      // This keeps the two controls visually aligned across phone/browser/app layouts.
+      var goHeight = Math.round(goButton.getBoundingClientRect().height);
+      if (goHeight > 0) {
+        button.style.setProperty("height", goHeight + "px", "important");
+        button.style.setProperty("min-height", goHeight + "px", "important");
       }
     }
     function addResetButtons(root) {
