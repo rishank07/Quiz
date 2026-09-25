@@ -14006,19 +14006,72 @@
       document.getElementById('filtered-count').textContent = vocabData.length.toLocaleString();
     }
 
+    function cleanCopyValue(value) {
+      return value == null ? '' : String(value)
+        .replace(/\r\n|\r/g, '\n')
+        .replace(/\u00a0/g, ' ')
+        .trim();
+    }
+
+    function writeBlackbookClipboard(text) {
+      const value = String(text == null ? '' : text);
+      if (!value) return Promise.resolve(false);
+
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        return navigator.clipboard.writeText(value).then(() => true).catch(() => {
+          return fallbackCopy(value);
+        });
+      }
+      return Promise.resolve(fallbackCopy(value));
+    }
+
+    function fallbackCopy(text) {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        textarea.style.pointerEvents = 'none';
+        document.body.appendChild(textarea);
+        textarea.focus({ preventScroll: true });
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+        const ok = document.execCommand('copy');
+        textarea.remove();
+        return ok;
+      } catch (_) {
+        return false;
+      }
+    }
+
     function copyEntry(sn, e) {
-      e.stopImmediatePropagation();
+      if (e) e.stopImmediatePropagation();
       const item = vocabData.find(i => i.sn === sn);
-      const text = `${item.word} (${item.pos})\nHindi: ${item.hindi_meaning}\nMemory Trick: ${item.trick}\nDefinition: ${item.definition}\nSynonyms: ${item.synonyms}\nAntonyms: ${item.antonyms}`;
-      navigator.clipboard.writeText(text);
+      if (!item) return;
+      const text = [
+        `${cleanCopyValue(item.word)}${item.pos ? ` (${cleanCopyValue(item.pos)})` : ''}`,
+        `Hindi: ${cleanCopyValue(item.hindi_meaning)}`,
+        `Memory Trick: ${cleanCopyValue(item.trick) || '—'}`,
+        `Definition: ${cleanCopyValue(item.definition)}`,
+        `Synonyms: ${cleanCopyValue(item.synonyms)}`,
+        `Antonyms: ${cleanCopyValue(item.antonyms)}`
+      ].join('\n');
+      writeBlackbookClipboard(text);
     }
 
     function copyAllVisible() {
-      let txt = `Blackbook Synonyms & Antonyms - ExamFusion Prep\n\n`;
+      if (!currentFiltered.length) return;
+      let txt = `Blackbook Synonyms & Antonyms - ExamFusion Prep\nShowing: ${currentFiltered.length} entries\n\n`;
       currentFiltered.forEach(i => {
-        txt += `${i.sn}. ${i.word} (${i.pos})\nHindi: ${i.hindi_meaning}\nMemory Trick: ${i.trick}\nDefinition: ${i.definition}\nSynonyms: ${i.synonyms}\nAntonyms: ${i.antonyms}\n\n`;
+        txt += `${i.sn}. ${cleanCopyValue(i.word)}${i.pos ? ` (${cleanCopyValue(i.pos)})` : ''}\n`;
+        txt += `   Hindi: ${cleanCopyValue(i.hindi_meaning)}\n`;
+        txt += `   Memory Trick: ${cleanCopyValue(i.trick) || '—'}\n`;
+        txt += `   Definition: ${cleanCopyValue(i.definition)}\n`;
+        txt += `   Synonyms: ${cleanCopyValue(i.synonyms)}\n`;
+        txt += `   Antonyms: ${cleanCopyValue(i.antonyms)}\n\n`;
       });
-      navigator.clipboard.writeText(txt);
+      writeBlackbookClipboard(txt.trimEnd());
     }
 
     function csvCell(value) {

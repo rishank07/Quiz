@@ -2435,8 +2435,48 @@
             document.getElementById('filtered-count').textContent = vocabData.length.toLocaleString();
         }
 
-        function copyWord(word, el) {
-            navigator.clipboard.writeText(word).then(() => {
+        function cleanCopyValue(value) {
+      return value == null ? '' : String(value)
+        .replace(/\r\n|\r/g, '\n')
+        .replace(/\u00a0/g, ' ')
+        .trim();
+    }
+
+    function writeBlackbookClipboard(text) {
+      const value = String(text == null ? '' : text);
+      if (!value) return Promise.resolve(false);
+
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        return navigator.clipboard.writeText(value).then(() => true).catch(() => {
+          return fallbackCopy(value);
+        });
+      }
+      return Promise.resolve(fallbackCopy(value));
+    }
+
+    function fallbackCopy(text) {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        textarea.style.pointerEvents = 'none';
+        document.body.appendChild(textarea);
+        textarea.focus({ preventScroll: true });
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+        const ok = document.execCommand('copy');
+        textarea.remove();
+        return ok;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function copyWord(word, el) {
+            writeBlackbookClipboard(cleanCopyValue(word)).then(ok => {
+                if (!ok || !el) return;
                 const orig = el.innerHTML;
                 el.innerHTML = `${word} <i class="fa-solid fa-check text-emerald-500 ml-1"></i>`;
                 setTimeout(() => { if (el) el.innerHTML = orig; }, 1300);
@@ -2444,20 +2484,31 @@
         }
 
         function copyTrick(sn, e) {
-            e.stopImmediatePropagation();
+            if (e) e.stopImmediatePropagation();
             const item = vocabData.find(i => i.sn === sn);
             if (!item) return;
-            const text = `${item.word}\n\nMeaning: ${item.meaning}\n\nMemory Trick: ${item.trick}\n\nHindi: ${item.hindi}`;
-            navigator.clipboard.writeText(text);
+            const text = [
+                cleanCopyValue(item.word),
+                '',
+                `Meaning: ${cleanCopyValue(item.meaning)}`,
+                '',
+                `Memory Trick: ${cleanCopyValue(item.trick) || '—'}`,
+                '',
+                `Hindi: ${cleanCopyValue(item.hindi)}`
+            ].join('\n');
+            writeBlackbookClipboard(text);
         }
 
         function copyAllVisible() {
-            if (currentFiltered.length === 0) return;
-            let txt = `Blackbook Vocabulary - ExamFusion Prep\nShowing: ${currentFiltered.length} words\n\n`;
+            if (!currentFiltered.length) return;
+            let txt = `Blackbook One Word Substitutions - ExamFusion Prep\nShowing: ${currentFiltered.length} entries\n\n`;
             currentFiltered.forEach(i => {
-                txt += `${i.sn}. ${i.word}\n   ${i.meaning}\n   Trick: ${i.trick}\n   Hindi: ${i.hindi}\n\n`;
+                txt += `${i.sn}. ${cleanCopyValue(i.word)}\n`;
+                txt += `   Meaning: ${cleanCopyValue(i.meaning)}\n`;
+                txt += `   Memory Trick: ${cleanCopyValue(i.trick) || '—'}\n`;
+                txt += `   Hindi: ${cleanCopyValue(i.hindi)}\n\n`;
             });
-            navigator.clipboard.writeText(txt);
+            writeBlackbookClipboard(txt.trimEnd());
         }
 
         function csvCell(value) {
