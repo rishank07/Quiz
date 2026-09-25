@@ -8,6 +8,10 @@
   var CRUX_HOME_SEARCH_GUARD = "efpCruxHomeSearchGuard";
   var HOME_SEARCH_CHAIN_KEY = "efp_home_search_back_chain";
   var HOME_SEARCH_GUARD = "efpHomeSearchGuard";
+  var CRUX_RETURN_DOC_ID = "";
+  try {
+    CRUX_RETURN_DOC_ID = new URLSearchParams(window.location.search).get("returnPdf") || "";
+  } catch (_) {}
 
   function normalizePath(pathname) {
     var path = pathname || "/";
@@ -615,10 +619,7 @@
        the return URL. If Android discarded/refreshed sessionStorage, rebuild
        the exact Chapter hierarchy from crux-manifest instead of guessing from
        browser history. */
-    try {
-      var id = new URLSearchParams(window.location.search).get("returnPdf");
-      if (id) return buildCruxStateFromDocId(id);
-    } catch (_) {}
+    if (CRUX_RETURN_DOC_ID) return buildCruxStateFromDocId(CRUX_RETURN_DOC_ID);
     return null;
   }
 
