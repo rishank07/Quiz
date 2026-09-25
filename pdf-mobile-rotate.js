@@ -110,52 +110,7 @@
   function syncButton(){
     var land = shownLandscape();
     var targetLandscape = !land;
-    /* Android app fallback landscape is a CSS-rotated portrait WebView.
-     Native touch panning keeps using the unrotated screen axes on some
-     WebViews, so an apparently vertical swipe cannot reach earlier PDF
-     content. Bridge physical landscape gestures to the PDF stage's logical
-     scroll axes. One finger scrolls; two-finger pinch stays owned by viewer-v2. */
-  (function bindManualLandscapePan(){
-    if (!appContext) return;
-    var stage = document.getElementById('pdfStage');
-    if (!stage || !stage.addEventListener) return;
-
-    var pan = null;
-    function endPan(){ pan = null; }
-
-    stage.addEventListener('touchstart', function(event){
-      if (manualMode !== 'landscape' || !event.touches || event.touches.length !== 1) {
-        pan = null;
-        return;
-      }
-      var t = event.touches[0];
-      pan = {
-        x: t.clientX,
-        y: t.clientY,
-        top: stage.scrollTop || 0,
-        left: stage.scrollLeft || 0
-      };
-    }, { passive:true });
-
-    stage.addEventListener('touchmove', function(event){
-      if (!pan || manualMode !== 'landscape' || !event.touches || event.touches.length !== 1) return;
-      var t = event.touches[0];
-      var dx = t.clientX - pan.x;
-      var dy = t.clientY - pan.y;
-      if (Math.abs(dx) < 2 && Math.abs(dy) < 2) return;
-
-      /* With body rotated +90deg, local PDF Y points toward physical screen
-         right and local PDF X points toward physical screen down. */
-      if (event.cancelable) event.preventDefault();
-      stage.scrollTop = Math.max(0, pan.top + dx);
-      stage.scrollLeft = Math.max(0, pan.left - dy);
-    }, { passive:false });
-
-    stage.addEventListener('touchend', endPan, { passive:true });
-    stage.addEventListener('touchcancel', endPan, { passive:true });
-  })();
-
-  Array.prototype.forEach.call(buttons, function(btn){
+    Array.prototype.forEach.call(buttons, function(btn){
       var label = targetLandscape ? 'Rotate PDF to landscape' : 'Rotate PDF to portrait';
       btn.setAttribute('aria-label', label);
       btn.setAttribute('title', label);
@@ -470,6 +425,51 @@
     showToast(goLandscape ? 'Landscape view' : 'Portrait view');
     busy = false;
   }
+
+  /* Android app fallback landscape is a CSS-rotated portrait WebView.
+     Native touch panning keeps using the unrotated screen axes on some
+     WebViews, so an apparently vertical swipe cannot reach earlier PDF
+     content. Bridge physical landscape gestures to the PDF stage's logical
+     scroll axes. One finger scrolls; two-finger pinch stays owned by viewer-v2. */
+  (function bindManualLandscapePan(){
+    if (!appContext) return;
+    var stage = document.getElementById('pdfStage');
+    if (!stage || !stage.addEventListener) return;
+
+    var pan = null;
+    function endPan(){ pan = null; }
+
+    stage.addEventListener('touchstart', function(event){
+      if (manualMode !== 'landscape' || !event.touches || event.touches.length !== 1) {
+        pan = null;
+        return;
+      }
+      var t = event.touches[0];
+      pan = {
+        x: t.clientX,
+        y: t.clientY,
+        top: stage.scrollTop || 0,
+        left: stage.scrollLeft || 0
+      };
+    }, { passive:true });
+
+    stage.addEventListener('touchmove', function(event){
+      if (!pan || manualMode !== 'landscape' || !event.touches || event.touches.length !== 1) return;
+      var t = event.touches[0];
+      var dx = t.clientX - pan.x;
+      var dy = t.clientY - pan.y;
+      if (Math.abs(dx) < 2 && Math.abs(dy) < 2) return;
+
+      /* With body rotated +90deg, local PDF Y points toward physical screen
+         right and local PDF X points toward physical screen down. */
+      if (event.cancelable) event.preventDefault();
+      stage.scrollTop = Math.max(0, pan.top + dx);
+      stage.scrollLeft = Math.max(0, pan.left - dy);
+    }, { passive:false });
+
+    stage.addEventListener('touchend', endPan, { passive:true });
+    stage.addEventListener('touchcancel', endPan, { passive:true });
+  })();
 
   Array.prototype.forEach.call(buttons, function(btn){
     btn.addEventListener('click', function(event){
