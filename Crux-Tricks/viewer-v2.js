@@ -803,7 +803,7 @@
     var link=document.head.querySelector('link[rel="canonical"]');if(!link){link=document.createElement('link');link.rel='canonical';document.head.appendChild(link)}link.href=canonical.href;
     [['og:title',pageTitle],['og:description',description],['og:url',canonical.href]].forEach(function(pair){var m=document.head.querySelector('meta[property="'+pair[0]+'"]');if(!m){m=document.createElement('meta');m.setAttribute('property',pair[0]);document.head.appendChild(m)}m.content=pair[1]});
   })();
-  var backBtn=document.getElementById('backBtn');if(backBtn)backBtn.addEventListener('click',function(){if(history.length>1)history.back();else location.href='index.html'});
+  var backBtn=document.getElementById('backBtn');if(backBtn)backBtn.addEventListener('click',function(event){event.preventDefault();if(typeof window.EFP_CRUX_VIEWER_BACK==='function'&&window.EFP_CRUX_VIEWER_BACK())return;location.replace('index.html')});
   prevBtn.addEventListener('click',function(){go(page-1,true)});
   nextBtn.addEventListener('click',function(){go(page+1,true)});
   input.addEventListener('change',function(){go(parseInt(input.value,10)||page,true)});
