@@ -3498,15 +3498,36 @@
       navigator.clipboard.writeText(txt);
     }
 
-    function exportToCSV() {
-      let csv = 'SN,Correct Spelling,Times Asked in SSC\n';
-      currentFiltered.forEach(i => {
-        csv += `${i.sn},"${i.word}","${i.times || ''}"\n`;
-      });
+    function csvCell(value) {
+      const text = value == null ? '' : String(value)
+        .replace(/\r\n|\r|\n/g, ' ')
+        .replace(/\u00a0/g, ' ');
+      return '"' + text.replace(/"/g, '""') + '"';
+    }
+
+    function downloadCSV(filename, headers, rows) {
+      const lines = [headers.map(csvCell).join(',')];
+      rows.forEach(row => lines.push(row.map(csvCell).join(',')));
+      const csv = lines.join('\r\n');
+      const blob = new Blob(['\uFEFF', csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-      a.download = `Blackbook_Spelling_FirstPage_${currentFiltered.length}.csv`;
+      a.href = url;
+      a.download = filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
       a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    }
+
+    function exportToCSV() {
+      const rows = spellingData.map(i => [i.sn, i.word, i.times]);
+      downloadCSV(
+        'Blackbook_Spelling_Complete.csv',
+        ["SN","Correct Spelling","Times Asked in SSC"],
+        rows
+      );
     }
 
     /* Native dialog lifecycle: no body-position hack and no VisualViewport
