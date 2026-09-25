@@ -1,5 +1,5 @@
-// v156 native Android PDF rotation and deterministic Crux return
-const CACHE_VERSION = "efp-pwa-2026-09-26-v156-native-crux-return";
+// v157 native Android PDF rotation and durable Crux return
+const CACHE_VERSION = "efp-pwa-2026-09-26-v157-native-crux-return";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -30,7 +30,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260925refreshnormal2",
   "/app-session.js?v=20260925refreshnormal2",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260926cruxreturn2",
+  "/back-nav.js?v=20260926cruxreturn3",
   "/pdf-mobile-rotate.js?v=20260926rotate10",
   "/search-logic.js",
   "/search-worker.js",
@@ -55,7 +55,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260924cruxback1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260926cruxreturn2",
+  "/Crux-Tricks/viewer-v2.js?v=20260926cruxreturn3",
 ];
 
 self.addEventListener("install", (event) => {
