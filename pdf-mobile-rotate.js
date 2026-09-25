@@ -30,7 +30,21 @@
   }
 
   var appContext = isInstalledAndroidAppContext();
-  if (appContext) root.classList.add('efp-pdf-app-context');
+  if (appContext) {
+    root.classList.add('efp-pdf-app-context');
+
+    /* Android app users already have the system Auto-rotate / rotation
+       suggestion. Remove ExamFusion's own rotate control entirely so the
+       reader does not offer a second, unreliable orientation path. */
+    Array.prototype.forEach.call(buttons, function(btn){
+      try { btn.remove(); }
+      catch (_) {
+        btn.hidden = true;
+        btn.style.setProperty('display','none','important');
+      }
+    });
+    return;
+  }
 
   function actualLandscape(){
     try {
