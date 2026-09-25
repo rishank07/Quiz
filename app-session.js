@@ -546,6 +546,25 @@
       var nav = event.target && event.target.closest ? event.target.closest("#alphabet-container button[data-letter]") : null;
       if (nav) setTimeout(function () { saveSection(nav); }, 0);
     }, true);
+    var blackbookLazyObserver = null;
+    var blackbookRestoreTimer = 0;
+    if (window.MutationObserver) {
+      var quizRoot = document.getElementById("quiz-container") || document.documentElement;
+      blackbookLazyObserver = new MutationObserver(function (mutations) {
+        var hasQuizContent = mutations.some(function (mutation) {
+          return Array.prototype.some.call(mutation.addedNodes || [], function (node) {
+            if (!node || node.nodeType !== 1) return false;
+            if (node.matches && (node.matches('.quiz-option') || node.matches('section[id^="section-"]'))) return true;
+            return !!(node.querySelector && node.querySelector('.quiz-option'));
+          });
+        });
+        if (!hasQuizContent) return;
+        clearTimeout(blackbookRestoreTimer);
+        blackbookRestoreTimer = setTimeout(restore, 20);
+      });
+      blackbookLazyObserver.observe(quizRoot, { childList: true, subtree: true });
+    }
+
     if (document.readyState === "complete") setTimeout(function () { ready(0); }, 0);
     else window.addEventListener("load", function () { setTimeout(function () { ready(0); }, 0); }, { once: true });
   }

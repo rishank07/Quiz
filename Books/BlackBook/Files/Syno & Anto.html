@@ -25,7 +25,7 @@
     gtag("config", "G-Q1WNRY8ECV");
   </script>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Noto+Sans+Devanagari:wght@400;500;600&amp;display=swap');
@@ -162,7 +162,7 @@
     }
 
   </style>
-  <script defer src="/home-nav.js?v=20260906"></script>
+  <script defer src="/home-nav.js?v=20260925blackbookperf1"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
   <script defer src="/back-nav.js?v=20260924bookhier3"></script>
 </head>
@@ -13895,6 +13895,7 @@
     function renderTable(data) {
       const tbody = document.getElementById('vocab-body');
       tbody.innerHTML = '';
+      const fragment = document.createDocumentFragment();
       data.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -13919,13 +13920,15 @@
                         </button>
                     </td>
                 `;
-        tbody.appendChild(tr);
+        fragment.appendChild(tr);
       });
+          tbody.appendChild(fragment);
     }
 
     function renderMobileCards(data) {
       const container = document.getElementById('mobile-cards');
       container.innerHTML = '';
+      const fragment = document.createDocumentFragment();
       data.forEach(item => {
         const card = document.createElement('div');
         card.className = `vocab-card bg-white border border-slate-200 rounded-3xl p-4 shadow-sm`;
@@ -13950,8 +13953,17 @@
                     <div class="mt-3 text-sm"><span class="font-semibold text-emerald-600">Synonyms:</span> ${item.synonyms}</div>
                     <div class="mt-1 text-sm"><span class="font-semibold text-red-600">Antonyms:</span> ${item.antonyms}</div>
                 `;
-        container.appendChild(card);
+        fragment.appendChild(card);
       });
+          container.appendChild(fragment);
+    }
+
+    function renderActiveView(data) {
+      const mobile = !!(window.matchMedia && window.matchMedia('(max-width: 767px)').matches);
+      const tbody = document.querySelector('tbody');
+      const cards = document.getElementById('mobile-cards');
+      if (mobile) { if (tbody) tbody.innerHTML = ''; renderMobileCards(data); }
+      else { if (cards) cards.innerHTML = ''; renderTable(data); }
     }
 
     function filterAll() {
@@ -13963,16 +13975,14 @@
         const regex = new RegExp(`(?:^|\\W)${escaped}(?:\\W|$)`, 'i');
         currentFiltered = vocabData.filter(item => regex.test(item.word));
       }
-      renderTable(currentFiltered);
-      renderMobileCards(currentFiltered);
+      renderActiveView(currentFiltered);
       document.getElementById('filtered-count').textContent = currentFiltered.length.toLocaleString();
     }
 
     function clearSearch() {
       document.getElementById('search-input').value = '';
       currentFiltered = [...vocabData];
-      renderTable(currentFiltered);
-      renderMobileCards(currentFiltered);
+      renderActiveView(currentFiltered);
       document.getElementById('filtered-count').textContent = vocabData.length.toLocaleString();
     }
 
@@ -14163,13 +14173,19 @@
     }
 
     function init() {
-      renderTable(vocabData);
-      renderMobileCards(vocabData);
+      renderActiveView(vocabData);
       document.getElementById('filtered-count').textContent = vocabData.length.toLocaleString();
       document.getElementById('total-count').textContent = vocabData.length.toLocaleString();
 
       const search = document.getElementById('search-input');
-      search.addEventListener('input', filterAll);
+      let searchTimer = 0;
+      search.addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(filterAll, 120); });
+      const viewQuery = window.matchMedia && window.matchMedia('(max-width: 767px)');
+      if (viewQuery) {
+        const rerender = () => renderActiveView(currentFiltered);
+        if (viewQuery.addEventListener) viewQuery.addEventListener('change', rerender);
+        else if (viewQuery.addListener) viewQuery.addListener(rerender);
+      }
 
       const globalQuery = new URLSearchParams(window.location.search).get('efsearch');
       if (globalQuery) {
@@ -14186,7 +14202,8 @@
       });
     }
 
-    window.onload = init;
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
+    else init();
   </script>
 </body>
 
