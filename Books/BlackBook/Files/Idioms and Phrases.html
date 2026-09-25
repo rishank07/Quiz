@@ -208,7 +208,36 @@
       }
     }
 
-  </style>
+  
+    /* Keep the BlackBook page locked to the viewport on touch devices.
+       Wide desktop tables may still scroll inside .table-container. */
+    html,
+    body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .mobile-only,
+    #mobile-cards,
+    .vocab-card {
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .vocab-card,
+    .vocab-card * {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .table-container {
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+    }
+</style>
   <script defer src="/home-nav.js?v=20260925blackbookperf1"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
   <script defer src="/back-nav.js?v=20260924bookhier3"></script>

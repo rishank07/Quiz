@@ -1,5 +1,5 @@
-// v145 Fix BlackBook copy data and clipboard fallback
-const CACHE_VERSION = "efp-pwa-2026-09-25-v145-blackbook-copy-fix";
+// v146 Lock BlackBook pages to mobile viewport
+const CACHE_VERSION = "efp-pwa-2026-09-25-v146-blackbook-mobile-fit";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925blackbookperf1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
