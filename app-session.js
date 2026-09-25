@@ -714,9 +714,8 @@
   }
 
   // Warn only after the learner has actually interacted with a quiz.
-  // Browsers ignore custom beforeunload text, so refresh / device Back uses
-  // the native leave-page dialog while in-page Back/Home controls get our
-  // explicit ExamFusion message.
+  // Refresh/reload is intentionally allowed because quiz progress is saved.
+  // In-page Back/Home controls still use the explicit ExamFusion quit dialog.
   function installQuizProgressWarning() {
     var dirty = false;
     var allowNavigation = false;
@@ -1150,13 +1149,6 @@
     document.addEventListener("change", function (event) {
       if (isAnswerInteraction(event.target)) arm();
     }, true);
-
-    window.addEventListener("beforeunload", function (event) {
-      if (!shouldWarn()) return;
-      event.preventDefault();
-      event.returnValue = "Do you really want to quit?";
-      return "Do you really want to quit?";
-    });
 
     window.addEventListener("pageshow", function () {
       allowNavigation = false;
