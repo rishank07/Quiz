@@ -4,7 +4,8 @@
 
   var SESSION_KEY = "efp_app_session_v1";
   var PENDING_KEY = "efp_app_resume_pending_v1";
-  var STATIC_QUIZ_KEY = "efp_app_static_quiz_v1";
+  var STATIC_QUIZ_KEY = "efp_quiz_progress_v2";
+  var LEGACY_STATIC_QUIZ_KEY = "efp_app_static_quiz_v1";
   var QUIZ_WARNING_KEY = "efp_app_quiz_warning_v1";
   var INSTALLED_APP_CONTEXT_KEY = "efp_installed_app_context_v1";
   var MAX_RESUME_AGE = 24 * 60 * 60 * 1000;
@@ -211,67 +212,201 @@
     else window.addEventListener("load", function () { setTimeout(attempt, 0); }, { once: true });
   }
 
-  // Legacy book quizzes use static radio cards and keep their scores only in
-  // JavaScript variables. Replaying checked cards through their own Check
-  // button reconstructs both the feedback and the score after an app restart.
+  // Book quizzes and Bihar's 60 Sets use static radio cards. Keep one durable
+  // entry per page (and per set on Bihar 60 Sets), then replay each checked
+  // card through the page's own Check button so its score and feedback remain
+  // the source of truth after refresh, Back, or reopening the quiz.
   function installStaticQuizTracking() {
-    var pending = pendingForThisPage();
+    var path = normalizedPath(location.pathname);
+    var lowerPath = path.toLowerCase();
+    var supported = lowerPath.indexOf("/books/") === 0 ||
+      lowerPath === "/bihar special/topic names/bihar objective gk - 60 sets.html";
+    if (!supported) return;
+
+    var restoring = false;
     function cards() { return document.querySelectorAll(".question-box[id] .options[data-correct]"); }
     function questionText(card) {
       var text = card.querySelector(".q-text-en, .q-text-hi");
       return text ? text.textContent.replace(/\s+/g, " ").trim().slice(0, 160) : "";
     }
+    function readStore() {
+      var value = safeParse(localStorage.getItem(STATIC_QUIZ_KEY), {});
+      return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+    }
+    function writeStore(store) {
+      try {
+        if (Object.keys(store).length) localStorage.setItem(STATIC_QUIZ_KEY, JSON.stringify(store));
+        else localStorage.removeItem(STATIC_QUIZ_KEY);
+      } catch (_) {}
+    }
+    function migrateLegacy(store) {
+      try {
+        var legacy = safeParse(localStorage.getItem(LEGACY_STATIC_QUIZ_KEY), null);
+        if (legacy && legacy.path === location.pathname && legacy.answers && !store[path]) {
+          store[path] = { kind: "static", ts: Number(legacy.ts) || Date.now(), answers: legacy.answers };
+          writeStore(store);
+        }
+        localStorage.removeItem(LEGACY_STATIC_QUIZ_KEY);
+      } catch (_) {}
+      return store;
+    }
     function save() {
       var options = cards();
       if (!options.length) return;
-      var answers = {};
+      var store = migrateLegacy(readStore());
+      var entry = store[path] && store[path].kind === "static"
+        ? store[path] : { kind: "static", answers: {} };
+      if (!entry.answers || typeof entry.answers !== "object") entry.answers = {};
       Array.prototype.forEach.call(options, function (group) {
         var card = group.closest(".question-box[id]");
         var selected = group.querySelector('input[type="radio"]:checked');
-        if (!card || !selected) return;
-        answers[card.id] = {
+        if (!card) return;
+        if (!selected) {
+          delete entry.answers[card.id];
+          return;
+        }
+        entry.answers[card.id] = {
           value: selected.value,
           checked: card.classList.contains("answered"),
           text: questionText(card)
         };
       });
-      try { localStorage.setItem(STATIC_QUIZ_KEY, JSON.stringify({
-        path: location.pathname, ts: Date.now(), answers: answers
-      })); } catch (_) {}
+      entry.ts = Date.now();
+      if (Object.keys(entry.answers).length) store[path] = entry;
+      else delete store[path];
+      writeStore(store);
     }
-    function restore() {
-      if (!pending || !cards().length) return;
+    function restoreGroup(group, answer) {
+      if (!group || !answer) return false;
+      var card = group.closest(".question-box[id]");
+      if (!card || card.classList.contains("answered") || questionText(card) !== answer.text) return false;
+      var selected = Array.prototype.find.call(group.querySelectorAll('input[type="radio"]'),
+        function (input) { return input.value === answer.value; });
+      if (!selected) return false;
+      selected.checked = true;
+      if (answer.checked) {
+        var button = group.querySelector(".check-btn") || card.querySelector(".check-btn");
+        if (button && !button.disabled) button.click();
+      }
+      return true;
+    }
+    function restore(root) {
+      if (!cards().length) return;
+      var restoredAny = false;
       try {
-        var saved = safeParse(localStorage.getItem(STATIC_QUIZ_KEY), null);
-        if (!saved || saved.path !== location.pathname ||
-            !Number.isFinite(Number(saved.ts)) || Date.now() - Number(saved.ts) > MAX_RESUME_AGE) return;
-        Object.keys(saved.answers || {}).forEach(function (id) {
-          var card = document.getElementById(id);
-          var answer = saved.answers[id];
-          if (!card || !answer || questionText(card) !== answer.text) return;
-          var group = card.querySelector(".options[data-correct]");
-          if (!group) return;
-          var selected = Array.prototype.find.call(group.querySelectorAll('input[type="radio"]'),
-            function (input) { return input.value === answer.value; });
-          if (!selected) return;
-          selected.checked = true;
-          if (answer.checked) {
-            var button = group.querySelector(".check-btn");
-            if (button && !button.disabled) button.click();
-          }
+        var store = migrateLegacy(readStore());
+        var saved = store[path];
+        if (!saved || saved.kind !== "static" || !saved.answers) return;
+        var scope = root && root.querySelectorAll ? root : document;
+        restoring = true;
+        var groups = Array.prototype.slice.call(scope.querySelectorAll(".question-box[id] .options[data-correct]"));
+        if (scope.matches && scope.matches(".question-box[id]")) {
+          var ownGroup = scope.querySelector(".options[data-correct]");
+          if (ownGroup) groups.unshift(ownGroup);
+        }
+        Array.prototype.forEach.call(groups, function (group) {
+          var card = group.closest(".question-box[id]");
+          if (card && restoreGroup(group, saved.answers[card.id])) restoredAny = true;
         });
-      } catch (_) {}
+      } catch (_) {
+      } finally {
+        restoring = false;
+        if (restoredAny && window.EFP_QUIZ_PROGRESS_WARNING) window.EFP_QUIZ_PROGRESS_WARNING.arm();
+      }
     }
-    function onReady() { restore(); save(); }
+    function resetDom(scope) {
+      Array.prototype.forEach.call(scope.querySelectorAll(".question-box[id]"), function (card) {
+        card.classList.remove("answered");
+        Array.prototype.forEach.call(card.querySelectorAll('input[type="radio"]'), function (input) {
+          input.checked = false;
+          input.disabled = false;
+        });
+        Array.prototype.forEach.call(card.querySelectorAll(".option-label"), function (label) {
+          label.classList.remove("correct", "wrong", "incorrect");
+        });
+        var explanation = card.querySelector(".explanation");
+        if (explanation) explanation.style.display = "none";
+        var check = card.querySelector(".check-btn");
+        if (check) check.disabled = false;
+      });
+    }
+    function clearSavedFor(scope, setno) {
+      var store = readStore();
+      var entry = store[path];
+      if (entry && entry.answers) {
+        if (setno) {
+          var prefix = "s" + setno + "-";
+          Object.keys(entry.answers).forEach(function (id) {
+            if (id.indexOf(prefix) === 0) delete entry.answers[id];
+          });
+        } else {
+          entry.answers = {};
+        }
+        if (Object.keys(entry.answers).length) {
+          entry.ts = Date.now();
+          store[path] = entry;
+        } else {
+          delete store[path];
+        }
+        writeStore(store);
+      }
+      resetDom(scope);
+      if (setno) {
+        try { if (typeof setScores !== "undefined") setScores[setno] = { correct: 0, wrong: 0, attempted: 0 }; } catch (_) {}
+        ["totalAttempted-", "correctCount-", "wrongCount-"].forEach(function (prefix) {
+          var node = document.getElementById(prefix + setno);
+          if (node) node.textContent = "0";
+        });
+      } else {
+        try {
+          if (typeof correctTotal !== "undefined") correctTotal = 0;
+          if (typeof wrongTotal !== "undefined") wrongTotal = 0;
+          if (typeof attempted !== "undefined") attempted = 0;
+        } catch (_) {}
+        [["totalAttempted", "0"], ["correctCount", "0"], ["wrongCount", "0"]].forEach(function (pair) {
+          var node = document.getElementById(pair[0]);
+          if (node) node.textContent = pair[1];
+        });
+      }
+      if (window.EFP_QUIZ_PROGRESS_WARNING) window.EFP_QUIZ_PROGRESS_WARNING.disarm();
+    }
+    function ensureStyle() {
+      if (document.getElementById("efp-quiz-reset-style")) return;
+      var style = document.createElement("style");
+      style.id = "efp-quiz-reset-style";
+      style.textContent = ".efp-quiz-reset-btn{appearance:none;border:1px solid rgba(220,38,38,.28);background:#fff;color:#b42318;border-radius:999px;padding:6px 10px;font:800 11px/1.1 Arial,sans-serif;cursor:pointer;white-space:nowrap}.efp-quiz-reset-btn:hover{background:#fff1f2;border-color:#ef4444}.efp-quiz-reset-btn:focus-visible{outline:3px solid rgba(239,68,68,.25);outline-offset:2px}html.efp-black .efp-quiz-reset-btn,html.efp-black-invert .efp-quiz-reset-btn{background:#111827;color:#fca5a5;border-color:#7f1d1d}";
+      document.head.appendChild(style);
+    }
+    function addResetButtons(root) {
+      ensureStyle();
+      var scope = root && root.querySelectorAll ? root : document;
+      Array.prototype.forEach.call(scope.querySelectorAll(".score-bar, .set-score-bar"), function (bar) {
+        if (bar.querySelector(".efp-quiz-reset-btn")) return;
+        var setPanel = bar.closest(".set-panel");
+        var setno = setPanel && setPanel.getAttribute("data-set");
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "efp-quiz-reset-btn";
+        button.textContent = "↻ Reset";
+        button.setAttribute("aria-label", setno ? "Reset progress for Set " + setno : "Reset quiz progress");
+        button.addEventListener("click", function () {
+          var label = setno ? "Set " + String(setno).padStart(2, "0") : "this quiz";
+          if (!window.confirm("Reset progress for " + label + "? Your bookmarks will stay saved.")) return;
+          clearSavedFor(setPanel || document, setno);
+        });
+        bar.appendChild(button);
+      });
+    }
+    function onReady() { restore(document); addResetButtons(document); save(); }
     if (document.readyState === "complete") setTimeout(onReady, 0);
     else window.addEventListener("load", onReady, { once: true });
     document.addEventListener("change", function (event) {
       if (event.target && event.target.matches &&
-          event.target.matches('.question-box .options[data-correct] input[type="radio"]')) save();
+          event.target.matches('.question-box .options[data-correct] input[type="radio"]') && !restoring) save();
     });
     document.addEventListener("click", function (event) {
       if (event.target && event.target.closest && event.target.closest(".question-box .options[data-correct] .check-btn")) {
-        setTimeout(save, 0);
+        if (!restoring) setTimeout(save, 0);
       }
     });
     document.addEventListener("visibilitychange", function () {
@@ -279,6 +414,140 @@
     });
     document.addEventListener("freeze", save);
     window.addEventListener("pagehide", save);
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          Array.prototype.forEach.call(mutation.addedNodes || [], function (node) {
+            if (!node || node.nodeType !== 1) return;
+            restore(node);
+            addResetButtons(node.matches && node.matches(".set-panel,.set-score-bar") ? (node.parentNode || document) : node);
+          });
+        });
+      });
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+    }
+  }
+
+  // BlackBook A-Z quizzes build randomized button options on window.load.
+  // Store the selected option text by stable question id, then click the
+  // matching option after the next render to reconstruct score and feedback.
+  function installDynamicBookQuizTracking() {
+    var path = normalizedPath(location.pathname);
+    if (path.toLowerCase().indexOf("/books/blackbook/files/") !== 0) return;
+
+    function readStore() {
+      var value = safeParse(localStorage.getItem(STATIC_QUIZ_KEY), {});
+      return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+    }
+    function writeStore(store) {
+      try {
+        if (Object.keys(store).length) localStorage.setItem(STATIC_QUIZ_KEY, JSON.stringify(store));
+        else localStorage.removeItem(STATIC_QUIZ_KEY);
+      } catch (_) {}
+    }
+    function selectedText(button) {
+      var text = button && button.querySelector && button.querySelector(".option-text");
+      return text ? text.textContent.replace(/\s+/g, " ").trim() : "";
+    }
+    function saveAnswer(button) {
+      var group = button && button.closest && button.closest('[id^="opts-"]');
+      if (!group || !group.id) return;
+      var value = selectedText(button);
+      if (!value) return;
+      var store = readStore();
+      var entry = store[path] && store[path].kind === "dynamic-book"
+        ? store[path] : { kind: "dynamic-book", answers: {} };
+      entry.answers[group.id] = { value: value };
+      entry.ts = Date.now();
+      var active = document.querySelector("#alphabet-container button[data-letter].bg-blue-600");
+      if (active) entry.section = active.getAttribute("data-letter") || "";
+      store[path] = entry;
+      writeStore(store);
+    }
+    function saveSection(button) {
+      var letter = button && button.getAttribute && button.getAttribute("data-letter");
+      if (!letter) return;
+      var store = readStore();
+      var entry = store[path] && store[path].kind === "dynamic-book"
+        ? store[path] : { kind: "dynamic-book", answers: {} };
+      entry.section = letter;
+      entry.ts = Date.now();
+      store[path] = entry;
+      writeStore(store);
+    }
+    function restore() {
+      var store = readStore();
+      var entry = store[path];
+      if (!entry || entry.kind !== "dynamic-book" || !entry.answers) return true;
+      var ids = Object.keys(entry.answers);
+      if (!document.querySelector(".quiz-option")) return false;
+      var index = 0;
+      function batch() {
+        var end = Math.min(ids.length, index + 35);
+        for (; index < end; index += 1) {
+          var group = document.getElementById(ids[index]);
+          if (!group || group.querySelector(".quiz-option:disabled")) continue;
+          var wanted = entry.answers[ids[index]].value;
+          var button = Array.prototype.find.call(group.querySelectorAll(".quiz-option"), function (candidate) {
+            return selectedText(candidate) === wanted;
+          });
+          if (button) button.click();
+        }
+        if (index < ids.length) {
+          (window.requestAnimationFrame || window.setTimeout)(batch);
+          return;
+        }
+        if (entry.section) {
+          var nav = document.querySelector('#alphabet-container button[data-letter="' + entry.section + '"]');
+          if (nav) nav.click();
+        }
+      }
+      batch();
+      return true;
+    }
+    function addResetButton() {
+      if (document.getElementById("efp-blackbook-reset")) return;
+      var score = document.getElementById("total-score");
+      if (!score) return;
+      if (!document.getElementById("efp-quiz-reset-style")) {
+        var style = document.createElement("style");
+        style.id = "efp-quiz-reset-style";
+        style.textContent = ".efp-quiz-reset-btn{appearance:none;border:1px solid rgba(220,38,38,.28);background:#fff;color:#b42318;border-radius:999px;padding:7px 11px;font:800 11px/1.1 Arial,sans-serif;cursor:pointer;white-space:nowrap}.efp-quiz-reset-btn:focus-visible{outline:3px solid rgba(255,255,255,.32);outline-offset:2px}";
+        document.head.appendChild(style);
+      }
+      var row = score.closest("header") && score.closest("header").querySelector(".max-w-4xl > .flex");
+      if (!row) return;
+      var button = document.createElement("button");
+      button.id = "efp-blackbook-reset";
+      button.type = "button";
+      button.className = "efp-quiz-reset-btn";
+      button.style.background = "rgba(255,255,255,.14)";
+      button.style.color = "#fff";
+      button.style.borderColor = "rgba(255,255,255,.35)";
+      button.textContent = "↻ Reset";
+      button.addEventListener("click", function () {
+        if (!window.confirm("Reset progress for this quiz? Your bookmarks will stay saved.")) return;
+        var store = readStore();
+        delete store[path];
+        writeStore(store);
+        if (window.EFP_QUIZ_PROGRESS_WARNING) window.EFP_QUIZ_PROGRESS_WARNING.disarm();
+        location.reload();
+      });
+      row.appendChild(button);
+    }
+    function ready(attempt) {
+      addResetButton();
+      if (restore()) return;
+      if (attempt < 30) setTimeout(function () { ready(attempt + 1); }, 100);
+    }
+    document.addEventListener("click", function (event) {
+      var option = event.target && event.target.closest ? event.target.closest(".quiz-option") : null;
+      if (option && !option.disabled) setTimeout(function () { saveAnswer(option); }, 0);
+      var nav = event.target && event.target.closest ? event.target.closest("#alphabet-container button[data-letter]") : null;
+      if (nav) setTimeout(function () { saveSection(nav); }, 0);
+    }, true);
+    if (document.readyState === "complete") setTimeout(function () { ready(0); }, 0);
+    else window.addEventListener("load", function () { setTimeout(function () { ready(0); }, 0); }, { once: true });
   }
 
   // Warn only after the learner has actually interacted with a quiz.
@@ -369,6 +638,23 @@
         if (isVisible(nodes[i])) return true;
       }
       return false;
+    }
+
+    function hasAnsweredQuizSurface() {
+      var selectors = [
+        ".question-box.answered",
+        ".option-btn.answered",
+        ".quiz-option:disabled",
+        ".qcard .opt:disabled",
+        ".qcard button.opt:disabled",
+        ".question-card button:disabled"
+      ];
+      try {
+        var node = document.querySelector(selectors.join(","));
+        return !!(node && hasVisibleQuizSurface());
+      } catch (_) {
+        return false;
+      }
     }
 
     function isClearlyFinished() {
@@ -510,12 +796,12 @@
         '<div class="efp-qw-card">' +
           '<div class="efp-qw-body">' +
             '<div class="efp-qw-icon" aria-hidden="true">!</div>' +
-            '<h2 id="' + MODAL_ID + '-title">Leave this quiz?</h2>' +
-            '<p id="' + MODAL_ID + '-desc">Your current quiz progress may be lost if you refresh, go back, or leave this page before finishing.</p>' +
-            '<div class="efp-qw-note">Stay on this page to continue the quiz from your current position.</div>' +
+            '<h2 id="' + MODAL_ID + '-title">Do you really want to quit?</h2>' +
+            '<p id="' + MODAL_ID + '-desc">Your quiz progress is saved automatically, so you can continue from the same place later.</p>' +
+            '<div class="efp-qw-note">Choose Stay on Quiz if you want to keep practising now.</div>' +
           '</div>' +
           '<div class="efp-qw-actions">' +
-            '<button type="button" class="efp-qw-leave">Leave Quiz</button>' +
+            '<button type="button" class="efp-qw-leave">Quit Quiz</button>' +
             '<button type="button" class="efp-qw-stay">Stay on Quiz</button>' +
           '</div>' +
         '</div>';
@@ -705,8 +991,8 @@
     window.addEventListener("beforeunload", function (event) {
       if (!shouldWarn()) return;
       event.preventDefault();
-      event.returnValue = "";
-      return "";
+      event.returnValue = "Do you really want to quit?";
+      return "Do you really want to quit?";
     });
 
     window.addEventListener("pageshow", function () {
@@ -719,7 +1005,12 @@
     // warning from an earlier app session.
     restorePersistedWarning();
     if (!dirty && document.readyState !== "complete") {
-      window.addEventListener("load", function () { restorePersistedWarning(); }, { once: true });
+      window.addEventListener("load", function () {
+        restorePersistedWarning();
+        if (!dirty && hasAnsweredQuizSurface()) arm();
+      }, { once: true });
+    } else if (!dirty) {
+      setTimeout(function () { if (!dirty && hasAnsweredQuizSurface()) arm(); }, 0);
     }
 
     window.EFP_QUIZ_PROGRESS_WARNING = {
@@ -782,6 +1073,7 @@
   installQuizProgressWarning();
   installLifecycleTracking();
   installStaticQuizTracking();
+  installDynamicBookQuizTracking();
   restorePendingScroll();
   writeSession();
 

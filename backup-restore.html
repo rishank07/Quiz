@@ -270,7 +270,7 @@
     <section class="hero">
       <span class="eyebrow">ExamFusion Prep · Device Backup</span>
       <h1>Backup &amp; Restore</h1>
-      <p>Save your bookmarks, chapter progress, and recent Mixed Practice sets to one backup, then restore them after clearing browser data, reinstalling the app, or moving to another device.</p>
+      <p>Save your bookmarks, chapter progress, quiz answers, and recent Mixed Practice sets to one backup, then restore them after clearing browser data, reinstalling the app, or moving to another device.</p>
     </section>
 
     <section class="summary" aria-label="Saved data summary">
@@ -325,7 +325,7 @@
         <h2 id="dangerTitle">⚠️ Reset Study Data</h2>
         <span class="danger-pill">Danger Zone</span>
       </div>
-      <p>Delete every ExamFusion bookmark and chapter-progress entry saved on this device. Dark Mode and other app settings will stay unchanged.</p>
+      <p>Delete every ExamFusion bookmark, chapter-progress entry, and saved quiz attempt on this device. Dark Mode and other app settings will stay unchanged.</p>
       <p class="danger-note"><strong>Recommended:</strong> save a backup before resetting. This action affects only this browser/app installation.</p>
       <div class="danger-actions">
         <button class="danger-backup" type="button" id="dangerBackupBtn">⬇️ Create Backup First</button>
@@ -341,6 +341,7 @@
           <ul>
             <li>Question bookmarks saved by ExamFusion Prep.</li>
             <li>Visited/completed chapter progress for supported study sections.</li>
+            <li>Saved answers and resume position for Books, Current Affairs, Bihar 60 Sets, and Original Practice quizzes.</li>
             <li>Up to 20 recent Mixed Practice sets, including their Resume/Review state.</li>
             <li>No passwords, browsing history, or unrelated browser data.</li>
           </ul>
@@ -386,6 +387,8 @@
       var MIXED_TAB_STATE_PREFIX = "efp_mixed_practice_tab_state_v1:";
       var MIXED_BOOKMARK_KEY = "efp_mixed_practice_bookmarks_v1";
       var RAPID_KEY_PATTERN = /^efp_ca_.+_rapid_v1$/;
+      var QUIZ_PROGRESS_KEY = "efp_quiz_progress_v2";
+      var ORIGINAL_ATTEMPT_PREFIX = "efp_original_practice_attempt_v2:";
       var APP_NAME = "ExamFusion Prep";
       var SCHEMA_VERSION = 1;
       var selectedBackup = null;
@@ -444,7 +447,7 @@
       }
 
       function isPracticeKey(key) {
-        return key === MIXED_STATE_KEY || key === MIXED_HISTORY_KEY || key === MIXED_DELETED_KEY || key === MIXED_BOOKMARK_KEY || (key && (key.indexOf(MIXED_TAB_STATE_PREFIX) === 0 || key.indexOf(MIXED_HISTORY_ITEM_PREFIX) === 0)) || RAPID_KEY_PATTERN.test(key || "");
+        return key === MIXED_STATE_KEY || key === MIXED_HISTORY_KEY || key === MIXED_DELETED_KEY || key === MIXED_BOOKMARK_KEY || key === QUIZ_PROGRESS_KEY || (key && (key.indexOf(MIXED_TAB_STATE_PREFIX) === 0 || key.indexOf(MIXED_HISTORY_ITEM_PREFIX) === 0 || key.indexOf(ORIGINAL_ATTEMPT_PREFIX) === 0)) || RAPID_KEY_PATTERN.test(key || "");
       }
 
       function normalizeMixedState(value) {
@@ -488,7 +491,7 @@
       }
 
       function normalizePracticeData(raw) {
-        var out = { rapid: {}, mixedState: null, mixedBookmarks: [], mixedRecentSets: [] };
+        var out = { rapid: {}, quizProgress: {}, originalAttempts: {}, mixedState: null, mixedBookmarks: [], mixedRecentSets: [] };
         if (!raw || typeof raw !== "object" || Array.isArray(raw)) return out;
         var rapid = raw.rapid;
         if (rapid && typeof rapid === "object" && !Array.isArray(rapid)) {
@@ -502,8 +505,30 @@
                 if (sourceBookmarks[id]) bookmarks[id] = true;
               });
             }
+            var answers = {};
+            var sourceAnswers = value.answers;
+            if (sourceAnswers && typeof sourceAnswers === "object" && !Array.isArray(sourceAnswers)) {
+              Object.keys(sourceAnswers).forEach(function (id) {
+                var selected = Number(sourceAnswers[id]);
+                if (Number.isInteger(selected) && selected >= 0) answers[id] = selected;
+              });
+            }
             var section = Number(value.section);
-            out.rapid[key] = { section: Number.isFinite(section) ? Math.max(0, Math.floor(section)) : 0, answers: {}, bookmarks: bookmarks };
+            out.rapid[key] = { section: Number.isFinite(section) ? Math.max(0, Math.floor(section)) : 0, answers: answers, bookmarks: bookmarks };
+          });
+        }
+        if (raw.quizProgress && typeof raw.quizProgress === "object" && !Array.isArray(raw.quizProgress)) {
+          Object.keys(raw.quizProgress).forEach(function (path) {
+            var entry = raw.quizProgress[path];
+            if (!entry || typeof entry !== "object" || Array.isArray(entry) || !entry.answers || typeof entry.answers !== "object") return;
+            out.quizProgress[path] = entry;
+          });
+        }
+        if (raw.originalAttempts && typeof raw.originalAttempts === "object" && !Array.isArray(raw.originalAttempts)) {
+          Object.keys(raw.originalAttempts).forEach(function (key) {
+            var entry = raw.originalAttempts[key];
+            if (key.indexOf(ORIGINAL_ATTEMPT_PREFIX) !== 0 || !entry || typeof entry !== "object" || Array.isArray(entry)) return;
+            out.originalAttempts[key] = entry;
           });
         }
         out.mixedState = normalizeMixedState(raw.mixedState);
@@ -525,6 +550,8 @@
       function getPracticeData() {
         var raw = {
           rapid: {},
+          quizProgress: safeParse(localStorage.getItem(QUIZ_PROGRESS_KEY), {}),
+          originalAttempts: {},
           mixedState: safeParse(localStorage.getItem(MIXED_STATE_KEY), null),
           mixedBookmarks: safeParse(localStorage.getItem(MIXED_BOOKMARK_KEY), []),
           mixedRecentSets: safeParse(localStorage.getItem(MIXED_HISTORY_KEY), [])
@@ -534,6 +561,7 @@
         for (var i = 0; i < localStorage.length; i++) {
           var key = localStorage.key(i);
           if (RAPID_KEY_PATTERN.test(key || "")) raw.rapid[key] = safeParse(localStorage.getItem(key), {});
+          if (key && key.indexOf(ORIGINAL_ATTEMPT_PREFIX) === 0) raw.originalAttempts[key] = safeParse(localStorage.getItem(key), null);
           if (key && key.indexOf(MIXED_TAB_STATE_PREFIX) === 0) {
             var tabState = safeParse(localStorage.getItem(key), null);
             if (tabState) tabStates.push(tabState);
@@ -556,7 +584,7 @@
       }
 
       function hasPracticeData(practice) {
-        return !!practice.mixedState || (practice.mixedBookmarks || []).length > 0 || (practice.mixedRecentSets || []).length > 0 || Object.keys(practice.rapid || {}).length > 0;
+        return !!practice.mixedState || (practice.mixedBookmarks || []).length > 0 || (practice.mixedRecentSets || []).length > 0 || Object.keys(practice.rapid || {}).length > 0 || Object.keys(practice.quizProgress || {}).length > 0 || Object.keys(practice.originalAttempts || {}).length > 0;
       }
 
       function countAllBookmarks(bookmarks, practice) {
@@ -578,10 +606,29 @@
         return total;
       }
 
+      function countPracticeProgress(practice) {
+        var total = 0;
+        practice = practice || {};
+        Object.keys(practice.rapid || {}).forEach(function (key) {
+          total += Object.keys(practice.rapid[key].answers || {}).length;
+        });
+        Object.keys(practice.quizProgress || {}).forEach(function (path) {
+          total += Object.keys(practice.quizProgress[path].answers || {}).length;
+        });
+        Object.keys(practice.originalAttempts || {}).forEach(function (key) {
+          total += Object.keys(practice.originalAttempts[key].answers || {}).length;
+        });
+        return total;
+      }
+
+      function countAllProgress(progress, practice) {
+        return countProgress(progress) + countPracticeProgress(practice);
+      }
+
       function refreshCounts() {
         var practice = getPracticeData();
         var bookmarkTotal = countAllBookmarks(getBookmarks(), practice);
-        var progressTotal = countProgress(getProgress());
+        var progressTotal = countAllProgress(getProgress(), practice);
         bookmarkCountEl.textContent = bookmarkTotal;
         progressCountEl.textContent = progressTotal;
         resetOpenBtn.disabled = bookmarkTotal + progressTotal === 0 && !hasPracticeData(practice);
@@ -900,12 +947,41 @@
               return one;
             })() }).rapid[key] || { section: 0, answers: {}, bookmarks: {} };
             incoming = {
-              section: current.section,
-              answers: {},
+              section: Object.keys(current.answers || {}).length ? current.section : incoming.section,
+              answers: Object.assign({}, incoming.answers, current.answers),
               bookmarks: mergeBookmarks(current.bookmarks, incoming.bookmarks)
             };
           }
           localStorage.setItem(key, JSON.stringify(incoming));
+        });
+        var incomingQuiz = practice.quizProgress || {};
+        if (!replace) {
+          var currentQuiz = safeParse(localStorage.getItem(QUIZ_PROGRESS_KEY), {});
+          if (!currentQuiz || typeof currentQuiz !== "object" || Array.isArray(currentQuiz)) currentQuiz = {};
+          Object.keys(incomingQuiz).forEach(function (path) {
+            var incomingEntry = incomingQuiz[path];
+            var currentEntry = currentQuiz[path];
+            if (!currentEntry || currentEntry.kind !== incomingEntry.kind) {
+              currentQuiz[path] = incomingEntry;
+              return;
+            }
+            currentQuiz[path] = Object.assign({}, incomingEntry, currentEntry, {
+              answers: Object.assign({}, incomingEntry.answers || {}, currentEntry.answers || {}),
+              ts: Math.max(Number(incomingEntry.ts) || 0, Number(currentEntry.ts) || 0)
+            });
+          });
+          incomingQuiz = currentQuiz;
+        }
+        if (Object.keys(incomingQuiz).length) localStorage.setItem(QUIZ_PROGRESS_KEY, JSON.stringify(incomingQuiz));
+        else if (replace) localStorage.removeItem(QUIZ_PROGRESS_KEY);
+
+        Object.keys(practice.originalAttempts || {}).forEach(function (key) {
+          var incomingAttempt = practice.originalAttempts[key];
+          if (!replace) {
+            var currentAttempt = safeParse(localStorage.getItem(key), null);
+            if (currentAttempt && Number(currentAttempt.ts) >= Number(incomingAttempt.ts || 0)) return;
+          }
+          localStorage.setItem(key, JSON.stringify(incomingAttempt));
         });
         if (practice.mixedState) {
           var currentMixed = normalizeMixedState(safeParse(localStorage.getItem(MIXED_STATE_KEY), null));
@@ -1044,7 +1120,7 @@
           var payload = backupPayload();
           var result = await saveJson(payload);
           var b = countAllBookmarks(payload.data.bookmarks, payload.data.practice);
-          var p = countProgress(payload.data.progress);
+          var p = countAllProgress(payload.data.progress, payload.data.practice);
           var where = result.method === "picker" ? "Backup saved" :
             result.method === "file-share" ? "Android backup file shared" :
             result.method === "code-share" ? "Android Backup Code shared" :
@@ -1129,7 +1205,7 @@
         try {
           var snapshot = snapshotStudyData();
           var bookmarkTotal = countAllBookmarks(snapshot.bookmarks, snapshot.practice);
-          var progressTotal = countProgress(snapshot.progress);
+          var progressTotal = countAllProgress(snapshot.progress, snapshot.practice);
           clearStudyData();
           closeResetModal();
           refreshCounts();
@@ -1164,7 +1240,7 @@
           selectedBackup = normalizeBackup(parsed);
           restoreBtn.disabled = false;
           fileName.textContent = "Android Backup Code loaded";
-          showStatus(restoreStatus, "good", "Valid Backup Code: " + countAllBookmarks(selectedBackup.bookmarks, selectedBackup.practice) + " bookmarks, " + countProgress(selectedBackup.progress) + " progress entries. Now tap Restore Loaded Backup.");
+          showStatus(restoreStatus, "good", "Valid Backup Code: " + countAllBookmarks(selectedBackup.bookmarks, selectedBackup.practice) + " bookmarks, " + countAllProgress(selectedBackup.progress, selectedBackup.practice) + " progress entries. Now tap Restore Loaded Backup.");
           restoreBtn.textContent = "Restore Loaded Backup";
         } catch (e) {
           fileName.textContent = "No valid backup loaded";
@@ -1194,7 +1270,7 @@
             showStatus(
               restoreStatus,
               "good",
-              "Valid backup: " + countAllBookmarks(selectedBackup.bookmarks, selectedBackup.practice) + " bookmarks, " + countProgress(selectedBackup.progress) + " progress entries. Created: " + selectedBackup.exportedAt
+              "Valid backup: " + countAllBookmarks(selectedBackup.bookmarks, selectedBackup.practice) + " bookmarks, " + countAllProgress(selectedBackup.progress, selectedBackup.practice) + " progress entries. Created: " + selectedBackup.exportedAt
             );
           } catch (e) {
             selectedBackup = null;
@@ -1214,7 +1290,7 @@
         if (!selectedBackup) return;
         var replace = !!replaceMode.checked;
         var b = countAllBookmarks(selectedBackup.bookmarks, selectedBackup.practice);
-        var p = countProgress(selectedBackup.progress);
+        var p = countAllProgress(selectedBackup.progress, selectedBackup.practice);
         var action = replace ? "REPLACE the current ExamFusion bookmarks/progress with" : "MERGE the current ExamFusion bookmarks/progress with";
         var ok = window.confirm(action + " this backup?\n\nBackup contains " + b + " bookmarks and " + p + " chapter-progress entries.");
         if (!ok) return;

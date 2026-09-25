@@ -13,8 +13,8 @@ var CONFIGS={
 var CFG=CONFIGS[PAGE_FILE]||{slug:"practice",label:"Practice"};
 var PROGRESS_KEY="efp_visited_originalpractice_"+CFG.slug;
 var BOOKMARK_KEY="efp_bookmarks";
-var APP_ATTEMPT_KEY="efp_app_original_practice_attempt_v1";
-var APP_RESUME_KEY="efp_app_resume_pending_v1";
+var ATTEMPT_PREFIX="efp_original_practice_attempt_v2:";
+var LEGACY_APP_ATTEMPT_KEY="efp_app_original_practice_attempt_v1";
 var bookmarkOnly=false;
 var pendingDeepQuestion=null;
 
@@ -65,79 +65,88 @@ function ensureGlobalOriginalPracticeNavigation(){
 ensureGlobalOriginalPracticeNavigation();
 
 
-// Keeps attempted answers alive while the user moves between sections of the same chapter.
-// A fresh attempt stays in memory; only an Android app or installed web app/PWA
-// relaunch restores a matching interrupted attempt through the shared resume engine.
+// Keep every chapter attempt until the learner explicitly resets it. Answers,
+// score, option order and last section now survive refresh, Back and reopening
+// on browsers as well as installed Android/Windows apps.
 if(!state.answerMap) state.answerMap={};
 function clearLegacyPersistedAnswers(){try{localStorage.removeItem("efp_quiz_answer_state_v1")}catch(e){}}
 clearLegacyPersistedAnswers();
-function clearSavedAppAttempt(){try{localStorage.removeItem(APP_ATTEMPT_KEY)}catch(e){}}
+function attemptStorageKey(){
+ return ATTEMPT_PREFIX+encodeURIComponent(CFG.slug)+":"+encodeURIComponent(String(state.subject||""))+":"+encodeURIComponent(String(state.chapterName||""));
+}
 function attemptSignature(){
  return (state.quizData||[]).map(function(sec){
   var qs=sec.questions||[];
-  return qs.length+":"+(qs[0]&&qs[0].q.en||"")+":"+(qs[qs.length-1]&&qs[qs.length-1].q.en||"");
+  var first=qs[0]&&qs[0].q&&qs[0].q.en||"",last=qs[qs.length-1]&&qs[qs.length-1].q&&qs[qs.length-1].q.en||"";
+  return qs.length+":"+first.slice(0,72)+":"+last.slice(0,72);
  }).join("|");
 }
 function saveAppAttempt(){
  if(state.screen!=="quiz"||!state.quizData)return;
- try{localStorage.setItem(APP_ATTEMPT_KEY,JSON.stringify({
+ var answers={},orders={};
+ Object.keys(state.answerMap||{}).forEach(function(key){
+  var selected=Number(state.answerMap[key]&&state.answerMap[key].selectedOrigIdx);
+  var order=state.shuffleMap&&state.shuffleMap[key];
+  if(!Number.isInteger(selected)||!Array.isArray(order))return;
+  answers[key]=selected;orders[key]=order.slice();
+ });
+ try{localStorage.setItem(attemptStorageKey(),JSON.stringify({
   path:location.pathname,subject:state.subject,chapter:state.chapterName,
-  signature:attemptSignature(),answerMap:state.answerMap,shuffleMap:state.shuffleMap,
+  signature:attemptSignature(),answers:answers,orders:orders,section:Math.max(0,Number(state.currentSection)||0),
   ts:Date.now()
- }))}catch(e){}
+ }));localStorage.removeItem(LEGACY_APP_ATTEMPT_KEY)}catch(e){}
 }
-function restoreAppAttempt(){
- if(state.screen!=="quiz"||!state.quizData)return;
+function restoreAppAttempt(preserveSection){
+ if(state.screen!=="quiz"||!state.quizData)return false;
  try{
-  var pending=JSON.parse(sessionStorage.getItem(APP_RESUME_KEY)||"null");
-  var saved=JSON.parse(localStorage.getItem(APP_ATTEMPT_KEY)||"null");
-  if(!pending||!saved||!pending.url||!saved.ts||Date.now()-saved.ts>86400000)return;
-  var resumeUrl=new URL(pending.url,location.origin);
-  if(resumeUrl.origin!==location.origin||resumeUrl.pathname!==location.pathname||
-     saved.path!==location.pathname||saved.subject!==state.subject||
-     saved.chapter!==state.chapterName||saved.signature!==attemptSignature())return;
+  var key=attemptStorageKey(),saved=JSON.parse(localStorage.getItem(key)||"null");
+  if(!saved||saved.path!==location.pathname||saved.subject!==state.subject||
+     saved.chapter!==state.chapterName||saved.signature!==attemptSignature()){
+   if(saved)try{localStorage.removeItem(key)}catch(_){}
+   return false;
+  }
   var answers={},orders={},score={correct:0,wrong:0,attempted:0};
-  Object.keys(saved.answerMap||{}).forEach(function(key){
-   var pair=/^(\d+)-(\d+)$/.exec(key);
+  Object.keys(saved.answers||{}).forEach(function(answerKey){
+   var pair=/^(\d+)-(\d+)$/.exec(answerKey);
    if(!pair)return;
    var sec=state.quizData[Number(pair[1])];
    var q=sec&&sec.questions[Number(pair[2])];
-   var order=saved.shuffleMap&&saved.shuffleMap[key];
-   var selected=Number(saved.answerMap[key]&&saved.answerMap[key].selectedOrigIdx);
+   var order=saved.orders&&saved.orders[answerKey];
+   var selected=Number(saved.answers[answerKey]);
    if(!q||!Array.isArray(order)||order.length!==q.o.length||
       order.some(function(value,i){return !Number.isInteger(value)||value<0||value>=q.o.length||order.indexOf(value)!==i})||
       !Number.isInteger(selected)||selected<0||selected>=q.o.length)return;
-   answers[key]={selectedOrigIdx:selected};orders[key]=order;
+   answers[answerKey]={selectedOrigIdx:selected};orders[answerKey]=order.slice();
    score.attempted++;
    if(selected===currentAnswerIndex(q))score.correct++;else score.wrong++;
   });
   state.answerMap=answers;state.shuffleMap=orders;state.score=score;
- }catch(e){}
+  if(!preserveSection&&Number.isFinite(Number(saved.section))){
+   state.currentSection=Math.max(0,Math.min(state.quizData.length-1,Math.floor(Number(saved.section))));
+  }
+  return true;
+ }catch(e){return false}
+}
+function clearCurrentSavedAttempt(){
+ try{if(state.subject&&state.chapterName)localStorage.removeItem(attemptStorageKey())}catch(e){}
 }
 function clearTransientAttempt(){
  state.answerMap={};
  state.shuffleMap={};
  state.score={correct:0,wrong:0,attempted:0};
  clearLegacyPersistedAnswers();
- clearSavedAppAttempt();
 }
-function isReloadNavigation(){
- try{var entries=performance.getEntriesByType&&performance.getEntriesByType("navigation");return !!(entries&&entries[0]&&entries[0].type==="reload")}catch(e){return false}
-}
-// Browsers and installed PWAs may restore a complete page from the back-forward cache.
-// An explicit refresh or back-forward revisit starts a clean attempt; an app
-// relaunch arrives as a new navigation and keeps the restored answerMap.
 window.addEventListener("pageshow",function(event){
  clearLegacyPersistedAnswers();
- if(!event.persisted&&!isReloadNavigation())return;
- clearTransientAttempt();
- if(state.screen==="quiz")render();
+ if(event.persisted&&state.screen==="quiz"){
+  restoreAppAttempt(true);
+  render();
+ }
 });
-window.addEventListener("pagehide",clearLegacyPersistedAnswers);
-window.addEventListener("beforeunload",clearLegacyPersistedAnswers);
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden")saveAppAttempt()});
 document.addEventListener("freeze",saveAppAttempt);
 window.addEventListener("pagehide",saveAppAttempt);
+window.addEventListener("beforeunload",saveAppAttempt);
 function answerStateKey(sectionIndex,qi){return String(sectionIndex)+"-"+String(qi)}
 function restoreAnsweredSection(){
  var secIndex=state.currentSection;
@@ -224,6 +233,7 @@ function restoreOriginalPracticeHistory(entry){
   }else if(entry.screen==="quiz"&&entry.subject&&entry.chapter){
    if(typeof baseGoToChapters==="function")baseGoToChapters(entry.subject);
    if(typeof baseGoToQuiz==="function")baseGoToQuiz(entry.chapter);
+   restoreAppAttempt(true);
    if(Number.isInteger(Number(entry.section))&&Number(entry.section)>0&&typeof baseSwitchSection==="function")baseSwitchSection(Number(entry.section));
   }
   try{window.scrollTo(0,0)}catch(_){}
@@ -312,9 +322,16 @@ function addProgress(subject,host){if(!host)return;var total=Object.keys(MASTER[
 function enhanceHome(){var root=document.querySelector("#app .max-w-5xl");if(!root)return;var header=root.querySelector(".text-center.mb-10");if(header)header.insertAdjacentElement("afterend",searchPanel(null));var cards=root.querySelectorAll('div[onclick^="goToChapters"]');var subjects=Object.keys(MASTER);cards.forEach(function(card,i){var s=subjects[i];if(!s)return;card.setAttribute("role","button");card.setAttribute("tabindex","0");card.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();goToChapters(s)}});var p=document.createElement("span");p.className="efp-op-card-progress";p.textContent=countVisited(s)+" / "+Object.keys(MASTER[s]).length+" chapters opened";var target=card.querySelector(".p-5")||card;p && target.appendChild(p)});var note=document.createElement("div");note.className="efp-op-original-note";note.textContent="यह अभ्यास सामग्री ExamFusion Prep द्वारा प्रतियोगी परीक्षाओं की तैयारी के लिए स्वतंत्र रूप से तैयार की गई है।";root.appendChild(note)}
 function enhanceChapters(){var root=document.querySelector("#app .max-w-4xl");if(!root||!state.subject)return;var header=root.querySelector(".mb-6");if(header){var holder=document.createElement("div");header.insertAdjacentElement("afterend",holder);addProgress(state.subject,holder);holder.insertAdjacentElement("afterend",searchPanel(state.subject))}var cards=root.querySelectorAll('div[onclick^="goToQuiz"]'),names=Object.keys(MASTER[state.subject]||{});cards.forEach(function(card,i){var c=names[i];if(!c)return;card.setAttribute("role","button");card.setAttribute("tabindex","0");card.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();goToQuiz(c)}});if(isVisited(state.subject,c))card.classList.add("efp-op-visited")})}
 function toggleBookmark(qi,button){var b=getBookmarks(),k=qKey(qi);if(b[k])delete b[k];else b[k]=true;saveBookmarks(b);track("original_practice_bookmark",{subject:state.subject,chapter:state.chapterName,bookmarked:!!b[k]});applyBookmarkFilter();updateBookmarkBar()}
-function updateBookmarkBar(){var bar=document.querySelector(".efp-op-bookmarkbar");if(!bar)return;var meta=bar.querySelector(".efp-op-bookmark-meta");if(meta)meta.textContent="⭐ "+pageBookmarkCount()+" saved on this subject page";var btn=bar.querySelector("button");if(btn){btn.classList.toggle("active",bookmarkOnly);btn.textContent=bookmarkOnly?"Show all questions":"Bookmarked only"}}
+function updateBookmarkBar(){var bar=document.querySelector(".efp-op-bookmarkbar");if(!bar)return;var meta=bar.querySelector(".efp-op-bookmark-meta");if(meta)meta.textContent="⭐ "+pageBookmarkCount()+" saved on this subject page";var btn=bar.querySelector(".efp-op-bookmark-filter");if(btn){btn.classList.toggle("active",bookmarkOnly);btn.textContent=bookmarkOnly?"Show all questions":"Bookmarked only"}}
 function applyBookmarkFilter(){var b=getBookmarks(),cards=document.querySelectorAll("#questions-container > [id^='q-']"),shown=0;cards.forEach(function(card){var qi=Number((card.id||"").replace("q-","")),yes=!!b[qKey(qi)];var star=card.querySelector(".efp-op-star");if(star){star.textContent=yes?"★":"☆";star.classList.toggle("is-bookmarked",yes);star.setAttribute("aria-label",yes?"Remove bookmark":"Bookmark this question")}var hide=bookmarkOnly&&!yes;card.classList.toggle("efp-op-bookmark-hidden",hide);if(!hide)shown++});var empty=document.querySelector(".efp-op-empty");if(empty)empty.classList.toggle("show",bookmarkOnly&&shown===0)}
-function enhanceQuiz(){var cont=document.getElementById("questions-container");if(!cont)return;var bar=document.createElement("div");bar.className="efp-op-bookmarkbar";bar.innerHTML='<span class="efp-op-bookmark-meta"></span><button type="button"></button>';bar.querySelector("button").addEventListener("click",function(){bookmarkOnly=!bookmarkOnly;applyBookmarkFilter();updateBookmarkBar()});cont.parentNode.insertBefore(bar,cont);var cards=cont.querySelectorAll(":scope > [id^='q-']");cards.forEach(function(card){card.classList.add("efp-op-qcard");var qi=Number((card.id||"").replace("q-",""));var star=document.createElement("button");star.type="button";star.className="efp-op-star";star.addEventListener("click",function(e){e.stopPropagation();toggleBookmark(qi,star)});card.appendChild(star)});var empty=document.createElement("div");empty.className="efp-op-empty";empty.textContent="No bookmarked questions in this section / इस सेक्शन में कोई बुकमार्क प्रश्न नहीं है।";cont.insertAdjacentElement("afterend",empty);restoreAnsweredSection();applyBookmarkFilter();updateBookmarkBar()}
+function resetCurrentQuiz(){
+ if(!state.subject||!state.chapterName)return;
+ if(!confirm("Reset progress for this chapter? Your bookmarks will stay saved."))return;
+ clearCurrentSavedAttempt();clearTransientAttempt();state.currentSection=0;bookmarkOnly=false;
+ if(window.EFP_QUIZ_PROGRESS_WARNING)window.EFP_QUIZ_PROGRESS_WARNING.disarm();
+ syncUrl("quiz",false);render();window.scrollTo({top:0,behavior:"smooth"});
+}
+function enhanceQuiz(){var cont=document.getElementById("questions-container");if(!cont)return;var bar=document.createElement("div");bar.className="efp-op-bookmarkbar";bar.innerHTML='<span class="efp-op-bookmark-meta"></span><span class="efp-op-bookmark-actions"><button class="efp-op-bookmark-filter" type="button"></button><button class="efp-op-reset-attempt" type="button">↻ Reset Quiz</button></span>';bar.querySelector(".efp-op-bookmark-filter").addEventListener("click",function(){bookmarkOnly=!bookmarkOnly;applyBookmarkFilter();updateBookmarkBar()});bar.querySelector(".efp-op-reset-attempt").addEventListener("click",resetCurrentQuiz);cont.parentNode.insertBefore(bar,cont);var cards=cont.querySelectorAll(":scope > [id^='q-']");cards.forEach(function(card){card.classList.add("efp-op-qcard");var qi=Number((card.id||"").replace("q-",""));var star=document.createElement("button");star.type="button";star.className="efp-op-star";star.addEventListener("click",function(e){e.stopPropagation();toggleBookmark(qi,star)});card.appendChild(star)});var empty=document.createElement("div");empty.className="efp-op-empty";empty.textContent="No bookmarked questions in this section / इस सेक्शन में कोई बुकमार्क प्रश्न नहीं है।";cont.insertAdjacentElement("afterend",empty);restoreAnsweredSection();applyBookmarkFilter();updateBookmarkBar()}
 function enhance(){addTopbar();if(state.screen==="home")enhanceHome();else if(state.screen==="chapters")enhanceChapters();else if(state.screen==="quiz")enhanceQuiz()}
 var baseSelectOption=selectOption;
 selectOption=function(qi,displayIdx){
@@ -342,8 +359,8 @@ var baseGoToChapters=goToChapters;goToChapters=function(subject){
  var from=state.screen;clearTransientAttempt();baseGoToChapters(subject);syncUrl("chapters",!opHistoryRestoring&&from==="home");track("original_practice_subject_open",{practice:CFG.label,subject:subject})
 };
 var baseGoToQuiz=goToQuiz;goToQuiz=function(chapterName){
- var from=state.screen;clearTransientAttempt();markVisited(state.subject,chapterName);baseGoToQuiz(chapterName);syncUrl("quiz",!opHistoryRestoring&&from!=="quiz");track("original_practice_chapter_open",{practice:CFG.label,subject:state.subject,chapter:chapterName})
+ var from=state.screen;clearTransientAttempt();markVisited(state.subject,chapterName);baseGoToQuiz(chapterName);restoreAppAttempt(false);render();syncUrl("quiz",!opHistoryRestoring&&from!=="quiz");track("original_practice_chapter_open",{practice:CFG.label,subject:state.subject,chapter:chapterName})
 };
 function applyDeepLink(){try{var p=new URLSearchParams(location.search),s=p.get("subject"),c=p.get("chapter"),sec=Number(p.get("section")||1),q=Number(p.get("q")||0);if(s&&MASTER[s]){state.subject=s;if(c&&MASTER[s][c]){markVisited(s,c);state.screen="quiz";state.chapterName=c;state.quizData=MASTER[s][c];if(!Number.isFinite(sec)||sec<1)sec=1;state.currentSection=Math.min(state.quizData.length-1,Math.max(0,Math.floor(sec)-1));state.score={correct:0,wrong:0,attempted:0};state.shuffleMap={};state.answerMap={};if(Number.isFinite(q)&&q>=1&&state.quizData[state.currentSection]&&q<=state.quizData[state.currentSection].questions.length)pendingDeepQuestion=Math.floor(q)-1}else{state.screen="chapters";state.chapterName=null;state.quizData=null}}}catch(e){}}
-applyDeepLink();restoreAppAttempt();syncUrl(state.screen||"home",false);render();
+applyDeepLink();restoreAppAttempt(true);syncUrl(state.screen||"home",false);render();
 })();

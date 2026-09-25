@@ -7,7 +7,7 @@ HOME_NAV = ROOT / "home-nav.js"
 SERVICE_WORKER = ROOT / "service-worker.js"
 INDEX_HTML = ROOT / "index.html"
 
-APP_SESSION_VERSION = "20260925mixededge1"
+APP_SESSION_VERSION = "20260925quizsave1"
 APP_SESSION_URL = f"/app-session.js?v={APP_SESSION_VERSION}"
 
 LOADER_MARK = "EFP_APP_SESSION_LOADER"

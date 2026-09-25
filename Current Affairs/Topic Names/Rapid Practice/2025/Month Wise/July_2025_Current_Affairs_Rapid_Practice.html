@@ -98,10 +98,10 @@ const SECTIONS=MASTER['Current Affairs 2025']['07. July 2025 - जुलाई 2
 const STORE='efp_ca_july2025_rapid_v1';
 let saved={answers:{},bookmarks:{},section:0,dark:false};
 try{saved=Object.assign(saved,JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){}
-saved.answers={};try{localStorage.setItem(STORE,JSON.stringify(Object.assign({},saved,{answers:{}})))}catch(e){}
+
 let current=Math.max(0,Math.min(SECTIONS.length-1,saved.section||0));
 let onlyBookmarks=false;
-function save(){saved.section=current;const persist=Object.assign({},saved,{answers:{}});localStorage.setItem(STORE,JSON.stringify(persist));}
+function save(){saved.section=current;localStorage.setItem(STORE,JSON.stringify(saved));}
 function globalQNumber(si,qi){let n=qi+1;for(let i=0;i<si;i++)n+=SECTIONS[i].questions.length;return n}const TOTAL_QUESTIONS=SECTIONS.reduce((n,s)=>n+s.questions.length,0);function qid(si,qi){return si+'-'+qi}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function correctIndex(q){return q.o.findIndex(o=>o.en===q.a.en)}
@@ -114,7 +114,7 @@ function bookmark(qi){const id=qid(current,qi);saved.bookmarks[id]=!saved.bookma
 function toggleBookmarkFilter(){onlyBookmarks=!onlyBookmarks;document.getElementById('bookmarkFilter').classList.toggle('primary',onlyBookmarks);renderQuestions()}
 function openSection(i){current=i;document.getElementById('search').value='';save();renderQuestions();window.scrollTo({top:310,behavior:'smooth'})}
 function moveSection(d){openSection(Math.max(0,Math.min(SECTIONS.length-1,current+d)))}
-function resetAll(){if(!confirm('Reset all July 2025 answers and bookmarks?'))return;saved.answers={};saved.bookmarks={};saved.section=0;current=0;save();renderQuestions()}
+function resetAll(){if(!confirm('Reset quiz progress? Your bookmarks will stay saved.'))return;saved.answers={};saved.section=0;current=0;save();if(window.EFP_QUIZ_PROGRESS_WARNING)window.EFP_QUIZ_PROGRESS_WARNING.disarm();renderQuestions()}
 function toggleDark(){saved.dark=!saved.dark;applyDark();save()}
 function applyDark(){document.body.classList.toggle('dark',!!saved.dark);document.getElementById('darkBtn').textContent=saved.dark?'Light':'Dark'}
 applyDark();renderQuestions();</script>
