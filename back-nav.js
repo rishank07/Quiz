@@ -523,10 +523,8 @@
     }
   }
 
-  function buildCruxViewerState() {
-    if (!isCruxViewer()) return null;
-
-    var id = new URLSearchParams(window.location.search).get("id");
+  function buildCruxStateFromDocId(id) {
+    if (!id) return null;
     var docs = Array.isArray(window.EF_CRUX_DOCS) ? window.EF_CRUX_DOCS : [];
     var doc = docs.find(function (item) { return item && item.id === id; });
     if (!doc) return null;
@@ -547,6 +545,12 @@
     };
   }
 
+  function buildCruxViewerState() {
+    if (!isCruxViewer()) return null;
+    var id = new URLSearchParams(window.location.search).get("id");
+    return buildCruxStateFromDocId(id);
+  }
+
   function saveCruxViewerReturnState() {
     var state = buildCruxViewerState();
     if (!state || !state.kind || !state.source || !state.subject) return false;
@@ -557,6 +561,34 @@
       return false;
     }
   }
+
+  function navigateCruxViewerToHierarchy() {
+    if (!isCruxViewer()) return false;
+
+    var id = "";
+    try { id = new URLSearchParams(window.location.search).get("id") || ""; } catch (_) {}
+    var saved = saveCruxViewerReturnState();
+
+    /* Do not depend on the WebView's history stack for PDF -> Chapter. The
+       document id is a durable return token, and the index rebuilds the exact
+       Material -> Source -> Exam -> Subject -> Part -> Chapter state. */
+    try {
+      var url = new URL("/Crux-Tricks/index.html", window.location.origin);
+      if (id) url.searchParams.set("returnPdf", id);
+      clearLogicalChain();
+      clearHomeSearchChain();
+      window.location.replace(url.href);
+      return true;
+    } catch (_) {
+      if (saved) {
+        window.location.replace("/Crux-Tricks/index.html");
+        return true;
+      }
+      return false;
+    }
+  }
+
+  window.EFP_CRUX_VIEWER_BACK = navigateCruxViewerToHierarchy;
 
   function rememberCruxViewerState(parentUrl) {
     if (!isCruxViewer()) return;
@@ -569,15 +601,25 @@
   }
 
   function readCruxRestoreState() {
+    var state = null;
     try {
       var raw = sessionStorage.getItem(CRUX_RESTORE_KEY);
-      if (!raw) return null;
-      sessionStorage.removeItem(CRUX_RESTORE_KEY);
-      var state = JSON.parse(raw);
-      return state && typeof state === "object" ? state : null;
-    } catch (_) {
-      return null;
-    }
+      if (raw) {
+        sessionStorage.removeItem(CRUX_RESTORE_KEY);
+        state = JSON.parse(raw);
+        if (state && typeof state === "object") return state;
+      }
+    } catch (_) {}
+
+    /* New deterministic fallback: the viewer also passes its document id in
+       the return URL. If Android discarded/refreshed sessionStorage, rebuild
+       the exact Chapter hierarchy from crux-manifest instead of guessing from
+       browser history. */
+    try {
+      var id = new URLSearchParams(window.location.search).get("returnPdf");
+      if (id) return buildCruxStateFromDocId(id);
+    } catch (_) {}
+    return null;
   }
 
   function clickButtonByText(selector, wanted) {
@@ -817,11 +859,12 @@
      replaces it with the PDF's exact Crux hierarchy. The visible Back button
      uses this same path. */
   function installCruxHomeSearchHistoryGuard() {
-    /* Android TWA/WebView history can resume the Crux index at an older pane.
-       Give every Android PDF one local guard so both hardware Back and the
-       floating Back button rebuild the exact PDF -> Chapter hierarchy from
-       manifest metadata. Ordinary browser Crux navigation stays unchanged. */
-    if (!isCruxViewerFromHomeSearch() && !isInstalledAndroidAppContext()) return;
+    /* Normal Crux -> PDF navigation already has a correct managed Chapter
+       entry behind the viewer. Do not overwrite that history in Android.
+       A guard is needed only for direct/home-search opens that have no trusted
+       Crux parent in the real history stack. */
+    if (!isCruxViewer()) return;
+    if (!isCruxViewerFromHomeSearch() && hasExpectedCruxViewerReferrer()) return;
 
     var current = history.state;
     if (isHomeSearchGuardState(current, "top")) return;
@@ -835,15 +878,9 @@
 
   window.addEventListener("popstate", function (event) {
     if (isCruxViewer() && isHomeSearchGuardState(event.state, "base")) {
-      var cruxParentUrl = logicalParentUrl();
-      if (!cruxParentUrl) {
+      if (!navigateCruxViewerToHierarchy()) {
         window.location.replace("/Crux-Tricks/index.html");
-        return;
       }
-
-      rememberCruxViewerState(cruxParentUrl);
-      rememberLogicalDestination(cruxParentUrl);
-      window.location.replace(cruxParentUrl.href);
       return;
     }
 
@@ -916,6 +953,14 @@
         window.location.assign("/");
       } else {
         window.location.assign("/Original%20Practice/index.html");
+      }
+      return;
+    }
+
+    if (isCruxViewer()) {
+      consumeBackEvent(event);
+      if (!navigateCruxViewerToHierarchy()) {
+        window.location.replace("/Crux-Tricks/index.html");
       }
       return;
     }
