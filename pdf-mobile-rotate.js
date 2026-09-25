@@ -28,9 +28,24 @@
     'html.efp-manual-pdf-portrait body{position:fixed!important;top:0!important;left:0!important;width:100vh!important;height:100vw!important;max-width:none!important;max-height:none!important;transform:rotate(-90deg) translateX(-100%)!important;transform-origin:top left!important}' +
     '[data-efp-pdf-rotate] .efp-orientation-icon{display:block;width:27px;height:27px;pointer-events:none}' +
     '[data-efp-pdf-rotate] .efp-orientation-icon *{vector-effect:non-scaling-stroke}' +
+    '#efpPdfPortraitReturn{position:fixed;left:50%;bottom:max(8px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483600;display:none;align-items:center;justify-content:center;gap:7px;height:44px;padding:0 14px;border:1px solid rgba(201,149,43,.78);border-radius:999px;background:#0e2748;color:#fff;box-shadow:0 8px 26px rgba(0,0,0,.34);font:850 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;letter-spacing:.1px;-webkit-tap-highlight-color:transparent}' +
+    '#efpPdfPortraitReturn svg{width:23px;height:23px;display:block;pointer-events:none}#efpPdfPortraitReturn.show{display:inline-flex}#efpPdfPortraitReturn:active{transform:translateX(-50%) scale(.96)}' +
     '.efp-pdf-rotate-fallback-toast{position:fixed;left:50%;bottom:max(76px,calc(12px + env(safe-area-inset-bottom)));transform:translateX(-50%) translateY(12px);z-index:9999;opacity:0;pointer-events:none;background:rgba(15,23,42,.94);color:#fff;border-radius:999px;padding:8px 12px;font:800 11px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.28);transition:opacity .18s ease,transform .18s ease}' +
     '.efp-pdf-rotate-fallback-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}';
   document.head.appendChild(style);
+
+  var portraitReturn = document.createElement('button');
+  portraitReturn.id = 'efpPdfPortraitReturn';
+  portraitReturn.type = 'button';
+  portraitReturn.setAttribute('aria-label','Return PDF to portrait');
+  portraitReturn.setAttribute('title','Return to portrait');
+  portraitReturn.innerHTML =
+    '<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">' +
+      '<rect x="9" y="4.5" width="14" height="23" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.2"/>' +
+      '<path d="M25.1 9.2a11.3 11.3 0 0 1 .7 13.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>' +
+      '<path d="m23.4 20.8 2.4 3.8 3.1-3.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '</svg><span>Portrait</span>';
+  document.body.appendChild(portraitReturn);
 
   function orientationIcon(targetLandscape){
     if (targetLandscape) {
@@ -64,6 +79,9 @@
       btn.innerHTML = orientationIcon(targetLandscape);
       btn.classList.toggle('is-landscape', land);
     });
+    if (portraitReturn) {
+      portraitReturn.classList.toggle('show', land || !!document.fullscreenElement || forcedFullscreen);
+    }
   }
 
   var toastTimer = 0;
@@ -204,30 +222,36 @@
   }
 
   async function nativePortrait(){
+    /* When landscape was obtained through fullscreen, keep a visible Portrait
+       control and actively tear down the lock instead of asking the user to
+       swipe from the top / use Android Back. */
     try {
       await lockOrientation('portrait-primary');
-      if (await waitForOrientation(false, 1100)) return true;
+      if (await waitForOrientation(false, 900)) {
+        await leaveOwnedFullscreen();
+        unlockOrientation();
+        await wait(120);
+        return !actualLandscape();
+      }
     } catch (_) {}
 
-    /* A landscape lock made in fullscreen can survive until it is explicitly
-       released. Unlock first, then give the phone sensor a chance to restore
-       portrait before falling back to CSS. */
     unlockOrientation();
-    if (await waitForOrientation(false, 700)) return true;
 
-    if (document.fullscreenElement) {
-      try {
-        await lockOrientation('portrait-primary');
-        if (await waitForOrientation(false, 1100)) return true;
-      } catch (_) {}
-    }
-
-    if (forcedFullscreen) {
+    if (forcedFullscreen || document.fullscreenElement) {
       await leaveOwnedFullscreen();
       unlockOrientation();
-      if (await waitForOrientation(false, 900)) return true;
+      if (await waitForOrientation(false, 1000)) return true;
     }
 
+    try {
+      await lockOrientation('portrait-primary');
+      if (await waitForOrientation(false, 850)) {
+        unlockOrientation();
+        return true;
+      }
+    } catch (_) {}
+
+    unlockOrientation();
     return false;
   }
 
@@ -271,6 +295,19 @@
       event.stopPropagation();
       rotate();
     });
+  });
+
+  portraitReturn.addEventListener('click', function(event){
+    event.preventDefault();
+    event.stopPropagation();
+    if (busy) return;
+    /* This control exists specifically as an escape hatch from fullscreen /
+       locked landscape, so force the state machine toward portrait. */
+    if (!shownLandscape() && !document.fullscreenElement && !forcedFullscreen) {
+      syncButton();
+      return;
+    }
+    rotate();
   });
 
   try {
