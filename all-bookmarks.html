@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>All Bookmarks | ExamFusion Prep</title><meta name="robots" content="noindex,follow"><meta name="theme-color" content="#0f172a">
+<script>(function(){try{if(localStorage.getItem("efp_black_mode")==="on")document.documentElement.classList.add("dark")}catch(e){}})();</script>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--text:#172033;--muted:#667085;--line:#dce2ec;--nav:#12345a;--accent:#b7832f;--soft:#f7f1e6;--danger:#9b2c2c;--shadow:0 8px 26px rgba(24,39,75,.08)}
+html.dark{--bg:#070a10;--card:#111722;--text:#f5f7fb;--muted:#aab4c3;--line:#273244;--nav:#17395f;--accent:#e7b85f;--soft:#1b2432;--danger:#ff9b9b;--shadow:0 10px 30px rgba(0,0,0,.35);color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}body{padding-bottom:max(28px,env(safe-area-inset-bottom))}
+.top{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:max(10px,env(safe-area-inset-top)) 12px 10px;background:var(--nav);color:#fff;box-shadow:0 3px 14px rgba(0,0,0,.18)}
+.top a{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:9px 11px;font-weight:800;text-decoration:none}.top-title{text-align:center;min-width:0}.top-title b{display:block;font-size:15px}.top-title small{display:block;opacity:.76;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top-count{font-weight:900;min-width:38px;text-align:center}
+main{width:min(980px,calc(100% - 20px));margin:18px auto}.hero{text-align:center}.hero h1{font-size:clamp(25px,6vw,38px);margin:4px 0 6px}.hero p{margin:0;color:var(--muted);font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:15px 0}.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px;text-align:center;box-shadow:var(--shadow)}.stat strong{display:block;font-size:21px;color:var(--accent)}.stat span{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:800}
+.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:11px 13px;box-shadow:var(--shadow);margin-bottom:16px}.search input{width:100%;border:0;outline:0;background:transparent;color:var(--text);font:700 14px/1.3 inherit}.search input::placeholder{color:var(--muted);font-weight:500}
+.group{margin:20px 0}.gh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 2px 9px}.gh h2{margin:0;font-size:15px}.pill{font-size:9px;font-weight:900;color:var(--accent);border:1px solid var(--line);background:var(--soft);padding:4px 8px;border-radius:999px}
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px;box-shadow:var(--shadow);min-width:0}.kind{display:inline-flex;padding:4px 7px;border-radius:999px;background:var(--soft);color:var(--accent);font-size:9px;font-weight:900}.title{font-size:13px;font-weight:850;line-height:1.4;margin-top:7px;overflow-wrap:anywhere}.meta{margin-top:6px;color:var(--muted);font-size:10px;line-height:1.45;overflow-wrap:anywhere}.actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:11px}.open{display:inline-flex;text-decoration:none;border-radius:10px;background:var(--nav);color:#fff;padding:9px 11px;font-size:10px;font-weight:850}.remove{border:0;background:transparent;color:var(--danger);font-size:10px;font-weight:800;cursor:pointer;padding:7px}
+.empty{background:var(--card);border:1px dashed var(--line);border-radius:16px;text-align:center;padding:36px 16px;color:var(--muted)}.empty b{display:block;color:var(--text);font-size:16px;margin-bottom:6px}.empty a{display:inline-flex;margin-top:13px;text-decoration:none;background:var(--nav);color:#fff;padding:9px 12px;border-radius:10px;font-size:11px;font-weight:850}.hint{text-align:center;color:var(--muted);font-size:10px;margin-top:14px}
+@media(max-width:700px){main{width:min(100% - 14px,980px);margin-top:11px}.list{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.top a{padding:8px 9px;font-size:11px}.top-title b{font-size:13px}.card{padding:12px}}
+</style>
+</head>
+<body>
+<header class="top"><a href="./index.html">← Home</a><div class="top-title"><b>All Bookmarks</b><small>सभी सेव किए हुए प्रश्न और पेज</small></div><span id="topCount" class="top-count">0</span></header>
+<main>
+<section class="hero"><h1>🔖 All Bookmarks</h1><p>Questions, Rapid Practice, Mixed Practice and Crux PDF pages — all in one place.</p></section>
+<section class="stats"><div class="stat"><strong id="total">0</strong><span>TOTAL SAVED</span></div><div class="stat"><strong id="questions">0</strong><span>QUESTIONS</span></div><div class="stat"><strong id="rapid">0</strong><span>RAPID PRACTICE</span></div><div class="stat"><strong id="pages">0</strong><span>PDF PAGES</span></div></section>
+<label class="search"><span>⌕</span><input id="search" type="search" autocomplete="off" placeholder="Search bookmarks / बुकमार्क खोजें…"></label>
+<div id="content"></div><p class="hint">Remove deletes only that bookmark. Quiz answers and progress stay unchanged.</p>
+</main>
+<script src="./Crux-Tricks/crux-manifest.js?v=20260917ecossccrux1"></script>
+<script>
+(function(){"use strict";
+var SHARED="efp_bookmarks",MIXED="efp_mixed_practice_bookmarks_v1",content=document.getElementById("content"),search=document.getElementById("search");
+var TOPIC_FILES={
+"appointments_2026":"Appointments_2026_Current_Affairs_Rapid_Practice.html","awards_2026":"Awards_2026_Current_Affairs_Rapid_Practice.html","bills_acts_2026":"Bills_and_Acts_2026_Current_Affairs_Rapid_Practice.html","books_authors_2026":"Books_and_Authors_2026_Current_Affairs_Rapid_Practice.html","census_2027":"Census_2027_Current_Affairs_Rapid_Practice.html","central_schemes_2026":"Central_Schemes_2026_Current_Affairs_Rapid_Practice.html","commonwealth_games_2026":"Commonwealth_Games_2026_Current_Affairs_Rapid_Practice.html","drdo_defence_2026":"DRDO_and_Defence_2026_Current_Affairs_Rapid_Practice.html","important_days_themes_2026":"Days_and_Themes_2026_Current_Affairs_Rapid_Practice.html","economic_survey_2025_26":"Economic_Survey_2025-26_Rapid_Practice.html","environment_2026":"Environment_2026_Current_Affairs_Rapid_Practice.html","film_awards_2026":"Film_Awards_2026_Current_Affairs_Rapid_Practice.html","first_in_india_2026":"First_in_India_2026_Current_Affairs_Rapid_Practice.html","gi_tags_2026":"GI_Tags_2026_Current_Affairs_Rapid_Practice.html","independence_day_2026":"Independence_Day_2026_Current_Affairs_Rapid_Practice.html","military_exercises_2026":"Military_Exercises_2026_Current_Affairs_Rapid_Practice.html","mou_2026":"MoU_2026_Current_Affairs_Rapid_Practice.html","science_technology_2026":"Science_and_Technology_2026_Current_Affairs_Rapid_Practice.html","state_schemes_2026":"State_Schemes_2026_Current_Affairs_Rapid_Practice.html","summits_conferences_2026":"Summits_and_Conferences_2026_Current_Affairs_Rapid_Practice.html","union_budget_2026_27":"Union_Budget_2026-27_Rapid_Practice.html"};
+var MONTHS={january:"January",february:"February",march:"March",april:"April",may:"May",june:"June",july:"July",august:"August",september:"September",october:"October",november:"November",december:"December"};
+function safe(raw,f){try{var v=JSON.parse(raw);return v==null?f:v}catch(e){return f}}
+function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function dec(v){try{return decodeURIComponent(String(v||""))}catch(e){return String(v||"")}}
+function cleanPath(p){p=String(p||"");if(p.indexOf("/Quiz/")===0)p=p.slice(5);if(p.charAt(0)!=="/")p="/"+p;return p}
+function pretty(s){return dec(String(s||"")).replace(/\.html?$/i,"").replace(/[_-]+/g," ").replace(/\s+/g," ").trim()}
+function fileTitle(path){var b=cleanPath(path).split("/").filter(Boolean);return pretty(b[b.length-1]||"Saved Question")}
+function groupFromPath(path){var b=dec(cleanPath(path)).split("/").filter(Boolean);return b[0]||"Quiz Bookmarks"}
+function getShared(){var v=safe(localStorage.getItem(SHARED),{});return v&&typeof v==="object"&&!Array.isArray(v)?v:{}}
+function setShared(v){try{localStorage.setItem(SHARED,JSON.stringify(v))}catch(e){}}
+function rapidSource(key){
+ var m=/^efp_ca_([a-z]+)(20\d{2})_rapid_v1$/.exec(key);
+ if(m&&MONTHS[m[1]])return{title:MONTHS[m[1]]+" "+m[2]+" Current Affairs Rapid Practice",url:"./Current Affairs/Topic Names/Rapid Practice/"+m[2]+"/Month Wise/"+MONTHS[m[1]]+"_"+m[2]+"_Current_Affairs_Rapid_Practice.html"};
+ if(key==="efp_ca_sports2026_updated_rapid_v1")return{title:"Sports 2026 Current Affairs Rapid Practice",url:"./Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/Sports_2026_Current_Affairs_Rapid_Practice.html"};
+ m=/^efp_ca_topic_(.+)_rapid_v1$/.exec(key);
+ if(m&&TOPIC_FILES[m[1]])return{title:pretty(m[1])+" Rapid Practice",url:"./Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/"+TOPIC_FILES[m[1]]};
+ return{title:pretty(key.replace(/^efp_ca_/,"").replace(/_rapid_v1$/,""))+" Rapid Practice",url:"./Current Affairs/Topic Names/Rapid Practice.html"};
+}
+function sharedItems(){
+ var data=getShared(),out=[],docs=Array.isArray(window.EF_CRUX_DOCS)?window.EF_CRUX_DOCS:[];
+ Object.keys(data).forEach(function(key){
+  if(!data[key])return;
+  var cm=/^cruxpage:([^:]+):(\d+)$/.exec(key);
+  if(cm){var d=docs.find(function(x){return x.id===cm[1]}),pg=Math.max(1,Number(cm[2])||1);out.push({store:"shared",key:key,group:"Crux & Tricks",kind:"PDF Page",title:d&&d.title?d.title:"Crux & Tricks",meta:"Page "+pg+(d&&d.subject?" · "+d.subject:""),url:"./Crux-Tricks/viewer.html?id="+encodeURIComponent(cm[1])+"&page="+pg+"&from=crux-page",page:true});return}
+  var h=key.indexOf("#");if(h<0)return;var path=cleanPath(key.slice(0,h)),token=key.slice(h+1);
+  if(token.indexOf("op|")===0){var p=token.split("|"),slug=p[1]||"",subject=dec(p[2]||""),chapter=dec(p[3]||""),sec=Math.max(0,Number(p[4])||0),qi=Math.max(0,Number(p[5])||0),params=new URLSearchParams();if(slug!=="english"&&subject)params.set("subject",subject);if(chapter)params.set("chapter",chapter);params.set("section",sec+1);params.set("q",qi+1);out.push({store:"shared",key:key,group:"Original Practice",kind:"Question",title:chapter||fileTitle(path),meta:(subject?subject+" · ":"")+"Section "+(sec+1)+" · Question "+(qi+1),url:path+"?"+params.toString()});return}
+  out.push({store:"shared",key:key,group:groupFromPath(path),kind:"Question",title:fileTitle(path),meta:"Saved question · "+pretty(token),url:path+"#"+token});
+ });return out
+}
+function rapidItems(){
+ var out=[];try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(!k||!/^efp_ca_.+_rapid_v1$/.test(k))continue;var state=safe(localStorage.getItem(k),{}),marks=state&&state.bookmarks&&typeof state.bookmarks==="object"?state.bookmarks:{},src=rapidSource(k);Object.keys(marks).forEach(function(id){if(!marks[id])return;var m=/^(\d+)-(\d+)$/.exec(id),meta=m?"Section "+(Number(m[1])+1)+" · Question "+(Number(m[2])+1):"Saved question";out.push({store:"rapid",storageKey:k,key:id,group:"Current Affairs · Rapid Practice",kind:"Rapid",title:src.title,meta:meta,url:src.url+(m?"#rp-"+id:"")})})}}catch(e){}return out
+}
+function mixedItems(){var a=safe(localStorage.getItem(MIXED),[]);if(!Array.isArray(a))a=[];var seen={},out=[],n=0;a.forEach(function(id){id=String(id||"");if(!id||seen[id])return;seen[id]=1;n++;out.push({store:"mixed",key:id,group:"Random Mixed Practice",kind:"Mixed",title:"Saved Mixed Practice Question "+n,meta:"Open inside Saved Questions",url:"./Original Practice/Mixed_Practice.html?saved=1"})});return out}
+function allItems(){return sharedItems().concat(rapidItems(),mixedItems())}
+function removeItem(x){if(x.store==="shared"){var b=getShared();delete b[x.key];setShared(b)}else if(x.store==="rapid"){var s=safe(localStorage.getItem(x.storageKey),{});if(s&&s.bookmarks){delete s.bookmarks[x.key];try{localStorage.setItem(x.storageKey,JSON.stringify(s))}catch(e){}}}else{var a=safe(localStorage.getItem(MIXED),[]);if(Array.isArray(a)){a=a.map(String).filter(function(v){return v!==x.key});try{localStorage.setItem(MIXED,JSON.stringify(a))}catch(e){}}}render()}
+function sortGroup(a,b){var o=["Original Practice","Books","Blackbook","Ghatnachakra","Pinnacle","Bihar Special","Current Affairs · Rapid Practice","Random Mixed Practice","Crux & Tricks"],ai=o.indexOf(a),bi=o.indexOf(b);if(ai<0)ai=999;if(bi<0)bi=999;return ai-bi||a.localeCompare(b)}
+function stats(items){var r=0,p=0;items.forEach(function(x){if(x.store==="rapid")r++;if(x.page)p++});document.getElementById("total").textContent=items.length;document.getElementById("questions").textContent=Math.max(0,items.length-p);document.getElementById("rapid").textContent=r;document.getElementById("pages").textContent=p;document.getElementById("topCount").textContent=items.length}
+function render(){
+ var items=allItems(),q=search.value.trim().toLowerCase();stats(items);var shown=items.filter(function(x){return !q||[x.group,x.kind,x.title,x.meta].join(" ").toLowerCase().indexOf(q)>=0});content.innerHTML="";
+ if(!shown.length){var e=document.createElement("div");e.className="empty";e.innerHTML="<b>"+(q?"No matching bookmark.":"No bookmarks yet.")+"</b><span>"+(q?"Try another search.":"Bookmark anything while studying and it will appear here.")+"</span><br><a href=\"./index.html\">Open ExamFusion Prep</a>";content.appendChild(e);return}
+ var groups={};shown.forEach(function(x){(groups[x.group]||(groups[x.group]=[])).push(x)});
+ Object.keys(groups).sort(sortGroup).forEach(function(name){var s=document.createElement("section");s.className="group";var h=document.createElement("div");h.className="gh";h.innerHTML="<h2>"+esc(name)+"</h2><span class=\"pill\">"+groups[name].length+" saved</span>";s.appendChild(h);var l=document.createElement("div");l.className="list";groups[name].forEach(function(x){var c=document.createElement("article");c.className="card";c.innerHTML="<span class=\"kind\">"+esc(x.kind)+"</span><div class=\"title\">"+esc(x.title)+"</div><div class=\"meta\">"+esc(x.meta)+"</div><div class=\"actions\"><a class=\"open\" href=\""+esc(x.url)+"\">Open →</a><button class=\"remove\" type=\"button\">Remove</button></div>";c.querySelector(".remove").addEventListener("click",function(){removeItem(x)});l.appendChild(c)});s.appendChild(l);content.appendChild(s)})
+}
+search.addEventListener("input",render);window.addEventListener("pageshow",render);window.addEventListener("storage",render);render()
+})();
+</script>
+</body></html>
