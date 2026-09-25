@@ -219,8 +219,9 @@
   function installStaticQuizTracking() {
     var path = normalizedPath(location.pathname);
     var lowerPath = path.toLowerCase();
-    var supported = lowerPath.indexOf("/books/") === 0 ||
+    var isBiharSixtySets =
       lowerPath === "/bihar special/topic names/bihar objective gk - 60 sets.html";
+    var supported = lowerPath.indexOf("/books/") === 0 || isBiharSixtySets;
     if (!supported) return;
 
     var restoring = false;
@@ -374,11 +375,82 @@
       if (document.getElementById("efp-quiz-reset-style")) return;
       var style = document.createElement("style");
       style.id = "efp-quiz-reset-style";
-      style.textContent = ".efp-quiz-reset-btn{appearance:none;border:1px solid rgba(220,38,38,.28);background:#fff;color:#b42318;border-radius:999px;padding:6px 10px;font:800 11px/1.1 Arial,sans-serif;cursor:pointer;white-space:nowrap}.efp-quiz-reset-btn:hover{background:#fff1f2;border-color:#ef4444}.efp-quiz-reset-btn:focus-visible{outline:3px solid rgba(239,68,68,.25);outline-offset:2px}html.efp-black .efp-quiz-reset-btn,html.efp-black-invert .efp-quiz-reset-btn{background:#111827;color:#fca5a5;border-color:#7f1d1d}";
+      style.textContent = ".efp-quiz-reset-btn{appearance:none;border:1px solid rgba(220,38,38,.28);background:#fff;color:#b42318;border-radius:999px;padding:6px 10px;font:800 11px/1.1 Arial,sans-serif;cursor:pointer;white-space:nowrap}.efp-quiz-reset-btn:hover{background:#fff1f2;border-color:#ef4444}.efp-quiz-reset-btn:focus-visible{outline:3px solid rgba(239,68,68,.25);outline-offset:2px}html.efp-black .efp-quiz-reset-btn,html.efp-black-invert .efp-quiz-reset-btn{background:#111827;color:#fca5a5;border-color:#7f1d1d}.efp-bihar-reset-row{display:flex!important;align-items:center!important;gap:clamp(6px,1.8vw,14px)!important;flex-wrap:nowrap!important}.efp-bihar-reset-row .efp-bihar-reset-btn{margin:0!important;flex:0 0 auto!important;min-width:74px;padding:9px 11px!important;font-size:12px!important;line-height:1!important}.efp-bihar-reset-row .efp-bihar-reset-btn .efp-bihar-reset-icon{margin-right:3px}@media(max-width:480px){.efp-bihar-reset-row{gap:6px!important}.efp-bihar-reset-row input[type=number]{width:60px!important;min-width:0!important;max-width:60px!important;flex:0 0 60px!important}.efp-bihar-reset-row .efp-bihar-reset-btn{min-width:58px!important;padding:8px 7px!important;font-size:11px!important}.efp-bihar-reset-row .efp-bihar-reset-btn .efp-bihar-reset-icon{display:none}}";
       document.head.appendChild(style);
+    }
+    function currentBiharSetPanel() {
+      var active = document.querySelector(
+        ".set-panel.active[data-set],.set-panel.current[data-set],.set-panel[aria-hidden=\"false\"][data-set]"
+      );
+      if (active) return active;
+      var panels = document.querySelectorAll(".set-panel[data-set]");
+      for (var i = 0; i < panels.length; i++) {
+        var panel = panels[i];
+        var style = window.getComputedStyle ? window.getComputedStyle(panel) : null;
+        if ((!style || style.display !== "none") && panel.getClientRects().length) return panel;
+      }
+      return null;
+    }
+    function findBiharGoButton() {
+      var buttons = document.querySelectorAll("button");
+      var fallback = null;
+      for (var i = 0; i < buttons.length; i++) {
+        var button = buttons[i];
+        if ((button.textContent || "").replace(/\s+/g, " ").trim().toLowerCase() !== "go") continue;
+        if (!fallback) fallback = button;
+        var rowText = button.parentElement
+          ? (button.parentElement.textContent || "").replace(/\s+/g, " ").toLowerCase()
+          : "";
+        if (rowText.indexOf("set no") !== -1 || rowText.indexOf("सेट") !== -1) return button;
+      }
+      return fallback;
+    }
+    function addBiharResetButton() {
+      var goButton = findBiharGoButton();
+      if (!goButton || !goButton.parentNode) return;
+      var oldButtons = document.querySelectorAll(
+        ".score-bar .efp-quiz-reset-btn,.set-score-bar .efp-quiz-reset-btn"
+      );
+      Array.prototype.forEach.call(oldButtons, function (oldButton) {
+        if (oldButton.id !== "efp-bihar-quiz-reset") oldButton.remove();
+      });
+      var button = document.getElementById("efp-bihar-quiz-reset");
+      if (!button) {
+        button = document.createElement("button");
+        button.id = "efp-bihar-quiz-reset";
+        button.type = "button";
+        button.className = "efp-quiz-reset-btn efp-bihar-reset-btn";
+        button.innerHTML =
+          "<span class=\"efp-bihar-reset-icon\" aria-hidden=\"true\">↻</span><span>Reset</span>";
+        button.setAttribute("aria-label", "Reset progress for the current Bihar GK set");
+        button.addEventListener("click", function () {
+          var setPanel = currentBiharSetPanel();
+          var setno = setPanel && setPanel.getAttribute("data-set");
+          if (!setno) {
+            var input = goButton.parentElement &&
+              goButton.parentElement.querySelector('input[type="number"]');
+            var candidate = input ? parseInt(input.value, 10) : 0;
+            if (candidate >= 1 && candidate <= 60) {
+              setno = String(candidate);
+              setPanel = document.querySelector('.set-panel[data-set="' + setno + '"]');
+            }
+          }
+          var label = setno ? "Set " + String(setno).padStart(2, "0") : "this set";
+          if (!window.confirm("Reset progress for " + label + "? Your bookmarks will stay saved.")) return;
+          clearSavedFor(setPanel || document, setno);
+        });
+      }
+      goButton.parentElement.classList.add("efp-bihar-reset-row");
+      if (button.previousElementSibling !== goButton) {
+        goButton.insertAdjacentElement("afterend", button);
+      }
     }
     function addResetButtons(root) {
       ensureStyle();
+      if (isBiharSixtySets) {
+        addBiharResetButton();
+        return;
+      }
       var scope = root && root.querySelectorAll ? root : document;
       Array.prototype.forEach.call(scope.querySelectorAll(".score-bar, .set-score-bar"), function (bar) {
         if (bar.querySelector(".efp-quiz-reset-btn")) return;
