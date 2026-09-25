@@ -657,7 +657,9 @@
     var appResume=JSON.parse(sessionStorage.getItem('efp_app_resume_pending_v1')||'null');
     var appResumeHere=!!(__savedOnLoad&&appResume&&appResume.url&&new URL(appResume.url,location.origin).pathname===location.pathname);
     var shouldRestore=!!(__savedOnLoad&&__savedOnLoad.ids&&__savedOnLoad.ids.length&&((isReloadNavigation()&&lastView==='quiz')||appResumeHere));
-    if(shouldRestore)restoreState(__savedOnLoad,false);
+    var openSavedFromHub=false;try{openSavedFromHub=new URLSearchParams(location.search).get('saved')==='1'}catch(_){}
+    if(openSavedFromHub){sessionStorage.setItem(VIEW_KEY,'setup');setTimeout(function(){openSavedQuestions()},0)}
+    else if(shouldRestore)restoreState(__savedOnLoad,false);
     else sessionStorage.setItem(VIEW_KEY,'setup');
   }catch(e){}
   window.addEventListener('pageshow',function(event){
