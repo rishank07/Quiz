@@ -9,6 +9,8 @@
   var manualMode = '';
   var busy = false;
   var requestedLandscape = false;
+  var manualAnchorPage = 1;
+  var alignmentToken = 0;
 
   function isInstalledAndroidAppContext(){
     var detected = false;
@@ -48,9 +50,16 @@
     'html.efp-manual-pdf-landscape .reader-head{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:2147483500!important;width:100%!important;max-width:none!important;height:38px!important;min-height:38px!important;padding:3px 48px!important;background:var(--nav,#0e2748)!important;color:#fff!important;opacity:1!important;transform:none!important;pointer-events:auto!important}' +
     'html.efp-manual-pdf-landscape.efp-reader-ui-hidden .reader-head{opacity:1!important;transform:none!important;pointer-events:auto!important}' +
     'html.efp-manual-pdf-landscape .reader-shell{position:fixed!important;top:38px!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:auto!important;margin:0!important;max-width:none!important}' +
+    /* viewer-v2 injects its continuous-reader CSS after this file. These
+       more-specific rules must win so its portrait 100dvh height cannot make
+       the rotated WebView scrollport taller than the landscape body. */
+    'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf .reader-head{position:fixed!important;top:0!important;opacity:1!important;transform:none!important;pointer-events:auto!important}' +
+    'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf .reader-shell{top:38px!important;bottom:0!important;height:auto!important}' +
+    'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf.efp-reader-ui-hidden .reader-head{opacity:1!important;transform:none!important;pointer-events:auto!important}' +
+    'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-home-button,html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-app-back-button{opacity:1!important;pointer-events:auto!important;transform:none!important}' +
     'html.efp-manual-pdf-landscape .pdf-mode{height:100%!important;padding:0!important}' +
-    'html.efp-manual-pdf-landscape .pdf-stage{height:100%!important;min-height:0!important;max-height:none!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x pan-y!important}' +
-    'html.efp-manual-pdf-landscape #efpContinuousPages{width:100%!important;min-height:100%!important}' +
+    'html.efp-manual-pdf-landscape .pdf-stage{height:100%!important;min-height:0!important;max-height:none!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x pan-y!important;scroll-behavior:auto!important;overflow-anchor:none!important}' +
+    'html.efp-manual-pdf-landscape #efpContinuousPages{width:100%!important;min-height:100%!important;overflow-anchor:none!important}' +
     'html.efp-manual-pdf-landscape .shell{width:100%!important;height:100dvw!important;min-height:0!important;grid-template-rows:46px minmax(0,1fr)!important}' +
     'html.efp-manual-pdf-landscape .viewer{min-height:0!important;height:auto!important;overflow:hidden!important}' +
     'html.efp-manual-pdf-landscape .viewer iframe{width:100%!important;height:100%!important}' +
@@ -220,19 +229,41 @@
     }
   }
 
-  function alignCurrentPdfPageTop(){
+  function currentPdfPage(){
+    var input = document.getElementById('pageInput');
+    return Math.max(1, parseInt(input && input.value || '1',10) || 1);
+  }
+
+  function alignCurrentPdfPageTop(pageNumber){
     var stage = document.getElementById('pdfStage');
     if (!stage) return;
-    var input = document.getElementById('pageInput');
-    var n = Math.max(1, parseInt(input && input.value || '1',10) || 1);
+    var n = Math.max(1, parseInt(pageNumber || manualAnchorPage || currentPdfPage(),10) || 1);
     var shell = stage.querySelector('.efp-cont-page[data-page="' + n + '"]');
     var top = shell ? Math.max(0,(shell.offsetTop || 0)-4) : 0;
-    try { stage.scrollTo({top:top,left:0,behavior:'auto'}); }
-    catch (_) { stage.scrollTop=top; stage.scrollLeft=0; }
+    /* Android WebView can keep the portrait scroll anchor alive while the
+       transformed landscape reader is reflowing. Set the legacy properties
+       as well as scrollTo so neither scroll anchoring nor an unsupported
+       ScrollToOptions overload can leave the first part of the page clipped. */
+    stage.style.overflowAnchor = 'none';
+    stage.scrollTop = top;
+    stage.scrollLeft = 0;
+    try { stage.scrollTo(0, top); } catch (_) {}
     document.documentElement.classList.remove('efp-reader-ui-hidden');
   }
 
+  function scheduleLandscapeTopAlignment(pageNumber){
+    manualAnchorPage = Math.max(1, parseInt(pageNumber || currentPdfPage(),10) || 1);
+    var token = ++alignmentToken;
+    [0, 100, 280, 560, 960].forEach(function(delay){
+      window.setTimeout(function(){
+        if (token !== alignmentToken || manualMode !== 'landscape') return;
+        alignCurrentPdfPageTop(manualAnchorPage);
+      }, delay);
+    });
+  }
+
   function setManualMode(mode){
+    var anchorPage = currentPdfPage();
     manualMode = mode || '';
     root.classList.toggle('efp-manual-pdf-landscape', manualMode === 'landscape');
     root.classList.toggle('efp-manual-pdf-portrait', manualMode === 'portrait');
@@ -240,15 +271,23 @@
     root.classList.remove('efp-reader-ui-hidden');
     dispatchResize();
     if (manualMode === 'landscape') {
-      /* viewer-v2 reflows canvases asynchronously after resize. Re-anchor the
-         current page after each likely reflow point so page 1 begins at its
-         actual top instead of inheriting the portrait pixel scroll offset. */
-      window.setTimeout(alignCurrentPdfPageTop, 120);
-      window.setTimeout(alignCurrentPdfPageTop, 360);
-      window.setTimeout(alignCurrentPdfPageTop, 720);
+      /* viewer-v2 reflows canvases asynchronously after resize. Preserve the
+         page that was visible when Rotate was pressed and re-anchor it after
+         each likely WebView layout point. */
+      scheduleLandscapeTopAlignment(anchorPage);
+    } else {
+      alignmentToken++;
     }
     syncButton();
   }
+
+  /* Crux viewer-v2 sends this after its asynchronous canvas reflow finishes.
+     This is the authoritative alignment point on slower Android WebViews. */
+  window.addEventListener('efp-pdf-layout-ready', function(event){
+    if (manualMode !== 'landscape') return;
+    var pageNumber = event && event.detail && event.detail.page;
+    alignCurrentPdfPageTop(pageNumber || manualAnchorPage);
+  });
 
   async function enterOwnedFullscreen(){
     if (document.fullscreenElement) return true;

@@ -175,7 +175,7 @@
   function pushRecent(){var a=recent().filter(function(x){return x!==doc.id});a.unshift(doc.id);try{localStorage.setItem('efp_visited_crux_recent',JSON.stringify(a.slice(0,20)))}catch(e){}}
   function toast(s){var t=document.getElementById('toast');if(!t)return;t.textContent=s;t.classList.add('show');clearTimeout(t._efp);t._efp=setTimeout(function(){t.classList.remove('show')},1500)}
   function markVisited(){var a=prog().filter(function(x){return !/^last:/.test(x)});a.push('p:'+page,'last:'+page);saveProg(a);pushRecent();if(typeof gtag==='function')gtag('event','crux_page_view',{document_id:doc.id,document_title:doc.title,page_number:page,source:doc.source,reader_mode:continuous?'pdfjs_continuous_mobile':'pdfjs_original_pdf'})}
-  function updateUrl(){var p=new URLSearchParams(location.search);p.set('id',doc.id);p.set('page',String(page));history.replaceState(null,'',location.pathname+'?'+p.toString())}
+  function updateUrl(){var p=new URLSearchParams(location.search);p.set('id',doc.id);p.set('page',String(page));history.replaceState(history.state,'',location.pathname+'?'+p.toString())}
   function pdfUrl(){return doc.pdf+'#page='+page+'&zoom=page-width'}
   function updateControls(){
     input.value=page;
@@ -600,7 +600,18 @@
       var n=parseInt(list[i].dataset.page,10)||0;sizeShell(list[i],pageRatios[n]||defaultRatio);var c=list[i].querySelector('canvas');if(c)c.remove();var hl=list[i].querySelector('.efp-search-layer');if(hl)hl.remove();list[i].dataset.rendered='0';
     }
     continuousRenders={};
-    requestAnimationFrame(function(){go(saved,false);warmContinuousPages(saved)});
+    requestAnimationFrame(function(){
+      Promise.resolve(go(saved,false)).then(function(){
+        warmContinuousPages(saved);
+        requestAnimationFrame(function(){
+          try{
+            window.dispatchEvent(new CustomEvent('efp-pdf-layout-ready',{detail:{page:saved}}));
+          }catch(e){
+            try{var ev=document.createEvent('Event');ev.initEvent('efp-pdf-layout-ready',true,false);window.dispatchEvent(ev)}catch(_){}
+          }
+        });
+      });
+    });
   }
   function disableContinuous(){
     continuous=false;document.documentElement.classList.remove('efp-continuous-mobile-pdf','efp-reader-ui-hidden');

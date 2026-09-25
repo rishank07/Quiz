@@ -57,7 +57,7 @@ def inject(path: Path, root: Path) -> bool:
     # counts workflow rewrites navigation tags. Other sections keep the shared
     # default cache URL.
     back_nav_version = (
-        "20260924cruxdirect3" if rel.parts[0] == "Crux-Tricks"
+        "20260926androidpdf1" if rel.parts[0] == "Crux-Tricks"
         else "20260925mixededge1" if rel == MIXED_PRACTICE_FILE
         else "20260924bookhier3"
     )

@@ -817,7 +817,11 @@
      replaces it with the PDF's exact Crux hierarchy. The visible Back button
      uses this same path. */
   function installCruxHomeSearchHistoryGuard() {
-    if (!isCruxViewerFromHomeSearch()) return;
+    /* Android TWA/WebView history can resume the Crux index at an older pane.
+       Give every Android PDF one local guard so both hardware Back and the
+       floating Back button rebuild the exact PDF -> Chapter hierarchy from
+       manifest metadata. Ordinary browser Crux navigation stays unchanged. */
+    if (!isCruxViewerFromHomeSearch() && !isInstalledAndroidAppContext()) return;
 
     var current = history.state;
     if (isHomeSearchGuardState(current, "top")) return;
@@ -922,6 +926,15 @@
       return;
     }
 
+    /* Android PDF viewers always own one same-document guard entry. Walking
+       to its base invokes the popstate restore above, which cannot skip the
+       Chapter pane even if the WebView's older index history is incomplete. */
+    if (isCruxViewer() && isHomeSearchGuardState(history.state, "top")) {
+      consumeBackEvent(event);
+      window.history.back();
+      return;
+    }
+
     /* `from=crux-index` is part of the shareable viewer URL, so it cannot by
        itself prove that the current history entry was opened from the Crux
        SPA. Only reuse browser history when the actual referrer matches the
@@ -977,4 +990,3 @@ installCruxHomeSearchHistoryGuard();
   }
 
 })();
-
