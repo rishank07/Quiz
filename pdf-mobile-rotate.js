@@ -381,32 +381,27 @@
     var goLandscape = !shownLandscape();
     requestedLandscape = goLandscape;
 
-    /* Android app: never fake-rotate the WebView with CSS. The device's real
-       orientation already lays the PDF out correctly, including scrolling and
-       safe areas. Try the native Screen Orientation API only; if Android does
-       not grant it, leave the page untouched and let the system Auto-rotate /
-       rotation suggestion handle it. */
+    /* Android app: use a real Android/WebView orientation, never CSS rotate.
+       Some Android WebViews reject screen.orientation.lock() until the page is
+       fullscreen, so use the same native fullscreen+orientation path as a
+       browser. That gives the PDF a genuinely landscape viewport, matching the
+       working system Auto-rotate behaviour. */
     if (appContext) {
       if (manualMode) setManualMode('');
-      if (document.fullscreenElement && document.exitFullscreen) {
-        try { await document.exitFullscreen(); } catch (_) {}
-      }
-      forcedFullscreen = false;
       unlockOrientation();
 
-      var appRotated = false;
-      if (orientationApiAvailable()) {
-        try {
-          await lockOrientation(goLandscape ? 'landscape' : 'portrait');
-          appRotated = await waitForOrientation(goLandscape, 1000);
-        } catch (_) {}
-      }
+      var appRotated = goLandscape
+        ? await nativeLandscape()
+        : await nativePortrait();
 
       if (!appRotated) {
+        /* Keep the reader in its real current orientation. Do not fall back to
+           transform:rotate(), because that is what broke top scrolling. */
+        if (forcedFullscreen) await leaveOwnedFullscreen();
         unlockOrientation();
         requestedLandscape = actualLandscape();
         syncButton();
-        showToast('Use phone Auto-rotate');
+        showToast('Android blocked one-tap rotation');
         busy = false;
         return;
       }
