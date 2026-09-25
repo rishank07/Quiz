@@ -1,7 +1,7 @@
-// v148 Harden BlackBook while preserving Bihar reset polish
-const CACHE_VERSION = "efp-pwa-2026-09-25-v148-blackbook-edge-fixes";
+// v149 Active-quiz reload/exit confirmation for browser + Windows PWA
+const CACHE_VERSION = "efp-pwa-2026-09-25-v149-quiz-leave-reload";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925blackbookedge2"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925leavereload1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -25,7 +25,7 @@ const APP_SHELL = [
   "/black-mode.js",
   "/owner-debug.js",
   "/home-nav.js?v=20260925blackbookedge2",
-  "/app-session.js?v=20260925blackbookedge2",
+  "/app-session.js?v=20260925leavereload1",
   "/back-parent-map.js",
   "/back-nav.js?v=20260924cruxdirect3",
   "/search-logic.js",
