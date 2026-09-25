@@ -21,7 +21,7 @@
     </script>
 
     <!-- Tailwind CSS -->
-    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../blackbook-tailwind.css?v=20260925blackbookedge2">
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -90,7 +90,7 @@
             background-color: rgba(255, 255, 255, 0.9);
         }
     </style>
-  <script defer src="/home-nav.js?v=20260925blackbookperf1"></script>
+  <script defer src="/home-nav.js?v=20260925blackbookedge2"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
   <script defer src="/back-nav.js?v=20260924bookhier3"></script>
 </head>
@@ -1992,6 +1992,22 @@
 
         let currentScore = 0;
 
+        window.EFP_BLACKBOOK_QUIZ = {
+            correctFor(questionId) {
+                const sn = Number(String(questionId || '').replace(/^opts-/, ''));
+                const item = vocabData.find(entry => entry.sn === sn);
+                return item ? item.meaning : '';
+            },
+            setScore(value) {
+                currentScore = Math.max(0, Number(value) || 0);
+                document.getElementById('total-score').textContent = currentScore;
+                document.getElementById('mobile-score').textContent = currentScore;
+            },
+            getScore() {
+                return currentScore;
+            }
+        };
+
         // Shuffle array helper
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -2008,13 +2024,24 @@
             return div.innerHTML;
         }
 
-        // Get 3 random wrong meaning options (excluded by sn, not text, since meanings must be unique per question)
-        function getWrongOptions(correctSn) {
-            let options = [];
-            let pool = [...vocabData].filter(w => w.sn !== correctSn);
-            pool = shuffle(pool);
-            for(let i=0; i<3; i++) {
-                if(pool[i]) options.push(pool[i].meaning);
+        function normalizeOption(value) {
+            return String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+        }
+
+        // Keep every option distinct and never use another sense of the same
+        // word as a distractor.
+        function getWrongOptions(correctItem) {
+            const options = [];
+            const seen = new Set([normalizeOption(correctItem.meaning)]);
+            const correctWord = normalizeOption(correctItem.word);
+            const pool = shuffle([...vocabData]);
+            for (const candidate of pool) {
+                if (candidate.sn === correctItem.sn || normalizeOption(candidate.word) === correctWord) continue;
+                const key = normalizeOption(candidate.meaning);
+                if (!key || seen.has(key)) continue;
+                seen.add(key);
+                options.push(candidate.meaning);
+                if (options.length === 3) break;
             }
             return options;
         }
@@ -2099,9 +2126,13 @@ if (activeLetter && navButtons[activeLetter]) {
 
                 const questionsContainer = section.querySelector(`#questions-${letter}`);
 
-                // Render questions for this section
-                words.forEach(item => {
-                    const wrongOpts = getWrongOptions(item.sn);
+                // Render in small frames so large letters never freeze the UI.
+                let renderIndex = 0;
+                function renderBatch() {
+                    const batchEnd = Math.min(words.length, renderIndex + 20);
+                    for (; renderIndex < batchEnd; renderIndex++) {
+                    const item = words[renderIndex];
+                    const wrongOpts = getWrongOptions(item);
                     let allOpts = [...wrongOpts, item.meaning];
                     allOpts = shuffle(allOpts);
                     const letters = ['A', 'B', 'C', 'D'];
@@ -2148,7 +2179,12 @@ if (activeLetter && navButtons[activeLetter]) {
                         optBtn.addEventListener('click', () => checkAnswer(optBtn, opt, item, optsContainer));
                         optsContainer.appendChild(optBtn);
                     });
-                });
+                    }
+                    if (renderIndex < words.length) {
+                        (window.requestAnimationFrame || window.setTimeout)(renderBatch);
+                    }
+                }
+                renderBatch();
             
         }
 

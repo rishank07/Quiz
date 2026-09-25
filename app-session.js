@@ -528,6 +528,38 @@
       var text = button && button.querySelector && button.querySelector(".option-text");
       return text ? text.textContent.replace(/\s+/g, " ").trim() : "";
     }
+    function normalizedAnswerText(value) {
+      return String(value == null ? "" : value).replace(/\s+/g, " ").trim();
+    }
+    function correctTextFor(questionId) {
+      var api = window.EFP_BLACKBOOK_QUIZ;
+      if (api && typeof api.correctFor === "function") {
+        try { return normalizedAnswerText(api.correctFor(questionId)); } catch (_) {}
+      }
+      var group = document.getElementById(questionId);
+      var card = group && group.parentElement;
+      var correct = card && card.querySelector && card.querySelector('[id^="exp-"] .text-lg.font-bold.text-blue-800');
+      return normalizedAnswerText(correct && correct.textContent);
+    }
+    function answerWasCorrect(questionId, answer) {
+      if (answer && typeof answer.correct === "boolean") return answer.correct;
+      var correct = correctTextFor(questionId);
+      return !!correct && normalizedAnswerText(answer && answer.value) === correct;
+    }
+    function syncFullScore(entry) {
+      if (!entry || !entry.answers) return;
+      var total = Object.keys(entry.answers).reduce(function (sum, questionId) {
+        return sum + (answerWasCorrect(questionId, entry.answers[questionId]) ? 1 : 0);
+      }, 0);
+      var api = window.EFP_BLACKBOOK_QUIZ;
+      if (api && typeof api.setScore === "function") {
+        try { api.setScore(total); return; } catch (_) {}
+      }
+      ["total-score", "mobile-score"].forEach(function (id) {
+        var node = document.getElementById(id);
+        if (node) node.textContent = String(total);
+      });
+    }
     function saveAnswer(button) {
       var group = button && button.closest && button.closest('[id^="opts-"]');
       if (!group || !group.id) return;
@@ -536,7 +568,10 @@
       var store = readStore();
       var entry = store[path] && store[path].kind === "dynamic-book"
         ? store[path] : { kind: "dynamic-book", answers: {} };
-      entry.answers[group.id] = { value: value };
+      entry.answers[group.id] = {
+        value: value,
+        correct: button.classList.contains("option-correct") && !button.classList.contains("option-incorrect")
+      };
       entry.ts = Date.now();
       var active = document.querySelector("#alphabet-container button[data-letter].bg-blue-600");
       if (active) entry.section = active.getAttribute("data-letter") || "";
@@ -560,25 +595,55 @@
       if (!entry || entry.kind !== "dynamic-book" || !entry.answers) return true;
       var ids = Object.keys(entry.answers);
       if (!document.querySelector(".quiz-option")) return false;
+      var migrated = false;
+      ids.forEach(function (questionId) {
+        var answer = entry.answers[questionId];
+        if (!answer || typeof answer.correct === "boolean") return;
+        var correct = correctTextFor(questionId);
+        if (!correct) return;
+        answer.correct = normalizedAnswerText(answer.value) === correct;
+        migrated = true;
+      });
+      if (migrated) {
+        store[path] = entry;
+        writeStore(store);
+      }
+      syncFullScore(entry);
       var index = 0;
       function batch() {
         var end = Math.min(ids.length, index + 35);
         for (; index < end; index += 1) {
           var group = document.getElementById(ids[index]);
           if (!group || group.querySelector(".quiz-option:disabled")) continue;
-          var wanted = entry.answers[ids[index]].value;
+          var savedAnswer = entry.answers[ids[index]];
+          var wanted = normalizedAnswerText(savedAnswer && savedAnswer.value);
           var button = Array.prototype.find.call(group.querySelectorAll(".quiz-option"), function (candidate) {
-            return selectedText(candidate) === wanted;
+            return normalizedAnswerText(selectedText(candidate)) === wanted;
           });
+          // Distractors are randomized on every render. If a previously
+          // selected wrong option is absent, reuse one current wrong button
+          // and restore the saved label before replaying the answer.
+          if (!button && wanted && !answerWasCorrect(ids[index], savedAnswer)) {
+            var correct = correctTextFor(ids[index]);
+            button = Array.prototype.find.call(group.querySelectorAll(".quiz-option"), function (candidate) {
+              return normalizedAnswerText(selectedText(candidate)) !== correct;
+            });
+            var optionText = button && button.querySelector(".option-text");
+            if (optionText) optionText.textContent = wanted;
+          }
           if (button) button.click();
         }
         if (index < ids.length) {
           (window.requestAnimationFrame || window.setTimeout)(batch);
           return;
         }
-        if (entry.section) {
-          var nav = document.querySelector('#alphabet-container button[data-letter="' + entry.section + '"]');
-          if (nav) nav.click();
+        var latestStore = readStore();
+        var latestEntry = latestStore[path] && latestStore[path].kind === "dynamic-book"
+          ? latestStore[path] : entry;
+        syncFullScore(latestEntry);
+        if (latestEntry.section) {
+          var nav = document.querySelector('#alphabet-container button[data-letter="' + latestEntry.section + '"]');
+          if (nav && !nav.classList.contains("bg-blue-600")) nav.click();
         }
       }
       batch();

@@ -45,7 +45,7 @@
         gtag("config", "G-Q1WNRY8ECV");
     </script>
 
-    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../blackbook-tailwind.css?v=20260925blackbookedge2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Noto+Sans+Devanagari:wght@400;500;600&amp;display=swap');
@@ -131,6 +131,29 @@
                 display: none !important;
             }
         }
+
+        @media (max-width: 767px) {
+            .mobile-only,
+            #mobile-cards,
+            .vocab-card {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+                box-sizing: border-box;
+            }
+
+            .vocab-card {
+                overflow: hidden;
+            }
+
+            .vocab-card *,
+            .vocab-card .flex > * {
+                min-width: 0;
+                max-width: 100%;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+        }
     
 
     /* ExamFusion Prep: native top-layer Random card v4.
@@ -148,6 +171,7 @@
       position: fixed !important;
       inset: 0 !important;
       width: 100vw !important;
+      box-sizing: border-box !important;
       height: 100vh !important;
       height: 100dvh !important;
       max-width: none !important;
@@ -217,7 +241,7 @@
     }
 
   </style>
-  <script defer src="/home-nav.js?v=20260925blackbookperf1"></script>
+  <script defer src="/home-nav.js?v=20260925blackbookedge2"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
   <script defer src="/back-nav.js?v=20260924bookhier3"></script>
 </head>
@@ -391,7 +415,7 @@
                 </div>
                 <input type="text" id="search-input"
                     class="w-full pl-14 pr-11 py-[15px] bg-white border border-slate-200 focus:border-blue-400 transition-all text-[15px] rounded-3xl shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-100"
-                    placeholder="Search word... (Press /)" onkeyup="filterAll()">
+                    placeholder="Search word... (Press /)">
                 <button onclick="clearSearch()"
                     class="absolute right-5 top-1/2 -mt-2.5 text-slate-400 hover:text-slate-600">
                     <i class="fa-solid fa-times text-xl"></i>
@@ -2317,19 +2341,27 @@
         ];
 
         let currentFiltered = [...vocabData];
+        let renderGeneration = 0;
+        const scheduleRenderFrame = window.requestAnimationFrame || (callback => setTimeout(callback, 0));
 
         function renderTable(data) {
             const tbody = document.getElementById('vocab-body');
             if (!tbody) return;
             tbody.innerHTML = '';
-      const fragment = document.createDocumentFragment();
+            const generation = ++renderGeneration;
 
             if (data.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-slate-400">No matching words found.</td></tr>`;
                 return;
             }
 
-            data.forEach(item => {
+            let index = 0;
+            function appendBatch() {
+              if (generation !== renderGeneration) return;
+              const fragment = document.createDocumentFragment();
+              const end = Math.min(data.length, index + 100);
+              for (; index < end; index++) {
+                const item = data[index];
                 const tr = document.createElement('tr');
                 tr.className = `hover:bg-blue-50/50 even:bg-slate-50/50`;
                 tr.innerHTML = `
@@ -2354,22 +2386,31 @@
                     </td>
                 `;
                 fragment.appendChild(tr);
-            });
+              }
               tbody.appendChild(fragment);
-    }
+              if (index < data.length) scheduleRenderFrame(appendBatch);
+            }
+            appendBatch();
+        }
 
         function renderMobileCards(data) {
             const container = document.getElementById('mobile-cards');
             if (!container) return;
             container.innerHTML = '';
-      const fragment = document.createDocumentFragment();
+            const generation = ++renderGeneration;
 
             if (data.length === 0) {
                 container.innerHTML = `<div class="text-center py-10 text-slate-400">No matching words found.</div>`;
                 return;
             }
 
-            data.forEach(item => {
+            let index = 0;
+            function appendBatch() {
+              if (generation !== renderGeneration) return;
+              const fragment = document.createDocumentFragment();
+              const end = Math.min(data.length, index + 60);
+              for (; index < end; index++) {
+                const item = data[index];
                 const card = document.createElement('div');
                 card.className = `vocab-card bg-white border border-slate-200 rounded-3xl p-4 shadow-sm`;
                 card.innerHTML = `
@@ -2397,9 +2438,12 @@
                     </div>
                 `;
                 fragment.appendChild(card);
-            });
+              }
               container.appendChild(fragment);
-    }
+              if (index < data.length) scheduleRenderFrame(appendBatch);
+            }
+            appendBatch();
+        }
 
         function renderActiveView(data) {
       const mobile = !!(window.matchMedia && window.matchMedia('(max-width: 767px)').matches);
@@ -2436,7 +2480,8 @@
         }
 
         function cleanCopyValue(value) {
-      return value == null ? '' : String(value)
+            if (Array.isArray(value)) value = value.join(', ');
+            return value == null ? '' : String(value)
         .replace(/\r\n|\r/g, '\n')
         .replace(/\u00a0/g, ' ')
         .trim();
@@ -2512,6 +2557,7 @@
         }
 
         function csvCell(value) {
+            if (Array.isArray(value)) value = value.join(', ');
       const text = value == null ? '' : String(value)
         .replace(/\r\n|\r|\n/g, ' ')
         .replace(/\u00a0/g, ' ');
