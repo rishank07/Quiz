@@ -27,6 +27,7 @@
     'html.efp-manual-pdf-landscape body{position:fixed!important;top:0!important;left:0!important;width:100vh!important;height:100vw!important;max-width:none!important;max-height:none!important;transform:rotate(90deg) translateY(-100%)!important;transform-origin:top left!important}' +
     'html.efp-manual-pdf-portrait body{position:fixed!important;top:0!important;left:0!important;width:100vh!important;height:100vw!important;max-width:none!important;max-height:none!important;transform:rotate(-90deg) translateX(-100%)!important;transform-origin:top left!important}' +
     '[data-efp-pdf-rotate] .efp-orientation-icon{display:block;width:27px;height:27px;pointer-events:none}' +
+    '[data-efp-pdf-rotate].efp-rotate-ready{opacity:1;pointer-events:auto}' +
     '[data-efp-pdf-rotate] .efp-orientation-icon *{vector-effect:non-scaling-stroke}' +
     '#efpPdfPortraitReturn{position:fixed;right:max(10px,env(safe-area-inset-right));top:max(10px,env(safe-area-inset-top));z-index:2147483600;display:none;align-items:center;justify-content:center;gap:7px;height:44px;padding:0 14px;border:1px solid rgba(201,149,43,.78);border-radius:999px;background:#0e2748;color:#fff;box-shadow:0 8px 26px rgba(0,0,0,.34);font:850 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;letter-spacing:.1px;-webkit-tap-highlight-color:transparent}' +
     '#efpPdfPortraitReturn svg{width:23px;height:23px;display:block;pointer-events:none}#efpPdfPortraitReturn.show{display:inline-flex}#efpPdfPortraitReturn:active{transform:scale(.96)}' +
@@ -77,6 +78,8 @@
       btn.setAttribute('title', label);
       btn.dataset.orientationTarget = targetLandscape ? 'landscape' : 'portrait';
       btn.innerHTML = orientationIcon(targetLandscape);
+      btn.classList.remove('efp-rotate-pending');
+      btn.classList.add('efp-rotate-ready');
       btn.classList.toggle('is-landscape', land);
     });
     if (portraitReturn) {
