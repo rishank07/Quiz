@@ -1,5 +1,5 @@
-// v160 flicker-free Crux PDF return
-const CACHE_VERSION = "efp-pwa-2026-09-26-v160-crux-back-no-flicker";
+// v161 no Portrait control after system auto-rotate
+const CACHE_VERSION = "efp-pwa-2026-09-26-v161-system-rotate-clean";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -31,7 +31,7 @@ const APP_SHELL = [
   "/app-session.js?v=20260925refreshnormal2",
   "/back-parent-map.js",
   "/back-nav.js?v=20260926cruxreturn4",
-  "/pdf-mobile-rotate.js?v=20260926rotate12",
+  "/pdf-mobile-rotate.js?v=20260926rotate13",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
