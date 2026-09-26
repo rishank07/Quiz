@@ -1,7 +1,7 @@
 // v165 Windows installed-app close/reload warning
 const CACHE_VERSION = "efp-pwa-2026-09-26-v165-windows-exit-warning";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260926windowsexit1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -28,7 +28,7 @@ const APP_SHELL = [
   "/blackbook-quiz-bookmarks.js",
   "/owner-debug.js",
   "/home-nav.js?v=20260925refreshnormal2",
-  "/app-session.js?v=20260926windowsexit1",
+  "/app-session.js?v=20260925refreshnormal2",
   "/back-parent-map.js",
   "/back-nav.js?v=20260926resume1",
   "/pdf-mobile-rotate.js?v=20260926rotate14",
