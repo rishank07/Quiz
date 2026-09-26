@@ -124,7 +124,31 @@
   function syncButton(){
     var land = shownLandscape();
     var targetLandscape = !land;
+    var ownedRotation = forcedFullscreen || !!manualMode;
+    var touchPhone = false;
+    try {
+      touchPhone = !!(window.matchMedia &&
+        window.matchMedia('(hover:none) and (pointer:coarse)').matches);
+    } catch (_) {}
+    if (!touchPhone) {
+      try { touchPhone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || ''); } catch (_) {}
+    }
+
+    /* If the phone/browser itself rotated to landscape, remove ExamFusion's
+       small Portrait-target rotate icon completely. It reappears automatically
+       after the phone returns to portrait. */
+    var hideRotateForSystemLandscape = land && touchPhone && !ownedRotation;
+
     Array.prototype.forEach.call(buttons, function(btn){
+      if (hideRotateForSystemLandscape) {
+        btn.hidden = true;
+        btn.style.setProperty('display','none','important');
+        btn.setAttribute('aria-hidden','true');
+        return;
+      }
+      btn.hidden = false;
+      btn.style.removeProperty('display');
+      btn.removeAttribute('aria-hidden');
       var label = targetLandscape ? 'Rotate PDF to landscape' : 'Rotate PDF to portrait';
       btn.setAttribute('aria-label', label);
       btn.setAttribute('title', label);
@@ -134,13 +158,19 @@
       btn.classList.add('efp-rotate-ready');
       btn.classList.toggle('is-landscape', land);
     });
+
     if (portraitReturn) {
-      /* Show the emergency Portrait control only when ExamFusion itself owns
-         the rotated/fullscreen state. A normal phone/browser Auto-rotate to
-         landscape must not summon our Portrait button; mixing the two
-         orientation systems can leave the viewport in a bad state. */
-      var ownedRotation = forcedFullscreen || !!manualMode;
+      /* Never leave even a sliver of the floating Portrait escape button when
+         system Auto-rotate owns the landscape state. */
       portraitReturn.classList.toggle('show', ownedRotation);
+      portraitReturn.hidden = !ownedRotation;
+      if (!ownedRotation) {
+        portraitReturn.style.setProperty('display','none','important');
+        portraitReturn.setAttribute('aria-hidden','true');
+      } else {
+        portraitReturn.style.removeProperty('display');
+        portraitReturn.removeAttribute('aria-hidden');
+      }
     }
   }
 
