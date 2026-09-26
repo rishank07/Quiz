@@ -1,7 +1,7 @@
-// v165 Windows installed-app close/reload warning
-const CACHE_VERSION = "efp-pwa-2026-09-26-v165-windows-exit-warning";
+// v166 Native-only Android Exit + fresh installed-app shell
+const CACHE_VERSION = "efp-pwa-2026-09-26-v166-native-exit-refresh";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260926nativeexit2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -28,7 +28,7 @@ const APP_SHELL = [
   "/blackbook-quiz-bookmarks.js",
   "/owner-debug.js",
   "/home-nav.js?v=20260925refreshnormal2",
-  "/app-session.js?v=20260925refreshnormal2",
+  "/app-session.js?v=20260926nativeexit2",
   "/back-parent-map.js",
   "/back-nav.js?v=20260926resume1",
   "/pdf-mobile-rotate.js?v=20260926rotate14",
@@ -228,7 +228,7 @@ async function networkFirst(request) {
   const url = new URL(request.url);
   const injectDebug = await shouldInjectOwnerDebug(url);
   try {
-    const response = await fetch(request);
+    const response = await fetch(request, { cache: "no-store" });
     const served = await prepareNavigationResponse(response, injectDebug);
     if (served && served.ok && (served.type === "basic" || served.type === "default")) {
       cache.put(request, served.clone());
