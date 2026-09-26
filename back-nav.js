@@ -875,10 +875,12 @@
       return;
     }
 
-    /* The section root already has the real Home entry immediately behind it.
-       Let the ordinary Back handler use that entry instead of adding a second
-       synthetic Home step. */
-    if (isHomePageUrl(parentUrl.href)) {
+    /* Normal browser deep-links do not need a synthetic Home step at a
+       section root. Android TWA is different: a root page can itself be the
+       Activity's first useful entry, so give it the guard too. If a real Home
+       entry is already underneath, the popstate handler detects the matching
+       referrer and continues native history instead of duplicating Home. */
+    if (isHomePageUrl(parentUrl.href) && !androidAppBoundary) {
       clearHomeSearchChain();
       if (continuing) clearLogicalChain();
       return;
