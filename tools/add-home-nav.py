@@ -59,6 +59,7 @@ def inject(path: Path, root: Path) -> bool:
     back_nav_version = (
         "20260926resume1" if rel.parts[0] == "Crux-Tricks"
         else "20260926resume1" if rel == MIXED_PRACTICE_FILE
+        else "20260927ghatnaroot1" if rel.as_posix() == "Books/Ghatnachakra Purvalokan/SubjectName.html"
         else "20260924bookhier3"
     )
 
