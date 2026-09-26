@@ -306,6 +306,19 @@
     return isManaged(history.state) ? history.state : null;
   }
 
+  function pendingManagedResumeState() {
+    try {
+      var pending = JSON.parse(sessionStorage.getItem("efp_app_resume_pending_v1") || "null");
+      if (!pending || !pending.url || !isManaged(pending.historyState)) return null;
+      var target = new URL(String(pending.url), window.location.origin);
+      if (target.origin !== window.location.origin ||
+          normalizedPath(target.pathname) !== normalizedPath(window.location.pathname)) return null;
+      return pending.historyState;
+    } catch (_) {
+      return null;
+    }
+  }
+
   function makeState(level, depth, data) {
     var state = {
       efpCruxNav: true,
@@ -332,6 +345,59 @@
       a.kind === b.kind && a.source === b.source && a.exam === b.exam &&
       a.subject === b.subject && a.branch === b.branch &&
       a.utility === b.utility;
+  }
+
+  function buildManagedResumeChain(target) {
+    if (!isManaged(target)) return [];
+    var chain = [makeState("material", 0)];
+    if (target.level === "material") return chain;
+    if (!target.kind) return [];
+
+    chain.push(makeState("source", chain.length, { kind: target.kind }));
+    if (target.level === "source") return chain;
+    if (!target.source) return [];
+
+    if (target.source === "Pinnacle") {
+      chain.push(makeState("exam", chain.length, {
+        kind: target.kind, source: target.source, exam: target.exam || "Railway"
+      }));
+      if (target.level === "exam") return chain;
+    }
+
+    chain.push(makeState("subjects", chain.length, {
+      kind: target.kind, source: target.source, exam: target.exam
+    }));
+    if (target.level === "subjects") return chain;
+
+    if (target.level === "utility") {
+      chain.push(makeState("utility", chain.length, {
+        kind: target.kind, source: target.source, exam: target.exam, utility: target.utility
+      }));
+      return chain;
+    }
+
+    if (!target.subject) return [];
+    if (target.level === "parts") {
+      chain.push(makeState("parts", chain.length, {
+        kind: target.kind, source: target.source, exam: target.exam, subject: target.subject
+      }));
+      return chain;
+    }
+
+    if (target.level === "chapters") {
+      if (target.branch) {
+        chain.push(makeState("parts", chain.length, {
+          kind: target.kind, source: target.source, exam: target.exam, subject: target.subject
+        }));
+      }
+      chain.push(makeState("chapters", chain.length, {
+        kind: target.kind, source: target.source, exam: target.exam,
+        subject: target.subject, branch: target.branch
+      }));
+      return chain;
+    }
+
+    return [];
   }
 
   function consume(event) {
@@ -506,6 +572,22 @@
       }
       try { window.scrollTo(0, 0); } catch (_) {}
     }
+  }
+
+  function restoreManagedResumeHierarchy(target) {
+    var chain = buildManagedResumeChain(target);
+    if (!chain.length || chain[chain.length - 1].level !== target.level) return false;
+    var finalState = chain[chain.length - 1];
+
+    restoreState(finalState);
+    try {
+      history.replaceState(chain[0], "", baseUrl());
+      for (var i = 1; i < chain.length; i++) history.pushState(chain[i], "", baseUrl());
+    } catch (_) {
+      history.replaceState(finalState, "", baseUrl());
+    }
+    syncStudyBackLabel(currentState());
+    return true;
   }
 
   /* Direct/shared viewer URLs do not have the Crux SPA panes in browser
@@ -748,7 +830,12 @@
     if (ready) return;
     ready = true;
 
-    if (isManaged(bootState)) {
+    var resumedState = pendingManagedResumeState();
+    if (isManaged(resumedState) && restoreManagedResumeHierarchy(resumedState)) {
+      // Android may recreate the installed app with only launch Home beneath
+      // the restored Crux URL. Rebuild every SPA history step before the user
+      // presses Back, otherwise a deep pane can jump straight to Home.
+    } else if (isManaged(bootState)) {
       // A real page navigation (e.g. viewer -> Android Back -> Crux) can reload
       // index.html. The old inline SPA init replaces history.state with null, so
       // bootState captured above is the durable state we restore here.

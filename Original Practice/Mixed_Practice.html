@@ -43,7 +43,7 @@
   </style>
   <script defer src="/home-nav.js?v=20260925mixededge1"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
-  <script defer src="/back-nav.js?v=20260925mixededge1"></script>
+  <script defer src="/back-nav.js?v=20260926resume1"></script>
 </head>
 <body>
 <main class="wrap">
@@ -306,12 +306,12 @@
   function copyHistoryState(value){var copy={};if(!value||typeof value!=='object')return copy;Object.keys(value).forEach(function(key){copy[key]=value[key]});return copy}
   function mixedHistoryPhase(value,phase){return !!(value&&value[HISTORY_VIEW_KEY]===phase)}
   function mixedRelativeUrl(){return location.pathname+location.search+location.hash}
-  function armMixedQuizHistory(){
-    if(mixedHistoryPhase(history.state,'quiz'))return;
+  function armMixedQuizHistory(forceRebuild){
+    if(!forceRebuild&&mixedHistoryPhase(history.state,'quiz'))return;
     var base=copyHistoryState(history.state),top;
     base[HISTORY_VIEW_KEY]='builder';top=copyHistoryState(base);top[HISTORY_VIEW_KEY]='quiz';
     try{
-      if(!mixedHistoryPhase(history.state,'builder'))history.replaceState(base,'',mixedRelativeUrl());
+      if(forceRebuild||!mixedHistoryPhase(history.state,'builder'))history.replaceState(base,'',mixedRelativeUrl());
       history.pushState(top,'',mixedRelativeUrl());
     }catch(e){}
   }
@@ -382,7 +382,7 @@
   async function generateSet(keys,total){clearStatus();if(keys.length<2){setStatus('Choose at least two subjects or subject groups for a mixed set.','bad');return}total=Math.max(keys.length,Math.min(MAX_QUESTIONS,total));$('generateBtn').disabled=true;$('surpriseBtn').disabled=true;setStatus('Preparing question pools… first load can take a few seconds.');try{var pools=await Promise.all(keys.map(buildPool)),available=pools.reduce(function(s,p){return s+p.length},0);if(total>available)total=available;var quotas=quotaPreview(keys,total),used=new Set(),picked=[];for(var i=0;i<keys.length;i++){var need=quotas[keys[i]]||0;if(need>pools[i].length)throw new Error(POOLS[keys[i]].label+' has fewer than '+need+' available questions.');picked=picked.concat(randomSample(pools[i],need,used))}shuffle(picked);currentQuestions=picked;currentIndex=0;pendingSelections={};historyReviewMode=false;state={version:4,idVersion:3,ownerTab:TAB_ID,setId:'mix-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),selectedKeys:keys.slice(),total:picked.length,ids:picked.map(function(q){return q.id}),answers:{},optionOrders:buildOptionOrders(picked),createdAt:Date.now(),currentIndex:0};saveState();showQuiz();renderQuestion();setStatus('Random set ready.','good')}catch(err){console.error(err);setStatus('Could not prepare the mixed set: '+(err&&err.message?err.message:'Unknown error'),'bad')}finally{$('generateBtn').disabled=false;$('surpriseBtn').disabled=false}}
   $('generateBtn').onclick=function(){generateSet(checkedKeys(),normalizedCount())};
   $('surpriseBtn').onclick=function(){var choices=[['history','polity','english'],['geography','chemistry','biology','ecology'],['history','geography','science','english'],['polity','economics','geography','ecology'],['physics','chemistry','biology','english']],pick=choices[Math.floor(Math.random()*choices.length)];MAJOR.concat(SPECIFIC).forEach(function(k){setChecked(k,false)});pick.forEach(function(k){setChecked(k,true)});$('questionCount').value=[50,60,100][Math.floor(Math.random()*3)];updateDistribution();generateSet(pick,normalizedCount())};
-  async function restoreState(saved,reviewMode){
+  async function restoreState(saved,reviewMode,repairResumeHistory){
     if(!saved||!saved.ids||!saved.selectedKeys)return false;
     ensureSetId(saved);
     if(isSetDeleted(saved)){setStatus('This recent set was deleted and cannot be resumed.','bad');refreshResume();return false}
@@ -415,12 +415,12 @@
       pendingSelections={};currentQuestions=restored;ensureOptionOrders(restored);
       currentIndex=historyReviewMode?0:Math.max(0,Math.min(restored.length-1,Number(saved.currentIndex)||0));
       if(!historyReviewMode)saveState();else upsertRecentSet(state);
-      showQuiz();renderQuestion();return true
+      showQuiz(!!repairResumeHistory);renderQuestion();return true
     }catch(err){
       console.error(err);setStatus('Could not open this recent set.','bad');historyReviewMode=false;return false
     }finally{document.documentElement.classList.remove('efp-mixed-restoring')}
   }
-  function showQuiz(){try{sessionStorage.setItem(VIEW_KEY,'quiz')}catch(e){}armMixedQuizHistory();$('setupView').hidden=true;$('finishView').hidden=true;$('quizView').hidden=false;var head=document.querySelector('.quiz-head');if(head){head.classList.remove('efp-mobile-compact');head.removeAttribute('data-sticky-start')}window.scrollTo({top:0,behavior:'auto'});updateQuizTitle();requestAnimationFrame(syncMobileQuizHead)}
+  function showQuiz(repairResumeHistory){try{sessionStorage.setItem(VIEW_KEY,'quiz')}catch(e){}armMixedQuizHistory(!!repairResumeHistory);$('setupView').hidden=true;$('finishView').hidden=true;$('quizView').hidden=false;var head=document.querySelector('.quiz-head');if(head){head.classList.remove('efp-mobile-compact');head.removeAttribute('data-sticky-start')}window.scrollTo({top:0,behavior:'auto'});updateQuizTitle();requestAnimationFrame(syncMobileQuizHead)}
   function showSetup(){historyReviewMode=false;try{sessionStorage.setItem(VIEW_KEY,'setup')}catch(e){}$('quizView').hidden=true;$('finishView').hidden=true;$('setupView').hidden=false;window.scrollTo({top:0,behavior:'auto'});refreshResume()}
   function isMobileQuiz(){
     return !!(window.matchMedia&&window.matchMedia('(max-width:560px)').matches);
@@ -659,7 +659,7 @@
     var shouldRestore=!!(__savedOnLoad&&__savedOnLoad.ids&&__savedOnLoad.ids.length&&((isReloadNavigation()&&lastView==='quiz')||appResumeHere));
     var openSavedFromHub=false;try{openSavedFromHub=new URLSearchParams(location.search).get('saved')==='1'}catch(_){}
     if(openSavedFromHub){sessionStorage.setItem(VIEW_KEY,'setup');setTimeout(function(){openSavedQuestions()},0)}
-    else if(shouldRestore)restoreState(__savedOnLoad,false);
+    else if(shouldRestore)restoreState(__savedOnLoad,false,appResumeHere);
     else sessionStorage.setItem(VIEW_KEY,'setup');
   }catch(e){}
   window.addEventListener('pageshow',function(event){

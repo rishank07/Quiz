@@ -1,5 +1,5 @@
-// v162 fully hide Portrait controls after system rotation
-const CACHE_VERSION = "efp-pwa-2026-09-26-v162-hide-system-portrait";
+// v163 resume-safe Back hierarchy after idle/process recreation
+const CACHE_VERSION = "efp-pwa-2026-09-26-v163-resume-safe-back";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -30,7 +30,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260925refreshnormal2",
   "/app-session.js?v=20260925refreshnormal2",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260926cruxreturn4",
+  "/back-nav.js?v=20260926resume1",
   "/pdf-mobile-rotate.js?v=20260926rotate14",
   "/search-logic.js",
   "/search-worker.js",
@@ -51,7 +51,7 @@ const APP_SHELL = [
   "/Crux-Tricks/viewer.html",
   "/Crux-Tricks/my-pages.html",
   "/Crux-Tricks/crux-manifest.js",
-  "/Crux-Tricks/crux-search-route.js?v=20260924cruxrestore2",
+  "/Crux-Tricks/crux-search-route.js?v=20260926resume1",
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260924cruxback1",
   "/Crux-Tricks/viewer.css",

@@ -8,6 +8,8 @@
   var CRUX_HOME_SEARCH_GUARD = "efpCruxHomeSearchGuard";
   var HOME_SEARCH_CHAIN_KEY = "efp_home_search_back_chain";
   var HOME_SEARCH_GUARD = "efpHomeSearchGuard";
+  var APP_RESUME_PENDING_KEY = "efp_app_resume_pending_v1";
+  var AUTO_RESUMED_BOUNDARY = false;
   var CRUX_RETURN_DOC_ID = "";
   try {
     CRUX_RETURN_DOC_ID = new URLSearchParams(window.location.search).get("returnPdf") || "";
@@ -20,6 +22,21 @@
     if (path.length > 1) path = path.replace(/\/$/, "");
     return path || "/";
   }
+
+  function detectAutoResumedBoundary() {
+    try {
+      var pending = JSON.parse(sessionStorage.getItem(APP_RESUME_PENDING_KEY) || "null");
+      if (!pending || !pending.url) return false;
+      var target = new URL(String(pending.url), window.location.origin);
+      if (target.origin !== window.location.origin) return false;
+      return normalizePath(target.pathname) === normalizePath(window.location.pathname) &&
+        target.search === window.location.search;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  AUTO_RESUMED_BOUNDARY = detectAutoResumedBoundary();
 
   function isCruxTricksRoot() {
     var path = normalizePath(window.location.pathname).toLowerCase();
@@ -838,7 +855,8 @@
 
     var current = normalizePath(window.location.pathname);
     var expected = expectedLogicalPath();
-    var initial = hasHomeSearchMarker() || isHomePageUrl(document.referrer);
+    var resumedBoundary = AUTO_RESUMED_BOUNDARY && !isMixedPracticePage() && !isCruxTricksRoot();
+    var initial = hasHomeSearchMarker() || isHomePageUrl(document.referrer) || resumedBoundary;
     var continuing = hasHomeSearchChain() && expected === current;
 
     if (!initial && !continuing) {
@@ -1024,6 +1042,14 @@
         return;
       }
       useLogicalParent(event);
+      return;
+    }
+
+    /* An installed-app auto-resume is a recreated history boundary: the
+       same-origin referrer is the launch Home entry, not the page the learner
+       actually came from. Prefer the generated logical parent so Back cannot
+       jump Home after the app has been idle or Android recreated the process. */
+    if (AUTO_RESUMED_BOUNDARY && useLogicalParent(event)) {
       return;
     }
 
