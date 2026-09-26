@@ -138,6 +138,22 @@
     var isAndroidApp = false;
     try { isAndroidApp = sessionStorage.getItem(ANDROID_APP_CONTEXT_KEY) === "1"; } catch (_) {}
     if (!isAndroidApp) return;
+
+    /* The web Exit control is useful only when the native Android wrapper can
+       actually finish its Activity. Do not expose it in Windows/PWA/browser
+       contexts, or in older Android builds where window.close()/history.back()
+       could fall through to a blank browser-like page. */
+    var exitUa = "";
+    try { exitUa = navigator.userAgent || ""; } catch (_) {}
+    var exitVersion = /ExamFusionPrepAndroid\/(\d+)\.(\d+)\.(\d+)/i.exec(exitUa);
+    if (!exitVersion) return;
+    var exitMajor = Number(exitVersion[1]) || 0;
+    var exitMinor = Number(exitVersion[2]) || 0;
+    var exitPatch = Number(exitVersion[3]) || 0;
+    var hasNativeExitBridge =
+      exitMajor > 1 || (exitMajor === 1 && (exitMinor > 0 || exitPatch >= 2));
+    if (!hasNativeExitBridge) return;
+
     if (document.getElementById("efp-android-exit-button")) return;
 
     var STYLE_ID = "efp-android-exit-style";
@@ -220,21 +236,10 @@
       try { sessionStorage.removeItem(PENDING_KEY); } catch (_) {}
       try { localStorage.removeItem(QUIZ_WARNING_KEY); } catch (_) {}
 
-      if (supportsNativeAndroidExit()) {
-        try {
-          window.location.href = "examfusionprep://exit";
-          return;
-        } catch (_) {}
-      }
-
-      try { window.close(); } catch (_) {}
-      window.setTimeout(function () {
-        try {
-          if (!window.closed && document.visibilityState !== "hidden" && window.history.length <= 2) {
-            window.history.back();
-          }
-        } catch (_) {}
-      }, 120);
+      if (!supportsNativeAndroidExit()) return;
+      try {
+        window.location.href = "examfusionprep://exit";
+      } catch (_) {}
     }
 
     button.addEventListener("click", function (event) {
