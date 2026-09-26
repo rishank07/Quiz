@@ -856,7 +856,15 @@
     var current = normalizePath(window.location.pathname);
     var expected = expectedLogicalPath();
     var resumedBoundary = AUTO_RESUMED_BOUNDARY && !isMixedPracticePage() && !isCruxTricksRoot();
-    var initial = hasHomeSearchMarker() || isHomePageUrl(document.referrer) || resumedBoundary;
+    /* Android TWA must not depend on Chrome preserving a useful document
+       history entry for every navigation. Give every mapped Android page the
+       same one-entry guard used by homepage deep-links, so both the floating
+       Back button and the phone's system Back reach the logical parent. Keep
+       Mixed Practice and the Crux SPA on their own dedicated history bridges. */
+    var androidAppBoundary = isInstalledAndroidAppContext() &&
+      !isMixedPracticePage() && !isCruxTricksRoot();
+    var initial = hasHomeSearchMarker() || isHomePageUrl(document.referrer) ||
+      resumedBoundary || androidAppBoundary;
     var continuing = hasHomeSearchChain() && expected === current;
 
     if (!initial && !continuing) {
@@ -931,6 +939,24 @@
       clearHomeSearchChain();
       window.location.replace("/");
       return;
+    }
+
+    /* When Android reached this page through its real logical parent, the
+       parent's guarded history entry is already immediately underneath us.
+       Continue the native traversal instead of replacing the URL and creating
+       duplicate parent entries. Direct/resumed/deep-link opens do not have
+       that trusted parent underneath, so they still use deterministic replace. */
+    if (isInstalledAndroidAppContext() && document.referrer) {
+      try {
+        var referrer = new URL(document.referrer, window.location.href);
+        if (referrer.origin === window.location.origin &&
+            normalizePath(referrer.pathname) === normalizePath(parentUrl.pathname) &&
+            referrer.search === parentUrl.search &&
+            window.history.length > 1) {
+          window.history.back();
+          return;
+        }
+      } catch (_) {}
     }
 
     rememberHomeSearchChain();
