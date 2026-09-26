@@ -60,6 +60,7 @@
   }
 
   var ANDROID_APP_CONTEXT_KEY = "efp_android_app_context_v1";
+  var WINDOWS_APP_CONTEXT_KEY = "efp_windows_app_context_v1";
 
   function rememberAndroidAppContext() {
     if (!isHomePath(location.pathname)) return;
@@ -77,6 +78,37 @@
        where the android-app:// referrer is no longer available. */
     if (!/Android/i.test(ua) || (!packageReferrer && !installedAppLaunchMarker())) return;
     try { sessionStorage.setItem(ANDROID_APP_CONTEXT_KEY, "1"); } catch (_) {}
+  }
+
+  function rememberWindowsAppContext() {
+    if (!isHomePath(location.pathname)) return;
+    var ua = "";
+    var source = "";
+    var standalone = false;
+    try { ua = navigator.userAgent || ""; } catch (_) {}
+    try { source = new URLSearchParams(location.search).get("source") || ""; } catch (_) {}
+    try {
+      standalone = !!(window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+    } catch (_) {}
+
+    if (!/Windows NT/i.test(ua) || /Android/i.test(ua)) return;
+    if (!standalone && !/^windows-pwa$/i.test(source)) return;
+    try { sessionStorage.setItem(WINDOWS_APP_CONTEXT_KEY, "1"); } catch (_) {}
+  }
+
+  function isWindowsAppContext() {
+    var ua = "";
+    try { ua = navigator.userAgent || ""; } catch (_) {}
+    if (!/Windows NT/i.test(ua) || /Android/i.test(ua)) return false;
+
+    try {
+      if (sessionStorage.getItem(WINDOWS_APP_CONTEXT_KEY) === "1") return true;
+    } catch (_) {}
+    try {
+      return !!(window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+    } catch (_) {
+      return false;
+    }
   }
 
   function rememberInstalledAppContext() {
@@ -97,6 +129,7 @@
   }
 
   rememberAndroidAppContext();
+  rememberWindowsAppContext();
   rememberInstalledAppContext();
 
   function installAndroidHomeExitControl() {
@@ -1298,6 +1331,73 @@
     };
   }
 
+  function installWindowsAppCloseWarning() {
+    if (!isWindowsAppContext()) return;
+
+    var allowThisUnload = false;
+    var allowTimer = 0;
+
+    function allowInternalNavigation() {
+      allowThisUnload = true;
+      if (allowTimer) clearTimeout(allowTimer);
+      allowTimer = setTimeout(function () {
+        allowThisUnload = false;
+        allowTimer = 0;
+      }, 2500);
+    }
+
+    function sameOriginNavigationTarget(anchor) {
+      if (!anchor || !anchor.href) return false;
+      if (anchor.target && anchor.target.toLowerCase() === "_blank") return false;
+      try {
+        return new URL(anchor.href, location.href).origin === location.origin;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    /* Normal in-app navigation must stay silent. The Windows app's native
+       Close button and reload/F5 do not create DOM click events, so they still
+       reach beforeunload without this bypass. */
+    document.addEventListener("click", function (event) {
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button > 0) return;
+      var target = event.target;
+      if (!target || !target.closest) return;
+
+      var anchor = target.closest("a[href]");
+      if (sameOriginNavigationTarget(anchor)) {
+        allowInternalNavigation();
+        return;
+      }
+
+      if (target.closest("#efp-home-button, #efp-app-back-button")) {
+        allowInternalNavigation();
+      }
+    }, true);
+
+    document.addEventListener("submit", function (event) {
+      var form = event.target;
+      if (!form || !form.action) return;
+      try {
+        if (new URL(form.action, location.href).origin === location.origin) {
+          allowInternalNavigation();
+        }
+      } catch (_) {}
+    }, true);
+
+    window.addEventListener("beforeunload", function (event) {
+      writeSession();
+      if (allowThisUnload) {
+        allowThisUnload = false;
+        return;
+      }
+
+      event.preventDefault();
+      event.returnValue = "";
+      return "";
+    });
+  }
+
   function installHistoryTracking() {
     ["pushState", "replaceState"].forEach(function (name) {
       var original = history[name];
@@ -1346,6 +1446,7 @@
 
   installHistoryTracking();
   installQuizProgressWarning();
+  installWindowsAppCloseWarning();
   installLifecycleTracking();
   installStaticQuizTracking();
   installDynamicBookQuizTracking();
