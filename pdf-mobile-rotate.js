@@ -135,7 +135,12 @@
       btn.classList.toggle('is-landscape', land);
     });
     if (portraitReturn) {
-      portraitReturn.classList.toggle('show', land || !!document.fullscreenElement || forcedFullscreen);
+      /* Show the emergency Portrait control only when ExamFusion itself owns
+         the rotated/fullscreen state. A normal phone/browser Auto-rotate to
+         landscape must not summon our Portrait button; mixing the two
+         orientation systems can leave the viewport in a bad state. */
+      var ownedRotation = forcedFullscreen || !!manualMode;
+      portraitReturn.classList.toggle('show', ownedRotation);
     }
   }
 
