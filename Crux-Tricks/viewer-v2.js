@@ -860,7 +860,7 @@
   nextBtn.addEventListener('click',function(){go(page+1,true)});
   input.addEventListener('change',function(){go(parseInt(input.value,10)||page,true)});
   input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go(parseInt(input.value,10)||page,true);input.blur()}});
-  function clampReaderZoom(v){return Math.max(.70,Math.min(3.00,Math.round(v*100)/100))}
+  function clampReaderZoom(v){return Math.max(.70,Math.min(5.00,Math.round(v*100)/100))}
   function applyReaderZoom(next,focusX,focusY){
     var oldZoom=autoFit?1:zoom;
     var oldLeft=pdfStage.scrollLeft||0,oldTop=pdfStage.scrollTop||0;
@@ -939,7 +939,7 @@
   pdfStage.addEventListener('touchmove',function(e){
     if(!pinchStartDist||e.touches.length!==2)return;
     e.preventDefault();
-    pinchScale=Math.max(.45,Math.min(3.5,touchDistance(e.touches)/pinchStartDist));
+    pinchScale=Math.max(.45,Math.min(5.5,touchDistance(e.touches)/pinchStartDist));
     var target=continuous&&continuousRoot?continuousRoot:pdfCanvas;
     if(target){
       target.style.transformOrigin=(pdfStage.scrollLeft+pinchFocusX)+'px '+(pdfStage.scrollTop+pinchFocusY)+'px';
