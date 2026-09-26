@@ -43,6 +43,7 @@
   var pageAliases=[];
   var pdfDoc=null;
   var renderTask=null;
+  var singleRenderGeneration=0;
   var zoom=mobileReader?1:1;
   var autoFit=true;
   var lastPageLandscape=false;
@@ -50,12 +51,15 @@
   var continuousRoot=null;
   var continuousObserver=null;
   var continuousRenders={};
+  var continuousLayoutGeneration=0;
   var pageRatios={};
   var defaultRatio=.707;
   var scrollTimer=null;
   var scrollRAF=0;
   var resizeTimer=null;
   var controlsTimer=null;
+  var zoomScrollTimer=null;
+  var zoomViewGeneration=0;
   var searchQuery='';
   var activeSearchPage=0;
   var searchFocusPending=false;
@@ -406,10 +410,12 @@
   function renderContinuousPage(n,force){
     if(readerSuspended||!continuous||!pdfDoc)return Promise.resolve(false);
     var el=pageShell(n);if(!el)return Promise.resolve(false);
-    if(pageHasCanvas(el)){pageRenderFailures[n]=0;clearPageRetry(n);return Promise.resolve(true)}
-    if(el.dataset.rendered==='1')el.dataset.rendered='0';
-    if(continuousRenders[n])return continuousRenders[n];
-    continuousRenders[n]=pdfDoc.getPage(n).then(function(pg){
+    if(pageHasCanvas(el)&&!force){pageRenderFailures[n]=0;clearPageRetry(n);return Promise.resolve(true)}
+    if(el.dataset.rendered==='1'&&!el.querySelector('canvas'))el.dataset.rendered='0';
+    var generation=continuousLayoutGeneration;
+    var renderKey=n+':'+generation;
+    if(continuousRenders[renderKey])return continuousRenders[renderKey];
+    continuousRenders[renderKey]=pdfDoc.getPage(n).then(function(pg){
       var base=pg.getViewport({scale:1});
       var ratio=base.height/base.width;
       pageRatios[n]=ratio;
@@ -432,8 +438,10 @@
       var ctx=c.getContext('2d',{alpha:false});
       if(!ctx)throw new Error('Canvas context unavailable');
       return pg.render({canvasContext:ctx,viewport:vp}).promise.then(function(){
-        if(readerSuspended||!continuous||!continuousRoot||!el.isConnected)return false;
-        if(!force&&Math.abs(n-page)>KEEP_RENDER_RADIUS)return false;
+        if(readerSuspended||!continuous||!continuousRoot||!el.isConnected||generation!==continuousLayoutGeneration){
+          c.width=1;c.height=1;return false;
+        }
+        if(!force&&Math.abs(n-page)>KEEP_RENDER_RADIUS){c.width=1;c.height=1;return false}
         var current=el.querySelector('canvas');
         if(current&&current!==c){current.width=1;current.height=1;current.remove()}
         var badge=el.querySelector('.efp-page-badge');
@@ -451,11 +459,11 @@
       schedulePageRetry(n);
       return false;
     }).then(function(result){
-      delete continuousRenders[n];
-      if(result!==true&&!readerSuspended&&Math.abs(n-page)<=KEEP_RENDER_RADIUS+1)schedulePageRetry(n);
+      delete continuousRenders[renderKey];
+      if(result!==true&&!readerSuspended&&generation===continuousLayoutGeneration&&Math.abs(n-page)<=KEEP_RENDER_RADIUS+1)schedulePageRetry(n);
       return result;
     });
-    return continuousRenders[n];
+    return continuousRenders[renderKey];
   }
   function warmContinuousPages(center){
     if(!continuous||!pdfDoc)return;
@@ -557,6 +565,8 @@
   }
   function buildContinuous(firstPg){
     if(!pdfDoc)return;
+    continuousLayoutGeneration++;
+    continuousRenders={};
     continuous=true;
     document.documentElement.classList.add('efp-continuous-mobile-pdf');
     document.documentElement.classList.remove('efp-mobile-rotated-page');
@@ -595,11 +605,20 @@
   function reflowContinuous(){
     if(!continuous||!continuousRoot)return;
     var saved=page;
+    continuousLayoutGeneration++;
+    continuousRenders={};
     var list=continuousRoot.querySelectorAll('.efp-cont-page');
     for(var i=0;i<list.length;i++){
-      var n=parseInt(list[i].dataset.page,10)||0;sizeShell(list[i],pageRatios[n]||defaultRatio);var c=list[i].querySelector('canvas');if(c)c.remove();var hl=list[i].querySelector('.efp-search-layer');if(hl)hl.remove();list[i].dataset.rendered='0';
+      var n=parseInt(list[i].dataset.page,10)||0;
+      sizeShell(list[i],pageRatios[n]||defaultRatio);
+      var c=list[i].querySelector('canvas');
+      // Keep the last good bitmap visible at the new CSS size while PDF.js
+      // renders the sharp zoomed replacement off-DOM. This removes the blank
+      // frame/flicker that used to happen on every zoom step.
+      if(c){c.style.width=list[i].style.width;c.style.height=list[i].style.height}
+      var hl=list[i].querySelector('.efp-search-layer');if(hl)hl.remove();
+      list[i].dataset.rendered='0';
     }
-    continuousRenders={};
     requestAnimationFrame(function(){
       Promise.resolve(go(saved,false)).then(function(){
         warmContinuousPages(saved);
@@ -622,11 +641,20 @@
 
   function renderSinglePage(){
     if(!pdfDoc)return;
+    var generation=++singleRenderGeneration;
     mobileReader=isCompactReader();
     document.documentElement.classList.toggle('efp-compact-reader',mobileReader);
-    pdfError.hidden=true;pdfLoading.hidden=false;pdfLoading.textContent='Loading page '+page+'…';pdfCanvas.hidden=true;pdfCanvas.style.display='';
+    pdfError.hidden=true;
+    var keepVisible=!!(pdfCanvas&&!pdfCanvas.hidden&&pdfCanvas.width>2&&pdfCanvas.height>2);
+    if(keepVisible){
+      pdfLoading.hidden=true;
+    }else{
+      pdfLoading.hidden=false;pdfLoading.textContent='Loading page '+page+'…';pdfCanvas.hidden=true;
+    }
+    pdfCanvas.style.display='';
     if(renderTask){try{renderTask.cancel()}catch(e){}renderTask=null}
     pdfDoc.getPage(page).then(function(pg){
+      if(generation!==singleRenderGeneration)return null;
       var base=pg.getViewport({scale:1});
       var landscape=base.width>base.height*1.03;
       lastPageLandscape=landscape;
@@ -644,11 +672,35 @@
       var cssWidth=Math.max(1,base.width*cssScale),cssHeight=Math.max(1,base.height*cssScale);
       var dpr=fullHdDensity(cssWidth,cssHeight,mobileReader);
       var vp=pg.getViewport({scale:cssScale*dpr});
-      var ctx=pdfCanvas.getContext('2d',{alpha:false});
+      var nextCanvas=document.createElement('canvas');
+      nextCanvas.width=Math.max(1,Math.floor(vp.width));nextCanvas.height=Math.max(1,Math.floor(vp.height));
+      nextCanvas.style.width=Math.max(1,Math.floor(vp.width/dpr))+'px';nextCanvas.style.height=Math.max(1,Math.floor(vp.height/dpr))+'px';
+      var nextCtx=nextCanvas.getContext('2d',{alpha:false});
+      if(!nextCtx)throw new Error('Canvas context unavailable');
       pdfStage.style.overflowY='auto';pdfStage.style.overflowX=mobileReader&&autoFit?'hidden':'auto';
-      pdfCanvas.width=Math.floor(vp.width);pdfCanvas.height=Math.floor(vp.height);pdfCanvas.style.width=Math.floor(vp.width/dpr)+'px';pdfCanvas.style.height=Math.floor(vp.height/dpr)+'px';
-      renderTask=pg.render({canvasContext:ctx,viewport:vp});return renderTask.promise;
-    }).then(function(){renderTask=null;pdfLoading.hidden=true;pdfCanvas.hidden=false;markVisited();updateUrl();updateControls();if(searchQuery&&page===activeSearchPage)renderSearchHighlights(page)}).catch(function(err){if(err&&err.name==='RenderingCancelledException')return;showError('This PDF page could not be rendered inside the app.');if(console&&console.error)console.error(err)});
+      renderTask=pg.render({canvasContext:nextCtx,viewport:vp});
+      return renderTask.promise.then(function(){return nextCanvas});
+    }).then(function(nextCanvas){
+      if(!nextCanvas||generation!==singleRenderGeneration)return;
+      renderTask=null;
+      var oldHighlight=document.getElementById('efpSingleSearchLayer');if(oldHighlight)oldHighlight.remove();
+      // Commit the completed bitmap synchronously to the live canvas. The old
+      // page remains visible until this point, so zoom/page changes never flash
+      // a blank canvas between renders.
+      pdfCanvas.width=nextCanvas.width;pdfCanvas.height=nextCanvas.height;
+      pdfCanvas.style.width=nextCanvas.style.width;pdfCanvas.style.height=nextCanvas.style.height;
+      var liveCtx=pdfCanvas.getContext('2d',{alpha:false});
+      if(!liveCtx)throw new Error('Canvas context unavailable');
+      liveCtx.drawImage(nextCanvas,0,0);
+      nextCanvas.width=1;nextCanvas.height=1;
+      pdfLoading.hidden=true;pdfCanvas.hidden=false;markVisited();updateUrl();updateControls();
+      if(searchQuery&&page===activeSearchPage)renderSearchHighlights(page);
+    }).catch(function(err){
+      if(generation!==singleRenderGeneration)return;
+      if(err&&err.name==='RenderingCancelledException')return;
+      showError('This PDF page could not be rendered inside the app.');
+      if(console&&console.error)console.error(err);
+    });
   }
 
   function go(n,smooth){
@@ -818,8 +870,11 @@
     document.documentElement.classList.add('efp-pdf-zoomed');
     updateControls();
     var scaleRatio=zoom/Math.max(.01,oldZoom);
+    var viewGeneration=++zoomViewGeneration;
     if(continuous)reflowContinuous();else renderSinglePage();
-    setTimeout(function(){
+    clearTimeout(zoomScrollTimer);
+    zoomScrollTimer=setTimeout(function(){
+      if(viewGeneration!==zoomViewGeneration)return;
       pdfStage.scrollLeft=Math.max(0,(oldLeft+focusX)*scaleRatio-focusX);
       pdfStage.scrollTop=Math.max(0,(oldTop+focusY)*scaleRatio-focusY);
     },120);
@@ -835,6 +890,7 @@
   zoomOutBtn.addEventListener('click',function(){applyReaderZoom(steppedReaderZoom(-1))});
 
   function resetReaderFit(){
+    zoomViewGeneration++;clearTimeout(zoomScrollTimer);
     autoFit=true;zoom=1;
     document.documentElement.classList.remove('efp-pdf-zoomed');
     updateControls();
