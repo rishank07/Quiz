@@ -1,5 +1,5 @@
-// v169 Android app Back guard includes section roots
-const CACHE_VERSION = "efp-pwa-2026-09-27-v169-android-back-root-guard";
+// v167 remove Android homepage Exit control
+const CACHE_VERSION = "efp-pwa-2026-09-26-v167-no-android-exit";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260926noandroidexit1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -30,7 +30,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260925refreshnormal2",
   "/app-session.js?v=20260926noandroidexit1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260927androidback2",
+  "/back-nav.js?v=20260926resume1",
   "/pdf-mobile-rotate.js?v=20260926rotate14",
   "/search-logic.js",
   "/search-worker.js",
