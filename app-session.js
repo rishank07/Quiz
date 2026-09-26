@@ -60,7 +60,6 @@
   }
 
   var ANDROID_APP_CONTEXT_KEY = "efp_android_app_context_v1";
-  var WINDOWS_APP_CONTEXT_KEY = "efp_windows_app_context_v1";
 
   function rememberAndroidAppContext() {
     if (!isHomePath(location.pathname)) return;
@@ -78,37 +77,6 @@
        where the android-app:// referrer is no longer available. */
     if (!/Android/i.test(ua) || (!packageReferrer && !installedAppLaunchMarker())) return;
     try { sessionStorage.setItem(ANDROID_APP_CONTEXT_KEY, "1"); } catch (_) {}
-  }
-
-  function rememberWindowsAppContext() {
-    if (!isHomePath(location.pathname)) return;
-    var ua = "";
-    var source = "";
-    var standalone = false;
-    try { ua = navigator.userAgent || ""; } catch (_) {}
-    try { source = new URLSearchParams(location.search).get("source") || ""; } catch (_) {}
-    try {
-      standalone = !!(window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
-    } catch (_) {}
-
-    if (!/Windows NT/i.test(ua) || /Android/i.test(ua)) return;
-    if (!standalone && !/^windows-pwa$/i.test(source)) return;
-    try { sessionStorage.setItem(WINDOWS_APP_CONTEXT_KEY, "1"); } catch (_) {}
-  }
-
-  function isWindowsAppContext() {
-    var ua = "";
-    try { ua = navigator.userAgent || ""; } catch (_) {}
-    if (!/Windows NT/i.test(ua) || /Android/i.test(ua)) return false;
-
-    try {
-      if (sessionStorage.getItem(WINDOWS_APP_CONTEXT_KEY) === "1") return true;
-    } catch (_) {}
-    try {
-      return !!(window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
-    } catch (_) {
-      return false;
-    }
   }
 
   function rememberInstalledAppContext() {
@@ -129,7 +97,6 @@
   }
 
   rememberAndroidAppContext();
-  rememberWindowsAppContext();
   rememberInstalledAppContext();
 
   function relativeUrl() {
@@ -1217,19 +1184,6 @@
     };
   }
 
-  function installWindowsAppCloseWarning() {
-    /* Windows installed app: do not register a beforeunload confirmation.
-       Browser-controlled beforeunload dialogs use fixed Edge wording such as
-       "Changes you made may not be saved" and may show an extra
-       "Prevent this page..." option. That UI cannot be customised and makes
-       the app feel like a webpage rather than a desktop app.
-
-       Session/progress persistence is already handled by the lifecycle
-       tracking below, so Windows Close (X) and Refresh can stay clean while
-       the user's place is still saved for resume. */
-    return;
-  }
-
   function installHistoryTracking() {
     ["pushState", "replaceState"].forEach(function (name) {
       var original = history[name];
@@ -1272,7 +1226,6 @@
 
   installHistoryTracking();
   installQuizProgressWarning();
-  installWindowsAppCloseWarning();
   installLifecycleTracking();
   installStaticQuizTracking();
   installDynamicBookQuizTracking();
