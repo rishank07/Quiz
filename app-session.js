@@ -1332,70 +1332,16 @@
   }
 
   function installWindowsAppCloseWarning() {
-    if (!isWindowsAppContext()) return;
+    /* Windows installed app: do not register a beforeunload confirmation.
+       Browser-controlled beforeunload dialogs use fixed Edge wording such as
+       "Changes you made may not be saved" and may show an extra
+       "Prevent this page..." option. That UI cannot be customised and makes
+       the app feel like a webpage rather than a desktop app.
 
-    var allowThisUnload = false;
-    var allowTimer = 0;
-
-    function allowInternalNavigation() {
-      allowThisUnload = true;
-      if (allowTimer) clearTimeout(allowTimer);
-      allowTimer = setTimeout(function () {
-        allowThisUnload = false;
-        allowTimer = 0;
-      }, 2500);
-    }
-
-    function sameOriginNavigationTarget(anchor) {
-      if (!anchor || !anchor.href) return false;
-      if (anchor.target && anchor.target.toLowerCase() === "_blank") return false;
-      try {
-        return new URL(anchor.href, location.href).origin === location.origin;
-      } catch (_) {
-        return false;
-      }
-    }
-
-    /* Normal in-app navigation must stay silent. The Windows app's native
-       Close button and reload/F5 do not create DOM click events, so they still
-       reach beforeunload without this bypass. */
-    document.addEventListener("click", function (event) {
-      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button > 0) return;
-      var target = event.target;
-      if (!target || !target.closest) return;
-
-      var anchor = target.closest("a[href]");
-      if (sameOriginNavigationTarget(anchor)) {
-        allowInternalNavigation();
-        return;
-      }
-
-      if (target.closest("#efp-home-button, #efp-app-back-button")) {
-        allowInternalNavigation();
-      }
-    }, true);
-
-    document.addEventListener("submit", function (event) {
-      var form = event.target;
-      if (!form || !form.action) return;
-      try {
-        if (new URL(form.action, location.href).origin === location.origin) {
-          allowInternalNavigation();
-        }
-      } catch (_) {}
-    }, true);
-
-    window.addEventListener("beforeunload", function (event) {
-      writeSession();
-      if (allowThisUnload) {
-        allowThisUnload = false;
-        return;
-      }
-
-      event.preventDefault();
-      event.returnValue = "";
-      return "";
-    });
+       Session/progress persistence is already handled by the lifecycle
+       tracking below, so Windows Close (X) and Refresh can stay clean while
+       the user's place is still saved for resume. */
+    return;
   }
 
   function installHistoryTracking() {
