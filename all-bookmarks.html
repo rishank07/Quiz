@@ -59,6 +59,8 @@ function sharedItems(){
  var data=getShared(),out=[],docs=Array.isArray(window.EF_CRUX_DOCS)?window.EF_CRUX_DOCS:[];
  Object.keys(data).forEach(function(key){
   if(!data[key])return;
+  var fm=/^cruxdoc:([^:]+)$/.exec(key);
+  if(fm){var fd=docs.find(function(x){return x.id===fm[1]}),fmeta=[];if(fd&&fd.source)fmeta.push(fd.source);if(fd&&fd.subject)fmeta.push(fd.subject);if(fd&&fd.branch)fmeta.push(fd.branch);out.push({store:"shared",key:key,group:"Crux & Tricks",kind:"Favourite Chapter",title:fd&&fd.title?fd.title:"Crux & Tricks Chapter",meta:(fmeta.length?fmeta.join(" · ")+" · ":"")+"Chapter favourite",url:"./Crux-Tricks/viewer.html?id="+encodeURIComponent(fm[1])+"&from=crux-favourite"});return}
   var cm=/^cruxpage:([^:]+):(\d+)$/.exec(key);
   if(cm){var d=docs.find(function(x){return x.id===cm[1]}),pg=Math.max(1,Number(cm[2])||1);out.push({store:"shared",key:key,group:"Crux & Tricks",kind:"PDF Page",title:d&&d.title?d.title:"Crux & Tricks",meta:"Page "+pg+(d&&d.subject?" · "+d.subject:""),url:"./Crux-Tricks/viewer.html?id="+encodeURIComponent(cm[1])+"&page="+pg+"&from=crux-page",page:true});return}
   var h=key.indexOf("#");if(h<0)return;var path=cleanPath(key.slice(0,h)),token=key.slice(h+1);
