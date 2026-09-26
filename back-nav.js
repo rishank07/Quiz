@@ -997,6 +997,19 @@
       return;
     }
 
+    /* A mapped section root has Home as its logical parent. The visible Back
+       button must honor that mapping directly instead of trusting Android/TWA
+       referrer history, which can point at a recreated or stale app entry. */
+    var visibleParentUrl = logicalParentUrl();
+    if (visibleParentUrl && isHomePageUrl(visibleParentUrl.href)) {
+      consumeBackEvent(event);
+      clearLogicalChain();
+      clearHomeSearchChain();
+      if (window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
+      window.location.assign("/");
+      return;
+    }
+
     if (isGenericHomeSearchGuardState(history.state, "top")) {
       consumeBackEvent(event);
       window.history.back();
