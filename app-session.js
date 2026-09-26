@@ -204,20 +204,30 @@
       modal.classList.remove("show");
     }
 
+    function supportsNativeAndroidExit() {
+      var ua = "";
+      try { ua = navigator.userAgent || ""; } catch (_) {}
+      var match = /ExamFusionPrepAndroid\/(\d+)\.(\d+)\.(\d+)/i.exec(ua);
+      if (!match) return false;
+      var major = Number(match[1]) || 0;
+      var minor = Number(match[2]) || 0;
+      var patch = Number(match[3]) || 0;
+      return major > 1 || (major === 1 && (minor > 0 || patch >= 2));
+    }
+
     function requestAppExit() {
       markIntentionalHome();
       try { sessionStorage.removeItem(PENDING_KEY); } catch (_) {}
       try { localStorage.removeItem(QUIZ_WARNING_KEY); } catch (_) {}
 
-      /* A TWA/PWA is still browser-rendered. window.close() is the only
-         website-side close request that does not also hook Refresh. It is
-         intentionally called directly from the confirmed user gesture. */
-      try { window.close(); } catch (_) {}
+      if (supportsNativeAndroidExit()) {
+        try {
+          window.location.href = "examfusionprep://exit";
+          return;
+        } catch (_) {}
+      }
 
-      /* Some Android browser/TWA versions treat the launch activity as the
-         first history entry. In that case one Back request finishes the
-         activity even when window.close() itself is ignored. Never run this
-         fallback through a deep in-app history stack. */
+      try { window.close(); } catch (_) {}
       window.setTimeout(function () {
         try {
           if (!window.closed && document.visibilityState !== "hidden" && window.history.length <= 2) {
