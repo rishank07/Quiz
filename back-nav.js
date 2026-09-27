@@ -8,6 +8,7 @@
   var CRUX_HOME_SEARCH_GUARD = "efpCruxHomeSearchGuard";
   var HOME_SEARCH_CHAIN_KEY = "efp_home_search_back_chain";
   var HOME_SEARCH_GUARD = "efpHomeSearchGuard";
+  var APPROVED_LOGICAL_BACK_ATTRIBUTE = "data-efp-approved-logical-back";
   var APP_RESUME_PENDING_KEY = "efp_app_resume_pending_v1";
   var AUTO_RESUMED_BOUNDARY = false;
   var CRUX_RETURN_DOC_ID = "";
@@ -955,6 +956,8 @@
       ? event.target.closest("#" + BACK_BUTTON_ID)
       : null;
     if (!target) return;
+    var approvedLogicalBack = target.getAttribute(APPROVED_LOGICAL_BACK_ATTRIBUTE) === "1";
+    if (approvedLogicalBack) target.removeAttribute(APPROVED_LOGICAL_BACK_ATTRIBUTE);
 
     if (useCruxInternalBack(event)) {
       return;
@@ -994,6 +997,15 @@
       if (!navigateCruxViewerToHierarchy()) {
         window.location.replace("/Crux-Tricks/index.html");
       }
+      return;
+    }
+
+    /* Quiz Quit replays the shared Back click after releasing its synthetic
+       history guard. On an idle/resumed Android or browser session, the entry
+       behind that guard may have been rebuilt as Home. The explicit marker
+       tells this one approved replay to follow the generated site hierarchy;
+       ordinary live Back clicks can still preserve genuine browser history. */
+    if (approvedLogicalBack && useLogicalParent(event)) {
       return;
     }
 

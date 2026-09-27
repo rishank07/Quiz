@@ -721,6 +721,7 @@
     var allowNavigation = false;
     var MODAL_ID = "efp-quiz-exit-modal";
     var SYSTEM_BACK_GUARD_KEY = "efpQuizQuitGuard";
+    var LOGICAL_BACK_ATTRIBUTE = "data-efp-approved-logical-back";
     var systemBackGuardActive = false;
     var pendingGuardRelease = null;
     var restoringSystemBackGuard = false;
@@ -1289,7 +1290,20 @@
             window.setTimeout(function () {
               try {
                 if (navTarget && navTarget.isConnected && typeof navTarget.click === "function") {
-                  navTarget.click();
+                  /* Removing the quiz guard deliberately walks one synthetic
+                     history entry. After Android has idled/recreated the page,
+                     the next real entry can be the app launch Home rather than
+                     the page's hierarchy parent. Mark this approved replay so
+                     back-nav.js uses its deterministic parent map instead of
+                     trusting that recreated browser history. */
+                  var logicalBack = !!(navTarget.matches &&
+                    navTarget.matches("#efp-app-back-button"));
+                  if (logicalBack) navTarget.setAttribute(LOGICAL_BACK_ATTRIBUTE, "1");
+                  try {
+                    navTarget.click();
+                  } finally {
+                    if (logicalBack) navTarget.removeAttribute(LOGICAL_BACK_ATTRIBUTE);
+                  }
                   return;
                 }
                 if (navTarget && navTarget.href) window.location.assign(navTarget.href);

@@ -9,12 +9,11 @@ from pathlib import Path
 
 SCRIPT_SPECS = (
     ("/back-parent-map.js", '  <script defer src="/back-parent-map.js?v=20260906hier1"></script>\n'),
-    ("/back-nav.js", '  <script defer src="/back-nav.js?v=20260924bookhier3"></script>\n'),
+    ("/back-nav.js", '  <script defer src="/back-nav.js?v=20260927idlehier1"></script>\n'),
     ("/home-nav.js", '  <script defer src="/home-nav.js?v=20260906nav2"></script>\n'),
 )
 
 MATHS_SPEED_BOOSTER_FILE = Path("Maths Speed Booster/math-speed-booster.html")
-MIXED_PRACTICE_FILE = Path("Original Practice/Mixed_Practice.html")
 MATHS_FIT_MARKER = "/Maths%20Speed%20Booster/math-speed-booster-fit.css"
 MATHS_FIT_TAG = (
     '  <link rel="stylesheet" '
@@ -53,15 +52,9 @@ def inject(path: Path, root: Path) -> bool:
         raise RuntimeError(f"Non-UTF-8 HTML file: {path}") from exc
 
     rel = path.relative_to(root)
-    # Crux and Mixed Practice need their current Back handlers even after the
-    # counts workflow rewrites navigation tags. Other sections keep the shared
-    # default cache URL.
-    back_nav_version = (
-        "20260926resume1" if rel.parts[0] == "Crux-Tricks"
-        else "20260926resume1" if rel == MIXED_PRACTICE_FILE
-        else "20260927ghatnaroot1" if rel.as_posix() == "Books/Ghatnachakra Purvalokan/SubjectName.html"
-        else "20260924bookhier3"
-    )
+    # Keep every page on the same deterministic Back runtime even after a
+    # counts/content workflow rewrites its shared navigation tags.
+    back_nav_version = "20260927idlehier1"
 
     # Keep the shared Back runtime on one fresh URL across the whole site.
     # Existing pages may already contain /back-nav.js with an older query
@@ -82,7 +75,7 @@ def inject(path: Path, root: Path) -> bool:
         changed = True
 
     head_blocks = [
-        tag.replace("20260924bookhier3", back_nav_version)
+        tag.replace("20260927idlehier1", back_nav_version)
         for marker, tag in SCRIPT_SPECS if marker not in text
     ]
 
