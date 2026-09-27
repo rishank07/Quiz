@@ -1,5 +1,5 @@
-// v185 refresh mobile PDF landscape chrome and floating controls
-const CACHE_VERSION = "efp-pwa-2026-09-28-v185-pdf-landscape-controls";
+// v186 refresh mobile PDF controls and Mixed Practice arrow navigation
+const CACHE_VERSION = "efp-pwa-2026-09-28-v186-pdf-mixed-arrows";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
