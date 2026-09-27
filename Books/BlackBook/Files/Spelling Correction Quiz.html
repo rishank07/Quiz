@@ -3534,7 +3534,7 @@ if (activeLetter && navButtons[activeLetter]) {
                             <span class="option-circle flex-shrink-0 w-7 h-7 rounded-full border-2 border-slate-300 text-slate-500 text-xs font-bold flex items-center justify-center transition-colors">${letters[idx] || ''}</span>
                             <span class="option-text flex-1">${escapeHtml(opt)}</span>
                         `;
-                        optBtn.addEventListener('click', () => checkAnswer(optBtn, opt, item, optsContainer));
+                        optBtn.addEventListener('click', (event) => checkAnswer(optBtn, opt, item, optsContainer, !!event.isTrusted));
                         optsContainer.appendChild(optBtn);
                     });
                     }
@@ -3546,9 +3546,27 @@ if (activeLetter && navButtons[activeLetter]) {
             
         }
 
-        function checkAnswer(btn, selected, item, optsContainer) {
+        function keepRevealedAnswerBelowScorebar(target) {
+            if (!target || window.innerWidth >= 640) return;
+            const scorebar = document.querySelector('.efp-mobile-scorebar');
+            if (!scorebar) return;
+            requestAnimationFrame(() => {
+                const barBottom = scorebar.getBoundingClientRect().bottom;
+                const targetTop = target.getBoundingClientRect().top;
+                const safeTop = barBottom + 14;
+                if (targetTop < safeTop) {
+                    window.scrollBy({
+                        top: Math.floor(targetTop - safeTop),
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        }
+
+        function checkAnswer(btn, selected, item, optsContainer, userInitiated = false) {
             const explanation = document.getElementById(`exp-${item.sn}`);
             const buttons = optsContainer.querySelectorAll('button');
+            let revealedCorrect = null;
 
             // Disable all buttons in this question
             buttons.forEach(b => {
@@ -3566,6 +3584,7 @@ if (activeLetter && navButtons[activeLetter]) {
             const isCorrect = selected === item.word;
 
             if (isCorrect) {
+                revealedCorrect = btn;
                 btn.classList.add('option-correct');
                 btn.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle-check ml-2 float-right mt-1"></i>');
 
@@ -3585,6 +3604,7 @@ if (activeLetter && navButtons[activeLetter]) {
                 buttons.forEach(b => {
                     const textSpan = b.querySelector('.option-text');
                     if (textSpan && textSpan.textContent === item.word) {
+                        revealedCorrect = b;
                         b.classList.add('option-correct');
                         b.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle-check ml-2 float-right mt-1"></i>');
                     }
@@ -3594,6 +3614,11 @@ if (activeLetter && navButtons[activeLetter]) {
             // Show explanation with animation
             explanation.classList.remove('hidden');
             explanation.classList.add('explanation-reveal');
+
+            // On mobile, a sticky score bar must never cover the revealed
+            // correct option after a real learner tap. Programmatic restore
+            // clicks intentionally skip this so reopening a quiz does not jump.
+            if (userInitiated) keepRevealedAnswerBelowScorebar(revealedCorrect || btn);
         }
 
         // Initialize App
