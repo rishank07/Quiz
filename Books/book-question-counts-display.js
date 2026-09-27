@@ -388,7 +388,7 @@
 
     function installResponsiveScoreBar() {
       var source = document.getElementById("scoreTxt");
-      if (!source || source.dataset.efCaResponsiveScore === "1") return;
+      if (!source || source.dataset.efNativeScore === "1" || source.dataset.efCaResponsiveScore === "1") return;
       source.dataset.efCaResponsiveScore = "1";
       source.classList.add("ef-ca-score-source");
 
