@@ -1,5 +1,5 @@
-// v175 refresh app shell for full-depth bookmark hierarchy
-const CACHE_VERSION = "efp-pwa-2026-09-27-v175-bookmark-full-depth";
+// v176 refresh app shell for final full-depth bookmark hierarchy
+const CACHE_VERSION = "efp-pwa-2026-09-27-v176-bookmark-full-depth-final";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
