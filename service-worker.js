@@ -1,5 +1,5 @@
-// v176 refresh app shell for final full-depth bookmark hierarchy
-const CACHE_VERSION = "efp-pwa-2026-09-27-v176-bookmark-full-depth-final";
+// v177 refresh app shell for bookmark hierarchy Back navigation
+const CACHE_VERSION = "efp-pwa-2026-09-27-v177-bookmark-back-nav";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -32,7 +32,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260927idlehier1",
   "/app-session.js?v=20260927idlehier1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260927cruxhier2",
+  "/back-nav.js?v=20260927bookmarkhier1",
   "/pdf-mobile-rotate.js?v=20260926rotate14",
   "/search-logic.js",
   "/search-worker.js",
