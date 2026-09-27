@@ -1,5 +1,5 @@
-// v184 refresh mobile PDF controls and Mixed Practice solid edge masks
-const CACHE_VERSION = "efp-pwa-2026-09-28-v184-pdf-mixed-solid-masks";
+// v185 refresh mobile PDF landscape chrome and floating controls
+const CACHE_VERSION = "efp-pwa-2026-09-28-v185-pdf-landscape-controls";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -33,7 +33,7 @@ const APP_SHELL = [
   "/app-session.js?v=20260927idlehier1",
   "/back-parent-map.js",
   "/back-nav.js?v=20260927bookmarkhier1",
-  "/pdf-mobile-rotate.js?v=20260928rotate15",
+  "/pdf-mobile-rotate.js?v=20260928rotate16",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
@@ -57,7 +57,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260924cruxback1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260928readerzoom1",
+  "/Crux-Tricks/viewer-v2.js?v=20260928readerzoom2",
 ];
 
 self.addEventListener("install", (event) => {
