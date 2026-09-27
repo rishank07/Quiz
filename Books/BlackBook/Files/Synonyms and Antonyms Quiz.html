@@ -83,11 +83,17 @@
         }
 
         .sticky-nav {
-            position: sticky;
-            top: 0;
-            z-index: 50;
+            position: static;
             backdrop-filter: blur(12px);
             background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (min-width: 640px) {
+            .sticky-nav {
+                position: sticky;
+                top: 0;
+                z-index: 50;
+            }
         }
 
         /* Keep the live score visible while desktop users scroll through a quiz. */
@@ -115,12 +121,20 @@
                 font-weight: 800;
                 text-align: right;
             }
+
+            .desktop-sticky-score .wrong-value {
+                min-width: 2ch;
+                color: rgb(220 38 38);
+                font-size: 1.125rem;
+                font-weight: 800;
+                text-align: right;
+            }
         }
     </style>
   <script defer src="/home-nav.js?v=20260925blackbookedge2"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
   <script defer src="/back-nav.js?v=20260924bookhier3"></script>
-  <script defer src="/blackbook-quiz-bookmarks.js?v=20260927b2"></script>
+  <script defer src="/blackbook-quiz-bookmarks.js?v=20260927b5"></script>
 </head>
 <body class="antialiased selection:bg-blue-200">
 
@@ -137,9 +151,15 @@
                         <p class="text-blue-100 text-sm font-medium">A-Z Synonyms &amp; Antonyms</p>
                     </div>
                 </div>
-                <div class="text-center hidden sm:block">
-                    <div class="text-3xl font-black" id="total-score">0</div>
-                    <div class="text-xs text-blue-200 uppercase tracking-wider font-semibold">Score</div>
+                <div class="hidden sm:flex items-center gap-5">
+                    <div class="text-center">
+                        <div class="text-3xl font-black" id="total-score">0</div>
+                        <div class="text-xs text-blue-200 uppercase tracking-wider font-semibold">Score</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-black text-red-200" id="total-wrong">0</div>
+                        <div class="text-xs text-red-200 uppercase tracking-wider font-semibold">Wrong</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -154,14 +174,23 @@
             <div class="desktop-sticky-score" aria-live="polite">
                 <span>Current Score:</span>
                 <span class="score-value" id="desktop-sticky-score">0</span>
+                <span aria-hidden="true">•</span>
+                <span>Wrong:</span>
+                <span class="wrong-value" id="desktop-sticky-wrong">0</span>
             </div>
         </div>
     </nav>
 
     <!-- Mobile Score Bar -->
-    <div class="sm:hidden bg-white border-b border-slate-200 px-4 py-2 flex justify-between items-center sticky top-[60px] z-40">
-        <span class="font-semibold text-slate-600">Current Score:</span>
-        <span class="font-bold text-blue-600 text-lg" id="mobile-score">0</span>
+    <div class="efp-mobile-scorebar sm:hidden bg-white border-b border-slate-200 px-4 py-2 flex justify-between items-center sticky top-0 z-[60] shadow-sm">
+        <div class="flex items-center gap-2">
+            <span class="font-semibold text-slate-600">Current Score:</span>
+            <span class="font-bold text-blue-600 text-lg" id="mobile-score">0</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="font-semibold text-slate-600">Wrong:</span>
+            <span class="font-bold text-red-600 text-lg" id="mobile-wrong">0</span>
+        </div>
     </div>
 
     <!-- Main Content -->
@@ -195,6 +224,18 @@
         });
 
         let currentScore = 0;
+        let wrongScore = 0;
+
+        function syncScoreDisplays() {
+            ['total-score', 'mobile-score', 'desktop-sticky-score'].forEach(id => {
+                const node = document.getElementById(id);
+                if (node) node.textContent = currentScore;
+            });
+            ['total-wrong', 'mobile-wrong', 'desktop-sticky-wrong'].forEach(id => {
+                const node = document.getElementById(id);
+                if (node) node.textContent = wrongScore;
+            });
+        }
 
         window.EFP_BLACKBOOK_QUIZ = {
             correctFor(questionId) {
@@ -202,14 +243,18 @@
                 const item = vocabData.find(entry => entry.sn === sn);
                 return item ? item.meaning : '';
             },
-            setScore(value) {
+            setScore(value, wrongValue) {
                 currentScore = Math.max(0, Number(value) || 0);
-                document.getElementById('total-score').textContent = currentScore;
-                document.getElementById('mobile-score').textContent = currentScore;
-                document.getElementById('desktop-sticky-score').textContent = currentScore;
+                if (wrongValue !== undefined) {
+                    wrongScore = Math.max(0, Number(wrongValue) || 0);
+                }
+                syncScoreDisplays();
             },
             getScore() {
                 return currentScore;
+            },
+            getWrongScore() {
+                return wrongScore;
             }
         };
 
@@ -423,15 +468,17 @@ if (activeLetter && navButtons[activeLetter]) {
                 btn.classList.add('option-correct');
                 btn.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle-check ml-2 float-right mt-1"></i>');
 
-                // Update Score
+                // Update live score
                 currentScore++;
-                document.getElementById('total-score').textContent = currentScore;
-                document.getElementById('mobile-score').textContent = currentScore;
-                document.getElementById('desktop-sticky-score').textContent = currentScore;
+                syncScoreDisplays();
             } else {
                 btn.classList.add('option-incorrect');
                 btn.classList.remove('hover:bg-blue-50', 'hover:border-blue-300');
                 btn.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle-xmark ml-2 float-right mt-1"></i>');
+
+                // Update live wrong count
+                wrongScore++;
+                syncScoreDisplays();
 
                 // Reveal the correct option too
                 buttons.forEach(b => {
