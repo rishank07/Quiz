@@ -133,14 +133,29 @@ function trailFromPath(path){
  else if(root&&idx<0)chain.unshift(root);
  return compactTrail(chain)
 }
+function currentAffairsLeaf(file,fallback){
+ var raw=dec(String(file||"")).replace(/\.html?$/i,""),key=raw.toUpperCase().replace(/[^A-Z0-9]/g,""),m;
+ m=/^(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)(20\d{2})$/.exec(key);
+ if(m)return m[1].charAt(0)+m[1].slice(1).toLowerCase()+" "+m[2];
+ var labels={
+  "SUMMITS2026":"Summits","APPOINTMENT2026":"Appointment","BILLSANDACT2026":"Bills & Act","SPORTS2026":"Sports",
+  "ENVIRONMENT2026":"Environment","DRDOANDDEFENCE2026":"DRDO & Defence","INDEX2026PROPERBILINGUAL":"Index",
+  "AWARDS2026PROPERBILINGUAL":"Awards","FIRSTININDIA2026PROPERBILINGUAL":"First In India","EXERCISES2026PROPERBILINGUAL":"Exercises",
+  "BUDGET202627":"Budget","ECONOMICSURVEY2026":"Economic Survey","FILMSAWARDS2026":"Film Awards","CENTRALSCHEMES2026":"Central Scheme",
+  "DAYSANDTHEME2026":"Days & Theme","COMMONWEALTHGAMES2026":"Commonwealth Games","BOOKS2026PROPERBILINGUAL":"Books & Authors",
+  "SCIENCETECH2026":"Sci And Tech","MOU2026":"MoU","STATESCHEME2026":"State Scheme","GITAG2026PROPERBILINGUAL":"GI Tag",
+  "INDEPENDENCEDAY2026":"Independence Day","CENSUS2027":"Census","BRICS2026":"BRICS"
+ };
+ return labels[key]||fallback||pretty(raw)
+}
 function currentAffairsTrail(path,title){
  var p=pathFromUrl(path),trail=["Current Affairs"],m;
  m=/^\/Current Affairs\/Topic Names\/Rapid Practice\/(20\d{2})\/(Month Wise|Topic Wise)\/([^/]+)$/i.exec(p);
- if(m)return compactTrail(trail.concat(["Rapid Practice",m[1],pretty(m[2]),title||pretty(m[3]).replace(/ Current Affairs Rapid Practice$/i,"").replace(/ Rapid Practice$/i,"")]));
+ if(m)return compactTrail(trail.concat(["Rapid Practice",m[1],pretty(m[2]),title||currentAffairsLeaf(m[3],"")]));
  m=/^\/Current Affairs\/Topic Names\/(20\d{2})\/(Month Wise|Topic Wise)\/([^/]+)$/i.exec(p);
- if(m)return compactTrail(trail.concat([m[1],pretty(m[2]),title||pretty(m[3])]));
+ if(m)return compactTrail(trail.concat([m[1],pretty(m[2]),currentAffairsLeaf(m[3],title)]));
  m=/^\/Current Affairs\/Topic Names\/([^/]+)$/i.exec(p);
- if(m&& !/^Rapid Practice\.html$/i.test(m[1]))return compactTrail(trail.concat([title||pretty(m[1])]));
+ if(m&& !/^Rapid Practice\.html$/i.test(m[1]))return compactTrail(trail.concat([currentAffairsLeaf(m[1],title)]));
  return trail
 }
 function blackbookTrail(path,title){
