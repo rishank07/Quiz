@@ -1,5 +1,5 @@
-// v166 shared Current Affairs controls plus Blackbook topic bookmarks
-const CACHE_VERSION = "efp-pwa-2026-09-27-v166-blackbook-topic-bookmarks";
+// v166 refresh Current Affairs quiz section ranges
+const CACHE_VERSION = "efp-pwa-2026-09-27-v166-ca-quiz-ranges";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -26,7 +26,6 @@ const APP_SHELL = [
   "/black-mode.js",
   "/ca-question-deeplink.js?v=20260927-bookmark-filter",
   "/blackbook-quiz-bookmarks.js",
-  "/blackbook-topic-bookmarks.js",
   "/owner-debug.js",
   "/home-nav.js?v=20260925refreshnormal2",
   "/app-session.js?v=20260925refreshnormal2",
@@ -299,6 +298,21 @@ async function freshCurrentAffairsBookmarkAsset() {
   }
 }
 
+async function freshRapidPracticeAsset() {
+  const currentAsset = "/rapid-practice-deeplink.js?v=20260927-section-ranges";
+  const cache = await caches.open(CACHE_VERSION);
+  try {
+    const response = await fetch(currentAsset, { cache: "no-store" });
+    if (response && response.ok && (response.type === "basic" || response.type === "cors")) {
+      await cache.put(currentAsset, response.clone());
+    }
+    return response;
+  } catch (_) {
+    const cached = await caches.match(currentAsset) || await caches.match("/rapid-practice-deeplink.js");
+    return cached || new Response("", { status: 503, statusText: "Offline" });
+  }
+}
+
 async function freshPyqAsset(request) {
   // PYQ is a fast-changing external-link catalog. Never let ignoreSearch return
   // an older runtime-cached catalog/app asset after a bulk import.
@@ -341,9 +355,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/search-logic.js" ||
       url.pathname === "/homepage-search-ui.js" ||
       url.pathname === "/homepage-fulltext-search.js" ||
-      url.pathname === "/rapid-practice-deeplink.js" ||
       url.pathname === "/blackbook-quiz-bookmarks.js" ||
-      url.pathname === "/blackbook-topic-bookmarks.js" ||
       url.pathname === "/pdf-mobile-rotate.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
       url.pathname === "/Original%20Practice/original-practice.js" ||
@@ -357,6 +369,11 @@ self.addEventListener("fetch", (event) => {
 
   if (url.pathname === "/ca-question-deeplink.js") {
     event.respondWith(freshCurrentAffairsBookmarkAsset());
+    return;
+  }
+
+  if (url.pathname === "/rapid-practice-deeplink.js") {
+    event.respondWith(freshRapidPracticeAsset());
     return;
   }
 

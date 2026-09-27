@@ -108,6 +108,101 @@
     });
   }
 
+  function rapidSections() {
+    try {
+      if (typeof SECTIONS !== "undefined" && Array.isArray(SECTIONS)) return SECTIONS;
+    } catch (_) {}
+    return [];
+  }
+
+  function activeSectionIndex() {
+    try {
+      if (typeof current !== "undefined" && Number.isFinite(Number(current))) {
+        return Math.max(0, Number(current));
+      }
+    } catch (_) {}
+
+    var active = document.querySelector("#sectionNav .pill.active");
+    if (active && active.parentNode) {
+      var pills = Array.prototype.slice.call(active.parentNode.querySelectorAll(".pill"));
+      var index = pills.indexOf(active);
+      if (index >= 0) return index;
+    }
+
+    var secNo = document.getElementById("secNo");
+    var match = secNo && (secNo.textContent || "").match(/Section\s+(\d+)/i);
+    return match ? Math.max(0, parseInt(match[1], 10) - 1) : 0;
+  }
+
+  function sectionRange(sections, index) {
+    var start = 1;
+    for (var i = 0; i < index; i += 1) {
+      start += sections[i] && Array.isArray(sections[i].questions) ? sections[i].questions.length : 0;
+    }
+    var count = sections[index] && Array.isArray(sections[index].questions)
+      ? sections[index].questions.length
+      : 0;
+    return { start: start, end: Math.max(start, start + count - 1), count: count };
+  }
+
+  function cleanSectionTitle(value, hindi) {
+    var text = String(value || "").replace(/\s+/g, " ").trim();
+    text = text.replace(/^\s*(?:Part|भाग)\s+\d+[A-Za-z]?\s*:\s*/i, "");
+    text = text.replace(/\s*(?::|[-–—]|·)?\s*(?:Facts|तथ्य)\s*\d+\s*[-–—]\s*\d+\s*$/i, "");
+    text = text.replace(/\s*Q\s*\d+\s*[-–—]\s*Q?\s*\d+\s*$/i, "");
+    text = text.replace(/^(Explanation(?: Fact)? Drill|स्पष्टीकरण अभ्यास)\s+\d+$/i, "$1");
+    text = text.replace(/\s*[:·–—-]\s*$/, "").trim();
+    return text || (hindi ? "प्रश्न" : "Questions");
+  }
+
+  function installLogicalSectionRanges() {
+    var head = document.querySelector(".sec-head");
+    var nav = document.getElementById("sectionNav");
+    if (!head || !nav || head.__efpLogicalRanges) return;
+    head.__efpLogicalRanges = true;
+
+    function syncRanges() {
+      var sections = rapidSections();
+      if (!sections.length) return;
+      var index = Math.min(activeSectionIndex(), sections.length - 1);
+      var section = sections[index] || {};
+      var range = sectionRange(sections, index);
+      if (!range.count) return;
+
+      var title = section.title || {};
+      var rangeText = "Q" + range.start + "–Q" + range.end;
+      var en = cleanSectionTitle(title.en, false) + " · " + rangeText;
+      var hi = cleanSectionTitle(title.hi || title.en, true) + " · " + rangeText;
+      var meta = "Section " + (index + 1) + " of " + sections.length +
+        " · " + rangeText + " · " + range.count + " questions";
+      var secNo = document.getElementById("secNo");
+      var secTitle = document.getElementById("secTitle");
+      var secTitleHi = document.getElementById("secTitleHi");
+
+      if (secNo && secNo.textContent !== meta) secNo.textContent = meta;
+      if (secTitle && secTitle.textContent !== en) secTitle.textContent = en;
+      if (secTitleHi && secTitleHi.textContent !== hi) secTitleHi.textContent = hi;
+
+      nav.querySelectorAll(".pill").forEach(function (pill, pillIndex) {
+        if (!sections[pillIndex]) return;
+        var pillRange = sectionRange(sections, pillIndex);
+        var pillRangeText = "Q" + pillRange.start + "–Q" + pillRange.end;
+        var pillTitle = cleanSectionTitle((sections[pillIndex].title || {}).en, false) +
+          " · " + pillRangeText + " · " + pillRange.count + " questions";
+        pill.title = pillTitle;
+        pill.setAttribute("aria-label", "Section " + (pillIndex + 1) + ": " + pillTitle);
+      });
+    }
+
+    syncRanges();
+    new MutationObserver(syncRanges).observe(head, {
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
+    new MutationObserver(syncRanges).observe(nav, { childList: true, subtree: true });
+  }
+
   function getTarget() {
     var hash = (window.location.hash || "").replace(/^#/, "");
     var m = /^rp-(\d+)-(\d+)$/.exec(hash);
@@ -176,15 +271,18 @@
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function () {
       installOriginalPracticeScoreLook();
+      installLogicalSectionRanges();
       run();
     }, { once: true });
   } else {
     installOriginalPracticeScoreLook();
+    installLogicalSectionRanges();
     setTimeout(run, 0);
   }
   window.addEventListener("hashchange", run);
   window.addEventListener("pageshow", function () {
     installOriginalPracticeScoreLook();
+    installLogicalSectionRanges();
     if (getTarget()) setTimeout(run, 0);
   });
 })();
