@@ -80,6 +80,54 @@
   }
 
 
+  function installDesktopBookmarkScrollBehavior() {
+    var toolbar = document.querySelector(".toolbar");
+    var bookmark = document.getElementById("bookmarkFilter");
+    if (!toolbar || !bookmark || toolbar.__efpDesktopBookmarkScroll) return;
+    toolbar.__efpDesktopBookmarkScroll = true;
+
+    var row = bookmark.closest ? bookmark.closest(".row") : bookmark.parentElement;
+    if (!row) row = bookmark;
+    var naturalTop = 0;
+    var ticking = false;
+
+    function documentTop(el) {
+      var top = 0;
+      var node = el;
+      while (node) {
+        top += Number(node.offsetTop) || 0;
+        node = node.offsetParent;
+      }
+      return top;
+    }
+
+    function measure() {
+      naturalTop = documentTop(toolbar);
+      sync();
+    }
+
+    function apply() {
+      ticking = false;
+      var desktop = window.innerWidth > 650;
+      var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+      var stuck = desktop && y >= Math.max(0, naturalTop - 1);
+
+      if (stuck) row.style.setProperty("display", "none", "important");
+      else row.style.removeProperty("display");
+    }
+
+    function sync() {
+      if (ticking) return;
+      ticking = true;
+      (window.requestAnimationFrame || function (fn) { return setTimeout(fn, 16); })(apply);
+    }
+
+    measure();
+    window.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", measure, { passive: true });
+    window.addEventListener("load", measure, { once: true });
+  }
+
   function installOriginalPracticeScoreLook() {
     var rows = document.querySelectorAll(
       ".toolbar > .barcard > .row:first-child, .toolbar > .bar > .row:first-child"
@@ -314,17 +362,20 @@
     document.addEventListener("DOMContentLoaded", function () {
       installOriginalPracticeScoreLook();
       installLogicalSectionRanges();
+      installDesktopBookmarkScrollBehavior();
       run();
     }, { once: true });
   } else {
     installOriginalPracticeScoreLook();
     installLogicalSectionRanges();
+    installDesktopBookmarkScrollBehavior();
     setTimeout(run, 0);
   }
   window.addEventListener("hashchange", run);
   window.addEventListener("pageshow", function () {
     installOriginalPracticeScoreLook();
     installLogicalSectionRanges();
+    installDesktopBookmarkScrollBehavior();
     if (getTarget()) setTimeout(run, 0);
   });
 })();
