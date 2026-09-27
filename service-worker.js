@@ -1,5 +1,5 @@
-// v163 resume-safe Back hierarchy after idle/process recreation
-const CACHE_VERSION = "efp-pwa-2026-09-26-v163-resume-safe-back";
+// v164 refresh shared Current Affairs bookmark controls
+const CACHE_VERSION = "efp-pwa-2026-09-27-v164-ca-bookmark-filter";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -24,7 +24,7 @@ const APP_SHELL = [
   "/pwa-icons/icon-512.png",
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
-  "/ca-question-deeplink.js",
+  "/ca-question-deeplink.js?v=20260927-bookmark-filter",
   "/blackbook-quiz-bookmarks.js",
   "/owner-debug.js",
   "/home-nav.js?v=20260925refreshnormal2",
