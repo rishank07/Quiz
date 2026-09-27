@@ -82,12 +82,20 @@
             to { opacity: 1; transform: scaleY(1); height: auto; }
         }
 
+        /* On mobile the A-Z/bookmark controls should scroll away; the score bar
+           below is the only sticky quiz status. */
         .sticky-nav {
-            position: sticky;
-            top: 0;
-            z-index: 50;
+            position: static;
             backdrop-filter: blur(12px);
             background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (min-width: 640px) {
+            .sticky-nav {
+                position: sticky;
+                top: 0;
+                z-index: 50;
+            }
         }
 
         /* Keep the live score visible while desktop users scroll through a quiz. */
@@ -176,7 +184,7 @@
     </nav>
 
     <!-- Mobile Score Bar -->
-    <div class="sm:hidden bg-white border-b border-slate-200 px-4 py-2 flex justify-between items-center sticky top-[60px] z-40">
+    <div class="sm:hidden bg-white border-b border-slate-200 px-4 py-2 flex justify-between items-center sticky top-0 z-[60] shadow-sm">
         <div class="flex items-center gap-2">
             <span class="font-semibold text-slate-600">Current Score:</span>
             <span class="font-bold text-blue-600 text-lg" id="mobile-score">0</span>
