@@ -72,7 +72,14 @@ function sharedItems(){
 function rapidItems(){
  var out=[];try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(!k||!/^efp_ca_.+_rapid_v1$/.test(k))continue;var state=safe(localStorage.getItem(k),{}),marks=state&&state.bookmarks&&typeof state.bookmarks==="object"?state.bookmarks:{},src=rapidSource(k);Object.keys(marks).forEach(function(id){if(!marks[id])return;var m=/^(\d+)-(\d+)$/.exec(id),meta=m?"Section "+(Number(m[1])+1)+" · Question "+(Number(m[2])+1):"Saved question";out.push({store:"rapid",storageKey:k,key:id,group:"Current Affairs · Rapid Practice",kind:"Rapid",title:src.title,section:m?Number(m[1])+1:0,meta:meta,url:src.url+(m?"#rp-"+id:"")})})}}catch(e){}return out
 }
-function mixedItems(){var a=safe(localStorage.getItem(MIXED),[]),mm=safe(localStorage.getItem(MIXED_META),{});if(!Array.isArray(a))a=[];if(!mm||typeof mm!=="object"||Array.isArray(mm))mm={};var seen={},out=[],n=0;a.forEach(function(id){id=String(id||"");if(!id||seen[id])return;seen[id]=1;n++;var md=mm[id]&&typeof mm[id]==="object"?mm[id]:{};out.push({store:"mixed",key:id,group:"Random Mixed Practice",kind:"Mixed",title:md.chapter||("Saved Mixed Practice Question "+n),poolLabel:md.poolLabel||"",source:md.source||"",chapter:md.chapter||"",sectionName:md.section||"",meta:[md.poolLabel,md.source,md.chapter,md.section].filter(Boolean).join(" · ")||"Open inside Saved Questions",url:"./Original Practice/Mixed_Practice.html?saved=1"})});return out}
+function mixedLegacyMeta(id){
+ var labels={history:"History",polity:"Polity",science:"Science",geography:"Geography",economics:"Economics",ecology:"Environment & Ecology",english:"English Grammar",staticgk:"Static GK"},m=/^qv3\|([^|]+)\|/.exec(id);
+ if(m)return{poolLabel:labels[m[1]]||pretty(m[1]),source:"",chapter:"",section:""};
+ m=/^([^|]+)\|([^|]+)\|/.exec(id);
+ if(m)return{poolLabel:labels[m[1]]||pretty(m[1]),source:dec(m[2]||""),chapter:"",section:""};
+ return{}
+}
+function mixedItems(){var a=safe(localStorage.getItem(MIXED),[]),mm=safe(localStorage.getItem(MIXED_META),{});if(!Array.isArray(a))a=[];if(!mm||typeof mm!=="object"||Array.isArray(mm))mm={};var seen={},out=[],n=0;a.forEach(function(id){id=String(id||"");if(!id||seen[id])return;seen[id]=1;n++;var md=mm[id]&&typeof mm[id]==="object"?mm[id]:mixedLegacyMeta(id);out.push({store:"mixed",key:id,group:"Random Mixed Practice",kind:"Mixed",title:md.chapter||("Saved Mixed Practice Question "+n),poolLabel:md.poolLabel||"",source:md.source||"",chapter:md.chapter||"",sectionName:md.section||"",meta:[md.poolLabel,md.source,md.chapter,md.section].filter(Boolean).join(" · ")||"Open inside Saved Questions",url:"./Original Practice/Mixed_Practice.html?saved=1"})});return out}
 function allItems(){return sharedItems().concat(rapidItems(),mixedItems())}
 function removeItem(x){if(x.store==="shared"){var b=getShared();delete b[x.key];setShared(b)}else if(x.store==="rapid"){var s=safe(localStorage.getItem(x.storageKey),{});if(s&&s.bookmarks){delete s.bookmarks[x.key];try{localStorage.setItem(x.storageKey,JSON.stringify(s))}catch(e){}}}else{var a=safe(localStorage.getItem(MIXED),[]);if(Array.isArray(a)){a=a.map(String).filter(function(v){return v!==x.key});try{localStorage.setItem(MIXED,JSON.stringify(a))}catch(e){}}var mm=safe(localStorage.getItem(MIXED_META),{});if(mm&&typeof mm==="object"&&!Array.isArray(mm)&&mm[x.key]){delete mm[x.key];try{localStorage.setItem(MIXED_META,JSON.stringify(mm))}catch(e){}}}render()}
 var HOME_ROOTS=["Original Practice","Current Affairs","Crux & Tricks","GhatnaChakra Purvalokan","Lucent's Objective","Pinnacle SSC/Railway GS","Blackbook","Bihar Special"];
@@ -134,7 +141,7 @@ function trailFromPath(path){
  return compactTrail(chain)
 }
 function currentAffairsLeaf(file,fallback){
- var raw=dec(String(file||"")).replace(/\.html?$/i,""),key=raw.toUpperCase().replace(/[^A-Z0-9]/g,""),m;
+ var raw=dec(String(file||"")).replace(/\.html?$/i,"").replace(/_Current_Affairs_Rapid_Practice$/i,"").replace(/_Rapid_Practice$/i,""),key=raw.toUpperCase().replace(/[^A-Z0-9]/g,""),m;
  m=/^(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)(20\d{2})$/.exec(key);
  if(m)return m[1].charAt(0)+m[1].slice(1).toLowerCase()+" "+m[2];
  var labels={
@@ -151,7 +158,7 @@ function currentAffairsLeaf(file,fallback){
 function currentAffairsTrail(path,title){
  var p=pathFromUrl(path),trail=["Current Affairs"],m;
  m=/^\/Current Affairs\/Topic Names\/Rapid Practice\/(20\d{2})\/(Month Wise|Topic Wise)\/([^/]+)$/i.exec(p);
- if(m)return compactTrail(trail.concat(["Rapid Practice",m[1],pretty(m[2]),title||currentAffairsLeaf(m[3],"")]));
+ if(m)return compactTrail(trail.concat(["Rapid Practice",m[1],pretty(m[2]),currentAffairsLeaf(m[3],title)]));
  m=/^\/Current Affairs\/Topic Names\/(20\d{2})\/(Month Wise|Topic Wise)\/([^/]+)$/i.exec(p);
  if(m)return compactTrail(trail.concat([m[1],pretty(m[2]),currentAffairsLeaf(m[3],title)]));
  m=/^\/Current Affairs\/Topic Names\/([^/]+)$/i.exec(p);
