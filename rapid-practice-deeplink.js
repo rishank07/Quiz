@@ -31,9 +31,8 @@
       "display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:nowrap!important;" +
       "background:rgba(255,255,255,.96);border:1px solid rgba(184,134,63,.22);border-radius:12px;" +
       "box-shadow:0 3px 14px rgba(26,31,46,.10);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}" +
-      ".toolbar>.barcard>.row:first-child #scoreTxt,.toolbar>.bar>.row:first-child #scoreTxt{display:none!important}" +
       ".toolbar>.barcard>.row:first-child .pct,.toolbar>.bar>.row:first-child .pct{display:none!important}" +
-      ".efp-rp-score-badges{display:flex!important;align-items:center;gap:3px;min-width:0;flex:0 1 auto}" +
+      ".efp-rp-score-badges{display:none!important}" +
       ".toolbar>.barcard>.row:first-child .progress,.toolbar>.bar>.row:first-child .progress{" +
       "display:block!important;flex:1 1 46px;min-width:28px;max-width:72px;height:8px;margin:0!important;border-radius:999px;overflow:hidden}" +
       ".efp-rp-score-badge{display:inline-flex;align-items:center;white-space:nowrap;padding:5px 6px;border-radius:6px;" +
@@ -69,6 +68,12 @@
     rows.forEach(function (row) {
       var score = row.querySelector("#scoreTxt");
       if (!score || score.__efpOriginalPracticeScore) return;
+      if (score.dataset.efNativeScore === "1" || score.classList.contains("ef-native-score")) {
+        var staleBadges = row.querySelector(".efp-rp-score-badges");
+        if (staleBadges) staleBadges.remove();
+        score.__efpOriginalPracticeScore = true;
+        return;
+      }
       score.__efpOriginalPracticeScore = true;
 
       var badges = document.createElement("div");
