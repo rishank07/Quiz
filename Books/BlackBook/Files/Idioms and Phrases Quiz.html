@@ -105,6 +105,13 @@
                 grid-template-columns: minmax(0, 1fr) auto;
                 gap: 10px;
                 align-items: center;
+                transition: transform 0.18s ease, opacity 0.18s ease;
+                will-change: transform, opacity;
+            }
+            .efp-mobile-scorebar.efp-yield-feedback {
+                transform: translateY(-105%);
+                opacity: 0;
+                pointer-events: none;
             }
             .efp-mobile-scorebar > div {
                 min-width: 0;
@@ -2251,7 +2258,7 @@ if (activeLetter && navButtons[activeLetter]) {
                             <span class="option-circle flex-shrink-0 w-7 h-7 rounded-full border-2 border-slate-300 text-slate-500 text-xs font-bold flex items-center justify-center transition-colors">${letters[idx] || ''}</span>
                             <span class="option-text flex-1">${escapeHtml(opt)}</span>
                         `;
-                        optBtn.addEventListener('click', (event) => checkAnswer(optBtn, opt, item, optsContainer, !!event.isTrusted));
+                        optBtn.addEventListener('click', () => checkAnswer(optBtn, opt, item, optsContainer));
                         optsContainer.appendChild(optBtn);
                     });
                     }
@@ -2263,27 +2270,38 @@ if (activeLetter && navButtons[activeLetter]) {
             
         }
 
-        function keepRevealedAnswerBelowScorebar(target) {
-            if (!target || window.innerWidth >= 640) return;
+        let scorebarOverlapFrame = 0;
+
+        function syncMobileScorebarFeedbackOverlap() {
+            scorebarOverlapFrame = 0;
+            if (window.innerWidth >= 640) return;
             const scorebar = document.querySelector('.efp-mobile-scorebar');
             if (!scorebar) return;
-            requestAnimationFrame(() => {
-                const barBottom = scorebar.getBoundingClientRect().bottom;
-                const targetTop = target.getBoundingClientRect().top;
-                const safeTop = barBottom + 14;
-                if (targetTop < safeTop) {
-                    window.scrollBy({
-                        top: Math.floor(targetTop - safeTop),
-                        behavior: 'smooth'
-                    });
-                }
+
+            const safeBottom = scorebar.offsetHeight + 12;
+            const feedback = document.querySelectorAll('.option-correct, .explanation-reveal');
+            let overlapsFeedback = false;
+
+            feedback.forEach(node => {
+                if (overlapsFeedback) return;
+                const rect = node.getBoundingClientRect();
+                if (rect.bottom > 0 && rect.top < safeBottom) overlapsFeedback = true;
             });
+
+            scorebar.classList.toggle('efp-yield-feedback', overlapsFeedback);
         }
 
-        function checkAnswer(btn, selected, item, optsContainer, userInitiated = false) {
+        function scheduleScorebarFeedbackOverlapCheck() {
+            if (scorebarOverlapFrame) return;
+            scorebarOverlapFrame = requestAnimationFrame(syncMobileScorebarFeedbackOverlap);
+        }
+
+        window.addEventListener('scroll', scheduleScorebarFeedbackOverlapCheck, { passive: true });
+        window.addEventListener('resize', scheduleScorebarFeedbackOverlapCheck, { passive: true });
+
+        function checkAnswer(btn, selected, item, optsContainer) {
             const explanation = document.getElementById(`exp-${item.sn}`);
             const buttons = optsContainer.querySelectorAll('button');
-            let revealedCorrect = null;
 
             // Disable all buttons in this question
             buttons.forEach(b => {
@@ -2301,7 +2319,6 @@ if (activeLetter && navButtons[activeLetter]) {
             const isCorrect = selected === item.meaning;
 
             if (isCorrect) {
-                revealedCorrect = btn;
                 btn.classList.add('option-correct');
                 btn.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle-check ml-2 float-right mt-1"></i>');
 
@@ -2321,7 +2338,6 @@ if (activeLetter && navButtons[activeLetter]) {
                 buttons.forEach(b => {
                     const textSpan = b.querySelector('.option-text');
                     if (textSpan && textSpan.textContent === item.meaning) {
-                        revealedCorrect = b;
                         b.classList.add('option-correct');
                         b.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle-check ml-2 float-right mt-1"></i>');
                     }
@@ -2332,10 +2348,8 @@ if (activeLetter && navButtons[activeLetter]) {
             explanation.classList.remove('hidden');
             explanation.classList.add('explanation-reveal');
 
-            // On mobile, a sticky score bar must never cover the revealed
-            // correct option after a real learner tap. Programmatic restore
-            // clicks intentionally skip this so reopening a quiz does not jump.
-            if (userInitiated) keepRevealedAnswerBelowScorebar(revealedCorrect || btn);
+            // Keep sticky score status from covering visible answer feedback.
+            scheduleScorebarFeedbackOverlapCheck();
         }
 
         // Initialize App
@@ -2347,8 +2361,14 @@ if (activeLetter && navButtons[activeLetter]) {
                 showSection(firstLetter);
             }
         }
-        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initQuiz, { once: true });
-        else initQuiz();
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => {
+            initQuiz();
+            scheduleScorebarFeedbackOverlapCheck();
+        }, { once: true });
+        else {
+            initQuiz();
+            scheduleScorebarFeedbackOverlapCheck();
+        }
 
     </script>
 <div style="text-align:center;font-size:12px;opacity:.6;padding:14px 10px;">© <span id="efpCopyrightYear"></span> ExamFusion Prep. All Rights Reserved.</div>
