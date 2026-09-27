@@ -98,6 +98,36 @@
             }
         }
 
+        /* Keep the mobile status readable even on very narrow screens. */
+        @media (max-width: 639px) {
+            .efp-mobile-scorebar {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 10px;
+                align-items: center;
+            }
+            .efp-mobile-scorebar > div {
+                min-width: 0;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 359px) {
+            .efp-mobile-scorebar {
+                padding-left: 0.65rem !important;
+                padding-right: 0.65rem !important;
+                gap: 6px;
+            }
+            .efp-mobile-scorebar > div {
+                gap: 0.35rem !important;
+                font-size: 0.88rem;
+            }
+            .efp-mobile-scorebar [id$="-score"],
+            .efp-mobile-scorebar [id$="-wrong"] {
+                font-size: 1rem !important;
+            }
+        }
+
         /* Keep the live score visible while desktop users scroll through a quiz. */
         .desktop-sticky-score {
             display: none;
@@ -136,7 +166,7 @@
   <script defer src="/home-nav.js?v=20260925blackbookedge2"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
   <script defer src="/back-nav.js?v=20260924bookhier3"></script>
-  <script defer src="/blackbook-quiz-bookmarks.js?v=20260927b3"></script>
+  <script defer src="/blackbook-quiz-bookmarks.js?v=20260927b4"></script>
 </head>
 <body class="antialiased selection:bg-blue-200">
 
@@ -184,7 +214,7 @@
     </nav>
 
     <!-- Mobile Score Bar -->
-    <div class="sm:hidden bg-white border-b border-slate-200 px-4 py-2 flex justify-between items-center sticky top-0 z-[60] shadow-sm">
+    <div class="efp-mobile-scorebar sm:hidden bg-white border-b border-slate-200 px-4 py-2 flex justify-between items-center sticky top-0 z-[60] shadow-sm">
         <div class="flex items-center gap-2">
             <span class="font-semibold text-slate-600">Current Score:</span>
             <span class="font-bold text-blue-600 text-lg" id="mobile-score">0</span>
