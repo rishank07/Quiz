@@ -9,7 +9,7 @@ from pathlib import Path
 
 SCRIPT_SPECS = (
     ("/back-parent-map.js", '  <script defer src="/back-parent-map.js?v=20260906hier1"></script>\n'),
-    ("/back-nav.js", '  <script defer src="/back-nav.js?v=20260927cruxhier1"></script>\n'),
+    ("/back-nav.js", '  <script defer src="/back-nav.js?v=20260927cruxhier2"></script>\n'),
     ("/home-nav.js", '  <script defer src="/home-nav.js?v=20260906nav2"></script>\n'),
 )
 
@@ -54,7 +54,7 @@ def inject(path: Path, root: Path) -> bool:
     rel = path.relative_to(root)
     # Keep every page on the same deterministic Back runtime even after a
     # counts/content workflow rewrites its shared navigation tags.
-    back_nav_version = "20260927cruxhier1"
+    back_nav_version = "20260927cruxhier2"
 
     # Keep the shared Back runtime on one fresh URL across the whole site.
     # Existing pages may already contain /back-nav.js with an older query
@@ -75,7 +75,7 @@ def inject(path: Path, root: Path) -> bool:
         changed = True
 
     head_blocks = [
-        tag.replace("20260927cruxhier1", back_nav_version)
+        tag.replace("20260927cruxhier2", back_nav_version)
         for marker, tag in SCRIPT_SPECS if marker not in text
     ]
 

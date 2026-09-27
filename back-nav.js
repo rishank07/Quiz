@@ -777,6 +777,10 @@
       return;
     }
 
+    /* BFCache does not rerun the early index cloak bootstrap. Apply the same
+       guard before validating/repairing so an intermediate Source pane cannot
+       paint between pageshow handlers. */
+    try { document.documentElement.classList.add("efp-crux-restoring"); } catch (_) {}
     restoreCruxIndexState.running = true;
     var attempts = 0;
     var startedAt = Date.now();
