@@ -443,9 +443,15 @@
         }
         if(!force&&Math.abs(n-page)>KEEP_RENDER_RADIUS){c.width=1;c.height=1;return false}
         var current=el.querySelector('canvas');
-        if(current&&current!==c){current.width=1;current.height=1;current.remove()}
         var badge=el.querySelector('.efp-page-badge');
-        if(badge)el.insertBefore(c,badge);else el.appendChild(c);
+        // Swap the completed bitmap atomically so there is never a painted frame
+        // with an empty page shell between zoom renders.
+        if(current&&current!==c){
+          try{current.parentNode.replaceChild(c,current)}catch(_){if(badge)el.insertBefore(c,badge);else el.appendChild(c)}
+          current.width=1;current.height=1;
+        }else if(!current){
+          if(badge)el.insertBefore(c,badge);else el.appendChild(c);
+        }
         el.style.width=c.style.width;el.style.height=c.style.height;el.style.minHeight=c.style.height;
         el.dataset.rendered='1';
         pageRenderFailures[n]=0;clearPageRetry(n);
@@ -860,18 +866,36 @@
   nextBtn.addEventListener('click',function(){go(page+1,true)});
   input.addEventListener('change',function(){go(parseInt(input.value,10)||page,true)});
   input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go(parseInt(input.value,10)||page,true);input.blur()}});
-  function clampReaderZoom(v){return Math.max(.70,Math.min(5.00,Math.round(v*100)/100))}
+  function readerZoomFloor(){return (continuous||isCompactReader())?1:.70}
+  function clampReaderZoom(v){return Math.max(readerZoomFloor(),Math.min(5.00,Math.round(v*100)/100))}
+  function scaleSingleZoomPreview(scaleRatio){
+    if(!pdfCanvas||pdfCanvas.hidden||pdfCanvas.width<=2||pdfCanvas.height<=2)return;
+    var w=parseFloat(pdfCanvas.style.width)||pdfCanvas.clientWidth||0;
+    var h=parseFloat(pdfCanvas.style.height)||pdfCanvas.clientHeight||0;
+    if(!w||!h)return;
+    pdfCanvas.style.width=Math.max(1,Math.round(w*scaleRatio))+'px';
+    pdfCanvas.style.height=Math.max(1,Math.round(h*scaleRatio))+'px';
+    pdfStage.style.overflowX='auto';
+  }
   function applyReaderZoom(next,focusX,focusY){
     var oldZoom=autoFit?1:zoom;
     var oldLeft=pdfStage.scrollLeft||0,oldTop=pdfStage.scrollTop||0;
     focusX=Number.isFinite(focusX)?focusX:pdfStage.clientWidth/2;
     focusY=Number.isFinite(focusY)?focusY:pdfStage.clientHeight/2;
-    autoFit=false;zoom=clampReaderZoom(next);
-    document.documentElement.classList.add('efp-pdf-zoomed');
+    var target=clampReaderZoom(next);
+    var fitFloor=(continuous||isCompactReader())&&target<=1.0001;
+    autoFit=fitFloor;zoom=fitFloor?1:target;
+    document.documentElement.classList.toggle('efp-pdf-zoomed',!autoFit);
     updateControls();
     var scaleRatio=zoom/Math.max(.01,oldZoom);
     var viewGeneration=++zoomViewGeneration;
-    if(continuous)reflowContinuous();else renderSinglePage();
+    if(continuous)reflowContinuous();
+    else{
+      // Keep the existing bitmap visible at the requested CSS size immediately;
+      // PDF.js redraws the sharper replacement off-screen and commits it later.
+      scaleSingleZoomPreview(scaleRatio);
+      renderSinglePage();
+    }
     clearTimeout(zoomScrollTimer);
     zoomScrollTimer=setTimeout(function(){
       if(viewGeneration!==zoomViewGeneration)return;
@@ -949,10 +973,12 @@
   function finishPinch(e){
     if(!pinchStartDist||e.touches&&e.touches.length>=2)return;
     if(e&&e.cancelable)e.preventDefault();
-    clearPinchPreview();
     var next=pinchStartZoom*pinchScale;
     pinchStartDist=0;pinchScale=1;
+    // Apply the real CSS zoom before dropping the gesture preview. Clearing the
+    // preview first briefly snaps back to the old size and is perceived as flicker.
     applyReaderZoom(next,pinchFocusX,pinchFocusY);
+    clearPinchPreview();
   }
   pdfStage.addEventListener('touchend',finishPinch,{passive:false});
   pdfStage.addEventListener('touchcancel',finishPinch,{passive:false});
