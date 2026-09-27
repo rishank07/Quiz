@@ -1,5 +1,5 @@
-// v164 refresh shared Current Affairs bookmark controls
-const CACHE_VERSION = "efp-pwa-2026-09-27-v164-ca-bookmark-filter";
+// v165 refresh shared Current Affairs bookmark controls
+const CACHE_VERSION = "efp-pwa-2026-09-27-v165-ca-bookmark-filter";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -283,6 +283,21 @@ async function freshCoreAsset(request) {
   }
 }
 
+async function freshCurrentAffairsBookmarkAsset() {
+  const currentAsset = "/ca-question-deeplink.js?v=20260927-bookmark-filter";
+  const cache = await caches.open(CACHE_VERSION);
+  try {
+    const response = await fetch(currentAsset, { cache: "no-store" });
+    if (response && response.ok && (response.type === "basic" || response.type === "cors")) {
+      await cache.put(currentAsset, response.clone());
+    }
+    return response;
+  } catch (_) {
+    const cached = await caches.match(currentAsset) || await caches.match("/ca-question-deeplink.js");
+    return cached || new Response("", { status: 503, statusText: "Offline" });
+  }
+}
+
 async function freshPyqAsset(request) {
   // PYQ is a fast-changing external-link catalog. Never let ignoreSearch return
   // an older runtime-cached catalog/app asset after a bulk import.
@@ -326,7 +341,6 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/homepage-search-ui.js" ||
       url.pathname === "/homepage-fulltext-search.js" ||
       url.pathname === "/rapid-practice-deeplink.js" ||
-      url.pathname === "/ca-question-deeplink.js" ||
       url.pathname === "/blackbook-quiz-bookmarks.js" ||
       url.pathname === "/pdf-mobile-rotate.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
@@ -336,6 +350,11 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/Crux-Tricks/crux-tricks.js" ||
       url.pathname === "/Crux-Tricks/viewer-v2.js") {
     event.respondWith(freshCoreAsset(request));
+    return;
+  }
+
+  if (url.pathname === "/ca-question-deeplink.js") {
+    event.respondWith(freshCurrentAffairsBookmarkAsset());
     return;
   }
 
