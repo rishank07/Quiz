@@ -55,13 +55,22 @@
       .quiz-head.efp-mobile-compact .stat span{font-size:8.5px;line-height:1.05;margin-top:3px;letter-spacing:0}
       .opt-en{font-size:13.5px;line-height:1.5}
       .opt-hi{font-size:13px;line-height:1.5}
-      #quizView{padding-bottom:150px}
-      body.efp-mixed-quiz-active::before,body.efp-mixed-quiz-active::after{content:"";position:fixed;left:0;right:0;pointer-events:none;background:#07101d}
-      body.efp-mixed-quiz-active::before{top:0;height:4px;z-index:6}
-      body.efp-mixed-quiz-active::after{bottom:0;height:calc(62px + env(safe-area-inset-bottom));z-index:6}
-      .quiz-head,.quiz-head.efp-mobile-compact{background:#07101d;backdrop-filter:none;-webkit-backdrop-filter:none}
-      .question-nav{position:fixed;z-index:7;left:9px;right:9px;bottom:calc(62px + env(safe-area-inset-bottom));grid-template-columns:1fr 1fr;gap:8px;margin:0;padding:7px;border:1px solid rgba(240,207,119,.2);border-radius:16px;background:#07101d;box-shadow:0 10px 30px rgba(0,0,0,.38);backdrop-filter:none;-webkit-backdrop-filter:none}
-      .question-nav .nav-btn{min-width:0;min-height:46px;padding:8px 6px;font-size:13px;line-height:1.2}
+      #quizView{padding-bottom:96px}
+      body.efp-mixed-quiz-active::before,body.efp-mixed-quiz-active::after{display:none!important}
+      .quiz-head,.quiz-head.efp-mobile-compact{backdrop-filter:none;-webkit-backdrop-filter:none}
+      .question-nav{position:fixed;z-index:2147483000;left:50%;right:auto;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(132px,calc(100vw - 132px));grid-template-columns:1fr 1fr;align-items:center;gap:10px;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none}
+      .question-nav .nav-btn{pointer-events:auto;min-width:0;width:100%;height:44px;min-height:44px;padding:0;border-radius:999px;font-size:0;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 16px rgba(0,0,0,.16);transition:transform .14s ease,box-shadow .14s ease,opacity .14s ease;-webkit-tap-highlight-color:transparent}
+      .question-nav .nav-btn::before{display:block;font-size:24px;font-weight:1000;line-height:1;transform:translateY(-1px)}
+      .question-nav #prevBtn{color:#f59e0b;border:1.5px solid rgba(245,158,11,.78);background:linear-gradient(135deg,rgba(245,158,11,.24),rgba(251,191,36,.10))}
+      .question-nav #prevBtn::before{content:"←"}
+      .question-nav #nextBtn{color:#3b82f6;border:1.5px solid rgba(59,130,246,.82);background:linear-gradient(135deg,rgba(59,130,246,.24),rgba(34,197,94,.10))}
+      .question-nav #nextBtn::before{content:"→"}
+      .question-nav .nav-btn:active:not(:disabled){transform:scale(.92);box-shadow:0 2px 8px rgba(0,0,0,.18)}
+      .question-nav .nav-btn:disabled{opacity:.34;box-shadow:none}
+      html:not(.efp-black):not(.efp-black-invert) .question-nav #prevBtn{color:#b45309;background:linear-gradient(135deg,rgba(251,191,36,.22),rgba(255,255,255,.92));border-color:rgba(217,119,6,.58)}
+      html:not(.efp-black):not(.efp-black-invert) .question-nav #nextBtn{color:#1d4ed8;background:linear-gradient(135deg,rgba(96,165,250,.20),rgba(255,255,255,.94));border-color:rgba(37,99,235,.52)}
+      html.efp-black .question-nav #prevBtn,html.efp-black-invert .question-nav #prevBtn{color:#fbbf24;background:linear-gradient(135deg,rgba(245,158,11,.22),rgba(15,23,42,.88));border-color:rgba(251,191,36,.72)}
+      html.efp-black .question-nav #nextBtn,html.efp-black-invert .question-nav #nextBtn{color:#60a5fa;background:linear-gradient(135deg,rgba(37,99,235,.24),rgba(15,23,42,.88));border-color:rgba(96,165,250,.72)}
     }
   </style>
   <script defer src="/home-nav.js?v=20260925mixededge1"></script>
@@ -128,7 +137,7 @@
       <div class="options" id="options"></div>
       <div class="answer-box" id="answerBox"><div class="answer-line" id="answerLine"></div><div class="correct-answer" id="correctAnswer"></div><div class="explanation" id="explanation"></div></div>
     </article>
-    <div class="question-nav"><button class="nav-btn" id="prevBtn" type="button">← Previous</button><button class="nav-btn primary" id="nextBtn" type="button">Next →</button></div>
+    <div class="question-nav" aria-label="Question navigation"><button class="nav-btn" id="prevBtn" type="button" aria-label="Previous question">← Previous</button><button class="nav-btn primary" id="nextBtn" type="button" aria-label="Next question">Next →</button></div>
   </section>
 
   <section id="finishView" class="panel finish-panel" hidden>
@@ -604,9 +613,9 @@
     if(bookmarks.has(item.id))rememberBookmarkMeta(item);
     $('bookmarkBtn').classList.toggle('on',bookmarks.has(item.id));
     $('bookmarkBtn').textContent=bookmarks.has(item.id)?'★ Saved':'☆ Save';
-    $('prevBtn').disabled=currentIndex===0;
-    var unanswered=firstUnansweredIndex();
-    $('nextBtn').textContent=currentIndex===currentQuestions.length-1?(savedMode?'Back to Set →':(unanswered>=0?'Review Unanswered →':'Finish Set →')):'Next →';
+    $('prevBtn').disabled=currentIndex===0;$('prevBtn').setAttribute('aria-label',currentIndex===0?'Previous question unavailable':'Previous question');
+    var unanswered=firstUnansweredIndex(),nextLabel=currentIndex===currentQuestions.length-1?(savedMode?'Back to set':(unanswered>=0?'Review unanswered questions':'Finish set')):'Next question';
+    $('nextBtn').textContent=currentIndex===currentQuestions.length-1?(savedMode?'Back to Set →':(unanswered>=0?'Review Unanswered →':'Finish Set →')):'Next →';$('nextBtn').setAttribute('aria-label',nextLabel);
     updateSavedQuestionsButton();updateStats();saveState();
   }
   $('bookmarkBtn').onclick=function(){var item=currentQuestions[currentIndex];if(!item)return;var wasSaved=bookmarks.has(item.id);if(wasSaved){bookmarks.delete(item.id);forgetBookmarkMeta(item.id)}else{bookmarks.add(item.id);bookmarkMeta[item.id]=bookmarkMetaFor(item);saveBookmarkMeta()}saveBookmarks();updateSavedQuestionsButton();if(savedMode&&wasSaved){currentQuestions.splice(currentIndex,1);if(!currentQuestions.length){closeSavedQuestions();return}currentIndex=Math.min(currentIndex,currentQuestions.length-1);state.ids=currentQuestions.map(function(q){return q.id});state.total=currentQuestions.length}renderQuestion()};
