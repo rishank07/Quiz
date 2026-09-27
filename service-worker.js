@@ -1,5 +1,5 @@
-// v183 refresh mobile PDF floating controls
-const CACHE_VERSION = "efp-pwa-2026-09-28-v183-pdf-floating-controls";
+// v184 refresh mobile PDF controls and Mixed Practice solid edge masks
+const CACHE_VERSION = "efp-pwa-2026-09-28-v184-pdf-mixed-solid-masks";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
