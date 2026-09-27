@@ -380,19 +380,14 @@
   }
 
   async function nativeLandscape(){
+    /* Do not request browser fullscreen here. Chrome/Android shows its own
+       "to exit full screen..." education bubble and webpages cannot style or
+       suppress that browser UI. Try a native orientation lock only when the
+       browser permits it without fullscreen; otherwise the caller uses the
+       existing CSS landscape fallback, which keeps the reader prompt-free. */
     try {
       await lockOrientation('landscape-primary');
       return await waitForOrientation(true, 900);
-    } catch (_) {}
-
-    if (!document.fullscreenElement) {
-      var full = await enterOwnedFullscreen();
-      if (!full) return false;
-    }
-
-    try {
-      await lockOrientation('landscape-primary');
-      return await waitForOrientation(true, 1100);
     } catch (_) {
       return false;
     }
@@ -471,8 +466,9 @@
       return;
     }
 
-    /* Remove any previous CSS fallback before trying the real Screen
-       Orientation API again. */
+    /* Remove any previous CSS fallback before trying a prompt-free native
+       orientation lock. If the browser requires fullscreen, use CSS fallback
+       instead so Chrome never shows its fullscreen education bubble. */
     if (manualMode) setManualMode('');
 
     var success = false;
