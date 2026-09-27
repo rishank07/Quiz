@@ -1,5 +1,5 @@
-// v182 refresh landscape PDF chrome and rotation control
-const CACHE_VERSION = "efp-pwa-2026-09-28-v182-pdf-landscape-ui";
+// v183 refresh landscape PDF chrome and Mixed Practice overlay layers
+const CACHE_VERSION = "efp-pwa-2026-09-28-v183-pdf-mixed-overlay";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
