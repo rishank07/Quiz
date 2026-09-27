@@ -292,6 +292,103 @@
   } else {
     window.addEventListener("load", startLazyCounts, { once: true });
   }
+
+  // Current Affairs Rapid Practice: keep section navigation consistent with
+  // Original Practice. On the final section the Next button becomes Finish,
+  // and Finish shows the persisted quiz score instead of silently staying on
+  // the same section. Scoped strictly to Current Affairs Rapid Practice pages.
+  function enhanceCurrentAffairsRapidFinish() {
+    var path = decodeURIComponent(window.location.pathname || "");
+    if (path.indexOf("/Current Affairs/Topic Names/Rapid Practice/") < 0) return;
+
+    var questions = document.getElementById("questions");
+    var sectionNav = document.getElementById("sectionNav");
+    var bottom = document.querySelector(".bottom");
+    if (!questions || !sectionNav || !bottom) return;
+
+    function nextButton() {
+      return bottom.querySelector('button[onclick*="moveSection(1)"]');
+    }
+
+    function isLastSection() {
+      var pills = sectionNav.querySelectorAll(".pill");
+      if (!pills.length) return false;
+      var active = sectionNav.querySelector(".pill.active");
+      return !!active && active === pills[pills.length - 1];
+    }
+
+    function syncFinishButton() {
+      var btn = nextButton();
+      if (!btn) return;
+      var last = isLastSection();
+      btn.textContent = last ? "Finish →" : "Next →";
+      btn.setAttribute("aria-label", last ? "Finish quiz and show score" : "Go to next section");
+    }
+
+    function readScore() {
+      try {
+        if (typeof window.stats === "function") {
+          var x = window.stats();
+          if (x && Number.isFinite(Number(x.attempted)) && Number.isFinite(Number(x.correct))) {
+            return {
+              attempted: Number(x.attempted),
+              correct: Number(x.correct),
+              wrong: Number(x.attempted) - Number(x.correct),
+              total: Number(x.total) || 0
+            };
+          }
+        }
+      } catch (_) {}
+
+      var text = (document.getElementById("scoreTxt") || {}).textContent || "";
+      var m = text.match(/(\d+)\s*correct\s*[·|/]\s*(\d+)\s*wrong\s*[·|/]\s*(\d+)\s*\/\s*(\d+)\s*attempted/i);
+      return m ? {correct:Number(m[1]), wrong:Number(m[2]), attempted:Number(m[3]), total:Number(m[4])}
+               : {correct:0, wrong:0, attempted:0, total:0};
+    }
+
+    var originalMove = window.moveSection;
+    if (typeof originalMove === "function" && !originalMove.__efpCaFinishPatched) {
+      var patchedMove = function (direction) {
+        if (Number(direction) > 0 && isLastSection()) {
+          var x = readScore();
+          window.alert(
+            "Quiz complete!\nScore: " + x.correct + " correct / " + x.wrong +
+            " wrong out of " + x.attempted + " attempted."
+          );
+          syncFinishButton();
+          return;
+        }
+        var result = originalMove.apply(this, arguments);
+        window.setTimeout(syncFinishButton, 0);
+        return result;
+      };
+      patchedMove.__efpCaFinishPatched = true;
+      window.moveSection = patchedMove;
+    }
+
+    var originalOpen = window.openSection;
+    if (typeof originalOpen === "function" && !originalOpen.__efpCaFinishPatched) {
+      var patchedOpen = function () {
+        var result = originalOpen.apply(this, arguments);
+        window.setTimeout(syncFinishButton, 0);
+        return result;
+      };
+      patchedOpen.__efpCaFinishPatched = true;
+      window.openSection = patchedOpen;
+    }
+
+    syncFinishButton();
+    window.addEventListener("pageshow", function () {
+      window.setTimeout(syncFinishButton, 0);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", enhanceCurrentAffairsRapidFinish, { once: true });
+  } else {
+    enhanceCurrentAffairsRapidFinish();
+  }
+
   window.addEventListener("pageshow", function () {
     // Every normal page load fires pageshow once after load. Skip that first
     // event so we do not schedule a duplicate manifest request. A BFCache
