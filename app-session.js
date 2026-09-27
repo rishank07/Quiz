@@ -720,6 +720,12 @@
     var dirty = false;
     var allowNavigation = false;
     var MODAL_ID = "efp-quiz-exit-modal";
+    var SYSTEM_BACK_GUARD_KEY = "efpQuizQuitGuard";
+    var systemBackGuardActive = false;
+    var pendingGuardRelease = null;
+    var restoringSystemBackGuard = false;
+    var pendingSystemBackPrompt = false;
+    var systemBackRestoreTimer = 0;
 
     function warningPageKey(value) {
       try {
@@ -759,6 +765,7 @@
         if (!savedKey || savedKey !== pendingKey || savedKey !== currentKey) return false;
         if (!hasVisibleQuizSurface() || isClearlyFinished()) return false;
         dirty = true;
+        ensureSystemBackGuard();
         return true;
       } catch (_) {
         return false;
@@ -847,6 +854,7 @@
       if (!hasVisibleQuizSurface()) return;
       dirty = true;
       persistWarning();
+      ensureSystemBackGuard();
     }
 
     function disarm() {
@@ -911,6 +919,150 @@
       allowNavigation = true;
       window.setTimeout(function () { allowNavigation = false; }, 1800);
     }
+
+    function isSystemBackGuardState(value) {
+      return !!(value && typeof value === "object" && value[SYSTEM_BACK_GUARD_KEY] === true);
+    }
+
+    function guardedHistoryState() {
+      var current = history.state;
+      var next = {};
+      if (current && typeof current === "object") {
+        try { next = JSON.parse(JSON.stringify(current)); }
+        catch (_) {
+          try {
+            Object.keys(current).forEach(function (key) { next[key] = current[key]; });
+          } catch (_) {}
+        }
+      }
+      next[SYSTEM_BACK_GUARD_KEY] = true;
+      return next;
+    }
+
+    function ensureSystemBackGuard() {
+      if (!dirty || !hasVisibleQuizSurface() || isClearlyFinished()) return false;
+      if (isSystemBackGuardState(history.state)) {
+        systemBackGuardActive = true;
+        return true;
+      }
+      try {
+        history.pushState(guardedHistoryState(), "", relativeUrl());
+        systemBackGuardActive = true;
+        return true;
+      } catch (_) {
+        systemBackGuardActive = false;
+        return false;
+      }
+    }
+
+    function consumeSystemBackEvent(event) {
+      try { if (event && event.preventDefault) event.preventDefault(); } catch (_) {}
+      try { if (event && event.stopPropagation) event.stopPropagation(); } catch (_) {}
+      try { if (event && event.stopImmediatePropagation) event.stopImmediatePropagation(); } catch (_) {}
+    }
+
+    function releaseSystemBackGuard(action) {
+      if (typeof action !== "function") return;
+      if (!systemBackGuardActive || !isSystemBackGuardState(history.state)) {
+        systemBackGuardActive = false;
+        action();
+        return;
+      }
+      pendingGuardRelease = action;
+      try {
+        history.back();
+      } catch (_) {
+        pendingGuardRelease = null;
+        systemBackGuardActive = false;
+        action();
+      }
+    }
+
+    function showSystemBackQuitPrompt() {
+      if (!shouldWarn()) return;
+      showExitModal(function () {
+        releaseSystemBackGuard(function () {
+          approveOneNavigation();
+          try { history.back(); } catch (_) {}
+        });
+      });
+    }
+
+    function installSystemBackInterceptor() {
+      window.addEventListener("popstate", function (event) {
+        if (pendingGuardRelease) {
+          consumeSystemBackEvent(event);
+          var action = pendingGuardRelease;
+          pendingGuardRelease = null;
+          systemBackGuardActive = false;
+          window.setTimeout(action, 0);
+          return;
+        }
+
+        if (restoringSystemBackGuard) {
+          consumeSystemBackEvent(event);
+          restoringSystemBackGuard = false;
+          if (systemBackRestoreTimer) {
+            clearTimeout(systemBackRestoreTimer);
+            systemBackRestoreTimer = 0;
+          }
+          systemBackGuardActive = isSystemBackGuardState(event.state);
+          if (pendingSystemBackPrompt) {
+            pendingSystemBackPrompt = false;
+            window.setTimeout(showSystemBackQuitPrompt, 0);
+          }
+          return;
+        }
+
+        if (!systemBackGuardActive) {
+          if (isSystemBackGuardState(event.state)) systemBackGuardActive = true;
+          return;
+        }
+
+        if (isSystemBackGuardState(event.state)) {
+          systemBackGuardActive = true;
+          return;
+        }
+
+        consumeSystemBackEvent(event);
+
+        // The guard is a duplicate of the active quiz entry. If the warning is
+        // no longer needed (reset/finished/approved navigation), skip that
+        // duplicate automatically so one Back gesture still performs one Back.
+        if (!shouldWarn()) {
+          systemBackGuardActive = false;
+          approveOneNavigation();
+          window.setTimeout(function () {
+            try { history.back(); } catch (_) {}
+          }, 0);
+          return;
+        }
+
+        // Browser/Android Back has just moved from the guard to the duplicated
+        // quiz entry. Restore the guard before showing the custom dialog so
+        // Stay really stays, and Quit can deliberately skip the duplicate.
+        pendingSystemBackPrompt = true;
+        restoringSystemBackGuard = true;
+        try {
+          history.forward();
+          systemBackRestoreTimer = window.setTimeout(function () {
+            if (!restoringSystemBackGuard || !pendingSystemBackPrompt) return;
+            restoringSystemBackGuard = false;
+            pendingSystemBackPrompt = false;
+            systemBackRestoreTimer = 0;
+            ensureSystemBackGuard();
+            showSystemBackQuitPrompt();
+          }, 120);
+        } catch (_) {
+          restoringSystemBackGuard = false;
+          pendingSystemBackPrompt = false;
+          ensureSystemBackGuard();
+          window.setTimeout(showSystemBackQuitPrompt, 0);
+        }
+      }, true);
+    }
+
+    installSystemBackInterceptor();
 
     function ensureExitModal() {
       var existing = document.getElementById(MODAL_ID);
@@ -1092,8 +1244,11 @@
         location.assign("/Original%20Practice/index.html");
       }
 
-      if (shouldWarn()) showExitModal(leavePractice);
-      else leavePractice();
+      if (shouldWarn()) {
+        showExitModal(function () { releaseSystemBackGuard(leavePractice); });
+      } else {
+        releaseSystemBackGuard(leavePractice);
+      }
     }, true);
 
     document.addEventListener("click", function (event) {
@@ -1111,34 +1266,36 @@
           navTarget.closest && navTarget.closest("#efp-app-back-button");
 
         showExitModal(function () {
-          approveOneNavigation();
+          releaseSystemBackGuard(function () {
+            approveOneNavigation();
 
-          if (mixedBack) {
-            disarm();
-            if (typeof window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP === "function") {
-              window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP();
-            } else {
-              var mixedSetupButton = document.getElementById("setupBtn");
-              if (mixedSetupButton) mixedSetupButton.click();
-            }
-            try { window.scrollTo(0, 0); } catch (_) {}
-            return;
-          }
-
-          if (currentPath === "/original practice/mixed_practice.html" &&
-              typeof window.EFP_MIXED_PRACTICE_PREPARE_NAVIGATION === "function") {
-            window.EFP_MIXED_PRACTICE_PREPARE_NAVIGATION();
-          }
-
-          window.setTimeout(function () {
-            try {
-              if (navTarget && navTarget.isConnected && typeof navTarget.click === "function") {
-                navTarget.click();
-                return;
+            if (mixedBack) {
+              disarm();
+              if (typeof window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP === "function") {
+                window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP();
+              } else {
+                var mixedSetupButton = document.getElementById("setupBtn");
+                if (mixedSetupButton) mixedSetupButton.click();
               }
-              if (navTarget && navTarget.href) window.location.assign(navTarget.href);
-            } catch (_) {}
-          }, 0);
+              try { window.scrollTo(0, 0); } catch (_) {}
+              return;
+            }
+
+            if (currentPath === "/original practice/mixed_practice.html" &&
+                typeof window.EFP_MIXED_PRACTICE_PREPARE_NAVIGATION === "function") {
+              window.EFP_MIXED_PRACTICE_PREPARE_NAVIGATION();
+            }
+
+            window.setTimeout(function () {
+              try {
+                if (navTarget && navTarget.isConnected && typeof navTarget.click === "function") {
+                  navTarget.click();
+                  return;
+                }
+                if (navTarget && navTarget.href) window.location.assign(navTarget.href);
+              } catch (_) {}
+            }, 0);
+          });
         });
         return;
       }
@@ -1153,6 +1310,7 @@
     window.addEventListener("pageshow", function () {
       allowNavigation = false;
       if (!dirty) restorePersistedWarning();
+      if (dirty) ensureSystemBackGuard();
     });
 
     // Re-arm only for an installed-app auto-resume. Normal browser visits
