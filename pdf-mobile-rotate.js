@@ -70,15 +70,15 @@
   style.textContent =
     'html.efp-manual-pdf-landscape,html.efp-manual-pdf-landscape body,html.efp-manual-pdf-portrait,html.efp-manual-pdf-portrait body{overflow:hidden!important;width:100%!important;height:100%!important;overscroll-behavior:none!important}' +
     'html.efp-manual-pdf-landscape body{position:fixed!important;top:0!important;left:0!important;width:100dvh!important;height:100dvw!important;max-width:none!important;max-height:none!important;transform:rotate(90deg) translateY(-100%)!important;transform-origin:top left!important}' +
-    'html.efp-manual-pdf-landscape .reader-head{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:2147483500!important;width:100%!important;max-width:none!important;height:38px!important;min-height:38px!important;padding:3px 48px!important;background:var(--nav,#0e2748)!important;color:#fff!important;opacity:1!important;transform:none!important;pointer-events:auto!important}' +
-    'html.efp-manual-pdf-landscape.efp-reader-ui-hidden .reader-head{opacity:1!important;transform:none!important;pointer-events:auto!important}' +
-    'html.efp-manual-pdf-landscape .reader-shell{position:fixed!important;top:38px!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:auto!important;margin:0!important;max-width:none!important}' +
+    'html.efp-manual-pdf-landscape .reader-head{display:none!important}' +
+    'html.efp-manual-pdf-landscape.efp-reader-ui-hidden .reader-head{display:none!important}' +
+    'html.efp-manual-pdf-landscape .reader-shell{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:auto!important;margin:0!important;max-width:none!important}' +
     /* viewer-v2 injects its continuous-reader CSS after this file. These
        more-specific rules must win so its portrait 100dvh height cannot make
        the rotated WebView scrollport taller than the landscape body. */
-    'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf .reader-head{position:fixed!important;top:0!important;opacity:1!important;transform:none!important;pointer-events:auto!important}' +
-    'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf .reader-shell{top:38px!important;bottom:0!important;height:auto!important}' +
-    'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf.efp-reader-ui-hidden .reader-head{opacity:1!important;transform:none!important;pointer-events:auto!important}' +
+    'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf .reader-head{display:none!important}' +
+    'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf .reader-shell{top:0!important;bottom:0!important;height:auto!important}' +
+    'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf.efp-reader-ui-hidden .reader-head{display:none!important}' +
     'html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-home-button,html.efp-manual-pdf-landscape.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-app-back-button{opacity:1!important;pointer-events:auto!important;transform:none!important}' +
     'html.efp-manual-pdf-landscape .pdf-mode{height:100%!important;padding:0!important}' +
     'html.efp-manual-pdf-landscape .pdf-stage{height:100%!important;min-height:0!important;max-height:none!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;touch-action:none!important;scroll-behavior:auto!important;overflow-anchor:none!important}' +
