@@ -1,5 +1,5 @@
-// v165 refresh shared Current Affairs bookmark controls
-const CACHE_VERSION = "efp-pwa-2026-09-27-v165-ca-bookmark-filter";
+// v166 shared Current Affairs controls plus Blackbook topic bookmarks
+const CACHE_VERSION = "efp-pwa-2026-09-27-v166-blackbook-topic-bookmarks";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -26,6 +26,7 @@ const APP_SHELL = [
   "/black-mode.js",
   "/ca-question-deeplink.js?v=20260927-bookmark-filter",
   "/blackbook-quiz-bookmarks.js",
+  "/blackbook-topic-bookmarks.js",
   "/owner-debug.js",
   "/home-nav.js?v=20260925refreshnormal2",
   "/app-session.js?v=20260925refreshnormal2",
@@ -342,6 +343,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/homepage-fulltext-search.js" ||
       url.pathname === "/rapid-practice-deeplink.js" ||
       url.pathname === "/blackbook-quiz-bookmarks.js" ||
+      url.pathname === "/blackbook-topic-bookmarks.js" ||
       url.pathname === "/pdf-mobile-rotate.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
       url.pathname === "/Original%20Practice/original-practice.js" ||
