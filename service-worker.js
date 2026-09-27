@@ -1,5 +1,5 @@
-// v188 keep Mixed Practice mobile header full size
-const CACHE_VERSION = "efp-pwa-2026-09-28-v188-mixed-full-header";
+// v189 polish Mixed Practice scorecard and navigation colors
+const CACHE_VERSION = "efp-pwa-2026-09-28-v189-mixed-score-nav-colors";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
