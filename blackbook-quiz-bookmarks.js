@@ -59,16 +59,22 @@
       ".efp-bb-bookmark-btn:hover{background:#fff3c4;border-color:#e5ad2d}" +
       ".efp-bb-bookmark-btn:active{transform:scale(.97)}" +
       ".efp-bb-bookmark-btn.is-bookmarked{background:#f5b301;border-color:#f5b301;color:#1f2937}" +
-      "@media(max-width:639px){.efp-bb-question-head{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;" +
-      "grid-template-areas:'q save' 'title title' 'meta meta';column-gap:12px!important;row-gap:9px!important;align-items:start!important}" +
-      ".efp-bb-question-head>span:first-child{grid-area:q;justify-self:start;margin:0!important}.efp-bb-question-head>h3{" +
-      "grid-area:title;width:100%;min-width:0!important;margin:0!important;white-space:normal!important;word-break:normal!important;" +
-      "overflow-wrap:break-word!important}.efp-bb-question-head>.efp-bb-bookmark-btn{grid-area:save;justify-self:end;margin:0!important}" +
-      ".efp-bb-question-head>span:not(:first-child){grid-area:meta;justify-self:start;max-width:100%;margin:0!important;" +
-      "white-space:normal!important;overflow-wrap:break-word!important}.quiz-option{min-width:0!important;max-width:100%!important}" +
-      ".quiz-option .option-text{min-width:0!important;max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important}" +
-      "[id^='bbq-']{min-width:0!important;max-width:100%!important}}" +
-      "@media(max-width:359px){[id^='bbq-']{padding:1rem!important}.efp-bb-bookmark-btn{padding:6px 8px!important;font-size:10px!important}}" +
+      "@media(max-width:639px){.sticky-nav{position:static!important;top:auto!important}.efp-mobile-scorebar{" +
+      "position:sticky!important;top:0!important;z-index:60!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;" +
+      "gap:10px!important;align-items:center!important;transform:none!important;opacity:1!important;pointer-events:auto!important}" +
+      ".efp-mobile-scorebar>div{min-width:0;white-space:nowrap}.efp-bb-question-head{display:grid!important;" +
+      "grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:'q save' 'title title' 'meta meta';column-gap:12px!important;" +
+      "row-gap:9px!important;align-items:start!important}.efp-bb-question-head>span:first-child{grid-area:q;justify-self:start;margin:0!important}" +
+      ".efp-bb-question-head>h3{grid-area:title;width:100%;min-width:0!important;margin:0!important;white-space:normal!important;" +
+      "word-break:normal!important;overflow-wrap:break-word!important}.efp-bb-question-head>.efp-bb-bookmark-btn{grid-area:save;" +
+      "justify-self:end;margin:0!important}.efp-bb-question-head>span:not(:first-child){grid-area:meta;justify-self:start;max-width:100%;" +
+      "margin:0!important;white-space:normal!important;overflow-wrap:break-word!important}.quiz-option{min-width:0!important;max-width:100%!important;" +
+      "scroll-margin-top:72px!important}.quiz-option .option-text{min-width:0!important;max-width:100%!important;white-space:normal!important;" +
+      "overflow-wrap:anywhere!important}[id^='bbq-']{min-width:0!important;max-width:100%!important;scroll-margin-top:72px!important}" +
+      ".explanation-reveal{scroll-margin-top:72px!important}html{scroll-padding-top:72px!important}}" +
+      "@media(max-width:359px){[id^='bbq-']{padding:1rem!important}.efp-bb-bookmark-btn{padding:6px 8px!important;font-size:10px!important}" +
+      ".efp-mobile-scorebar{padding-left:.65rem!important;padding-right:.65rem!important;gap:6px!important}" +
+      ".efp-mobile-scorebar>div{gap:.35rem!important;font-size:.88rem!important}}" +
       "#" + FILTER_ID + "{display:flex;width:100%;align-items:center;justify-content:center;gap:7px;margin-top:10px;" +
       "border:1px solid #d7b451;background:#fff9e8;color:#805b00;border-radius:999px;padding:10px 16px;" +
       "font:800 13px/1.15 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;cursor:pointer;transition:.15s ease}" +
@@ -202,6 +208,46 @@
     applyFilter();
   }
 
+  function ensureMobileScorebar() {
+    var score = document.getElementById("mobile-score");
+    var node = score;
+    while (node && node !== document.body) {
+      if (node.classList && node.classList.contains("sm:hidden")) {
+        node.classList.add("efp-mobile-scorebar");
+        return node;
+      }
+      node = node.parentElement;
+    }
+    return document.querySelector(".efp-mobile-scorebar");
+  }
+
+  function keepAnsweredFeedbackClear(option) {
+    if (!option || window.innerWidth >= 640) return;
+    var bar = ensureMobileScorebar();
+    if (!bar) return;
+    var card = option.closest && option.closest('[id^="bbq-"]');
+    if (!card) {
+      var group = option.closest && option.closest('[id^="opts-"]');
+      card = group && group.parentElement;
+    }
+    if (!card) return;
+
+    setTimeout(function () {
+      (window.requestAnimationFrame || window.setTimeout)(function () {
+        var target = card.querySelector(".option-correct") || option;
+        var barRect = bar.getBoundingClientRect();
+        var targetRect = target.getBoundingClientRect();
+        var safeTop = barRect.bottom + 12;
+        if (targetRect.top < safeTop && targetRect.bottom > barRect.top) {
+          window.scrollBy({
+            top: Math.floor(targetRect.top - safeTop),
+            behavior: "smooth"
+          });
+        }
+      });
+    }, 0);
+  }
+
   function enhanceOptions(options) {
     if (!options || !/^opts-\d+$/.test(options.id || "")) return;
     var sn = (options.id || "").replace(/^opts-/, "");
@@ -283,6 +329,7 @@
   }
 
   function init() {
+    ensureMobileScorebar();
     scan(document);
     if (targetSn()) {
       openTargetLetter();
@@ -309,6 +356,14 @@
   } else {
     init();
   }
+
+  document.addEventListener("click", function (event) {
+    var option = event.target && event.target.closest ? event.target.closest(".quiz-option") : null;
+    if (!option || !event.isTrusted) return;
+    keepAnsweredFeedbackClear(option);
+  }, false);
+
+  window.addEventListener("resize", ensureMobileScorebar, { passive: true });
 
   window.addEventListener("hashchange", function () {
     openTargetLetter();
