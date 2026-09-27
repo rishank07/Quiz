@@ -30,6 +30,15 @@
   }
 
   var appContext = isInstalledAndroidAppContext();
+  /* Keep PDF reading chrome out of the way only while the viewport is
+     landscape. This covers normal device rotation (including the Android
+     app) and the browser's CSS fallback; portrait restores the normal UI. */
+  var landscapeChromeStyle = document.createElement('style');
+  landscapeChromeStyle.id = 'efp-pdf-landscape-chrome-style';
+  landscapeChromeStyle.textContent =
+    '@media(orientation:landscape){html #efp-home-button,html #efp-app-back-button{display:none!important}}' +
+    'html.efp-manual-pdf-landscape #efp-home-button,html.efp-manual-pdf-landscape #efp-app-back-button{display:none!important}';
+  document.head.appendChild(landscapeChromeStyle);
   if (appContext) {
     root.classList.add('efp-pdf-app-context');
 
@@ -81,8 +90,8 @@
     '[data-efp-pdf-rotate] .efp-orientation-icon{display:block;width:27px;height:27px;pointer-events:none}' +
     '[data-efp-pdf-rotate].efp-rotate-ready{opacity:1;pointer-events:auto}' +
     '[data-efp-pdf-rotate] .efp-orientation-icon *{vector-effect:non-scaling-stroke}' +
-    '#efpPdfPortraitReturn{position:fixed;right:max(10px,env(safe-area-inset-right));top:max(10px,env(safe-area-inset-top));z-index:2147483600;display:none;align-items:center;justify-content:center;gap:7px;height:44px;padding:0 14px;border:1px solid rgba(201,149,43,.78);border-radius:999px;background:#0e2748;color:#fff;box-shadow:0 8px 26px rgba(0,0,0,.34);font:850 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;letter-spacing:.1px;-webkit-tap-highlight-color:transparent}' +
-    '#efpPdfPortraitReturn svg{width:23px;height:23px;display:block;pointer-events:none}#efpPdfPortraitReturn.show{display:inline-flex}#efpPdfPortraitReturn:active{transform:scale(.96)}' +
+    '#efpPdfPortraitReturn{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));top:auto;z-index:2147483600;display:none;align-items:center;justify-content:center;width:46px;min-width:46px;height:46px;padding:0;border:1px solid rgba(242,198,111,.88);border-radius:50%;background:rgba(7,20,38,.56);color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.16);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);-webkit-tap-highlight-color:transparent}' +
+    '#efpPdfPortraitReturn svg{width:25px;height:25px;display:block;pointer-events:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.72))}#efpPdfPortraitReturn.show{display:inline-flex}#efpPdfPortraitReturn:active{transform:scale(.94);background:rgba(7,20,38,.68)}' +
     '.efp-pdf-rotate-fallback-toast{position:fixed;left:50%;bottom:max(76px,calc(12px + env(safe-area-inset-bottom)));transform:translateX(-50%) translateY(12px);z-index:9999;opacity:0;pointer-events:none;background:rgba(15,23,42,.94);color:#fff;border-radius:999px;padding:8px 12px;font:800 11px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.28);transition:opacity .18s ease,transform .18s ease}' +
     '.efp-pdf-rotate-fallback-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}';
   document.head.appendChild(style);
@@ -97,7 +106,7 @@
       '<rect x="9" y="4.5" width="14" height="23" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.2"/>' +
       '<path d="M25.1 9.2a11.3 11.3 0 0 1 .7 13.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>' +
       '<path d="m23.4 20.8 2.4 3.8 3.1-3.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
-    '</svg><span>Portrait</span>';
+    '</svg>';
   document.body.appendChild(portraitReturn);
 
   function orientationIcon(targetLandscape){
