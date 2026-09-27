@@ -340,7 +340,16 @@
         }
       } catch (_) {}
 
-      var text = (document.getElementById("scoreTxt") || {}).textContent || "";
+      var scoreNode = document.getElementById("scoreTxt");
+      if (scoreNode && scoreNode.dataset && scoreNode.dataset.efAttempted !== undefined) {
+        return {
+          correct:Number(scoreNode.dataset.efCorrect || 0),
+          wrong:Number(scoreNode.dataset.efWrong || 0),
+          attempted:Number(scoreNode.dataset.efAttempted || 0),
+          total:Number(scoreNode.dataset.efTotal || 0)
+        };
+      }
+      var text = (scoreNode || {}).textContent || "";
       var m = text.match(/(\d+)\s*correct\s*[·|/]\s*(\d+)\s*wrong\s*[·|/]\s*(\d+)\s*\/\s*(\d+)\s*attempted/i);
       return m ? {correct:Number(m[1]), wrong:Number(m[2]), attempted:Number(m[3]), total:Number(m[4])}
                : {correct:0, wrong:0, attempted:0, total:0};
@@ -377,9 +386,59 @@
       window.openSection = patchedOpen;
     }
 
+    function installResponsiveScoreBar() {
+      var score = document.getElementById("scoreTxt");
+      if (!score || score.dataset.efCaResponsiveScore === "1") return;
+      score.dataset.efCaResponsiveScore = "1";
+      score.classList.add("ef-ca-scorebar");
+
+      if (!document.getElementById("efCaResponsiveScoreStyles")) {
+        var style = document.createElement("style");
+        style.id = "efCaResponsiveScoreStyles";
+        style.textContent = [
+          ".ef-ca-scorebar{display:flex!important;align-items:center;gap:6px;flex-wrap:wrap;min-width:0;line-height:1.1}",
+          ".ef-ca-score-chip{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:0;padding:6px 9px;border-radius:9px;border:1px solid #d9d5cc;background:#f7f7f5;font-size:12px;font-weight:800;white-space:nowrap}",
+          ".ef-ca-score-chip strong{font-size:13px}",
+          ".ef-ca-score-correct{background:#e9f8f2;border-color:#b7e4d4;color:#087a58}",
+          ".ef-ca-score-wrong{background:#fff0f0;border-color:#f1c0c0;color:#b83232}",
+          "body.dark .ef-ca-score-chip{background:#182231;border-color:#314052;color:#edf2f7}",
+          "body.dark .ef-ca-score-correct{background:#173229;border-color:#2e6c58;color:#7be0bd}",
+          "body.dark .ef-ca-score-wrong{background:#382023;border-color:#74404a;color:#ff9aa5}",
+          "@media(max-width:700px){.toolbar .row:first-child{align-items:stretch}.ef-ca-scorebar{flex:1 0 100%;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.ef-ca-score-chip{width:100%;padding:6px 4px;font-size:10.5px}.ef-ca-score-chip strong{font-size:12px}.toolbar .row:first-child .progress{min-width:90px;flex:1 1 120px}.toolbar .row:first-child .pct{align-self:center}.toolbar .row:first-child .btn{align-self:center}}",
+          "@media(max-width:390px){.ef-ca-score-chip{font-size:9.5px;padding:6px 2px}.ef-ca-score-chip strong{font-size:11px}.toolbar .row:first-child{gap:6px}}"
+        ].join("");
+        document.head.appendChild(style);
+      }
+
+      function paintScore() {
+        var raw = score.textContent || "";
+        var m = raw.match(/(\d+)\s*correct\s*[·|/]\s*(\d+)\s*wrong\s*[·|/]\s*(\d+)\s*\/\s*(\d+)\s*attempted/i);
+        if (!m) return;
+        var correct = Number(m[1]), wrong = Number(m[2]), attempted = Number(m[3]), total = Number(m[4]);
+        score.dataset.efCorrect = String(correct);
+        score.dataset.efWrong = String(wrong);
+        score.dataset.efAttempted = String(attempted);
+        score.dataset.efTotal = String(total);
+        score.innerHTML =
+          '<span class="ef-ca-score-chip ef-ca-score-total">Total <strong>' + attempted + '/' + total + '</strong></span>' +
+          '<span class="ef-ca-score-chip ef-ca-score-correct">Correct <strong>' + correct + '</strong></span>' +
+          '<span class="ef-ca-score-chip ef-ca-score-wrong">Wrong <strong>' + wrong + '</strong></span>';
+      }
+
+      var observer = new MutationObserver(function () {
+        window.setTimeout(paintScore, 0);
+      });
+      observer.observe(score, {childList:true, characterData:true, subtree:true});
+      paintScore();
+    }
+
     syncFinishButton();
+    installResponsiveScoreBar();
     window.addEventListener("pageshow", function () {
-      window.setTimeout(syncFinishButton, 0);
+      window.setTimeout(function () {
+        syncFinishButton();
+        installResponsiveScoreBar();
+      }, 0);
     });
   }
 
