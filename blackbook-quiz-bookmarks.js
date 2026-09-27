@@ -192,6 +192,52 @@
     syncFilterControl();
   }
 
+
+  function installDesktopFilterScrollBehavior() {
+    var sticky = document.querySelector(".sticky-nav");
+    var button = document.getElementById(FILTER_ID);
+    if (!sticky || !button || sticky.__efpDesktopBookmarkScroll) return;
+    sticky.__efpDesktopBookmarkScroll = true;
+
+    var naturalTop = 0;
+    var ticking = false;
+
+    function documentTop(el) {
+      var top = 0;
+      var node = el;
+      while (node) {
+        top += Number(node.offsetTop) || 0;
+        node = node.offsetParent;
+      }
+      return top;
+    }
+
+    function measure() {
+      naturalTop = documentTop(sticky);
+      sync();
+    }
+
+    function apply() {
+      ticking = false;
+      var desktop = window.innerWidth >= 640;
+      var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+      var stuck = desktop && y >= Math.max(0, naturalTop - 1);
+
+      if (stuck) button.style.setProperty("display", "none", "important");
+      else button.style.removeProperty("display");
+    }
+
+    function sync() {
+      if (ticking) return;
+      ticking = true;
+      (window.requestAnimationFrame || function (fn) { return setTimeout(fn, 16); })(apply);
+    }
+
+    measure();
+    window.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", measure, { passive: true });
+    window.addEventListener("load", measure, { once: true });
+  }
   function updateButton(button, active) {
     button.classList.toggle("is-bookmarked", !!active);
     button.textContent = active ? "★ Saved" : "☆ Save";
@@ -331,6 +377,7 @@
   function init() {
     ensureMobileScorebar();
     scan(document);
+    installDesktopFilterScrollBehavior();
     if (targetSn()) {
       openTargetLetter();
       var tries = 0;
@@ -372,6 +419,7 @@
   window.addEventListener("pageshow", function () {
     scan(document);
     syncButtons();
+    installDesktopFilterScrollBehavior();
     if (targetSn()) {
       openTargetLetter();
       focusTarget();
