@@ -1,5 +1,5 @@
-// v168 refresh BRICS bilingual quiz content and runtime
-const CACHE_VERSION = "efp-pwa-2026-09-27-v168-brics-bilingual";
+// v169 add Bihar bookmarks after the BRICS bilingual refresh
+const CACHE_VERSION = "efp-pwa-2026-09-27-v169-bihar-bookmarks";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -27,6 +27,7 @@ const APP_SHELL = [
   "/ca-question-deeplink.js?v=20260927-bookmark-filter",
   "/blackbook-quiz-bookmarks.js",
   "/blackbook-topic-bookmarks.js",
+  "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
   "/home-nav.js?v=20260925refreshnormal2",
   "/app-session.js?v=20260925refreshnormal2",
@@ -360,6 +361,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/blackbook-topic-bookmarks.js" ||
       url.pathname === "/Current%20Affairs/Topic%20Names/brics-search-index.js" ||
       url.pathname === "/Current%20Affairs/Topic%20Names/Rapid%20Practice/2026/Topic%20Wise/rapid-runtime.js" ||
+      url.pathname === "/bihar-topic-bookmarks.js" ||
       url.pathname === "/pdf-mobile-rotate.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
       url.pathname === "/Original%20Practice/original-practice.js" ||
