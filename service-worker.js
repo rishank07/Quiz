@@ -1,5 +1,5 @@
-// v186 refresh mobile PDF controls and Mixed Practice arrow navigation
-const CACHE_VERSION = "efp-pwa-2026-09-28-v186-pdf-mixed-arrows";
+// v187 avoid browser fullscreen prompt during PDF rotation
+const CACHE_VERSION = "efp-pwa-2026-09-28-v187-pdf-no-fullscreen-prompt";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -33,7 +33,7 @@ const APP_SHELL = [
   "/app-session.js?v=20260927idlehier1",
   "/back-parent-map.js",
   "/back-nav.js?v=20260927bookmarkhier1",
-  "/pdf-mobile-rotate.js?v=20260928rotate16",
+  "/pdf-mobile-rotate.js?v=20260928rotate17",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
