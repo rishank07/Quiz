@@ -1,5 +1,5 @@
-// v170 keep Quiz Quit on the logical Back hierarchy after idle/app resume
-const CACHE_VERSION = "efp-pwa-2026-09-27-v170-idle-back-hierarchy";
+// v171 validate/repair the exact Crux Chapter hierarchy after PDF Back/BFCache
+const CACHE_VERSION = "efp-pwa-2026-09-27-v171-crux-back-hierarchy";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -32,7 +32,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260927idlehier1",
   "/app-session.js?v=20260927idlehier1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260927idlehier1",
+  "/back-nav.js?v=20260927cruxhier1",
   "/pdf-mobile-rotate.js?v=20260926rotate14",
   "/search-logic.js",
   "/search-worker.js",
@@ -53,7 +53,7 @@ const APP_SHELL = [
   "/Crux-Tricks/viewer.html",
   "/Crux-Tricks/my-pages.html",
   "/Crux-Tricks/crux-manifest.js",
-  "/Crux-Tricks/crux-search-route.js?v=20260926resume1",
+  "/Crux-Tricks/crux-search-route.js?v=20260927cruxhier1",
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260924cruxback1",
   "/Crux-Tricks/viewer.css",

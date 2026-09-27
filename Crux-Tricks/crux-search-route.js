@@ -654,7 +654,38 @@
       restoring = false;
     }
 
-    return ok;
+    if (!ok) return false;
+
+    /* A helper click existing is not enough: on a slow/revived WebView its
+       handler can still belong to a stale pane. Confirm the exact leaf pane
+       before replacing browser history. */
+    if (!visible("study") || !visible("chapterPane") ||
+        visible("material") || visible("source") || visible("partPane") ||
+        visible("subjectPane")) return false;
+
+    var crumb = document.getElementById("chapterCrumb");
+    var crumbText = String(crumb && crumb.textContent || "");
+    if (crumbText.indexOf(state.subject) === -1) return false;
+    if (state.branch && crumbText.indexOf(state.branch) === -1) return false;
+    return true;
+  }
+
+  function matchesExternalHierarchy(data) {
+    data = data || {};
+    var state = currentState();
+    if (!state || state.level !== "chapters") return false;
+    if (state.kind !== String(data.kind || "") ||
+        state.source !== String(data.source || "") ||
+        state.subject !== String(data.subject || "") ||
+        state.branch !== String(data.branch || "")) return false;
+
+    var wantedExam = String(data.exam || "");
+    if (state.source === "Pinnacle" &&
+        (state.exam || "Railway") !== (wantedExam || "Railway")) return false;
+
+    return visible("study") && visible("chapterPane") &&
+      !visible("material") && !visible("source") &&
+      !visible("partPane") && !visible("subjectPane");
   }
 
   function restoreExternalHierarchy(data) {
@@ -852,8 +883,11 @@
         return !!(state && state.level !== "material");
       },
       state: function () { return currentState(); },
+      matchesExternalHierarchy: matchesExternalHierarchy,
       restoreExternalHierarchy: restoreExternalHierarchy
     };
+
+    try { window.dispatchEvent(new Event("efp-crux-history-ready")); } catch (_) {}
   }
 
   if (document.readyState === "loading") {

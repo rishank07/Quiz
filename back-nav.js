@@ -594,7 +594,14 @@
         isCruxViewerFromCruxPage() &&
         hasExpectedCruxViewerReferrer() &&
         window.history.length > 1) {
-      clearCruxViewerReturnState();
+      /* Keep an exact document-derived return target until the Crux index has
+         actually verified its Chapter pane. A BFCache restore can preserve a
+         stale Source DOM/history entry even though the referrer is correct.
+         My Pages is not the hierarchy index, so it must not leave this token. */
+      var viewerSource = "";
+      try { viewerSource = new URLSearchParams(window.location.search).get("from") || ""; } catch (_) {}
+      if (viewerSource === "crux-index") saveCruxViewerReturnState();
+      else clearCruxViewerReturnState();
       clearLogicalChain();
       clearHomeSearchChain();
       window.history.back();
@@ -636,21 +643,23 @@
   }
 
   function readCruxRestoreState() {
-    var state = null;
+    /* The URL token belongs to the PDF being returned from, so it is more
+       authoritative than an older sessionStorage value left by a prior PDF. */
+    if (CRUX_RETURN_DOC_ID) {
+      var tokenState = buildCruxStateFromDocId(CRUX_RETURN_DOC_ID);
+      if (tokenState) return tokenState;
+    }
+
     try {
       var raw = sessionStorage.getItem(CRUX_RESTORE_KEY);
       if (raw) {
-        sessionStorage.removeItem(CRUX_RESTORE_KEY);
-        state = JSON.parse(raw);
+        var state = JSON.parse(raw);
         if (state && typeof state === "object") return state;
       }
-    } catch (_) {}
+    } catch (_) {
+      clearCruxViewerReturnState();
+    }
 
-    /* New deterministic fallback: the viewer also passes its document id in
-       the return URL. If Android discarded/refreshed sessionStorage, rebuild
-       the exact Chapter hierarchy from crux-manifest instead of guessing from
-       browser history. */
-    if (CRUX_RETURN_DOC_ID) return buildCruxStateFromDocId(CRUX_RETURN_DOC_ID);
     return null;
   }
 
@@ -759,36 +768,56 @@
      Material -> Source -> Subject -> Part -> Chapter list. */
   function restoreCruxIndexState() {
     if (!isCruxTricksRoot()) return;
+    if (restoreCruxIndexState.running) return;
 
     var state = readCruxRestoreState();
     if (!state || !state.kind || !state.source || !state.subject) {
+      if (!CRUX_RETURN_DOC_ID) clearCruxViewerReturnState();
       signalCruxRestoreComplete();
       return;
     }
 
+    restoreCruxIndexState.running = true;
     var attempts = 0;
+    var startedAt = Date.now();
+
+    function finish(success) {
+      restoreCruxIndexState.running = false;
+      if (success) {
+        clearCruxViewerReturnState();
+        CRUX_RETURN_DOC_ID = "";
+      }
+      signalCruxRestoreComplete();
+    }
+
     function apply() {
       attempts++;
       var bridge = window.EFP_CRUX_BROWSER_HISTORY;
 
-      if (bridge && typeof bridge.restoreExternalHierarchy === "function" &&
-          bridge.restoreExternalHierarchy(state)) {
-        signalCruxRestoreComplete();
+      if (bridge) {
+        /* A normal Back/BFCache return is usually already exact. Validate it
+           without rewriting history; repair only a stale/missing hierarchy. */
+        if (typeof bridge.matchesExternalHierarchy === "function" &&
+            bridge.matchesExternalHierarchy(state)) {
+          finish(true);
+          return;
+        }
+
+        if (typeof bridge.restoreExternalHierarchy === "function" &&
+            bridge.restoreExternalHierarchy(state)) {
+          finish(true);
+          return;
+        }
+      }
+
+      if (attempts < 80 && Date.now() - startedAt < 5000) {
+        window.setTimeout(apply, 50);
         return;
       }
 
-      if (attempts < 20) {
-        window.setTimeout(apply, 40);
-        return;
-      }
-
-      /* Safe failure mode: show the Material landing page, never a blank Crux
-         shell. The user can still navigate normally from here. */
-      var reset = document.getElementById("backMaterial");
-      if (reset) {
-        try { reset.click(); } catch (_) {}
-      }
-      signalCruxRestoreComplete();
+      /* Do not destroy a still-usable cached pane on a failed repair. Keep the
+         token so a later pageshow can retry when the WebView is fully awake. */
+      finish(false);
     }
 
     apply();
@@ -1098,5 +1127,14 @@ installCruxHomeSearchHistoryGuard();
   } else {
     restoreCruxIndexState();
   }
+
+  /* BFCache restores do not replay DOMContentLoaded. Validate the durable PDF
+     return target whenever the cached Crux page becomes active again. */
+  window.addEventListener("pageshow", function (event) {
+    if (!isCruxTricksRoot()) return;
+    var pending = false;
+    try { pending = !!sessionStorage.getItem(CRUX_RESTORE_KEY); } catch (_) {}
+    if (event.persisted || pending || CRUX_RETURN_DOC_ID) restoreCruxIndexState();
+  });
 
 })();
