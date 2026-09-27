@@ -105,13 +105,6 @@
                 grid-template-columns: minmax(0, 1fr) auto;
                 gap: 10px;
                 align-items: center;
-                transition: transform 0.18s ease, opacity 0.18s ease;
-                will-change: transform, opacity;
-            }
-            .efp-mobile-scorebar.efp-yield-feedback {
-                transform: translateY(-105%);
-                opacity: 0;
-                pointer-events: none;
             }
             .efp-mobile-scorebar > div {
                 min-width: 0;
@@ -173,7 +166,7 @@
   <script defer src="/home-nav.js?v=20260925blackbookedge2"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
   <script defer src="/back-nav.js?v=20260924bookhier3"></script>
-  <script defer src="/blackbook-quiz-bookmarks.js?v=20260927b4"></script>
+  <script defer src="/blackbook-quiz-bookmarks.js?v=20260927b5"></script>
 </head>
 <body class="antialiased selection:bg-blue-200">
 
@@ -3553,35 +3546,6 @@ if (activeLetter && navButtons[activeLetter]) {
             
         }
 
-        let scorebarOverlapFrame = 0;
-
-        function syncMobileScorebarFeedbackOverlap() {
-            scorebarOverlapFrame = 0;
-            if (window.innerWidth >= 640) return;
-            const scorebar = document.querySelector('.efp-mobile-scorebar');
-            if (!scorebar) return;
-
-            const safeBottom = scorebar.offsetHeight + 12;
-            const feedback = document.querySelectorAll('.option-correct, .explanation-reveal');
-            let overlapsFeedback = false;
-
-            feedback.forEach(node => {
-                if (overlapsFeedback) return;
-                const rect = node.getBoundingClientRect();
-                if (rect.bottom > 0 && rect.top < safeBottom) overlapsFeedback = true;
-            });
-
-            scorebar.classList.toggle('efp-yield-feedback', overlapsFeedback);
-        }
-
-        function scheduleScorebarFeedbackOverlapCheck() {
-            if (scorebarOverlapFrame) return;
-            scorebarOverlapFrame = requestAnimationFrame(syncMobileScorebarFeedbackOverlap);
-        }
-
-        window.addEventListener('scroll', scheduleScorebarFeedbackOverlapCheck, { passive: true });
-        window.addEventListener('resize', scheduleScorebarFeedbackOverlapCheck, { passive: true });
-
         function checkAnswer(btn, selected, item, optsContainer) {
             const explanation = document.getElementById(`exp-${item.sn}`);
             const buttons = optsContainer.querySelectorAll('button');
@@ -3631,8 +3595,6 @@ if (activeLetter && navButtons[activeLetter]) {
             explanation.classList.remove('hidden');
             explanation.classList.add('explanation-reveal');
 
-            // Keep sticky score status from covering visible answer feedback.
-            scheduleScorebarFeedbackOverlapCheck();
         }
 
         // Initialize App
@@ -3644,14 +3606,8 @@ if (activeLetter && navButtons[activeLetter]) {
                 showSection(firstLetter);
             }
         }
-        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => {
-            initQuiz();
-            scheduleScorebarFeedbackOverlapCheck();
-        }, { once: true });
-        else {
-            initQuiz();
-            scheduleScorebarFeedbackOverlapCheck();
-        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initQuiz, { once: true });
+        else initQuiz();
 
     </script>
 <div style="text-align:center;font-size:12px;opacity:.6;padding:14px 10px;">© <span id="efpCopyrightYear"></span> ExamFusion Prep. All Rights Reserved.</div>
