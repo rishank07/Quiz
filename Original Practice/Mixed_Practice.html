@@ -58,6 +58,15 @@
       #quizView{padding-bottom:96px}
       body.efp-mixed-quiz-active::before,body.efp-mixed-quiz-active::after{display:none!important}
       .quiz-head,.quiz-head.efp-mobile-compact{backdrop-filter:none;-webkit-backdrop-filter:none}
+      /* Keep the full quiz header/scorecard size while scrolling. Content scrolls
+         underneath the sticky header; the former colorful compact mode is disabled. */
+      .quiz-head.efp-mobile-compact{padding:9px!important;border-radius:16px!important;margin-bottom:13px!important;box-shadow:0 12px 28px rgba(0,0,0,.2)!important}
+      .quiz-head.efp-mobile-compact .quiz-head-top{display:grid!important}
+      .quiz-head.efp-mobile-compact .progress-track{display:block!important}
+      .quiz-head.efp-mobile-compact .stats-row{margin-top:9px!important;gap:5px!important}
+      .quiz-head.efp-mobile-compact .stat{min-height:0!important;padding:6px 3px!important;border-radius:10px!important;border:1px solid rgba(255,255,255,.08)!important;background:rgba(255,255,255,.035)!important;box-shadow:none!important}
+      .quiz-head.efp-mobile-compact .stat strong,.quiz-head.efp-mobile-compact .stat:nth-child(1) strong,.quiz-head.efp-mobile-compact .stat:nth-child(2) strong,.quiz-head.efp-mobile-compact .stat:nth-child(3) strong,.quiz-head.efp-mobile-compact .stat:nth-child(4) strong{font-size:14px!important;line-height:1.1!important;color:inherit!important;text-shadow:none!important}
+      .quiz-head.efp-mobile-compact .stat span{font-size:9px!important;line-height:normal!important;margin-top:1px!important;letter-spacing:normal!important;color:#8799ad!important}
       .question-nav{position:fixed;z-index:2147483000;left:50%;right:auto;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(132px,calc(100vw - 132px));grid-template-columns:1fr 1fr;align-items:center;gap:10px;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none}
       .question-nav .nav-btn{pointer-events:auto;min-width:0;width:100%;height:44px;min-height:44px;padding:0;border-radius:999px;font-size:0;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 16px rgba(0,0,0,.16);transition:transform .14s ease,box-shadow .14s ease,opacity .14s ease;-webkit-tap-highlight-color:transparent}
       .question-nav .nav-btn::before{display:block;font-size:24px;font-weight:1000;line-height:1;transform:translateY(-1px)}
@@ -476,25 +485,18 @@
   function syncMobileQuizHead(){
     var head=document.querySelector('.quiz-head');
     if(!head)return;
-    if(!isMobileQuiz()||$('quizView').hidden){head.classList.remove('efp-mobile-compact');head.removeAttribute('data-sticky-start');return}
-    var start=Number(head.getAttribute('data-sticky-start'));
-    if(!Number.isFinite(start)||start<=0){
-      start=head.getBoundingClientRect().top+window.scrollY;
-      head.setAttribute('data-sticky-start',String(start));
-    }
-    // Hysteresis avoids rapid expand/collapse around the sticky threshold.
-    if(window.scrollY>Math.max(18,start+6)) head.classList.add('efp-mobile-compact');
-    else if(window.scrollY<3) head.classList.remove('efp-mobile-compact');
+    // Mobile header stays full-size at every scroll position.
+    head.classList.remove('efp-mobile-compact');
+    head.removeAttribute('data-sticky-start');
   }
   function focusQuestionAfterStep(){
     if(!isMobileQuiz()){window.scrollTo({top:0,behavior:'smooth'});return}
     var head=document.querySelector('.quiz-head'),card=document.querySelector('.question-card');
     if(!head||!card)return;
-    head.classList.add('efp-mobile-compact');
+    head.classList.remove('efp-mobile-compact');
     var top=Math.max(0,card.getBoundingClientRect().top+window.scrollY-head.offsetHeight-8);
     window.scrollTo({top:top,behavior:'auto'});
   }
-  window.addEventListener('scroll',syncMobileQuizHead,{passive:true});
   window.addEventListener('resize',syncMobileQuizHead);
   function updateQuizTitle(){if(!state)return;if(savedMode){$('quizTitle').textContent='★ Saved Questions · '+currentQuestions.length+' Q';return}var labels=state.selectedKeys.map(function(k){return POOLS[k]?POOLS[k].label:k});$('quizTitle').textContent=labels.join(' + ')+' · '+currentQuestions.length+' Q'}
   function updateSavedQuestionsButton(){
