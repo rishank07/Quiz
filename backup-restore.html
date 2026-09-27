@@ -386,6 +386,7 @@
       var MIXED_DELETED_KEY = "efp_mixed_practice_deleted_sets_v1";
       var MIXED_TAB_STATE_PREFIX = "efp_mixed_practice_tab_state_v1:";
       var MIXED_BOOKMARK_KEY = "efp_mixed_practice_bookmarks_v1";
+      var MIXED_BOOKMARK_META_KEY = "efp_mixed_practice_bookmark_meta_v1";
       var RAPID_KEY_PATTERN = /^efp_ca_.+_rapid_v1$/;
       var QUIZ_PROGRESS_KEY = "efp_quiz_progress_v2";
       var ORIGINAL_ATTEMPT_PREFIX = "efp_original_practice_attempt_v2:";
@@ -447,7 +448,7 @@
       }
 
       function isPracticeKey(key) {
-        return key === MIXED_STATE_KEY || key === MIXED_HISTORY_KEY || key === MIXED_DELETED_KEY || key === MIXED_BOOKMARK_KEY || key === QUIZ_PROGRESS_KEY || (key && (key.indexOf(MIXED_TAB_STATE_PREFIX) === 0 || key.indexOf(MIXED_HISTORY_ITEM_PREFIX) === 0 || key.indexOf(ORIGINAL_ATTEMPT_PREFIX) === 0)) || RAPID_KEY_PATTERN.test(key || "");
+        return key === MIXED_STATE_KEY || key === MIXED_HISTORY_KEY || key === MIXED_DELETED_KEY || key === MIXED_BOOKMARK_KEY || key === MIXED_BOOKMARK_META_KEY || key === QUIZ_PROGRESS_KEY || (key && (key.indexOf(MIXED_TAB_STATE_PREFIX) === 0 || key.indexOf(MIXED_HISTORY_ITEM_PREFIX) === 0 || key.indexOf(ORIGINAL_ATTEMPT_PREFIX) === 0)) || RAPID_KEY_PATTERN.test(key || "");
       }
 
       function normalizeMixedState(value) {
@@ -491,7 +492,7 @@
       }
 
       function normalizePracticeData(raw) {
-        var out = { rapid: {}, quizProgress: {}, originalAttempts: {}, mixedState: null, mixedBookmarks: [], mixedRecentSets: [] };
+        var out = { rapid: {}, quizProgress: {}, originalAttempts: {}, mixedState: null, mixedBookmarks: [], mixedBookmarkMeta: {}, mixedRecentSets: [] };
         if (!raw || typeof raw !== "object" || Array.isArray(raw)) return out;
         var rapid = raw.rapid;
         if (rapid && typeof rapid === "object" && !Array.isArray(rapid)) {
@@ -533,6 +534,18 @@
         }
         out.mixedState = normalizeMixedState(raw.mixedState);
         out.mixedBookmarks = uniqueStrings(Array.isArray(raw.mixedBookmarks) ? raw.mixedBookmarks : []);
+        if (raw.mixedBookmarkMeta && typeof raw.mixedBookmarkMeta === "object" && !Array.isArray(raw.mixedBookmarkMeta)) {
+          out.mixedBookmarks.forEach(function (id) {
+            var meta = raw.mixedBookmarkMeta[id];
+            if (!meta || typeof meta !== "object" || Array.isArray(meta)) return;
+            out.mixedBookmarkMeta[id] = {
+              poolLabel: String(meta.poolLabel || ""),
+              source: String(meta.source || ""),
+              chapter: String(meta.chapter || ""),
+              section: String(meta.section || "")
+            };
+          });
+        }
         var seen = new Set();
         (Array.isArray(raw.mixedRecentSets) ? raw.mixedRecentSets : [])
           .map(normalizeMixedState)
@@ -554,6 +567,7 @@
           originalAttempts: {},
           mixedState: safeParse(localStorage.getItem(MIXED_STATE_KEY), null),
           mixedBookmarks: safeParse(localStorage.getItem(MIXED_BOOKMARK_KEY), []),
+          mixedBookmarkMeta: safeParse(localStorage.getItem(MIXED_BOOKMARK_META_KEY), {}),
           mixedRecentSets: safeParse(localStorage.getItem(MIXED_HISTORY_KEY), [])
         };
         var tabStates = [];
@@ -1009,6 +1023,17 @@
           var saved = replace ? practice.mixedBookmarks : uniqueStrings((safeParse(localStorage.getItem(MIXED_BOOKMARK_KEY), []) || []).concat(practice.mixedBookmarks));
           if (saved.length) localStorage.setItem(MIXED_BOOKMARK_KEY, JSON.stringify(saved));
           else localStorage.removeItem(MIXED_BOOKMARK_KEY);
+          var meta = {};
+          if (!replace) {
+            var currentMeta = safeParse(localStorage.getItem(MIXED_BOOKMARK_META_KEY), {});
+            if (currentMeta && typeof currentMeta === "object" && !Array.isArray(currentMeta)) meta = Object.assign({}, currentMeta);
+          }
+          Object.keys(practice.mixedBookmarkMeta || {}).forEach(function (id) { meta[id] = practice.mixedBookmarkMeta[id]; });
+          Object.keys(meta).forEach(function (id) { if (saved.indexOf(id) < 0) delete meta[id]; });
+          if (Object.keys(meta).length) localStorage.setItem(MIXED_BOOKMARK_META_KEY, JSON.stringify(meta));
+          else localStorage.removeItem(MIXED_BOOKMARK_META_KEY);
+        } else if (replace) {
+          localStorage.removeItem(MIXED_BOOKMARK_META_KEY);
         }
       }
 
