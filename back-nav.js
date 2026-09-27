@@ -250,6 +250,22 @@
     event.stopImmediatePropagation();
   }
 
+  /* All Bookmarks is an in-page folder hierarchy backed by real History
+     entries. Delegate the universal Back button to that hierarchy first so
+     Folder -> Parent Folder -> All Bookmarks happens before leaving the page. */
+  function useBookmarkHierarchyBack(event) {
+    var bridge = window.EFP_BOOKMARK_BROWSER_HISTORY;
+    if (!bridge || typeof bridge.canGoBackInsideBookmarks !== "function" ||
+        typeof bridge.goBackInsideBookmarks !== "function") return false;
+    try {
+      if (!bridge.canGoBackInsideBookmarks()) return false;
+      consumeBackEvent(event);
+      return bridge.goBackInsideBookmarks() !== false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   function clickCruxControl(id) {
     var button = document.getElementById(id);
     if (!button) return false;
@@ -991,6 +1007,10 @@
     if (!target) return;
     var approvedLogicalBack = target.getAttribute(APPROVED_LOGICAL_BACK_ATTRIBUTE) === "1";
     if (approvedLogicalBack) target.removeAttribute(APPROVED_LOGICAL_BACK_ATTRIBUTE);
+
+    if (useBookmarkHierarchyBack(event)) {
+      return;
+    }
 
     if (useCruxInternalBack(event)) {
       return;
