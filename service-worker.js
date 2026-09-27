@@ -1,5 +1,5 @@
 // v177 refresh app shell for bookmark hierarchy Back navigation
-const CACHE_VERSION = "efp-pwa-2026-09-27-v177-bookmark-back-nav";
+const CACHE_VERSION = "efp-pwa-2026-09-28-v178-pdf-zoom-polish";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -57,7 +57,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20260924cruxback1",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260927smoothzoom2",
+  "/Crux-Tricks/viewer-v2.js?v=20260927smoothzoom3",
 ];
 
 self.addEventListener("install", (event) => {

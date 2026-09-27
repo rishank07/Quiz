@@ -59,6 +59,7 @@
   var resizeTimer=null;
   var controlsTimer=null;
   var zoomScrollTimer=null;
+  var zoomRenderTimer=null;
   var zoomViewGeneration=0;
   var searchQuery='';
   var activeSearchPage=0;
@@ -162,6 +163,7 @@
       'html:not(.dark).efp-advance-maths-dark-pdf .efp-cont-page canvas{filter:invert(.965) hue-rotate(180deg) saturate(1.02) brightness(1.08) contrast(1.14)!important;background:#fff!important}',
       'html.efp-continuous-mobile-pdf .mobile-reader-bar{transition:opacity .18s ease,transform .22s ease!important}',
       'html.efp-continuous-mobile-pdf .mobile-reader-bar.efp-reader-hidden{opacity:0!important;pointer-events:none!important;transform:translateX(-50%) translateY(calc(100% + 28px))!important}',
+      '.zoom-controls button:disabled,.mobile-zoom-row button:disabled{opacity:.38!important;cursor:not-allowed!important}',
       '@media(orientation:landscape){html.efp-continuous-mobile-pdf .reader-head{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:145!important;height:26px!important;min-height:26px!important;padding:1px 48px!important;grid-template-columns:minmax(0,1fr)!important;background:color-mix(in srgb,var(--paper) 88%,transparent)!important;-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;transition:opacity .18s ease,transform .22s ease!important}html.efp-continuous-mobile-pdf .reader-title b{font-size:9px!important}html.efp-continuous-mobile-pdf .reader-shell{height:100dvh!important;width:100%!important;margin:0!important}html.efp-continuous-mobile-pdf.efp-reader-ui-hidden .reader-head{opacity:0!important;pointer-events:none!important;transform:translateY(-110%)!important}html.efp-continuous-mobile-pdf body #efp-home-button,html.efp-continuous-mobile-pdf body #efp-app-back-button{top:auto!important;bottom:max(6px,env(safe-area-inset-bottom))!important;width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;border-radius:50%!important;transition:opacity .18s ease,transform .22s ease,background .18s ease!important}html.efp-continuous-mobile-pdf body #efp-home-button{right:max(8px,env(safe-area-inset-right))!important;left:auto!important}html.efp-continuous-mobile-pdf body #efp-app-back-button{left:max(8px,env(safe-area-inset-left))!important;right:auto!important}html.efp-continuous-mobile-pdf body #efp-home-button .efp-home-icon,html.efp-continuous-mobile-pdf body #efp-app-back-button .efp-back-icon{font-size:19px!important}html.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-home-button,html.efp-continuous-mobile-pdf.efp-reader-ui-hidden body #efp-app-back-button{opacity:0!important;pointer-events:none!important;transform:translateY(calc(100% + 18px))!important}html.efp-continuous-mobile-pdf.efp-reader-ui-hidden .mobile-reader-bar{opacity:0!important;pointer-events:none!important;transform:translateX(-50%) translateY(calc(100% + 28px))!important}.efp-cont-page{margin-bottom:4px}}'
     ].join('');
     document.head.appendChild(st);
@@ -190,6 +192,7 @@
     completeBtn.textContent=prog().indexOf('complete')>=0?'✓ Completed':'✓ Complete';
     openPdf.href=pdfUrl();openPdf2.href=pdfUrl();
     zoomLabel.textContent=autoFit?'Fit':Math.round(zoom*100)+'%';
+    zoomOutBtn.disabled=(autoFit&&readerZoomFloor()>=1)||(!autoFit&&zoom<=readerZoomFloor()+.0001);
   }
   function showError(msg){pdfLoading.hidden=true;pdfCanvas.hidden=true;pdfError.hidden=false;var p=pdfError.querySelector('p');if(p)p.textContent=msg||'PDF could not be displayed inside the app.'}
 
@@ -868,6 +871,26 @@
   input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go(parseInt(input.value,10)||page,true);input.blur()}});
   function readerZoomFloor(){return (continuous||isCompactReader())?1:.70}
   function clampReaderZoom(v){return Math.max(readerZoomFloor(),Math.min(5.00,Math.round(v*100)/100))}
+  function cancelScheduledZoomRender(){clearTimeout(zoomRenderTimer);zoomRenderTimer=null}
+  function previewContinuousZoom(){
+    if(!continuous||!continuousRoot)return;
+    var list=continuousRoot.querySelectorAll('.efp-cont-page');
+    for(var i=0;i<list.length;i++){
+      var n=parseInt(list[i].dataset.page,10)||0;
+      sizeShell(list[i],pageRatios[n]||defaultRatio);
+      var c=list[i].querySelector('canvas');
+      if(c){c.style.width=list[i].style.width;c.style.height=list[i].style.height}
+      var hl=list[i].querySelector('.efp-search-layer');if(hl)hl.remove();
+    }
+  }
+  function scheduleZoomRender(){
+    cancelScheduledZoomRender();
+    zoomRenderTimer=setTimeout(function(){
+      zoomRenderTimer=null;
+      if(readerSuspended||!pdfDoc)return;
+      if(continuous)reflowContinuous();else renderSinglePage();
+    },90);
+  }
   function scaleSingleZoomPreview(scaleRatio){
     if(!pdfCanvas||pdfCanvas.hidden||pdfCanvas.width<=2||pdfCanvas.height<=2)return;
     var w=parseFloat(pdfCanvas.style.width)||pdfCanvas.clientWidth||0;
@@ -884,18 +907,27 @@
     focusY=Number.isFinite(focusY)?focusY:pdfStage.clientHeight/2;
     var target=clampReaderZoom(next);
     var fitFloor=(continuous||isCompactReader())&&target<=1.0001;
+    var targetZoom=fitFloor?1:target;
+    if(autoFit===fitFloor&&Math.abs(targetZoom-oldZoom)<.0001){updateControls();return}
     autoFit=fitFloor;zoom=fitFloor?1:target;
     document.documentElement.classList.toggle('efp-pdf-zoomed',!autoFit);
     updateControls();
     var scaleRatio=zoom/Math.max(.01,oldZoom);
     var viewGeneration=++zoomViewGeneration;
-    if(continuous)reflowContinuous();
+    if(continuous){
+      // Invalidate an older in-flight bitmap before it can overwrite this preview.
+      continuousLayoutGeneration++;continuousRenders={};
+      previewContinuousZoom();
+    }
     else{
+      singleRenderGeneration++;
+      if(renderTask){try{renderTask.cancel()}catch(_){ }renderTask=null}
       // Keep the existing bitmap visible at the requested CSS size immediately;
       // PDF.js redraws the sharper replacement off-screen and commits it later.
       scaleSingleZoomPreview(scaleRatio);
-      renderSinglePage();
     }
+    // Rapid button/wheel input only needs one sharp redraw at the final zoom.
+    scheduleZoomRender();
     clearTimeout(zoomScrollTimer);
     zoomScrollTimer=setTimeout(function(){
       if(viewGeneration!==zoomViewGeneration)return;
@@ -915,10 +947,18 @@
 
   function resetReaderFit(){
     zoomViewGeneration++;clearTimeout(zoomScrollTimer);
+    if(autoFit){updateControls();return}
+    var oldZoom=Math.max(.01,zoom);
     autoFit=true;zoom=1;
     document.documentElement.classList.remove('efp-pdf-zoomed');
     updateControls();
-    if(continuous)reflowContinuous();else renderSinglePage();
+    if(continuous){continuousLayoutGeneration++;continuousRenders={};previewContinuousZoom()}
+    else{
+      singleRenderGeneration++;
+      if(renderTask){try{renderTask.cancel()}catch(_){ }renderTask=null}
+      scaleSingleZoomPreview(1/oldZoom);
+    }
+    scheduleZoomRender();
     setTimeout(function(){pdfStage.scrollLeft=0},120);
   }
   function keyboardTargetIsEditable(target){
@@ -963,7 +1003,9 @@
   pdfStage.addEventListener('touchmove',function(e){
     if(!pinchStartDist||e.touches.length!==2)return;
     e.preventDefault();
-    pinchScale=Math.max(.45,Math.min(5.5,touchDistance(e.touches)/pinchStartDist));
+    var minPreviewScale=readerZoomFloor()/Math.max(.01,pinchStartZoom);
+    var maxPreviewScale=5/Math.max(.01,pinchStartZoom);
+    pinchScale=Math.max(minPreviewScale,Math.min(maxPreviewScale,touchDistance(e.touches)/pinchStartDist));
     var target=continuous&&continuousRoot?continuousRoot:pdfCanvas;
     if(target){
       target.style.transformOrigin=(pdfStage.scrollLeft+pinchFocusX)+'px '+(pdfStage.scrollTop+pinchFocusY)+'px';
@@ -1027,7 +1069,7 @@
     clearTimeout(resizeTimer);resizeTimer=setTimeout(function(){
       if(document.body.classList.contains('mobile-tools-open'))return;
       var ae=document.activeElement;if(ae&&ae.closest&&ae.closest('input,textarea,[contenteditable="true"]'))return;
-      mobileReader=isCompactReader();autoFit=true;zoom=1;if(devicePortrait())document.documentElement.classList.remove('efp-reader-ui-hidden');updateControls();
+      cancelScheduledZoomRender();mobileReader=isCompactReader();autoFit=true;zoom=1;if(devicePortrait())document.documentElement.classList.remove('efp-reader-ui-hidden');updateControls();
       if(!pdfDoc)return;
       pdfDoc.getPage(page).then(function(pg){
         var b=pg.getViewport({scale:1}),landscape=b.width>b.height*1.03;
@@ -1053,7 +1095,7 @@
     searchGeneration++;
     Object.keys(pageRetryTimers).forEach(function(k){clearTimeout(pageRetryTimers[k])});
     pageRetryTimers={};
-    clearTimeout(scrollTimer);clearTimeout(resizeTimer);clearTimeout(controlsTimer);
+    clearTimeout(scrollTimer);clearTimeout(resizeTimer);clearTimeout(controlsTimer);cancelScheduledZoomRender();
     if(scrollRAF){try{cancelAnimationFrame(scrollRAF)}catch(_){ }scrollRAF=0}
     if(renderTask){try{renderTask.cancel()}catch(_){ }renderTask=null}
     if(continuousObserver){try{continuousObserver.disconnect()}catch(_){ }}
