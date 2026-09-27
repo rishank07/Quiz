@@ -59,11 +59,16 @@
       ".efp-bb-bookmark-btn:hover{background:#fff3c4;border-color:#e5ad2d}" +
       ".efp-bb-bookmark-btn:active{transform:scale(.97)}" +
       ".efp-bb-bookmark-btn.is-bookmarked{background:#f5b301;border-color:#f5b301;color:#1f2937}" +
-      "@media(max-width:639px){.efp-bb-question-head{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;" +
-      "column-gap:12px!important;row-gap:8px!important;align-items:start!important}.efp-bb-question-head>h3{grid-column:2;" +
-      "grid-row:1;min-width:0!important;word-break:normal!important;overflow-wrap:normal!important}.efp-bb-question-head>" +
-      ".efp-bb-bookmark-btn{grid-column:3;grid-row:1;margin:0!important}.efp-bb-question-head>span:not(:first-child){" +
-      "grid-column:2/4;grid-row:2;justify-self:start;margin-top:0!important}}" +
+      "@media(max-width:639px){.efp-bb-question-head{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;" +
+      "grid-template-areas:'q save' 'title title' 'meta meta';column-gap:12px!important;row-gap:9px!important;align-items:start!important}" +
+      ".efp-bb-question-head>span:first-child{grid-area:q;justify-self:start;margin:0!important}.efp-bb-question-head>h3{" +
+      "grid-area:title;width:100%;min-width:0!important;margin:0!important;white-space:normal!important;word-break:normal!important;" +
+      "overflow-wrap:break-word!important}.efp-bb-question-head>.efp-bb-bookmark-btn{grid-area:save;justify-self:end;margin:0!important}" +
+      ".efp-bb-question-head>span:not(:first-child){grid-area:meta;justify-self:start;max-width:100%;margin:0!important;" +
+      "white-space:normal!important;overflow-wrap:break-word!important}.quiz-option{min-width:0!important;max-width:100%!important}" +
+      ".quiz-option .option-text{min-width:0!important;max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important}" +
+      "[id^='bbq-']{min-width:0!important;max-width:100%!important}}" +
+      "@media(max-width:359px){[id^='bbq-']{padding:1rem!important}.efp-bb-bookmark-btn{padding:6px 8px!important;font-size:10px!important}}" +
       "#" + FILTER_ID + "{display:flex;width:100%;align-items:center;justify-content:center;gap:7px;margin-top:10px;" +
       "border:1px solid #d7b451;background:#fff9e8;color:#805b00;border-radius:999px;padding:10px 16px;" +
       "font:800 13px/1.15 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;cursor:pointer;transition:.15s ease}" +
