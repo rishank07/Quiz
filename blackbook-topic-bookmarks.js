@@ -7,9 +7,13 @@
 
   var BOOKMARK_KEY = "efp_bookmarks";
   var STYLE_ID = "efp-blackbook-topic-bookmark-style";
+  var FILTER_ID = "efp-bb-topic-filter";
+  var EMPTY_ID = "efp-bb-topic-empty";
   var TOKEN_PREFIX = "bbt-";
   var observer = null;
   var focusTimer = null;
+  var filterTimer = null;
+  var filterActive = false;
 
   function safeParse(raw, fallback) {
     try {
@@ -37,6 +41,18 @@
     return window.location.pathname + "#" + entryId(sn);
   }
 
+  function savedSerials() {
+    var prefix = window.location.pathname + "#" + TOKEN_PREFIX;
+    var saved = {};
+    var data = getBookmarks();
+    Object.keys(data).forEach(function (key) {
+      if (!data[key] || key.indexOf(prefix) !== 0) return;
+      var sn = Number(key.slice(prefix.length));
+      if (Number.isInteger(sn) && sn > 0) saved[sn] = true;
+    });
+    return saved;
+  }
+
   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
     var style = document.createElement("style");
@@ -51,13 +67,90 @@
       ".efp-bb-topic-save.is-bookmarked{background:#f5b301;border-color:#f5b301;color:#1f2937}" +
       "tr .efp-bb-topic-save{margin-left:8px;vertical-align:middle}" +
       ".vocab-card>.efp-bb-topic-save{width:100%;margin-top:12px}" +
+      "#" + FILTER_ID + "{display:inline-flex;align-items:center;justify-content:center;gap:6px;" +
+      "min-height:46px;border:1px solid #d7b451;background:#fff9e8;color:#805b00;border-radius:999px;" +
+      "padding:10px 16px;font:800 13px/1.1 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;" +
+      "cursor:pointer;white-space:nowrap;transition:.15s ease}" +
+      "#" + FILTER_ID + ":hover{background:#fff3c4;border-color:#e5ad2d}" +
+      "#" + FILTER_ID + ".is-active{background:#f5b301;border-color:#f5b301;color:#1f2937;box-shadow:0 4px 12px rgba(245,179,1,.25)}" +
+      ".efp-bb-topic-filter-hidden{display:none!important}" +
+      "#" + EMPTY_ID + "{display:none;margin:14px auto 0;max-width:620px;padding:14px 18px;text-align:center;" +
+      "border:1px dashed #d7b451;border-radius:14px;background:#fff9e8;color:#805b00;font:700 13px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}" +
+      "#" + EMPTY_ID + ".is-visible{display:block}" +
       ".efp-bb-topic-focus{outline:3px solid #f5b301!important;outline-offset:3px;" +
       "box-shadow:0 0 0 6px rgba(245,179,1,.16)!important}" +
       "html.efp-black .efp-bb-topic-save,html.efp-black-invert .efp-bb-topic-save{" +
       "background:#2a2517;color:#f7d66c;border-color:#8c7127}" +
       "html.efp-black .efp-bb-topic-save.is-bookmarked,html.efp-black-invert .efp-bb-topic-save.is-bookmarked{" +
+      "background:#f5b301;color:#17130a;border-color:#f5b301}" +
+      "html.efp-black #" + FILTER_ID + ",html.efp-black-invert #" + FILTER_ID + "," +
+      "html.efp-black #" + EMPTY_ID + ",html.efp-black-invert #" + EMPTY_ID + "{" +
+      "background:#2a2517;color:#f7d66c;border-color:#8c7127}" +
+      "html.efp-black #" + FILTER_ID + ".is-active,html.efp-black-invert #" + FILTER_ID + ".is-active{" +
       "background:#f5b301;color:#17130a;border-color:#f5b301}";
     document.head.appendChild(style);
+  }
+
+  function syncFilterControl() {
+    var button = document.getElementById(FILTER_ID);
+    if (!button) return;
+    var count = Object.keys(savedSerials()).length;
+    button.textContent = "🔖 Bookmarked (" + count + ")";
+    button.classList.toggle("is-active", filterActive);
+    button.setAttribute("aria-pressed", filterActive ? "true" : "false");
+  }
+
+  function clearPageSearch() {
+    var input = document.getElementById("search-input");
+    if (!input || !input.value) return;
+    input.value = "";
+    try { input.dispatchEvent(new Event("input", { bubbles: true })); } catch (_) {}
+  }
+
+  function applyFilter() {
+    var saved = savedSerials();
+    document.querySelectorAll('[data-efp-bb-sn]').forEach(function (entry) {
+      if (entry.classList.contains("efp-bb-topic-save")) return;
+      var sn = Number(entry.getAttribute("data-efp-bb-sn"));
+      entry.classList.toggle("efp-bb-topic-filter-hidden", filterActive && !saved[sn]);
+    });
+    var empty = document.getElementById(EMPTY_ID);
+    if (empty) empty.classList.toggle("is-visible", filterActive && Object.keys(saved).length === 0);
+    syncFilterControl();
+  }
+
+  function scheduleFilter() {
+    clearTimeout(filterTimer);
+    filterTimer = setTimeout(function () {
+      filterTimer = null;
+      applyFilter();
+    }, 0);
+  }
+
+  function ensureFilterControl() {
+    if (document.getElementById(FILTER_ID)) return;
+    var input = document.getElementById("search-input");
+    if (!input || !input.parentElement || !input.parentElement.parentElement) return;
+    var row = input.parentElement.parentElement;
+    var actions = input.parentElement.nextElementSibling;
+    if (!actions) return;
+
+    var button = document.createElement("button");
+    button.type = "button";
+    button.id = FILTER_ID;
+    button.setAttribute("aria-label", "Show bookmarked entries on this page");
+    button.addEventListener("click", function () {
+      filterActive = !filterActive;
+      if (filterActive) clearPageSearch();
+      applyFilter();
+    });
+    actions.insertBefore(button, actions.firstChild);
+
+    var empty = document.createElement("div");
+    empty.id = EMPTY_ID;
+    empty.textContent = "No bookmarked entries on this page yet. Tap ☆ Save on any entry first.";
+    row.parentElement.insertBefore(empty, row.nextSibling);
+    syncFilterControl();
   }
 
   function updateButton(button, active) {
@@ -74,6 +167,7 @@
     saveBookmarks(data);
     syncButtons(sn);
     updateButton(button, !!data[key]);
+    applyFilter();
   }
 
   function serialFromRow(row) {
@@ -118,6 +212,7 @@
 
   function scan(root, bookmarks) {
     injectStyle();
+    ensureFilterControl();
     bookmarks = bookmarks || getBookmarks();
     var scope = root && root.querySelectorAll ? root : document;
     if (scope.matches) {
@@ -130,6 +225,7 @@
     scope.querySelectorAll("#mobile-cards > .vocab-card").forEach(function (card) {
       enhanceEntry(card, serialFromCard(card), bookmarks);
     });
+    scheduleFilter();
     focusTarget();
   }
 
@@ -190,6 +286,9 @@
     syncButtons();
   });
   window.addEventListener("storage", function (event) {
-    if (!event.key || event.key === BOOKMARK_KEY) syncButtons();
+    if (!event.key || event.key === BOOKMARK_KEY) {
+      syncButtons();
+      applyFilter();
+    }
   });
 })();

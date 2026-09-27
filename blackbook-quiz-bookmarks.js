@@ -7,8 +7,12 @@
 
   var BOOKMARK_KEY = "efp_bookmarks";
   var STYLE_ID = "efp-blackbook-quiz-bookmark-style";
+  var FILTER_ID = "efp-bb-quiz-filter";
+  var EMPTY_ID = "efp-bb-quiz-empty";
   var observer = null;
   var focusTimer = null;
+  var filterTimer = null;
+  var filterActive = false;
 
   function safeParse(raw, fallback) {
     try {
@@ -32,6 +36,18 @@
     return window.location.pathname + "#" + id;
   }
 
+  function savedSerials() {
+    var prefix = window.location.pathname + "#bbq-";
+    var saved = {};
+    var data = getBookmarks();
+    Object.keys(data).forEach(function (key) {
+      if (!data[key] || key.indexOf(prefix) !== 0) return;
+      var sn = Number(key.slice(prefix.length));
+      if (Number.isInteger(sn) && sn > 0) saved[sn] = true;
+    });
+    return saved;
+  }
+
   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
     var style = document.createElement("style");
@@ -43,13 +59,121 @@
       ".efp-bb-bookmark-btn:hover{background:#fff3c4;border-color:#e5ad2d}" +
       ".efp-bb-bookmark-btn:active{transform:scale(.97)}" +
       ".efp-bb-bookmark-btn.is-bookmarked{background:#f5b301;border-color:#f5b301;color:#1f2937}" +
+      "#" + FILTER_ID + "{display:flex;width:100%;align-items:center;justify-content:center;gap:7px;margin-top:10px;" +
+      "border:1px solid #d7b451;background:#fff9e8;color:#805b00;border-radius:999px;padding:10px 16px;" +
+      "font:800 13px/1.15 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;cursor:pointer;transition:.15s ease}" +
+      "#" + FILTER_ID + ":hover{background:#fff3c4;border-color:#e5ad2d}" +
+      "#" + FILTER_ID + ".is-active{background:#f5b301;border-color:#f5b301;color:#1f2937;box-shadow:0 4px 12px rgba(245,179,1,.25)}" +
+      ".efp-bb-quiz-filter-hidden{display:none!important}" +
+      "#" + EMPTY_ID + "{display:none;margin:8px auto 24px;max-width:620px;padding:16px 18px;text-align:center;" +
+      "border:1px dashed #d7b451;border-radius:14px;background:#fff9e8;color:#805b00;font:700 13px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}" +
+      "#" + EMPTY_ID + ".is-visible{display:block}" +
       ".efp-bb-deep-focus{outline:3px solid #f5b301!important;outline-offset:3px;border-radius:16px;" +
       "box-shadow:0 0 0 6px rgba(245,179,1,.16)!important}" +
       "html.efp-black .efp-bb-bookmark-btn,html.efp-black-invert .efp-bb-bookmark-btn{" +
       "background:#2a2517;color:#f7d66c;border-color:#8c7127}" +
       "html.efp-black .efp-bb-bookmark-btn.is-bookmarked,html.efp-black-invert .efp-bb-bookmark-btn.is-bookmarked{" +
+      "background:#f5b301;color:#17130a;border-color:#f5b301}" +
+      "html.efp-black #" + FILTER_ID + ",html.efp-black-invert #" + FILTER_ID + "," +
+      "html.efp-black #" + EMPTY_ID + ",html.efp-black-invert #" + EMPTY_ID + "{" +
+      "background:#2a2517;color:#f7d66c;border-color:#8c7127}" +
+      "html.efp-black #" + FILTER_ID + ".is-active,html.efp-black-invert #" + FILTER_ID + ".is-active{" +
       "background:#f5b301;color:#17130a;border-color:#f5b301}";
     document.head.appendChild(style);
+  }
+
+  function syncFilterControl() {
+    var button = document.getElementById(FILTER_ID);
+    if (!button) return;
+    var count = Object.keys(savedSerials()).length;
+    button.textContent = "🔖 Bookmarked (" + count + ")";
+    button.classList.toggle("is-active", filterActive);
+    button.setAttribute("aria-pressed", filterActive ? "true" : "false");
+  }
+
+  function savedLetters(saved) {
+    var letters = {};
+    try {
+      if (typeof vocabData === "undefined" || !Array.isArray(vocabData)) return letters;
+      vocabData.forEach(function (item) {
+        if (!item || !saved[Number(item.sn)] || !item.word) return;
+        var letter = String(item.word).trim().charAt(0).toUpperCase();
+        if (letter) letters[letter] = true;
+      });
+    } catch (_) {}
+    return letters;
+  }
+
+  function applyFilter() {
+    var saved = savedSerials();
+    var letters = savedLetters(saved);
+
+    if (filterActive) {
+      Object.keys(letters).forEach(function (letter) {
+        try { if (typeof renderQuiz === "function") renderQuiz(letter); } catch (_) {}
+      });
+    }
+
+    document.querySelectorAll('#quiz-container > section').forEach(function (section) {
+      if (!filterActive) return;
+      var letter = String(section.id || "").replace(/^section-/, "");
+      section.classList.toggle("hidden", !letters[letter]);
+    });
+    document.querySelectorAll('[id^="bbq-"]').forEach(function (card) {
+      var sn = Number(String(card.id).replace(/^bbq-/, ""));
+      card.classList.toggle("efp-bb-quiz-filter-hidden", filterActive && !saved[sn]);
+    });
+
+    var empty = document.getElementById(EMPTY_ID);
+    if (empty) empty.classList.toggle("is-visible", filterActive && Object.keys(saved).length === 0);
+    syncFilterControl();
+  }
+
+  function scheduleFilter() {
+    clearTimeout(filterTimer);
+    filterTimer = setTimeout(function () {
+      filterTimer = null;
+      applyFilter();
+    }, 0);
+  }
+
+  function setFilterActive(active, restoreLetter) {
+    filterActive = !!active;
+    applyFilter();
+    if (!filterActive && restoreLetter) {
+      try {
+        if (typeof activeLetter !== "undefined" && activeLetter && typeof showSection === "function") {
+          showSection(activeLetter);
+        }
+      } catch (_) {}
+    }
+  }
+
+  function ensureFilterControl() {
+    if (document.getElementById(FILTER_ID)) return;
+    var nav = document.getElementById("alphabet-container");
+    var quiz = document.getElementById("quiz-container");
+    if (!nav || !nav.parentElement || !quiz) return;
+
+    var button = document.createElement("button");
+    button.type = "button";
+    button.id = FILTER_ID;
+    button.setAttribute("aria-label", "Show bookmarked questions from all letters");
+    button.addEventListener("click", function () {
+      setFilterActive(!filterActive, filterActive);
+    });
+    nav.parentElement.insertBefore(button, nav.nextSibling);
+
+    var empty = document.createElement("div");
+    empty.id = EMPTY_ID;
+    empty.textContent = "No bookmarked questions in this quiz yet. Tap ☆ Save on any question first.";
+    quiz.parentElement.insertBefore(empty, quiz);
+
+    nav.addEventListener("click", function (event) {
+      var target = event.target && event.target.closest ? event.target.closest("button[data-letter]") : null;
+      if (target && filterActive) setFilterActive(false, false);
+    }, true);
+    syncFilterControl();
   }
 
   function updateButton(button, active) {
@@ -65,6 +189,7 @@
     else data[key] = true;
     saveBookmarks(data);
     updateButton(button, !!data[key]);
+    applyFilter();
   }
 
   function enhanceOptions(options) {
@@ -95,9 +220,11 @@
 
   function scan(root) {
     injectStyle();
+    ensureFilterControl();
     var scope = root && root.querySelectorAll ? root : document;
     if (scope.matches && scope.matches('[id^="opts-"]')) enhanceOptions(scope);
     scope.querySelectorAll('[id^="opts-"]').forEach(enhanceOptions);
+    scheduleFilter();
     focusTarget();
   }
 
@@ -184,6 +311,9 @@
     }
   });
   window.addEventListener("storage", function (event) {
-    if (!event.key || event.key === BOOKMARK_KEY) syncButtons();
+    if (!event.key || event.key === BOOKMARK_KEY) {
+      syncButtons();
+      applyFilter();
+    }
   });
 })();

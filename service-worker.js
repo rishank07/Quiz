@@ -1,5 +1,5 @@
-// v166 refresh Current Affairs quiz section ranges
-const CACHE_VERSION = "efp-pwa-2026-09-27-v166-ca-quiz-ranges";
+// v167 page-level Blackbook Bookmarked filters
+const CACHE_VERSION = "efp-pwa-2026-09-27-v167-blackbook-bookmarked-filters";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260925refreshnormal2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -26,6 +26,7 @@ const APP_SHELL = [
   "/black-mode.js",
   "/ca-question-deeplink.js?v=20260927-bookmark-filter",
   "/blackbook-quiz-bookmarks.js",
+  "/blackbook-topic-bookmarks.js",
   "/owner-debug.js",
   "/home-nav.js?v=20260925refreshnormal2",
   "/app-session.js?v=20260925refreshnormal2",
@@ -356,6 +357,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/homepage-search-ui.js" ||
       url.pathname === "/homepage-fulltext-search.js" ||
       url.pathname === "/blackbook-quiz-bookmarks.js" ||
+      url.pathname === "/blackbook-topic-bookmarks.js" ||
       url.pathname === "/pdf-mobile-rotate.js" ||
       url.pathname === "/Original%20Practice/original-practice.css" ||
       url.pathname === "/Original%20Practice/original-practice.js" ||
