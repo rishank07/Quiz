@@ -1,5 +1,5 @@
-// v172 validate/repair the exact Crux Chapter hierarchy after PDF Back/BFCache
-const CACHE_VERSION = "efp-pwa-2026-09-27-v173-pdf-smooth-zoom";
+// v174 refresh app shell for hierarchical All Bookmarks navigation
+const CACHE_VERSION = "efp-pwa-2026-09-27-v174-bookmark-hierarchy";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
