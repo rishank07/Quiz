@@ -1,5 +1,5 @@
-// v190 keep Mixed Practice header below mobile browser chrome
-const CACHE_VERSION = "efp-pwa-2026-09-28-v190-mixed-header-offset";
+// v191 prevent Mixed Practice content peeking above sticky header
+const CACHE_VERSION = "efp-pwa-2026-09-28-v191-mixed-sticky-top";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
