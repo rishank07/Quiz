@@ -54,6 +54,18 @@
     return source === "crux-index" || source === "crux-page";
   }
 
+  function isCruxViewerFromBookmarks() {
+    return isCruxViewer() &&
+      new URLSearchParams(window.location.search).get("from") === "all-bookmarks";
+  }
+
+  function bookmarkReturnUrl() {
+    var url = new URL("/all-bookmarks.html", window.location.origin);
+    var trail = new URLSearchParams(window.location.search).get("bookmarkTrail");
+    if (trail) url.searchParams.set("folder", trail);
+    return url.href;
+  }
+
   function isOriginalPracticePage() {
     return normalizePath(window.location.pathname).toLowerCase().indexOf("/original practice/") === 0;
   }
@@ -454,6 +466,9 @@
       if (referrer.origin !== window.location.origin) return false;
       var path = normalizePath(referrer.pathname).toLowerCase();
       var source = new URLSearchParams(window.location.search).get("from");
+      if (source === "all-bookmarks") {
+        return path === "/all-bookmarks.html";
+      }
       if (source === "crux-index") {
         return path === "/crux-tricks" || path === "/crux-tricks/index.html";
       }
@@ -602,6 +617,18 @@
 
   function navigateCruxViewerToHierarchy() {
     if (!isCruxViewer()) return false;
+
+    if (isCruxViewerFromBookmarks()) {
+      if (isHomeSearchGuardState(history.state, "top")) {
+        window.history.back();
+      } else if (!AUTO_RESUMED_BOUNDARY && hasExpectedCruxViewerReferrer() &&
+          window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.replace(bookmarkReturnUrl());
+      }
+      return true;
+    }
 
     /* Normal browser navigation already has the exact Crux Chapter state
        immediately behind the viewer. Use that real entry instead of reloading
@@ -946,7 +973,10 @@
        A guard is needed only for direct/home-search opens that have no trusted
        Crux parent in the real history stack. */
     if (!isCruxViewer()) return;
-    if (!isCruxViewerFromHomeSearch() && hasExpectedCruxViewerReferrer()) return;
+    if (isCruxViewerFromBookmarks()) {
+      if (!AUTO_RESUMED_BOUNDARY && hasExpectedCruxViewerReferrer() &&
+          window.history.length > 1) return;
+    } else if (!isCruxViewerFromHomeSearch() && hasExpectedCruxViewerReferrer()) return;
 
     var current = history.state;
     if (isHomeSearchGuardState(current, "top")) return;
