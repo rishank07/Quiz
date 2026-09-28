@@ -57,7 +57,8 @@
       .opt-hi{font-size:13px;line-height:1.5}
       #quizView{padding-bottom:96px}
       body.efp-mixed-quiz-active::before{display:none!important}
-      body.efp-mixed-quiz-active::after{content:"";display:block!important;position:fixed;z-index:2147482500;left:9px;right:9px;bottom:max(6px,env(safe-area-inset-bottom));height:64px;border:1px solid rgba(240,207,119,.24);border-radius:20px;background:#0d1726;box-shadow:0 8px 24px rgba(0,0,0,.34);pointer-events:none}
+      body.efp-mixed-quiz-active::after{content:"";display:block!important;position:fixed;z-index:2147482500;left:9px;right:9px;bottom:max(6px,env(safe-area-inset-bottom));height:64px;border:1px solid #d8dee8;border-radius:20px;background:#ffffff;box-shadow:0 8px 24px rgba(15,23,42,.16);pointer-events:none}
+      html.efp-black body.efp-mixed-quiz-active::after{background:#0d1726;border-color:rgba(240,207,119,.24);box-shadow:0 8px 24px rgba(0,0,0,.34)}
       html.efp-black-invert body.efp-mixed-quiz-active::after{background:#000;border-color:#232b36;box-shadow:0 8px 24px rgba(0,0,0,.18)}
       .quiz-head,.quiz-head.efp-mobile-compact{backdrop-filter:none;-webkit-backdrop-filter:none}
       /* Keep the full quiz header/scorecard size while scrolling. Content scrolls
@@ -97,29 +98,29 @@
       html.efp-black .quiz-head .stat:nth-child(4) strong,html.efp-black-invert .quiz-head .stat:nth-child(4) strong{color:#ff8e9b!important}
       html.efp-black .quiz-head .stat span,html.efp-black-invert .quiz-head .stat span{color:#cbd5e1!important}
       html.efp-black .progress-track,html.efp-black-invert .progress-track{background:#26354a!important}
-      .question-nav{position:fixed;z-index:2147483000;left:82px;right:82px;bottom:max(16px,calc(10px + env(safe-area-inset-bottom)));transform:none;width:auto;grid-template-columns:1fr 1fr;align-items:center;gap:10px;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none}
-      .question-nav .nav-btn{pointer-events:auto;min-width:0;width:100%;height:44px;min-height:44px;padding:0;border-radius:14px;font-size:0;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:none;transition:transform .14s ease,opacity .14s ease;-webkit-tap-highlight-color:transparent}
+      .question-nav{position:fixed;z-index:2147483000;left:25%;right:25%;bottom:max(16px,calc(10px + env(safe-area-inset-bottom)));transform:none;width:auto;grid-template-columns:1fr 1fr;align-items:center;gap:0;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none}
+      .question-nav .nav-btn{pointer-events:auto;justify-self:center;min-width:0;width:52px;height:44px;min-height:44px;padding:0;border-radius:14px;font-size:0;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:none;transition:transform .14s ease,opacity .14s ease;-webkit-tap-highlight-color:transparent}
       .question-nav .nav-btn::before{display:block;font-size:24px;font-weight:1000;line-height:1;transform:translateY(-1px)}
       .question-nav #prevBtn{color:#9a4d00;border:1.5px solid #e4a72b;background:#ffd978;box-shadow:0 5px 16px rgba(180,83,9,.24)}
       .question-nav #prevBtn::before{content:"‹";font-size:30px}
       .question-nav #nextBtn{color:#0f4aa8;border:1.5px solid #6aa9ff;background:#9dccff;box-shadow:0 5px 16px rgba(37,99,235,.22)}
       .question-nav #nextBtn::before{content:"›";font-size:30px}
       .question-nav .nav-btn:active:not(:disabled){transform:scale(.92);box-shadow:0 2px 8px rgba(0,0,0,.18)}
-      .question-nav .nav-btn:disabled{opacity:.34;box-shadow:none}
+      .question-nav .nav-btn:disabled{opacity:1!important;color:#94a3b8!important;background:#f3f5f8!important;border-color:#d3dae4!important;box-shadow:none!important}
+      html.efp-black .question-nav .nav-btn:disabled{color:#64748b!important;background:#152033!important;border-color:#334155!important}
       /* Mixed Practice is natively dark. Keep raw controls light in the dark
          canvas; efp-black-invert then flips those same light fills into darker
          fills in the visual day/white mode. This matches the user's visible
          theme instead of grouping both black-mode classes together. */
-      html:not(.efp-black):not(.efp-black-invert) .question-nav #prevBtn,
-      html.efp-black .question-nav #prevBtn,
-      html.efp-black-invert .question-nav #prevBtn{color:#7a4300;background:#ffd978;border-color:#f0b83f;box-shadow:0 5px 18px rgba(245,184,63,.18)}
-      html:not(.efp-black):not(.efp-black-invert) .question-nav #nextBtn,
-      html.efp-black .question-nav #nextBtn,
-      html.efp-black-invert .question-nav #nextBtn{color:#0b458f;background:#9dccff;border-color:#78b7ff;box-shadow:0 5px 18px rgba(96,165,250,.18)}
-      body.efp-mixed-quiz-active #efp-app-back-button,body.efp-mixed-quiz-active #efp-home-button{top:auto!important;bottom:max(16px,calc(10px + env(safe-area-inset-bottom)))!important;width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;border-radius:14px!important;background:#101b2b!important;border:1px solid rgba(240,207,119,.62)!important;color:#ffd166!important;box-shadow:none!important}
-      body.efp-mixed-quiz-active #efp-app-back-button{left:18px!important;right:auto!important}
-      body.efp-mixed-quiz-active #efp-home-button{right:18px!important;left:auto!important}
-      html.efp-black-invert body.efp-mixed-quiz-active #efp-app-back-button,html.efp-black-invert body.efp-mixed-quiz-active #efp-home-button{background:#111827!important;border-color:#9a6a14!important;color:#f2b733!important}
+      html:not(.efp-black):not(.efp-black-invert) .question-nav #prevBtn{color:#a16207;background:#fff7dc;border-color:#e8c45d;box-shadow:0 2px 8px rgba(161,98,7,.10)}
+      html:not(.efp-black):not(.efp-black-invert) .question-nav #nextBtn{color:#1d5fbf;background:#eaf3ff;border-color:#8fc2ff;box-shadow:0 2px 8px rgba(37,99,235,.10)}
+      html.efp-black .question-nav #prevBtn,html.efp-black-invert .question-nav #prevBtn{color:#f6c84f;background:#2b230f;border-color:#9a7726;box-shadow:none}
+      html.efp-black .question-nav #nextBtn,html.efp-black-invert .question-nav #nextBtn{color:#79b8ff;background:#112b4d;border-color:#356fae;box-shadow:none}
+      body.efp-mixed-quiz-active #efp-app-back-button,body.efp-mixed-quiz-active #efp-home-button{top:auto!important;bottom:max(16px,calc(10px + env(safe-area-inset-bottom)))!important;width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;border-radius:14px!important;background:#fffaf0!important;border:1px solid #dfb64f!important;color:#a16207!important;box-shadow:0 2px 8px rgba(161,98,7,.10)!important}
+      body.efp-mixed-quiz-active #efp-app-back-button{left:22px!important;right:auto!important}
+      body.efp-mixed-quiz-active #efp-home-button{right:22px!important;left:auto!important}
+      html.efp-black body.efp-mixed-quiz-active #efp-app-back-button,html.efp-black body.efp-mixed-quiz-active #efp-home-button{background:#101b2b!important;border-color:rgba(240,207,119,.62)!important;color:#ffd166!important;box-shadow:none!important}
+      html.efp-black-invert body.efp-mixed-quiz-active #efp-app-back-button,html.efp-black-invert body.efp-mixed-quiz-active #efp-home-button{background:#111827!important;border-color:#9a6a14!important;color:#f2b733!important;box-shadow:none!important}
     }
   </style>
   <script defer src="/home-nav.js?v=20260925mixededge1"></script>
