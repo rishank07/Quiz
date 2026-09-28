@@ -721,9 +721,9 @@
     var allowNavigation = false;
     var MODAL_ID = "efp-quiz-exit-modal";
     var SYSTEM_BACK_GUARD_KEY = "efpQuizQuitGuard";
-    var LOGICAL_BACK_ATTRIBUTE = "data-efp-approved-logical-back";
     var systemBackGuardActive = false;
     var pendingGuardRelease = null;
+    var guardReleaseTimer = 0;
     var restoringSystemBackGuard = false;
     var pendingSystemBackPrompt = false;
     var systemBackRestoreTimer = 0;
@@ -968,7 +968,9 @@
 
     function releaseSystemBackGuard(action) {
       if (typeof action !== "function") return;
-      if (!systemBackGuardActive || !isSystemBackGuardState(history.state)) {
+      // The history entry is authoritative. BFCache/process restoration may
+      // restore its state while the in-memory flag still says false.
+      if (!isSystemBackGuardState(history.state)) {
         systemBackGuardActive = false;
         action();
         return;
@@ -976,6 +978,14 @@
       pendingGuardRelease = action;
       try {
         history.back();
+        // Some installed WebViews accept history.back() without firing
+        // popstate after a process recreation. Do not strand the Quit action.
+        guardReleaseTimer = window.setTimeout(function () {
+          if (pendingGuardRelease !== action) return;
+          pendingGuardRelease = null;
+          systemBackGuardActive = false;
+          action();
+        }, 700);
       } catch (_) {
         pendingGuardRelease = null;
         systemBackGuardActive = false;
@@ -1002,7 +1012,9 @@
           }
         }
       } catch (_) {}
-      try { history.back(); } catch (_) {}
+      // A failed/missing parent mapping must not turn Quit into a blind
+      // history traversal: its previous entry may be the app launch Home.
+      console.warn("Quiz parent unavailable for", location.pathname);
     }
 
     function showSystemBackQuitPrompt() {
@@ -1018,6 +1030,8 @@
           consumeSystemBackEvent(event);
           var action = pendingGuardRelease;
           pendingGuardRelease = null;
+          if (guardReleaseTimer) clearTimeout(guardReleaseTimer);
+          guardReleaseTimer = 0;
           systemBackGuardActive = false;
           window.setTimeout(action, 0);
           return;
@@ -1210,58 +1224,7 @@
 
       function leavePractice() {
         approveOneNavigation();
-        if (path === "/original practice" || path === "/original practice/index.html") {
-          markIntentionalHome();
-          try { sessionStorage.removeItem("efp_logical_back_expected_path"); } catch (_) {}
-          location.assign("/");
-          return;
-        }
-
-        // Mixed Practice owns an in-page Quiz -> Set Builder hierarchy.
-        // Call the page-owned exit function directly instead of replaying the
-        // global Back button. Replaying the button can race with home/back
-        // handlers in installed Android WebViews and occasionally jump Home.
-        if (path === "/original practice/mixed_practice.html") {
-          var mixedQuiz = document.getElementById("quizView");
-          var mixedFinish = document.getElementById("finishView");
-          var mixedVisible = !!((mixedQuiz && !mixedQuiz.hidden) || (mixedFinish && !mixedFinish.hidden));
-          if (mixedVisible) {
-            disarm();
-            if (typeof window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP === "function") {
-              window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP();
-            } else {
-              var mixedSetupButton = document.getElementById("setupBtn");
-              if (mixedSetupButton) mixedSetupButton.click();
-            }
-            try { window.scrollTo(0, 0); } catch (_) {}
-            return;
-          }
-        }
-
-        try {
-          if (typeof state !== "undefined" && state && state.screen) {
-            if (state.screen === "quiz") {
-              if (state.subject && typeof goToChapters === "function") {
-                goToChapters(state.subject);
-              } else if (typeof goChapters === "function") {
-                goChapters();
-              } else {
-                throw new Error("No Original Practice quiz parent");
-              }
-            } else if (state.screen === "chapters" && typeof goHome === "function") {
-              goHome();
-            } else {
-              throw new Error("Practice index is the next parent");
-            }
-            disarm();
-            try { window.scrollTo(0, 0); } catch (_) {}
-            return;
-          }
-        } catch (_) {}
-
-        // Subject Home, English chapters and standalone practice pages all
-        // return to the Original Practice index, without clearing app resume.
-        location.assign("/Original%20Practice/index.html");
+        leaveQuizViaHierarchy();
       }
 
       if (shouldWarn()) {
@@ -1282,22 +1245,15 @@
         if (event.stopImmediatePropagation) event.stopImmediatePropagation();
 
         var currentPath = normalizedPath(location.pathname).toLowerCase();
-        var mixedBack = currentPath === "/original practice/mixed_practice.html" &&
-          navTarget.closest && navTarget.closest("#efp-app-back-button");
-
         showExitModal(function () {
           releaseSystemBackGuard(function () {
             approveOneNavigation();
 
-            if (mixedBack) {
-              disarm();
-              if (typeof window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP === "function") {
-                window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP();
-              } else {
-                var mixedSetupButton = document.getElementById("setupBtn");
-                if (mixedSetupButton) mixedSetupButton.click();
-              }
-              try { window.scrollTo(0, 0); } catch (_) {}
+            // Back and system Back share one hierarchy decision. Replaying a
+            // click can race with another button listener after the guard is
+            // removed and use the recreated Home history entry instead.
+            if (navTarget.matches && navTarget.matches("#efp-app-back-button")) {
+              leaveQuizViaHierarchy();
               return;
             }
 
@@ -1309,24 +1265,7 @@
             window.setTimeout(function () {
               try {
                 if (navTarget && navTarget.isConnected && typeof navTarget.click === "function") {
-                  if (navTarget.matches && navTarget.matches("#efp-app-back-button") &&
-                      window.EFP_BACK_NAV &&
-                      typeof window.EFP_BACK_NAV.navigateQuizParent === "function" &&
-                      window.EFP_BACK_NAV.navigateQuizParent()) return;
-                  /* Removing the quiz guard deliberately walks one synthetic
-                     history entry. After Android has idled/recreated the page,
-                     the next real entry can be the app launch Home rather than
-                     the page's hierarchy parent. Mark this approved replay so
-                     back-nav.js uses its deterministic parent map instead of
-                     trusting that recreated browser history. */
-                  var logicalBack = !!(navTarget.matches &&
-                    navTarget.matches("#efp-app-back-button"));
-                  if (logicalBack) navTarget.setAttribute(LOGICAL_BACK_ATTRIBUTE, "1");
-                  try {
-                    navTarget.click();
-                  } finally {
-                    if (logicalBack) navTarget.removeAttribute(LOGICAL_BACK_ATTRIBUTE);
-                  }
+                  navTarget.click();
                   return;
                 }
                 if (navTarget && navTarget.href) window.location.assign(navTarget.href);

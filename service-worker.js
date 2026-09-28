@@ -1,7 +1,7 @@
-// v203 refresh Current Affairs answer and explanation search
-const CACHE_VERSION = "efp-pwa-2026-09-28-v203-ca-answer-search";
+// v204 keep quiz Quit on its logical parent across browser and app sessions
+const CACHE_VERSION = "efp-pwa-2026-09-28-v204-quiz-quit-parent";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260928quitparent2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -30,9 +30,9 @@ const APP_SHELL = [
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
   "/home-nav.js?v=20260927idlehier1",
-  "/app-session.js?v=20260927idlehier1",
+  "/app-session.js?v=20260928quitparent2",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260928quizhier1",
+  "/back-nav.js?v=20260928quitparent2",
   "/pdf-mobile-rotate.js?v=20260928rotate17",
   "/search-logic.js",
   "/search-worker.js",

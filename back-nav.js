@@ -936,6 +936,12 @@
     var url = window.location.pathname + window.location.search + window.location.hash;
     var base = copyHistoryState(history.state);
     var top = copyHistoryState(history.state);
+    // A quiz may already have armed its Quit guard before this home-search
+    // hierarchy guard is installed (notably after app resume). The base is
+    // where Back lands: it must be distinguishable from the protected top so
+    // app-session can show Quit instead of letting the hierarchy popstate
+    // handler jump straight to Home/a parent without confirmation.
+    delete base.efpQuizQuitGuard;
     base[HOME_SEARCH_GUARD] = true;
     base.phase = "base";
     top[HOME_SEARCH_GUARD] = true;
