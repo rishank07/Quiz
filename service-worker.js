@@ -1,5 +1,5 @@
-// v202 refresh Mixed Practice delete confirmation
-const CACHE_VERSION = "efp-pwa-2026-09-28-v202-mixed-delete-confirm";
+// v203 refresh Current Affairs answer and explanation search
+const CACHE_VERSION = "efp-pwa-2026-09-28-v203-ca-answer-search";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -357,6 +357,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/search-logic.js" ||
       url.pathname === "/homepage-search-ui.js" ||
       url.pathname === "/homepage-fulltext-search.js" ||
+      url.pathname === "/search-snippets-current-affairs.js" ||
       url.pathname === "/blackbook-quiz-bookmarks.js" ||
       url.pathname === "/blackbook-topic-bookmarks.js" ||
       url.pathname === "/Current%20Affairs/Topic%20Names/brics-search-index.js" ||
