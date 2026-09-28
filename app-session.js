@@ -941,7 +941,11 @@
     }
 
     function ensureSystemBackGuard() {
-      if (!dirty || !hasVisibleQuizSurface() || isClearlyFinished()) return false;
+      if (!hasVisibleQuizSurface() || isClearlyFinished()) return false;
+      // Mixed Practice already has its own Quiz -> Set Builder history entry.
+      // Once answered, the existing confirmation guard still protects it.
+      if (!dirty && normalizedPath(location.pathname).toLowerCase() ===
+          "/original practice/mixed_practice.html") return false;
       if (isSystemBackGuardState(history.state)) {
         systemBackGuardActive = true;
         return true;
@@ -979,13 +983,32 @@
       }
     }
 
+    function leaveQuizViaHierarchy() {
+      approveOneNavigation();
+      var navigation = window.EFP_BACK_NAV;
+      if (navigation && typeof navigation.navigateQuizParent === "function" &&
+          navigation.navigateQuizParent()) return;
+
+      // A page with an older cached back-nav.js can still use the same parent
+      // map. Never trust the app's recreated Home history entry for a quiz.
+      try {
+        var path = normalizedPath(location.pathname);
+        var parent = window.EFP_BACK_PARENT_MAP && window.EFP_BACK_PARENT_MAP[path];
+        if (parent) {
+          var url = new URL(parent, location.origin);
+          if (url.origin === location.origin && normalizedPath(url.pathname) !== path) {
+            location.replace(url.href);
+            return;
+          }
+        }
+      } catch (_) {}
+      try { history.back(); } catch (_) {}
+    }
+
     function showSystemBackQuitPrompt() {
       if (!shouldWarn()) return;
       showExitModal(function () {
-        releaseSystemBackGuard(function () {
-          approveOneNavigation();
-          try { history.back(); } catch (_) {}
-        });
+        releaseSystemBackGuard(leaveQuizViaHierarchy);
       });
     }
 
@@ -1027,15 +1050,11 @@
 
         consumeSystemBackEvent(event);
 
-        // The guard is a duplicate of the active quiz entry. If the warning is
-        // no longer needed (reset/finished/approved navigation), skip that
-        // duplicate automatically so one Back gesture still performs one Back.
+        // An unanswered quiz also owns a guard: its browser predecessor may
+        // be the app's launch Home, not its mapped section parent.
         if (!shouldWarn()) {
           systemBackGuardActive = false;
-          approveOneNavigation();
-          window.setTimeout(function () {
-            try { history.back(); } catch (_) {}
-          }, 0);
+          window.setTimeout(leaveQuizViaHierarchy, 0);
           return;
         }
 
@@ -1290,6 +1309,10 @@
             window.setTimeout(function () {
               try {
                 if (navTarget && navTarget.isConnected && typeof navTarget.click === "function") {
+                  if (navTarget.matches && navTarget.matches("#efp-app-back-button") &&
+                      window.EFP_BACK_NAV &&
+                      typeof window.EFP_BACK_NAV.navigateQuizParent === "function" &&
+                      window.EFP_BACK_NAV.navigateQuizParent()) return;
                   /* Removing the quiz guard deliberately walks one synthetic
                      history entry. After Android has idled/recreated the page,
                      the next real entry can be the app launch Home rather than
@@ -1315,6 +1338,11 @@
       }
 
       if (isAnswerInteraction(target)) arm();
+      else if (!systemBackGuardActive) {
+        // Many quiz screens are built after a chapter/set click. Let that
+        // click finish rendering before protecting the newly visible screen.
+        window.setTimeout(ensureSystemBackGuard, 0);
+      }
     }, true);
 
     document.addEventListener("change", function (event) {
@@ -1324,7 +1352,7 @@
     window.addEventListener("pageshow", function () {
       allowNavigation = false;
       if (!dirty) restorePersistedWarning();
-      if (dirty) ensureSystemBackGuard();
+      ensureSystemBackGuard();
     });
 
     // Re-arm only for an installed-app auto-resume. Normal browser visits
@@ -1335,15 +1363,20 @@
       window.addEventListener("load", function () {
         restorePersistedWarning();
         if (!dirty && hasAnsweredQuizSurface()) arm();
+        ensureSystemBackGuard();
       }, { once: true });
     } else if (!dirty) {
-      setTimeout(function () { if (!dirty && hasAnsweredQuizSurface()) arm(); }, 0);
+      setTimeout(function () {
+        if (!dirty && hasAnsweredQuizSurface()) arm();
+        ensureSystemBackGuard();
+      }, 0);
     }
 
     window.EFP_QUIZ_PROGRESS_WARNING = {
       arm: arm,
       disarm: disarm,
       isArmed: function () { return dirty; },
+      isQuizVisible: function () { return hasVisibleQuizSurface() && !isClearlyFinished(); },
       confirmLeave: function (onLeave) {
         if (typeof onLeave !== "function") return false;
         if (shouldWarn()) {

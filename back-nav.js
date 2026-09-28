@@ -884,6 +884,37 @@
     return true;
   }
 
+  /* Quiz confirmation must choose the visible site's parent, not the previous
+     browser entry. After an app resume that entry may be the launch Home, and
+     quiz/history guards can add more same-URL entries in front of it. Both the
+     universal button and Android/system Back call this after confirmation. */
+  function navigateQuizParent() {
+    var event = {
+      preventDefault: function () {},
+      stopPropagation: function () {},
+      stopImmediatePropagation: function () {}
+    };
+    if (useBookmarkHierarchyBack(event) || useCruxInternalBack(event) ||
+        useOriginalPracticeInternalBack(event)) return true;
+
+    if (isCruxViewer()) {
+      if (!navigateCruxViewerToHierarchy()) window.location.replace("/Crux-Tricks/index.html");
+      return true;
+    }
+    if (isOriginalPracticePage()) {
+      if (isOriginalPracticeIndex()) {
+        if (window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
+        window.location.replace("/");
+      } else {
+        window.location.replace("/Original%20Practice/index.html");
+      }
+      return true;
+    }
+    return useLogicalParent(event);
+  }
+
+  window.EFP_BACK_NAV = { navigateQuizParent: navigateQuizParent };
+
   function isGenericHomeSearchGuardState(state, phase) {
     return !!(state && state[HOME_SEARCH_GUARD] === true &&
       (!phase || state.phase === phase));
@@ -1082,6 +1113,12 @@
       }
       return;
     }
+
+    /* The visible Back button on an unanswered quiz must use the same parent
+       as Quit Quiz. A same-origin referrer can be the recreated app Home. */
+    var quizWarning = window.EFP_QUIZ_PROGRESS_WARNING;
+    if (quizWarning && typeof quizWarning.isQuizVisible === "function" &&
+        quizWarning.isQuizVisible() && useLogicalParent(event)) return;
 
     /* Quiz Quit replays the shared Back click after releasing its synthetic
        history guard. On an idle/resumed Android or browser session, the entry
