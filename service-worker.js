@@ -1,5 +1,5 @@
-// v194 keep quiz quit on the site's logical parent after app resume
-const CACHE_VERSION = "efp-pwa-2026-09-28-v194-quiz-quit-hierarchy";
+// v195 refresh quiz hierarchy fixes and unified Mixed Practice bottom dock
+const CACHE_VERSION = "efp-pwa-2026-09-28-v195-quiz-hierarchy-mixed-dock";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
