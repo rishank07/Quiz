@@ -48,7 +48,7 @@
 
     document.addEventListener("click", function (event) {
       var row = event.target.closest && event.target.closest(".chapter");
-      if (!row || event.target.closest(".cfav") || event.target.closest("a")) return;
+      if (!row || event.target.closest("button, a, input, select, textarea, [role='button']")) return;
       var link = row.querySelector("a.ctxt");
       if (link && link.href) location.href = link.href;
     });
