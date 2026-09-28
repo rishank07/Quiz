@@ -730,7 +730,7 @@
       btn.className='recent-set-action';btn.type='button';btn.textContent=saved.completed?'Review':'Resume';
       btn.onclick=function(){restoreState(snapshotState(saved),!!saved.completed)};
       del.className='recent-set-delete';del.type='button';del.setAttribute('aria-label','Delete recent set');del.title='Delete';del.textContent='×';
-      del.onclick=function(event){event.preventDefault();event.stopPropagation();deleteRecentSet(saved)};
+      del.onclick=function(event){event.preventDefault();event.stopPropagation();if(!window.confirm('Delete this mixed set?'))return;deleteRecentSet(saved)};
       copy.appendChild(title);copy.appendChild(meta);actions.appendChild(btn);actions.appendChild(del);card.appendChild(copy);card.appendChild(actions);box.appendChild(card);
     })
   }
