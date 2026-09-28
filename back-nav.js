@@ -630,10 +630,10 @@
       return true;
     }
 
-    /* Normal browser navigation already has the exact Crux Chapter state
-       immediately behind the viewer. Use that real entry instead of reloading
-       index.html and rebuilding the SPA, which caused the brief Source flash. */
-    if (!isInstalledAndroidAppContext() &&
+    /* A trusted Crux -> PDF navigation has its exact parent in the real
+       history stack, including the installed app while the session is live.
+       Reuse it so a replacement index cannot duplicate the hierarchy. */
+    if (!AUTO_RESUMED_BOUNDARY &&
         isCruxViewerFromCruxPage() &&
         hasExpectedCruxViewerReferrer() &&
         window.history.length > 1) {
@@ -823,7 +823,6 @@
     /* BFCache does not rerun the early index cloak bootstrap. Apply the same
        guard before validating/repairing so an intermediate Source pane cannot
        paint between pageshow handlers. */
-    try { document.documentElement.classList.add("efp-crux-restoring"); } catch (_) {}
     restoreCruxIndexState.running = true;
     var attempts = 0;
     var startedAt = Date.now();
@@ -850,6 +849,7 @@
           return;
         }
 
+        try { document.documentElement.classList.add("efp-crux-restoring"); } catch (_) {}
         if (typeof bridge.restoreExternalHierarchy === "function" &&
             bridge.restoreExternalHierarchy(state)) {
           finish(true);
@@ -857,6 +857,7 @@
         }
       }
 
+      try { document.documentElement.classList.add("efp-crux-restoring"); } catch (_) {}
       if (attempts < 80 && Date.now() - startedAt < 5000) {
         window.setTimeout(apply, 50);
         return;
@@ -1013,7 +1014,7 @@
     if (isCruxViewerFromBookmarks()) {
       if (!AUTO_RESUMED_BOUNDARY && hasExpectedCruxViewerReferrer() &&
           window.history.length > 1) return;
-    } else if (!isCruxViewerFromHomeSearch() && hasExpectedCruxViewerReferrer()) return;
+    } else if (!AUTO_RESUMED_BOUNDARY && !isCruxViewerFromHomeSearch() && hasExpectedCruxViewerReferrer()) return;
 
     var current = history.state;
     if (isHomeSearchGuardState(current, "top")) return;
