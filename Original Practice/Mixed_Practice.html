@@ -538,6 +538,17 @@
     var top=Math.max(0,card.getBoundingClientRect().top+window.scrollY-head.offsetHeight-8);
     window.scrollTo({top:top,behavior:'auto'});
   }
+  function focusExplanationAfterAnswer(questionId){
+    requestAnimationFrame(function(){
+      if(!currentQuestions[currentIndex]||currentQuestions[currentIndex].id!==questionId)return;
+      var box=$('answerBox'),head=document.querySelector('.quiz-head');
+      if(!box.classList.contains('show'))return;
+      var headerBottom=head?head.getBoundingClientRect().bottom:0;
+      var top=Math.max(0,window.scrollY+box.getBoundingClientRect().top-Math.max(0,headerBottom)-12);
+      var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({top:top,behavior:reduceMotion?'auto':'smooth'});
+    });
+  }
   window.addEventListener('resize',syncMobileQuizHead);
   function updateQuizTitle(){if(!state)return;if(savedMode){$('quizTitle').textContent='★ Saved Questions · '+currentQuestions.length+' Q';return}var labels=state.selectedKeys.map(function(k){return POOLS[k]?POOLS[k].label:k});$('quizTitle').textContent=labels.join(' + ')+' · '+currentQuestions.length+' Q'}
   function updateSavedQuestionsButton(){
@@ -637,6 +648,7 @@
         delete pendingSelections[item.id];
         saveState();
         renderQuestion();
+        focusExplanationAfterAnswer(item.id);
       });
     });
     $('answerBox').classList.toggle('show',!!ans);
