@@ -33,27 +33,36 @@ html.efp-black .option-btn.correct{background:rgba(40,167,69,.09)!important;bord
 html.efp-black .option-btn.incorrect{background:rgba(220,53,69,.09)!important;border-color:rgba(220,53,69,.62)!important;box-shadow:none!important;color:#f8fafc!important}
 html.efp-black .option-btn.correct *,html.efp-black .option-btn.incorrect *{color:#f8fafc!important}
 
-/* White-mode Hindi readability — Original Practice */
-/* Keep Devanagari comfortably readable throughout the quiz without changing
-   the English sizing. These selectors target the shared Complete Practice
-   markup used by every Original Practice subject. */
-.efp-op-qcard > p.text-sm.mb-3{
+/* Original Practice bilingual size balance
+   Swap the current English/Hindi reading sizes: English gets the larger size
+   that Hindi had; Hindi gets the former English size. Colours and font families
+   stay unchanged in both light and dark modes. */
+.efp-op-qcard > p.font-semibold.text-sm.mb-1{
   font-size:1.05rem!important;
+}
+.efp-op-qcard > p.text-sm.mb-3{
+  font-size:.875rem!important;
   line-height:1.65!important;
   font-weight:600!important;
   color:#16834f!important;
   font-family:'Noto Sans Devanagari','Nirmala UI','Mangal',Arial,sans-serif!important;
 }
-.efp-op-qcard .option-btn > span.block.text-xs.text-gray-500{
+.efp-op-qcard .option-btn > span.block:first-child{
   font-size:.95rem!important;
+}
+.efp-op-qcard .option-btn > span.block.text-xs.text-gray-500{
+  font-size:.875rem!important;
   line-height:1.5!important;
   font-weight:600!important;
   color:#475569!important;
   font-family:'Noto Sans Devanagari','Nirmala UI','Mangal',Arial,sans-serif!important;
   margin-top:2px;
 }
-.efp-op-qcard [id^="exp-"] > p.mt-1.text-xs{
+.efp-op-qcard [id^="exp-"] > p:first-child{
   font-size:1rem!important;
+}
+.efp-op-qcard [id^="exp-"] > p.mt-1.text-xs{
+  font-size:.875rem!important;
   line-height:1.6!important;
   font-weight:600!important;
   color:#157347!important;
@@ -72,7 +81,10 @@ html:not(.efp-black):not(.efp-black-invert) .efp-op-qcard .option-btn.incorrect 
 }
 
 @media(max-width:600px){
-  .efp-op-qcard > p.text-sm.mb-3{font-size:1rem!important;line-height:1.6!important}
-  .efp-op-qcard .option-btn > span.block.text-xs.text-gray-500{font-size:.92rem!important;line-height:1.48!important}
-  .efp-op-qcard [id^="exp-"] > p.mt-1.text-xs{font-size:.96rem!important;line-height:1.55!important}
+  .efp-op-qcard > p.font-semibold.text-sm.mb-1{font-size:1rem!important}
+  .efp-op-qcard > p.text-sm.mb-3{font-size:.875rem!important;line-height:1.6!important}
+  .efp-op-qcard .option-btn > span.block:first-child{font-size:.92rem!important}
+  .efp-op-qcard .option-btn > span.block.text-xs.text-gray-500{font-size:.875rem!important;line-height:1.48!important}
+  .efp-op-qcard [id^="exp-"] > p:first-child{font-size:.96rem!important}
+  .efp-op-qcard [id^="exp-"] > p.mt-1.text-xs{font-size:.875rem!important;line-height:1.55!important}
 }
