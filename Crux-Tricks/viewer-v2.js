@@ -870,7 +870,7 @@
   nextBtn.addEventListener('click',function(){go(page+1,true)});
   input.addEventListener('change',function(){go(parseInt(input.value,10)||page,true)});
   input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go(parseInt(input.value,10)||page,true);input.blur()}});
-  function readerZoomFloor(){return (continuous||isCompactReader())?1:.70}
+  function readerZoomFloor(){return .50}
   function clampReaderZoom(v){return Math.max(readerZoomFloor(),Math.min(5.00,Math.round(v*100)/100))}
   function cancelScheduledZoomRender(){clearTimeout(zoomRenderTimer);zoomRenderTimer=null}
   function captureZoomAnchor(focusX,focusY){
