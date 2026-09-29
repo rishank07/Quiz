@@ -216,15 +216,22 @@
       background:#f9fafb!important;
       border-color:#9ca3af!important;
     }
-    #quizView .option.correct .option-body{
+    /* Answer feedback must outrank the generic :checked style. Otherwise the
+       selected option keeps the pale checked background while its text turns
+       white, which makes the answer look like it vanished. */
+    #quizView .option.correct > input + .option-body,
+    #quizView .option.correct > input:checked + .option-body{
       background:#10b981!important;
       border-color:#059669!important;
       color:#fff!important;
+      box-shadow:0 0 0 1px rgba(5,150,105,.08) inset!important;
     }
-    #quizView .option.wrong .option-body{
+    #quizView .option.wrong > input + .option-body,
+    #quizView .option.wrong > input:checked + .option-body{
       background:#ef4444!important;
       border-color:#dc2626!important;
       color:#fff!important;
+      box-shadow:0 0 0 1px rgba(220,38,38,.08) inset!important;
     }
     #quizView .option.correct .opt-en,
     #quizView .option.correct .opt-hi,
@@ -302,29 +309,36 @@
       background:#172033!important;
       border-color:#64748b!important;
     }
-    html.efp-black #quizView .option.correct .option-body{
-      background:rgba(40,167,69,.09)!important;
-      border-color:rgba(40,167,69,.62)!important;
+    /* Dark mode keeps the same semantic green/red feedback, but with enough
+       fill contrast to be obvious without becoming neon. These selectors also
+       outrank the generic checked-option rule. */
+    html.efp-black #quizView .option.correct > input + .option-body,
+    html.efp-black #quizView .option.correct > input:checked + .option-body{
+      background:#123d2a!important;
+      border-color:#22c55e!important;
       color:#f8fafc!important;
+      box-shadow:0 0 0 1px rgba(34,197,94,.12) inset!important;
     }
-    html.efp-black #quizView .option.wrong .option-body{
-      background:rgba(220,53,69,.09)!important;
-      border-color:rgba(220,53,69,.62)!important;
+    html.efp-black #quizView .option.wrong > input + .option-body,
+    html.efp-black #quizView .option.wrong > input:checked + .option-body{
+      background:#4a1d25!important;
+      border-color:#ef4444!important;
       color:#f8fafc!important;
+      box-shadow:0 0 0 1px rgba(239,68,68,.12) inset!important;
     }
     html.efp-black #quizView .option.correct .opt-en,
     html.efp-black #quizView .option.correct .opt-hi,
     html.efp-black #quizView .option.wrong .opt-en,
     html.efp-black #quizView .option.wrong .opt-hi{color:#f8fafc!important}
     html.efp-black #quizView .option.correct .option-letter{
-      background:rgba(40,167,69,.16)!important;
-      border-color:rgba(40,167,69,.55)!important;
-      color:#f8fafc!important;
+      background:#166534!important;
+      border-color:#22c55e!important;
+      color:#fff!important;
     }
     html.efp-black #quizView .option.wrong .option-letter{
-      background:rgba(220,53,69,.16)!important;
-      border-color:rgba(220,53,69,.55)!important;
-      color:#f8fafc!important;
+      background:#7f1d1d!important;
+      border-color:#ef4444!important;
+      color:#fff!important;
     }
 
     html.efp-black #quizView .answer-box{
