@@ -137,137 +137,222 @@
   <script defer src="/back-nav.js?v=20260927cruxhier2"></script>
 
   <style>
-    /* Mixed Practice reading palette — option/explanation readability */
-    /* Slightly larger reading text on every device without changing layout. */
+    /* Original Practice visual parity — question, options and explanation.
+       Keep the Mixed Practice navigation/layout, but use the same reading
+       typography and answer colours as the regular Original Practice quizzes. */
+
+    #quizView .question-card,
+    #quizView .option-body,
+    #quizView .answer-box{
+      font-family:Georgia,'Noto Sans Devanagari',serif;
+    }
+
+    /* Light / normal mode mirrors Original Practice. */
+    #quizView .question-card{
+      background:#fff!important;
+      border:1px solid #e5e7eb!important;
+      color:#1a1f2e!important;
+      box-shadow:0 1px 3px rgba(0,0,0,.10),0 1px 2px rgba(0,0,0,.06)!important;
+      border-radius:12px!important;
+    }
+    #quizView .question-number{
+      color:#6b7280!important;
+      font:700 12px/1.35 Arial,sans-serif!important;
+    }
+    #quizView .q-en{
+      color:#2980b9!important;
+      font-family:Georgia,'Times New Roman',serif!important;
+      font-size:14px!important;
+      line-height:1.5!important;
+      font-weight:600!important;
+    }
+    #quizView .q-hi{
+      color:#16834f!important;
+      font-family:'Noto Sans Devanagari','Nirmala UI','Mangal',Arial,sans-serif!important;
+      font-size:1.05rem!important;
+      line-height:1.65!important;
+      font-weight:600!important;
+      margin-top:6px!important;
+    }
+
+    #quizView .options{gap:8px!important;margin-top:14px!important}
+    #quizView .option-body{
+      grid-template-columns:30px minmax(0,1fr)!important;
+      gap:9px!important;
+      align-items:flex-start!important;
+      padding:8px 12px!important;
+      border:2px solid #e5e7eb!important;
+      border-radius:8px!important;
+      background:#fff!important;
+      color:#1a1f2e!important;
+      box-shadow:none!important;
+    }
+    #quizView .option-letter{
+      width:28px!important;
+      height:28px!important;
+      border-radius:8px!important;
+      background:#f3f4f6!important;
+      border:1px solid #d1d5db!important;
+      color:#374151!important;
+      font:800 11px/1 Arial,sans-serif!important;
+    }
     #quizView .opt-en{
-      font-size:clamp(14.25px,1.22vw,15.5px)!important;
-      line-height:1.58!important;
-      font-weight:800!important;
-      letter-spacing:.002em;
+      color:#1a1f2e!important;
+      font-family:Georgia,'Times New Roman',serif!important;
+      font-size:14px!important;
+      line-height:1.5!important;
+      font-weight:400!important;
+      letter-spacing:0!important;
     }
     #quizView .opt-hi{
-      font-size:clamp(13.75px,1.16vw,15px)!important;
-      line-height:1.62!important;
-      font-weight:700!important;
-      margin-top:4px!important;
-      font-family:'Noto Sans Devanagari','Nirmala UI','Mangal',Arial,sans-serif;
+      color:#475569!important;
+      font-family:'Noto Sans Devanagari','Nirmala UI','Mangal',Arial,sans-serif!important;
+      font-size:.95rem!important;
+      line-height:1.5!important;
+      font-weight:600!important;
+      margin-top:2px!important;
+    }
+    #quizView .option input:checked + .option-body{
+      background:#f9fafb!important;
+      border-color:#9ca3af!important;
+    }
+    #quizView .option.correct .option-body{
+      background:#10b981!important;
+      border-color:#059669!important;
+      color:#fff!important;
+    }
+    #quizView .option.wrong .option-body{
+      background:#ef4444!important;
+      border-color:#dc2626!important;
+      color:#fff!important;
+    }
+    #quizView .option.correct .opt-en,
+    #quizView .option.correct .opt-hi,
+    #quizView .option.wrong .opt-en,
+    #quizView .option.wrong .opt-hi{
+      color:#fff!important;
+    }
+    #quizView .option.correct .option-letter,
+    #quizView .option.wrong .option-letter{
+      background:rgba(255,255,255,.16)!important;
+      border-color:rgba(255,255,255,.42)!important;
+      color:#fff!important;
+    }
+
+    #quizView .answer-box{
+      background:#e8f6f3!important;
+      border:1px solid #d3e9e1!important;
+      border-left:4px solid #2ecc71!important;
+      border-radius:8px!important;
+      padding:12px!important;
+      box-shadow:none!important;
+      color:#1a1f2e!important;
     }
     #quizView .answer-line,
     #quizView .correct-answer{
-      font-size:13.5px!important;
-      line-height:1.55!important;
+      font-family:Georgia,'Noto Sans Devanagari',serif!important;
+      font-size:14px!important;
+      line-height:1.5!important;
     }
+    #quizView .answer-line.good{color:#15803d!important}
+    #quizView .answer-line.bad{color:#b91c1c!important}
+    #quizView .correct-answer{color:#1a1f2e!important}
     #quizView .explanation{
-      font-size:clamp(13.75px,1.18vw,15px)!important;
-      line-height:1.72!important;
-      font-weight:550;
+      color:#1a1f2e!important;
+      border-top:1px solid #cfe3dc!important;
+      font-family:Georgia,'Times New Roman',serif!important;
+      font-size:14px!important;
+      line-height:1.6!important;
+      font-weight:400!important;
     }
     #quizView .explanation .exp-hi{
-      font-size:clamp(13.75px,1.16vw,14.75px)!important;
-      line-height:1.72!important;
-      font-weight:600;
-      font-family:'Noto Sans Devanagari','Nirmala UI','Mangal',Arial,sans-serif;
+      color:#157347!important;
+      font-family:'Noto Sans Devanagari','Nirmala UI','Mangal',Arial,sans-serif!important;
+      font-size:1rem!important;
+      line-height:1.6!important;
+      font-weight:600!important;
+      margin-top:8px!important;
     }
 
-    /* Normal/day palette: calm navy + warm Hindi accent for long reading. */
-    html:not(.efp-black):not(.efp-black-invert) #quizView .option-body{
-      background:#13243a!important;
-      border-color:#2d4764!important;
-      color:#eef6ff!important;
-      box-shadow:0 1px 0 rgba(255,255,255,.025) inset;
+    /* The page is natively dark, so black-mode.js uses efp-black here.
+       Recreate the regular Original Practice dark appearance directly. */
+    html.efp-black #quizView .question-card{
+      background:#0f172a!important;
+      border-color:#334155!important;
+      color:#f8fafc!important;
+      box-shadow:0 3px 14px rgba(0,0,0,.28)!important;
     }
-    html:not(.efp-black):not(.efp-black-invert) #quizView .opt-en{color:#f4f8fd!important}
-    html:not(.efp-black):not(.efp-black-invert) #quizView .opt-hi{color:#f3d28a!important}
-    html:not(.efp-black):not(.efp-black-invert) #quizView .option-letter{
-      background:#203753!important;
-      color:#ffe19a!important;
-      border:1px solid #355474;
-    }
-    html:not(.efp-black):not(.efp-black-invert) #quizView .option input:checked + .option-body{
-      background:#173b62!important;
-      border-color:#5b9bd5!important;
-    }
-    html:not(.efp-black):not(.efp-black-invert) #quizView .option.correct .option-body{
-      background:#123a2b!important;
-      border-color:#43a879!important;
-    }
-    html:not(.efp-black):not(.efp-black-invert) #quizView .option.wrong .option-body{
-      background:#47212a!important;
-      border-color:#cc6878!important;
-    }
-    html:not(.efp-black):not(.efp-black-invert) #quizView .answer-box{
-      background:#102b36!important;
-      border-color:#2c6170!important;
-      box-shadow:0 8px 22px rgba(0,0,0,.12);
-    }
-    html:not(.efp-black):not(.efp-black-invert) #quizView .explanation{
-      color:#e2f2f7!important;
-      border-top-color:#2d5965!important;
-    }
-    html:not(.efp-black):not(.efp-black-invert) #quizView .explanation .exp-hi{color:#f8d991!important}
-    html:not(.efp-black):not(.efp-black-invert) #quizView .correct-answer{color:#e5edf7!important}
-    html:not(.efp-black):not(.efp-black-invert) #quizView .answer-line.good{color:#86efac!important}
-    html:not(.efp-black):not(.efp-black-invert) #quizView .answer-line.bad{color:#fda4af!important}
+    html.efp-black #quizView .question-number{color:#94a3b8!important}
+    html.efp-black #quizView .q-en{color:#7dc7f0!important}
+    html.efp-black #quizView .q-hi{color:#69d39a!important}
 
-    /* Black mode: deeper AMOLED-friendly surfaces with brighter text, never pure
-       white blocks, so contrast stays comfortable at night. */
-    html.efp-black #quizView .option-body,
-    html.efp-black-invert #quizView .option-body{
-      background:#0b111a!important;
-      border-color:#29384a!important;
-      color:#f4f7fb!important;
-      box-shadow:none!important;
+    html.efp-black #quizView .option-body{
+      background:#111827!important;
+      border-color:#374151!important;
+      color:#f8fafc!important;
     }
-    html.efp-black #quizView .opt-en,
-    html.efp-black-invert #quizView .opt-en{color:#f4f7fb!important}
-    html.efp-black #quizView .opt-hi,
-    html.efp-black-invert #quizView .opt-hi{color:#f2ca72!important}
-    html.efp-black #quizView .option-letter,
-    html.efp-black-invert #quizView .option-letter{
-      background:#172333!important;
-      color:#f7d47d!important;
-      border:1px solid #33465e;
+    html.efp-black #quizView .option-letter{
+      background:#1f2937!important;
+      border-color:#475569!important;
+      color:#e5e7eb!important;
     }
-    html.efp-black #quizView .option input:checked + .option-body,
-    html.efp-black-invert #quizView .option input:checked + .option-body{
-      background:#102943!important;
-      border-color:#3f78ae!important;
+    html.efp-black #quizView .opt-en{color:#f8fafc!important}
+    html.efp-black #quizView .opt-hi{color:#cbd5e1!important}
+    html.efp-black #quizView .option input:checked + .option-body{
+      background:#172033!important;
+      border-color:#64748b!important;
     }
-    html.efp-black #quizView .option.correct .option-body,
-    html.efp-black-invert #quizView .option.correct .option-body{
-      background:#0b3022!important;
-      border-color:#32966a!important;
+    html.efp-black #quizView .option.correct .option-body{
+      background:rgba(40,167,69,.09)!important;
+      border-color:rgba(40,167,69,.62)!important;
+      color:#f8fafc!important;
     }
-    html.efp-black #quizView .option.wrong .option-body,
-    html.efp-black-invert #quizView .option.wrong .option-body{
-      background:#351820!important;
-      border-color:#ad5362!important;
+    html.efp-black #quizView .option.wrong .option-body{
+      background:rgba(220,53,69,.09)!important;
+      border-color:rgba(220,53,69,.62)!important;
+      color:#f8fafc!important;
     }
-    html.efp-black #quizView .answer-box,
-    html.efp-black-invert #quizView .answer-box{
-      background:#081d24!important;
-      border-color:#24505b!important;
-      box-shadow:none!important;
+    html.efp-black #quizView .option.correct .opt-en,
+    html.efp-black #quizView .option.correct .opt-hi,
+    html.efp-black #quizView .option.wrong .opt-en,
+    html.efp-black #quizView .option.wrong .opt-hi{color:#f8fafc!important}
+    html.efp-black #quizView .option.correct .option-letter{
+      background:rgba(40,167,69,.16)!important;
+      border-color:rgba(40,167,69,.55)!important;
+      color:#f8fafc!important;
     }
-    html.efp-black #quizView .explanation,
-    html.efp-black-invert #quizView .explanation{
-      color:#dceef4!important;
-      border-top-color:#244852!important;
+    html.efp-black #quizView .option.wrong .option-letter{
+      background:rgba(220,53,69,.16)!important;
+      border-color:rgba(220,53,69,.55)!important;
+      color:#f8fafc!important;
     }
-    html.efp-black #quizView .explanation .exp-hi,
-    html.efp-black-invert #quizView .explanation .exp-hi{color:#f1d27f!important}
-    html.efp-black #quizView .correct-answer,
-    html.efp-black-invert #quizView .correct-answer{color:#e6eef7!important}
-    html.efp-black #quizView .answer-line.good,
-    html.efp-black-invert #quizView .answer-line.good{color:#6ee7a8!important}
-    html.efp-black #quizView .answer-line.bad,
-    html.efp-black-invert #quizView .answer-line.bad{color:#ff8e9b!important}
 
-    @media(max-width:560px){
-      #quizView .opt-en{font-size:14.5px!important;line-height:1.58!important}
-      #quizView .opt-hi{font-size:14px!important;line-height:1.6!important}
-      #quizView .explanation{font-size:14px!important;line-height:1.7!important}
-      #quizView .explanation .exp-hi{font-size:14px!important;line-height:1.7!important}
+    html.efp-black #quizView .answer-box{
+      background:#10241e!important;
+      border-color:#24483b!important;
+      border-left-color:#2ecc71!important;
+      color:#f8fafc!important;
+    }
+    html.efp-black #quizView .answer-line.good{color:#6ee7a8!important}
+    html.efp-black #quizView .answer-line.bad{color:#ff8e9b!important}
+    html.efp-black #quizView .correct-answer{color:#f8fafc!important}
+    html.efp-black #quizView .explanation{
+      color:#f8fafc!important;
+      border-top-color:#2f4b41!important;
+    }
+    html.efp-black #quizView .explanation .exp-hi{color:#86efac!important}
+
+    /* If black-mode.js ever classifies this page as light, it applies its own
+       page inversion (efp-black-invert). The base Original Practice palette
+       above is intentionally left intact so that inversion behaves exactly
+       like the regular Original Practice pages. */
+    @media(max-width:600px){
+      #quizView .q-en{font-size:14px!important}
+      #quizView .q-hi{font-size:1rem!important;line-height:1.6!important}
+      #quizView .opt-en{font-size:14px!important;line-height:1.5!important}
+      #quizView .opt-hi{font-size:.92rem!important;line-height:1.48!important}
+      #quizView .explanation{font-size:14px!important;line-height:1.6!important}
+      #quizView .explanation .exp-hi{font-size:.96rem!important;line-height:1.55!important}
     }
   </style>
 </head>
