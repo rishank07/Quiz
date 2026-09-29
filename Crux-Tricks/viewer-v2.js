@@ -194,7 +194,7 @@
     bookmarkPage.textContent=b[pk()]?'🔖 Bookmarked':'🔖 Bookmark Page';bookmarkPage.classList.toggle('bookmarked',!!b[pk()]);
     completeBtn.textContent=prog().indexOf('complete')>=0?'✓ Completed':'✓ Complete';
     openPdf.href=pdfUrl();openPdf2.href=pdfUrl();
-    zoomLabel.textContent=autoFit?'Fit':Math.round(zoom*100)+'%';
+    zoomLabel.textContent=autoFit?'Fit Width':Math.round(zoom*100)+'%';
     zoomOutBtn.disabled=(autoFit&&readerZoomFloor()>=1)||(!autoFit&&zoom<=readerZoomFloor()+.0001);
     zoomInBtn.disabled=!autoFit&&zoom>=4.999;
   }
@@ -870,7 +870,7 @@
   nextBtn.addEventListener('click',function(){go(page+1,true)});
   input.addEventListener('change',function(){go(parseInt(input.value,10)||page,true)});
   input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go(parseInt(input.value,10)||page,true);input.blur()}});
-  function readerZoomFloor(){return .50}
+  function readerZoomFloor(){return .70}
   function clampReaderZoom(v){return Math.max(readerZoomFloor(),Math.min(5.00,Math.round(v*100)/100))}
   function cancelScheduledZoomRender(){clearTimeout(zoomRenderTimer);zoomRenderTimer=null}
   function captureZoomAnchor(focusX,focusY){
@@ -929,15 +929,15 @@
     focusX=Number.isFinite(focusX)?focusX:pdfStage.clientWidth/2;
     focusY=Number.isFinite(focusY)?focusY:pdfStage.clientHeight/2;
     var target=clampReaderZoom(next);
-    var fitFloor=(continuous||isCompactReader())&&target<=1.0001;
-    var targetZoom=fitFloor?1:target;
-    if(autoFit===fitFloor&&Math.abs(targetZoom-oldZoom)<.0001){
+    if(!autoFit&&Math.abs(target-oldZoom)<.0001){
       if(gestureAnchor)restoreZoomAnchor(gestureAnchor);
       updateControls();return
     }
     var anchor=gestureAnchor||captureZoomAnchor(focusX,focusY);
-    autoFit=fitFloor;zoom=fitFloor?1:target;
-    document.documentElement.classList.toggle('efp-pdf-zoomed',!autoFit);
+    /* Fit Width is an explicit mode. Manual 85% / 70% must stay smaller than
+       the viewport instead of snapping back to Fit Width. */
+    autoFit=false;zoom=target;
+    document.documentElement.classList.add('efp-pdf-zoomed');
     updateControls();
     var scaleRatio=zoom/Math.max(.01,oldZoom);
     if(continuous){
@@ -957,15 +957,31 @@
     restoreZoomAnchor(anchor);
     scheduleZoomRender(anchor);
   }
-  function steppedReaderZoom(direction){
-    var current=Math.round((autoFit?1:zoom)*100);
-    var next;
-    if(direction>0)next=current%25===0?current+25:Math.ceil(current/25)*25;
-    else next=current%25===0?current-25:Math.floor(current/25)*25;
-    return clampReaderZoom(next/100);
+  var READER_ZOOM_LEVELS=[.70,.85,1,1.25,1.50,1.75,2,2.50,3,4,5];
+  function stepReaderZoom(direction){
+    if(autoFit){
+      if(direction<0)applyReaderZoom(.85);
+      else applyReaderZoom(1.25);
+      return;
+    }
+    var current=clampReaderZoom(zoom),eps=.005,next=current;
+    if(direction>0){
+      for(var i=0;i<READER_ZOOM_LEVELS.length;i++){
+        if(READER_ZOOM_LEVELS[i]>current+eps){next=READER_ZOOM_LEVELS[i];break}
+      }
+      /* Crossing 100% returns to the semantic Fit Width state, just like
+         desktop PDF readers expose Fit Width separately from a percentage. */
+      if(current<1-eps&&next>=1-eps){resetReaderFit();return}
+    }else{
+      for(var j=READER_ZOOM_LEVELS.length-1;j>=0;j--){
+        if(READER_ZOOM_LEVELS[j]<current-eps){next=READER_ZOOM_LEVELS[j];break}
+      }
+      if(current>1+eps&&next<=1+eps){resetReaderFit();return}
+    }
+    applyReaderZoom(next);
   }
-  zoomInBtn.addEventListener('click',function(){applyReaderZoom(steppedReaderZoom(1))});
-  zoomOutBtn.addEventListener('click',function(){applyReaderZoom(steppedReaderZoom(-1))});
+  zoomInBtn.addEventListener('click',function(){stepReaderZoom(1)});
+  zoomOutBtn.addEventListener('click',function(){stepReaderZoom(-1)});
   zoomLabel.addEventListener('click',resetReaderFit);
 
   function resetReaderFit(){
@@ -998,8 +1014,8 @@
     if(key==='ArrowLeft'||key==='PageUp'||(key===' '&&e.shiftKey)){e.preventDefault();go(page-1,true);return;}
     if(key==='ArrowDown'){e.preventDefault();pdfStage.scrollBy({top:Math.max(72,Math.round(pdfStage.clientHeight*.12)),left:0,behavior:'auto'});return;}
     if(key==='ArrowUp'){e.preventDefault();pdfStage.scrollBy({top:-Math.max(72,Math.round(pdfStage.clientHeight*.12)),left:0,behavior:'auto'});return;}
-    if(key==='+'||key==='='){e.preventDefault();applyReaderZoom(steppedReaderZoom(1));return;}
-    if(key==='-'||key==='_'){e.preventDefault();applyReaderZoom(steppedReaderZoom(-1));return;}
+    if(key==='+'||key==='='){e.preventDefault();stepReaderZoom(1);return;}
+    if(key==='-'||key==='_'){e.preventDefault();stepReaderZoom(-1);return;}
     if(key==='0'||key==='f'||key==='F'){e.preventDefault();resetReaderFit();return;}
     if(key==='Home'){e.preventDefault();go(1,true);return;}
     if(key==='End'){e.preventDefault();go(max,true);return;}
