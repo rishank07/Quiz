@@ -774,12 +774,15 @@
     head.removeAttribute('data-sticky-start');
   }
   function focusQuestionAfterStep(){
-    if(!isMobileQuiz()){window.scrollTo({top:0,behavior:'smooth'});return}
-    var head=document.querySelector('.quiz-head'),card=document.querySelector('.question-card');
-    if(!head||!card)return;
+    var view=$('quizView'),head=document.querySelector('.quiz-head');
+    if(!view||!head)return;
     head.classList.remove('efp-mobile-compact');
-    var top=Math.max(0,card.getBoundingClientRect().top+window.scrollY-head.offsetHeight-8);
-    window.scrollTo({top:top,behavior:'auto'});
+    /* Keep the next/previous question framed like the quiz screenshot:
+       score header at the top, then the question card immediately below.
+       Do not jump to the document/page top. */
+    var top=Math.max(0,view.getBoundingClientRect().top+window.scrollY-8);
+    var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top:top,behavior:(isMobileQuiz()||reduceMotion)?'auto':'smooth'});
   }
   function focusExplanationAfterAnswer(questionId){
     requestAnimationFrame(function(){
