@@ -1,5 +1,5 @@
-// v207 restore PDF zoom-out below Fit Width
-const CACHE_VERSION = "efp-pwa-2026-09-29-v207-pdf-zoomout";
+// v208 restore stable fullscreen PDF landscape + Portrait escape
+const CACHE_VERSION = "efp-pwa-2026-09-29-v208-pdf-landscape-stable";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -33,7 +33,7 @@ const APP_SHELL = [
   "/app-session.js?v=20260927idlehier1",
   "/back-parent-map.js",
   "/back-nav.js?v=20260928quitparent2",
-  "/pdf-mobile-rotate.js?v=20260929pdfscreen5",
+  "/pdf-mobile-rotate.js?v=20260929pdfscreen6",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",

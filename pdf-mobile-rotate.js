@@ -92,8 +92,8 @@
     '[data-efp-pdf-rotate] .efp-orientation-icon *{vector-effect:non-scaling-stroke}' +
     '#efpPdfPortraitReturn{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));top:auto;z-index:2147483600;display:none;align-items:center;justify-content:center;gap:7px;width:46px;min-width:46px;height:46px;padding:0;border:1px solid rgba(242,198,111,.95);border-radius:50%;background:rgba(7,20,38,.88);color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.42),inset 0 0 0 1px rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);-webkit-tap-highlight-color:transparent}' +
     '#efpPdfPortraitReturn svg{width:25px;height:25px;display:block;flex:0 0 auto;pointer-events:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.72))}#efpPdfPortraitReturn .efp-portrait-label{display:none;pointer-events:none;font:850 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;white-space:nowrap}#efpPdfPortraitReturn.show{display:inline-flex}#efpPdfPortraitReturn:active{transform:scale(.94);background:rgba(7,20,38,.96)}' +
-    'html.efp-manual-pdf-landscape #efpPdfPortraitReturn{top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));bottom:auto;width:auto;min-width:96px;height:44px;padding:0 13px;border-radius:999px;transform:rotate(-90deg);transform-origin:center;background:rgba(7,20,38,.94);border-color:rgba(242,198,111,.98);box-shadow:0 8px 24px rgba(0,0,0,.48),0 0 0 1px rgba(255,255,255,.12)}' +
-    'html.efp-manual-pdf-landscape #efpPdfPortraitReturn .efp-portrait-label{display:inline}html.efp-manual-pdf-landscape #efpPdfPortraitReturn:active{transform:rotate(-90deg) scale(.94)}' +
+    'html.efp-manual-pdf-landscape > #efpPdfPortraitReturn{right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));top:auto;width:auto;min-width:96px;height:44px;padding:0 13px;border-radius:999px;transform:none;background:rgba(7,20,38,.94);border-color:rgba(242,198,111,.98);box-shadow:0 8px 24px rgba(0,0,0,.48),0 0 0 1px rgba(255,255,255,.12)}' +
+    'html.efp-manual-pdf-landscape > #efpPdfPortraitReturn .efp-portrait-label{display:inline}html.efp-manual-pdf-landscape > #efpPdfPortraitReturn:active{transform:scale(.94)}' +
     '.efp-pdf-rotate-fallback-toast{position:fixed;left:50%;bottom:max(76px,calc(12px + env(safe-area-inset-bottom)));transform:translateX(-50%) translateY(12px);z-index:9999;opacity:0;pointer-events:none;background:rgba(15,23,42,.94);color:#fff;border-radius:999px;padding:8px 12px;font:800 11px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.28);transition:opacity .18s ease,transform .18s ease}' +
     '.efp-pdf-rotate-fallback-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}';
   document.head.appendChild(style);
@@ -109,7 +109,7 @@
       '<path d="M25.1 9.2a11.3 11.3 0 0 1 .7 13.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>' +
       '<path d="m23.4 20.8 2.4 3.8 3.1-3.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
     '</svg><span class="efp-portrait-label">Portrait</span>';
-  document.body.appendChild(portraitReturn);
+  document.documentElement.appendChild(portraitReturn);
 
   function orientationIcon(targetLandscape){
     if (targetLandscape) {
@@ -468,10 +468,14 @@
       return;
     }
 
-    /* Fullscreen is required here: it removes Chrome's URL bar/browser chrome.
-       Once fullscreen is active, lock the real viewport to portrait and rotate
-       only the PDF reader with CSS. This prevents Android Auto-rotate from
-       rotating the viewport a second time when the user turns the handset. */
+    /* Browser custom landscape:
+       1) enter fullscreen first so Chrome's URL bar/browser chrome disappears;
+       2) request a real landscape viewport;
+       3) use CSS rotation only as a fallback when Screen Orientation is blocked.
+       Never lock the browser to portrait while showing landscape: that was what
+       triggered Android's competing rotate control and double-rotation state. */
+    if (manualMode) setManualMode('');
+
     if (goLandscape) {
       var fullscreenReady = await enterOwnedFullscreen();
       if (!fullscreenReady) {
@@ -481,10 +485,29 @@
         busy = false;
         return;
       }
-      try { await lockOrientation('portrait-primary'); } catch (_) {}
-      setManualMode('landscape');
+
+      unlockOrientation();
+      var landscapeReady = false;
+      try {
+        await lockOrientation('landscape-primary');
+        landscapeReady = await waitForOrientation(true, 1100);
+      } catch (_) {}
+
+      if (!landscapeReady) {
+        /* Safe fallback: stay fullscreen and rotate only ExamFusion's reader.
+           The Portrait escape control lives outside the transformed body. */
+        unlockOrientation();
+        setManualMode('landscape');
+      }
     } else {
-      setManualMode('');
+      if (manualMode) setManualMode('');
+
+      /* A Portrait tap must always be able to unwind a native landscape lock. */
+      try {
+        await lockOrientation('portrait-primary');
+        await waitForOrientation(false, 900);
+      } catch (_) {}
+
       unlockOrientation();
       await leaveOwnedFullscreen();
       unlockOrientation();
@@ -526,16 +549,29 @@
     }
   } catch (_) {}
 
-  window.addEventListener('orientationchange', function(){
-    window.setTimeout(function(){
-      if (!busy && !manualMode) requestedLandscape = actualLandscape();
+  function reconcileSystemOrientation(){
+    if (busy) {
       syncButton();
-    }, 140);
+      return;
+    }
+    if (manualMode === 'landscape' && actualLandscape()) {
+      /* The phone/browser has taken ownership of landscape. Remove the CSS
+         fallback at once so there is never a double 90-degree rotation. */
+      setManualMode('');
+      requestedLandscape = true;
+      syncButton();
+      return;
+    }
+    if (!manualMode && !forcedFullscreen) requestedLandscape = actualLandscape();
+    syncButton();
+  }
+
+  window.addEventListener('orientationchange', function(){
+    window.setTimeout(reconcileSystemOrientation, 140);
   });
 
   window.addEventListener('resize', function(){
-    if (!busy && !manualMode && !forcedFullscreen) requestedLandscape = actualLandscape();
-    syncButton();
+    window.setTimeout(reconcileSystemOrientation, 30);
   });
 
   document.addEventListener('fullscreenchange', function(){
