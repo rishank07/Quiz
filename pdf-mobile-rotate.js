@@ -30,14 +30,24 @@
   }
 
   var appContext = isInstalledAndroidAppContext();
-  /* Keep PDF reading chrome out of the way only while the viewport is
-     landscape. This covers normal device rotation (including the Android
-     app) and the browser's CSS fallback; portrait restores the normal UI. */
+  /* Keep PDF reading chrome out of the way on phones/tablets in landscape.
+     Do not apply this to desktop/laptop viewports: landscape is the normal
+     desktop shape, so Back + Home must remain available there. */
+  var mobileLandscapeChrome = false;
+  try {
+    mobileLandscapeChrome = !!(window.matchMedia &&
+      window.matchMedia('(hover:none) and (pointer:coarse)').matches);
+  } catch (_) {}
+  if (!mobileLandscapeChrome) {
+    try { mobileLandscapeChrome = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || ''); } catch (_) {}
+  }
+
   var landscapeChromeStyle = document.createElement('style');
   landscapeChromeStyle.id = 'efp-pdf-landscape-chrome-style';
-  landscapeChromeStyle.textContent =
-    '@media(orientation:landscape){html #efp-home-button,html #efp-app-back-button{display:none!important}}' +
-    'html.efp-manual-pdf-landscape #efp-home-button,html.efp-manual-pdf-landscape #efp-app-back-button{display:none!important}';
+  landscapeChromeStyle.textContent = mobileLandscapeChrome
+    ? ('@media(orientation:landscape){html #efp-home-button,html #efp-app-back-button{display:none!important}}' +
+       'html.efp-manual-pdf-landscape #efp-home-button,html.efp-manual-pdf-landscape #efp-app-back-button{display:none!important}')
+    : '';
   document.head.appendChild(landscapeChromeStyle);
   if (appContext) {
     root.classList.add('efp-pdf-app-context');
