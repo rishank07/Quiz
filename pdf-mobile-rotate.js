@@ -466,12 +466,15 @@
       return;
     }
 
-    /* In a mobile browser, rotating the screen also rotates Chrome's URL bar.
-       Keep the physical viewport in portrait and rotate only the PDF reader. */
+    /* Fullscreen hides browser chrome without turning the actual screen. Keep
+       the PDF's landscape layout as a CSS transform so the URL bar cannot
+       reappear along the side when the phone is held sideways. */
     if (goLandscape) {
+      await enterOwnedFullscreen();
       setManualMode('landscape');
     } else {
       setManualMode('');
+      await leaveOwnedFullscreen();
     }
 
     await wait(80);
@@ -523,7 +526,10 @@
   });
 
   document.addEventListener('fullscreenchange', function(){
-    if (!document.fullscreenElement) forcedFullscreen = false;
+    if (!document.fullscreenElement && forcedFullscreen) {
+      forcedFullscreen = false;
+      if (manualMode === 'landscape') setManualMode('');
+    }
     syncButton();
   });
 
