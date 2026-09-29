@@ -1,5 +1,5 @@
-// v205 keep custom PDF landscape fullscreen/orientation logic fresh
-const CACHE_VERSION = "efp-pwa-2026-09-29-v205-pdf-fullscreen-rotate";
+// v206 keep PDF landscape portrait-return control visible
+const CACHE_VERSION = "efp-pwa-2026-09-29-v206-pdf-return-control";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -33,7 +33,7 @@ const APP_SHELL = [
   "/app-session.js?v=20260927idlehier1",
   "/back-parent-map.js",
   "/back-nav.js?v=20260928quitparent2",
-  "/pdf-mobile-rotate.js?v=20260929pdfscreen4",
+  "/pdf-mobile-rotate.js?v=20260929pdfscreen5",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",

@@ -90,8 +90,10 @@
     '[data-efp-pdf-rotate] .efp-orientation-icon{display:block;width:27px;height:27px;pointer-events:none}' +
     '[data-efp-pdf-rotate].efp-rotate-ready{opacity:1;pointer-events:auto}' +
     '[data-efp-pdf-rotate] .efp-orientation-icon *{vector-effect:non-scaling-stroke}' +
-    '#efpPdfPortraitReturn{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));top:auto;z-index:2147483600;display:none;align-items:center;justify-content:center;width:46px;min-width:46px;height:46px;padding:0;border:1px solid rgba(242,198,111,.88);border-radius:50%;background:rgba(7,20,38,.56);color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.16);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);-webkit-tap-highlight-color:transparent}' +
-    '#efpPdfPortraitReturn svg{width:25px;height:25px;display:block;pointer-events:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.72))}#efpPdfPortraitReturn.show{display:inline-flex}#efpPdfPortraitReturn:active{transform:scale(.94);background:rgba(7,20,38,.68)}' +
+    '#efpPdfPortraitReturn{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));top:auto;z-index:2147483600;display:none;align-items:center;justify-content:center;gap:7px;width:46px;min-width:46px;height:46px;padding:0;border:1px solid rgba(242,198,111,.95);border-radius:50%;background:rgba(7,20,38,.88);color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.42),inset 0 0 0 1px rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);-webkit-tap-highlight-color:transparent}' +
+    '#efpPdfPortraitReturn svg{width:25px;height:25px;display:block;flex:0 0 auto;pointer-events:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.72))}#efpPdfPortraitReturn .efp-portrait-label{display:none;pointer-events:none;font:850 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;white-space:nowrap}#efpPdfPortraitReturn.show{display:inline-flex}#efpPdfPortraitReturn:active{transform:scale(.94);background:rgba(7,20,38,.96)}' +
+    'html.efp-manual-pdf-landscape #efpPdfPortraitReturn{top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));bottom:auto;width:auto;min-width:96px;height:44px;padding:0 13px;border-radius:999px;transform:rotate(-90deg);transform-origin:center;background:rgba(7,20,38,.94);border-color:rgba(242,198,111,.98);box-shadow:0 8px 24px rgba(0,0,0,.48),0 0 0 1px rgba(255,255,255,.12)}' +
+    'html.efp-manual-pdf-landscape #efpPdfPortraitReturn .efp-portrait-label{display:inline}html.efp-manual-pdf-landscape #efpPdfPortraitReturn:active{transform:rotate(-90deg) scale(.94)}' +
     '.efp-pdf-rotate-fallback-toast{position:fixed;left:50%;bottom:max(76px,calc(12px + env(safe-area-inset-bottom)));transform:translateX(-50%) translateY(12px);z-index:9999;opacity:0;pointer-events:none;background:rgba(15,23,42,.94);color:#fff;border-radius:999px;padding:8px 12px;font:800 11px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.28);transition:opacity .18s ease,transform .18s ease}' +
     '.efp-pdf-rotate-fallback-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}';
   document.head.appendChild(style);
@@ -106,7 +108,7 @@
       '<rect x="9" y="4.5" width="14" height="23" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.2"/>' +
       '<path d="M25.1 9.2a11.3 11.3 0 0 1 .7 13.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>' +
       '<path d="m23.4 20.8 2.4 3.8 3.1-3.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
-    '</svg>';
+    '</svg><span class="efp-portrait-label">Portrait</span>';
   document.body.appendChild(portraitReturn);
 
   function orientationIcon(targetLandscape){
