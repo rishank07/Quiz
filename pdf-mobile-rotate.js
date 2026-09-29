@@ -466,15 +466,26 @@
       return;
     }
 
-    /* Fullscreen hides browser chrome without turning the actual screen. Keep
-       the PDF's landscape layout as a CSS transform so the URL bar cannot
-       reappear along the side when the phone is held sideways. */
+    /* Fullscreen is required here: it removes Chrome's URL bar/browser chrome.
+       Once fullscreen is active, lock the real viewport to portrait and rotate
+       only the PDF reader with CSS. This prevents Android Auto-rotate from
+       rotating the viewport a second time when the user turns the handset. */
     if (goLandscape) {
-      await enterOwnedFullscreen();
+      var fullscreenReady = await enterOwnedFullscreen();
+      if (!fullscreenReady) {
+        requestedLandscape = actualLandscape();
+        syncButton();
+        showToast('Fullscreen blocked by browser');
+        busy = false;
+        return;
+      }
+      try { await lockOrientation('portrait-primary'); } catch (_) {}
       setManualMode('landscape');
     } else {
       setManualMode('');
+      unlockOrientation();
       await leaveOwnedFullscreen();
+      unlockOrientation();
     }
 
     await wait(80);
@@ -528,13 +539,14 @@
   document.addEventListener('fullscreenchange', function(){
     if (!document.fullscreenElement && forcedFullscreen) {
       forcedFullscreen = false;
+      unlockOrientation();
       if (manualMode === 'landscape') setManualMode('');
     }
     syncButton();
   });
 
   window.addEventListener('pagehide', function(){
-    if (appContext) unlockOrientation();
+    unlockOrientation();
   });
 
   if (appContext) {
