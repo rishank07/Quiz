@@ -687,6 +687,33 @@
         return typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent || "");
       }
 
+      function isAndroidAppContext() {
+        if (!isAndroidDevice()) return false;
+        try {
+          if (sessionStorage.getItem("efp_android_app_context_v1") === "1") return true;
+        } catch (_) {}
+        try {
+          if (/^android-app:\/\/com\.examfusionprep\.app(?:\/|$)/i.test(document.referrer || "")) return true;
+        } catch (_) {}
+        try {
+          if (/;\s*wv\)/i.test(navigator.userAgent || "")) return true;
+        } catch (_) {}
+        try {
+          if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
+        } catch (_) {}
+        return false;
+      }
+
+      // The Play Store/TWA wrapper does not reliably open Android's Web Share
+      // sheet for this long backup text. Keep browser sharing untouched, but in
+      // the installed Android app show only the reliable Copy Code action.
+      if (isAndroidAppContext()) {
+        shareBackupCodeBtn.hidden = true;
+        shareBackupCodeBtn.setAttribute("aria-hidden", "true");
+        var backupCodeActions = shareBackupCodeBtn.parentElement;
+        if (backupCodeActions) backupCodeActions.style.gridTemplateColumns = "1fr";
+      }
+
       function bytesToBase64(bytes) {
         var binary = "";
         for (var i = 0; i < bytes.length; i += 32768) {
@@ -803,6 +830,19 @@
         if (isAndroidDevice()) {
           var code = await encodeBackupCode(payload);
           revealBackupCode(code);
+
+          // In the installed Android app, skip navigator.share entirely. The
+          // wrapper exposes it inconsistently, while clipboard/manual copy is
+          // reliable. Android mobile browsers keep the normal Share Code path.
+          if (isAndroidAppContext()) {
+            try {
+              await copyText(code);
+              return { method: "code-copy", fileName: "Android Backup Code" };
+            } catch (appCopyError) {
+              return { method: "code-ready", fileName: "Android Backup Code" };
+            }
+          }
+
           if (code.length > 60000) {
             try {
               if (await shareBackupFile(text, fileName)) return { method: "file-share", fileName: fileName };
