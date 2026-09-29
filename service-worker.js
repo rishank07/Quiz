@@ -33,7 +33,7 @@ const APP_SHELL = [
   "/app-session.js?v=20260927idlehier1",
   "/back-parent-map.js",
   "/back-nav.js?v=20260928quitparent2",
-  "/pdf-mobile-rotate.js?v=20260929pdfscreen6",
+  "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js",
   "/search-worker.js",
   "/search-index-main.js",
