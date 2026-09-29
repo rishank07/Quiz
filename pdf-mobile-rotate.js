@@ -466,26 +466,12 @@
       return;
     }
 
-    /* Remove any previous CSS fallback before trying a prompt-free native
-       orientation lock. If the browser requires fullscreen, use CSS fallback
-       instead so Chrome never shows its fullscreen education bubble. */
-    if (manualMode) setManualMode('');
-
-    var success = false;
+    /* In a mobile browser, rotating the screen also rotates Chrome's URL bar.
+       Keep the physical viewport in portrait and rotate only the PDF reader. */
     if (goLandscape) {
-      success = await nativeLandscape();
-      if (!success) {
-        setManualMode('landscape');
-        success = true;
-      }
+      setManualMode('landscape');
     } else {
-      success = await nativePortrait();
-      if (!success) {
-        /* If the browser refuses to release a native landscape lock, visually
-           restore portrait so the control still has a deterministic way back. */
-        setManualMode(actualLandscape() ? 'portrait' : '');
-        success = true;
-      }
+      setManualMode('');
     }
 
     await wait(80);
