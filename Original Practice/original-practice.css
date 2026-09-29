@@ -32,3 +32,47 @@ html.efp-black-invert .option-btn.correct *,html.efp-black-invert .option-btn.in
 html.efp-black .option-btn.correct{background:rgba(40,167,69,.09)!important;border-color:rgba(40,167,69,.62)!important;box-shadow:none!important;color:#f8fafc!important}
 html.efp-black .option-btn.incorrect{background:rgba(220,53,69,.09)!important;border-color:rgba(220,53,69,.62)!important;box-shadow:none!important;color:#f8fafc!important}
 html.efp-black .option-btn.correct *,html.efp-black .option-btn.incorrect *{color:#f8fafc!important}
+
+/* White-mode Hindi readability — Original Practice */
+/* Keep Devanagari comfortably readable throughout the quiz without changing
+   the English sizing. These selectors target the shared Complete Practice
+   markup used by every Original Practice subject. */
+.efp-op-qcard > p.text-sm.mb-3{
+  font-size:1.05rem!important;
+  line-height:1.65!important;
+  font-weight:600!important;
+  color:#16834f!important;
+  font-family:'Noto Sans Devanagari','Nirmala UI','Mangal',Arial,sans-serif!important;
+}
+.efp-op-qcard .option-btn > span.block.text-xs.text-gray-500{
+  font-size:.95rem!important;
+  line-height:1.5!important;
+  font-weight:600!important;
+  color:#475569!important;
+  font-family:'Noto Sans Devanagari','Nirmala UI','Mangal',Arial,sans-serif!important;
+  margin-top:2px;
+}
+.efp-op-qcard [id^="exp-"] > p.mt-1.text-xs{
+  font-size:1rem!important;
+  line-height:1.6!important;
+  font-weight:600!important;
+  color:#157347!important;
+  font-family:'Noto Sans Devanagari','Nirmala UI','Mangal',Arial,sans-serif!important;
+}
+
+/* In white mode, answered options use solid green/red backgrounds. Tailwind's
+   gray utility on the Hindi line otherwise wins and becomes low-contrast.
+   Force the Hindi line to inherit a high-contrast white only for feedback
+   states; dark-mode rules remain untouched. */
+html:not(.efp-black):not(.efp-black-invert) .efp-op-qcard .option-btn.correct > span.block.text-xs.text-gray-500,
+html:not(.efp-black):not(.efp-black-invert) .efp-op-qcard .option-btn.incorrect > span.block.text-xs.text-gray-500{
+  color:#fff!important;
+  opacity:1!important;
+  text-shadow:0 1px 1px rgba(0,0,0,.12);
+}
+
+@media(max-width:600px){
+  .efp-op-qcard > p.text-sm.mb-3{font-size:1rem!important;line-height:1.6!important}
+  .efp-op-qcard .option-btn > span.block.text-xs.text-gray-500{font-size:.92rem!important;line-height:1.48!important}
+  .efp-op-qcard [id^="exp-"] > p.mt-1.text-xs{font-size:.96rem!important;line-height:1.55!important}
+}
