@@ -2460,12 +2460,9 @@
             if (!term) {
                 currentFiltered = [...vocabData];
             } else {
-                // Strict search only on the Word column, including titles ending in punctuation.
-                const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const regex = new RegExp(`(?:^|\\W)${escapedTerm}(?:\\W|$)`, 'i');
-
+                // Flexible substring search on the Word column.
                 currentFiltered = vocabData.filter(item => {
-                    return regex.test(item.word);
+                    return item.word.toLowerCase().includes(term);
                 });
             }
 
