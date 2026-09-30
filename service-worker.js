@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-2026-09-30-v214-mixed-review-refresh";
+const CACHE_VERSION = "efp-pwa-2026-09-30-v215-review-light-banner";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260930mixedreviewback1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -32,7 +32,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20260927idlehier1",
   "/app-session.js?v=20260930mixedreviewback1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260930mixedreviewback1",
+  "/back-nav.js?v=20260930reviewlight1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js",
   "/search-worker.js",
