@@ -1315,6 +1315,14 @@
     window.EFP_QUIZ_PROGRESS_WARNING = {
       arm: arm,
       disarm: disarm,
+      releaseBackGuard: function (onReleased) {
+        if (typeof onReleased !== "function") return false;
+        // Used when a quiz has already been submitted. Remove only the
+        // synthetic same-page Back guard; do not run the quiz-parent exit.
+        disarm();
+        releaseSystemBackGuard(onReleased);
+        return true;
+      },
       isArmed: function () { return dirty; },
       isQuizVisible: function () { return hasVisibleQuizSurface() && !isClearlyFinished(); },
       confirmLeave: function (onLeave) {
