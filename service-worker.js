@@ -1,7 +1,8 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-2026-09-30-v222-ca-top-force";
+const CACHE_VERSION = "efp-pwa-2026-09-30-v223-ca-top-v3";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260930mixedsubmitguard1"></script>';
+const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20260930r1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -25,7 +26,7 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/ca-question-deeplink.js?v=20260930movetop2",
-  "/ca-move-top.js?v=20260930direct2",
+  "/ca-move-top-v3.js?v=20260930r1",
   "/blackbook-quiz-bookmarks.js",
   "/blackbook-topic-bookmarks.js",
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
@@ -205,6 +206,26 @@ async function injectEdgeToEdge(response) {
   return rebuiltHtmlResponse(response, updated);
 }
 
+async function injectCurrentAffairsMoveTop(response, url) {
+  if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.toLowerCase().includes("text/html")) return response;
+
+  let pathname = "";
+  try { pathname = decodeURIComponent(url.pathname || ""); } catch (_) { pathname = url.pathname || ""; }
+  if (!pathname.startsWith("/Current Affairs/")) return response;
+
+  let html = await response.text();
+  html = html.replace(/<script\b[^>]*\bsrc=["'][^"']*\/ca-move-top(?:-v3)?\.js[^"']*["'][^>]*><\/script>\s*/ig, "");
+  if (/<\/head>/i.test(html)) {
+    html = html.replace(/<\/head>/i, "  " + CA_TOP_SCRIPT + "\n</head>");
+  } else {
+    const headMatch = html.match(/<head(?:\s[^>]*)?>/i);
+    if (headMatch) html = html.replace(headMatch[0], headMatch[0] + "\n  " + CA_TOP_SCRIPT);
+  }
+  return rebuiltHtmlResponse(response, html);
+}
+
 async function injectOwnerDebug(response) {
   if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
   const contentType = response.headers.get("content-type") || "";
@@ -220,8 +241,9 @@ async function injectOwnerDebug(response) {
   return rebuiltHtmlResponse(response, rewritten);
 }
 
-async function prepareNavigationResponse(response, injectDebug) {
+async function prepareNavigationResponse(response, injectDebug, url) {
   let served = await injectEdgeToEdge(response);
+  served = await injectCurrentAffairsMoveTop(served, url);
   if (injectDebug) served = await injectOwnerDebug(served);
   return served;
 }
@@ -232,17 +254,17 @@ async function networkFirst(request) {
   const injectDebug = await shouldInjectOwnerDebug(url);
   try {
     const response = await fetch(request);
-    const served = await prepareNavigationResponse(response, injectDebug);
+    const served = await prepareNavigationResponse(response, injectDebug, url);
     if (served && served.ok && (served.type === "basic" || served.type === "default")) {
       cache.put(request, served.clone());
     }
     return served;
   } catch (error) {
     const cached = await matchCachedRequest(request);
-    if (cached) return prepareNavigationResponse(cached, injectDebug);
+    if (cached) return prepareNavigationResponse(cached, injectDebug, url);
     const offline = await caches.match("/offline.html");
     if (!offline) return new Response("Offline", { status: 503 });
-    return prepareNavigationResponse(offline, injectDebug);
+    return prepareNavigationResponse(offline, injectDebug, url);
   }
 }
 
@@ -353,6 +375,7 @@ self.addEventListener("fetch", (event) => {
   // Navigation chrome and Original Practice shared assets change often;
   // never let an old app-shell copy win on a normal refresh.
   if (url.pathname === "/home-nav.js" ||
+      url.pathname === "/ca-move-top-v3.js" ||
       url.pathname === "/ca-move-top.js" ||
       url.pathname === "/app-session.js" ||
       url.pathname === "/back-nav.js" ||
