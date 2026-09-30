@@ -1002,6 +1002,7 @@
   }
   function showReview(){
     historyReviewMode=true;closeSubmitModal();try{sessionStorage.setItem(VIEW_KEY,'review')}catch(e){}
+    armMixedQuizHistory();
     document.body.classList.remove('efp-mixed-quiz-active');document.documentElement.classList.remove('efp-mixed-quiz-active');
     $('quizView').hidden=true;$('setupView').hidden=true;$('finishView').hidden=true;$('reviewView').hidden=false;
     renderReview();window.scrollTo({top:0,behavior:'auto'})
@@ -1053,7 +1054,7 @@
       title.className='recent-set-title';title.textContent=labels.join(' + ')||'Mixed Practice';
       meta.className='recent-set-meta';
       var stamp=formatSetTime(saved.createdAt||saved.updatedAt);
-      if(saved.completed){var unattempted=Math.max(0,total-st.attempted);meta.textContent=stamp+' · '+total+' Q · '+st.correct+' correct · '+st.wrong+' wrong · '+unattempted+' unattempted · '+accuracy+'%'};
+      if(saved.completed){var unattempted=Math.max(0,total-st.attempted);meta.textContent=stamp+' · '+total+' Q · '+st.correct+' correct · '+st.wrong+' wrong · '+unattempted+' unattempted · '+accuracy+'%'}
       else meta.textContent=stamp+' · '+total+' Q · '+st.attempted+' attempted · Question '+Math.min(total,Math.max(1,(Number(saved.currentIndex)||0)+1));
       actions.className='recent-set-actions';
       btn.className='recent-set-action';btn.type='button';btn.textContent=saved.completed?'Review':'Resume';
