@@ -424,10 +424,10 @@
       "z-index:2147483600!important;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;" +
       "display:flex;align-items:center;justify-content:center;" +
       "border:1px solid rgba(246,217,138,.62);border-radius:50%;" +
-      "background:linear-gradient(145deg,rgba(10,18,32,.94),rgba(25,39,62,.94));" +
+      "background:linear-gradient(145deg,#0a1220,#19273e);" +
       "color:#f6d98a;font:800 22px/1 system-ui,-apple-system,'Segoe UI',sans-serif;" +
       "box-shadow:0 7px 22px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.09);" +
-      "-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);" +
+      
       "cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" +
       "opacity:0;visibility:hidden;pointer-events:none;transform:translateY(9px) scale(.96);" +
       "transition:opacity .18s ease,visibility .18s ease,transform .18s ease,background .18s ease,border-color .18s ease;" +
@@ -439,7 +439,7 @@
       "#" + MOVE_TOP_ID + ":active{transform:translateY(1px) scale(.97);}" +
       "#" + MOVE_TOP_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px;}" +
       "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + MOVE_TOP_ID + "{" +
-      "background:linear-gradient(145deg,rgba(12,24,43,.97),rgba(30,51,80,.96));" +
+      "background:linear-gradient(145deg,#10233c,#263d50);" +
       "border-color:rgba(196,146,38,.9);color:#ffd86b;" +
       "box-shadow:0 7px 20px rgba(15,23,42,.24),inset 0 1px 0 rgba(255,255,255,.13);" +
       "}" +
