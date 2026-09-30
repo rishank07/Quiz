@@ -830,6 +830,7 @@
     function isClearlyFinished() {
       var finishSelectors = [
         "#finishView",
+        "#reviewView",
         ".finish-view",
         ".finish-panel",
         "#resultScreen",
