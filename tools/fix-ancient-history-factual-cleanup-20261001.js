@@ -47,6 +47,17 @@ function setQuestion(p,n,en,hi) {
   getQ(p,n).q = {en,hi};
   changed.push(p+'#'+n+':question');
 }
+function setAnswerUsingExistingOption(p,n,en,hi,replacementEn,replacementHi) {
+  const q = getQ(p,n);
+  const oldEn = q.a.en, oldHi = q.a.hi;
+  if (!q.o.some(o => o.en === en && o.hi === hi))
+    throw new Error('Target correct option not found: '+p+' #'+n);
+  const old = q.o.find(o => o.en === oldEn || o.hi === oldHi);
+  if (!old) throw new Error('Old correct option not found: '+p+' #'+n);
+  old.en = replacementEn; old.hi = replacementHi;
+  q.a = {en,hi};
+  changed.push(p+'#'+n+':answer-existing');
+}
 
 // Jainism: first disciple / Ganadhara
 for (const n of [30,114]) {
@@ -99,10 +110,12 @@ setQuestion(
   "Which famous Ayurvedic text preserves teachings attributed to Dhanvantari?",
   "धन्वंतरि से संबद्ध शिक्षाओं को संरक्षित करने वाला प्रसिद्ध आयुर्वेदिक ग्रंथ कौन-सा है?"
 );
-setAnswerAndOption(
+setAnswerUsingExistingOption(
   '10. Gupta Empire', 136,
   'Sushruta Samhita',
-  'सुश्रुत संहिता'
+  'सुश्रुत संहिता',
+  'Ashtanga Hridaya',
+  'अष्टांग हृदय'
 );
 setExp(
   '10. Gupta Empire', 136,
