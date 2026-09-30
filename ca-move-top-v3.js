@@ -35,7 +35,11 @@
       var cs=window.getComputedStyle ? window.getComputedStyle(home) : null;
       var visible=r.width>0 && r.height>0 &&
         (!cs || (cs.display!=="none" && cs.visibility!=="hidden" && parseFloat(cs.opacity||"1")>0));
-      if(visible && r.bottom>0 && r.top<window.innerHeight && r.left>window.innerWidth*0.45){
+      if(visible &&
+         r.bottom>0 &&
+         r.top<window.innerHeight &&
+         r.top>window.innerHeight*0.45 &&
+         r.left>window.innerWidth*0.45){
         return Math.max(16,Math.ceil(window.innerHeight-r.top+12));
       }
     }catch(_){}
