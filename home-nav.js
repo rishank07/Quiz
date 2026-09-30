@@ -10,8 +10,8 @@
   var CA_RAPID_ENHANCER_ID = "efp-ca-rapid-search-enhancer";
   var MOVE_TOP_ID = "efp-move-top-button";
   var MOVE_TOP_STYLE_ID = "efp-move-top-style";
-  var MOVE_TOP_SHOW_AFTER = 520;
-  var MOVE_TOP_MIN_SCROLL_RANGE = 680;
+  var MOVE_TOP_SHOW_AFTER = 420;
+  var MOVE_TOP_MIN_SCROLL_RANGE = 300;
 
   function normalizedPath(pathname) {
     var path = pathname || "/";
@@ -83,7 +83,8 @@
   }
 
   function removeLegacyBackToTop() {
-    if (!isMindMapsSubjectDashboard()) return;
+    /* Shared Move to Top owns this job wherever home-nav is present.
+       Remove old page-specific arrows to avoid duplicate/overlapping controls. */
     var buttons = document.querySelectorAll(".back-to-top");
     for (var i = 0; i < buttons.length; i++) buttons[i].remove();
   }
@@ -494,7 +495,15 @@
     var root = document.scrollingElement || document.documentElement;
     var scrollTop = root ? root.scrollTop : (window.pageYOffset || 0);
     var range = getDocumentScrollRange();
-    var show = range >= MOVE_TOP_MIN_SCROLL_RANGE && scrollTop >= MOVE_TOP_SHOW_AFTER;
+
+    /* Adaptive threshold: on medium-length pages (including accordion/dropdown
+       pages) the control should still become useful before the user reaches
+       the very bottom; very long pages wait a little longer. */
+    var showAfter = Math.min(
+      MOVE_TOP_SHOW_AFTER,
+      Math.max(180, Math.round(range * 0.32))
+    );
+    var show = range >= MOVE_TOP_MIN_SCROLL_RANGE && scrollTop >= showAfter;
 
     positionMoveTopAboveHome(button);
     button.classList.toggle("efp-move-top-visible", show);
