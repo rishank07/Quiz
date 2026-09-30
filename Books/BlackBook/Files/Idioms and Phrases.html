@@ -391,7 +391,7 @@
         <div class="absolute left-5 top-1/2 -mt-[9px] text-slate-400"><i class="fa-solid fa-search text-xl"></i></div>
         <input type="text" id="search-input"
           class="w-full pl-14 pr-11 py-[15px] bg-white border border-slate-200 focus:border-blue-400 transition-all text-[15px] rounded-3xl shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-100"
-          placeholder="Search Idiom / Phrase... (Press /)">
+          placeholder="Search Idiom / Phrase... (Strict start match)">
         <button onclick="clearSearch()" class="absolute right-5 top-1/2 -mt-2.5 text-slate-400 hover:text-slate-600"><i
             class="fa-solid fa-times text-xl"></i></button>
       </div>
@@ -2298,12 +2298,10 @@
       if (!term) {
         currentFiltered = [...idiomsData];
       } else {
-        // Sirf Idiom column mein strict match, punctuation wale idioms bhi included.
-        const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`(?:^|\\W)${escapedTerm}(?:\\W|$)`, 'i');
-
+        // Strict start/prefix match only on the Idiom column.
+        // Example: "break" shows "Break a leg", but "and" won't match words in the middle.
         currentFiltered = idiomsData.filter(item => {
-          return regex.test(item.idiom);   // ← Sirf Idiom column
+          return item.idiom.toLowerCase().startsWith(term);
         });
       }
 
