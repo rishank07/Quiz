@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-2026-09-30-v225-ca-single-top";
+const CACHE_VERSION = "efp-pwa-2026-09-30-v226-blackbook-search";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260930mixedsubmitguard1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20260930r2"></script>';
@@ -41,7 +41,7 @@ const APP_SHELL = [
   "/search-index-main.js",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20260924instantreturn1",
-  "/homepage-fulltext-search.js?v=20260924androidperf1",
+  "/homepage-fulltext-search.js?v=20260930blackbooksearch1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
