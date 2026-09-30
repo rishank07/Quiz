@@ -2,9 +2,13 @@ const fs = require('fs');
 
 const file = 'Original Practice/History_Complete_Practice.html';
 const src = fs.readFileSync(file, 'utf8');
-const match = src.match(/<script id="master-data" type="application\\/json">\\s*([\\s\\S]*?)\\s*<\\/script>/);
-if (!match) throw new Error('master-data not found');
-const data = JSON.parse(match[1]);
+const startTag = '<script id="master-data" type="application/json">';
+const start = src.indexOf(startTag);
+const endTag = '</script>';
+const end = src.indexOf(endTag, start + startTag.length);
+if (start < 0 || end < 0) throw new Error('master-data not found');
+const rawJson = src.slice(start + startTag.length, end).trim();
+const data = JSON.parse(rawJson);
 const anc = data['Ancient History'];
 
 function getQ(prefix, n) {
@@ -125,8 +129,8 @@ if(total!==2216) throw new Error('Unexpected Ancient History question count: '+t
 if(changed.length!==65) throw new Error('Unexpected patch count: '+changed.length);
 
 const json=JSON.stringify(data);
-const replacement='<script id="master-data" type="application/json">\n'+json+'\n</script>';
-const out=src.slice(0,match.index)+replacement+src.slice(match.index+match[0].length);
-JSON.parse(out.match(/<script id="master-data" type="application\\/json">\\s*([\\s\\S]*?)\\s*<\\/script>/)[1]);
+const replacement=startTag+'\n'+json+'\n'+endTag;
+const out=src.slice(0,start)+replacement+src.slice(end+endTag.length);
+JSON.parse(json);
 fs.writeFileSync(file,out,'utf8');
 console.log('Patched '+changed.length+' Ancient History entries; validated '+total+' questions.');
