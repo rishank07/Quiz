@@ -9,7 +9,113 @@
   var BOOKMARK_KEY = "efp_bookmarks";
   var STYLE_ID = "efp-ca-bookmark-style";
   var FILTER_ID = "efpCaBookmarkFilter";
+  var MOVE_TOP_ID = "efp-move-top-button";
+  var MOVE_TOP_STYLE_ID = "efp-ca-move-top-style";
   var filterActive = false;
+
+  function injectMoveTopStyle() {
+    if (!document.head || document.getElementById(MOVE_TOP_STYLE_ID) || document.getElementById("efp-move-top-style")) return;
+    var style = document.createElement("style");
+    style.id = MOVE_TOP_STYLE_ID;
+    style.textContent =
+      "#" + MOVE_TOP_ID + "{" +
+      "position:fixed!important;right:max(12px,env(safe-area-inset-right))!important;" +
+      "bottom:var(--efp-move-top-bottom,max(14px,env(safe-area-inset-bottom)))!important;" +
+      "z-index:2147483600!important;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;" +
+      "display:flex;align-items:center;justify-content:center;border:1px solid rgba(246,217,138,.62);" +
+      "border-radius:50%;background:linear-gradient(145deg,rgba(10,18,32,.94),rgba(25,39,62,.94));" +
+      "color:#f6d98a;font:800 22px/1 system-ui,-apple-system,'Segoe UI',sans-serif;" +
+      "box-shadow:0 7px 22px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.09);" +
+      "-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);cursor:pointer;" +
+      "-webkit-tap-highlight-color:transparent;touch-action:manipulation;" +
+      "opacity:0;visibility:hidden;pointer-events:none;transform:translateY(9px) scale(.96);" +
+      "transition:opacity .18s ease,visibility .18s ease,transform .18s ease,background .18s ease,border-color .18s ease}" +
+      "#" + MOVE_TOP_ID + ".efp-move-top-visible{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0) scale(1)}" +
+      "#" + MOVE_TOP_ID + ":hover{background:linear-gradient(145deg,#172740,#263d60);border-color:#ffe6a0}" +
+      "#" + MOVE_TOP_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px}" +
+      "@media(max-width:639px){#" + MOVE_TOP_ID + "{width:42px;height:42px;min-width:42px;min-height:42px;font-size:21px}}" +
+      "@media(prefers-reduced-motion:reduce){#" + MOVE_TOP_ID + "{transition:none!important}}" +
+      "@media(print){#" + MOVE_TOP_ID + "{display:none!important}}";
+    document.head.appendChild(style);
+  }
+
+  function positionMoveTop(button) {
+    if (!button) return;
+    var home = document.getElementById("efp-home-button");
+    if (!home) {
+      button.style.removeProperty("--efp-move-top-bottom");
+      return;
+    }
+    var rect = home.getBoundingClientRect();
+    var cs = window.getComputedStyle ? window.getComputedStyle(home) : null;
+    var visible = rect.width > 0 && rect.height > 0 &&
+      (!cs || (cs.display !== "none" && cs.visibility !== "hidden" && Number(cs.opacity || 1) > 0));
+    if (visible && rect.top > window.innerHeight * 0.45 && rect.left > window.innerWidth * 0.45) {
+      var gap = window.innerWidth <= 639 ? 12 : 14;
+      button.style.setProperty("--efp-move-top-bottom", Math.max(14, Math.ceil(window.innerHeight - rect.top + gap)) + "px");
+    } else {
+      button.style.removeProperty("--efp-move-top-bottom");
+    }
+  }
+
+  function updateMoveTop() {
+    var button = document.getElementById(MOVE_TOP_ID);
+    if (!button) return;
+    var root = document.scrollingElement || document.documentElement;
+    var scrollTop = root ? root.scrollTop : (window.pageYOffset || 0);
+    var range = root ? Math.max(0, root.scrollHeight - window.innerHeight) : 0;
+    var showAfter = Math.min(420, Math.max(180, Math.round(range * 0.32)));
+    var show = range >= 300 && scrollTop >= showAfter;
+    positionMoveTop(button);
+    button.classList.toggle("efp-move-top-visible", show);
+    button.tabIndex = show ? 0 : -1;
+    button.setAttribute("aria-hidden", show ? "false" : "true");
+  }
+
+  function ensureMoveTop() {
+    /* If shared home-nav already installed the control, just keep its position
+       current. Otherwise Current Affairs content pages get the same behavior. */
+    var button = document.getElementById(MOVE_TOP_ID);
+    if (!button) {
+      injectMoveTopStyle();
+      button = document.createElement("button");
+      button.id = MOVE_TOP_ID;
+      button.type = "button";
+      button.tabIndex = -1;
+      button.setAttribute("aria-hidden", "true");
+      button.setAttribute("aria-label", "Move to top");
+      button.setAttribute("title", "Move to top");
+      button.innerHTML = "<span aria-hidden=\"true\">&#8593;</span>";
+      button.addEventListener("click", function () {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, left: 0, behavior: reduce ? "auto" : "smooth" });
+      });
+      document.documentElement.appendChild(button);
+    }
+
+    if (!window.__efpCaMoveTopListenersInstalled) {
+      window.__efpCaMoveTopListenersInstalled = true;
+      var queued = false;
+      var schedule = function () {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(function () {
+          queued = false;
+          updateMoveTop();
+        });
+      };
+      window.addEventListener("scroll", schedule, { passive: true });
+      window.addEventListener("resize", schedule, { passive: true });
+      window.addEventListener("orientationchange", schedule, { passive: true });
+      window.addEventListener("pageshow", schedule);
+      if (window.ResizeObserver && document.body) {
+        var ro = new ResizeObserver(schedule);
+        ro.observe(document.body);
+        window.__efpCaMoveTopResizeObserver = ro;
+      }
+    }
+    updateMoveTop();
+  }
 
   function safeParse(raw, fallback) {
     try {
@@ -238,6 +344,7 @@
     injectBookmarks();
     injectFilter();
     syncButtons();
+    ensureMoveTop();
     run();
   }
 
@@ -255,6 +362,7 @@
     injectBookmarks();
     injectFilter();
     syncButtons();
+    ensureMoveTop();
     if (targetId()) setTimeout(run, 0);
   });
 })();
