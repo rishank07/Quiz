@@ -147,7 +147,7 @@
   </style>
   <script defer src="/home-nav.js?v=20260925mixededge1"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
-  <script defer src="/back-nav.js?v=20260927cruxhier2"></script>
+  <script defer src="/back-nav.js?v=20260930mixedreviewback1"></script>
 
   <style>
     /* Original Practice visual parity — question, options and explanation.
@@ -1002,6 +1002,8 @@
   }
   function showReview(){
     historyReviewMode=true;closeSubmitModal();try{sessionStorage.setItem(VIEW_KEY,'review')}catch(e){}
+    var quizWarning=window.EFP_QUIZ_PROGRESS_WARNING;
+    if(quizWarning&&typeof quizWarning.disarm==='function')quizWarning.disarm();
     armMixedQuizHistory();
     document.body.classList.remove('efp-mixed-quiz-active');document.documentElement.classList.remove('efp-mixed-quiz-active');
     $('quizView').hidden=true;$('setupView').hidden=true;$('finishView').hidden=true;$('reviewView').hidden=false;
