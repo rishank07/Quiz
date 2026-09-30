@@ -373,7 +373,10 @@
     if (isMixedPracticePage()) {
       var mixedQuiz = document.getElementById("quizView");
       var mixedFinish = document.getElementById("finishView");
-      var mixedVisible = !!((mixedQuiz && !mixedQuiz.hidden) || (mixedFinish && !mixedFinish.hidden));
+      var mixedReview = document.getElementById("reviewView");
+      var mixedVisible = !!((mixedQuiz && !mixedQuiz.hidden) ||
+        (mixedFinish && !mixedFinish.hidden) ||
+        (mixedReview && !mixedReview.hidden));
       if (mixedVisible) {
         consumeBackEvent(event);
         if (typeof window.EFP_MIXED_PRACTICE_EXIT_TO_SETUP === "function") {
