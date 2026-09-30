@@ -8,6 +8,10 @@
   var CRUX_BACK_CLASS = "efp-crux-back-fallback";
   var MATHS_FIT_STYLE_ID = "efp-maths-speed-booster-fit";
   var CA_RAPID_ENHANCER_ID = "efp-ca-rapid-search-enhancer";
+  var MOVE_TOP_ID = "efp-move-top-button";
+  var MOVE_TOP_STYLE_ID = "efp-move-top-style";
+  var MOVE_TOP_SHOW_AFTER = 520;
+  var MOVE_TOP_MIN_SCROLL_RANGE = 680;
 
   function normalizedPath(pathname) {
     var path = pathname || "/";
@@ -393,6 +397,161 @@
     document.head.appendChild(style);
   }
 
+  function isMoveTopExcludedPage() {
+    var path = normalizedPath(window.location.pathname).toLowerCase();
+
+    /* Random Mixed Practice owns a special horizontal/session navigation UI. */
+    if (path === "/original practice/mixed_practice.html") return true;
+
+    /* PDF readers have their own zoom/reader chrome; do not add page scrolling UI. */
+    if (/\/viewer\.html$/.test(path)) return true;
+    if (document.querySelector(
+      'embed[type="application/pdf"],object[type="application/pdf"],iframe[src*=".pdf"],iframe[src*=".PDF"]'
+    )) return true;
+
+    return false;
+  }
+
+  function injectMoveTopStyle() {
+    if (!document.head || document.getElementById(MOVE_TOP_STYLE_ID)) return;
+    var style = document.createElement("style");
+    style.id = MOVE_TOP_STYLE_ID;
+    style.textContent =
+      "#" + MOVE_TOP_ID + "{" +
+      "position:fixed!important;right:max(12px,env(safe-area-inset-right))!important;" +
+      "bottom:var(--efp-move-top-bottom,max(14px,env(safe-area-inset-bottom)))!important;" +
+      "z-index:2147483600!important;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;" +
+      "display:flex;align-items:center;justify-content:center;" +
+      "border:1px solid rgba(246,217,138,.62);border-radius:50%;" +
+      "background:linear-gradient(145deg,rgba(10,18,32,.94),rgba(25,39,62,.94));" +
+      "color:#f6d98a;font:800 22px/1 system-ui,-apple-system,'Segoe UI',sans-serif;" +
+      "box-shadow:0 7px 22px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.09);" +
+      "-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);" +
+      "cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" +
+      "opacity:0;visibility:hidden;pointer-events:none;transform:translateY(9px) scale(.96);" +
+      "transition:opacity .18s ease,visibility .18s ease,transform .18s ease,background .18s ease,border-color .18s ease;" +
+      "}" +
+      "#" + MOVE_TOP_ID + ".efp-move-top-visible{" +
+      "opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0) scale(1);" +
+      "}" +
+      "#" + MOVE_TOP_ID + ":hover{background:linear-gradient(145deg,#172740,#263d60);border-color:#ffe6a0;}" +
+      "#" + MOVE_TOP_ID + ":active{transform:translateY(1px) scale(.97);}" +
+      "#" + MOVE_TOP_ID + ":focus-visible{outline:3px solid #ffd866;outline-offset:3px;}" +
+      "html:not(.dark):not(.efp-black):not(.efp-black-invert) #" + MOVE_TOP_ID + "{" +
+      "background:linear-gradient(145deg,rgba(12,24,43,.97),rgba(30,51,80,.96));" +
+      "border-color:rgba(196,146,38,.9);color:#ffd86b;" +
+      "box-shadow:0 7px 20px rgba(15,23,42,.24),inset 0 1px 0 rgba(255,255,255,.13);" +
+      "}" +
+      "@media(max-width:639px){#" + MOVE_TOP_ID + "{width:42px;height:42px;min-width:42px;min-height:42px;font-size:21px;}}" +
+      "@media(prefers-reduced-motion:reduce){#" + MOVE_TOP_ID + "{transition:none!important;}}" +
+      "@media(print){#" + MOVE_TOP_ID + "{display:none!important;}}";
+    document.head.appendChild(style);
+  }
+
+  function getDocumentScrollRange() {
+    var root = document.scrollingElement || document.documentElement;
+    if (!root) return 0;
+    return Math.max(0, root.scrollHeight - window.innerHeight);
+  }
+
+  function positionMoveTopAboveHome(button) {
+    if (!button) return;
+    var home = document.getElementById(BUTTON_ID);
+    var variable = "--efp-move-top-bottom";
+
+    if (!home) {
+      button.style.removeProperty(variable);
+      return;
+    }
+
+    var rect = home.getBoundingClientRect();
+    var computed = window.getComputedStyle ? window.getComputedStyle(home) : null;
+    var visible = rect.width > 0 && rect.height > 0 &&
+      (!computed || (computed.display !== "none" && computed.visibility !== "hidden" && Number(computed.opacity || 1) > 0));
+
+    /* Only stack above Home when Home is actually docked in the lower-right.
+       Desktop top-right Home therefore leaves Move to Top at its normal corner. */
+    if (visible && rect.top > window.innerHeight * 0.45 && rect.left > window.innerWidth * 0.45) {
+      var gap = window.innerWidth <= 639 ? 12 : 14;
+      var bottom = Math.max(14, Math.ceil(window.innerHeight - rect.top + gap));
+      button.style.setProperty(variable, bottom + "px");
+    } else {
+      button.style.removeProperty(variable);
+    }
+  }
+
+  function updateMoveTopButton() {
+    var button = document.getElementById(MOVE_TOP_ID);
+    if (!button) return;
+
+    if (isMoveTopExcludedPage()) {
+      button.classList.remove("efp-move-top-visible");
+      button.tabIndex = -1;
+      button.setAttribute("aria-hidden", "true");
+      return;
+    }
+
+    var root = document.scrollingElement || document.documentElement;
+    var scrollTop = root ? root.scrollTop : (window.pageYOffset || 0);
+    var range = getDocumentScrollRange();
+    var show = range >= MOVE_TOP_MIN_SCROLL_RANGE && scrollTop >= MOVE_TOP_SHOW_AFTER;
+
+    positionMoveTopAboveHome(button);
+    button.classList.toggle("efp-move-top-visible", show);
+    button.tabIndex = show ? 0 : -1;
+    button.setAttribute("aria-hidden", show ? "false" : "true");
+  }
+
+  function installMoveTopButton() {
+    if (!document.documentElement || !document.head || isMoveTopExcludedPage()) return;
+
+    injectMoveTopStyle();
+
+    var button = document.getElementById(MOVE_TOP_ID);
+    if (!button) {
+      button = document.createElement("button");
+      button.id = MOVE_TOP_ID;
+      button.type = "button";
+      button.tabIndex = -1;
+      button.setAttribute("aria-hidden", "true");
+      button.setAttribute("aria-label", "Move to top");
+      button.setAttribute("title", "Move to top");
+      button.innerHTML = "<span aria-hidden=\"true\">&#8593;</span>";
+      button.addEventListener("click", function () {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, left: 0, behavior: reduce ? "auto" : "smooth" });
+      });
+      document.documentElement.appendChild(button);
+    }
+
+    if (!window.__efpMoveTopListenersInstalled) {
+      window.__efpMoveTopListenersInstalled = true;
+      var queued = false;
+      var scheduleUpdate = function () {
+        if (queued) return;
+        queued = true;
+        window.requestAnimationFrame(function () {
+          queued = false;
+          updateMoveTopButton();
+        });
+      };
+
+      window.addEventListener("scroll", scheduleUpdate, { passive: true });
+      window.addEventListener("resize", scheduleUpdate, { passive: true });
+      window.addEventListener("orientationchange", scheduleUpdate, { passive: true });
+      window.addEventListener("pageshow", scheduleUpdate);
+
+      if (window.ResizeObserver) {
+        var ro = new ResizeObserver(scheduleUpdate);
+        if (document.documentElement) ro.observe(document.documentElement);
+        if (document.body) ro.observe(document.body);
+        window.__efpMoveTopResizeObserver = ro;
+      }
+    }
+
+    updateMoveTopButton();
+  }
+
   function installHomeButton() {
     if (!document.documentElement || !document.head || isMainHomePage()) return;
 
@@ -421,17 +580,24 @@
     document.documentElement.appendChild(link);
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", installHomeButton, { once: true });
-  } else {
+  function installSharedPageControls() {
     installHomeButton();
+    installMoveTopButton();
   }
 
-  window.addEventListener("pageshow", installHomeButton);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", installSharedPageControls, { once: true });
+  } else {
+    installSharedPageControls();
+  }
+
+  window.addEventListener("pageshow", installSharedPageControls);
 
   if (window.MutationObserver && document.documentElement) {
     var observer = new MutationObserver(function () {
       if (!document.getElementById(BUTTON_ID)) installHomeButton();
+      if (!document.getElementById(MOVE_TOP_ID)) installMoveTopButton();
+      else updateMoveTopButton();
       if (!isMainHomePage() && !document.getElementById(BACK_BUTTON_ID)) installDefaultBackButton();
       ensureCurrentAffairsRapidEnhancer();
       removeLegacyBackToTop();
