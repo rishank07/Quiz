@@ -73,48 +73,10 @@
   }
 
   function ensureMoveTop() {
-    /* If shared home-nav already installed the control, just keep its position
-       current. Otherwise Current Affairs content pages get the same behavior. */
-    var button = document.getElementById(MOVE_TOP_ID);
-    if (!button) {
-      injectMoveTopStyle();
-      button = document.createElement("button");
-      button.id = MOVE_TOP_ID;
-      button.type = "button";
-      button.tabIndex = -1;
-      button.setAttribute("aria-hidden", "true");
-      button.setAttribute("aria-label", "Move to top");
-      button.setAttribute("title", "Move to top");
-      button.innerHTML = "<span aria-hidden=\"true\">&#8593;</span>";
-      button.addEventListener("click", function () {
-        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        window.scrollTo({ top: 0, left: 0, behavior: reduce ? "auto" : "smooth" });
-      });
-      document.documentElement.appendChild(button);
-    }
-
-    if (!window.__efpCaMoveTopListenersInstalled) {
-      window.__efpCaMoveTopListenersInstalled = true;
-      var queued = false;
-      var schedule = function () {
-        if (queued) return;
-        queued = true;
-        requestAnimationFrame(function () {
-          queued = false;
-          updateMoveTop();
-        });
-      };
-      window.addEventListener("scroll", schedule, { passive: true });
-      window.addEventListener("resize", schedule, { passive: true });
-      window.addEventListener("orientationchange", schedule, { passive: true });
-      window.addEventListener("pageshow", schedule);
-      if (window.ResizeObserver && document.body) {
-        var ro = new ResizeObserver(schedule);
-        ro.observe(document.body);
-        window.__efpCaMoveTopResizeObserver = ro;
-      }
-    }
-    updateMoveTop();
+    /* Current Affairs uses only /ca-move-top-v3.js.
+       Remove any generic legacy control that may have been created by cached code. */
+    var legacy = document.getElementById(MOVE_TOP_ID);
+    if (legacy && legacy.parentNode) legacy.parentNode.removeChild(legacy);
   }
 
   function safeParse(raw, fallback) {
