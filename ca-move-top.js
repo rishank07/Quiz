@@ -1,116 +1,167 @@
-/* ExamFusion Prep — dedicated Current Affairs Move to Top */
+/* ExamFusion Prep — Current Affairs Move to Top (direct2)
+   Robust across browser scrolling, Android WebView and inner scrollers. */
 (function(){
   "use strict";
+
   var ID="efp-ca-direct-top";
-  var STYLE_ID="efp-ca-direct-top-style";
-  var SHOW_AFTER=220;
-  var MIN_RANGE=300;
+  var SHOW_AFTER=180;
+  var activeScroller=null;
+  var rafPending=false;
 
-  function scrollRoot(){
-    return document.scrollingElement || document.documentElement || document.body;
-  }
-
-  function scrollRange(){
-    var root=scrollRoot();
-    var h=Math.max(
-      root ? root.scrollHeight : 0,
-      document.documentElement ? document.documentElement.scrollHeight : 0,
-      document.body ? document.body.scrollHeight : 0
+  function mainY(){
+    var de=document.documentElement;
+    var b=document.body;
+    return Math.max(
+      window.pageYOffset||0,
+      window.scrollY||0,
+      de ? de.scrollTop||0 : 0,
+      b ? b.scrollTop||0 : 0
     );
-    return Math.max(0,h-window.innerHeight);
   }
 
-  function injectStyle(){
-    if(!document.head || document.getElementById(STYLE_ID)) return;
-    var s=document.createElement("style");
-    s.id=STYLE_ID;
-    s.textContent=
-      "#"+ID+"{position:fixed!important;right:max(14px,env(safe-area-inset-right))!important;"+
-      "bottom:var(--efp-ca-top-bottom,max(14px,env(safe-area-inset-bottom)))!important;"+
-      "z-index:2147483646!important;width:46px;height:46px;min-width:46px;min-height:46px;padding:0!important;"+
-      "display:flex!important;align-items:center;justify-content:center;border:1px solid rgba(246,217,138,.72)!important;"+
-      "border-radius:50%!important;background:linear-gradient(145deg,rgba(10,18,32,.97),rgba(28,43,67,.96))!important;"+
-      "color:#ffd86b!important;font:900 23px/1 system-ui,-apple-system,'Segoe UI',sans-serif!important;"+
-      "box-shadow:0 8px 24px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.10)!important;"+
-      "-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);cursor:pointer!important;"+
-      "opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px) scale(.96);"+
-      "transition:opacity .18s ease,visibility .18s ease,transform .18s ease!important}"+
-      "#"+ID+".show{opacity:1!important;visibility:visible!important;pointer-events:auto!important;transform:translateY(0) scale(1)!important}"+
-      "#"+ID+":hover{border-color:#ffe9a8!important;background:linear-gradient(145deg,#172740,#294464)!important}"+
-      "#"+ID+":focus-visible{outline:3px solid #ffd866!important;outline-offset:3px!important}"+
-      "@media(max-width:639px){#"+ID+"{width:42px;height:42px;min-width:42px;min-height:42px;font-size:21px!important}}"+
-      "@media(prefers-reduced-motion:reduce){#"+ID+"{transition:none!important}}"+
-      "@media(print){#"+ID+"{display:none!important}}";
-    document.head.appendChild(s);
+  function innerY(){
+    try{return activeScroller ? Number(activeScroller.scrollTop)||0 : 0;}catch(_){return 0;}
   }
 
-  function position(button){
+  function currentY(){
+    return Math.max(mainY(),innerY());
+  }
+
+  function homeSafeBottom(){
     var home=document.getElementById("efp-home-button");
-    if(!home){
-      button.style.removeProperty("--efp-ca-top-bottom");
-      return;
-    }
-    var rect=home.getBoundingClientRect();
-    var cs=window.getComputedStyle ? window.getComputedStyle(home) : null;
-    var visible=rect.width>0 && rect.height>0 &&
-      (!cs || (cs.display!=="none" && cs.visibility!=="hidden" && parseFloat(cs.opacity||"1")>0));
-    if(visible && rect.top>window.innerHeight*.45 && rect.left>window.innerWidth*.45){
-      button.style.setProperty("--efp-ca-top-bottom",
-        Math.max(14,Math.ceil(window.innerHeight-rect.top+(window.innerWidth<=639?12:14)))+"px");
-    }else{
-      button.style.removeProperty("--efp-ca-top-bottom");
-    }
+    if(!home) return 16;
+    try{
+      var r=home.getBoundingClientRect();
+      var cs=window.getComputedStyle ? window.getComputedStyle(home) : null;
+      var visible=r.width>0 && r.height>0 &&
+        (!cs || (cs.display!=="none" && cs.visibility!=="hidden" && parseFloat(cs.opacity||"1")>0));
+      if(visible && r.bottom>0 && r.top<window.innerHeight && r.left>window.innerWidth*0.45){
+        return Math.max(16,Math.ceil(window.innerHeight-r.top+12));
+      }
+    }catch(_){}
+    return 16;
+  }
+
+  function showState(btn,on){
+    btn.style.opacity=on?"1":"0";
+    btn.style.visibility=on?"visible":"hidden";
+    btn.style.pointerEvents=on?"auto":"none";
+    btn.style.transform=on?"translateY(0) scale(1)":"translateY(8px) scale(.96)";
   }
 
   function update(){
-    var b=document.getElementById(ID);
-    if(!b) return;
-    var root=scrollRoot();
-    var y=Math.max(window.pageYOffset||0, root ? root.scrollTop||0 : 0);
-    var range=scrollRange();
-    position(b);
-    b.classList.toggle("show", range>=MIN_RANGE && y>=SHOW_AFTER);
+    rafPending=false;
+    var btn=document.getElementById(ID);
+    if(!btn) return;
+    btn.style.bottom=homeSafeBottom()+"px";
+    showState(btn,currentY()>=SHOW_AFTER);
+  }
+
+  function schedule(){
+    if(rafPending) return;
+    rafPending=true;
+    (window.requestAnimationFrame||function(fn){return setTimeout(fn,16);})(update);
+  }
+
+  function onScroll(ev){
+    var t=ev && ev.target;
+    if(t && t!==document && t!==window && typeof t.scrollTop==="number"){
+      if(t.scrollTop>0) activeScroller=t;
+      else if(activeScroller===t) activeScroller=null;
+    }
+    schedule();
+  }
+
+  function scrollElementTop(el,smooth){
+    if(!el || el===window || el===document) return;
+    try{
+      if(typeof el.scrollTo==="function"){
+        el.scrollTo({top:0,left:0,behavior:smooth?"smooth":"auto"});
+      }else{
+        el.scrollTop=0;
+      }
+    }catch(_){
+      try{el.scrollTop=0;}catch(__){}
+    }
+  }
+
+  function goTop(){
+    var smooth=!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    scrollElementTop(activeScroller,smooth);
+    try{
+      window.scrollTo({top:0,left:0,behavior:smooth?"smooth":"auto"});
+    }catch(_){
+      try{window.scrollTo(0,0);}catch(__){}
+    }
+    try{if(document.documentElement) document.documentElement.scrollTop=0;}catch(_){}
+    try{if(document.body) document.body.scrollTop=0;}catch(_){}
+    activeScroller=null;
+    setTimeout(update,80);
+    setTimeout(update,350);
+  }
+
+  function build(){
+    var btn=document.getElementById(ID);
+    if(btn) return btn;
+
+    btn=document.createElement("button");
+    btn.id=ID;
+    btn.type="button";
+    btn.setAttribute("aria-label","Move to top");
+    btn.setAttribute("title","Move to top");
+    btn.textContent="↑";
+    btn.style.cssText=[
+      "position:fixed",
+      "right:16px",
+      "bottom:16px",
+      "z-index:2147483646",
+      "width:44px",
+      "height:44px",
+      "min-width:44px",
+      "min-height:44px",
+      "padding:0",
+      "margin:0",
+      "display:flex",
+      "align-items:center",
+      "justify-content:center",
+      "border:1px solid rgba(246,217,138,.78)",
+      "border-radius:50%",
+      "background:#142238",
+      "color:#ffd86b",
+      "font:900 22px/1 system-ui,-apple-system,'Segoe UI',sans-serif",
+      "box-shadow:0 7px 20px rgba(0,0,0,.34)",
+      "cursor:pointer",
+      "opacity:0",
+      "visibility:hidden",
+      "pointer-events:none",
+      "transform:translateY(8px) scale(.96)",
+      "transition:opacity .16s ease,transform .16s ease,visibility .16s ease",
+      "-webkit-tap-highlight-color:transparent",
+      "touch-action:manipulation"
+    ].join(";");
+    btn.addEventListener("click",goTop,{passive:true});
+    (document.body||document.documentElement).appendChild(btn);
+    return btn;
   }
 
   function install(){
-    if(!document.documentElement) return;
-    injectStyle();
-    var b=document.getElementById(ID);
-    if(!b){
-      b=document.createElement("button");
-      b.id=ID;
-      b.type="button";
-      b.setAttribute("aria-label","Move to top");
-      b.setAttribute("title","Move to top");
-      b.innerHTML='<span aria-hidden="true">&#8593;</span>';
-      b.addEventListener("click",function(){
-        var reduce=window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        window.scrollTo({top:0,left:0,behavior:reduce?"auto":"smooth"});
-      });
-      document.documentElement.appendChild(b);
+    build();
+    window.addEventListener("scroll",onScroll,{passive:true,capture:true});
+    document.addEventListener("scroll",onScroll,{passive:true,capture:true});
+    window.addEventListener("resize",schedule,{passive:true});
+    window.addEventListener("orientationchange",schedule,{passive:true});
+    window.addEventListener("pageshow",schedule,{passive:true});
+    if(window.visualViewport){
+      window.visualViewport.addEventListener("resize",schedule,{passive:true});
+      window.visualViewport.addEventListener("scroll",schedule,{passive:true});
     }
-    if(!window.__efpCaDirectTopInstalled){
-      window.__efpCaDirectTopInstalled=true;
-      var queued=false;
-      function schedule(){
-        if(queued) return;
-        queued=true;
-        requestAnimationFrame(function(){queued=false;update();});
-      }
-      addEventListener("scroll",schedule,{passive:true});
-      addEventListener("resize",schedule,{passive:true});
-      addEventListener("orientationchange",schedule,{passive:true});
-      addEventListener("pageshow",schedule);
-      if(window.ResizeObserver){
-        var ro=new ResizeObserver(schedule);
-        if(document.documentElement) ro.observe(document.documentElement);
-        if(document.body) ro.observe(document.body);
-        window.__efpCaDirectTopRO=ro;
-      }
-    }
+    window.__efpCaTopPoll=setInterval(update,500);
     update();
   }
 
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",install,{once:true});
-  else install();
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",install,{once:true});
+  }else{
+    install();
+  }
 })();
