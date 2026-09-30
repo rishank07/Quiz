@@ -8,6 +8,31 @@
   var activeScroller=null;
   var rafPending=false;
 
+  function isStandardCurrentAffairsPage(){
+    var p="";
+    try{p=decodeURIComponent(window.location.pathname||"");}catch(_){p=window.location.pathname||"";}
+    p=p.replace(/\\/g,"/").replace(/\/{2,}/g,"/");
+    return /^\/Current Affairs\/Topic Names\/(?:2025|2026)\/(?:Month Wise|Topic Wise)\/[^/]+\.html$/i.test(p);
+  }
+
+  function installRenderStabilityFix(){
+    if(!isStandardCurrentAffairsPage() || !document.head) return;
+    if(document.getElementById("efp-ca-render-stability-v1")) return;
+
+    var style=document.createElement("style");
+    style.id="efp-ca-render-stability-v1";
+    style.textContent=[
+      "html,body{background-color:#0b101e!important;overscroll-behavior-y:none!important;}",
+      ".question-card,.oneliner-card{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:#161f2f!important;}",
+      ".explanation-box{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:#0e1628!important;}",
+      ".star{animation:none!important;opacity:.38!important;transform:none!important;box-shadow:0 0 3px rgba(255,255,255,.28)!important;}",
+      "#efp-app-back-button,#efp-home-button,#efp-move-top-button,#efp-ca-direct-top{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}",
+      "@media(max-width:900px),(hover:none),(pointer:coarse){.question-card,.oneliner-card{box-shadow:0 6px 20px rgba(0,0,0,.22)!important;}.star-bg{contain:paint!important;}}"
+    ].join("");
+    document.head.appendChild(style);
+    document.documentElement.classList.add("efp-ca-render-stable");
+  }
+
   function mainY(){
     var de=document.documentElement;
     var b=document.body;
@@ -149,6 +174,7 @@
   }
 
   function install(){
+    installRenderStabilityFix();
     build();
     window.addEventListener("scroll",onScroll,{passive:true,capture:true});
     document.addEventListener("scroll",onScroll,{passive:true,capture:true});
