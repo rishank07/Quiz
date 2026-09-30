@@ -1,7 +1,7 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-2026-09-30-v212-mobile-browser-json-backup";
+const CACHE_VERSION = "efp-pwa-2026-09-30-v213-mixed-review-back";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260927idlehier1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260930mixedreviewback1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -30,9 +30,9 @@ const APP_SHELL = [
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
   "/home-nav.js?v=20260927idlehier1",
-  "/app-session.js?v=20260927idlehier1",
+  "/app-session.js?v=20260930mixedreviewback1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20260928quitparent2",
+  "/back-nav.js?v=20260930mixedreviewback1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js",
   "/search-worker.js",
