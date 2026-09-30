@@ -1023,7 +1023,19 @@
     var wasCompleted=!!state.completed,oldCompletedAt=state.completedAt;
     state.completed=true;state.submitted=true;state.completedAt=state.completedAt||Date.now();state.currentIndex=currentIndex;state.updatedAt=Date.now();ensureSetId(state);
     if(!upsertRecentSet(state)){state.completed=wasCompleted;if(oldCompletedAt)state.completedAt=oldCompletedAt;else delete state.completedAt;delete state.submitted;saveState();alert('Could not save this submitted set. Please try again.');return false}
-    removeActiveState(state.setId);showReview();return true
+    removeActiveState(state.setId);
+
+    // Answering a live quiz creates app-session's synthetic quit/back guard.
+    // A submitted Review must no longer own that guard. Remove it first so
+    // Review -> Mixed Sets / universal Back reaches the builder in one step,
+    // and a New Set started from Review gets a clean history stack.
+    var quizWarning=window.EFP_QUIZ_PROGRESS_WARNING;
+    if(quizWarning&&typeof quizWarning.releaseBackGuard==='function'){
+      quizWarning.releaseBackGuard(function(){showReview()});
+      return true
+    }
+    if(quizWarning&&typeof quizWarning.disarm==='function')quizWarning.disarm();
+    showReview();return true
   }
   $('nextBtn').onclick=function(){
     if(currentIndex<currentQuestions.length-1){currentIndex++;renderQuestion();focusQuestionAfterStep();return}
