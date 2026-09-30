@@ -14036,9 +14036,7 @@
       if (!term) {
         currentFiltered = [...vocabData];
       } else {
-        const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`(?:^|\\W)${escaped}(?:\\W|$)`, 'i');
-        currentFiltered = vocabData.filter(item => regex.test(item.word));
+        currentFiltered = vocabData.filter(item => item.word.toLowerCase().includes(term));
       }
       renderActiveView(currentFiltered);
       document.getElementById('filtered-count').textContent = currentFiltered.length.toLocaleString();
