@@ -3533,9 +3533,7 @@
       if (!term) {
         currentFiltered = [...spellingData];
       } else {
-        const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`(?:^|\\W)${escaped}(?:\\W|$)`, 'i');
-        currentFiltered = spellingData.filter(item => regex.test(item.word));
+        currentFiltered = spellingData.filter(item => item.word.toLowerCase().includes(term));
       }
       renderActiveView(currentFiltered);
       document.getElementById('filtered-count').textContent = currentFiltered.length.toLocaleString();
