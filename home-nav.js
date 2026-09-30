@@ -401,6 +401,9 @@
   function isMoveTopExcludedPage() {
     var path = normalizedPath(window.location.pathname).toLowerCase();
 
+    /* Current Affairs has its own dedicated v3 move-to-top control. */
+    if (path.indexOf("/current affairs/") === 0) return true;
+
     /* Random Mixed Practice owns a special horizontal/session navigation UI. */
     if (path === "/original practice/mixed_practice.html") return true;
 
