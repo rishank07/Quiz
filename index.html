@@ -288,102 +288,52 @@
       place-items: center;
       flex: 0 0 auto;
       isolation: isolate;
-      animation: efpLogoFloat 5.2s cubic-bezier(.45,0,.55,1) infinite;
+      animation: efpLogoFloat 5.6s cubic-bezier(.45,0,.55,1) infinite;
       will-change: transform;
     }
 
-    /* Premium solar crown: soft rays, a moving gold ring and a breathing aura. */
-    .logo-rays,
-    .logo-halo,
-    .logo-orbit,
-    .logo-glint {
+    /* Realistic solar corona: no cartoon spokes, only dim → bright → dim light bloom. */
+    .logo-corona,
+    .logo-corona-soft {
       position: absolute;
+      inset: 50% auto auto 50%;
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
       pointer-events: none;
-    }
-
-    .logo-rays {
-      inset: -20px;
-      border-radius: 50%;
-      z-index: -3;
-      opacity: .64;
-      background:
-        repeating-conic-gradient(
-          from -7deg,
-          transparent 0deg 10deg,
-          rgba(255, 230, 154, .15) 10.5deg 11.2deg,
-          rgba(246, 199, 86, .48) 11.4deg 12.2deg,
-          transparent 13deg 24deg
-        );
-      -webkit-mask: radial-gradient(circle, transparent 0 47%, #000 54% 100%);
-      mask: radial-gradient(circle, transparent 0 47%, #000 54% 100%);
-      animation: efpLogoRays 32s linear infinite, efpLogoRayPulse 5.2s ease-in-out infinite;
-      will-change: transform, opacity;
-    }
-
-    .logo-halo {
-      inset: -14px;
-      border-radius: 50%;
-      z-index: -2;
-      background:
-        radial-gradient(circle,
-          rgba(255, 242, 187, .32) 0 35%,
-          rgba(246, 199, 86, .20) 45%,
-          rgba(246, 199, 86, .08) 58%,
-          transparent 74%);
-      filter: blur(4px);
-      opacity: .72;
-      animation: efpLogoGlow 4.4s ease-in-out infinite;
-      will-change: transform, opacity;
-    }
-
-    .logo-orbit {
-      inset: -9px;
-      border-radius: 50%;
-      z-index: -1;
-      opacity: .9;
-      background:
-        conic-gradient(
-          from 0deg,
-          transparent 0deg 28deg,
-          rgba(255, 247, 207, .95) 42deg,
-          rgba(246, 199, 86, .76) 55deg,
-          transparent 72deg 205deg,
-          rgba(225, 164, 52, .28) 232deg,
-          transparent 255deg 360deg
-        );
-      -webkit-mask: radial-gradient(circle, transparent 0 72%, #000 74% 79%, transparent 81% 100%);
-      mask: radial-gradient(circle, transparent 0 72%, #000 74% 79%, transparent 81% 100%);
-      animation: efpLogoOrbit 8.5s linear infinite;
-      will-change: transform;
-    }
-
-    .logo-glint {
-      width: 6px;
-      height: 6px;
-      top: -3px;
-      right: 4px;
-      z-index: 4;
-      border-radius: 50%;
-      background: #fff9dd;
-      box-shadow: 0 0 7px 2px rgba(255, 214, 102, .58);
-      opacity: 0;
-      animation: efpLogoGlint 6.2s ease-in-out infinite;
-      will-change: transform, opacity;
-    }
-
-    .logo-glint::before,
-    .logo-glint::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, transparent, rgba(255, 238, 170, .95), transparent);
       transform: translate(-50%, -50%);
     }
 
-    .logo-glint::before { width: 18px; height: 1px; }
-    .logo-glint::after { width: 1px; height: 18px; }
+    .logo-corona {
+      z-index: -1;
+      width: 126%;
+      background:
+        radial-gradient(circle,
+          rgba(255, 252, 224, .68) 0 32%,
+          rgba(255, 224, 125, .50) 41%,
+          rgba(246, 186, 54, .27) 53%,
+          rgba(226, 139, 21, .10) 64%,
+          transparent 76%);
+      filter: blur(4px);
+      opacity: .24;
+      animation: efpSolarCorona 4.8s ease-in-out infinite;
+      will-change: transform, opacity, filter;
+    }
+
+    .logo-corona-soft {
+      z-index: -2;
+      width: 154%;
+      background:
+        radial-gradient(circle,
+          rgba(255, 222, 118, .22) 0 33%,
+          rgba(241, 168, 39, .14) 47%,
+          rgba(216, 119, 14, .07) 60%,
+          transparent 76%);
+      filter: blur(10px);
+      opacity: .16;
+      animation: efpSolarBloom 4.8s ease-in-out infinite;
+      will-change: transform, opacity, filter;
+    }
 
     .logo {
       position: relative;
@@ -395,42 +345,59 @@
       display: block;
       padding: 3px;
       background: var(--bg-mid);
-      border: 1px solid rgba(246, 217, 138, .62);
+      border: 1px solid rgba(246, 217, 138, .50);
       box-shadow:
         0 10px 26px rgba(0, 0, 0, .42),
-        0 0 0 2px rgba(246, 217, 138, .08),
-        0 0 24px rgba(246, 199, 86, .24);
+        0 0 10px rgba(246, 199, 86, .10);
+      animation: efpLogoSurfaceGlow 4.8s ease-in-out infinite;
+      will-change: box-shadow, filter;
     }
 
     @keyframes efpLogoFloat {
       0%, 100% { transform: translate3d(0, 0, 0); }
-      50% { transform: translate3d(0, -3.5px, 0); }
+      50% { transform: translate3d(0, -4px, 0); }
     }
 
-    @keyframes efpLogoRays {
-      to { transform: rotate(360deg); }
+    @keyframes efpSolarCorona {
+      0%, 100% {
+        opacity: .20;
+        filter: blur(4px);
+        transform: translate(-50%, -50%) scale(.92);
+      }
+      50% {
+        opacity: .94;
+        filter: blur(6px);
+        transform: translate(-50%, -50%) scale(1.11);
+      }
     }
 
-    @keyframes efpLogoRayPulse {
-      0%, 100% { opacity: .48; }
-      50% { opacity: .74; }
+    @keyframes efpSolarBloom {
+      0%, 100% {
+        opacity: .10;
+        filter: blur(10px);
+        transform: translate(-50%, -50%) scale(.88);
+      }
+      50% {
+        opacity: .66;
+        filter: blur(14px);
+        transform: translate(-50%, -50%) scale(1.18);
+      }
     }
 
-    @keyframes efpLogoOrbit {
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes efpLogoGlow {
-      0%, 100% { transform: scale(.95); opacity: .50; }
-      50% { transform: scale(1.08); opacity: .82; }
-    }
-
-    @keyframes efpLogoGlint {
-      0%, 54%, 100% { opacity: 0; transform: scale(.25) rotate(0deg); }
-      60% { opacity: .95; transform: scale(1.05) rotate(18deg); }
-      66% { opacity: .25; transform: scale(.72) rotate(36deg); }
-      72% { opacity: .92; transform: scale(1.2) rotate(50deg); }
-      79% { opacity: 0; transform: scale(.35) rotate(70deg); }
+    @keyframes efpLogoSurfaceGlow {
+      0%, 100% {
+        filter: brightness(.96);
+        box-shadow:
+          0 10px 26px rgba(0, 0, 0, .42),
+          0 0 10px rgba(246, 199, 86, .10);
+      }
+      50% {
+        filter: brightness(1.06);
+        box-shadow:
+          0 11px 28px rgba(0, 0, 0, .38),
+          0 0 16px rgba(255, 224, 128, .56),
+          0 0 32px rgba(241, 166, 36, .34);
+      }
     }
 
     /* Animated day/night theme toggle */
@@ -1630,10 +1597,8 @@
     <header class="hero">
       <div class="logo-row">
         <span class="logo-sunburst">
-          <span class="logo-rays" aria-hidden="true"></span>
-          <span class="logo-halo" aria-hidden="true"></span>
-          <span class="logo-orbit" aria-hidden="true"></span>
-          <span class="logo-glint" aria-hidden="true"></span>
+          <span class="logo-corona-soft" aria-hidden="true"></span>
+          <span class="logo-corona" aria-hidden="true"></span>
           <img src="./pwa-icons/icon-192.png" alt="Exam Fusion Prep Logo" class="logo" width="192" height="192"
             decoding="async" fetchpriority="high">
         </span>
