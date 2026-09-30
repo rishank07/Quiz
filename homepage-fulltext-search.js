@@ -364,8 +364,46 @@
     if (holder) holder.textContent = "(" + count + ")";
   }
 
+  function rankBlackbookHits(query, hits) {
+    hits = Array.isArray(hits) ? hits : [];
+    var normalize = (typeof efNormalizeSearchText === "function")
+      ? efNormalizeSearchText
+      : function (value) { return String(value == null ? "" : value).toLowerCase().replace(/\s+/g, " ").trim(); };
+    var q = normalize(query);
+    if (!q) return hits;
+
+    function wordStart(haystack, needle) {
+      return haystack === needle ||
+        haystack.indexOf(needle + " ") === 0 ||
+        haystack.indexOf(" " + needle + " ") !== -1 ||
+        haystack.lastIndexOf(" " + needle) === haystack.length - needle.length - 1;
+    }
+
+    function priority(hit) {
+      var title = normalize(hit && hit.t);
+      var breadcrumb = normalize(hit && hit.b);
+      var snippet = normalize(hit && hit.x);
+      if (title === q) return 0;
+      if (title.indexOf(q) === 0) return 1;
+      if (wordStart(title, q)) return 2;
+      if (title.indexOf(q) !== -1) return 3;
+      if (wordStart(breadcrumb, q)) return 4;
+      if (breadcrumb.indexOf(q) !== -1) return 5;
+      if (wordStart(snippet, q)) return 6;
+      if (snippet.indexOf(q) !== -1) return 7;
+      return 8;
+    }
+
+    return hits.map(function (hit, index) {
+      return { hit: hit, index: index, priority: priority(hit) };
+    }).sort(function (a, b) {
+      return a.priority - b.priority || a.index - b.index;
+    }).map(function (item) { return item.hit; });
+  }
+
   function appendHits(source, query, hits, seen) {
     hits = Array.isArray(hits) ? hits : [];
+    if (source && source.id === "blackbook") hits = rankBlackbookHits(query, hits);
     var added = 0;
     hits.forEach(function (hit) {
       if (added >= source.limit) return;
