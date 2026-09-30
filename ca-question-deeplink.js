@@ -371,9 +371,9 @@
 /* CA move-to-top hard loader — ensures refreshed runtime even on cached page HTML. */
 (function(){
   try{
-    if(document.querySelector('script[src*="/ca-move-top-v3.js?v=20260930r1"]')) return;
+    if(document.querySelector('script[src*="/ca-move-top-v3.js?v=20260930r2"]')) return;
     var s=document.createElement("script");
-    s.src="/ca-move-top-v3.js?v=20260930r1";
+    s.src="/ca-move-top-v3.js?v=20260930r2";
     s.defer=true;
     (document.head||document.documentElement).appendChild(s);
   }catch(_){ }
