@@ -1219,22 +1219,10 @@
       });
     }
 
-    function isBackForwardNavigation() {
-      try {
-        const nav = performance.getEntriesByType("navigation")[0];
-        if (nav) return nav.type === "back_forward";
-        if (performance.navigation) return performance.navigation.type === 2;
-      } catch (e) { }
-      return false;
-    }
-
-    // Fresh visit / reload => always start closed. Only a genuine
-    // back/forward navigation restores whatever was open before.
-    if (isBackForwardNavigation()) {
-      restoreAccordionState();
-    } else {
-      sessionStorage.removeItem('caAccordionState');
-    }
+    // Keep the user's manual accordion choices for this tab/session.
+    // Returning from any Current Affairs page (browser Back, custom Back,
+    // reload, or normal navigation) must not silently collapse the dropdown.
+    restoreAccordionState();
 
     // =======================================
     // Loading Animation & Persistent State
@@ -1243,6 +1231,9 @@
       event.preventDefault();
       const linkEl = event.currentTarget;
       const linkUrl = linkEl.href;
+
+      // Persist the exact open/closed hierarchy before leaving this index.
+      saveAccordionState();
 
       // Loading animation effect
       if (!linkEl.dataset.original) {
@@ -1258,8 +1249,10 @@
     }
 
     // Restore text states when returning to page
-    window.addEventListener("pageshow", function (e) {
-      if (e.persisted) restoreAccordionState();
+    window.addEventListener("pageshow", function () {
+      // pageshow also fires for BFCache restores; always re-apply the user's
+      // saved state so no navigation path can auto-collapse the dropdown.
+      restoreAccordionState();
       document.querySelectorAll("a[data-original]").forEach(function (a) {
         a.innerHTML = a.dataset.original;
         a.style.opacity = "1";
