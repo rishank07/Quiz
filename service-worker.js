@@ -49,7 +49,7 @@ const APP_SHELL = [
   "/Original%20Practice/index.html",
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
-  "/Original%20Practice/original-practice.js?v=20261001modern13-0350d3473fb2",
+  "/Original%20Practice/original-practice.js?v=20261001modern13-2cb05d301dae",
   "/Original%20Practice/english-practice.js?v=20261001ophistory1",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
