@@ -18,6 +18,8 @@
       ".efp-rp-score-badges{display:none}" +
       "#scoreTxt.ef-native-score{min-width:0!important;max-width:100%!important}" +
       ".ef-native-score-chip{min-width:0;box-sizing:border-box}" +
+      /* Opaque sticky surfaces avoid repeated backdrop repaints on WebViews. */
+      ".toolbar{background:var(--bg,#f6f2e9)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
       /* On phones, keep only the score row sticky.  The legacy quiz pages put
        * the score, bookmark controls and section pills inside one sticky
        * toolbar, which consumes too much of the viewport while answering.
@@ -31,8 +33,8 @@
       ".toolbar>.barcard>.row:first-child,.toolbar>.bar>.row:first-child{" +
       "position:sticky;top:8px;z-index:130;margin:10px 0 8px!important;padding:7px 8px;gap:4px;" +
       "display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:nowrap!important;" +
-      "background:rgba(255,255,255,.96);border:1px solid rgba(184,134,63,.22);border-radius:12px;" +
-      "box-shadow:0 3px 14px rgba(26,31,46,.10);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}" +
+      "background:var(--card,#fff);border:1px solid rgba(184,134,63,.22);border-radius:12px;" +
+      "box-shadow:0 3px 14px rgba(26,31,46,.10);-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
       ".toolbar>.barcard>.row:first-child .pct,.toolbar>.bar>.row:first-child .pct{display:none!important}" +
       ".efp-rp-score-badges{display:none!important}" +
       ".toolbar>.barcard>.row:first-child .progress,.toolbar>.bar>.row:first-child .progress{" +
@@ -68,7 +70,7 @@
       ".toolbar>.barcard>.section-nav,.toolbar>.bar>.section-nav{padding:8px 10px 10px;background:var(--card,#fff);" +
       "border:1px solid var(--line,#d9d5cc);border-top:0;border-radius:0 0 14px 14px}" +
       "body.dark .toolbar>.barcard>.row:first-child,body.dark .toolbar>.bar>.row:first-child{" +
-      "background:rgba(24,34,49,.96);border-color:#314052;box-shadow:none}" +
+      "background:#182231;border-color:#314052;box-shadow:none}" +
       "body.dark .efp-rp-score-total{background:#263445;color:#e5e7eb}" +
       "body.dark .efp-rp-score-correct{background:#123d32;color:#8be0bd}" +
       "body.dark .efp-rp-score-wrong{background:#4a2229;color:#ffacb6}" +
@@ -89,21 +91,29 @@
     var row = bookmark.closest ? bookmark.closest(".row") : bookmark.parentElement;
     if (!row) row = bookmark;
     var naturalTop = 0;
+    var expandedHeight = 0;
+    var hidden = false;
     var ticking = false;
-
-    function documentTop(el) {
-      var top = 0;
-      var node = el;
-      while (node) {
-        top += Number(node.offsetTop) || 0;
-        node = node.offsetParent;
-      }
-      return top;
-    }
+    // Measure an in-flow marker, never the offsetTop of a sticky element.
+    // Keep the removed bookmark row's space outside the sticky surface so
+    // scroll anchoring cannot move the heading and retrigger this transition.
+    var marker = document.createElement("div");
+    var spacer = document.createElement("div");
+    marker.setAttribute("aria-hidden", "true");
+    spacer.setAttribute("aria-hidden", "true");
+    marker.style.cssText = "height:0;margin:0;padding:0;border:0;";
+    spacer.style.cssText = "height:0;margin:0;padding:0;border:0;overflow-anchor:none;";
+    toolbar.parentNode.insertBefore(marker, toolbar);
+    toolbar.parentNode.insertBefore(spacer, toolbar.nextSibling);
 
     function measure() {
-      naturalTop = documentTop(toolbar);
-      sync();
+      row.style.removeProperty("display");
+      spacer.style.height = "0px";
+      hidden = false;
+      expandedHeight = toolbar.getBoundingClientRect().height;
+      naturalTop = marker.getBoundingClientRect().top + (window.pageYOffset || 0) +
+        (parseFloat(getComputedStyle(toolbar).marginTop) || 0);
+      apply();
     }
 
     function apply() {
@@ -112,8 +122,15 @@
       var y = window.pageYOffset || document.documentElement.scrollTop || 0;
       var stuck = desktop && y >= Math.max(0, naturalTop - 1);
 
-      if (stuck) row.style.setProperty("display", "none", "important");
-      else row.style.removeProperty("display");
+      if (stuck === hidden) return;
+      hidden = stuck;
+      if (stuck) {
+        row.style.setProperty("display", "none", "important");
+        spacer.style.height = Math.max(0, expandedHeight - toolbar.getBoundingClientRect().height) + "px";
+      } else {
+        row.style.removeProperty("display");
+        spacer.style.height = "0px";
+      }
     }
 
     function sync() {
@@ -126,6 +143,7 @@
     window.addEventListener("scroll", sync, { passive: true });
     window.addEventListener("resize", measure, { passive: true });
     window.addEventListener("load", measure, { once: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
   }
 
   function installOriginalPracticeScoreLook() {

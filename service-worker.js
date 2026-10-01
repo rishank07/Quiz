@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261001navbuttons1";
+const CACHE_VERSION = "efp-pwa-20261001casticky1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -36,6 +36,7 @@ const APP_SHELL = [
   "/back-parent-map.js",
   "/back-nav.js?v=20261001homesearchapp2",
   "/progress.js?v=20261001caback1",
+  "/rapid-practice-deeplink.js?v=20261001casticky1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js",
   "/section-search-ui.js?v=20261001searchreturn2",
@@ -326,7 +327,7 @@ async function freshCurrentAffairsBookmarkAsset() {
 }
 
 async function freshRapidPracticeAsset() {
-  const currentAsset = "/rapid-practice-deeplink.js?v=20260927-section-ranges";
+  const currentAsset = "/rapid-practice-deeplink.js?v=20261001casticky1";
   const cache = await caches.open(CACHE_VERSION);
   try {
     const response = await fetch(currentAsset, { cache: "no-store" });
