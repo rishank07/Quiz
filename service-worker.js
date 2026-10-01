@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261001sectionsearchlazy1";
+const CACHE_VERSION = "efp-pwa-20261001searchreturn2";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260930mixedsubmitguard1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20260930r2"></script>';
@@ -34,14 +34,14 @@ const APP_SHELL = [
   "/home-nav.js?v=20260930movetop3",
   "/app-session.js?v=20260930mixedsubmitguard1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20261001searchreturn1",
+  "/back-nav.js?v=20261001searchreturn2",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js",
-  "/section-search-ui.js?v=20261001lazy1",
+  "/section-search-ui.js?v=20261001searchreturn2",
   "/search-worker.js",
   "/search-index-main.js",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
-  "/homepage-search-ui.js?v=20260924instantreturn1",
+  "/homepage-search-ui.js?v=20261001searchreturn2",
   "/homepage-fulltext-search.js?v=20260930blackbooksearch1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
@@ -56,9 +56,9 @@ const APP_SHELL = [
   "/Crux-Tricks/viewer.html",
   "/Crux-Tricks/my-pages.html",
   "/Crux-Tricks/crux-manifest.js",
-  "/Crux-Tricks/crux-search-route.js?v=20260927cruxhier1",
+  "/Crux-Tricks/crux-search-route.js?v=20261001searchreturn2",
   "/Crux-Tricks/crux-tricks.css",
-  "/Crux-Tricks/crux-tricks.js?v=20260924cruxback1",
+  "/Crux-Tricks/crux-tricks.js?v=20261001searchreturn2",
   "/Crux-Tricks/viewer.css",
   "/Crux-Tricks/viewer-v2.js?v=20260929prozoom1",
 ];

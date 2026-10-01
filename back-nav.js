@@ -6,14 +6,41 @@
   if (!/^\/(?:index\.html)?$/i.test(location.pathname) && !document.getElementById("efp-section-search-ui")) {
     var searchUi = document.createElement("script");
     searchUi.id = "efp-section-search-ui";
-    searchUi.src = "/section-search-ui.js?v=20261001lazy1";
+    searchUi.src = "/section-search-ui.js?v=20261001searchreturn2";
     searchUi.async = false;
     document.head.appendChild(searchUi);
   }
   var PARAM = "efSearchReturn", RESTORE = "efSearchRestore";
   var PREFIX = "efp_search_return_v1:";
   var INPUTS = 'input[type="search"], input[id*="earch"]';
-  var active = null, restoring = false;
+  var active = null, restoring = false, restoredToken = "";
+  var RESULTS = '.efp-op-search-results, #results, #searchResults, #efContentResults, #efBlackbookResults, #fullTextResults, #efp-ca-rapid-exact-results';
+  // Preserve presentation only: replacing menus would discard their listeners.
+  var PRESENTATION = '[id], .menu, .card, .nested, .sub-nested, .submenu a';
+
+  function presentation(node) {
+    return { hidden: node.hidden, className: node.getAttribute("class"), style: node.getAttribute("style") };
+  }
+  function applyPresentation(node, saved) {
+    node.hidden = saved.hidden;
+    ["class", "style"].forEach(function (name) {
+      var value = name === "class" ? saved.className : saved.style;
+      if (value == null) node.removeAttribute(name); else node.setAttribute(name, value);
+    });
+  }
+  function nodePath(node) {
+    var steps = [];
+    while (node && !node.id && node !== document.body) {
+      steps.unshift(Array.prototype.indexOf.call(node.parentElement.children, node));
+      node = node.parentElement;
+    }
+    return { root: node && node.id, steps: steps };
+  }
+  function nodeAt(path) {
+    var node = path.root ? document.getElementById(path.root) : document.body;
+    path.steps.forEach(function (index) { node = node && node.children[index]; });
+    return node;
+  }
 
   function read(token) {
     try {
@@ -37,9 +64,10 @@
   }
   function snapshot() {
     var inputs = fields();
-    if (!inputs.some(function (input) {
+    var queryInput = inputs.find(function (input) {
       return input.value.trim() && !input.closest('[hidden]');
-    })) return null;
+    });
+    if (!queryInput) return null;
     var token = Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
     var source = new URL(location.href);
     source.searchParams.delete(RESTORE);
@@ -51,15 +79,30 @@
       filters: Array.prototype.slice.call(document.querySelectorAll('select[id]')).map(function (select) {
         return { id: select.id, value: select.value };
       }),
-      scroll: window.scrollY || 0
+      scroll: window.scrollY || 0,
+      searchTop: Math.max(0, (window.scrollY || 0) + queryInput.getBoundingClientRect().top - 110),
+      results: Array.prototype.map.call(document.querySelectorAll(RESULTS), function (node, index) {
+        return { index: index, html: node.innerHTML, view: presentation(node), scroll: node.scrollTop };
+      }),
+      batches: window.EFP_SECTION_SEARCH ? window.EFP_SECTION_SEARCH.snapshot() : [],
+      presentation: Array.prototype.map.call(document.querySelectorAll(PRESENTATION), function (node, index) {
+        return { path: nodePath(node), tag: node.tagName, view: presentation(node) };
+      }).filter(function (field) { return !/^(SCRIPT|STYLE|HTML|BODY)$/.test(field.tag); })
     };
     try {
-      sessionStorage.setItem(PREFIX + token, JSON.stringify(saved));
-      history.replaceState(Object.assign({}, history.state, { efpSearchSnapshot: token }), "", location.href);
       // Only the newest 24 trips are needed; do not fill session storage with
       // abandoned search visits. Active trips survive refresh and app resume.
       var keys = Object.keys(sessionStorage).filter(function (key) { return key.indexOf(PREFIX) === 0; }).sort();
-      while (keys.length > 24) sessionStorage.removeItem(keys.shift());
+      while (keys.length >= 24) sessionStorage.removeItem(keys.shift());
+      var serialized = JSON.stringify(saved);
+      for (;;) {
+        try { sessionStorage.setItem(PREFIX + token, serialized); break; }
+        catch (error) {
+          if (!keys.length) throw error;
+          sessionStorage.removeItem(keys.shift());
+        }
+      }
+      history.replaceState(Object.assign({}, history.state, { efpSearchSnapshot: token }), "", location.href);
     } catch (_) { return null; }
     return saved;
   }
@@ -103,7 +146,7 @@
         (history.state && history.state.efpSearchSnapshot);
     } catch (_) {}
     var saved = read(token);
-    if (!saved) return;
+    if (!saved || restoredToken === token) return;
     restoring = true;
     // Crux stores its source/subject/chapter pane in managed History state.
     // Reinstate that pane before rebuilding its search results.
@@ -113,29 +156,48 @@
     }
     saved.filters.forEach(function (field) {
       var select = document.getElementById(field.id);
-      if (select && select.value !== field.value) {
-        select.value = field.value;
-        select.dispatchEvent(new Event("change", { bubbles: true }));
-      }
+      if (select) select.value = field.value;
     });
     var inputs = fields();
     saved.inputs.forEach(function (field) {
       var input = field.id ? document.getElementById(field.id) : inputs[field.index];
-      if (!input || input.value === field.value) return;
-      input.value = field.value;
-      input.dispatchEvent(new Event("input", { bubbles: true }));
+      if (input) input.value = field.value;
     });
+    // Let renderers restore local filter state without starting full-text work.
+    window.dispatchEvent(new CustomEvent("efp-search-restored", { detail: saved }));
+    (saved.presentation || []).forEach(function (field) {
+      var node = nodeAt(field.path);
+      if (node && node.tagName === field.tag) applyPresentation(node, field.view);
+    });
+    var results = document.querySelectorAll(RESULTS);
+    (saved.results || []).forEach(function (field) {
+      var node = results[field.index];
+      if (!node) return;
+      node.innerHTML = field.html;
+      node.querySelectorAll('.efp-op-search-loading').forEach(function (loading) { loading.remove(); });
+      applyPresentation(node, field.view);
+      node.scrollTop = field.scroll || 0;
+    });
+    if (window.EFP_SECTION_SEARCH) window.EFP_SECTION_SEARCH.restore(saved.batches || []);
+    window.dispatchEvent(new CustomEvent("efp-search-results-restored", { detail: saved }));
     try {
       var url = new URL(location.href);
       url.searchParams.delete(RESTORE);
       history.replaceState(Object.assign({}, history.state, { efpSearchSnapshot: saved.token }), "", url.href);
-      window.scrollTo(0, saved.scroll);
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      // The search bar must remain on screen even if the selected hit was far
+      // down the list. Do this after layout; never focus an input on return.
+      var top = Math.min(saved.scroll || 0, saved.searchTop || 0);
+      window.scrollTo({ top: top, behavior: "instant" });
+      window.requestAnimationFrame(function () { window.scrollTo({ top: top, behavior: "instant" }); });
     } catch (_) {}
+    restoredToken = token;
     restoring = false;
   }
 
   window.EFP_SEARCH_RETURN = {
     isActive: function () { return !!active; },
+    isRestoring: function () { return restoring; },
     leave: leave,
     // Used by Original Practice's in-document chapter/question buttons.
     openInPage: function (action) {
@@ -145,34 +207,67 @@
     }
   };
 
+  // Window capture precedes legacy page/Home Back handlers on every hub.
+  window.addEventListener("click", function (event) {
+    if (!active || !event.target || !event.target.closest ||
+        !event.target.closest('#efp-app-back-button, #backBtn, #backMaterial, #backExam, #backSource, #backSubjects, #backParts')) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    var warning = window.EFP_QUIZ_PROGRESS_WARNING;
+    if (warning && warning.isArmed && warning.isArmed()) {
+      warning.confirmLeave(function () { warning.releaseBackGuard(leave); });
+    } else if (warning && warning.releaseBackGuard) warning.releaseBackGuard(leave);
+    else leave();
+  }, true);
+
   document.addEventListener("click", function (event) {
     if (event.button > 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     var link = event.target && event.target.closest ? event.target.closest('a[href]') : null;
     if (!link || link.hasAttribute("download") || link.target === "_blank") return;
-    if (link.closest('nav, .topnav, .efp-op-topbar, .viewer-toolbar, .home-btn, .back-btn') ||
+    if (link.closest('.topnav, .efp-op-topbar, .viewer-toolbar, .home-btn, .back-btn') ||
         /^(efp-home-button|efp-app-back-button|.*[Bb]ack.*|.*[Cc]lear.*)$/.test(link.id)) return;
     var url;
     try { url = new URL(link.href); } catch (_) { return; }
     if (url.origin !== location.origin || !/\.(html|pdf)$|\/$/i.test(url.pathname)) return;
     // A live search can filter ordinary chapter/menu cards as well as adding
     // dedicated result rows. Both are search results while the query is open.
-    var saved = snapshot();
+    // Once inside a search trip, every deeper page belongs to the original
+    // search. A PDF's own find bar must not become the trip's new origin.
+    var saved = /\/viewer\.html$/i.test(location.pathname) ? active : (snapshot() || active);
     if (!saved) return;
     url.searchParams.set(PARAM, saved.token);
     link.href = url.href;
+    link.setAttribute("data-efp-search-trip", saved.token);
+  }, true);
+
+  document.addEventListener("input", function (event) {
+    if (restoring || (event.detail && event.detail.efpRestoredSearch)) return;
+    if (!event.target.matches || !event.target.matches(INPUTS)) return;
+    restoredToken = "";
+    // An edited query is a new search; stale link tokens must not turn a later
+    // manual click into a search entry after the user clears the bar.
+    document.querySelectorAll('a[data-efp-search-trip]').forEach(function (link) {
+      var url = new URL(link.href); url.searchParams.delete(PARAM); link.href = url.href;
+      link.removeAttribute("data-efp-search-trip");
+    });
+    if (history.state && history.state.efpSearchSnapshot) {
+      var state = Object.assign({}, history.state); delete state.efpSearchSnapshot;
+      history.replaceState(state, "", location.href);
+    }
   }, true);
 
   window.addEventListener("popstate", function (event) {
-    if (active && event.state && event.state.efpSearchReturnGuard === "base") {
+    if (active && !restoring && !isQuiz()) {
       event.stopImmediatePropagation();
       leave();
       return;
     }
     window.setTimeout(restore, 0);
-  });
+  }, true);
   window.addEventListener("pageshow", function () {
     window.setTimeout(function () { restore(); armGuard(); }, 0);
   });
+  window.addEventListener("efp-crux-history-ready", function () { restore(); armGuard(); });
   if (document.readyState === "complete") window.setTimeout(function () { restore(); armGuard(); }, 0);
   else window.addEventListener("load", function () { restore(); armGuard(); }, { once: true });
 })();

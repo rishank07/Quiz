@@ -17,7 +17,7 @@ function make(html,url,session={},local={}){
  return {w,run,scripts,nav,dom};
 }
 const dump=s=>Object.fromEntries(Array.from({length:s.length},(_,i)=>{let k=s.key(i);return[k,s.getItem(k)]}));
-const mini=(id,link)=>`<input type="search" id="${id}"><div id="results"><a href="${link}">Match</a></div><a id="efp-home-button" href="/">Home</a><button id="efp-app-back-button">Back</button>`;
+const mini=(id,link)=>`<input type="search" id="${id}"><nav><div id="results"><a href="${link}">Match</a></div></nav><a id="efp-home-button" href="/">Home</a><button id="efp-app-back-button">Back</button>`;
 function trip(url='/',id='searchBox',leaf='/Crux-Tricks/viewer.html?id=sample&from=home-search'){
  const p=make(mini(id,leaf),url);p.nav();let input=p.w.document.getElementById(id);input.value='ancient history';let a=p.w.document.querySelector('#results a');a.addEventListener('click',e=>e.preventDefault());a.click();return {p,url:a.href,storage:dump(p.w.sessionStorage)};
 }
@@ -31,6 +31,34 @@ function op(file,url,session={},local={}){
   const sourceUrl=new URL(leaf.w.__navigation);const ret=make(mini(id,'/leaf.html'),sourceUrl.pathname+sourceUrl.search,t.storage);ret.nav();ret.w.dispatchEvent(new ret.w.Event('load'));assert.equal(ret.w.document.getElementById(id).value,'ancient history');assert(!ret.w.location.search.includes('efSearchRestore'));
  }
  console.log('PASS six search sources: exact origin return and restored query');
+ // Search -> hub -> deeper leaf must retain the original source with no query
+ // in the hub. Legacy Back handlers registered first must also yield.
+ const deepTrip=trip('/','searchBox','/Crux-Tricks/index.html');
+ const hubUrl=new URL(deepTrip.url);
+ const hub=make(mini('searchBox','/Crux-Tricks/viewer.html?id=ct0001&from=crux-index'),hubUrl.pathname+hubUrl.search,deepTrip.storage);
+ hub.w.document.addEventListener('click',event=>{if(event.target.id==='efp-app-back-button'){event.stopImmediatePropagation();hub.w.__legacyBack=true}},true);
+ hub.nav();const deeper=hub.w.document.querySelector('#results a');deeper.addEventListener('click',event=>event.preventDefault());deeper.click();
+ assert.equal(new URL(deeper.href).searchParams.get('efSearchReturn'),hubUrl.searchParams.get('efSearchReturn'));
+ hub.w.document.getElementById('efp-app-back-button').click();assert.equal(new URL(hub.w.__navigation).pathname,'/');assert(!hub.w.__legacyBack);
+ // A managed pane can replace the synthetic guard. Hardware Back must still
+ // leave this search trip instead of climbing the pane hierarchy.
+ hub.w.__navigation='';hub.w.history.replaceState({efpCruxNav:true,level:'chapters'},'',hub.w.location.href);
+ hub.w.dispatchEvent(new hub.w.PopStateEvent('popstate',{state:{efpCruxNav:true,level:'subjects'}}));
+ assert.equal(new URL(hub.w.__navigation).pathname,'/');
+ console.log('PASS search marker inheritance, legacy button and managed system Back');
+ // A cold return restores exact results/presentation without an input event,
+ // and keeps the search bar visible even after selecting a far-down result.
+ const scrollSource=make(mini('globalSearch','/leaf.html'),'/Bihar%20Special/Bihar%20Special.html');scrollSource.nav();
+ const si=scrollSource.w.document.getElementById('globalSearch');si.value='Maurya';
+ Object.defineProperty(scrollSource.w,'scrollY',{value:900});si.getBoundingClientRect=()=>({top:-640});
+ const sa=scrollSource.w.document.querySelector('#results a');sa.addEventListener('click',event=>event.preventDefault());sa.click();
+ const ss=dump(scrollSource.w.sessionStorage),st=new URL(sa.href).searchParams.get('efSearchReturn');
+ const cold=make(mini('globalSearch','/blank.html'),'/Bihar%20Special/Bihar%20Special.html?efSearchRestore='+st,ss);
+ let reruns=0,scrolls=[];cold.w.document.getElementById('globalSearch').addEventListener('input',()=>reruns++);cold.w.scrollTo=(options)=>scrolls.push(options.top);
+ cold.nav();cold.w.dispatchEvent(new cold.w.Event('load'));await sleep(30);cold.w.dispatchEvent(new cold.w.Event('pageshow'));await sleep(30);
+ assert.equal(reruns,0);assert.equal(cold.w.document.getElementById('globalSearch').value,'Maurya');assert.equal(new URL(cold.w.document.querySelector('#results a').href).pathname,'/leaf.html');assert(scrolls.length&&scrolls.every(top=>top<=150));
+ cold.w.document.getElementById('globalSearch').value='Gupta';cold.w.document.getElementById('globalSearch').dispatchEvent(new cold.w.Event('input',{bubbles:true}));assert.equal(reruns,1);
+ console.log('PASS cold result restore: no re-search, stable visible search bar, edit resumes search');
  // Homepage's existing result snapshot must return instantly without restarting workers.
  const homeSnapshot=make(read('index.html'),'/',{
   efp_home_search_results_v1:JSON.stringify({query:'ancient',html:'<li data-deepresult="1"><a href="/leaf.html">Ancient result</a></li>',filter:'all',pages:0,scrollTop:0})
@@ -49,7 +77,7 @@ function op(file,url,session={},local={}){
  function crux(url,storage={}){
   const c=make(read('Crux-Tricks/index.html'),url,storage);c.w.MutationObserver=class{observe(){} disconnect(){}};
   c.run(read('Crux-Tricks/crux-search-route.js'));c.run(read('Crux-Tricks/crux-manifest.js'));c.run(read('search-logic.js'));
-  c.run('efCreateSearchWorker=function(){return {warm:function(){return Promise.resolve()},search:function(){return Promise.resolve([])}}}');
+ c.run('window.__searchCalls=0;efCreateSearchWorker=function(){return {warm:function(){return Promise.resolve()},search:function(){window.__searchCalls++;return Promise.resolve([])}}}');
   c.run(read('Crux-Tricks/crux-tricks.js'));c.scripts();c.nav();return c;
  }
  let c=crux('/Crux-Tricks/index.html');await sleep(30);
@@ -66,6 +94,7 @@ function op(file,url,session={},local={}){
  assert.equal(new URL(incoming.w.__navigation).pathname,'/Crux-Tricks/index.html');
  const cu=new URL(incoming.w.__navigation);const restored=crux(cu.pathname+cu.search,cstorage);await sleep(30);
  assert.equal(restored.w.history.state.level,level);assert.equal(restored.w.document.getElementById('searchBox').value,'Maurya');
+ await sleep(250);assert.equal(restored.w.__searchCalls,0);assert(restored.w.document.querySelector('#fullTextResults a'));
  console.log('PASS actual Crux managed pane, source search restoration and Back precedence');[c,incoming,restored].forEach(x=>x.dom.window.close());
  // Real Original Practice: source marker survives URL rewriting, sections and reset.
  const master=JSON.parse(read('Original Practice/Economics_Complete_Practice.html').match(/<script id="master-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
@@ -78,6 +107,7 @@ function op(file,url,session={},local={}){
  p=op('Economics_Complete_Practice.html','/Original%20Practice/Economics_Complete_Practice.html');await sleep(30);let inp=p.w.document.querySelector('.efp-op-search input');inp.value='demand';inp.dispatchEvent(new p.w.Event('input',{bubbles:true}));await sleep(180);let result=p.w.document.querySelector('button.efp-op-search-result');assert(result);result.click();await sleep(20);assert(p.w.EFP_SEARCH_RETURN.isActive());assert.equal(p.run('state.screen'),'quiz');p.w.document.getElementById('efp-app-back-button').click();await sleep(40);url=new URL(p.w.__navigation);assert(!url.searchParams.get('chapter'));let source=op('Economics_Complete_Practice.html',url.pathname+url.search,dump(p.w.sessionStorage));source.w.dispatchEvent(new source.w.Event('load'));await sleep(170);assert.equal(source.w.document.querySelector('.efp-op-search input').value,'demand');assert(source.w.document.querySelector('button.efp-op-search-result'));console.log('PASS actual in-page Economics search/results restore');
  // English question-result buttons use the same source and retain marker after Reset.
  p=op('English_Grammar_Complete_Practice.html','/Original%20Practice/English_Grammar_Complete_Practice.html');await sleep(30);inp=p.w.document.querySelector('.efp-op-search input');inp.value='nouns';inp.dispatchEvent(new p.w.Event('input',{bubbles:true}));await sleep(130);result=p.w.document.querySelector('button.efp-op-search-result');assert(result);result.click();await sleep(30);assert.equal(p.run('state.screen'),'quiz');assert(p.w.EFP_SEARCH_RETURN.isActive());p.w.document.querySelector('.efp-op-reset-attempt').click();await sleep(40);p.w.document.getElementById('efp-app-back-button').click();await sleep(40);assert(!new URL(p.w.__navigation).searchParams.get('chapter'));console.log('PASS English in-page search + Reset + Back');
+ const eu=new URL(p.w.__navigation);const er=op('English_Grammar_Complete_Practice.html',eu.pathname+eu.search,dump(p.w.sessionStorage));await sleep(170);assert(er.w.document.querySelector('button[data-search-chapter]'));er.w.document.querySelector('button[data-search-chapter]').click();await sleep(30);assert.equal(er.run('state.screen'),'quiz');console.log('PASS restored English result buttons remain usable');
  // Ordinary navigation stays in the existing hierarchy.
  p=op('Economics_Complete_Practice.html','/Original%20Practice/Economics_Complete_Practice.html');p.run('goToChapters(Object.keys(MASTER)[0]);goToQuiz(Object.keys(MASTER[state.subject])[0])');await sleep(30);assert(!p.w.EFP_SEARCH_RETURN.isActive());p.w.document.getElementById('efp-app-back-button').click();await sleep(50);assert.equal(p.run('state.screen'),'chapters');assert(!p.w.__navigation);console.log('PASS non-search quiz hierarchy');
  // Home and modified clicks must not start a search trip.

@@ -240,13 +240,14 @@ function searchPanel(){
  var box=document.createElement("div");box.className="efp-op-search";
  box.innerHTML='<div class="efp-op-search-row"><span aria-hidden="true">🔎</span><input type="search" autocomplete="off" placeholder="Search chapter or question / अध्याय या प्रश्न खोजें…" aria-label="Search English Grammar chapters and questions"></div><div class="efp-op-search-results" aria-live="polite"></div>';
  var input=box.querySelector("input"),results=box.querySelector(".efp-op-search-results"),timer=null,searchSequence=0;
+ results.addEventListener("click",function(event){var b=event.target.closest("button[data-search-chapter]");if(!b||b.__efpSearchLive)return;openSearchResult(function(){if(b.dataset.searchQuestion!=null)openQuestion({chapter:b.dataset.searchChapter,section:Number(b.dataset.searchSection),qi:Number(b.dataset.searchQuestion)});else{markVisited(b.dataset.searchChapter);goToQuiz(b.dataset.searchChapter)}})});
  input.addEventListener("input",function(){
   var sequence=++searchSequence;
   clearTimeout(timer);results.innerHTML="";var raw=input.value.trim(),query=norm(raw);if(query.length<2)return;
   timer=setTimeout(function(){
    var terms=query.split(" ").filter(Boolean),chapters=chapterNames().filter(function(chapter){return terms.every(function(term){return norm(chapter).indexOf(term)>=0})}).slice(0,10);
    if(chapters.length){var heading=document.createElement("div");heading.className="efp-op-search-heading";heading.textContent="Chapters / अध्याय";results.appendChild(heading)}
-   chapters.forEach(function(chapter){var button=document.createElement("button");button.type="button";button.className="efp-op-search-result";button.innerHTML="<strong>"+escapeHtml(chapter.replace(/^\d+\.\s*/,""))+"</strong><small>English Grammar · "+chapterQCount(MASTER[chapter])+" questions</small>";button.onclick=function(){openSearchResult(function(){markVisited(chapter);goToQuiz(chapter)})};results.appendChild(button)});
+   chapters.forEach(function(chapter){var button=document.createElement("button");button.type="button";button.className="efp-op-search-result";button.dataset.searchChapter=chapter;button.__efpSearchLive=true;button.innerHTML="<strong>"+escapeHtml(chapter.replace(/^\d+\.\s*/,""))+"</strong><small>English Grammar · "+chapterQCount(MASTER[chapter])+" questions</small>";button.onclick=function(){openSearchResult(function(){markVisited(chapter);goToQuiz(chapter)})};results.appendChild(button)});
    var loading=document.createElement("div");loading.className="efp-op-search-loading";loading.textContent="Searching questions… / प्रश्न खोजे जा रहे हैं…";results.appendChild(loading);
    questionRecords().then(function(records){
    if(sequence!==searchSequence||input.value.trim()!==raw||!input.isConnected)return;
@@ -254,7 +255,7 @@ function searchPanel(){
    var matches=[];
    for(var i=0;i<records.length&&matches.length<16;i++){var record=records[i];if(terms.every(function(term){return record.text.indexOf(term)>=0}))matches.push(record)}
    if(matches.length){var qh=document.createElement("div");qh.className="efp-op-search-heading";qh.textContent="Question Matches / प्रश्न मिलान";results.appendChild(qh)}
-   matches.forEach(function(record){var button=document.createElement("button");button.type="button";button.className="efp-op-search-result efp-op-search-question";button.innerHTML="<strong>"+escapeHtml(stripHtml(record.title))+"</strong><small>"+escapeHtml(record.chapter)+" · Section "+(record.section+1)+" · Q"+(record.qi+1)+"</small>";button.onclick=function(){openSearchResult(function(){openQuestion(record)})};results.appendChild(button)});
+   matches.forEach(function(record){var button=document.createElement("button");button.type="button";button.className="efp-op-search-result efp-op-search-question";button.dataset.searchChapter=record.chapter;button.dataset.searchSection=record.section;button.dataset.searchQuestion=record.qi;button.__efpSearchLive=true;button.innerHTML="<strong>"+escapeHtml(stripHtml(record.title))+"</strong><small>"+escapeHtml(record.chapter)+" · Section "+(record.section+1)+" · Q"+(record.qi+1)+"</small>";button.onclick=function(){openSearchResult(function(){openQuestion(record)})};results.appendChild(button)});
    if(!chapters.length&&!matches.length)results.innerHTML='<div class="efp-op-search-none">No matching chapter or question / कोई मिलान नहीं मिला</div>';
    });
   },100);
