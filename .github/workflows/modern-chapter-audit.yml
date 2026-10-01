@@ -1,0 +1,29 @@
+name: Apply verified Modern History chapter audits
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'audits/modern-history/chapter-*.json'
+      - 'tools/apply-modern-chapter-audit.cjs'
+      - 'tools/sync-modern-history-index.cjs'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: history-content-audits
+  cancel-in-progress: false
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+      - name: Apply and validate reviewed chapters, push separately and sync search
+        run: |
+          git pull --ff-only origin master
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          node tools/apply-modern-chapter-audit.cjs --commit
+          node tools/sync-modern-history-index.cjs --commit
