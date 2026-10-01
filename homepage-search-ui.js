@@ -138,6 +138,31 @@
     }
   }
 
+  window.addEventListener("efp-search-restored", function (event) {
+    var field = event.detail.inputs.find(function (input) { return input.id === "searchBox"; });
+    if (!field) return;
+    // The shared return snapshot is authoritative when another search was
+    // subsequently used elsewhere in this tab.
+    saveQuery(field.value.trim());
+    var snapshot = readSavedResults(field.value.trim());
+    if (snapshot && !menuList.querySelector("li[data-deepresult]")) {
+      menuList.insertAdjacentHTML("beforeend", snapshot.html);
+      if (snapshot.html) menuList.classList.add("has-deep-results");
+    }
+    box.dispatchEvent(new CustomEvent("input", {
+      bubbles: true,
+      detail: { efpRestoredSearch: true, filter: snapshot && snapshot.filter, pages: snapshot && snapshot.pages }
+    }));
+  });
+  window.addEventListener("efp-search-results-restored", function () {
+    // The captured page may have still been streaming when a result opened.
+    // A return is a finished snapshot, so remove its old loading presentation.
+    isSearching = false;
+    tools.classList.remove("is-searching");
+    menuList.classList.remove("ef-search-loading");
+    reconcile();
+  });
+
   function normalized(value) {
     if (typeof efNormalizeSearchText === "function") return efNormalizeSearchText(value);
     return String(value == null ? "" : value).toLowerCase().replace(/\s+/g, " ").trim();

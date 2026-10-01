@@ -69,6 +69,16 @@ nextSource()}
 document.querySelectorAll('.chip').forEach(function(btn){btn.addEventListener('click',function(){setKind(btn.dataset.kind,false)})});
 sourceFilter.addEventListener('change',function(){updateBranchOptions();render()});subjectFilter.addEventListener('change',function(){updateBranchOptions();render();partMap.querySelectorAll('.part-btn').forEach(function(x){x.classList.toggle('active',x.dataset.subject===subjectFilter.value&&x.dataset.branch===branchFilter.value)})});branchFilter.addEventListener('change',function(){render();partMap.querySelectorAll('.part-btn').forEach(function(x){x.classList.toggle('active',x.dataset.subject===subjectFilter.value&&x.dataset.branch===branchFilter.value)})});
 var timer;searchBox.addEventListener('input',function(){clearTimeout(timer);timer=setTimeout(runSearch,180)});searchBox.addEventListener('focus',function(){getClients()},{once:true});
+window.addEventListener('efp-search-restored',function(event){
+ clearTimeout(timer);++searchSeq;
+ (searchClients||[]).forEach(function(client){if(client.terminate)client.terminate()});searchClients=null;
+ var saved=event.detail;
+ var branch=saved.filters.find(function(field){return field.id==='branchFilter'});
+ updateBranchOptions(branch&&branch.value);render();
+ // Reveal the search pane without dispatching input or querying PDF indexes.
+ var wrap=document.getElementById('resultsWrap');if(wrap&&searchBox.value.trim())wrap.hidden=false;
+});
+window.addEventListener('pagehide',function(){clearTimeout(timer);++searchSeq;(searchClients||[]).forEach(function(client){if(client.terminate)client.terminate()});searchClients=null});
 function refreshStoredState(){refreshStats();render()}
 window.addEventListener('pageshow',function(e){if(e.persisted)refreshStoredState()});
 document.addEventListener('visibilitychange',function(){if(!document.hidden)refreshStoredState()});

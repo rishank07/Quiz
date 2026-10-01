@@ -50,7 +50,7 @@
       var row = event.target.closest && event.target.closest(".chapter");
       if (!row || event.target.closest("button, a, input, select, textarea, [role='button']")) return;
       var link = row.querySelector("a.ctxt");
-      if (link && link.href) location.href = link.href;
+      if (link && link.href) link.click();
     });
 
     // Pinnacle has a dedicated Exam layer. The live document array is filtered
@@ -739,7 +739,8 @@
     var globalBack = target.closest("#efp-app-back-button");
     // A search-result entry belongs to its source search, even when this
     // Crux document has a deeper managed pane. Let shared Back own that trip.
-    if (globalBack && window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.isActive()) return;
+    if (target.closest('#efp-app-back-button, #backMaterial, #backExam, #backSource, #backSubjects, #backParts') &&
+        window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.isActive()) return;
     if (globalBack && state && state.level !== "material") {
       consume(event);
       history.back();

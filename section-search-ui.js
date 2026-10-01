@@ -81,6 +81,28 @@
       });
     })) schedule();
   }) : null;
+  window.EFP_SECTION_SEARCH = {
+    snapshot: function () {
+      var saved = [];
+      targets.forEach(function (target) {
+        document.querySelectorAll(target[0]).forEach(function (container, index) {
+          var state = states.get(container);
+          if (state) saved.push({ selector: target[0], index: index, query: state.query, limit: state.limit });
+        });
+      });
+      return saved;
+    },
+    restore: function (saved) {
+      saved.forEach(function (field) {
+        var container = document.querySelectorAll(field.selector)[field.index];
+        if (!container) return;
+        var state = states.get(container) || { button: null };
+        state.query = field.query; state.limit = field.limit;
+        states.set(container, state);
+      });
+      sync();
+    }
+  };
   function start() {
     if (observer && document.body) observer.observe(document.body, { childList: true, subtree: true });
     sync();
