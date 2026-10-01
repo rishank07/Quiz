@@ -1087,7 +1087,18 @@
   $('submitNoBtn').onclick=closeSubmitModal;
   $('submitYesBtn').onclick=function(){closeSubmitModal();showFinish()};
   $('submitModal').addEventListener('click',function(event){if(event.target===$('submitModal'))closeSubmitModal()});
-  document.addEventListener('keydown',function(event){if(event.key==='Escape'&&!$('submitModal').hidden)closeSubmitModal()});
+  document.addEventListener('keydown',function(event){
+    if(event.key==='Escape'&&!$('submitModal').hidden){closeSubmitModal();return}
+    if(event.defaultPrevented||event.repeat||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey)return;
+    if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;
+    if($('quizView').hidden||!$('submitModal').hidden)return;
+    var target=event.target,tag=target&&target.tagName?target.tagName.toLowerCase():'',type=target&&target.type?String(target.type).toLowerCase():'';
+    var textEntry=target&&(target.isContentEditable||tag==='textarea'||tag==='select'||(tag==='input'&&type!=='radio'&&type!=='checkbox'&&type!=='button'&&type!=='submit'));
+    if(textEntry)return;
+    event.preventDefault();
+    var button=event.key==='ArrowRight'?$('nextBtn'):$('prevBtn');
+    if(button&&!button.disabled)button.click()
+  });
   $('reviewBackBtn').onclick=exitMixedPracticeToSetup;
   $('reviewNewSetBtn').onclick=function(){if(state)generateSet(state.selectedKeys,state.total||currentQuestions.length)};
   $('finishNewBtn').onclick=function(){if(state)generateSet(state.selectedKeys,state.total||currentQuestions.length)};$('reviewBtn').onclick=showReview;
