@@ -6,6 +6,7 @@ on:
       - 'audits/ancient-history/chapter-*.json'
       - 'audits/ancient-history/generic-wording.json'
       - 'tools/apply-ancient-chapter-audit.cjs'
+      - 'tools/sync-ancient-history-index.cjs'
   workflow_dispatch:
 permissions:
   contents: write
@@ -30,3 +31,4 @@ jobs:
           if [ -f audits/ancient-history/generic-wording.json ]; then
             node tools/apply-ancient-chapter-audit.cjs --generic --commit
           fi
+          node tools/sync-ancient-history-index.cjs --commit
