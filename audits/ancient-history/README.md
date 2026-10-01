@@ -1,6 +1,17 @@
 # Ancient History audit status
 
-The unresolved quiz claims recorded in the original Chapter 04–13 audit notes are closed by the follow-up plans below. The original plans preserve the earlier audit history; their pending notes are superseded by these resolutions.
+Chapters 01–03 have now received a fresh, complete question-by-question audit. English and Hindi questions, options, answer keys and explanations were reviewed together.
+
+| Chapter | Questions reviewed | Questions corrected | Audit plan |
+|---|---:|---:|---|
+| 01 | 130 | 67 | [Chapter 01](chapter-01.json) |
+| 02 | 126 | 72 | [Chapter 02](chapter-02.json) |
+| 03 | 183 | 134 | [Chapter 03](chapter-03.json) |
+| **Total** | **439** | **273** | |
+
+Correction counts refer to distinct question positions within each chapter; multiple changes to one question count once. Unsupported absolute claims, conflicting dates, rankings and historical interpretations were qualified or replaced with securely attested facts. Historical debates are not presented as settled facts.
+
+The original Chapter 04–13 audit reviewed 1,777 questions. Its recorded pending claims were subsequently addressed by the follow-up plans below.
 
 **94 additional questions revised.** Definitive errors were corrected. Conflicting dates, rankings and identities were made explicitly traditional/approximate or rewritten to securely attested facts. This does not claim that scholarly historical debates have been settled.
 
