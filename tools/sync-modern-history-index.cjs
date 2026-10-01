@@ -8,6 +8,7 @@ const SNIPPETS = 'search-snippets-original-practice.js';
 const HOME = 'index.html';
 const OP_INDEX = 'Original Practice/index.html';
 const OP_RUNTIME = 'Original Practice/original-practice.js';
+const MIXED = 'Original Practice/Mixed_Practice.html';
 const SITEMAP = 'sitemap.xml';
 const SW = 'service-worker.js';
 const LASTMOD = '2026-10-01';
@@ -117,6 +118,13 @@ function bumpSearchConsumers(historySrc, changed) {
     throw new Error('History runtime script reference not found');
   }
   writeIfChanged(HISTORY, historyNext, changed);
+
+  const mixed = read(MIXED);
+  const mixedNext = mixed.replace(/fetch\('\.\/'\+filename(?:\+\(fileKey==='history'\?'\?v=[^']+':''\))?,\{cache:'force-cache'\}\)/, "fetch('./'+filename+(fileKey==='history'?'?v=" + VERSION + "':''),{cache:'force-cache'})");
+  if (mixedNext === mixed && !mixed.includes("fileKey==='history'?'?v=" + VERSION)) {
+    throw new Error('Mixed Practice History data loader not found');
+  }
+  writeIfChanged(MIXED, mixedNext, changed);
 
   const sw = read(SW);
   let swNext = sw.replace(/const CACHE_VERSION = "efp-pwa-[^"]+";/, 'const CACHE_VERSION = "efp-pwa-' + VERSION + '";');
