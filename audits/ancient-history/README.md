@@ -1,5 +1,7 @@
 # Ancient History audit status
 
+Student-facing textbook references have been replaced with generic bilingual wording in **59 questions across Chapters 01–13**. Approximate dates and interpretive qualifications remain; answer keys and options are unchanged. Chapters 10–11 needed no wording edits. Historical source attribution remains in the audit records. See [generic-wording.json](generic-wording.json) for the exact before/after changes.
+
 Chapters 01–03 have now received a fresh, complete question-by-question audit. English and Hindi questions, options, answer keys and explanations were reviewed together.
 
 | Chapter | Questions reviewed | Questions corrected | Audit plan |
