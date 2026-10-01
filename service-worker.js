@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-2026-10-01-v229-op-chapters-warning";
+const CACHE_VERSION = "efp-pwa-2026-10-01-v230-op-reset-back";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20260930mixedsubmitguard1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20260930r2"></script>';
@@ -47,8 +47,8 @@ const APP_SHELL = [
   "/Original%20Practice/index.html",
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
-  "/Original%20Practice/original-practice.js?v=20261001ancient13",
-  "/Original%20Practice/english-practice.js?v=20261001opnav2",
+  "/Original%20Practice/original-practice.js?v=20261001opreset1",
+  "/Original%20Practice/english-practice.js?v=20261001opreset1",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
   "/Crux-Tricks/all-topics.html",
