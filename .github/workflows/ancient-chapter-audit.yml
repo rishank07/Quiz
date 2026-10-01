@@ -4,6 +4,8 @@ on:
     branches: [master]
     paths:
       - 'audits/ancient-history/chapter-*.json'
+      - 'audits/ancient-history/generic-wording.json'
+      - 'tools/apply-ancient-chapter-audit.cjs'
   workflow_dispatch:
 permissions:
   contents: write
@@ -24,3 +26,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           node tools/apply-ancient-chapter-audit.cjs --commit
+          node tools/apply-ancient-chapter-audit.cjs --pending --commit
+          if [ -f audits/ancient-history/generic-wording.json ]; then
+            node tools/apply-ancient-chapter-audit.cjs --generic --commit
+          fi
