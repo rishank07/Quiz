@@ -331,7 +331,48 @@ function resetCurrentQuiz(){
  if(window.EFP_QUIZ_PROGRESS_WARNING)window.EFP_QUIZ_PROGRESS_WARNING.disarm();
  syncUrl("quiz",false);render();window.scrollTo({top:0,behavior:"smooth"});
 }
-function enhanceQuiz(){var cont=document.getElementById("questions-container");if(!cont)return;var bar=document.createElement("div");bar.className="efp-op-bookmarkbar";bar.innerHTML='<span class="efp-op-bookmark-meta"></span><span class="efp-op-bookmark-actions"><button class="efp-op-bookmark-filter" type="button"></button><button class="efp-op-reset-attempt" type="button">↻ Reset Quiz</button></span>';bar.querySelector(".efp-op-bookmark-filter").addEventListener("click",function(){bookmarkOnly=!bookmarkOnly;applyBookmarkFilter();updateBookmarkBar()});bar.querySelector(".efp-op-reset-attempt").addEventListener("click",resetCurrentQuiz);cont.parentNode.insertBefore(bar,cont);var cards=cont.querySelectorAll(":scope > [id^='q-']");cards.forEach(function(card){card.classList.add("efp-op-qcard");var qi=Number((card.id||"").replace("q-",""));var star=document.createElement("button");star.type="button";star.className="efp-op-star";star.addEventListener("click",function(e){e.stopPropagation();toggleBookmark(qi,star)});card.appendChild(star)});var empty=document.createElement("div");empty.className="efp-op-empty";empty.textContent="No bookmarked questions in this section / इस सेक्शन में कोई बुकमार्क प्रश्न नहीं है।";cont.insertAdjacentElement("afterend",empty);restoreAnsweredSection();applyBookmarkFilter();updateBookmarkBar()}
+
+var EFP_STANDALONE_FIRST_PROMPTS={
+ economics:{
+  "01. Demand, Supply and Market - मांग, आपूर्ति एवं बाज़ार":{en:"What topics form the core of demand, supply and market analysis in microeconomics?",hi:"व्यष्टि अर्थशास्त्र में मांग, आपूर्ति और बाजार विश्लेषण के मुख्य विषय कौन-से हैं?"}
+ },
+ geography:{
+  "1. India Location Borders & Standard Time":{en:"Which map-based facts are essential for understanding India's location, borders and standard time?",hi:"भारत की अवस्थिति, सीमाओं और मानक समय को समझने के लिए कौन-से मानचित्र-आधारित तथ्य आवश्यक हैं?"},
+  "2. Geological Structure of India":{en:"Which concepts are central to understanding the geological structure of India?",hi:"भारत की भूगर्भिक संरचना को समझने के लिए कौन-सी अवधारणाएँ प्रमुख हैं?"},
+  "3. Physical Divisions of India":{en:"Which six major physical divisions form India's physiographic framework?",hi:"भारत के भौतिक स्वरूप के छह प्रमुख विभाग कौन-से हैं?"},
+  "4. Rivers of India":{en:"Which major drainage systems and river patterns are essential to Indian geography?",hi:"भारतीय भूगोल में कौन-सी प्रमुख जल-निकासी प्रणालियाँ और नदी-पैटर्न महत्वपूर्ण हैं?"},
+  "5. Lakes & Waterfalls of India":{en:"Which topics are central to the study of India's lakes and waterfalls?",hi:"भारत की झीलों और जलप्रपातों के अध्ययन के प्रमुख विषय कौन-से हैं?"},
+  "10. Agriculture & Animal Husbandry":{en:"Which combination best describes the common exam pattern for Indian agriculture?",hi:"भारतीय कृषि से जुड़े प्रश्नों का सामान्य परीक्षा-पैटर्न किस संयोजन पर आधारित है?"},
+  "11. Mineral Resources":{en:"Which areas are most important for exam preparation on India's mineral resources?",hi:"भारत के खनिज संसाधनों से जुड़े परीक्षा प्रश्नों के लिए कौन-से क्षेत्र सबसे महत्वपूर्ण हैं?"},
+  "12. Energy Resources":{en:"Which areas are most important for exam preparation on India's energy resources?",hi:"भारत के ऊर्जा संसाधनों से जुड़े परीक्षा प्रश्नों के लिए कौन-से क्षेत्र सबसे महत्वपूर्ण हैं?"},
+  "13. Industries":{en:"What patterns do exam questions on Indian industries mostly follow?",hi:"भारतीय उद्योगों से जुड़े परीक्षा प्रश्न अधिकतर किन पैटर्न का पालन करते हैं?"},
+  "14. Transport & Communication":{en:"What do exam questions on India's transport and communication mostly revolve around?",hi:"भारत के परिवहन और संचार से जुड़े परीक्षा प्रश्न अधिकतर किन तथ्यों के इर्द-गिर्द घूमते हैं?"},
+  "15. Population & Urbanization":{en:"Which facts are most important for exam questions on India's population and urbanization?",hi:"भारत की जनसंख्या और शहरीकरण से जुड़े परीक्षा प्रश्नों में किस प्रकार के तथ्य सबसे महत्वपूर्ण हैं?"},
+  "16. Races & Tribes of India":{en:"Which two main areas are essential for studying races and tribes of India?",hi:"भारत की नस्लों और जनजातियों के अध्ययन के लिए कौन-से दो मुख्य क्षेत्र आवश्यक हैं?"},
+  "17. States & Union Territories of India":{en:"What are the key exam-relevant facts about India's states and Union Territories?",hi:"भारत के राज्यों और केंद्र शासित प्रदेशों से जुड़े प्रमुख परीक्षा-उपयोगी तथ्य कौन-से हैं?"},
+  "1. Geography: An Introduction":{en:"Which foundational topics are central to an introduction to geography?",hi:"भूगोल के परिचय में कौन-से आधारभूत विषय प्रमुख हैं?"},
+  "2. Universe":{en:"Which topics are central to the study of the universe in geography?",hi:"भूगोल में ब्रह्मांड के अध्ययन के प्रमुख विषय कौन-से हैं?"},
+  "14. Rivers, Lakes & Waterfalls":{en:"Which topics are most important for studying the world's rivers, lakes and waterfalls?",hi:"विश्व की नदियों, झीलों और जलप्रपातों के अध्ययन के सबसे महत्वपूर्ण विषय कौन-से हैं?"},
+  "22. Soils & Natural Vegetation":{en:"Which sequence best summarizes the key topics in soils and natural vegetation?",hi:"मिट्टी और प्राकृतिक वनस्पति के प्रमुख विषयों को कौन-सा क्रम सबसे अच्छी तरह संक्षेपित करता है?"},
+  "23. Agriculture & Animal Husbandry":{en:"Which areas form the core of world agriculture and animal husbandry?",hi:"विश्व कृषि और पशुपालन के मुख्य अध्ययन-क्षेत्र कौन-से हैं?"},
+  "24. Minerals & Energy Resources":{en:"Which areas form the core of world minerals and energy resources?",hi:"विश्व के खनिज और ऊर्जा संसाधनों के मुख्य अध्ययन-क्षेत्र कौन-से हैं?"},
+  "25. Major Industries of the World":{en:"Which areas form the core of the world's major industries?",hi:"विश्व के प्रमुख उद्योगों के मुख्य अध्ययन-क्षेत्र कौन-से हैं?"},
+  "26. Transport":{en:"Which modes and systems form the core of world transport?",hi:"विश्व परिवहन के मुख्य साधन और प्रणालियाँ कौन-सी हैं?"},
+  "27. Population & Urbanization":{en:"Which areas form the core of world population and urbanization?",hi:"विश्व जनसंख्या और शहरीकरण के मुख्य अध्ययन-क्षेत्र कौन-से हैं?"},
+  "28. Human Races, Tribes & Languages":{en:"Which areas are covered under human races, tribes and languages in world geography?",hi:"विश्व भूगोल में मानव नस्लों, जनजातियों और भाषाओं के अंतर्गत कौन-से प्रमुख क्षेत्र आते हैं?"}
+ }
+};
+function applyStandaloneFirstQuestionPrompt(){
+ if(state.screen!=="quiz"||state.currentSection!==0)return;
+ var bySubject=EFP_STANDALONE_FIRST_PROMPTS[CFG.slug],prompt=bySubject&&bySubject[state.chapterName];
+ if(!prompt)return;
+ var card=document.getElementById("q-0");if(!card)return;
+ var paras=card.querySelectorAll(":scope > p");
+ if(paras[0])paras[0].textContent="1. "+prompt.en;
+ if(paras[1])paras[1].textContent=prompt.hi;
+}
+
+function enhanceQuiz(){var cont=document.getElementById("questions-container");if(!cont)return;applyStandaloneFirstQuestionPrompt();var bar=document.createElement("div");bar.className="efp-op-bookmarkbar";bar.innerHTML='<span class="efp-op-bookmark-meta"></span><span class="efp-op-bookmark-actions"><button class="efp-op-bookmark-filter" type="button"></button><button class="efp-op-reset-attempt" type="button">↻ Reset Quiz</button></span>';bar.querySelector(".efp-op-bookmark-filter").addEventListener("click",function(){bookmarkOnly=!bookmarkOnly;applyBookmarkFilter();updateBookmarkBar()});bar.querySelector(".efp-op-reset-attempt").addEventListener("click",resetCurrentQuiz);cont.parentNode.insertBefore(bar,cont);var cards=cont.querySelectorAll(":scope > [id^='q-']");cards.forEach(function(card){card.classList.add("efp-op-qcard");var qi=Number((card.id||"").replace("q-",""));var star=document.createElement("button");star.type="button";star.className="efp-op-star";star.addEventListener("click",function(e){e.stopPropagation();toggleBookmark(qi,star)});card.appendChild(star)});var empty=document.createElement("div");empty.className="efp-op-empty";empty.textContent="No bookmarked questions in this section / इस सेक्शन में कोई बुकमार्क प्रश्न नहीं है।";cont.insertAdjacentElement("afterend",empty);restoreAnsweredSection();applyBookmarkFilter();updateBookmarkBar()}
 function enhance(){addTopbar();if(state.screen==="home")enhanceHome();else if(state.screen==="chapters")enhanceChapters();else if(state.screen==="quiz")enhanceQuiz()}
 var baseSelectOption=selectOption;
 selectOption=function(qi,displayIdx){
