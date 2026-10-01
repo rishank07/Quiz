@@ -5,6 +5,11 @@ const tag = '<script id="master-data" type="application/json">';
 const same = (a,b) => JSON.stringify(a) === JSON.stringify(b);
 const commit = process.argv.includes('--commit');
 const pending = process.argv.includes('--pending');
+const generic = process.argv.includes('--generic');
+if (pending && generic) throw Error('Choose one audit mode');
+const genericPath = 'audits/ancient-history/generic-wording.json';
+const genericPlans = fs.existsSync(genericPath) ? JSON.parse(fs.readFileSync(genericPath,'utf8')).chapters : [];
+if (generic && !genericPlans.length) throw Error('Generic wording plan missing');
 const planDir = pending ? 'audits/ancient-history/pending' : 'audits/ancient-history';
 const finalEdits = new Map();
 if (!pending && fs.existsSync('audits/ancient-history/pending')) {
@@ -13,11 +18,14 @@ if (!pending && fs.existsSync('audits/ancient-history/pending')) {
     for(const edit of plan.edits) finalEdits.set(plan.chapter+':'+edit.section+':'+edit.question,edit.after);
   }
 }
+// Later editorial wording supersedes historical audit text in both replay modes.
+for (const plan of genericPlans) for (const edit of plan.edits) {
+  finalEdits.set(plan.chapter+':'+edit.section+':'+edit.question, edit.after);
+}
 const selected = process.argv.find(x => /^--chapter=\d+$/.test(x));
 const chapterNumber = selected ? Number(selected.split('=')[1]) : null;
-const plans = fs.readdirSync(planDir).filter(x => /^chapter-\d+\.json$/.test(x)).sort();
-for (const planFile of plans) {
-  const plan = JSON.parse(fs.readFileSync(planDir+'/'+planFile,'utf8'));
+const plans = generic ? genericPlans : fs.readdirSync(planDir).filter(x => /^chapter-\d+\.json$/.test(x)).sort().map(name => JSON.parse(fs.readFileSync(planDir+'/'+name,'utf8')));
+for (const plan of plans) {
   if (chapterNumber && plan.chapter !== chapterNumber) continue;
   const src = fs.readFileSync(file,'utf8');
   const s = src.indexOf(tag), e = src.indexOf('</script>',s+tag.length);
@@ -56,7 +64,7 @@ for (const planFile of plans) {
   console.log('Chapter '+plan.chapter+': applied '+plan.edits.length+' corrections; '+plan.reviewed_questions+' questions, total '+total);
   if(commit){
     cp.execFileSync('git',['add','--',file],{stdio:'inherit'});
-    cp.execFileSync('git',['commit','-m',(pending ? 'Resolve pending Ancient History Chapter ' : 'Audit Ancient History Chapter ')+plan.chapter+': bilingual factual and option corrections'],{stdio:'inherit'});
+    cp.execFileSync('git',['commit','-m',(generic ? 'Make wording generic in Ancient History Chapter ' : pending ? 'Resolve pending Ancient History Chapter ' : 'Audit Ancient History Chapter ')+plan.chapter+': bilingual factual and option corrections'],{stdio:'inherit'});
     cp.execFileSync('git',['push','origin','HEAD:master'],{stdio:'inherit'});
   }
 }
