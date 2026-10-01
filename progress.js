@@ -25,20 +25,9 @@
     return normalizePath(location.pathname).toLowerCase() === "/current affairs/topic names.html";
   }
 
-  /* Current Affairs is a top-level section. Its visible Back button should
-     always return Home, not whichever quiz happened to be open previously. */
-  if (isCurrentAffairsLanding()) {
-    document.addEventListener("click", function (event) {
-      var back = event.target && event.target.closest
-        ? event.target.closest("#efp-app-back-button")
-        : null;
-      if (!back) return;
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      window.location.href = "/index.html";
-    }, true);
-  }
+  // Shared back-nav.js owns Back, including the installed-app Home marker.
+  // An early progress listener used to bypass that marker: Home immediately
+  // auto-resumed this hub, making its Back button appear stuck after a quiz.
 
   function detectBookKey() {
     var path = decodeURIComponent(location.pathname);
