@@ -46,7 +46,7 @@ function ensureGlobalOriginalPracticeNavigation(){
   var defs=[
    {needle:"/home-nav.js",src:"/home-nav.js?v=20260909mobilecompact1"},
    {needle:"/back-parent-map.js",src:"/back-parent-map.js?v=20260915staticgk1"},
-   {needle:"/back-nav.js",src:"/back-nav.js?v=20260912ecology1"}
+   {needle:"/back-nav.js",src:"/back-nav.js?v=20261001opnav1"}
   ];
   function alreadyLoaded(needle){
    var scripts=document.scripts||[];
@@ -209,6 +209,22 @@ function opHistoryEntry(mode,hasParent){
 }
 function opHasManagedParent(){
  try{return !!(history.state&&history.state[OP_HISTORY_KEY]===true&&history.state.hasParent)}catch(e){return false}
+}
+function opRunAfterQuizGuardRelease(action){
+ var warning=window.EFP_QUIZ_PROGRESS_WARNING;
+ if(!opHistoryRestoring&&state.screen==="quiz"&&warning&&typeof warning.releaseBackGuard==="function"){
+  warning.releaseBackGuard(action);
+  return;
+ }
+ action();
+}
+function opBackToParent(fallback){
+ opRunAfterQuizGuardRelease(function(){
+  if(opHasManagedParent()){
+   try{history.back();return}catch(e){}
+  }
+  fallback();
+ });
 }
 function syncUrl(mode,push){
  try{
@@ -396,7 +412,11 @@ var baseGoHome=goHome;goHome=function(){
  clearTransientAttempt();baseGoHome();syncUrl("home",false)
 };
 var baseGoToChapters=goToChapters;goToChapters=function(subject){
- if(!opHistoryRestoring&&state.screen==="quiz"&&opHasManagedParent()){clearTransientAttempt();history.back();return}
+ if(!opHistoryRestoring&&state.screen==="quiz"){
+  var targetSubject=subject||state.subject;
+  opBackToParent(function(){clearTransientAttempt();baseGoToChapters(targetSubject);syncUrl("chapters",false)});
+  return;
+ }
  var from=state.screen;clearTransientAttempt();baseGoToChapters(subject);syncUrl("chapters",!opHistoryRestoring&&from==="home");track("original_practice_subject_open",{practice:CFG.label,subject:subject})
 };
 var baseGoToQuiz=goToQuiz;goToQuiz=function(chapterName){
