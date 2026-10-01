@@ -238,6 +238,12 @@ function syncUrl(mode,push){
   if(mode==="quiz"&&state.chapterName){u.searchParams.set("chapter",state.chapterName);u.searchParams.set("section",String((state.currentSection||0)+1))}
   var previous=history.state,hasParent=push?true:!!(previous&&previous[OP_HISTORY_KEY]===true&&previous.hasParent);
   var entry=opHistoryEntry(mode,hasParent);
+  // Section changes rewrite the current quiz URL. Preserve the shared
+  // synthetic system-Back guard on that same entry; dropping it here makes
+  // the next answered question push another guard and stacks duplicate Back
+  // steps across sections. Reset intentionally releases the guard first, so
+  // its replaceState stays guard-free.
+  if(!push&&previous&&previous.efpQuizQuitGuard===true)entry.efpQuizQuitGuard=true;
   if(push)history.pushState(entry,"",u.pathname+u.search+u.hash);
   else history.replaceState(entry,"",u.pathname+u.search+u.hash);
  }catch(e){}
