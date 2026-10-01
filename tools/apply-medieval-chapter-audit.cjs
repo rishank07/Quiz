@@ -12,7 +12,7 @@ for(const name of fs.readdirSync(dir).filter(n=>/^chapter-\d+\.json$/.test(n)).s
  for(const edit of plan.edits){
   const sec=chapter[edit.section-1],q=sec?.questions[edit.question-1];
   if(same(q,edit.after))continue;
-  if(!same(q,edit.before))throw Error('Concurrent content change: '+name+' S'+edit.section+'Q'+edit.question);
+  if(!same(q,edit.before)&&!(edit.previous_after||[]).some(v=>same(q,v)))throw Error('Concurrent content change: '+name+' S'+edit.section+'Q'+edit.question);
   sec.questions[edit.question-1]=edit.after;
  }
  for(const sec of chapter)for(const q of sec.questions){
