@@ -996,6 +996,20 @@
 
     function leaveQuizViaHierarchy() {
       approveOneNavigation();
+
+      /* Search-result navigation owns the Back destination. In the installed
+         Android/TWA surface app-session.js is injected before back-nav.js, so
+         its quiz/system-Back guard can fire first. Defer to the shared search
+         return trip here instead of climbing the ordinary quiz hierarchy. */
+      var searchReturn = window.EFP_SEARCH_RETURN;
+      try {
+        if (searchReturn &&
+            typeof searchReturn.isActive === "function" &&
+            searchReturn.isActive() &&
+            typeof searchReturn.leave === "function" &&
+            searchReturn.leave()) return;
+      } catch (_) {}
+
       var navigation = window.EFP_BACK_NAV;
       if (navigation && typeof navigation.navigateQuizParent === "function" &&
           navigation.navigateQuizParent()) return;
