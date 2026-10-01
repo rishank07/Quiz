@@ -29,7 +29,7 @@ for (const planFile of plans) {
   for(const edit of plan.edits){
     const section=chapter[edit.section-1], q=section?.questions[edit.question-1];
     if(same(q,edit.after) || same(q,finalEdits.get(plan.chapter+':'+edit.section+':'+edit.question))) continue;
-    if(!same(q,edit.before)) throw Error('Concurrent content change: '+plan.chapter+' S'+edit.section+'Q'+edit.question);
+    if(!same(q,edit.before) && !(edit.previous_after || []).some(old=>same(q,old))) throw Error('Concurrent content change: '+plan.chapter+' S'+edit.section+'Q'+edit.question);
     section.questions[edit.question-1]=edit.after;
   }
   let total=0;
