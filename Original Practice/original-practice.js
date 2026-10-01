@@ -321,7 +321,7 @@ var opFullSearchClient=null;
 function getOpFullSearchClient(){
  if(opFullSearchClient)return opFullSearchClient;
  if(typeof efCreateSearchWorker!=="function")return null;
- var specialIndex=CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20260912ecology1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261001modern13-1425e81675db",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
+ var specialIndex=CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20260912ecology1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261001modern13-f71de615bec2",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
  opFullSearchClient=efCreateSearchWorker({
   workerUrl:new URL("../search-worker.js?v=20260904v8",document.baseURI).href,
   logicUrl:new URL("../search-logic.js?v=20260904v8",document.baseURI).href,
