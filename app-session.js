@@ -168,6 +168,18 @@
 
   function maybeResumeSameDeviceLaunch() {
     if (!launchMarker()) return false;
+    // Search Back uses replace() to reload the Home snapshot, so navigation
+    // is not back_forward even though this is an intentional return. The
+    // original Home URL still carries the installed-app launch marker.
+    // Honor the restore before reading a stale last-page session, including
+    // returns from content that still has an older cached Back script.
+    try {
+      if (new URLSearchParams(location.search).get("efSearchRestore")) {
+        markIntentionalHome();
+        sessionStorage.removeItem(PENDING_KEY);
+        return false;
+      }
+    } catch (_) {}
     if (isHistoryTraversal()) { markIntentionalHome(); return false; }
     var saved = readSession();
     if (!saved) return false;

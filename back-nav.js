@@ -119,6 +119,12 @@
     if (!active) return false;
     var url = new URL(active.source);
     url.searchParams.set(RESTORE, active.token);
+    // Installed-app Home retains its launch marker (for example
+    // ?source=windows-pwa). Record this deliberate return before pagehide
+    // can save the leaf again and make Home auto-resume that same leaf.
+    if (/^\/(?:index\.html)?$/i.test(url.pathname) && window.EFP_APP_SESSION) {
+      window.EFP_APP_SESSION.markHome();
+    }
     location.replace(url.href);
     return true;
   }

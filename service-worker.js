@@ -1,7 +1,7 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261001modern13-1425e81675db";
+const CACHE_VERSION = "efp-pwa-20261001homesearchapp2";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001searchreturnandroid1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20260930r2"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -32,9 +32,9 @@ const APP_SHELL = [
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
   "/home-nav.js?v=20260930movetop3",
-  "/app-session.js?v=20261001searchreturnandroid1",
+  "/app-session.js?v=20261001homesearchapp2",
   "/back-parent-map.js",
-  "/back-nav.js?v=20261001searchreturn3",
+  "/back-nav.js?v=20261001homesearchapp2",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js",
   "/section-search-ui.js?v=20261001searchreturn2",
