@@ -1,3 +1,175 @@
+/* Search results return to the search that opened them, across every hub.
+   Keep this in the shared navigation asset so cached/older content pages use
+   the same rule without rewriting the question banks. */
+(function () {
+  "use strict";
+  var PARAM = "efSearchReturn", RESTORE = "efSearchRestore";
+  var PREFIX = "efp_search_return_v1:";
+  var INPUTS = 'input[type="search"], input[id*="earch"]';
+  var active = null, restoring = false;
+
+  function read(token) {
+    try {
+      var saved = JSON.parse(sessionStorage.getItem(PREFIX + token) || "null");
+      if (!saved || saved.token !== token || !Array.isArray(saved.inputs) || !Array.isArray(saved.filters)) return null;
+      var source = new URL(saved.source, location.origin);
+      if (source.origin !== location.origin) return null;
+      return saved;
+    } catch (_) { return null; }
+  }
+  function tokenFromPage() {
+    try {
+      return new URL(location.href).searchParams.get(PARAM) ||
+        (history.state && history.state.efpSearchReturnToken) || "";
+    } catch (_) { return ""; }
+  }
+  active = read(tokenFromPage());
+
+  function fields() {
+    return Array.prototype.slice.call(document.querySelectorAll(INPUTS));
+  }
+  function snapshot() {
+    var inputs = fields();
+    if (!inputs.some(function (input) {
+      return input.value.trim() && !input.closest('[hidden]');
+    })) return null;
+    var token = Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+    var source = new URL(location.href);
+    source.searchParams.delete(RESTORE);
+    var saved = {
+      token: token, source: source.href, state: history.state,
+      inputs: inputs.map(function (input, i) {
+        return { id: input.id, index: i, value: input.value };
+      }),
+      filters: Array.prototype.slice.call(document.querySelectorAll('select[id]')).map(function (select) {
+        return { id: select.id, value: select.value };
+      }),
+      scroll: window.scrollY || 0
+    };
+    try {
+      sessionStorage.setItem(PREFIX + token, JSON.stringify(saved));
+      history.replaceState(Object.assign({}, history.state, { efpSearchSnapshot: token }), "", location.href);
+      // Only the newest 24 trips are needed; do not fill session storage with
+      // abandoned search visits. Active trips survive refresh and app resume.
+      var keys = Object.keys(sessionStorage).filter(function (key) { return key.indexOf(PREFIX) === 0; }).sort();
+      while (keys.length > 24) sessionStorage.removeItem(keys.shift());
+    } catch (_) { return null; }
+    return saved;
+  }
+  function markCurrent(saved) {
+    active = saved;
+    try {
+      var url = new URL(location.href);
+      url.searchParams.set(PARAM, saved.token);
+      history.replaceState(Object.assign({}, history.state, { efpSearchReturnToken: saved.token }), "", url.href);
+    } catch (_) {}
+    armGuard();
+  }
+  function leave() {
+    if (!active) return false;
+    var url = new URL(active.source);
+    url.searchParams.set(RESTORE, active.token);
+    location.replace(url.href);
+    return true;
+  }
+  function isQuiz() {
+    var warning = window.EFP_QUIZ_PROGRESS_WARNING;
+    return !!(warning && warning.isQuizVisible && warning.isQuizVisible());
+  }
+  function armGuard() {
+    if (!active || isQuiz()) return;
+    if (history.state && history.state.efpSearchReturnGuard === "top") return;
+    var base = Object.assign({}, history.state, {
+      efpSearchReturnToken: active.token, efpSearchReturnGuard: "base"
+    });
+    var top = Object.assign({}, base, { efpSearchReturnGuard: "top" });
+    try {
+      history.replaceState(base, "", location.href);
+      history.pushState(top, "", location.href);
+    } catch (_) {}
+  }
+  function restore() {
+    if (restoring) return;
+    var token;
+    try {
+      token = new URL(location.href).searchParams.get(RESTORE) ||
+        (history.state && history.state.efpSearchSnapshot);
+    } catch (_) {}
+    var saved = read(token);
+    if (!saved) return;
+    restoring = true;
+    // Crux stores its source/subject/chapter pane in managed History state.
+    // Reinstate that pane before rebuilding its search results.
+    if (saved.state && saved.state.efpCruxNav) {
+      history.replaceState(saved.state, "", location.href);
+      window.dispatchEvent(new PopStateEvent("popstate", { state: saved.state }));
+    }
+    saved.filters.forEach(function (field) {
+      var select = document.getElementById(field.id);
+      if (select && select.value !== field.value) {
+        select.value = field.value;
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    });
+    var inputs = fields();
+    saved.inputs.forEach(function (field) {
+      var input = field.id ? document.getElementById(field.id) : inputs[field.index];
+      if (!input || input.value === field.value) return;
+      input.value = field.value;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    try {
+      var url = new URL(location.href);
+      url.searchParams.delete(RESTORE);
+      history.replaceState(Object.assign({}, history.state, { efpSearchSnapshot: saved.token }), "", url.href);
+      window.scrollTo(0, saved.scroll);
+    } catch (_) {}
+    restoring = false;
+  }
+
+  window.EFP_SEARCH_RETURN = {
+    isActive: function () { return !!active; },
+    leave: leave,
+    // Used by Original Practice's in-document chapter/question buttons.
+    openInPage: function (action) {
+      var saved = snapshot();
+      action();
+      if (saved) markCurrent(saved);
+    }
+  };
+
+  document.addEventListener("click", function (event) {
+    if (event.button > 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    var link = event.target && event.target.closest ? event.target.closest('a[href]') : null;
+    if (!link || link.hasAttribute("download") || link.target === "_blank") return;
+    if (link.closest('nav, .topnav, .efp-op-topbar, .viewer-toolbar, .home-btn, .back-btn') ||
+        /^(efp-home-button|efp-app-back-button|.*[Bb]ack.*|.*[Cc]lear.*)$/.test(link.id)) return;
+    var url;
+    try { url = new URL(link.href); } catch (_) { return; }
+    if (url.origin !== location.origin || !/\.(html|pdf)$|\/$/i.test(url.pathname)) return;
+    // A live search can filter ordinary chapter/menu cards as well as adding
+    // dedicated result rows. Both are search results while the query is open.
+    var saved = snapshot();
+    if (!saved) return;
+    url.searchParams.set(PARAM, saved.token);
+    link.href = url.href;
+  }, true);
+
+  window.addEventListener("popstate", function (event) {
+    if (active && event.state && event.state.efpSearchReturnGuard === "base") {
+      event.stopImmediatePropagation();
+      leave();
+      return;
+    }
+    window.setTimeout(restore, 0);
+  });
+  window.addEventListener("pageshow", function () {
+    window.setTimeout(function () { restore(); armGuard(); }, 0);
+  });
+  if (document.readyState === "complete") window.setTimeout(function () { restore(); armGuard(); }, 0);
+  else window.addEventListener("load", function () { restore(); armGuard(); }, { once: true });
+})();
+
 /* ExamFusion Prep — logical Back fallback for direct/external links. */
 (function () {
   "use strict";
@@ -899,6 +1071,7 @@
      quiz/history guards can add more same-URL entries in front of it. Both the
      universal button and Android/system Back call this after confirmation. */
   function navigateQuizParent() {
+    if (window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.leave()) return true;
     var event = {
       preventDefault: function () {},
       stopPropagation: function () {},
@@ -972,6 +1145,7 @@
      parent, then that parent installs the next guard. This recreates the same
      hierarchy the user would have traversed manually. */
   function installGenericHomeSearchHistoryGuard() {
+    if (window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.isActive()) return;
     /* Original Practice already owns a complete in-document history stack.
        Adding this generic guard there creates a second same-URL Back layer and
        makes Quiz/Chapters exits depend on which synthetic guard is on top. */
@@ -1018,6 +1192,7 @@
      replaces it with the PDF's exact Crux hierarchy. The visible Back button
      uses this same path. */
   function installCruxHomeSearchHistoryGuard() {
+    if (window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.isActive()) return;
     /* Normal Crux -> PDF navigation already has a correct managed Chapter
        entry behind the viewer. Do not overwrite that history in Android.
        A guard is needed only for direct/home-search opens that have no trusted
@@ -1082,6 +1257,17 @@
       ? event.target.closest("#" + BACK_BUTTON_ID)
       : null;
     if (!target) return;
+    if (window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.isActive()) {
+      consumeBackEvent(event);
+      var searchWarning = window.EFP_QUIZ_PROGRESS_WARNING;
+      var returnToSearch = function () { window.EFP_SEARCH_RETURN.leave(); };
+      if (searchWarning && searchWarning.isArmed && searchWarning.isArmed()) {
+        searchWarning.confirmLeave(function () { searchWarning.releaseBackGuard(returnToSearch); });
+      } else if (searchWarning && searchWarning.releaseBackGuard) {
+        searchWarning.releaseBackGuard(returnToSearch);
+      } else returnToSearch();
+      return;
+    }
     var approvedLogicalBack = target.getAttribute(APPROVED_LOGICAL_BACK_ATTRIBUTE) === "1";
     if (approvedLogicalBack) target.removeAttribute(APPROVED_LOGICAL_BACK_ATTRIBUTE);
 

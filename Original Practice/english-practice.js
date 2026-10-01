@@ -128,10 +128,14 @@ function opBackToParent(fallback){
 }
 function syncUrl(mode,push){
  try{
-  var url=new URL(location.href);url.search="";
+  var url=new URL(location.href),searchReturn=url.searchParams.get("efSearchReturn"),searchRestore=url.searchParams.get("efSearchRestore");url.search="";
+  if(searchReturn)url.searchParams.set("efSearchReturn",searchReturn);
+  if(searchRestore)url.searchParams.set("efSearchRestore",searchRestore);
   if(mode==="quiz"&&state.chapterName){url.searchParams.set("chapter",state.chapterName);url.searchParams.set("section",String((state.currentSection||0)+1))}
   var previous=history.state,hasParent=push?true:!!(previous&&previous[OP_HISTORY_KEY]===true&&previous.hasParent);
   var entry=opHistoryEntry(mode,hasParent);
+  if(previous&&previous.efpSearchReturnToken)entry.efpSearchReturnToken=previous.efpSearchReturnToken;
+  if(previous&&previous.efpSearchSnapshot&&!push)entry.efpSearchSnapshot=previous.efpSearchSnapshot;
   // Section changes rewrite the current quiz URL. Preserve the shared
   // synthetic system-Back guard on that same entry; dropping it here makes
   // the next answered question push another guard and stacks duplicate Back
@@ -213,6 +217,10 @@ function openQuestion(record){
  state.screen="quiz";state.chapterName=record.chapter;state.quizData=MASTER[record.chapter];state.currentSection=record.section;state.shuffleMap={};saved.answers={};restoreAttempt(true);
  render();syncUrl("quiz",!opHistoryRestoring&&from!=="quiz");track("original_practice_search_open",{practice:CFG.label,chapter:record.chapter,section:record.section+1,question:record.qi+1});
 }
+function openSearchResult(action){
+ if(window.EFP_SEARCH_RETURN)window.EFP_SEARCH_RETURN.openInPage(action);
+ else action();
+}
 
 function searchPanel(){
  var box=document.createElement("div");box.className="efp-op-search";
@@ -223,10 +231,10 @@ function searchPanel(){
   timer=setTimeout(function(){
    var terms=query.split(" ").filter(Boolean),chapters=chapterNames().filter(function(chapter){return terms.every(function(term){return norm(chapter).indexOf(term)>=0})}).slice(0,10);
    if(chapters.length){var heading=document.createElement("div");heading.className="efp-op-search-heading";heading.textContent="Chapters / अध्याय";results.appendChild(heading)}
-   chapters.forEach(function(chapter){var button=document.createElement("button");button.type="button";button.className="efp-op-search-result";button.innerHTML="<strong>"+escapeHtml(chapter.replace(/^\d+\.\s*/,""))+"</strong><small>English Grammar · "+chapterQCount(MASTER[chapter])+" questions</small>";button.onclick=function(){markVisited(chapter);goToQuiz(chapter)};results.appendChild(button)});
+   chapters.forEach(function(chapter){var button=document.createElement("button");button.type="button";button.className="efp-op-search-result";button.innerHTML="<strong>"+escapeHtml(chapter.replace(/^\d+\.\s*/,""))+"</strong><small>English Grammar · "+chapterQCount(MASTER[chapter])+" questions</small>";button.onclick=function(){openSearchResult(function(){markVisited(chapter);goToQuiz(chapter)})};results.appendChild(button)});
    var matches=questionRecords().filter(function(record){return terms.every(function(term){return record.text.indexOf(term)>=0})}).slice(0,16);
    if(matches.length){var qh=document.createElement("div");qh.className="efp-op-search-heading";qh.textContent="Question Matches / प्रश्न मिलान";results.appendChild(qh)}
-   matches.forEach(function(record){var button=document.createElement("button");button.type="button";button.className="efp-op-search-result efp-op-search-question";button.innerHTML="<strong>"+escapeHtml(stripHtml(record.title))+"</strong><small>"+escapeHtml(record.chapter)+" · Section "+(record.section+1)+" · Q"+(record.qi+1)+"</small>";button.onclick=function(){openQuestion(record)};results.appendChild(button)});
+   matches.forEach(function(record){var button=document.createElement("button");button.type="button";button.className="efp-op-search-result efp-op-search-question";button.innerHTML="<strong>"+escapeHtml(stripHtml(record.title))+"</strong><small>"+escapeHtml(record.chapter)+" · Section "+(record.section+1)+" · Q"+(record.qi+1)+"</small>";button.onclick=function(){openSearchResult(function(){openQuestion(record)})};results.appendChild(button)});
    if(!chapters.length&&!matches.length)results.innerHTML='<div class="efp-op-search-none">No matching chapter or question / कोई मिलान नहीं मिला</div>';
   },100);
  });

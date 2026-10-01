@@ -233,11 +233,15 @@ function opBackToParent(fallback){
 }
 function syncUrl(mode,push){
  try{
-  var u=new URL(location.href);u.search="";
+  var u=new URL(location.href),searchReturn=u.searchParams.get("efSearchReturn"),searchRestore=u.searchParams.get("efSearchRestore");u.search="";
+  if(searchReturn)u.searchParams.set("efSearchReturn",searchReturn);
+  if(searchRestore)u.searchParams.set("efSearchRestore",searchRestore);
   if(mode!=="home"&&state.subject)u.searchParams.set("subject",state.subject);
   if(mode==="quiz"&&state.chapterName){u.searchParams.set("chapter",state.chapterName);u.searchParams.set("section",String((state.currentSection||0)+1))}
   var previous=history.state,hasParent=push?true:!!(previous&&previous[OP_HISTORY_KEY]===true&&previous.hasParent);
   var entry=opHistoryEntry(mode,hasParent);
+  if(previous&&previous.efpSearchReturnToken)entry.efpSearchReturnToken=previous.efpSearchReturnToken;
+  if(previous&&previous.efpSearchSnapshot&&!push)entry.efpSearchSnapshot=previous.efpSearchSnapshot;
   // Section changes rewrite the current quiz URL. Preserve the shared
   // synthetic system-Back guard on that same entry; dropping it here makes
   // the next answered question push another guard and stacks duplicate Back
@@ -338,7 +342,7 @@ function searchPanel(subjectOnly){
   var rawQ=input.value.trim(),q=norm(rawQ),my=++seq;clearTimeout(timer);results.innerHTML="";if(q.length<2)return;
   var terms=q.split(" "),hits=records.filter(function(r){var hay=norm(r.subject+" "+r.en+" "+r.hi);return terms.every(function(t){return hay.indexOf(t)>=0})}).slice(0,12);
   if(hits.length){var h=document.createElement("div");h.className="efp-op-search-heading";h.textContent="Chapters / अध्याय";results.appendChild(h)}
-  hits.forEach(function(r){var b=document.createElement("button");b.type="button";b.className="efp-op-search-result";b.innerHTML="<strong>"+escapeHtml(r.en)+(r.hi?" / "+escapeHtml(r.hi):"")+"</strong><small>"+escapeHtml(r.subject)+"</small>";b.addEventListener("click",function(){goToChapters(r.subject);goToQuiz(r.chapter)});results.appendChild(b)});
+  hits.forEach(function(r){var b=document.createElement("button");b.type="button";b.className="efp-op-search-result";b.innerHTML="<strong>"+escapeHtml(r.en)+(r.hi?" / "+escapeHtml(r.hi):"")+"</strong><small>"+escapeHtml(r.subject)+"</small>";b.addEventListener("click",function(){var open=function(){state.subject=r.subject;goToQuiz(r.chapter)};if(window.EFP_SEARCH_RETURN)window.EFP_SEARCH_RETURN.openInPage(open);else open()});results.appendChild(b)});
   var loading=document.createElement("div");loading.className="efp-op-search-loading";loading.textContent="Searching questions… / प्रश्न खोजे जा रहे हैं…";results.appendChild(loading);
   timer=setTimeout(function(){var client=getOpFullSearchClient();if(!client){loading.textContent="Loading full-text search… / पूर्ण खोज लोड हो रही है…";return}client.search(rawQ).then(function(full){if(my!==seq||input.value.trim()!==rawQ)return;loading.remove();full=Array.isArray(full)?full:[];full=full.filter(function(hit){return String(hit.b||"").indexOf("Original Practice / "+CFG.label+" /")===0});var seen={},rows=[];full.forEach(function(hit){var d=decodeOpSearchHit(hit);if(!d.url||seen[d.url])return;seen[d.url]=1;rows.push({hit:hit,d:d})});rows=rows.slice(0,12);if(rows.length){var h=document.createElement("div");h.className="efp-op-search-heading";h.textContent="Question Matches / प्रश्न मिलान";results.appendChild(h)}rows.forEach(function(row){var a=document.createElement("a");a.className="efp-op-search-result efp-op-search-question";a.href=row.d.url;a.innerHTML="<strong>"+escapeHtml(row.hit.t||"Question match")+"</strong><small>"+escapeHtml(row.hit.b||"Original Practice")+"</small><span>"+escapeHtml(opSearchSnippet(row.d.text,rawQ))+"</span>";results.appendChild(a)});if(!hits.length&&!rows.length){results.innerHTML='<div class="efp-op-search-none">No matching chapter or question / कोई मिलान नहीं मिला</div>'}}).catch(function(){if(my===seq){loading.remove();if(!hits.length)results.innerHTML='<div class="efp-op-search-none">Question search could not load. Please retry.</div>';opFullSearchClient=null}})},120)
  });

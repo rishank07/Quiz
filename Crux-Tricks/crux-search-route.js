@@ -295,7 +295,11 @@
   ];
 
   function baseUrl() {
-    return location.pathname + location.hash;
+    var current = new URLSearchParams(location.search), params = new URLSearchParams();
+    ["efSearchReturn", "efSearchRestore"].forEach(function (key) {
+      if (current.has(key)) params.set(key, current.get(key));
+    });
+    return location.pathname + (params.toString() ? "?" + params.toString() : "") + location.hash;
   }
 
   function isManaged(state) {
@@ -733,6 +737,9 @@
     var target = event.target;
 
     var globalBack = target.closest("#efp-app-back-button");
+    // A search-result entry belongs to its source search, even when this
+    // Crux document has a deeper managed pane. Let shared Back own that trip.
+    if (globalBack && window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.isActive()) return;
     if (globalBack && state && state.level !== "material") {
       consume(event);
       history.back();
@@ -837,6 +844,7 @@
   }, true);
 
   window.addEventListener("popstate", function (event) {
+    if (event.state && event.state.efpSearchReturnGuard) return;
     if (isManaged(event.state)) {
       restoreState(event.state);
     }
