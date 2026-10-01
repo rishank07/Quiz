@@ -1,0 +1,29 @@
+name: Fix Ancient History Ch1 options
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply Ancient History Chapter 1 option corrections
+        run: node tools/fix-ancient-history-ch1-options-20261001.js
+      - name: Commit corrected Chapter 1 and remove helpers
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "Original Practice/History_Complete_Practice.html"
+          git rm "tools/fix-ancient-history-ch1-options-20261001.js"
+          git rm ".github/workflows/fix-ancient-history-ch1-options-20261001.yml"
+          git commit -m "Correct Ancient History Chapter 1 answer options"
+          git push origin HEAD:master
