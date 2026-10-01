@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261001casticky2";
+const CACHE_VERSION = "efp-pwa-20261001polity22-583a40e433b0";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -40,7 +40,7 @@ const APP_SHELL = [
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js",
   "/section-search-ui.js?v=20261001searchreturn2",
-  "/search-worker.js",
+  "/search-worker.js?v=20261001polity22-583a40e433b0",
   "/search-index-main.js",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261001searchreturn2",
@@ -50,7 +50,7 @@ const APP_SHELL = [
   "/Original%20Practice/index.html",
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
-  "/Original%20Practice/original-practice.js?v=20261001modern13-15616a4dad83",
+  "/Original%20Practice/original-practice.js?v=20261001polity22-583a40e433b0",
   "/Original%20Practice/english-practice.js?v=20261001ophistory1",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",

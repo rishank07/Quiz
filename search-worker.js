@@ -415,6 +415,11 @@
     // For snippet mode, intentionally do not import/warm search-logic.js.
     // The index itself is all this fast worker needs.
     importScripts(config.indexUrl);
+    // Polity audit overlay
+    if (config.globalName === "EF_ORIGINAL_PRACTICE_SNIPPET_INDEX") {
+      importScripts(new URL("./search-snippets-polity-original-practice.js?v=20261001polity22-583a40e433b0", config.indexUrl).href);
+    }
+    // End Polity audit overlay
     records = self[config.globalName];
     if (!Array.isArray(records)) throw new Error("Search index was not available: " + config.globalName);
     loadCruxManifest();
