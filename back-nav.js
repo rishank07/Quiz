@@ -1168,6 +1168,12 @@
     rememberCruxViewerState(parentUrl);
     rememberLogicalDestination(parentUrl);
 
+    if (isHomePageUrl(parentUrl.href)) {
+      clearLogicalChain();
+      clearHomeSearchChain();
+      if (window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
+    }
+
     /* Replace instead of assign so a direct-link Back chain does not create
        child -> parent -> child browser-history loops. */
     window.location.replace(parentUrl.href);
@@ -1262,11 +1268,22 @@
     var parentUrl = logicalParentUrl();
     if (!parentUrl) return;
 
+    /* Quiz Quit can replace a leaf with a hub that is also immediately behind
+       it in history. Protect a mapped section root so one hardware/browser
+       Back reaches Home instead of silently traversing that duplicate hub.
+       This also covers an installed app resumed directly on the section. */
+    if (isHomePageUrl(parentUrl.href) && !isCruxTricksRoot()) {
+      clearHomeSearchChain();
+      clearLogicalChain();
+      armGenericHomeSearchGuard();
+      return;
+    }
+
     var current = normalizePath(window.location.pathname);
     var expected = expectedLogicalPath();
     var resumedBoundary = AUTO_RESUMED_BOUNDARY && !isMixedPracticePage() && !isCruxTricksRoot();
     var initial = hasHomeSearchMarker() || isHomePageUrl(document.referrer) || resumedBoundary;
-    var continuing = hasHomeSearchChain() && expected === current;
+    var continuing = expected === current;
 
     if (!initial && !continuing) {
       if (hasHomeSearchChain() && expected && expected !== current) {
@@ -1344,8 +1361,7 @@
     }
 
     rememberHomeSearchChain();
-    rememberLogicalDestination(parentUrl);
-    window.location.replace(parentUrl.href);
+    useLogicalParent(event);
   });
 
   document.addEventListener("click", function (event) {

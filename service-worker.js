@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261001modern13-15616a4dad83";
+const CACHE_VERSION = "efp-pwa-20261001caback1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20260930r2"></script>';
@@ -35,6 +35,7 @@ const APP_SHELL = [
   "/app-session.js?v=20261001homesearchapp2",
   "/back-parent-map.js",
   "/back-nav.js?v=20261001homesearchapp2",
+  "/progress.js?v=20261001caback1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js",
   "/section-search-ui.js?v=20261001searchreturn2",
@@ -380,6 +381,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/ca-move-top.js" ||
       url.pathname === "/app-session.js" ||
       url.pathname === "/back-nav.js" ||
+      url.pathname === "/progress.js" ||
       url.pathname === "/search-logic.js" ||
       url.pathname === "/section-search-ui.js" ||
       url.pathname === "/homepage-search-ui.js" ||
