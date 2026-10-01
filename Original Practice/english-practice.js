@@ -252,8 +252,14 @@ function resetCurrentQuiz(){
  if(!state.chapterName)return;
  if(!confirm("Reset progress for this chapter? Your bookmarks will stay saved."))return;
  clearCurrentAttempt();saved.answers[state.chapterName]={};state.shuffleMap={};state.currentSection=0;bookmarkOnly=false;
- if(window.EFP_QUIZ_PROGRESS_WARNING)window.EFP_QUIZ_PROGRESS_WARNING.disarm();
- syncUrl("quiz",false);render();window.scrollTo({top:0,behavior:"smooth"});
+ var finishReset=function(){
+  saved.answers[state.chapterName]={};state.shuffleMap={};state.currentSection=0;bookmarkOnly=false;
+  syncUrl("quiz",false);render();window.scrollTo({top:0,behavior:"smooth"});
+ };
+ var warning=window.EFP_QUIZ_PROGRESS_WARNING;
+ if(warning&&typeof warning.releaseBackGuard==="function"){warning.releaseBackGuard(finishReset);return}
+ if(warning&&typeof warning.disarm==="function")warning.disarm();
+ finishReset();
 }
 function enhanceQuiz(){
  var container=document.getElementById("questions-container");if(!container)return;
