@@ -53,7 +53,7 @@ function parseMaster() {
   return {src, data: JSON.parse(src.slice(s + tag.length, e))};
 }
 
-function expectedMedievalRecords(data) {
+function expectedModernRecords(data) {
   const modern = data['Modern History'];
   if (!modern) throw new Error('Modern History master group missing');
   const chapters = Object.keys(modern);
@@ -131,8 +131,8 @@ function refreshSitemap(changed) {
     if (!m) return block;
     const loc = m[1].replace(/&amp;/g, '&');
     const isHistoryMain = loc === 'https://examfusionprep.com/Original%20Practice/History_Complete_Practice.html';
-    const isMedieval = loc.startsWith('https://examfusionprep.com/Original%20Practice/History_Complete_Practice.html?') && loc.includes('subject=Medieval+History');
-    if (!isHistoryMain && !isMedieval) return block;
+    const isModern = loc.startsWith('https://examfusionprep.com/Original%20Practice/History_Complete_Practice.html?') && loc.includes('subject=Modern+History');
+    if (!isHistoryMain && !isModern) return block;
     return block.replace(/<lastmod>[^<]*<\/lastmod>/, '<lastmod>' + LASTMOD + '</lastmod>');
   });
   writeIfChanged(SITEMAP, next, changed);
@@ -141,7 +141,7 @@ function refreshSitemap(changed) {
 const {src: historySrc, data} = parseMaster();
 const digest = crypto.createHash('sha256').update(JSON.stringify(data['Modern History'])).digest('hex').slice(0, 12);
 const VERSION = '20261001modern13-' + digest;
-const {records, questions} = expectedMedievalRecords(data);
+const {records, questions} = expectedModernRecords(data);
 const changed = [];
 rebuildSharedSnippet(records, changed);
 bumpSearchConsumers(historySrc, changed);
