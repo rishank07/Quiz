@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const cp = require('node:child_process');
+const crypto = require('node:crypto');
 
 const ROOT = '.';
 const HISTORY = 'Original Practice/History_Complete_Practice.html';
@@ -9,7 +10,6 @@ const OP_INDEX = 'Original Practice/index.html';
 const OP_RUNTIME = 'Original Practice/original-practice.js';
 const SITEMAP = 'sitemap.xml';
 const SW = 'service-worker.js';
-const VERSION = '20261001medieval9';
 const LASTMOD = '2026-10-01';
 const commit = process.argv.includes('--commit');
 
@@ -119,7 +119,7 @@ function bumpSearchConsumers(historySrc, changed) {
   writeIfChanged(HISTORY, historyNext, changed);
 
   const sw = read(SW);
-  let swNext = sw.replace(/const CACHE_VERSION = "efp-pwa-[^"]+";/, 'const CACHE_VERSION = "efp-pwa-2026-10-01-v230-medieval-index";');
+  let swNext = sw.replace(/const CACHE_VERSION = "efp-pwa-[^"]+";/, 'const CACHE_VERSION = "efp-pwa-' + VERSION + '";');
   swNext = swNext.replace(/\/Original%20Practice\/original-practice\.js\?v=[^"']+/g, '/Original%20Practice/original-practice.js?v=' + VERSION);
   writeIfChanged(SW, swNext, changed);
 }
@@ -139,6 +139,8 @@ function refreshSitemap(changed) {
 }
 
 const {src: historySrc, data} = parseMaster();
+const digest = crypto.createHash('sha256').update(JSON.stringify(data['Medieval History'])).digest('hex').slice(0, 12);
+const VERSION = '20261001medieval9-' + digest;
 const {records, questions} = expectedMedievalRecords(data);
 const changed = [];
 rebuildSharedSnippet(records, changed);
