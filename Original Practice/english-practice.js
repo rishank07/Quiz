@@ -76,19 +76,33 @@ function stripHtml(value){var node=document.createElement("div");node.innerHTML=
 function norm(value){return stripHtml(value).toLowerCase().replace(/[’‘`]/g,"'").replace(/[^a-z0-9\u0900-\u097f]+/g," ").replace(/\s+/g," ").trim()}
 function chapterNames(){return Object.keys(MASTER)}
 
-var QUESTION_RECORDS=null;
+var QUESTION_RECORDS=null,QUESTION_RECORDS_PROMISE=null;
 function questionRecords(){
- if(QUESTION_RECORDS)return QUESTION_RECORDS;
- QUESTION_RECORDS=[];
+ if(QUESTION_RECORDS)return Promise.resolve(QUESTION_RECORDS);
+ if(QUESTION_RECORDS_PROMISE)return QUESTION_RECORDS_PROMISE;
+ var pending=[];
  chapterNames().forEach(function(chapter){
   (MASTER[chapter]||[]).forEach(function(section,sectionIndex){
    (section.questions||[]).forEach(function(q,qi){
-    var answer=Array.isArray(q.options)&&Number.isInteger(q.answer)?q.options[q.answer]:"";
-    QUESTION_RECORDS.push({chapter:chapter,section:sectionIndex,qi:qi,title:q.prompt||"Question",text:norm([q.prompt,q.sentence,(q.options||[]).join(" "),answer,q.explanation,q.englishExplanation,q.rule].join(" "))});
+    pending.push({chapter:chapter,section:sectionIndex,qi:qi,q:q});
    });
   });
  });
- return QUESTION_RECORDS;
+ QUESTION_RECORDS_PROMISE=new Promise(function(resolve){
+  var records=[],index=0;
+  function nextBatch(){
+   var start=Date.now(),count=0;
+   while(index<pending.length&&count++<60&&Date.now()-start<6){
+    var item=pending[index++],q=item.q;
+    var answer=Array.isArray(q.options)&&Number.isInteger(q.answer)?q.options[q.answer]:"";
+    records.push({chapter:item.chapter,section:item.section,qi:item.qi,title:q.prompt||"Question",text:norm([q.prompt,q.sentence,(q.options||[]).join(" "),answer,q.explanation,q.englishExplanation,q.rule].join(" "))});
+   }
+   if(index<pending.length){setTimeout(nextBatch,0);return}
+   pending.length=0;QUESTION_RECORDS=records;resolve(records);
+  }
+  setTimeout(nextBatch,0);
+ });
+ return QUESTION_RECORDS_PROMISE;
 }
 
 var OP_HISTORY_KEY="efpOriginalPracticeNav";
@@ -225,17 +239,24 @@ function openSearchResult(action){
 function searchPanel(){
  var box=document.createElement("div");box.className="efp-op-search";
  box.innerHTML='<div class="efp-op-search-row"><span aria-hidden="true">🔎</span><input type="search" autocomplete="off" placeholder="Search chapter or question / अध्याय या प्रश्न खोजें…" aria-label="Search English Grammar chapters and questions"></div><div class="efp-op-search-results" aria-live="polite"></div>';
- var input=box.querySelector("input"),results=box.querySelector(".efp-op-search-results"),timer=null;
+ var input=box.querySelector("input"),results=box.querySelector(".efp-op-search-results"),timer=null,searchSequence=0;
  input.addEventListener("input",function(){
+  var sequence=++searchSequence;
   clearTimeout(timer);results.innerHTML="";var raw=input.value.trim(),query=norm(raw);if(query.length<2)return;
   timer=setTimeout(function(){
    var terms=query.split(" ").filter(Boolean),chapters=chapterNames().filter(function(chapter){return terms.every(function(term){return norm(chapter).indexOf(term)>=0})}).slice(0,10);
    if(chapters.length){var heading=document.createElement("div");heading.className="efp-op-search-heading";heading.textContent="Chapters / अध्याय";results.appendChild(heading)}
    chapters.forEach(function(chapter){var button=document.createElement("button");button.type="button";button.className="efp-op-search-result";button.innerHTML="<strong>"+escapeHtml(chapter.replace(/^\d+\.\s*/,""))+"</strong><small>English Grammar · "+chapterQCount(MASTER[chapter])+" questions</small>";button.onclick=function(){openSearchResult(function(){markVisited(chapter);goToQuiz(chapter)})};results.appendChild(button)});
-   var matches=questionRecords().filter(function(record){return terms.every(function(term){return record.text.indexOf(term)>=0})}).slice(0,16);
+   var loading=document.createElement("div");loading.className="efp-op-search-loading";loading.textContent="Searching questions… / प्रश्न खोजे जा रहे हैं…";results.appendChild(loading);
+   questionRecords().then(function(records){
+   if(sequence!==searchSequence||input.value.trim()!==raw||!input.isConnected)return;
+   loading.remove();
+   var matches=[];
+   for(var i=0;i<records.length&&matches.length<16;i++){var record=records[i];if(terms.every(function(term){return record.text.indexOf(term)>=0}))matches.push(record)}
    if(matches.length){var qh=document.createElement("div");qh.className="efp-op-search-heading";qh.textContent="Question Matches / प्रश्न मिलान";results.appendChild(qh)}
    matches.forEach(function(record){var button=document.createElement("button");button.type="button";button.className="efp-op-search-result efp-op-search-question";button.innerHTML="<strong>"+escapeHtml(stripHtml(record.title))+"</strong><small>"+escapeHtml(record.chapter)+" · Section "+(record.section+1)+" · Q"+(record.qi+1)+"</small>";button.onclick=function(){openSearchResult(function(){openQuestion(record)})};results.appendChild(button)});
    if(!chapters.length&&!matches.length)results.innerHTML='<div class="efp-op-search-none">No matching chapter or question / कोई मिलान नहीं मिला</div>';
+   });
   },100);
  });
  return box;

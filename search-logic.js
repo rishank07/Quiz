@@ -749,8 +749,57 @@ function efFallbackSnippetSearchAsync(query, records, options) {
   });
 }
 
+// Section pages used to retain several large workers (and warm them on focus).
+// Match Home's low-memory policy: start on demand, serialize sources and free
+// each index after its results have been copied out of the worker.
+var efSectionSearchScheduler = { tail: Promise.resolve(), active: null, epoch: 0 };
+function efIsSectionSearchPage() {
+  if (typeof document === "undefined" || typeof location === "undefined") return false;
+  return !/^\/(?:index\.html)?$/i.test(location.pathname);
+}
+function efManageSectionSearchClient(client) {
+  var generation = 0;
+  var managed = {
+    // Merely focusing a field must not download/parse all its indexes.
+    warm: function () { return Promise.resolve(true); },
+    terminate: function () { ++generation; client.terminate(); },
+    search: function (query) {
+      var token = ++generation, epoch = efSectionSearchScheduler.epoch;
+      if (efSectionSearchScheduler.active === managed) client.terminate();
+      var job = efSectionSearchScheduler.tail.then(function () {
+        if (token !== generation || epoch !== efSectionSearchScheduler.epoch) return [];
+        efSectionSearchScheduler.active = managed;
+        return client.search(query).then(function (rows) {
+          return token === generation && epoch === efSectionSearchScheduler.epoch ? rows : [];
+        }).finally(function () {
+          client.terminate();
+          if (efSectionSearchScheduler.active === managed) efSectionSearchScheduler.active = null;
+        });
+      });
+      efSectionSearchScheduler.tail = job.catch(function () {});
+      return job;
+    }
+  };
+  return managed;
+}
+if (efIsSectionSearchPage()) {
+  var efCancelSectionSearch = function () {
+    ++efSectionSearchScheduler.epoch;
+    if (efSectionSearchScheduler.active) efSectionSearchScheduler.active.terminate();
+  };
+  document.addEventListener("input", function (event) {
+    if (event.target && event.target.matches &&
+        event.target.matches('input[type="search"], input[id*="earch"]')) efCancelSectionSearch();
+  }, true);
+  window.addEventListener("pagehide", efCancelSectionSearch);
+}
+
 function efCreateSearchWorker(options) {
   options = options || {};
+  var managedSection = efIsSectionSearchPage();
+  // A failed worker must not suddenly inject a tens-of-MB index into the UI
+  // thread. Existing title/chapter filtering stays available in that case.
+  if (managedSection) options = Object.assign({}, options, { workerOnly: true });
   var worker = null;
   var workerStartPromise = null;
   var cancelStartup = null;
@@ -759,6 +808,11 @@ function efCreateSearchWorker(options) {
   var latestSearchToken = 0;
   var pending = {};
   var fallbackRecordsPromise = null;
+  function cancellation() {
+    var error = new Error("Search worker terminated");
+    error.efCancelled = true;
+    return error;
+  }
 
   function rejectPending(error) {
     Object.keys(pending).forEach(function (id) {
@@ -803,7 +857,7 @@ function efCreateSearchWorker(options) {
         settled = true;
         clearTimeout(timeout);
         cancelStartup = null;
-        reject(new Error("Search worker terminated"));
+        reject(cancellation());
       };
 
       worker.onmessage = function (event) {
@@ -880,7 +934,8 @@ function efCreateSearchWorker(options) {
         pending[id] = { resolve: resolve, reject: reject };
         worker.postMessage({ type: "search", id: id, query: query });
       });
-    }).catch(function () {
+    }).catch(function (error) {
+      if (error && error.efCancelled) return [];
       workerFailed = true;
       if (options.workerOnly) return [];
       return fallbackSearch(query).then(function (rows) { return token === latestSearchToken ? rows : []; });
@@ -903,7 +958,7 @@ function efCreateSearchWorker(options) {
     ++latestSearchToken;
     if (cancelStartup) cancelStartup();
     if (worker) worker.terminate();
-    rejectPending(new Error("Search worker terminated"));
+    rejectPending(cancellation());
     worker = null;
     workerStartPromise = null;
   }
@@ -911,5 +966,6 @@ function efCreateSearchWorker(options) {
   // Always return a client when an index is configured. This prevents UI code
   // from degrading to a misleading "Full-text search unavailable" state.
   if (!options.indexUrl || !options.globalName) return null;
-  return { warm: warm, search: search, terminate: terminate };
+  var client = { warm: warm, search: search, terminate: terminate };
+  return managedSection ? efManageSectionSearchClient(client) : client;
 }

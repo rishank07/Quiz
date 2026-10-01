@@ -3,6 +3,13 @@
    the same rule without rewriting the question banks. */
 (function () {
   "use strict";
+  if (!/^\/(?:index\.html)?$/i.test(location.pathname) && !document.getElementById("efp-section-search-ui")) {
+    var searchUi = document.createElement("script");
+    searchUi.id = "efp-section-search-ui";
+    searchUi.src = "/section-search-ui.js?v=20261001lazy1";
+    searchUi.async = false;
+    document.head.appendChild(searchUi);
+  }
   var PARAM = "efSearchReturn", RESTORE = "efSearchRestore";
   var PREFIX = "efp_search_return_v1:";
   var INPUTS = 'input[type="search"], input[id*="earch"]';
