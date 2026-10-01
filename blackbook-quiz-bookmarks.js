@@ -14,6 +14,79 @@
   var filterTimer = null;
   var filterActive = false;
 
+  function installSectionNavigation() {
+    var container = document.getElementById("quiz-container");
+    if (!container || typeof window.showSection !== "function") return;
+
+    var nav = document.getElementById("efp-bb-section-nav");
+    if (!nav) {
+      nav = document.createElement("nav");
+      nav.id = "efp-bb-section-nav";
+      nav.className = "efp-bb-section-nav";
+      nav.setAttribute("aria-label", "Quiz section navigation");
+      nav.innerHTML = '<button type="button" class="efp-bb-previous">← Previous</button>' +
+        '<button type="button" class="efp-bb-next">Next →</button>';
+      nav.firstElementChild.addEventListener("click", function () { move(-1); });
+      nav.lastElementChild.addEventListener("click", function () { move(1); });
+    }
+
+    function availableLetters() {
+      return Array.prototype.filter.call(
+        document.querySelectorAll("#alphabet-container button[data-letter]"),
+        function (button) { return !button.disabled; }
+      ).map(function (button) { return button.dataset.letter; });
+    }
+
+    function currentIndex(letters) {
+      var section = container.querySelector("section:not(.hidden)");
+      return section ? letters.indexOf(section.id.replace(/^section-/, "")) : -1;
+    }
+
+    function update() {
+      var letters = availableLetters();
+      var index = currentIndex(letters);
+      nav.hidden = index < 0;
+      nav.firstElementChild.disabled = index <= 0;
+      nav.lastElementChild.textContent = index === letters.length - 1 ? "Finish" : "Next →";
+      /* New letters are rendered lazily; always keep navigation after them. */
+      if (container.lastElementChild !== nav) container.appendChild(nav);
+    }
+
+    function move(direction) {
+      var letters = availableLetters();
+      var index = currentIndex(letters);
+      if (index < 0) return;
+      if (direction > 0 && index === letters.length - 1) {
+        var leave = function () {
+          if (window.EFP_APP_SESSION && typeof window.EFP_APP_SESSION.save === "function") window.EFP_APP_SESSION.save();
+          window.location.assign("/Books/BlackBook/BlackBook.html");
+        };
+        var warning = window.EFP_QUIZ_PROGRESS_WARNING;
+        if (warning && typeof warning.releaseBackGuard === "function") {
+          warning.releaseBackGuard(leave);
+        } else {
+          if (warning && typeof warning.disarm === "function") warning.disarm();
+          leave();
+        }
+        return;
+      }
+      if (index + direction >= 0 && index + direction < letters.length) {
+        window.showSection(letters[index + direction]);
+      }
+    }
+
+    if (!window.__efpBlackbookSectionNavInstalled) {
+      window.__efpBlackbookSectionNavInstalled = true;
+      var showSection = window.showSection;
+      window.showSection = function () {
+        var result = showSection.apply(this, arguments);
+        update();
+        return result;
+      };
+    }
+    update();
+  }
+
   function safeParse(raw, fallback) {
     try {
       var value = JSON.parse(raw);
@@ -53,6 +126,13 @@
     var style = document.createElement("style");
     style.id = STYLE_ID;
     style.textContent =
+      ".efp-bb-section-nav{display:flex;justify-content:space-between;gap:12px;margin:24px 0 0;padding-bottom:16px}" +
+      ".efp-bb-section-nav[hidden]{display:none}.efp-bb-section-nav button{min-height:44px;min-width:104px;" +
+      "padding:10px 16px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#334155;" +
+      "font:700 14px/1.25 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;cursor:pointer;touch-action:manipulation}" +
+      ".efp-bb-section-nav .efp-bb-next{background:#2563eb;border-color:#2563eb;color:#fff}" +
+      ".efp-bb-section-nav button:disabled{opacity:.4;cursor:default}.efp-bb-section-nav button:focus-visible{outline:3px solid #f5b301;outline-offset:3px}" +
+      "html.efp-black .efp-bb-section-nav .efp-bb-previous,html.dark .efp-bb-section-nav .efp-bb-previous{background:#182231;border-color:#475569;color:#f1f5f9}" +
       ".efp-bb-bookmark-btn{flex:0 0 auto;border:1px solid #f2c14e;background:#fff9e8;color:#9a6a00;" +
       "border-radius:10px;padding:6px 9px;font:800 11px/1.15 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;" +
       "cursor:pointer;white-space:nowrap;box-shadow:0 1px 2px rgba(15,23,42,.06);transition:.15s ease}" +
@@ -377,6 +457,7 @@
   function init() {
     ensureMobileScorebar();
     scan(document);
+    installSectionNavigation();
     installDesktopFilterScrollBehavior();
     if (targetSn()) {
       openTargetLetter();

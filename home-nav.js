@@ -458,13 +458,45 @@
     return Math.max(0, root.scrollHeight - window.innerHeight);
   }
 
+  /* Keep floating arrows clear of the visible section navigation row. */
+  function moveTopSafeBottom(button, bottom) {
+    if (!button || window.innerWidth >= 1200) return bottom;
+    var arrow = button.getBoundingClientRect();
+    var height = arrow.height || 44;
+    var controls = document.querySelectorAll(
+      ".bottom button,.pagination button,.quiz-navigation button,.nav-buttons button," +
+      ".efp-bb-section-nav button,[onclick*='moveSection'],[onclick*='nextSection'],[onclick*='prevSection']"
+    );
+    var rects = [];
+    for (var i = 0; i < controls.length; i++) {
+      var rect = controls[i].getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight &&
+          rect.right > arrow.left - 10 && rect.left < arrow.right + 10) rects.push(rect);
+    }
+    /* Recheck after each lift in case a second navigation row sits above it. */
+    for (var pass = 0; pass <= rects.length; pass++) {
+      var before = bottom;
+      for (var j = 0; j < rects.length; j++) {
+        var top = window.innerHeight - bottom - height;
+        var lower = window.innerHeight - bottom;
+        if (lower > rects[j].top - 10 && top < rects[j].bottom + 10) {
+          bottom = Math.max(bottom, Math.ceil(window.innerHeight - rects[j].top + 12));
+        }
+      }
+      if (bottom === before) break;
+    }
+    return bottom;
+  }
+
+  window.EFP_MOVE_TOP_SAFE_BOTTOM = moveTopSafeBottom;
+
   function positionMoveTopAboveHome(button) {
     if (!button) return;
     var home = document.getElementById(BUTTON_ID);
     var variable = "--efp-move-top-bottom";
 
     if (!home) {
-      button.style.removeProperty(variable);
+      button.style.setProperty(variable, moveTopSafeBottom(button, 14) + "px");
       return;
     }
 
@@ -478,9 +510,9 @@
     if (visible && rect.top > window.innerHeight * 0.45 && rect.left > window.innerWidth * 0.45) {
       var gap = window.innerWidth <= 639 ? 12 : 14;
       var bottom = Math.max(14, Math.ceil(window.innerHeight - rect.top + gap));
-      button.style.setProperty(variable, bottom + "px");
+      button.style.setProperty(variable, moveTopSafeBottom(button, bottom) + "px");
     } else {
-      button.style.removeProperty(variable);
+      button.style.setProperty(variable, moveTopSafeBottom(button, 14) + "px");
     }
   }
 

@@ -1,8 +1,8 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261001caback1";
+const CACHE_VERSION = "efp-pwa-20261001navbuttons1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
-const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20260930r2"></script>';
+const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
@@ -26,12 +26,12 @@ const APP_SHELL = [
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
   "/ca-question-deeplink.js?v=20260930movetop2",
-  "/ca-move-top-v3.js?v=20260930r2",
-  "/blackbook-quiz-bookmarks.js",
+  "/ca-move-top-v3.js?v=20261001navbuttons1",
+  "/blackbook-quiz-bookmarks.js?v=20261001navbuttons1",
   "/blackbook-topic-bookmarks.js",
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
-  "/home-nav.js?v=20260930movetop3",
+  "/home-nav.js?v=20261001navbuttons1",
   "/app-session.js?v=20261001homesearchapp2",
   "/back-parent-map.js",
   "/back-nav.js?v=20261001homesearchapp2",
