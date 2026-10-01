@@ -213,7 +213,12 @@ function opHasManagedParent(){
 function opRunAfterQuizGuardRelease(action){
  var warning=window.EFP_QUIZ_PROGRESS_WARNING;
  if(!opHistoryRestoring&&state.screen==="quiz"&&warning&&typeof warning.releaseBackGuard==="function"){
-  warning.releaseBackGuard(action);
+  var release=function(){warning.releaseBackGuard(action)};
+  if(typeof warning.isArmed==="function"&&warning.isArmed()&&typeof warning.confirmLeave==="function"){
+   warning.confirmLeave(release);
+   return;
+  }
+  release();
   return;
  }
  action();
