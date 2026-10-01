@@ -972,7 +972,10 @@
      parent, then that parent installs the next guard. This recreates the same
      hierarchy the user would have traversed manually. */
   function installGenericHomeSearchHistoryGuard() {
-    if (isCruxViewer()) return;
+    /* Original Practice already owns a complete in-document history stack.
+       Adding this generic guard there creates a second same-URL Back layer and
+       makes Quiz/Chapters exits depend on which synthetic guard is on top. */
+    if (isCruxViewer() || isOriginalPracticePage()) return;
 
     var parentUrl = logicalParentUrl();
     if (!parentUrl) return;
@@ -1045,13 +1048,10 @@
 
     if (!isGenericHomeSearchGuardState(event.state, "base")) return;
 
-    /* Original Practice keeps Quiz -> Chapters -> Complete Practice Home in
-       one document. Re-arm the same browser guard after each in-page step so
-       Android Back and the visible Back button follow an identical route. */
-    if (useOriginalPracticeInternalBack(event)) {
-      window.setTimeout(armGenericHomeSearchGuard, 0);
-      return;
-    }
+    /* Older cached sessions may still contain one legacy generic guard on
+       an Original Practice page. Consume it once through the SPA hierarchy,
+       but never recreate that competing guard. */
+    if (useOriginalPracticeInternalBack(event)) return;
 
     var parentUrl = logicalParentUrl();
     if (!parentUrl) {
