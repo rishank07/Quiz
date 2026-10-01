@@ -4,11 +4,20 @@ const file = 'Original Practice/History_Complete_Practice.html';
 const tag = '<script id="master-data" type="application/json">';
 const same = (a,b) => JSON.stringify(a) === JSON.stringify(b);
 const commit = process.argv.includes('--commit');
+const pending = process.argv.includes('--pending');
+const planDir = pending ? 'audits/ancient-history/pending' : 'audits/ancient-history';
+const finalEdits = new Map();
+if (!pending && fs.existsSync('audits/ancient-history/pending')) {
+  for (const name of fs.readdirSync('audits/ancient-history/pending').filter(x=>/^chapter-\d+\.json$/.test(x))) {
+    const plan=JSON.parse(fs.readFileSync('audits/ancient-history/pending/'+name,'utf8'));
+    for(const edit of plan.edits) finalEdits.set(plan.chapter+':'+edit.section+':'+edit.question,edit.after);
+  }
+}
 const selected = process.argv.find(x => /^--chapter=\d+$/.test(x));
 const chapterNumber = selected ? Number(selected.split('=')[1]) : null;
-const plans = fs.readdirSync('audits/ancient-history').filter(x => /^chapter-\d+\.json$/.test(x)).sort();
+const plans = fs.readdirSync(planDir).filter(x => /^chapter-\d+\.json$/.test(x)).sort();
 for (const planFile of plans) {
-  const plan = JSON.parse(fs.readFileSync('audits/ancient-history/'+planFile,'utf8'));
+  const plan = JSON.parse(fs.readFileSync(planDir+'/'+planFile,'utf8'));
   if (chapterNumber && plan.chapter !== chapterNumber) continue;
   const src = fs.readFileSync(file,'utf8');
   const s = src.indexOf(tag), e = src.indexOf('</script>',s+tag.length);
@@ -19,7 +28,7 @@ for (const planFile of plans) {
   if(!chapter || chapter.reduce((n,s)=>n+s.questions.length,0)!==plan.reviewed_questions) throw Error('Chapter count mismatch');
   for(const edit of plan.edits){
     const section=chapter[edit.section-1], q=section?.questions[edit.question-1];
-    if(same(q,edit.after)) continue;
+    if(same(q,edit.after) || same(q,finalEdits.get(plan.chapter+':'+edit.section+':'+edit.question))) continue;
     if(!same(q,edit.before)) throw Error('Concurrent content change: '+plan.chapter+' S'+edit.section+'Q'+edit.question);
     section.questions[edit.question-1]=edit.after;
   }
@@ -47,7 +56,7 @@ for (const planFile of plans) {
   console.log('Chapter '+plan.chapter+': applied '+plan.edits.length+' corrections; '+plan.reviewed_questions+' questions, total '+total);
   if(commit){
     cp.execFileSync('git',['add','--',file],{stdio:'inherit'});
-    cp.execFileSync('git',['commit','-m','Audit Ancient History Chapter '+plan.chapter+': bilingual factual and option corrections'],{stdio:'inherit'});
+    cp.execFileSync('git',['commit','-m',(pending ? 'Resolve pending Ancient History Chapter ' : 'Audit Ancient History Chapter ')+plan.chapter+': bilingual factual and option corrections'],{stdio:'inherit'});
     cp.execFileSync('git',['push','origin','HEAD:master'],{stdio:'inherit'});
   }
 }
