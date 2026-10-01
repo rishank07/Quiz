@@ -14,7 +14,7 @@
   var PREFIX = "efp_search_return_v1:";
   var INPUTS = 'input[type="search"], input[id*="earch"]';
   var active = null, restoring = false, restoredToken = "";
-  var RESULTS = '.efp-op-search-results, #results, #searchResults, #efContentResults, #efBlackbookResults, #fullTextResults, #efp-ca-rapid-exact-results';
+  var RESULTS = '.efp-op-search-results, #efScopedResults, #results, #searchResults, #efContentResults, #efBlackbookResults, #fullTextResults, #efp-ca-rapid-exact-results';
   // Preserve presentation only: replacing menus would discard their listeners.
   var PRESENTATION = '[id], .menu, .card, .nested, .sub-nested, .submenu a';
 
