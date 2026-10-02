@@ -41,6 +41,9 @@
   var initialSearch=String(params.get('search')||'').trim();
   var pages=[];
   var pageAliases=[];
+  var searchIndexFallbackPending=false;
+  var searchIndexFallbackRunning=false;
+  var searchPlaceholder='Search in this PDF / खोजें…';
   var pdfDoc=null;
   var renderTask=null;
   var singleRenderGeneration=0;
@@ -800,6 +803,7 @@
     task.promise.then(function(loaded){
       if(readerSuspended||generation!==pdfLoadGeneration){try{loaded.destroy()}catch(_){}return}
       pdfDoc=loaded;pdfError.hidden=true;total.textContent=loaded.numPages;
+      if(searchIndexFallbackPending)buildSearchIndexFromPdf();
       if(page>loaded.numPages)page=loaded.numPages;
       return chooseReaderAfterLoad();
     }).catch(function(err){
@@ -827,7 +831,54 @@
     });
   }
 
-  function loadPagesForSearch(){var s=document.createElement('script');s.src='pages/'+doc.id+'.js?v=20260923mathsstrict1';s.onload=function(){pages=Array.isArray(window.EF_CRUX_DOC_PAGES)?window.EF_CRUX_DOC_PAGES:[];pageAliases=Array.isArray(window.EF_CRUX_DOC_PAGE_ALIASES)?window.EF_CRUX_DOC_PAGE_ALIASES:[];runDocSearch()};s.onerror=function(){docSearch.placeholder='PDF search index unavailable — use page number';docSearch.disabled=true};document.head.appendChild(s)}
+  // Keep text PDFs searchable even when an index request fails. Extract one
+  // page at a time and yield between pages so the reader stays responsive.
+  function buildSearchIndexFromPdf(){
+    if(!pdfDoc||readerSuspended||searchIndexFallbackRunning)return;
+    searchIndexFallbackRunning=true;
+    var loaded=pdfDoc,extracted=[],n=1;
+    docSearch.disabled=false;
+    docSearch.placeholder='Preparing PDF search…';
+    function next(){
+      if(readerSuspended||pdfDoc!==loaded)throw new Error('PDF reader suspended');
+      if(n>loaded.numPages)return;
+      return loaded.getPage(n++).then(function(pg){return pg.getTextContent()}).then(function(content){
+        extracted.push(content.items.map(function(item){return (item.str||'')+(item.hasEOL?'\n':' ')}).join(''));
+        return new Promise(function(resolve){setTimeout(resolve,0)}).then(next);
+      });
+    }
+    Promise.resolve().then(next).then(function(){
+      if(readerSuspended||pdfDoc!==loaded)return;
+      pages=extracted;pageAliases=[];
+      searchIndexFallbackPending=false;
+      docSearch.placeholder=pages.some(function(text){return text.trim()})?searchPlaceholder:'No searchable text in this PDF';
+      runDocSearch();
+    }).catch(function(){
+      if(!readerSuspended)docSearch.placeholder='PDF search could not load — reopen to retry';
+    }).then(function(){
+      searchIndexFallbackRunning=false;
+      if(searchIndexFallbackPending&&pdfDoc!==loaded&&!readerSuspended)buildSearchIndexFromPdf();
+    });
+  }
+  function loadPagesForSearch(){
+    searchPlaceholder=docSearch.placeholder||searchPlaceholder;
+    var s=document.createElement('script');
+    s.src='pages/'+doc.id+'.js?v=20261002pdfsearch1';
+    function fallback(){
+      searchIndexFallbackPending=true;
+      docSearch.disabled=false;docSearch.placeholder='Preparing PDF search…';
+      buildSearchIndexFromPdf();
+    }
+    s.onload=function(){
+      var indexed=window.EF_CRUX_DOC_PAGES;
+      if(window.EF_CRUX_DOC_ID!==doc.id||!Array.isArray(indexed)||indexed.length!==doc.pages||!indexed.every(function(text){return typeof text==='string'&&text.trim()})){fallback();return}
+      pages=indexed;
+      pageAliases=Array.isArray(window.EF_CRUX_DOC_PAGE_ALIASES)?window.EF_CRUX_DOC_PAGE_ALIASES:[];
+      docSearch.disabled=false;docSearch.placeholder=searchPlaceholder;runDocSearch();
+    };
+    s.onerror=fallback;
+    document.head.appendChild(s);
+  }
   function runDocSearch(){
     var q=normalizeSearchText(docSearch.value);docHits.innerHTML='';
     if(q!==searchQuery){searchQuery=q;activeSearchPage=0;searchFocusPending=false;searchGeneration++;clearSearchHighlightLayers()}

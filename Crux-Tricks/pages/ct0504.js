@@ -1,0 +1,2 @@
+window.EF_CRUX_DOC_ID="ct0504";
+window.EF_CRUX_DOC_PAGES=["Exam Fusion Prep  |  examfusionprep.com  |  Uses of Biodiversity Mind Map\nUSES OF BIODIVERSITY - FULL MIND MAP\nTopic-wise | Hinglish | SSC / BPSC / BSSC / Railway\nTopics in this chapter:\n1. Ecosystem Services & Human Existence\n1. Ecosystem Services & Human Existence\n●1, 2, 3 and 4 - plants, microbes, apaghatakon aur soil-organisms ki parasparik kriyaen soil construction\nmein contribution deti hain. vegetation cover aur jad-system soil aparadan ko kam karne mein help karte\nhain. [Q1]"];

@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261002wordcues1";
+const CACHE_VERSION = "efp-pwa-20261002pdfsearch1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -62,7 +62,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20261001searchreturn2",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20260929prozoom1",
+  "/Crux-Tricks/viewer-v2.js?v=20261002pdfsearch1",
 ];
 
 self.addEventListener("install", (event) => {
@@ -399,6 +399,8 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/Original%20Practice/english-practice.js" ||
       url.pathname === "/Crux-Tricks/crux-search-route.js" ||
       url.pathname === "/Crux-Tricks/crux-tricks.js" ||
+      url.pathname === "/Crux-Tricks/search-snippets-crux-tricks.js" ||
+      url.pathname.startsWith("/Crux-Tricks/pages/") ||
       url.pathname === "/Crux-Tricks/viewer-v2.js") {
     event.respondWith(freshCoreAsset(request));
     return;
