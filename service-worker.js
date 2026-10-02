@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261001polity22-583a40e433b0";
+const CACHE_VERSION = "efp-pwa-20261002blackbooknext1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -27,7 +27,7 @@ const APP_SHELL = [
   "/black-mode.js",
   "/ca-question-deeplink.js?v=20260930movetop2",
   "/ca-move-top-v3.js?v=20261001navbuttons1",
-  "/blackbook-quiz-bookmarks.js?v=20261001navbuttons1",
+  "/blackbook-quiz-bookmarks.js?v=20261002blackbooknext1",
   "/blackbook-topic-bookmarks.js",
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",

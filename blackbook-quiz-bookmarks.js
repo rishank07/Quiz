@@ -38,6 +38,10 @@
     }
 
     function currentIndex(letters) {
+      /* Bookmark filtering can reveal several sections at once. The selected
+       * A-Z button remains the source of truth for Next/Previous. */
+      var selected = document.querySelector("#alphabet-container button[data-letter].bg-blue-600");
+      if (selected) return letters.indexOf(selected.dataset.letter);
       var section = container.querySelector("section:not(.hidden)");
       return section ? letters.indexOf(section.id.replace(/^section-/, "")) : -1;
     }
@@ -71,7 +75,11 @@
         return;
       }
       if (index + direction >= 0 && index + direction < letters.length) {
-        window.showSection(letters[index + direction]);
+        /* Use the existing A-Z click path: it clears the bookmark filter and
+         * saves the chosen letter before lazy answer restoration runs. Calling
+         * showSection directly lets that restoration reopen the previous letter. */
+        var button = document.querySelector('#alphabet-container button[data-letter="' + letters[index + direction] + '"]');
+        if (button && !button.disabled) button.click();
       }
     }
 
