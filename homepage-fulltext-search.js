@@ -54,7 +54,7 @@
       id: "blackbook",
       label: "BlackBook",
       icon: "fa-spell-check",
-      indexUrl: "search-snippets-blackbook.js?v=20260905books1",
+      indexUrl: "search-snippets-blackbook.js?v=20261002tricks1",
       mode: "records",
       globalName: "EF_BLACKBOOK_INDEX",
       fields: ["t", "x", "b"],
