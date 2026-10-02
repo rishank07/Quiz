@@ -74,7 +74,7 @@
       id: "currentaffairs",
       label: "Current Affairs",
       icon: "fa-newspaper",
-      indexUrl: "search-snippets-current-affairs.js?v=20260928answers1",
+      indexUrl: "search-snippets-current-affairs.js?v=20261003ca3pdf1",
       mode: "snippet",
       globalName: "EF_SNIPPET_INDEX",
       sectionPrefix: "./Current%20Affairs/Topic%20Names/",
