@@ -64,7 +64,7 @@
       id: "mindmaps",
       label: "Mind Maps",
       icon: "fa-sitemap",
-      indexUrl: "search-snippets-mindmaps.js?v=20260905books1",
+      indexUrl: "search-snippets-mindmaps.js?v=20261003historymindmaps1",
       mode: "snippet",
       globalName: "EF_SNIPPET_INDEX",
       sectionPrefix: "./Mind%20Maps/",
