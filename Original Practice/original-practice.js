@@ -11,6 +11,35 @@ var CONFIGS={
  "static_gk_complete_practice.html":{slug:"staticgk",label:"Static GK"}
 };
 var CFG=CONFIGS[PAGE_FILE]||{slug:"practice",label:"Practice"};
+
+// Section titles describe revision content independently of exam-specific branding.
+// Address only these title objects; question banks and progress keys stay intact.
+if(PAGE_FILE==="science_complete_practice.html"){
+ [
+  ["Physics","12. Semiconductor",5,"6. High-Yield Exam Points","6. महत्वपूर्ण परीक्षा बिंदु"],
+  ["Physics","13. Our Universe",9,"10. Key Revision Points","10. मुख्य पुनरावृत्ति बिंदु"],
+  ["Chemistry","1. Matter & States of Matter",9,"10. High-Yield Exam Points","10. महत्वपूर्ण परीक्षा बिंदु"],
+  ["Chemistry","2. Atomic Structure",8,"9. Key Revision Points","9. मुख्य पुनरावृत्ति बिंदु"]
+ ].forEach(function(row){
+  var sections=MASTER[row[0]]&&MASTER[row[0]][row[1]];
+  var section=sections&&sections[row[2]];
+  if(section&&section.title&&typeof section.title==="object"){
+   section.title.en=row[3];section.title.hi=row[4];
+  }
+ });
+}
+function improveHomeExamHeading(){
+ if(state.screen!=="home")return;
+ var heading=document.querySelector("#app .text-center.mb-10 p.text-xs.mt-1.text-gray-500");
+ if(!heading)return;
+ var before=heading.textContent.trim();
+ if(before==="SSC · Railway · BPSC · BSSC exam preparation — offline practice"){
+  heading.textContent="SSC · Railway · UPSC · BPSC exam preparation — offline practice";
+ }else if(before==="SSC · Railway · Banking · BPSC · BSSC exam preparation — offline practice"){
+  heading.textContent="SSC · Railway · Banking · UPSC · BPSC exam preparation — offline practice";
+ }
+}
+
 var PROGRESS_KEY="efp_visited_originalpractice_"+CFG.slug;
 var BOOKMARK_KEY="efp_bookmarks";
 var ATTEMPT_PREFIX="efp_original_practice_attempt_v2:";
@@ -425,7 +454,7 @@ selectOption=function(qi,displayIdx){
  saveAppAttempt();
  track("original_practice_answer",{practice:CFG.label,subject:state.subject,chapter:state.chapterName,section:state.currentSection+1,question:qi+1,correct:selectedOrigIdx===currentAnswerIndex(state.quizData[state.currentSection].questions[qi])});
 };
-var baseRender=render;render=function(){baseRender();enhance();efpApplySeoMeta();if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}};
+var baseRender=render;render=function(){baseRender();improveHomeExamHeading();enhance();efpApplySeoMeta();if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}};
 var baseSwitchSection=switchSection;switchSection=function(i){pendingDeepQuestion=null;baseSwitchSection(i);syncUrl("quiz",false);saveAppAttempt()};
 var basePrevSection=prevSection;prevSection=function(){pendingDeepQuestion=null;basePrevSection();if(state.screen==="quiz"){syncUrl("quiz",false);saveAppAttempt()}};
 var baseNextSection=nextSection;nextSection=function(){pendingDeepQuestion=null;baseNextSection();if(state.screen==="quiz"){syncUrl("quiz",false);saveAppAttempt()}};
