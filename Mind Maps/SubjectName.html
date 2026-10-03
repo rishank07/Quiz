@@ -56,11 +56,14 @@
 
     html {
       scroll-behavior: smooth;
+      min-height: 100%;
+      background-color: #0f2027;
     }
 
     body {
       font-family: "Poppins", "Noto Sans Devanagari", sans-serif;
-      background:
+      background-color: #0f2027;
+      background-image:
         radial-gradient(circle at top left, #243b55 0%, transparent 40%),
         radial-gradient(circle at bottom right, #1b2735 0%, transparent 40%),
         linear-gradient(135deg, #0f2027, #203a43, #2c5364);
@@ -774,6 +777,26 @@
 
       html {
         scroll-behavior: auto;
+      }
+    }
+
+    @media(max-width:900px), (hover: none) and (pointer: coarse) {
+      /* Keep the mobile scroll canvas opaque and avoid repainting a fixed
+         gradient through large glass layers as the browser toolbar resizes. */
+      body {
+        background-attachment: scroll;
+      }
+
+      .container,
+      .search-box input {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+      }
+
+      #efp-home-button,
+      #efp-app-back-button {
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
       }
     }
 
@@ -2321,6 +2344,9 @@
     // =======================================
     document.querySelectorAll(".submenu a, .nested-links a").forEach(function (link) {
       link.addEventListener("mousemove", function (e) {
+        // Touch browsers can emit a synthetic mousemove after a tap. Keep
+        // the white spotlight exclusive to devices with a real hover pointer.
+        if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
         this.style.background = `radial-gradient(circle at ${e.offsetX}px ${e.offsetY}px, rgba(255,255,255,0.2), transparent)`;
       });
       link.addEventListener("mouseleave", function () {
