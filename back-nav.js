@@ -3,6 +3,12 @@
    the same rule without rewriting the question banks. */
 (function () {
   "use strict";
+  if (!document.getElementById("efp-shared-search-context")) {
+    var searchContext = document.createElement("script");
+    searchContext.id = "efp-shared-search-context";
+    searchContext.src = "/search-context.js?v=20261004context1";
+    document.head.appendChild(searchContext);
+  }
   if (!/^\/(?:index\.html)?$/i.test(location.pathname) && !document.getElementById("efp-section-search-ui")) {
     var searchUi = document.createElement("script");
     searchUi.id = "efp-section-search-ui";

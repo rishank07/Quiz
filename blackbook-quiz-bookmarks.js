@@ -452,6 +452,7 @@
     focusTimer = setTimeout(function () {
       var el = document.getElementById("bbq-" + sn);
       if (!el) return;
+      if (window.EFP_SEARCH_CONTEXT && window.EFP_SEARCH_CONTEXT.isDismissed(el)) return;
       try { el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" }); }
       catch (_) { el.scrollIntoView(); }
       el.classList.add("efp-bb-deep-focus");

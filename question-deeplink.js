@@ -10,6 +10,7 @@
     var box = document.getElementById(id);
     if (!box || !box.classList || !box.classList.contains("question-box")) return;
     setTimeout(function () {
+      if (window.EFP_SEARCH_CONTEXT && window.EFP_SEARCH_CONTEXT.isDismissed(box)) return;
       try { box.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (e) { box.scrollIntoView(); }
       box.classList.add("efp-deep-focus");
       setTimeout(function () { box.classList.remove("efp-deep-focus"); }, 2200);

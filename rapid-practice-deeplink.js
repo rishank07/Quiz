@@ -337,6 +337,7 @@
   }
 
   function focusArticle(el) {
+    if (window.EFP_SEARCH_CONTEXT && window.EFP_SEARCH_CONTEXT.isDismissed(el)) return;
     try {
       el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
     } catch (_) {

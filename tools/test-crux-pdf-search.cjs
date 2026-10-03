@@ -20,7 +20,7 @@ async function viewer({id='ct0577',mobile=false,indexFailure=false,invalidIndex=
  w.pdfjsLib={GlobalWorkerOptions:{},Util:{transform:(a,b)=>b},getDocument(){return {promise:delay(pdfDelay).then(()=>({numPages:text.length,getPage(n){return Promise.resolve({getViewport({scale}){return {width:600*scale,height:800*scale,scale,transform:[scale,0,0,scale,0,0]}},render(){return {promise:Promise.resolve(),cancel(){}}},getTextContent(){extractions++;return Promise.resolve({items:[{str:text[n-1],transform:[1,0,0,1,0,10],width:10,height:10}],styles:{}})}})}}))}}};
  const append=w.document.head.appendChild.bind(w.document.head);
  w.document.head.appendChild=node=>{const result=append(node);if(node.tagName==='SCRIPT'&&node.src.includes('/pages/'))w.setTimeout(()=>{if(indexFailure)node.onerror();else{run(read('Crux-Tricks/pages/'+id+'.js'));if(invalidIndex)w.EF_CRUX_DOC_ID='ct0001';node.onload()}},0);return result};
- run(read('Crux-Tricks/crux-manifest.js'));run(read('Crux-Tricks/viewer-v2.js'));
+ run(read('search-context.js'));run(read('Crux-Tricks/crux-manifest.js'));run(read('Crux-Tricks/viewer-v2.js'));
  // Run the actual mobile search bridge/mirror from the viewer shell.
  const bridge=Array.from(w.document.scripts).find(s=>!s.src&&s.textContent.includes('mirrorHits'));
  if(mobile)run(bridge.textContent);
@@ -35,6 +35,22 @@ async function viewer({id='ct0577',mobile=false,indexFailure=false,invalidIndex=
  if(mobile){await delay(10);assert.equal(w.document.querySelectorAll('#mobileSearchHits button').length,hits.length);w.document.querySelector('#mobileSearchHits button').click()}
  else hits[0].click();
  await delay(30);assert.equal(Number(w.document.getElementById('pageInput').value),expected[0]);
+ assert.equal(w.document.querySelectorAll('.efp-pdf-search-context').length,1,'PDF search context must open');
+ assert(w.document.querySelector('.efp-context-location').textContent.includes('Page '+expected[0]));
+ assert(w.document.querySelectorAll('.efp-search-mark').length,'Native PDF word highlights must remain');
+ w.document.querySelector('.efp-context-next').click();await delay(30);
+ assert.equal(Number(w.document.getElementById('pageInput').value),expected[1%expected.length]);
+ w.document.querySelector('.efp-context-prev').click();await delay(30);
+ assert.equal(Number(w.document.getElementById('pageInput').value),expected[0]);
+ const pageBefore=w.document.getElementById('pageInput').value,storageBefore=JSON.stringify(w.localStorage),urlBefore=w.location.href;
+ w.document.querySelector('.efp-context-dismiss').click();await delay(10);
+ assert.equal(w.document.querySelectorAll('.efp-search-context,.efp-search-layer').length,0,'Dismiss must clear context and PDF highlights');
+ assert.equal(w.document.getElementById('pageInput').value,pageBefore,'Dismiss must keep PDF page');
+ assert.equal(w.location.href,urlBefore,'Dismiss must preserve navigation URL');
+ assert.equal(JSON.stringify(w.localStorage),storageBefore,'Dismiss must preserve progress');
+ w.dispatchEvent(new w.PageTransitionEvent('pageshow',{persisted:true}));await delay(10);
+ assert.equal(w.document.querySelectorAll('.efp-search-context').length,0,'Dismissed PDF context must stay closed on BFCache restore');
+ hits[0].click();await delay(30);assert.equal(w.document.querySelectorAll('.efp-search-context').length,1,'Deliberate new search hit must reopen context');
  if(indexFailure||invalidIndex)assert(extractions>=text.length,'Missing/wrong index must extract all PDF pages');
  dom.window.close();
  console.log('PASS viewer search/page jump',mobile?'mobile':'desktop',indexFailure?'missing index':invalidIndex?'wrong document index':'normal index',pdfDelay?'delayed PDF':'');

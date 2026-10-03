@@ -8,6 +8,7 @@
   function focusQuestion(id) {
     var el = document.getElementById(id);
     if (!el) return;
+    if (window.EFP_SEARCH_CONTEXT && window.EFP_SEARCH_CONTEXT.isDismissed(el)) return;
     el.scrollIntoView({ behavior: "smooth", block: "center" });
     el.classList.add("efp-deep-focus");
     setTimeout(function () { el.classList.remove("efp-deep-focus"); }, 2600);

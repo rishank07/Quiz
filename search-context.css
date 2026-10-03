@@ -1,0 +1,25 @@
+.efp-search-context {
+  box-sizing:border-box;display:flex;align-items:center;gap:6px;width:100%;min-width:0;margin:8px 0;padding:4px 8px;
+  border:1px solid #d4b45c;border-radius:9px;background:#fff7d8;color:#302508;font:13px/1.3 system-ui,sans-serif;text-align:left;
+}
+.efp-search-context .efp-context-description{flex:1;min-width:0}
+.efp-search-context .efp-context-description span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.efp-search-context .efp-context-location{display:block;font-size:11px;margin-top:2px}
+.efp-search-context button{flex:0 0 auto;min-width:40px;min-height:44px;padding:4px 7px;margin:0;border:1px solid #b69636;border-radius:7px;background:#fff;color:#302508;font:700 13px/1.2 system-ui,sans-serif;cursor:pointer}
+.efp-search-context button:disabled{opacity:.45;cursor:default}
+.efp-search-context button:focus-visible{outline:2px solid #805900;outline-offset:2px}
+.efp-search-context .efp-context-dismiss{font-size:24px}
+mark.efp-context-match{background:#ffe17c!important;color:#241b00!important;border-radius:3px;padding:0 1px}
+mark.efp-context-current{outline:2px solid #b47b00;outline-offset:1px}
+html.efp-has-pdf-search-context .reader-head,html.efp-has-pdf-search-context .shell .head{height:auto!important}
+.reader-head>.efp-search-context,.shell .head>.efp-search-context{grid-column:1/-1;margin:0}
+html.efp-has-pdf-search-context .shell{grid-template-rows:auto minmax(0,1fr)}
+html.efp-has-pdf-search-context .reader-shell .toolbar{top:var(--efp-search-head-height,100px)}
+html.efp-has-pdf-search-context .reader-shell .pdf-stage{height:calc(100dvh - 172px - var(--efp-search-bar-height,54px))}
+html.efp-has-pdf-search-context.efp-continuous-mobile-pdf .reader-shell{height:calc(100dvh - var(--efp-search-head-height,92px))!important}
+html.efp-has-pdf-search-context.efp-continuous-mobile-pdf .pdf-stage{height:100%!important}
+@media(max-width:900px),(hover:none) and (pointer:coarse) and (max-width:1400px){
+  html.efp-has-pdf-search-context .reader-shell{height:calc(100dvh - var(--efp-search-head-height,98px))!important}
+  html.efp-has-pdf-search-context .reader-shell .pdf-stage{height:100%!important}
+}
+@media print{.efp-search-context{display:none!important}}

@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261004mindmapdismiss1";
+const CACHE_VERSION = "efp-pwa-20261004searchcontext1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -25,20 +25,22 @@ const APP_SHELL = [
   "/pwa-icons/icon-512.png",
   "/pwa-icons/maskable-icon-512.png",
   "/black-mode.js",
-  "/ca-question-deeplink.js?v=20260930movetop2",
+  "/ca-question-deeplink.js?v=20261004context1",
   "/ca-move-top-v3.js?v=20261001navbuttons1",
-  "/blackbook-quiz-bookmarks.js?v=20261002blackbooknext1",
+  "/blackbook-quiz-bookmarks.js?v=20261004context1",
   "/blackbook-topic-bookmarks.js",
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
   "/home-nav.js?v=20261001navbuttons1",
   "/app-session.js?v=20261001homesearchapp2",
   "/back-parent-map.js",
-  "/back-nav.js?v=20261004mindmapback1",
+  "/back-nav.js?v=20261004context1",
+  "/search-context.js?v=20261004context1",
+  "/search-context.css?v=20261004context1",
   "/mindmap-deeplink.js?v=20261004dismiss1",
   "/mindmap-reader.css?v=20261004dismiss1",
   "/progress.js?v=20261001caback1",
-  "/rapid-practice-deeplink.js?v=20261001casticky1",
+  "/rapid-practice-deeplink.js?v=20261004context1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js",
   "/section-search-ui.js?v=20261001searchreturn2",
@@ -52,8 +54,8 @@ const APP_SHELL = [
   "/Original%20Practice/index.html",
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
-  "/Original%20Practice/original-practice.js?v=20261001polity22-583a40e433b0",
-  "/Original%20Practice/english-practice.js?v=20261001ophistory1",
+  "/Original%20Practice/original-practice.js?v=20261004context1",
+  "/Original%20Practice/english-practice.js?v=20261004context1",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
   "/Crux-Tricks/all-topics.html",
@@ -64,7 +66,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.css",
   "/Crux-Tricks/crux-tricks.js?v=20261001searchreturn2",
   "/Crux-Tricks/viewer.css",
-  "/Crux-Tricks/viewer-v2.js?v=20261002pdfsearch1",
+  "/Crux-Tricks/viewer-v2.js?v=20261004context1",
 ];
 
 self.addEventListener("install", (event) => {
@@ -314,7 +316,7 @@ async function freshCoreAsset(request) {
 }
 
 async function freshCurrentAffairsBookmarkAsset() {
-  const currentAsset = "/ca-question-deeplink.js?v=20260930movetop2";
+  const currentAsset = "/ca-question-deeplink.js?v=20261004context1";
   const cache = await caches.open(CACHE_VERSION);
   try {
     const response = await fetch(currentAsset, { cache: "no-store" });
@@ -329,7 +331,7 @@ async function freshCurrentAffairsBookmarkAsset() {
 }
 
 async function freshRapidPracticeAsset() {
-  const currentAsset = "/rapid-practice-deeplink.js?v=20261001casticky1";
+  const currentAsset = "/rapid-practice-deeplink.js?v=20261004context1";
   const cache = await caches.open(CACHE_VERSION);
   try {
     const response = await fetch(currentAsset, { cache: "no-store" });
@@ -384,7 +386,11 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/ca-move-top.js" ||
       url.pathname === "/app-session.js" ||
       url.pathname === "/back-nav.js" ||
+      url.pathname === "/search-context.js" ||
+      url.pathname === "/search-context.css" ||
       url.pathname === "/back-parent-map.js" ||
+      url.pathname === "/question-deeplink.js" ||
+      url.pathname === "/bihar-objective-gk-deeplink.js" ||
       url.pathname === "/mindmap-deeplink.js" ||
       url.pathname === "/mindmap-reader.css" ||
       url.pathname === "/progress.js" ||
