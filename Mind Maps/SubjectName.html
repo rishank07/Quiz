@@ -1904,10 +1904,16 @@
 
     // Fresh visit / reload => start with default state. Only a genuine
     // back/forward navigation restores whatever was open before.
-    if (isBackForwardNavigationMM()) {
+    const mindMapReturn = new URL(location.href).searchParams.has('efMindMapReturn');
+    if (isBackForwardNavigationMM() || mindMapReturn) {
       restoreAccordionState();
     } else {
       sessionStorage.removeItem('mmAccordionState');
+    }
+    if (mindMapReturn) {
+      const cleanUrl = new URL(location.href);
+      cleanUrl.searchParams.delete('efMindMapReturn');
+      history.replaceState(history.state, '', cleanUrl.href);
     }
 
     document.querySelectorAll(".card-header").forEach(function (header) {

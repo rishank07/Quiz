@@ -847,7 +847,17 @@
     } catch (_) {}
   }
 
+  function isMindMapsInnerPage() {
+    var path = normalizePath(window.location.pathname).toLowerCase();
+    return path.indexOf("/mind maps/") === 0 && path !== "/mind maps/subjectname.html";
+  }
+
   function logicalParentUrl() {
+    /* The dashboard opens chapters directly. Subject/chapter-list HTML files
+       are legacy menus, not Back destinations, even with an older cached map. */
+    if (isMindMapsInnerPage()) {
+      return new URL("/Mind%20Maps/SubjectName.html?efMindMapReturn=1", window.location.origin);
+    }
     var map = window.EFP_BACK_PARENT_MAP;
     if (!map || typeof map !== "object") return null;
 
@@ -1268,6 +1278,14 @@
     var parentUrl = logicalParentUrl();
     if (!parentUrl) return;
 
+    /* Own hardware/browser Back as well as the visible button. Direct opens,
+       stale chapter-list history and app resume all return to the dashboard.
+       Search trips install their own guard and have already returned above. */
+    if (isMindMapsInnerPage()) {
+      armGenericHomeSearchGuard();
+      return;
+    }
+
     /* Quiz Quit can replace a leaf with a hub that is also immediately behind
        it in history. Protect a mapped section root so one hardware/browser
        Back reaches Home instead of silently traversing that duplicate hub.
@@ -1398,6 +1416,8 @@
     if (useBookmarkHierarchyBack(event)) {
       return;
     }
+
+    if (isMindMapsInnerPage() && useLogicalParent(event)) return;
 
     if (useCruxInternalBack(event)) {
       return;

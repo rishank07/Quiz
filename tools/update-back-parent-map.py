@@ -205,6 +205,12 @@ def generate(root: Path) -> tuple[dict[str, str], int]:
         if target == "index.html":
             continue
 
+        # Mind Map chapters are linked directly from the combined dashboard.
+        # Older subject/chapter menus still exist, but are not Back parents.
+        if target.startswith("Mind Maps/") and target != "Mind Maps/SubjectName.html":
+            parent_map[make_url_path(target)] = "/Mind Maps/SubjectName.html"
+            continue
+
         nav_candidates = [
             src for src in incoming.get(target, ())
             if src not in NON_NAV_REDIRECT_STUBS
