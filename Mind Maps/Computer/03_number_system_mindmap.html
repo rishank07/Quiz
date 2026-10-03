@@ -175,7 +175,7 @@
             <li><span class="hl-blue">Use:</span> Human-friendly representation of numbers.</li>
           </ul>
           <div class="formula"><strong>(593)<sub>10</sub></strong> = 5×10<sup>2</sup> + 9×10<sup>1</sup> + 3×10<sup>0</sup></div>
-          <div class="source-note"><div class="source-label">PDF PRINT NOTE</div>PDF line prints “500 + 90 + 30 = 593”. Mind map keeps the source formula above and flags this printed arithmetic line rather than silently changing the source.</div>
+          <div class="source-note"><div class="source-label">PDF PRINT NOTE</div>Correct arithmetic: <b>500 + 90 + 3 = 593</b>. The units digit contributes 3 × 10⁰ = 3.</div>
         </div>
       </div>
       <div class="card">
@@ -203,7 +203,7 @@
           <div class="rel-box"><div class="rel-big">4 Binary Bits ⇄ 1 Hex Digit</div><div class="rel-small">Binary ↔ Hexadecimal grouping</div></div>
         </div>
         <ul class="arrow-list" style="margin-top:10px">
-          <li>Decimal ↔ Binary/Octal/Hexadecimal conversion requires repeated division or multiplication.</li>
+          <li>Decimal → another base: divide the integer part repeatedly; multiply the fractional part repeatedly by the target base. Reverse conversion uses positional weights.</li>
           <li>Binary/Octal/Hexadecimal → Decimal: positional values are used.</li>
         </ul>
       </div>
@@ -227,7 +227,7 @@
       <div class="conv-card">
         <div class="conv-title">Binary ⇄ Octal</div>
         <ul class="arrow-list">
-          <li>Binary → Octal: group bits in <span class="hl-green">3 from the right</span>.</li>
+          <li>Binary → Octal: group integer bits in 3 from the right; group fractional bits in 3 from the binary point towards the right. Pad with zeros at the outer ends if needed.</li>
           <li>Octal → Binary: convert each octal digit to <span class="hl-green">3 binary bits</span>.</li>
         </ul>
         <div class="formula">(101101)<sub>2</sub> = (101 101) → 55<sub>8</sub><br>(725)<sub>8</sub> → (111010101)<sub>2</sub></div>
@@ -235,7 +235,7 @@
       <div class="conv-card">
         <div class="conv-title">Binary ⇄ Hexadecimal</div>
         <ul class="arrow-list">
-          <li>Binary → Hex: group bits in <span class="hl-purple">4 from the right</span>.</li>
+          <li>Binary → Hex: group integer bits in 4 from the right; group fractional bits in 4 from the binary point towards the right. Pad with zeros at the outer ends if needed.</li>
           <li>Hex → Binary: each hex digit becomes <span class="hl-purple">4 binary bits</span>.</li>
         </ul>
         <div class="formula">(11010110)<sub>2</sub> → D6<sub>16</sub><br>(2F)<sub>16</sub> → (00101111)<sub>2</sub></div>
@@ -261,8 +261,8 @@
           <li>For fractional part conversion, Decimal → Binary uses repeated multiplication by 2.</li>
           <li>At each step, take the integer part and repeat the process with the fractional part.</li>
         </ul>
-        <div class="formula"><strong>Source example:</strong> 0.625 × 2 → take integer part 1 → 0.25 × 2 = 0.5 (take 0) → 0.5 × 2 = 1.0 (take 1) → 0.101<sub>2</sub></div>
-        <div class="source-note"><div class="source-label">PDF TYPESETTING NOTE</div>The PDF prints the first multiplication result without a decimal point (“125”). The conversion sequence itself is shown as source content; this note flags the typesetting issue.</div>
+        <div class="formula">0.625 × 2 = 1.25 (take 1) → 0.25 × 2 = 0.5 (take 0) → 0.5 × 2 = 1.0 (take 1). Therefore <b>(0.625)₁₀ = (0.101)₂</b>.</div>
+        <div class="source-note"><div class="source-label">PDF TYPESETTING NOTE</div>The first product is <b>1.25</b>. Read the extracted integer bits in the order they are produced: 1, 0, 1.</div>
         <div class="formula"><strong>(0.101)<sub>2</sub></strong> = 1×2<sup>−1</sup> + 0×2<sup>−2</sup> + 1×2<sup>−3</sup> = 0.5 + 0 + 0.125 = 0.625</div>
       </div>
     </div>

@@ -111,14 +111,14 @@
 <div class="card"><div class="card-header orange">Popular Tools</div><div class="card-body">
 <div class="table-wrap"><table class="data-table">
 <tr><th>Tool</th><th>Use as stated in the source table</th></tr>
-<tr><td>Hadoop</td><td>Distributed storage and processing; source table also includes “data streaming” wording.</td></tr>
+<tr><td>Hadoop</td><td>Distributed storage (HDFS) and processing, traditionally using batch MapReduce; streaming requires suitable additional components.</td></tr>
 <tr><td>Spark</td><td>Fast and in-memory processing.</td></tr>
 <tr><td>Flink</td><td>Streaming data processing.</td></tr>
-<tr><td>Kafka</td><td>“Use of SQL-like queries” — retained from the source table wording.</td></tr>
-<tr><td>Hive</td><td>On Hadoop.</td></tr>
+<tr><td>Kafka</td><td>Distributed event-streaming platform for publishing, storing and consuming event streams.</td></tr>
+<tr><td>Hive</td><td>SQL-style querying and data warehousing over distributed storage.</td></tr>
 <tr><td>Pig</td><td>Scripting language on Hadoop.</td></tr>
 </table></div>
-<div class="exam-trap"><div class="trap-label">Source Fidelity Note</div>Tool-usage wording above follows the PDF table. The chapter later separately describes Apache Kafka as a distributed streaming platform for real-time data pipelines and stream-processing applications.</div>
+<div class="exam-trap"><div class="trap-label">Revision Note</div><b>Kafka</b> is for event streaming; <b>Hive</b> provides SQL-style analytics. They are different tools and their functions must not be swapped.</div>
 </div></div>
 
 <div class="card"><div class="card-header teal">Types of Big Data Processing</div><div class="card-body">
@@ -142,11 +142,11 @@
 </div>
 <div class="mini"><h3>2. Semi-Structured Data</h3>
 <p>Partly structured data without a fixed schema, though some portions remain organized.</p>
-<ul class="arrow-list"><li>XML files</li><li>JSON data</li><li>Email</li><li>Social media posts</li></ul>
+<ul class="arrow-list"><li>XML files</li><li>JSON data</li><li>Email</li><li>JSON event records; post text/media can be unstructured</li></ul>
 <p><b>Tools:</b> Apache Hive, NoSQL database (MongoDB).</p>
 </div>
 </div>
-<div class="source-note"><div class="source-label">Source Scope</div>The pages define <b>Structured</b> and <b>Semi-Structured</b> data in detail. Although “unstructured” appears earlier under Variety and NoSQL, this chapter section does not provide a separate full definition for it.</div>
+<div class="source-note"><div class="source-label">Source Scope</div><b>Unstructured data</b> has no predefined tabular model, e.g. free text, images, audio and video. Email headers are structured while the body can be unstructured.</div>
 </div></div>
 
 <div class="card"><div class="card-header purple">Major Big Data Processing Frameworks</div><div class="card-body">
@@ -166,7 +166,7 @@
 <ul class="arrow-list"><li>Centralized storage system.</li><li>Stores raw data in its original format.</li><li>Advantages: flexibility, scalability, low cost.</li><li>Examples in source: Amazon S3, HDFS.</li></ul>
 </div>
 <div class="mini"><h3>NoSQL Database</h3>
-<ul class="arrow-list"><li>Designed for non-relational, unstructured or semi-structured data.</li><li>Examples: MongoDB, Cassandra, HBase.</li><li>Advantages: high scalability, flexibility.</li></ul>
+<ul class="arrow-list"><li>Non-relational database models, including document, key-value, wide-column and graph. They can hold structured as well as semi-structured data.</li><li>Examples: MongoDB, Cassandra, HBase.</li><li>Advantages: high scalability, flexibility.</li></ul>
 </div>
 </div>
 </div></div>
@@ -223,7 +223,7 @@
 <li><b>Processing technologies:</b> MapReduce, Spark, Flink.</li>
 <li><b>Processing types:</b> Batch, Real-Time, Stream.</li>
 <li><b>Structured:</b> tables/databases; tools include MySQL, Oracle, MS SQL Server.</li>
-<li><b>Semi-Structured:</b> XML, JSON, Email, Social Media posts.</li>
+<li><b>Semi-Structured:</b> XML, JSON and structured message metadata; free text/media are unstructured.</li>
 <li><b>Hadoop:</b> HDFS + MapReduce.</li>
 <li><b>Spark:</b> in-memory, fast processing.</li>
 <li><b>Flink:</b> distributed stream processing, high performance, low latency.</li>
