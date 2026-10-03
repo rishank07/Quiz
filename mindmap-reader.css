@@ -1,0 +1,80 @@
+/* Shared reading and search context for chapter Mind Maps. */
+.efp-mindmap-reader .efp-mindmap-search-context {
+  position: sticky;
+  top: 6px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid #dfb745;
+  border-radius: 10px;
+  background: #fff7d8;
+  color: #302508;
+  box-shadow: 0 3px 12px #00000012;
+  font: 14px/1.4 system-ui, sans-serif;
+}
+.efp-mindmap-search-context > div { min-width: 0; }
+.efp-mindmap-search-context strong { display: block; overflow-wrap: anywhere; }
+.efp-mindmap-search-context span { display: block; margin-top: 3px; font-size: 12px; overflow-wrap: anywhere; }
+.efp-mindmap-search-context button {
+  flex: 0 0 auto;
+  min-width: 56px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid #b69636;
+  border-radius: 9px;
+  background: #fff;
+  color: #302508;
+  font: 700 14px/1.2 system-ui, sans-serif;
+  cursor: pointer;
+}
+.efp-mindmap-reader mark.efp-mindmap-match {
+  padding: 1px 2px;
+  border-radius: 3px;
+  background: #ffe17c !important;
+  color: #241b00 !important;
+  scroll-margin-top: 110px;
+}
+.efp-mindmap-reader mark.efp-mm-current-match { outline: 2px solid #b47b00; outline-offset: 2px; }
+.efp-mindmap-reader .efp-deep-focus { scroll-margin-top: 14px; }
+
+@media (max-width: 767px) {
+  .efp-mindmap-reader body { padding-bottom: max(88px, env(safe-area-inset-bottom)) !important; }
+  .efp-mindmap-reader :is(.fact-text,.trap-body,.recall-a,.ra,.ans,.card-body li,.tab-content li,.tab-panel li,.panel p,table td) {
+    font-size: 16px !important;
+    line-height: 1.65 !important;
+    overflow-wrap: break-word;
+  }
+  .efp-mindmap-reader :is(.sec-title,.sec,.section-title,.card-title,.c-name) {
+    font-size: 16px !important;
+    line-height: 1.45 !important;
+  }
+  .efp-mindmap-reader :is(.sec-title,.section-title) {
+    color: inherit !important;
+    font-weight: 650;
+  }
+  .efp-mindmap-reader :is(.two-col,.three-col,.four-col,.five-col,.grid-2,.grid-3,.compare-grid) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+  }
+  .efp-mindmap-reader :is(.tabs,.tab-nav) {
+    max-width: 100%;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    padding-bottom: 5px;
+    scrollbar-width: thin;
+  }
+  .efp-mindmap-reader :is(.tab-nav>.tab-btn,.tabs>.tab,.tabs>.tab-btn,.tabs>.tablink) {
+    flex: 0 0 auto;
+    min-height: 44px;
+    font-size: 14px !important;
+    white-space: nowrap;
+  }
+  .efp-mindmap-reader :is(.panel,.tab-content,.tab-panel,.card,.card-body) { min-width: 0; }
+  .efp-mindmap-reader .efp-mindmap-search-context { top: 4px; }
+}
+@media print { .efp-mindmap-search-context { display: none !important; } }

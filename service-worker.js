@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261004mindmapback1";
+const CACHE_VERSION = "efp-pwa-20261004mindmapmobile1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -35,6 +35,8 @@ const APP_SHELL = [
   "/app-session.js?v=20261001homesearchapp2",
   "/back-parent-map.js",
   "/back-nav.js?v=20261004mindmapback1",
+  "/mindmap-deeplink.js?v=20261004mobile1",
+  "/mindmap-reader.css?v=20261004mobile1",
   "/progress.js?v=20261001caback1",
   "/rapid-practice-deeplink.js?v=20261001casticky1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
@@ -383,6 +385,8 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/app-session.js" ||
       url.pathname === "/back-nav.js" ||
       url.pathname === "/back-parent-map.js" ||
+      url.pathname === "/mindmap-deeplink.js" ||
+      url.pathname === "/mindmap-reader.css" ||
       url.pathname === "/progress.js" ||
       url.pathname === "/search-logic.js" ||
       url.pathname === "/section-search-ui.js" ||

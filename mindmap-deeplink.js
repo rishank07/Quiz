@@ -8,6 +8,14 @@
 (function () {
   "use strict";
 
+  var openedKey = "";
+  var focusRun = 0;
+  var readerLink = document.createElement("link");
+  readerLink.rel = "stylesheet";
+  readerLink.href = "/mindmap-reader.css?v=20261004mobile1";
+  document.documentElement.classList.add("efp-mindmap-reader");
+  document.head.appendChild(readerLink);
+
   var SCHEMES = [
     ["tab-content", "active"],
     ["tab-panel", "active"],
@@ -109,15 +117,123 @@
     control.classList.add("active");
   }
 
+  function searchQuery() {
+    try {
+      var token = new URL(location.href).searchParams.get("efSearchReturn") ||
+        (history.state && history.state.efpSearchReturnToken);
+      if (!token) return "";
+      var saved = JSON.parse(sessionStorage.getItem("efp_search_return_v1:" + token) || "null");
+      if (!saved || saved.token !== token || !Array.isArray(saved.inputs) ||
+          new URL(saved.source, location.origin).origin !== location.origin) return "";
+      var field = saved.inputs.find(function (input) { return String(input.value || "").trim(); });
+      return field ? String(field.value).trim().slice(0, 160) : "";
+    } catch (_) { return ""; }
+  }
+
+  function clearSearchFocus() {
+    document.querySelectorAll(".efp-mindmap-search-context").forEach(function (el) { el.remove(); });
+    document.querySelectorAll("mark.efp-mindmap-match").forEach(function (el) {
+      el.replaceWith(document.createTextNode(el.textContent));
+    });
+    document.querySelectorAll(".efp-deep-focus").forEach(function (el) {
+      el.classList.remove("efp-deep-focus");
+      clearTimeout(el.__efpDeepFocusTimer);
+    });
+  }
+
+  function highlightQuery(target, query) {
+    if (!query) return [];
+    var ignored = /^(?:the|a|an|and|or|of|in|on|to|for|is|was|are|were|by|with|da|de|ka|ki|ke|hai|hain|में|का|की|के|है|हैं|और|से)$/i;
+    var terms = query.split(/[^\p{L}\p{M}\p{N}]+/u).filter(function (term) {
+      return term.length >= 2 && !ignored.test(term);
+    });
+    terms.unshift(query);
+    terms = terms.filter(function (term, i) { return term && terms.indexOf(term) === i; });
+    terms.sort(function (a, b) { return b.length - a.length; });
+    var pattern = new RegExp("(^|[^\\p{L}\\p{M}\\p{N}])(" + terms.map(function (term) {
+      return term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }).join("|") + ")(?=$|[^\\p{L}\\p{M}\\p{N}])", "giu");
+    var walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (node) {
+        return node.parentElement && !node.parentElement.closest(
+          "script,style,button,a,textarea,select,svg,.efp-mm-table-hint,.efp-mindmap-search-context"
+        ) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var nodes = [], node, marks = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function (textNode) {
+      if (marks.length >= 200) return;
+      pattern.lastIndex = 0;
+      var text = textNode.nodeValue, match, offset = 0, fragment = document.createDocumentFragment();
+      while ((match = pattern.exec(text)) && marks.length < 200) {
+        var start = match.index + match[1].length;
+        fragment.appendChild(document.createTextNode(text.slice(offset, start)));
+        var mark = document.createElement("mark");
+        mark.className = "efp-mindmap-match";
+        mark.textContent = match[2];
+        fragment.appendChild(mark); marks.push(mark);
+        offset = start + match[2].length;
+      }
+      if (offset) {
+        fragment.appendChild(document.createTextNode(text.slice(offset)));
+        textNode.replaceWith(fragment);
+      }
+    });
+    return marks;
+  }
+
+  function searchContext(target, key, control, query, marks) {
+    var bar = document.createElement("div");
+    bar.className = "efp-mindmap-search-context";
+    var label = document.createElement("div");
+    var section = document.createElement("strong");
+    section.textContent = control ? control.textContent.trim() : key.replace(/[-_]/g, " ");
+    label.appendChild(section);
+    var detail = document.createElement("span");
+    detail.textContent = query ? "Search: " + query : "Opened section / खुला हुआ भाग";
+    label.appendChild(detail); bar.appendChild(label);
+    var index = 0;
+    function scrollMatch() {
+      marks.forEach(function (mark) { mark.classList.remove("efp-mm-current-match"); });
+      if (!marks.length) return;
+      marks[index].classList.add("efp-mm-current-match");
+      marks[index].scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
+      if (next) next.textContent = (index + 1) + "/" + marks.length + " ↓";
+    }
+    var next;
+    if (marks.length) {
+      next = document.createElement("button");
+      next.type = "button";
+      next.setAttribute("aria-label", "Next search match / अगला खोज परिणाम");
+      next.addEventListener("click", function () { index = (index + 1) % marks.length; scrollMatch(); });
+      bar.appendChild(next);
+    }
+    target.prepend(bar);
+    return scrollMatch;
+  }
+
   function focusTarget(key, preferredControl) {
     var found = findPanel(key);
     var target = found ? found.el : preferredControl;
     if (!target) return false;
 
+    clearSearchFocus();
+    var query = searchQuery();
+    var marks = found ? highlightQuery(target, query) : [];
+    var focusMatch = found ? searchContext(target, key, preferredControl, query, marks) : null;
+    var run = ++focusRun;
+
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
+        if (run !== focusRun) return;
+        var nav = preferredControl && preferredControl.parentElement;
+        if (nav && nav.scrollWidth > nav.clientWidth) {
+          nav.scrollLeft = preferredControl.offsetLeft - (nav.clientWidth - preferredControl.offsetWidth) / 2;
+        }
         try {
-          target.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+          if (marks.length) focusMatch();
+          else target.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
         } catch (_) {
           target.scrollIntoView();
         }
@@ -125,7 +241,7 @@
         clearTimeout(target.__efpDeepFocusTimer);
         target.__efpDeepFocusTimer = setTimeout(function () {
           target.classList.remove("efp-deep-focus");
-        }, 3600);
+        }, 8000);
       });
     });
     return true;
@@ -134,6 +250,7 @@
   function openHash() {
     var key = hashKey();
     if (!key) return;
+    openedKey = key;
 
     // Prefer native navigation. This is the most reliable path because pages
     // vary between id="history" and id="tab-history", and their own functions
@@ -161,7 +278,8 @@
 
   function runWithRetry() {
     var key = hashKey();
-    if (!key) return;
+    if (!key) { openedKey = ""; ++focusRun; clearSearchFocus(); return; }
+    if (key === openedKey) return;
     var attempts = 0;
     (function seek() {
       var control = matchingNavControl(key);
