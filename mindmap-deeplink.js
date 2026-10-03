@@ -12,7 +12,7 @@
   var focusRun = 0;
   var readerLink = document.createElement("link");
   readerLink.rel = "stylesheet";
-  readerLink.href = "/mindmap-reader.css?v=20261004mobile1";
+  readerLink.href = "/mindmap-reader.css?v=20261004dismiss1";
   document.documentElement.classList.add("efp-mindmap-reader");
   document.head.appendChild(readerLink);
 
@@ -131,6 +131,7 @@
   }
 
   function clearSearchFocus() {
+    ++focusRun;
     document.querySelectorAll(".efp-mindmap-search-context").forEach(function (el) { el.remove(); });
     document.querySelectorAll("mark.efp-mindmap-match").forEach(function (el) {
       el.replaceWith(document.createTextNode(el.textContent));
@@ -198,17 +199,36 @@
       marks.forEach(function (mark) { mark.classList.remove("efp-mm-current-match"); });
       if (!marks.length) return;
       marks[index].classList.add("efp-mm-current-match");
-      marks[index].scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
+      marks[index].scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });
       if (next) next.textContent = (index + 1) + "/" + marks.length + " ↓";
     }
     var next;
     if (marks.length) {
       next = document.createElement("button");
+      next.className = "efp-mm-next";
       next.type = "button";
       next.setAttribute("aria-label", "Next search match / अगला खोज परिणाम");
       next.addEventListener("click", function () { index = (index + 1) % marks.length; scrollMatch(); });
       bar.appendChild(next);
     }
+    var close = document.createElement("button");
+    close.type = "button";
+    close.className = "efp-mm-dismiss";
+    close.textContent = "×";
+    close.setAttribute("aria-label", "Clear search highlights / खोज हाइलाइट हटाएँ");
+    close.setAttribute("title", "Clear search highlights");
+    close.addEventListener("click", function () {
+      // Remove only search decoration. Keep the selected tab, search-return
+      // token and the learner's current reading position intact.
+      // Cancel any in-flight smooth scroll before removing the banner.
+      window.scrollTo({ top: window.scrollY, left: window.scrollX, behavior: "instant" });
+      var anchor = marks.length ? marks[index].parentElement : target;
+      var top = anchor.getBoundingClientRect().top;
+      clearSearchFocus();
+      var delta = anchor.getBoundingClientRect().top - top;
+      if (delta) window.scrollBy({ top: delta, behavior: "instant" });
+    });
+    bar.appendChild(close);
     target.prepend(bar);
     return scrollMatch;
   }

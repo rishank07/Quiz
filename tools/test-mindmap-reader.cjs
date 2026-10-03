@@ -87,18 +87,42 @@ const normalize = text => text.replace(/\s+/g, ' ').trim();
         assert.deepEqual(errors, [], file);
         if (result.markCount > 1) {
           await page.getByRole('button', { name: 'Next search match / अगला खोज परिणाम' }).click();
-          assert.ok((await page.locator('.efp-mindmap-search-context button').textContent()).startsWith('2/'));
+          assert.ok((await page.locator('.efp-mm-next').textContent()).startsWith('2/'));
         }
         if (file.includes('european_companies') && width === 390 && process.env.EFP_LAYOUT_OUTPUT) {
           await page.screenshot({ path: theme === 'on' ? process.env.EFP_LAYOUT_OUTPUT.replace(/\.png$/, '-dark.png') : process.env.EFP_LAYOUT_OUTPUT });
         }
         // A restored page must retain the learner's current scroll/match.
-        const before = await page.locator('.efp-mindmap-search-context button').textContent();
+        const before = await page.locator('.efp-mm-next').textContent();
         await page.evaluate(() => dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
-        assert.equal(await page.locator('.efp-mindmap-search-context button').textContent(), before);
+        assert.equal(await page.locator('.efp-mm-next').textContent(), before);
+        const urlBefore = page.url();
+        const bannerHeight = await page.locator('.efp-mindmap-search-context').evaluate(el => el.getBoundingClientRect().height + parseFloat(getComputedStyle(el).marginBottom));
+        const anchor = await page.locator('.efp-mm-current-match').evaluate(el => {
+          el.parentElement.dataset.dismissAnchor = 'true';
+          return el.parentElement.getBoundingClientRect().top;
+        });
+        const closeRect = await page.getByRole('button', { name: 'Clear search highlights / खोज हाइलाइट हटाएँ' }).boundingBox();
+        assert.ok(closeRect && closeRect.y >= 0 && closeRect.y + closeRect.height <= (width === 844 ? 390 : 844), 'Dismiss control is outside viewport');
+        // Click the visible control directly so automation does not first
+        // scroll a sticky button and change the reading position itself.
+        await page.mouse.click(closeRect.x + closeRect.width / 2, closeRect.y + closeRect.height / 2);
+        assert.equal(await page.locator('.efp-mindmap-search-context,.efp-mindmap-match,.efp-deep-focus').count(), 0, `Dismiss not clicked: ${file}, ${width}, ${theme}, ${JSON.stringify(closeRect)}`);
+        assert.equal(page.url(), urlBefore);
+        const anchorAfter = await page.locator('[data-dismiss-anchor]').evaluate(el => el.getBoundingClientRect().top);
+        // Near the document top, removing the banner can exhaust the scroll
+        // offset. Otherwise the same text must stay at its reading position.
+        const atTop = await page.evaluate(() => scrollY === 0);
+        assert.ok(Math.abs(anchorAfter - anchor) <= 2 ||
+          (atTop && anchorAfter < anchor && anchor - anchorAfter <= bannerHeight + 2),
+          `Dismiss moved text: ${file}, ${width}, ${theme}: ${anchor} -> ${anchorAfter}`);
+        assert.equal(normalize(await page.locator('#' + id).textContent()), original);
+        assert.equal(await page.evaluate(() => EFP_SEARCH_RETURN.isActive()), true);
+        await page.evaluate(() => dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
+        assert.equal(await page.locator('.efp-mindmap-search-context,.efp-mindmap-match').count(), 0);
         await context.close(); cases++;
       }
     }
-    console.log(`PASS: ${cases} chapter/viewport layout cases, unchanged content, exact matches, next-match and BFCache checks.`);
+    console.log(`PASS: ${cases} chapter/viewport layout cases, unchanged content, exact matches, next-match, dismissal/reading position, search-return state and BFCache checks.`);
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
