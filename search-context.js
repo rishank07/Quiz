@@ -12,7 +12,7 @@
   var dockTopValue=null;
   var explanationSelector=".explanation,.explanation-box,.explain-box,.exp-box,.exp,.explain,.q-exp,[id^='exp-']";
   var optionSelector=".option,.option-text,.option-btn,.quiz-option,.opt,.opt-en,.opt-hi,.options label,.q-options label,[id^='opts-'] label,.options [onclick],.q-options [onclick],[id^='opts-'] [onclick]";
-  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context-dock-v2.css?v=20261005rootdock1";document.head.appendChild(style);
+  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context-dock-v3.css?v=20261005rootdock2";document.head.appendChild(style);
   var allowEntryFocus=true;
   function resolveDockTop(){
     if(dockTopValue!==null)return dockTopValue;
