@@ -2,7 +2,14 @@
   box-sizing:border-box;display:flex;align-items:center;gap:6px;width:100%;min-width:0;margin:8px 0;padding:4px 8px;
   border:1px solid #d4b45c;border-radius:9px;background:#fff7d8;color:#302508;font:13px/1.3 system-ui,sans-serif;text-align:left;
 }
-.efp-search-context:not(.efp-pdf-search-context){position:sticky;top:6px;z-index:200;box-shadow:0 3px 12px #00000012}
+/* Search-entry banner: every JS focus uses block:center, so enlarge only the
+   trailing scroll area. That makes the same call land the banner at the top
+   instead of sometimes in the middle; sticky then keeps it there. */
+.efp-search-context:not(.efp-pdf-search-context){position:sticky;top:6px;z-index:200;box-shadow:0 3px 12px #00000012;scroll-margin-block-end:max(0px,calc(100dvh - 70px))}
+/* The banner is inserted immediately before the active result. If another
+   deep-link/result scroll fires afterwards, reserve enough room so the
+   question heading cannot end up underneath the sticky banner. */
+.efp-search-context:not(.efp-pdf-search-context)+:is(.question-box,.qcard,.question-card,.quiz-question,.oneliner-item,.cd,[data-qid],[data-efp-bb-sn]){scroll-margin-top:90px}
 .efp-search-context .efp-context-description{flex:1;min-width:0}
 .efp-search-context .efp-context-description span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .efp-search-context .efp-context-location{display:block;font-size:11px;margin-top:2px}
@@ -23,7 +30,8 @@ html.efp-has-pdf-search-context .reader-shell .pdf-stage{height:calc(100dvh - 17
 html.efp-has-pdf-search-context.efp-continuous-mobile-pdf .reader-shell{height:calc(100dvh - var(--efp-search-head-height,92px))!important}
 html.efp-has-pdf-search-context.efp-continuous-mobile-pdf .pdf-stage{height:100%!important}
 @media(max-width:900px),(hover:none) and (pointer:coarse) and (max-width:1400px){
-  .efp-search-context:not(.efp-pdf-search-context){top:4px;gap:4px;padding:4px 6px}
+  .efp-search-context:not(.efp-pdf-search-context){top:4px;gap:4px;padding:4px 6px;scroll-margin-block-end:max(0px,calc(100dvh - 132px))}
+  .efp-search-context:not(.efp-pdf-search-context)+:is(.question-box,.qcard,.question-card,.quiz-question,.oneliner-item,.cd,[data-qid],[data-efp-bb-sn]){scroll-margin-top:160px}
   .efp-search-context:not(.efp-pdf-search-context) .efp-context-description{line-height:1.22}
   .efp-search-context:not(.efp-pdf-search-context) .efp-context-description>span{font-size:12.5px}
   .efp-search-context:not(.efp-pdf-search-context) .efp-context-location{display:inline;font-size:10.5px;margin-top:1px}
