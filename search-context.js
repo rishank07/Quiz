@@ -8,6 +8,7 @@
   var revealed=[];
   var appRestored=false,resumeState=null;
   var explanationSelector=".explanation,.explanation-box,.explain-box,.exp-box,.exp,.explain,.q-exp,[id^='exp-']";
+  var optionSelector=".option,.option-text,.option-btn,.quiz-option,.opt,.opt-en,.opt-hi,.options label,.q-options label,[id^='opts-'] label,.options [onclick],.q-options [onclick],[id^='opts-'] [onclick]";
   var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context.css?v=20261004inlinecenter1";document.head.appendChild(style);
   var allowEntryFocus=true;
   function centerBar(){
@@ -80,6 +81,28 @@
       if(offset){fragment.appendChild(document.createTextNode(text.slice(offset)));textNode.replaceWith(fragment)}
     });return result;
   }
+  function optionRoots(root){
+    var nodes=Array.from(root.querySelectorAll(optionSelector)).filter(function(node){return node.getClientRects().length});
+    return nodes.filter(function(node){return !nodes.some(function(other){return other!==node&&node.contains(other)})});
+  }
+  function matchingOptions(root,query){return optionRoots(root).filter(function(node){return textMatches(query,node.textContent||"")})}
+  function markOptionWords(root,query){
+    var terms=queryTerms(query);terms.sort(function(a,b){return b.length-a.length});
+    var pattern=new RegExp("(^|[^\\p{L}\\p{M}\\p{N}])("+terms.map(function(s){return s.replace(/[.*+?^$()|[\]\\{}]/g,"\\$&")}).join("|")+")(?=$|[^\\p{L}\\p{M}\\p{N}])","giu");
+    var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(node){
+      var parent=node.parentElement;if(!parent||parent.closest("script,style,input,textarea,select,svg,mark,.efp-search-context"))return NodeFilter.FILTER_REJECT;
+      return parent.getClientRects().length?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
+    }});
+    var nodes=[],node,result=[];while((node=walker.nextNode()))nodes.push(node);
+    nodes.forEach(function(textNode){
+      pattern.lastIndex=0;var text=textNode.nodeValue,match,offset=0,fragment=document.createDocumentFragment();
+      while(result.length<200&&(match=pattern.exec(text))){
+        var start=match.index+match[1].length;fragment.appendChild(document.createTextNode(text.slice(offset,start)));
+        var mark=document.createElement("mark");mark.className="efp-context-match";mark.textContent=match[2];fragment.appendChild(mark);result.push(mark);offset=start+match[2].length;
+      }
+      if(offset){fragment.appendChild(document.createTextNode(text.slice(offset)));textNode.replaceWith(fragment)}
+    });return result;
+  }
   function explanationRoots(root){
     var nodes=Array.from(root.querySelectorAll(explanationSelector+",details"));
     nodes=nodes.filter(function(node){return !node.matches("details")||node.matches(explanationSelector)||/explanation|solution|answer|व्याख्या|स्पष्टीकरण|उत्तर/i.test((node.querySelector("summary")||{}).textContent||"")});
@@ -133,7 +156,9 @@
   }
   function resultText(root){
     var text=[],walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(node){return node.parentElement&&!node.parentElement.closest("script,style,button,a,label,input,textarea,select,svg,nav,header,footer,.options,.option,.option-text,.opt,.opts,.q-options,[id^='opts-'],.efp-search-context")?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}}),node;
-    while((node=walker.nextNode()))text.push(node.nodeValue);return text.join(" ");
+    while((node=walker.nextNode()))text.push(node.nodeValue);
+    optionRoots(root).forEach(function(option){text.push(option.textContent||"")});
+    return text.join(" ");
   }
   var lazyProvider=null;
   function provider(){
@@ -205,22 +230,27 @@
     target=selected&&element(selected)||el;if(!target)return;
     selection=selected&&selected.key||"";current=Math.max(0,pageRecords.indexOf(selected));
     var groups=pageRecords.map(function(row){
-      var node=element(row),items=[],explanations=[],explanationMarks=[];
+      var node=element(row),items=[],options=[],optionMarks=[],explanations=[],explanationMarks=[];
       if(node&&node.getClientRects().length){
-        items=markWords(node,saved.query);explanations=matchingExplanations(node,saved.query);
+        items=markWords(node,saved.query);options=matchingOptions(node,saved.query);explanations=matchingExplanations(node,saved.query);
         if(resumeState&&Array.isArray(resumeState.revealed)&&resumeState.revealed.indexOf(row.key)>=0)explanations.forEach(function(exp){revealExplanation(exp,row.key)});
         explanations.forEach(function(exp){if(explanationVisible(exp))explanationMarks=explanationMarks.concat(markWords(exp,saved.query,true))});
       }
       items=items.concat(explanationMarks);marks=marks.concat(items);
-      return {record:row,anchor:node,marks:items,explanations:explanations,explanationMarks:explanationMarks};
+      return {record:row,anchor:node,marks:items,options:options,optionMarks:optionMarks,explanations:explanations,explanationMarks:explanationMarks};
     });
     bar=createBar(saved.query,selected?selected.label:questionLabel(target),function(){
       dismissed.add(saved.token);window.scrollTo({top:scrollY,left:scrollX,behavior:"instant"});
       var anchor=target,top=anchor.getBoundingClientRect().top;clear();clearRevealed();
       window.scrollBy({top:anchor.getBoundingClientRect().top-top,behavior:"instant"});
     });
-    var explanationButton=button("Show matching explanation without attempting / बिना प्रयास के मिली व्याख्या देखें","Dekho",function(){
-      var group=groups[current];if(!group||!group.explanations.length)return;
+    var explanationButton=button("Show matching option or explanation without attempting / बिना प्रयास के मिला विकल्प या व्याख्या देखें","Dekho",function(){
+      var group=groups[current];if(!group||(!group.options.length&&!group.explanations.length))return;
+      group.options.forEach(function(option){
+        if(!option.querySelector("mark.efp-context-match")){
+          var found=markOptionWords(option,saved.query);group.optionMarks=group.optionMarks.concat(found);group.marks=group.marks.concat(found);marks=marks.concat(found);
+        }
+      });
       group.explanations.forEach(function(exp){
         revealExplanation(exp,group.record.key);
         if(!exp.querySelector("mark.efp-context-match")){
@@ -228,7 +258,8 @@
         }
       });
       focusGroup(false);
-      (group.explanationMarks[0]||group.explanations[0]).scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
+      var destination=group.optionMarks[0]||group.options[0]||group.explanationMarks[0]||group.explanations[0];
+      if(destination)destination.scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
       schedule();
     });explanationButton.className="efp-context-explanation";bar.insertBefore(explanationButton,bar.lastChild);
     var explanationStatus=document.createElement("small");explanationStatus.className="efp-context-explanation-status";bar.querySelector(".efp-context-description").appendChild(explanationStatus);
@@ -237,9 +268,11 @@
       var group=groups[current];if(!group||!group.anchor)return;
       target=group.anchor;group.marks.forEach(function(mark){mark.classList.add("efp-context-current")});
       target.parentNode.insertBefore(bar,target);bar.querySelector(".efp-context-location").textContent=group.record.label;
-      explanationButton.hidden=!group.explanations.length;explanationStatus.hidden=!group.explanations.length;
-      explanationStatus.textContent=group.explanations.length?"Match explanation mein hai":"";
-      explanationButton.textContent=group.explanations.some(function(exp){return !explanationVisible(exp)})?"Dekho":"Dekho ↓";
+      var hasOptions=group.options.length>0,hasExplanations=group.explanations.length>0,hasSpecial=hasOptions||hasExplanations;
+      explanationButton.hidden=!hasSpecial;explanationStatus.hidden=!hasSpecial;
+      explanationStatus.textContent=hasOptions&&hasExplanations?"Match option/explanation mein hai":hasOptions?"Match option mein hai":hasExplanations?"Match explanation mein hai":"";
+      var optionPending=hasOptions&&!group.optionMarks.length;
+      explanationButton.textContent=(optionPending||group.explanations.some(function(exp){return !explanationVisible(exp)}))?"Dekho":"Dekho ↓";
       if(scroll)centerBar();
     }
     // Keep quiz card content and option event listeners independent of controls.
