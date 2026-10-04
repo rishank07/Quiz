@@ -7,10 +7,17 @@
   var pageRecords=[],recordCache="",recordProvider=null,viewKey="",viewRoots=[],selection="",scrollNext=false,entryCache="";
   var revealed=[];
   var appRestored=false,resumeState=null;
+  var fuzzyMatches=false;
   var explanationSelector=".explanation,.explanation-box,.explain-box,.exp-box,.exp,.explain,.q-exp,[id^='exp-']";
   var optionSelector=".option,.option-text,.option-btn,.quiz-option,.opt,.opt-en,.opt-hi,.options label,.q-options label,[id^='opts-'] label,.options [onclick],.q-options [onclick],[id^='opts-'] [onclick]";
   var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context.css?v=20261004inlinecenter1";document.head.appendChild(style);
   var allowEntryFocus=true;
+  // The stylesheet and the quiz's lazy section can finish in either order.
+  // Re-measure only while entry focus is still ours, never after interaction
+  // or an installed-app reading-position restore.
+  style.addEventListener("load",function(){
+    if(allowEntryFocus&&!appRestored)requestAnimationFrame(centerBar);
+  },{once:true});
   function centerBar(){
     if(!bar||!bar.isConnected||pdfAdapter)return;
     bar.scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
@@ -61,8 +68,17 @@
     var ignored=/^(the|and|for|with|from|was|are|hai|hain|में|और|का|की|के|है|से)$/i;
     return [query].concat(query.split(/[^\p{L}\p{M}\p{N}]+/u).filter(function(s){return s.length>=2&&!ignored.test(s)})).filter(function(s,i,all){return s&&all.indexOf(s)===i});
   }
+  function highlightTerms(root,query){
+    var terms=queryTerms(query),typedTerms=terms.slice(),tokens=Array.from(new Set((root.textContent||"").match(/[\p{L}\p{M}\p{N}]+/gu)||[]));
+    // Use the same bounded typo/partial-word matching as search retrieval.
+    // The original text remains intact: mark its actual word, not the typo.
+    if(typeof efTextMatches==="function")tokens.forEach(function(word){
+      if(typedTerms.some(function(term){return efTextMatches(term,word,fuzzyMatches)}))terms.push(word);
+    });
+    return Array.from(new Set(terms));
+  }
   function markWords(root,query,explanation){
-    var terms=queryTerms(query);
+    var terms=highlightTerms(root,query);
     terms.sort(function(a,b){return b.length-a.length});
     var pattern=new RegExp("(^|[^\\p{L}\\p{M}\\p{N}])("+terms.map(function(s){return s.replace(/[.*+?^$()|[\]\\{}]/g,"\\$&")}).join("|")+")(?=$|[^\\p{L}\\p{M}\\p{N}])","giu");
     var excluded="script,style,button,a,label,input,textarea,select,svg,mark,"+
@@ -89,7 +105,7 @@
   }
   function matchingOptions(root,query){return optionRoots(root).filter(function(node){return textMatches(query,node.textContent||"")})}
   function markOptionWords(root,query){
-    var terms=queryTerms(query);terms.sort(function(a,b){return b.length-a.length});
+    var terms=highlightTerms(root,query);terms.sort(function(a,b){return b.length-a.length});
     var pattern=new RegExp("(^|[^\\p{L}\\p{M}\\p{N}])("+terms.map(function(s){return s.replace(/[.*+?^$()|[\]\\{}]/g,"\\$&")}).join("|")+")(?=$|[^\\p{L}\\p{M}\\p{N}])","giu");
     var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(node){
       var parent=node.parentElement;if(!parent||parent.closest("script,style,input,textarea,select,svg,mark,.efp-search-context"))return NodeFilter.FILTER_REJECT;
@@ -153,7 +169,7 @@
   function textMatches(query,value){
     var parts=[];function text(v){if(typeof v==="string")parts.push(v.replace(/<[^>]*>/g," "));else if(v&&typeof v==="object")Object.keys(v).forEach(function(k){text(v[k])})}text(value);
     var hay=parts.join(" ");
-    if(typeof efTextMatches==="function")return efTextMatches(query,hay,false);
+    if(typeof efTextMatches==="function")return efTextMatches(query,hay,fuzzyMatches);
     var terms=query.toLocaleLowerCase().split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean);
     hay=hay.toLocaleLowerCase();return terms.length&&terms.every(function(term){return hay.indexOf(term)>=0});
   }
@@ -170,8 +186,9 @@
     try{
       if(typeof SECTIONS!=="undefined"&&Array.isArray(SECTIONS)&&typeof openSection==="function"){
         lazyProvider={
-          viewKey:function(){return "rapid|"+current},currentKey:function(el){return el&&el.id||""},
-          results:function(query,matches){var out=[];SECTIONS.forEach(function(sec,si){sec.questions.forEach(function(q,qi){if(matches(query,[q.q,q.o,q.options,q.a,q.exp]))out.push({key:"rp-"+si+"-"+qi,id:"rp-"+si+"-"+qi,section:si,label:"Section "+(si+1)+" · Question "+(qi+1)})})});return out},
+          viewKey:function(){var card=document.querySelector("#questions .qcard,#quiz-container .qcard");return "rapid|"+(card?card.id.split("-")[1]:"")},currentKey:function(el){return el&&el.id||""},
+          ready:function(){var id=location.hash.slice(1);return !/^rp-\d+-\d+$/.test(id)||!!document.getElementById(id)},
+          results:function(query,matches){var out=[],number=0;SECTIONS.forEach(function(sec,si){sec.questions.forEach(function(q,qi){number++;if(matches(query,[q.q,q.o,q.options,q.a,q.exp]))out.push({key:"rp-"+si+"-"+qi,id:"rp-"+si+"-"+qi,section:si,label:"Section "+(si+1)+" · Q"+number})})});return out},
           element:function(row){return document.getElementById(row.id)},
           open:function(row){if(typeof onlyBookmarks!=="undefined"&&onlyBookmarks&&typeof toggleBookmarkFilter==="function")toggleBookmarkFilter();openSection(row.section)}
         };return lazyProvider;
@@ -212,8 +229,13 @@
       if(resumeState){resumeState=null;window.EFP_APP_SESSION.restoreSearchScroll()}return;
     }
     var stamp=adapter?adapter.viewKey():"dom",cache=saved.token+":"+saved.query;
+    // Do not consume first-entry focus on the saved/default section while
+    // the exact search anchor is still waiting for the native deep link.
+    if(entryCache!==cache&&adapter&&adapter.ready&&!adapter.ready())return;
     if(adapter&&(recordCache!==cache||recordProvider!==adapter||!pageRecords.length)){
+      fuzzyMatches=false;
       pageRecords=adapter.results(saved.query,textMatches);recordCache=cache;recordProvider=adapter;
+      if(!pageRecords.length){fuzzyMatches=true;pageRecords=adapter.results(saved.query,textMatches)}
     }
     // Cached records include lazy sections. Only decorate the currently rendered
     // cards; opening another result uses the page's progress-preserving switcher.
@@ -225,7 +247,11 @@
     if(resumeState)selection=resumeState.selection||"";
     var firstEntry=entryCache!==cache;entryCache=cache;
     clear();viewKey=signature;viewRoots=roots;activeKey=stamp;
-    if(!adapter)pageRecords=roots.filter(function(node){return textMatches(saved.query,resultText(node))}).map(function(node,i){return {key:node.id||"dom-"+i,id:node.id,anchor:node,label:questionLabel(node)}});
+    if(!adapter){
+      fuzzyMatches=false;var matched=roots.filter(function(node){return textMatches(saved.query,resultText(node))});
+      if(!matched.length){fuzzyMatches=true;matched=roots.filter(function(node){return textMatches(saved.query,resultText(node))})}
+      pageRecords=matched.map(function(node,i){return {key:node.id||"dom-"+i,id:node.id,anchor:node,label:questionLabel(node)}});
+    }
     function element(row){return adapter?adapter.element(row):row.anchor}
     var selected=selection&&pageRecords.find(function(row){return row.key===selection});
     if(!selected&&(el||adapter))selected=pageRecords.find(function(row){return adapter?row.key===adapter.currentKey(el):row.anchor===el||row.anchor.contains(el)||el.contains(row.anchor)});

@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261004biharsearch1";
+const CACHE_VERSION = "efp-pwa-20261004resultcontext3";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261004resumeunlimited1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -35,7 +35,7 @@ const APP_SHELL = [
   "/app-session.js?v=20261004resumeunlimited1",
   "/back-parent-map.js",
   "/back-nav.js?v=20261004searchaudit1",
-  "/search-context.js?v=20261004biharsearch1",
+  "/search-context.js?v=20261004resultcontext3",
   "/search-context.css?v=20261004inlinecenter1",
   "/mindmap-deeplink.js?v=20261004searchaudit1",
   "/mindmap-reader.css?v=20261004scrollfix1",
@@ -445,6 +445,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/search-context.css" ||
       url.pathname === "/back-parent-map.js" ||
       url.pathname === "/question-deeplink.js" ||
+      url.pathname === "/rapid-practice-deeplink.js" ||
       url.pathname === "/bihar-objective-gk-deeplink.js" ||
       url.pathname === "/mindmap-deeplink.js" ||
       url.pathname === "/mindmap-reader.css" ||
