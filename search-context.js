@@ -12,7 +12,7 @@
   var dockTopValue=null;
   var explanationSelector=".explanation,.explanation-box,.explain-box,.exp-box,.exp,.explain,.q-exp,[id^='exp-']";
   var optionSelector=".option,.option-text,.option-btn,.quiz-option,.opt,.opt-en,.opt-hi,.options label,.q-options label,[id^='opts-'] label,.options [onclick],.q-options [onclick],[id^='opts-'] [onclick]";
-  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context-dock.css?v=20261005dock1";document.head.appendChild(style);
+  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context-dock-v2.css?v=20261005darkfix2";document.head.appendChild(style);
   var allowEntryFocus=true;
   function resolveDockTop(){
     if(dockTopValue!==null)return dockTopValue;
@@ -45,9 +45,6 @@
     var desired=Math.ceil(br.bottom)+10,delta=tr.top-desired;
     if(Math.abs(delta)>1)window.scrollBy({top:delta,left:0,behavior:"instant"});
   }
-  // The stylesheet and the quiz's lazy section can finish in either order.
-  // Re-measure only while entry focus is still ours, never after interaction
-  // or an installed-app reading-position restore.
   style.addEventListener("load",function(){
     measureDock();
     if(allowEntryFocus&&!appRestored)requestAnimationFrame(centerBar);
@@ -400,6 +397,7 @@
   window.addEventListener("hashchange",function(){viewKey="";selection="";schedule()});
   window.addEventListener("pageshow",function(){schedule();syncPdf()});
   window.addEventListener("resize",function(){dockTopValue=null;measurePdfHeader();measureDock()},{passive:true});
+  document.addEventListener("efp-black-mode-changed",function(){dockTopValue=null;requestAnimationFrame(measureDock)});
   ["pointerdown","touchstart","wheel","keydown"].forEach(function(name){
     window.addEventListener(name,function(){allowEntryFocus=false},{passive:true});
   });
