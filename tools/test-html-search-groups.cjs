@@ -20,13 +20,14 @@ function preserve(p){assert.equal(JSON.stringify(p.w.localStorage),p.storage);as
  // Same bilingual question, repeated term, split markup, answers and hidden text.
  for(const [id,cls] of [['q6','question-box'],['q-5','question-card'],['rp-0-5','qcard'],['bbq-6','question-box'],['s1-6','question-box']]){
   const p=await quiz(`<main><article class="${cls}" id="${id}"><h2>Summary of <b>BRICS</b>? BRICS?</h2><p>ब्रिक्स (BRICS) का सारांश?</p><div class="options">BRICS answer</div><div class="explanation">BRICS explanation</div><p hidden>BRICS</p></article></main>`,id);
-  const b=p.w.document.querySelector('.efp-context-next');assert.equal(b.textContent,'1/1');assert(b.disabled);assert.equal(p.w.document.querySelectorAll('mark').length,3);
-  assert.equal(p.w.document.querySelectorAll('.options mark,.explanation mark,[hidden] mark').length,0);
+  const b=p.w.document.querySelector('.efp-context-next');assert.equal(b.textContent,'1/1');assert(b.disabled);assert.equal(p.w.document.querySelectorAll('mark').length,4);
+  assert.equal(p.w.document.querySelectorAll('.options mark,[hidden] mark').length,0);
+  assert.equal(p.w.document.querySelectorAll('.explanation mark').length,1);
   b.click();assert.equal(b.textContent,'1/1');assert.equal(p.scrolled.length,0);
   p.w.dispatchEvent(new p.w.PageTransitionEvent('pageshow',{persisted:true}));await delay(30);assert.equal(p.w.document.querySelectorAll('.efp-search-context').length,1);assert.equal(b.textContent,'1/1');
   preserve(p);p.w.document.querySelector('.efp-context-dismiss').click();await delay(30);assert.equal(p.w.document.querySelectorAll('mark,.efp-search-context').length,0);preserve(p);p.dom.window.close();
  }
- console.log('PASS bilingual/repeated text counts once across five quiz templates; answers, explanations and saved state preserved');
+ console.log('PASS bilingual/repeated text counts once across five quiz templates; visible explanation matches and saved state preserved');
  for(const make of [quiz,mindmap]){
   const p=await make('<section class="panel active" id="facts"><article class="card" id="first"><p>BRICS</p><p>BRICS हिंदी</p></article><article class="card" id="second"><p>BRICS members</p><p>BRICS सदस्य</p></article><article class="card" hidden><p>BRICS invisible</p></article></section>','facts');
   const b=p.w.document.querySelector('.efp-context-next,.efp-mm-next');assert.equal(b.textContent,'1/2 ↓');assert(!b.disabled);
@@ -68,7 +69,7 @@ function preserve(p){assert.equal(JSON.stringify(p.w.localStorage),p.storage);as
  assert.equal(econ.w.document.querySelector('.efp-context-next').textContent,'12/13 ↓');assert.equal(run('state.currentSection'),7);
  const before=JSON.parse(attemptBefore),after=JSON.parse(run('JSON.stringify({answers:state.answerMap,score:state.score,orders:state.shuffleMap})'));
  assert.deepEqual(after.answers,before.answers);assert.deepEqual(after.score,before.score);Object.entries(before.orders).forEach(([key,order])=>assert.deepEqual(after.orders[key],order));
- assert(econ.w.document.querySelector('#opts-5 .answered'));assert.equal(econ.w.document.querySelectorAll('.options mark,.option-btn mark,[id^="exp-"] mark').length,0);
+ assert(econ.w.document.querySelector('#opts-5 .answered'));assert.equal(econ.w.document.querySelectorAll('.options mark,.option-btn mark,[id^="exp-"].hidden mark').length,0);
  assert.equal(JSON.stringify(econ.w.sessionStorage),econ.session);assert.equal(JSON.parse(econ.w.localStorage.getItem('attempt')).bookmark,true);
  econ.w.document.querySelector('.efp-context-dismiss').click();await delay(40);assert.equal(econ.w.document.querySelectorAll('.efp-search-context,mark.efp-context-match').length,0);econ.dom.window.close();
  console.log('PASS real Economics: 13 results across sections, selected hit index, wraparound, answers/options/order and search-return preservation');

@@ -6,7 +6,7 @@
   if (!document.getElementById("efp-shared-search-context")) {
     var searchContext = document.createElement("script");
     searchContext.id = "efp-shared-search-context";
-    searchContext.src = "/search-context.js?v=20261004pagehtml1";
+    searchContext.src = "/search-context.js?v=20261004explain1";
     document.head.appendChild(searchContext);
   }
   if (!/^\/(?:index\.html)?$/i.test(location.pathname) && !document.getElementById("efp-section-search-ui")) {
