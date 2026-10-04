@@ -12,7 +12,7 @@
   if (!document.getElementById("efp-shared-search-context")) {
     var searchContext = document.createElement("script");
     searchContext.id = "efp-shared-search-context";
-    searchContext.src = "/search-context.js?v=20261004opentry1";
+    searchContext.src = "/search-context.js?v=20261004rapidcontext1";
     searchContext.async = false;
     document.head.appendChild(searchContext);
   }
