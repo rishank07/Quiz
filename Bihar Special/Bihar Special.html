@@ -513,6 +513,10 @@
       var hash = "";
       var hashAt = file.indexOf("#");
       if (hashAt !== -1) { hash = file.slice(hashAt); file = file.slice(0, hashAt); }
+      if (!hash) {
+        var fact = String(match && match.text || "").match(/^\s*(?:EN\s*:\s*)?(\d+)\s*\./i);
+        if (fact) hash = "#bihar-" + (/Current Affairs for BPSC Pre 72\.html/i.test(file) ? "ca-" : "fact-") + fact[1];
+      }
       return file + (file.indexOf("?") === -1 ? "?" : "&") + "efsearch=" + encodeURIComponent(query) + hash;
     }
 

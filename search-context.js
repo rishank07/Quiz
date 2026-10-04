@@ -28,7 +28,7 @@
     try{
       var params=new URL(location.href).searchParams;
       var token=params.get("efSearchReturn")||(history.state&&history.state.efpSearchReturnToken);
-      var direct=String(params.get("efSearchQuery")||"").trim().slice(0,160);
+      var direct=String(params.get("efSearchQuery")||(/^\/Bihar(?:%20| )Special\//i.test(location.pathname)?params.get("efsearch"):"")||"").trim().slice(0,160);
       var saved=JSON.parse(sessionStorage.getItem("efp_search_return_v1:"+token)||"null");
       if(!saved||saved.token!==token||!Array.isArray(saved.inputs)||new URL(saved.source,location.origin).origin!==location.origin)return direct?{token:token||"query:"+direct,query:direct}:null;
       var input=saved.inputs.find(function(field){return String(field.value||"").trim()});
@@ -139,6 +139,7 @@
     var set=/^s(\d+)-(\d+)$/.exec(id);if(set)return "Set "+set[1]+" · Question "+set[2];
     var match=/^(?:q|bbq-)(\d+)$/i.exec(id);if(match)return "Question "+match[1];
     if(/^ca-ol-/.test(id))return "One-liner "+id.split("-").pop();
+    var bihar=/^bihar-(?:fact|ca)-(\d+)/.exec(id);if(bihar)return "One-liner "+bihar[1];
     return "Matched section / खोज से खुला भाग";
   }
   function findTarget(){
@@ -185,9 +186,9 @@
     }catch(_){}return null;
   }
   function domRoots(el){
-    var questions=Array.from(document.querySelectorAll(".question-box,.qcard,.question-card,.quiz-question,.oneliner-item,[data-qid],[data-efp-bb-sn],[id]"))
+    var questions=Array.from(document.querySelectorAll(".question-box,.qcard,.question-card,.quiz-question,.oneliner-item,#content .cd,.efp-bihar-bookmark-entry,[data-qid],[data-efp-bb-sn],[id]"))
       .filter(function(node){return !/^(BUTTON|A|INPUT|SELECT|TEXTAREA)$/.test(node.tagName)&&
-        (node.matches(".question-box,.qcard,.question-card,.quiz-question,.oneliner-item,[data-qid],[data-efp-bb-sn]")||/^(?:q-?\d+|bbq-\d+|rp-\d+-\d+|s\d+-\d+|ca-ol-.+)$/.test(node.id))});
+        (node.matches(".question-box,.qcard,.question-card,.quiz-question,.oneliner-item,#content .cd,.efp-bihar-bookmark-entry,[data-qid],[data-efp-bb-sn]")||/^(?:q-?\d+|bbq-\d+|rp-\d+-\d+|s\d+-\d+|ca-ol-.+)$/.test(node.id))});
     if(questions.length){
       var owners=new Set(questions);
       return questions.filter(function(node){for(var parent=node.parentElement;parent;parent=parent.parentElement)if(owners.has(parent))return false;return node.getClientRects().length||(/^s\d+-\d+$/.test(node.id)&&typeof showSet==="function")});

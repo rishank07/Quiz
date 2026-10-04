@@ -4,6 +4,19 @@
 
   var clearButton = null;
 
+  function syncHeadings() {
+    document.querySelectorAll("#content .sh").forEach(function (heading) {
+      var sibling = heading.nextElementSibling, visible = false;
+      while (sibling && !sibling.classList.contains("sh")) {
+        if (sibling.matches(".cd,.efp-bihar-bookmark-entry") && window.getComputedStyle(sibling).display !== "none") {
+          visible = true; break;
+        }
+        sibling = sibling.nextElementSibling;
+      }
+      heading.style.display = visible ? "" : "none";
+    });
+  }
+
   function syncClearButton() {
     var input = document.getElementById("searchInput");
     if (!input || !clearButton) return;
@@ -82,7 +95,10 @@
 
   function applySearchHandoff() {
     var query = "";
-    try { query = new URLSearchParams(window.location.search).get("efsearch") || ""; } catch (e) {}
+    try {
+      var params = new URLSearchParams(window.location.search);
+      query = params.get("efsearch") || params.get("efSearchQuery") || "";
+    } catch (e) {}
     query = query.trim();
     if (!query) return;
 
@@ -91,8 +107,20 @@
     input.value = query;
     syncClearButton();
     runLocalFilter(input);
+    syncHeadings();
 
     setTimeout(function () {
+      var token = "";
+      try { token = decodeURIComponent(location.hash.slice(1)); } catch (_) {}
+      var target = token && document.getElementById(token);
+      if (window.EFP_SEARCH_CONTEXT) {
+        window.EFP_SEARCH_CONTEXT.refresh();
+        if (window.EFP_SEARCH_CONTEXT.focusTarget(target)) return;
+      }
+      if (target && window.getComputedStyle(target).display !== "none") {
+        target.scrollIntoView({ behavior: "instant", block: "center" });
+        return;
+      }
       var cards = document.querySelectorAll(".cd");
       for (var i = 0; i < cards.length; i++) {
         if (window.getComputedStyle(cards[i]).display !== "none") {
@@ -105,6 +133,13 @@
 
   function init() {
     installSearchClear();
+    var filter = window.filterCards;
+    if (typeof filter === "function") window.filterCards = function () {
+      var result = filter.apply(this, arguments);
+      syncHeadings();
+      if (window.EFP_SEARCH_CONTEXT) window.EFP_SEARCH_CONTEXT.refresh();
+      return result;
+    };
     applySearchHandoff();
   }
 
