@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261004searchcontext1";
+const CACHE_VERSION = "efp-pwa-20261004scrollcanvas1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -24,7 +24,7 @@ const APP_SHELL = [
   "/pwa-icons/icon-192.png",
   "/pwa-icons/icon-512.png",
   "/pwa-icons/maskable-icon-512.png",
-  "/black-mode.js",
+  "/black-mode.js?v=20261004scrollcanvas1",
   "/ca-question-deeplink.js?v=20261004context1",
   "/ca-move-top-v3.js?v=20261001navbuttons1",
   "/blackbook-quiz-bookmarks.js?v=20261004context1",
@@ -205,6 +205,9 @@ async function injectEdgeToEdge(response) {
 
   const html = await response.text();
   let updated = ensureEdgeToEdgeViewport(html);
+  if (!/<script\b[^>]*\bsrc\s*=\s*["'][^"']*\bblack-mode\.js(?:[?"'])/i.test(updated)) {
+    updated = updated.replace(/<head(?:\s[^>]*)?>/i, (head) => head + '\n  <script defer data-efp-scroll-only src="/black-mode.js?v=20261004scrollcanvas1"></script>');
+  }
   // Some quiz pages do not load the shared Home navigation script. Install
   // session tracking for every app navigation, without adding it twice.
   if (!/id=["']efp-app-session-script["']/i.test(updated)) {
@@ -382,6 +385,7 @@ self.addEventListener("fetch", (event) => {
   // Navigation chrome and Original Practice shared assets change often;
   // never let an old app-shell copy win on a normal refresh.
   if (url.pathname === "/home-nav.js" ||
+      url.pathname === "/black-mode.js" ||
       url.pathname === "/ca-move-top-v3.js" ||
       url.pathname === "/ca-move-top.js" ||
       url.pathname === "/app-session.js" ||

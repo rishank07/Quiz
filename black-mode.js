@@ -43,6 +43,26 @@
   var siteRootUrl = new URL("./", scriptUrl);
   var homeUrl = new URL("index.html", siteRootUrl).href;
 
+  function injectScrollStyle() {
+    if (document.getElementById("efp-scroll-surface-style")) return;
+    var style = document.createElement("style");
+    style.id = "efp-scroll-surface-style";
+    // Opaque canvas; no new fixed layer, transform, filter or scroll listener.
+    style.textContent =
+      "html,body{overscroll-behavior-y:none;}" +
+      "html.efp-scroll-stable{min-height:100%;background-color:var(--efp-scroll-canvas)!important;color-scheme:var(--efp-scroll-scheme);}" +
+      "html.efp-scroll-stable body:where(.efp-transparent-canvas){background-color:var(--efp-scroll-canvas)!important;}" +
+      // Layered important rules outrank legacy unlayered important declarations,
+      // including the Home/Back buttons' ID selectors. Desktop glass stays intact.
+      "@layer efp-scroll-safety{@media(max-width:1024px),(hover:none),(pointer:coarse),(display-mode:standalone),(display-mode:fullscreen){" +
+      "html.efp-scroll-stable,html.efp-scroll-stable body,html.efp-scroll-stable body *{background-attachment:scroll!important;}" +
+      "html.efp-scroll-stable,html.efp-scroll-stable *,html.efp-scroll-stable *::before,html.efp-scroll-stable *::after{" +
+      "-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}" +
+      "html.efp-scroll-stable body::after{mix-blend-mode:normal!important;}" +
+      "}}";
+    document.head.appendChild(style);
+  }
+
   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
     var style = document.createElement("style");
@@ -63,12 +83,10 @@
       "background:#000 !important;" +
       "background-image:none !important;" +
       "min-height:100%;" +
-      /* Keep Android/WebView from assigning dark-system default text colours
-         before our page-wide inversion runs. Without this guard, legacy
-         statement blocks that omit an explicit colour can become black text
-         on a near-black inverted background. */
-      "color-scheme:light;" +
-      "color-scheme:only light;" +
+      /* The root represents the rendered black canvas, including native
+         gesture-area shading. BODY still uses only-light defaults below
+         before inversion, preserving legacy text and form-control colours. */
+      "color-scheme:dark;" +
       "overscroll-behavior-y:none;" +
       "}" +
       "html.efp-black-invert body {" +
@@ -534,6 +552,7 @@
   }
 
   function installPageEnhancements() {
+    syncScrollCanvas();
     markWideDesktopQuizLayout();
     markBackButtonLayout();
     installResponsiveFit();
@@ -546,6 +565,64 @@
     var parts = m[1].split(",").map(function (s) { return parseFloat(s); });
     var alpha = parts.length > 3 ? parts[3] : 1;
     return { r: parts[0], g: parts[1], b: parts[2], a: alpha };
+  }
+
+  function syncScrollCanvas() {
+    if (!document.body) return;
+    var html = document.documentElement;
+    // Read the page's original colours without our previous fallback or
+    // Black Mode overrides; toggling off must recover the original canvas.
+    var black = html.classList.contains("efp-black");
+    var invert = html.classList.contains("efp-black-invert");
+    html.classList.remove("efp-scroll-stable", "efp-black", "efp-black-invert");
+    document.body.classList.remove("efp-transparent-canvas");
+    var bodyStyle = getComputedStyle(document.body);
+    var bodyColor = parseRGBA(bodyStyle.backgroundColor);
+    var rootColor = parseRGBA(getComputedStyle(html).backgroundColor);
+    var color = bodyColor && bodyColor.a === 1 ? bodyColor : rootColor && rootColor.a === 1 ? rootColor : null;
+    if (!color) {
+      var ink = parseRGBA(bodyStyle.color);
+      var lightInk = ink && (ink.r + ink.g + ink.b) > 384;
+      var meta = document.querySelector('meta[name="theme-color"]');
+      // Use a valid opaque theme colour when available; gradient-only legacy
+      // pages otherwise inherit a base appropriate to their own text colour.
+      var probe = document.createElement("span");
+      probe.style.backgroundColor = meta ? meta.content : "";
+      probe.hidden = true;
+      document.body.appendChild(probe);
+      var theme = parseRGBA(getComputedStyle(probe).backgroundColor);
+      probe.remove();
+      color = theme && theme.a === 1 ? theme : lightInk ? {r:15,g:32,b:39} : {r:255,g:255,b:255};
+    }
+    html.style.setProperty("--efp-scroll-canvas", "rgb(" + color.r + "," + color.g + "," + color.b + ")");
+    var isDarkCanvas = black || invert || (0.299 * color.r + 0.587 * color.g + 0.114 * color.b) < 128;
+    html.style.setProperty("--efp-scroll-scheme", isDarkCanvas ? "dark" : "light");
+    document.body.classList.toggle("efp-transparent-canvas", !bodyColor || bodyColor.a < 1);
+    html.classList.add("efp-scroll-stable");
+    if (black) html.classList.add("efp-black");
+    if (invert) html.classList.add("efp-black-invert");
+  }
+
+  function installScrollCanvas() {
+    syncScrollCanvas();
+    var html = document.documentElement;
+    function themeKey() {
+      return [html, document.body].map(function (el) {
+        return Array.from(el.classList).filter(function (name) {
+          return name !== "efp-scroll-stable" && name !== "efp-transparent-canvas";
+        }).sort().join(" ");
+      }).join("|");
+    }
+    var lastTheme = themeKey();
+    var observer = new MutationObserver(function () {
+      var nextTheme = themeKey();
+      if (nextTheme === lastTheme) return;
+      lastTheme = nextTheme;
+      syncScrollCanvas();
+    });
+    observer.observe(html, {attributes:true, attributeFilter:["class"]});
+    observer.observe(document.body, {attributes:true, attributeFilter:["class"]});
+    window.addEventListener("pageshow", syncScrollCanvas);
   }
 
   // Walk down the first-child chain looking for a reasonably opaque
@@ -586,6 +663,7 @@
   }
 
   function notify(on) {
+    syncScrollCanvas();
     document.dispatchEvent(new CustomEvent("efp-black-mode-changed", { detail: { on: on } }));
   }
 
@@ -606,6 +684,17 @@
     if (document.body || !isOn) notify(isOn);
   }
 
+  injectScrollStyle();
+
+  // Reader/game shells already manage their own navigation and theme. Pages
+  // that lacked Black Mode load only the shared scroll layer, without adding
+  // a toggle, changing PDF filters, or moving any existing controls.
+  if (document.currentScript && document.currentScript.hasAttribute("data-efp-scroll-only")) {
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", installScrollCanvas, {once:true});
+    else installScrollCanvas();
+    return;
+  }
+
   document.documentElement.classList.add(SCREEN_FIT_CLASS);
   injectStyle();
 
@@ -618,8 +707,10 @@
   syncFromStorage();
 
   if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", installScrollCanvas, { once: true });
     document.addEventListener("DOMContentLoaded", installPageEnhancements, { once: true });
   } else {
+    installScrollCanvas();
     installPageEnhancements();
   }
 
@@ -660,4 +751,3 @@
     }
   });
 })();
-
