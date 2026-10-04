@@ -147,6 +147,7 @@ for (const [name, home, surface] of surfaces.slice(0, 3)) {
 // Internal search must keep its existing destination and session behavior.
 // A process kill loses all sessionStorage. Only local app resume data survives.
 for (const [name, home, surface] of surfaces.slice(0, 3)) {
+  for (const ageDays of [0, 2, 30, 730]) {
   for (const dismissed of [false, true]) {
     const t = trip(home, surface), leaf = page(t.url, surface, t.source.session, t.source.local);
     const homeRows = {query:'ancient history',html:'<li data-deepresult="1"><a href="/practice.html">Ancient match</a></li>',filter:'practice',pages:2,scrollTop:65};
@@ -159,8 +160,10 @@ for (const [name, home, surface] of surfaces.slice(0, 3)) {
     const saved = JSON.parse(leaf.local.getItem(SESSION));
     assert.equal(saved.searchState.trip.token, token);assert.deepEqual(saved.searchState.view, view);
     assert.deepEqual(saved.searchState.homeResults,homeRows);
+    saved.ts = Date.now() - ageDays * 24 * 60 * 60 * 1000;
+    leaf.local.setItem(SESSION, JSON.stringify(saved));
     const fresh = storage(), launch = page(home, surface, fresh, leaf.local);launch.run(app);
-    assert.equal(launch.w.navigation, leaf.w.location.href);
+    assert.equal(launch.w.navigation, leaf.w.location.href, name + ': ' + ageDays + '-day-old session must resume');
     assert(fresh.getItem('efp_search_return_v1:'+token), 'Cold launch must rehydrate the original search snapshot');
     assert.deepEqual(JSON.parse(fresh.getItem('efp_home_search_results_v1')),homeRows,'Homepage cards/filter/limit must survive empty sessionStorage');
     const resumed = page(launch.w.navigation, surface, fresh, leaf.local);resumed.run(app);resumed.run(back);resumed.flush();
@@ -169,8 +172,21 @@ for (const [name, home, surface] of surfaces.slice(0, 3)) {
     const returned = page(resumed.w.navigation, surface, fresh, leaf.local);returned.run(app);returned.run(back);returned.flush();
     assert.equal(returned.input.value,'ancient history');assert.equal(returned.results.innerHTML,'<a>Ancient match</a>');assert(!returned.w.navigation);
   }
-  console.log('PASS',name,'cold process relaunch: search trip/view/dismissal restored and Back returns original results');
+  }
+  console.log('PASS',name,'cold process relaunch at 0/2/30/730 days: search trip/view/dismissal restored and Back returns original results');
 }
+// Removing expiry must preserve the existing destination/record guards.
+for (const [name, home, surface] of surfaces.slice(0, 3)) {
+  for (const saved of [
+    {url:'https://example.com/quiz.html',ts:Date.now()-730*86400000},
+    {url:'/',ts:Date.now()-730*86400000},
+    {url:'/quiz.html',ts:'broken timestamp'}
+  ]) {
+    const launch=page(home,surface,storage(),storage({[SESSION]:JSON.stringify(saved)}));
+    launch.run(app);assert(!launch.w.navigation,name+': invalid/Home destination must not resume');
+  }
+}
+console.log('PASS no-expiry resume still rejects external URLs, Home destinations and malformed records');
 const browserTrip=trip('/',{}),browserLeaf=page(browserTrip.url,{},browserTrip.source.session,browserTrip.source.local);
 browserLeaf.w.EFP_SEARCH_CONTEXT={snapshot:()=>({kind:'html',dismissed:false})};browserLeaf.run(app);browserLeaf.flush();
 assert.equal(JSON.parse(browserLeaf.local.getItem(SESSION)).searchState,null,'Ordinary browsers must not persist app search context');

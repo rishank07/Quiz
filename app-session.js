@@ -8,7 +8,6 @@
   var LEGACY_STATIC_QUIZ_KEY = "efp_app_static_quiz_v1";
   var QUIZ_WARNING_KEY = "efp_app_quiz_warning_v1";
   var INSTALLED_APP_CONTEXT_KEY = "efp_installed_app_context_v1";
-  var MAX_RESUME_AGE = 24 * 60 * 60 * 1000;
   var intentionalHome = false;
   var replayingSavedAnswer = false;
   var SEARCH_RETURN_PREFIX = "efp_search_return_v1:";
@@ -226,7 +225,9 @@
     if (!data || typeof data !== "object") return null;
     var url = sameOriginRelative(data.url);
     if (!url || isHomePath(new URL(url, location.origin).pathname)) return null;
-    if (!Number.isFinite(Number(data.ts)) || Date.now() - Number(data.ts) > MAX_RESUME_AGE) return null;
+    // Keep the last reading/search session until the learner changes it.
+    // Its age does not make an otherwise valid same-origin page unusable.
+    if (!Number.isFinite(Number(data.ts))) return null;
     data.url = url;
     return data;
   }
