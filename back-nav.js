@@ -12,7 +12,7 @@
   if (!document.getElementById("efp-shared-search-context")) {
     var searchContext = document.createElement("script");
     searchContext.id = "efp-shared-search-context";
-    searchContext.src = "/search-context.js?v=20261004resultcontext3";
+    searchContext.src = "/search-context.js?v=20261004opentry1";
     searchContext.async = false;
     document.head.appendChild(searchContext);
   }
@@ -124,6 +124,8 @@
     try {
       var url = new URL(location.href);
       url.searchParams.set(PARAM, saved.token);
+      var field = saved.inputs.find(function(input){return String(input.value||"").trim()});
+      if (field) url.searchParams.set("efSearchQuery", String(field.value).trim().slice(0,160));
       history.replaceState(Object.assign({}, history.state, { efpSearchReturnToken: saved.token }), "", url.href);
     } catch (_) {}
     armGuard();
@@ -221,8 +223,18 @@
     // Used by Original Practice's in-document chapter/question buttons.
     openInPage: function (action) {
       var saved = snapshot();
+      var field = fields().find(function(input){return input.value.trim()&&!input.closest('[hidden]')});
+      var query = field && field.value.trim().slice(0,160);
+      if (window.EFP_SEARCH_CONTEXT && window.EFP_SEARCH_CONTEXT.beginEntry) window.EFP_SEARCH_CONTEXT.beginEntry();
       action();
       if (saved) markCurrent(saved);
+      else if (query) {
+        try {
+          var url = new URL(location.href);url.searchParams.set("efSearchQuery", query);
+          history.replaceState(history.state, "", url.href);
+        } catch (_) {}
+      }
+      if (window.EFP_SEARCH_CONTEXT) window.EFP_SEARCH_CONTEXT.refresh();
     }
   };
 

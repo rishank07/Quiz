@@ -6,6 +6,7 @@
   var dismissed=new Set(),scheduled=false,pdfAdapter=null,pdfObserver=null;
   var pageRecords=[],recordCache="",recordProvider=null,viewKey="",viewRoots=[],selection="",scrollNext=false,entryCache="";
   var revealed=[];
+  var optionPreviews=new Set();
   var appRestored=false,resumeState=null;
   var fuzzyMatches=false;
   var explanationSelector=".explanation,.explanation-box,.explain-box,.exp-box,.exp,.explain,.q-exp,[id^='exp-']";
@@ -141,6 +142,7 @@
     if(node.matches("details"))node.open=true;
   }
   function clearRevealed(){
+    optionPreviews.clear();
     revealed.forEach(function(entry){
       var node=entry.node;node.classList.remove("efp-context-revealed");
       var card=node.closest(".question-box,.qcard,.question-card,.quiz-question,[data-qid],[data-efp-bb-sn]")||node.parentElement;
@@ -262,10 +264,12 @@
       var node=element(row),items=[],options=[],optionMarks=[],explanations=[],explanationMarks=[];
       if(node&&node.getClientRects().length){
         items=markWords(node,saved.query);options=matchingOptions(node,saved.query);explanations=matchingExplanations(node,saved.query);
+        if(resumeState&&Array.isArray(resumeState.previewed)&&resumeState.previewed.indexOf(row.key)>=0)optionPreviews.add(cache+"|"+row.key);
+        if(optionPreviews.has(cache+"|"+row.key))options.forEach(function(option){optionMarks=optionMarks.concat(markOptionWords(option,saved.query))});
         if(resumeState&&Array.isArray(resumeState.revealed)&&resumeState.revealed.indexOf(row.key)>=0)explanations.forEach(function(exp){revealExplanation(exp,row.key)});
         explanations.forEach(function(exp){if(explanationVisible(exp))explanationMarks=explanationMarks.concat(markWords(exp,saved.query,true))});
       }
-      items=items.concat(explanationMarks);marks=marks.concat(items);
+      items=items.concat(optionMarks,explanationMarks);marks=marks.concat(items);
       return {record:row,anchor:node,marks:items,options:options,optionMarks:optionMarks,explanations:explanations,explanationMarks:explanationMarks};
     });
     bar=createBar(saved.query,selected?selected.label:questionLabel(target),function(){
@@ -275,6 +279,7 @@
     });
     var explanationButton=button("Show matching option or explanation without attempting / बिना प्रयास के मिला विकल्प या व्याख्या देखें","Dekho",function(){
       var group=groups[current];if(!group||(!group.options.length&&!group.explanations.length))return;
+      if(group.options.length)optionPreviews.add(cache+"|"+group.record.key);
       group.options.forEach(function(option){
         if(!option.querySelector("mark.efp-context-match")){
           var found=markOptionWords(option,saved.query);group.optionMarks=group.optionMarks.concat(found);group.marks=group.marks.concat(found);marks=marks.concat(found);
@@ -350,11 +355,19 @@
   function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(function(){scheduled=false;syncQuiz()})}
   window.EFP_SEARCH_CONTEXT={
     refresh:schedule,
+    beginEntry:function(){
+      // A deliberate in-page result click starts a new focus cycle after the
+      // typing/touch events that previously protected the learner's scroll.
+      clear();clearRevealed();allowEntryFocus=true;appRestored=false;
+      resumeState=null;viewKey="";entryCache="";selection="";scrollNext=false;
+      schedule();
+    },
     focusTarget:focusTarget,
     snapshot:function(){
       if(pdfAdapter&&pdfAdapter.snapshot)return pdfAdapter.snapshot();
       var saved=savedQuery();if(!saved||(!bar&&!dismissed.has(saved.token)))return null;
       return {kind:"html",token:saved.token,selection:selection,dismissed:dismissed.has(saved.token),
+        previewed:pageRecords.filter(function(row){return optionPreviews.has(saved.token+":"+saved.query+"|"+row.key)}).map(function(row){return row.key}),
         revealed:revealed.filter(function(entry){return entry.node.isConnected}).map(function(entry){return entry.key})};
     },
     isDismissed:function(el){var saved=savedQuery();return !!(saved&&el&&dismissed.has(saved.token))},
