@@ -15,7 +15,7 @@ async function viewer({id='ct0577',mobile=false,indexFailure=false,invalidIndex=
  w.document.elementFromPoint=()=>w.document.querySelector('.efp-cont-page[data-page="'+w.document.getElementById('pageInput').value+'"]');
  Object.defineProperty(w.HTMLElement.prototype,'clientWidth',{get(){return mobile?390:1200}});
  Object.defineProperty(w.HTMLElement.prototype,'clientHeight',{get(){return mobile?700:800}});
- w.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},clearRect(){},save(){},restore(){},setTransform(){},fillRect(){},measureText(){return {width:10}}});
+ w.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},clearRect(){},save(){},restore(){},setTransform(){},fillRect(){},measureText(str){return {width:str.length*5}}});
  w.IntersectionObserver=class{observe(){}unobserve(){}disconnect(){}};
  const text=pageData(id);let extractions=0;
  w.pdfjsLib={GlobalWorkerOptions:{},Util:{transform:(a,b)=>b},getDocument(){return {promise:delay(pdfDelay).then(()=>({numPages:text.length,getPage(n){return Promise.resolve({getViewport({scale}){return {width:600*scale,height:800*scale,scale,transform:[scale,0,0,scale,0,0]}},render(){return {promise:Promise.resolve(),cancel(){}}},getTextContent(){extractions++;return Promise.resolve({items:noNativeText?[]:fragmented?text[n-1].split(/(\s+)/).filter(Boolean).map((str,i)=>({str,transform:[1,0,0,10,(i%50)*10,10+Math.floor(i/50)*15],width:str.length*5,height:10})): [{str:text[n-1],transform:[1,0,0,1,0,10],width:10,height:10}],styles:{}})}})}}))}}};

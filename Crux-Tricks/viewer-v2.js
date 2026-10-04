@@ -305,7 +305,7 @@
         var layer=document.createElement('div');layer.className='efp-search-layer';
         if(!continuous)layer.id='efpSingleSearchLayer';
         layer.style.left=layerLeft+'px';layer.style.top=layerTop+'px';layer.style.width=cssW+'px';layer.style.height=cssH+'px';
-        var first=null,count=0;
+        var first=null,count=0,measure=document.createElement('canvas').getContext('2d');
         for(var m=0;m<keys.length;m++){
           var itemIndex=parseInt(keys[m],10),item=items[itemIndex];if(!item||!item.transform)continue;
           var tx=pdfjsLib.Util.transform(cssViewport.transform,item.transform);
@@ -314,10 +314,23 @@
           var baseLeft=tx[4],top=tx[5]-h;
           if(!isFinite(baseLeft)||!isFinite(top)||!isFinite(fullW)||!isFinite(h))continue;
           var ranges=matched[itemIndex]||[];
+          var raw=String(item.str||''),measuredWidth=0;
+          if(measure){
+            var font=null;try{if(pg.commonObjs)font=pg.commonObjs.get(item.fontName)}catch(ignore){}
+            var family=(tc.styles&&tc.styles[item.fontName]&&tc.styles[item.fontName].fontFamily)||'sans-serif';
+            var typeface=font?((font.systemFontInfo&&font.systemFontInfo.css)||('"'+(font.loadedName||family)+'", '+(font.fallbackName||family))):family;
+            measure.font=(font&&font.italic?'italic ':'')+(font&&font.black?'900 ':font&&font.bold?'bold ':'')+h+'px '+typeface;
+            measuredWidth=measure.measureText(raw).width;
+          }
           for(var r=0;r<ranges.length;r++){
             var rr=ranges[r];
-            var left=baseLeft+fullW*rr.start;
-            var w=Math.max(3,fullW*(rr.end-rr.start));
+            var start=rr.start,end=rr.end;
+            if(measuredWidth>0){
+              start=measure.measureText(raw.slice(0,Math.round(rr.start*raw.length))).width/measuredWidth;
+              end=measure.measureText(raw.slice(0,Math.round(rr.end*raw.length))).width/measuredWidth;
+            }
+            var left=baseLeft+fullW*start;
+            var w=Math.max(3,fullW*(end-start));
             if(left>cssW||top>cssH||left+w<0||top+h<0)continue;
             left=Math.max(0,left);var safeTop=Math.max(0,top);w=Math.min(w,cssW-left);var safeH=Math.min(h*1.08,cssH-safeTop);
             var mark=document.createElement('span');mark.className='efp-search-mark'+(count===0?' efp-search-active':'');

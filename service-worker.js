@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261004pdfmarks1";
+const CACHE_VERSION = "efp-pwa-20261004pdfmarks2";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -66,7 +66,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.js?v=20261001searchreturn2",
   "/Crux-Tricks/viewer.css",
   "/Crux-Tricks/pdf-search.js?v=20261004pdfmarks1",
-  "/Crux-Tricks/viewer-v2.js?v=20261004pdfmarks1",
+  "/Crux-Tricks/viewer-v2.js?v=20261004pdfmarks2",
 ];
 
 self.addEventListener("install", (event) => {
