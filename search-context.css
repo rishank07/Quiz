@@ -2,13 +2,20 @@
   box-sizing:border-box;display:flex;align-items:center;gap:6px;width:100%;min-width:0;margin:8px 0;padding:4px 8px;
   border:1px solid #d4b45c;border-radius:9px;background:#fff7d8;color:#302508;font:13px/1.3 system-ui,sans-serif;text-align:left;
 }
-/* Search-entry banner: every JS focus uses block:center, so enlarge only the
-   trailing scroll area. That makes the same call land the banner at the top
-   instead of sometimes in the middle; sticky then keeps it there. */
+/* Several legacy quiz shells use overflow-x:hidden on BODY. In browsers that
+   also creates a vertical scrolling box, so position:sticky attaches to BODY
+   instead of the viewport and the search banner moves with the page. Clip the
+   horizontal paint without creating that extra scroll container, but only
+   while the HTML search-result banner is present. */
+body:has(.efp-search-context:not(.efp-pdf-search-context)){
+  overflow-x:clip!important;
+  overflow-y:visible!important;
+}
+/* Search-entry banner stays in normal document flow (so it never covers the
+   active question) and sticks to the viewport once aligned near the top. The
+   large trailing scroll margin makes the existing block:center focus land the
+   banner near its sticky top instead of randomly around mid-screen. */
 .efp-search-context:not(.efp-pdf-search-context){position:sticky;top:6px;z-index:200;box-shadow:0 3px 12px #00000012;scroll-margin-block-end:max(0px,calc(100dvh - 70px))}
-/* The banner is inserted immediately before the active result. If another
-   deep-link/result scroll fires afterwards, reserve enough room so the
-   question heading cannot end up underneath the sticky banner. */
 .efp-search-context:not(.efp-pdf-search-context)+:is(.question-box,.qcard,.question-card,.quiz-question,.oneliner-item,.cd,[data-qid],[data-efp-bb-sn]){scroll-margin-top:90px}
 .efp-search-context .efp-context-description{flex:1;min-width:0}
 .efp-search-context .efp-context-description span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
