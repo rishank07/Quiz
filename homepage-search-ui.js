@@ -116,13 +116,13 @@
   function readSavedResults(query) {
     try {
       var saved = JSON.parse(sessionStorage.getItem(SEARCH_RESULTS_KEY) || "null");
-      return saved && saved.query === query && typeof saved.html === "string" ? saved : null;
+      return saved && normalized(saved.query) === normalized(query) && typeof saved.html === "string" ? saved : null;
     } catch (_) { return null; }
   }
 
   function restoreSavedQuery() {
     var saved = readSavedQuery().trim();
-    if (!saved || (box.value.trim() && currentQuery === box.value.trim())) return;
+    if (!saved || (box.value.trim() && normalized(currentQuery) === normalized(box.value))) return;
     var snapshot = readSavedResults(saved);
     box.value = saved;
     if (snapshot && saved.length >= 2) {
@@ -458,6 +458,7 @@
   box.addEventListener("input", function (event) {
     var query = box.value.trim();
     var restored = !!(event.detail && event.detail.efpRestoredSearch);
+    if (!restored && normalized(query) === normalized(currentQuery)) { saveQuery(query); return; }
     if (!restored) clearSavedResults();
     saveQuery(query);
     currentQuery = query;
@@ -542,7 +543,7 @@
 
   window.addEventListener("efp-search-state", function (event) {
     var detail = event.detail || {};
-    if (!detail.query || detail.query !== currentQuery) return;
+    if (!detail.query || normalized(detail.query) !== normalized(currentQuery)) return;
     if (detail.phase === "core-done" && currentQuery.length < 3) finishSearch(currentQuery);
     if (detail.phase === "fulltext-done") finishSearch(currentQuery);
   });

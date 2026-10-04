@@ -14,7 +14,7 @@
   if (!box || !menuList) return;
 
   var WORKER_URL = new URL("search-worker.js?v=20261004rank1", document.baseURI).href;
-  var LOGIC_URL = new URL("search-logic.js?v=20261004rank1", document.baseURI).href;
+  var LOGIC_URL = new URL("search-logic.js?v=20261004casefold1", document.baseURI).href;
 
   // Search the large indexes sequentially so a single query never makes
   // several 10–30 MB indexes parse at the same instant. Share the homepage
@@ -185,6 +185,13 @@
     return error;
   }
 
+  var lastInputQueryKey = null;
+  function queryKey(value) {
+    return typeof efNormalizeSearchText === "function" ? efNormalizeSearchText(value)
+      : String(value || "").toLowerCase().replace(/\s+/g, " ").trim();
+  }
+  function sameQuery(value, query) { return queryKey(value) === queryKey(query); }
+
   function createClient(source) {
     var worker = null;
     var startPromise = null;
@@ -295,8 +302,9 @@
     }
 
     function search(query) {
+      query = queryKey(query);
       var token = ++latestToken;
-      var key = "home:" + JSON.stringify(source) + "|" + query.toLowerCase().replace(/\s+/g, " ").trim();
+      var key = "home:" + JSON.stringify(source) + "|" + queryKey(query);
       var cached = typeof efCachedSearchResults === "function" ? efCachedSearchResults(key) : null;
       if (cached) return Promise.resolve().then(function(){return token === latestToken ? cached : [];});
       return start().then(function () {
@@ -462,7 +470,7 @@
   }
 
   function runQuery(query, mySequence) {
-    if (box.value.trim() !== query || mySequence !== sequence) return;
+    if (!sameQuery(box.value, query) || mySequence !== sequence) return;
     clearOwnResults();
     var seen = {};
     var index = 0;
@@ -475,7 +483,7 @@
     // Sequential loading prevents CPU/memory spikes. Results appear source by
     // source while the query remains current.
     function nextSource() {
-      if (box.value.trim() !== query || mySequence !== sequence) return;
+      if (!sameQuery(box.value, query) || mySequence !== sequence) return;
       if (index >= SOURCES.length) {
         try {
           window.dispatchEvent(new CustomEvent("efp-search-state", {
@@ -491,7 +499,7 @@
         return;
       }
       var search = function () {
-        if (box.value.trim() !== query || mySequence !== sequence) return [];
+        if (!sameQuery(box.value, query) || mySequence !== sequence) return [];
         return client.search(query).then(function (hits) {
           client.terminate();
           if (clients[source.id] === client) clients[source.id] = null;
@@ -505,20 +513,23 @@
       var job = typeof window.efpWithHomeSearchWorker === "function"
         ? window.efpWithHomeSearchWorker(search) : Promise.resolve().then(search);
       job.then(function (hits) {
-        if (box.value.trim() !== query || mySequence !== sequence) return;
+        if (!sameQuery(box.value, query) || mySequence !== sequence) return;
         appendHits(source, query, hits, seen);
         nextSource();
       }).catch(function (error) {
         if (error && error.efCancelled) return;
         disabled[source.id] = true;
         clients[source.id] = null;
-        if (box.value.trim() === query && mySequence === sequence) nextSource();
+        if (sameQuery(box.value, query) && mySequence === sequence) nextSource();
       });
     }
     nextSource();
   }
 
   box.addEventListener("input", function (event) {
+    var key = queryKey(box.value);
+    if (!(event.detail && event.detail.efpRestoredSearch) && key === lastInputQueryKey) return;
+    lastInputQueryKey = key;
     clearTimeout(timer);
     disposeWorkers();
     var query = box.value.trim();
@@ -544,7 +555,7 @@
   window.addEventListener("pagehide", function () {
     clearTimeout(timer);
     ++sequence;
+    lastInputQueryKey = null;
     disposeWorkers();
   });
 })();
-

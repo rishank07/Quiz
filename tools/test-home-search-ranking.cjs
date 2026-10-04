@@ -18,7 +18,9 @@ const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f
  async function search(query){let done=false;const listener=e=>{if(e.detail.phase==='fulltext-done')done=true};w.addEventListener('efp-search-state',listener);input.value=query;input.dispatchEvent(new w.Event('input',{bubbles:true}));for(let i=0;i<80&&!done;i++)await delay(20);w.removeEventListener('efp-search-state',listener);assert(done);}
  await search('BRICS');const rows=Array.from(w.document.querySelectorAll('[data-bookfullitem]'));
  assert(rows.length>=8);assert(rows[0].textContent.includes('Exact BRICS'));assert(rows.every((row,i)=>!i||Number(rows[i-1].dataset.searchScore)<=Number(row.dataset.searchScore)));
- assert.equal(max,1);assert.equal(alive,0);const initial=created;await search('brics');assert.equal(created,initial,'Repeat query must reuse small cached results, not parse every source again');
+ assert.equal(max,1);assert.equal(alive,0);const initial=created,snapshot=w.document.getElementById('menuList').innerHTML;
+ input.value='  brics  ';input.dispatchEvent(new w.Event('input',{bubbles:true}));await delay(450);
+ assert.equal(created,initial,'Equivalent query must keep results without parsing sources again');assert.equal(w.document.getElementById('menuList').innerHTML,snapshot);
  assert(w.document.querySelector('[data-bookfullitem] a').href.includes('#q1'),'Ranking must preserve question anchors');
  dom.window.close();console.log('PASS streamed sources rank by relevance, one worker, zero retained indexes, repeat-query reuse and exact anchors');
 })().catch(e=>{console.error(e);process.exitCode=1});

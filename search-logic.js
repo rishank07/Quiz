@@ -883,9 +883,14 @@ if (efIsSectionSearchPage()) {
     ++efSectionSearchScheduler.epoch;
     if (efSectionSearchScheduler.active) efSectionSearchScheduler.active.terminate();
   };
+  var efSectionInputQueries = new WeakMap();
   document.addEventListener("input", function (event) {
-    if (event.target && event.target.matches &&
-        event.target.matches('input[type="search"], input[id*="earch"]')) efCancelSectionSearch();
+    var input = event.target;
+    if (!input || !input.matches || !input.matches('input[type="search"], input[id*="earch"]')) return;
+    var query = efNormalizeSearchText(input.value);
+    if (efSectionInputQueries.get(input) === query) return;
+    efSectionInputQueries.set(input, query);
+    efCancelSectionSearch();
   }, true);
   window.addEventListener("pagehide", efCancelSectionSearch);
 }
@@ -1017,6 +1022,7 @@ function efCreateSearchWorker(options) {
 
   var cachePrefix = JSON.stringify(options) + "|";
   function search(query) {
+    query = efNormalizeSearchText(query);
     var token = ++latestSearchToken;
     var cacheKey = cachePrefix + efNormalizeSearchText(query);
     var cached = efCachedSearchResults(cacheKey);

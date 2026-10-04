@@ -1959,7 +1959,7 @@
             loadScriptOnce("search-index-main.js?v=20260915staticgk1", function () {
               return typeof SEARCH_INDEX !== "undefined";
             }),
-            loadScriptOnce("search-logic.js?v=20261004rank1", function () {
+            loadScriptOnce("search-logic.js?v=20261004casefold1", function () {
               return typeof efSearchRank === "function";
             })
           ]).then(function () {
@@ -1982,7 +1982,7 @@
         originalPracticeSearchClients = [
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004rank1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
             indexUrl: new URL("search-snippets-original-practice.js?v=20261001polity22-583a40e433b0", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -1992,7 +1992,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004rank1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
             indexUrl: new URL("search-snippets-economics-original-practice.js?v=20261001genericq1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2002,7 +2002,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004rank1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
             indexUrl: new URL("search-snippets-ecology-original-practice.js?v=20260912ecology1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2012,7 +2012,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004rank1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
             indexUrl: new URL("search-snippets-english-original-practice.js?v=20261003grammaraudit1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2022,7 +2022,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004rank1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
             indexUrl: new URL("search-snippets-static-gk-original-practice.js?v=20260915staticgk1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2060,7 +2060,7 @@
 
       function renderOriginalPracticeFullResults(q, hits) {
         hits = Array.isArray(hits) ? hits : [];
-        if (!hits.length || box.value.trim() !== q) return 0;
+        if (!hits.length || !sameSearchQuery(box.value, q)) return 0;
         var terms = (typeof efSearchTerms === "function") ? efSearchTerms(q) : q.toLowerCase().split(/\s+/).filter(Boolean);
         var seen = {};
         var rendered = [];
@@ -2124,7 +2124,7 @@
         cruxTricksSearchClients = [
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004rank1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20261002pdfsearch1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2134,7 +2134,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004rank1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-economics-crux.js?v=20260908econcrux1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2144,7 +2144,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004rank1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-original-geo-economics-tricks.js?v=20260915staticgktricks1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2154,7 +2154,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004rank1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-maths-ocr.js?v=20260923mathsstrict1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2250,7 +2250,7 @@
       }
       function renderCruxTricksFullResults(q, hits) {
         hits = rerankCruxTricksHits(q, hits);
-        if (!hits.length || box.value.trim() !== q) return 0;
+        if (!hits.length || !sameSearchQuery(box.value, q)) return 0;
         var terms = (typeof efSearchTerms === "function") ? efSearchTerms(q) : q.toLowerCase().split(/\s+/).filter(Boolean);
         var seen = {}, rendered = [];
         hits.forEach(function (hit) {
@@ -2358,6 +2358,12 @@
 
       let deepSearchTimer = null;
       let deepSearchSequence = 0;
+      let deepSearchQueryKey = null;
+      function searchQueryKey(value) {
+        return typeof efNormalizeSearchText === "function" ? efNormalizeSearchText(value)
+          : String(value || "").toLowerCase().replace(/\s+/g, " ").trim();
+      }
+      function sameSearchQuery(value, query) { return searchQueryKey(value) === searchQueryKey(query); }
       function stopExtraSearchClients() {
         [originalPracticeSearchClients, cruxTricksSearchClients].forEach(function (clients) {
           (clients || []).forEach(function (client) { client.terminate(); });
@@ -2373,15 +2379,15 @@
         var count = 0;
         return clients.reduce(function (previous, client) {
           return previous.then(function () {
-            if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
+            if (!sameSearchQuery(box.value, q) || sequence !== deepSearchSequence) return;
             return window.efpWithHomeSearchWorker(function () {
-              if (box.value.trim() !== q || sequence !== deepSearchSequence) return [];
+              if (!sameSearchQuery(box.value, q) || sequence !== deepSearchSequence) return [];
               return client.search(q).catch(function () { return []; }).then(function (hits) {
                 client.terminate();
                 return hits;
               });
             }).then(function (hits) {
-              if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
+              if (!sameSearchQuery(box.value, q) || sequence !== deepSearchSequence) return;
               groups.push(hits);
               menuList.querySelectorAll("li[" + marker + "]").forEach(function (li) { li.remove(); });
               count = render(q, mergeOriginalPracticeHits(groups, 24));
@@ -2392,6 +2398,9 @@
 
       box.addEventListener("input", function (event) {
         const q = box.value.trim();
+        const queryKey = searchQueryKey(q);
+        if (!(event.detail && event.detail.efpRestoredSearch) && queryKey === deepSearchQueryKey) return;
+        deepSearchQueryKey = queryKey;
         const sequence = ++deepSearchSequence;
         clearTimeout(deepSearchTimer);
         stopExtraSearchClients();
@@ -2426,9 +2435,9 @@
         clearDeepResults();
         noResults.classList.remove("show");
         deepSearchTimer = setTimeout(function () {
-          if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
+          if (!sameSearchQuery(box.value, q) || sequence !== deepSearchSequence) return;
           ensureDeepSearch().then(function (ready) {
-            if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
+            if (!sameSearchQuery(box.value, q) || sequence !== deepSearchSequence) return;
             const deepCount = ready ? renderDeepResults(q) : 0;
             const opClients = ready ? getOriginalPracticeSearchClients() : [];
             const ctClients = ready ? getCruxTricksSearchClients() : [];
@@ -2442,7 +2451,7 @@
                 return searchExtraClients(ctClients, q, sequence, "data-ctfullresult", renderCruxTricksFullResults)
                   .then(function (ctCount) { return opCount + ctCount; });
               }).then(function(extraCount){
-              if (box.value.trim() !== q || sequence !== deepSearchSequence) return;
+              if (!sameSearchQuery(box.value, q) || sequence !== deepSearchSequence) return;
               noResults.classList.toggle("show", visible === 0 && deepCount === 0 && extraCount === 0);
               reportSearchState("core-done", q);
             });
@@ -2452,6 +2461,7 @@
       window.addEventListener("pagehide", function () {
         clearTimeout(deepSearchTimer);
         ++deepSearchSequence;
+        deepSearchQueryKey = null;
         stopExtraSearchClients();
       });
     })();
@@ -2463,8 +2473,8 @@
     .ef-op-search-snippet mark{background:#ffe28a;color:inherit;padding:0 1px;border-radius:2px}
   </style>
   <!-- ExamFusion homepage full-text bridge -->
-  <script src="./homepage-search-ui.js?v=20261001searchreturn2" defer></script>
-  <script src="./homepage-fulltext-search.js?v=20261004rank1" defer></script>
+  <script src="./homepage-search-ui.js?v=20261004casefold1" defer></script>
+  <script src="./homepage-fulltext-search.js?v=20261004casefold1" defer></script>
   <!-- ExamFusion landing counts: start -->
   <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5036,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":12315,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":46414,"unit":"Questions"},"./PYQ/index.html":{"total":2278,"unit":"PYQs"},"./Crux-Tricks/index.html":{"total":591,"unit":"PDFs"}}</script>
   <style>
