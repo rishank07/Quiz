@@ -1,0 +1,63 @@
+name: Apply Awards 2026 PDF Update
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "tools/update-awards-2026-pdf.py"
+      - "tools/awards_2026_pdf_data1.json"
+      - "tools/awards_2026_pdf_data2.json"
+      - ".github/workflows/awards-2026-pdf-update.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: awards-2026-pdf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install parser
+        run: python -m pip install --disable-pip-version-check lxml
+      - name: Apply verified Awards PDF additions
+        run: python tools/update-awards-2026-pdf.py
+      - name: Refresh counts and navigation
+        run: |
+          python tools/update-rapid-practice-count.py --repo .
+          python tools/update-book-question-counts.py --repo .
+          python tools/update-home-integrations.py --repo .
+          python tools/update-back-parent-map.py --repo .
+          python tools/add-home-nav.py --repo .
+      - name: Validate generated assets
+        run: |
+          python -m py_compile tools/update-awards-2026-pdf.py
+          node --check search-snippets-current-affairs.js
+          node --check search-snippets-current-affairs-rapid.js
+          node --check homepage-fulltext-search.js
+          node --check service-worker.js
+      - name: Commit and push
+        run: |
+          if git diff --quiet; then
+            echo "Awards 2026 update is already applied."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "Current Affairs" Books index.html back-parent-map.js
+          git add search-snippets-current-affairs.js search-snippets-current-affairs-rapid.js
+          git add homepage-fulltext-search.js service-worker.js
+          git commit -m "Update Awards 2026 topic and rapid practice from PDF"
+          git pull --rebase origin master
+          git push
