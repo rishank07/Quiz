@@ -338,10 +338,12 @@
 
   function focusArticle(el) {
     if (window.EFP_SEARCH_CONTEXT && window.EFP_SEARCH_CONTEXT.isDismissed(el)) return;
-    try {
-      el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
-    } catch (_) {
-      el.scrollIntoView();
+    if (!(window.EFP_SEARCH_CONTEXT && window.EFP_SEARCH_CONTEXT.focusTarget && window.EFP_SEARCH_CONTEXT.focusTarget(el))) {
+      try {
+        el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+      } catch (_) {
+        el.scrollIntoView();
+      }
     }
     el.classList.add("efp-deep-focus");
     clearTimeout(el.__efpDeepFocusTimer);

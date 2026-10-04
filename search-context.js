@@ -8,26 +8,20 @@
   var revealed=[];
   var appRestored=false,resumeState=null;
   var explanationSelector=".explanation,.explanation-box,.explain-box,.exp-box,.exp,.explain,.q-exp,[id^='exp-']";
-  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context.css?v=20261004contextcenter1";document.head.appendChild(style);
-  function positionFloatingBar(){
-    if(!bar||!bar.classList.contains("efp-floating-search-context"))return;
-    var viewport=window.visualViewport,width=viewport?viewport.width:window.innerWidth,height=viewport?viewport.height:window.innerHeight;
-    bar.style.left=((viewport?viewport.offsetLeft:0)+width/2)+"px";
-    bar.style.top=((viewport?viewport.offsetTop:0)+height/2)+"px";
-    bar.style.width=Math.max(0,Math.min(640,width-24))+"px";
-    bar.style.maxHeight=Math.max(0,height-32)+"px";
+  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context.css?v=20261004inlinecenter1";document.head.appendChild(style);
+  var allowEntryFocus=true;
+  function centerBar(){
+    if(!bar||!bar.isConnected||pdfAdapter)return;
+    bar.scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
   }
-  function showFloatingBar(){
-    bar.classList.add("efp-floating-search-context");
-    // BODY inversion/filter and card transforms can trap fixed descendants.
-    // Keep this viewport control outside those page-specific containers.
-    document.documentElement.appendChild(bar);positionFloatingBar();
-  }
-  function focusMatch(node){
-    node.scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
-    // Keep the highlighted text below the centered control, so Dekho/Next
-    // never place their result behind the yellow bar.
-    if(bar&&bar.classList.contains("efp-floating-search-context"))window.scrollBy({top:-bar.getBoundingClientRect().height/2-24,behavior:"instant"});
+  function focusTarget(el){
+    var saved=savedQuery();
+    if(!saved||dismissed.has(saved.token)||pdfAdapter)return false;
+    // The inline search control, rather than a possibly very tall question,
+    // owns the entry scroll. Leave resumed reading positions untouched.
+    if(!bar){schedule();return true}
+    if(allowEntryFocus&&!appRestored&&(target===el||target&&el&&(target.contains(el)||el.contains(target))))centerBar();
+    return true;
   }
   function savedQuery(){
     try{
@@ -234,7 +228,7 @@
         }
       });
       focusGroup(false);
-      focusMatch(group.explanationMarks[0]||group.explanations[0]);
+      (group.explanationMarks[0]||group.explanations[0]).scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
       schedule();
     });explanationButton.className="efp-context-explanation";bar.insertBefore(explanationButton,bar.lastChild);
     var explanationStatus=document.createElement("small");explanationStatus.className="efp-context-explanation-status";bar.querySelector(".efp-context-description").appendChild(explanationStatus);
@@ -242,14 +236,14 @@
       marks.forEach(function(mark){mark.classList.remove("efp-context-current")});
       var group=groups[current];if(!group||!group.anchor)return;
       target=group.anchor;group.marks.forEach(function(mark){mark.classList.add("efp-context-current")});
-      showFloatingBar();bar.querySelector(".efp-context-location").textContent=group.record.label;
+      target.parentNode.insertBefore(bar,target);bar.querySelector(".efp-context-location").textContent=group.record.label;
       explanationButton.hidden=!group.explanations.length;explanationStatus.hidden=!group.explanations.length;
       explanationStatus.textContent=group.explanations.length?"Match explanation mein hai":"";
       explanationButton.textContent=group.explanations.some(function(exp){return !explanationVisible(exp)})?"Dekho":"Dekho ↓";
-      if(scroll)focusMatch(group.marks[0]||target);
+      if(scroll)centerBar();
     }
     // Keep quiz card content and option event listeners independent of controls.
-    showFloatingBar();
+    target.parentNode.insertBefore(bar,target);
     if(groups.length){
       var next=button("Next matched question or section / अगला मिला प्रश्न या भाग",(current+1)+"/"+groups.length+(groups.length>1?" ↓":""),function(){
         if(groups.length<2)return;
@@ -264,9 +258,8 @@
         remember();focusGroup(true);
         next.textContent=(current+1)+"/"+groups.length+" ↓";
       });next.className="efp-context-next";next.disabled=groups.length===1;bar.insertBefore(next,bar.lastChild);
-      var entryGroup=groups[current];
-      focusGroup(scrollNext||(!resumeState&&firstEntry&&entryGroup.explanationMarks.length>0&&entryGroup.marks.length===entryGroup.explanationMarks.length));scrollNext=false;
-    }
+      focusGroup(scrollNext||(!resumeState&&firstEntry&&allowEntryFocus));scrollNext=false;
+    }else if(!resumeState&&firstEntry&&allowEntryFocus)centerBar();
     if(resumeState){resumeState=null;window.EFP_APP_SESSION.restoreSearchScroll()}
   }
   function measurePdfHeader(){
@@ -295,6 +288,7 @@
   function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(function(){scheduled=false;syncQuiz()})}
   window.EFP_SEARCH_CONTEXT={
     refresh:schedule,
+    focusTarget:focusTarget,
     snapshot:function(){
       if(pdfAdapter&&pdfAdapter.snapshot)return pdfAdapter.snapshot();
       var saved=savedQuery();if(!saved||(!bar&&!dismissed.has(saved.token)))return null;
@@ -309,11 +303,9 @@
   window.addEventListener("hashchange",function(){viewKey="";selection="";schedule()});
   window.addEventListener("pageshow",function(){schedule();syncPdf()});
   window.addEventListener("resize",measurePdfHeader,{passive:true});
-  window.addEventListener("resize",positionFloatingBar,{passive:true});
-  if(window.visualViewport){
-    window.visualViewport.addEventListener("resize",positionFloatingBar,{passive:true});
-    window.visualViewport.addEventListener("scroll",positionFloatingBar,{passive:true});
-  }
+  ["pointerdown","touchstart","wheel","keydown"].forEach(function(name){
+    window.addEventListener(name,function(){allowEntryFocus=false},{passive:true});
+  });
   function init(){
     if(window.EFP_PDF_SEARCH_CONTEXT){pdfAdapter=window.EFP_PDF_SEARCH_CONTEXT;syncPdf()}
     else if(document.getElementById("pdfFrame")){

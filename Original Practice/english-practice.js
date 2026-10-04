@@ -310,7 +310,7 @@ function enhance(){addTopbar();if(state.screen==="quiz")enhanceQuiz();else enhan
 var baseRender=render;
 render=function(){
  baseRender();enhance();efpApplySeoMeta();
- if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;clearTimeout(deepFocusTimer);deepFocusTimer=setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;if(window.EFP_SEARCH_CONTEXT&&window.EFP_SEARCH_CONTEXT.isDismissed(card))return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}
+ if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;clearTimeout(deepFocusTimer);deepFocusTimer=setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;if(window.EFP_SEARCH_CONTEXT&&window.EFP_SEARCH_CONTEXT.isDismissed(card))return;card.classList.add("efp-op-deep-focus");if(!(window.EFP_SEARCH_CONTEXT&&window.EFP_SEARCH_CONTEXT.focusTarget&&window.EFP_SEARCH_CONTEXT.focusTarget(card))){try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}
 };
 var baseSelectOption=selectOption;
 selectOption=function(qi,origIdx){var q=state.quizData&&state.quizData[state.currentSection]&&state.quizData[state.currentSection].questions[qi];baseSelectOption(qi,origIdx);saveAttempt();if(q)track("original_practice_answer",{practice:CFG.label,subject:SUBJECT,chapter:state.chapterName,section:state.currentSection+1,question:qi+1,correct:origIdx===q.answer})};
