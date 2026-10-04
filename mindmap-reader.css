@@ -1,4 +1,12 @@
 /* Shared reading and search context for chapter Mind Maps. */
+/* Legacy templates use overflow-x:hidden on BODY. That also makes its
+   vertical overflow auto: sticky controls attach to this non-scrolling body,
+   and overscroll-behavior:none traps wheel/touch input after a match jump.
+   Clip horizontal paint without creating another scroll container. */
+.efp-mindmap-reader body {
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+}
 .efp-mindmap-reader .efp-mindmap-search-context {
   position: sticky;
   top: 6px;

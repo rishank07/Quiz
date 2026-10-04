@@ -24,7 +24,7 @@
   window.EFP_MINDMAP_SEARCH_CONTEXT = { snapshot: function () { return searchView; } };
   var readerLink = document.createElement("link");
   readerLink.rel = "stylesheet";
-  readerLink.href = "/mindmap-reader.css?v=20261004pagehtml1";
+  readerLink.href = "/mindmap-reader.css?v=20261004scrollfix1";
   document.documentElement.classList.add("efp-mindmap-reader");
   document.head.appendChild(readerLink);
 
