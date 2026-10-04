@@ -46,6 +46,8 @@ var ATTEMPT_PREFIX="efp_original_practice_attempt_v2:";
 var LEGACY_APP_ATTEMPT_KEY="efp_app_original_practice_attempt_v1";
 var bookmarkOnly=false;
 var pendingDeepQuestion=null;
+var deepFocusTimer=null;
+var searchEntryQuestion=Number(new URL(location.href).searchParams.get("q"))||0;
 
 // All Original Practice pages use the same site-wide dark-mode preference as
 // ExamFusion Home. The Complete Practice HTML files are very large, so
@@ -454,7 +456,7 @@ selectOption=function(qi,displayIdx){
  saveAppAttempt();
  track("original_practice_answer",{practice:CFG.label,subject:state.subject,chapter:state.chapterName,section:state.currentSection+1,question:qi+1,correct:selectedOrigIdx===currentAnswerIndex(state.quizData[state.currentSection].questions[qi])});
 };
-var baseRender=render;render=function(){baseRender();improveHomeExamHeading();enhance();efpApplySeoMeta();if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;if(window.EFP_SEARCH_CONTEXT&&window.EFP_SEARCH_CONTEXT.isDismissed(card))return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}};
+var baseRender=render;render=function(){baseRender();improveHomeExamHeading();enhance();efpApplySeoMeta();if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;clearTimeout(deepFocusTimer);deepFocusTimer=setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;if(window.EFP_SEARCH_CONTEXT&&window.EFP_SEARCH_CONTEXT.isDismissed(card))return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}};
 var baseSwitchSection=switchSection;switchSection=function(i){pendingDeepQuestion=null;baseSwitchSection(i);syncUrl("quiz",false);saveAppAttempt()};
 var basePrevSection=prevSection;prevSection=function(){pendingDeepQuestion=null;basePrevSection();if(state.screen==="quiz"){syncUrl("quiz",false);saveAppAttempt()}};
 var baseNextSection=nextSection;nextSection=function(){pendingDeepQuestion=null;baseNextSection();if(state.screen==="quiz"){syncUrl("quiz",false);saveAppAttempt()}};
@@ -474,5 +476,26 @@ var baseGoToQuiz=goToQuiz;goToQuiz=function(chapterName){
  var from=state.screen;clearTransientAttempt();markVisited(state.subject,chapterName);baseGoToQuiz(chapterName);restoreAppAttempt(false);render();syncUrl("quiz",!opHistoryRestoring&&from!=="quiz");track("original_practice_chapter_open",{practice:CFG.label,subject:state.subject,chapter:chapterName})
 };
 function applyDeepLink(){try{var p=new URLSearchParams(location.search),s=p.get("subject"),c=p.get("chapter"),sec=Number(p.get("section")||1),q=Number(p.get("q")||0);if(s&&MASTER[s]){state.subject=s;if(c&&MASTER[s][c]){markVisited(s,c);state.screen="quiz";state.chapterName=c;state.quizData=MASTER[s][c];if(!Number.isFinite(sec)||sec<1)sec=1;state.currentSection=Math.min(state.quizData.length-1,Math.max(0,Math.floor(sec)-1));state.score={correct:0,wrong:0,attempted:0};state.shuffleMap={};state.answerMap={};if(Number.isFinite(q)&&q>=1&&state.quizData[state.currentSection]&&q<=state.quizData[state.currentSection].questions.length)pendingDeepQuestion=Math.floor(q)-1}else{state.screen="chapters";state.chapterName=null;state.quizData=null}}}catch(e){}}
+// Page search includes chapters/sections that are rendered only when opened.
+window.EFP_HTML_SEARCH_PAGE={
+ viewKey:function(){return state.screen+"|"+state.subject+"|"+state.chapterName+"|"+state.currentSection+"|"+bookmarkOnly},
+ currentKey:function(el){return state.subject+"|"+state.chapterName+"|"+state.currentSection+"|"+(el&&el.id||searchEntryQuestion&&"q-"+(searchEntryQuestion-1)||"")},
+ results:function(query,matches){
+  if(state.screen!=="quiz")return [];
+  var out=[];Object.keys(MASTER).forEach(function(subject){Object.keys(MASTER[subject]).forEach(function(chapter){MASTER[subject][chapter].forEach(function(section,si){section.questions.forEach(function(q,qi){
+   if(!matches(query,[q.q,q.a,q.exp]))return;
+   out.push({key:subject+"|"+chapter+"|"+si+"|q-"+qi,id:"q-"+qi,subject:subject,chapter:chapter,section:si,qi:qi,label:chapterDisplayName(chapter)+" · Section "+(si+1)+" · Question "+(qi+1)});
+  })})})});return out;
+ },
+ element:function(record){return state.screen==="quiz"&&state.subject===record.subject&&state.chapterName===record.chapter&&state.currentSection===record.section?document.getElementById(record.id):null},
+ open:function(record){
+  pendingDeepQuestion=null;clearTimeout(deepFocusTimer);searchEntryQuestion=record.qi+1;bookmarkOnly=false;
+  if(state.subject!==record.subject||state.chapterName!==record.chapter){
+   saveAppAttempt();state.subject=record.subject;state.chapterName=record.chapter;state.quizData=MASTER[record.subject][record.chapter];
+   state.screen="quiz";state.answerMap={};state.shuffleMap={};state.score={correct:0,wrong:0,attempted:0};restoreAppAttempt(true);markVisited(record.subject,record.chapter);
+  }
+  state.currentSection=record.section;syncUrl("quiz",false);render();saveAppAttempt();
+ }
+};
 applyDeepLink();restoreAppAttempt(true);syncUrl(state.screen||"home",false);render();
 })();

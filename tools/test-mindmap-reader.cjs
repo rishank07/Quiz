@@ -86,8 +86,9 @@ const normalize = text => text.replace(/\s+/g, ' ').trim();
         if (width <= 767 && result.font) assert.equal(result.font, '16px', file);
         assert.deepEqual(errors, [], file);
         if (await page.locator('.efp-mm-next').isEnabled()) {
+          const [index,total]=(await page.locator('.efp-mm-next').textContent()).match(/\d+/g).map(Number);
           await page.getByRole('button', { name: 'Next matched section / अगला मिला भाग' }).click();
-          assert.ok((await page.locator('.efp-mm-next').textContent()).startsWith('2/'));
+          assert.ok((await page.locator('.efp-mm-next').textContent()).startsWith((index%total+1)+'/'));
         }
         if (file.includes('european_companies') && width === 390 && process.env.EFP_LAYOUT_OUTPUT) {
           await page.screenshot({ path: theme === 'on' ? process.env.EFP_LAYOUT_OUTPUT.replace(/\.png$/, '-dark.png') : process.env.EFP_LAYOUT_OUTPUT });

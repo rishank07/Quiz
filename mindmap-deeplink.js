@@ -12,7 +12,7 @@
   var focusRun = 0;
   var readerLink = document.createElement("link");
   readerLink.rel = "stylesheet";
-  readerLink.href = "/mindmap-reader.css?v=20261004uniquehtml1";
+  readerLink.href = "/mindmap-reader.css?v=20261004pagehtml1";
   document.documentElement.classList.add("efp-mindmap-reader");
   document.head.appendChild(readerLink);
 
@@ -85,6 +85,13 @@
     for (var i = 0; i < ids.length; i++) {
       var el = document.getElementById(ids[i]);
       if (!el || !el.classList) continue;
+      // Two panel templates share .panel but use different active classes.
+      // Prefer the scheme already in use by a sibling panel.
+      for (var j = 0; j < SCHEMES.length; j++) {
+        if (el.classList.contains(SCHEMES[j][0]) && document.querySelector("."+SCHEMES[j][0]+"."+SCHEMES[j][1])) {
+          return { el: el, scheme: SCHEMES[j] };
+        }
+      }
       for (var j = 0; j < SCHEMES.length; j++) {
         if (el.classList.contains(SCHEMES[j][0])) {
           return { el: el, scheme: SCHEMES[j] };
@@ -142,7 +149,7 @@
     });
   }
 
-  function highlightQuery(target, query) {
+  function highlightQuery(target, query, includePanel) {
     if (!query) return [];
     var ignored = /^(?:the|a|an|and|or|of|in|on|to|for|is|was|are|were|by|with|da|de|ka|ki|ke|hai|hain|में|का|की|के|है|हैं|और|से)$/i;
     var terms = query.split(/[^\p{L}\p{M}\p{N}]+/u).filter(function (term) {
@@ -156,7 +163,9 @@
     }).join("|") + ")(?=$|[^\\p{L}\\p{M}\\p{N}])", "giu");
     var walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT, {
       acceptNode: function (node) {
-        return node.parentElement && node.parentElement.getClientRects().length && !node.parentElement.closest(
+        var parent=node.parentElement;
+        var hidden=parent&&parent.closest("[hidden],.hidden");
+        return parent && (parent.getClientRects().length || includePanel) && (!hidden || hidden===target) && !parent.closest(
           "script,style,button,a,textarea,select,svg,.efp-mm-table-hint,.efp-mindmap-search-context"
         ) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
       }
@@ -164,10 +173,9 @@
     var nodes = [], node, marks = [];
     while ((node = walker.nextNode())) nodes.push(node);
     nodes.forEach(function (textNode) {
-      if (marks.length >= 200) return;
       pattern.lastIndex = 0;
       var text = textNode.nodeValue, match, offset = 0, fragment = document.createDocumentFragment();
-      while ((match = pattern.exec(text)) && marks.length < 200) {
+      while ((match = pattern.exec(text))) {
         var start = match.index + match[1].length;
         fragment.appendChild(document.createTextNode(text.slice(offset, start)));
         var mark = document.createElement("mark");
@@ -189,11 +197,21 @@
     var groups = [], owners = new Map();
     marks.forEach(function (mark) {
       var owner = mark.closest("tr,li,.section-card,.card,.flow-box,.fact,.event,.timeline-item,.node,.branch,.item,.box,.step");
-      if (!owner || !target.contains(owner)) owner = target;
+      var panel=mark.closest(".tab-content,.tab-panel,.panel,section.tab,div.tab")||target;
+      if (!owner || !panel.contains(owner)) owner = panel;
       var group = owners.get(owner);
-      if (!group) { group = {anchor: owner, marks: []}; owners.set(owner, group); groups.push(group); }
+      if (!group) { group = {anchor: owner, panel:panel, marks: []}; owners.set(owner, group); groups.push(group); }
       group.marks.push(mark);
     });
+    if(query){
+      groups=groups.filter(function(group){
+        var content=group.anchor.textContent;
+        var matches=typeof efTextMatches==="function"?efTextMatches(query,content,false):query.toLocaleLowerCase().split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean).every(function(term){return content.toLocaleLowerCase().indexOf(term)>=0});
+        if(!matches)group.marks.forEach(function(mark){mark.replaceWith(document.createTextNode(mark.textContent))});
+        return matches;
+      });
+      marks=groups.reduce(function(all,group){return all.concat(group.marks)},[]);
+    }
     var bar = document.createElement("div");
     bar.className = "efp-mindmap-search-context";
     var label = document.createElement("div");
@@ -203,10 +221,23 @@
     var detail = document.createElement("span");
     detail.textContent = query ? "Search: " + query : "Opened section / खुला हुआ भाग";
     label.appendChild(detail); bar.appendChild(label);
-    var index = 0;
+    var index = Math.max(0,groups.findIndex(function(group){return group.panel===target}));
     function scrollMatch() {
       marks.forEach(function (mark) { mark.classList.remove("efp-mm-current-match"); });
       if (!groups.length) return;
+      var group=groups[index];
+      if(!group.panel.getClientRects().length){
+        var panelKey=group.panel.id,nav=matchingNavControl(panelKey);
+        if(nav)nav.click();
+        var found=findPanel(panelKey);if(found&&!group.panel.getClientRects().length)activatePanelDirectly(found);
+        markNavActive(panelKey,nav);
+      }
+      group.panel.prepend(bar);
+      var navControl=matchingNavControl(group.panel.id);
+      section.textContent=navControl?navControl.textContent.trim():group.panel.id.replace(/^(tab|panel|section)-/,"").replace(/[-_]/g," ");
+      if(hashKey()!==group.panel.id){
+        try{var url=new URL(location.href);url.hash=group.panel.id;history.replaceState(history.state,"",url.pathname+url.search+url.hash);openedKey=group.panel.id}catch(_){}
+      }
       groups[index].marks.forEach(function (mark) { mark.classList.add("efp-mm-current-match"); });
       groups[index].marks[0].scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });
       if (next) next.textContent = (index + 1) + "/" + groups.length + (groups.length > 1 ? " ↓" : "");
@@ -250,7 +281,10 @@
 
     clearSearchFocus();
     var query = searchQuery();
-    var marks = found ? highlightQuery(target, query) : [];
+    var panels=Array.from(document.querySelectorAll(".tab-content,.tab-panel,.panel,section.tab,div.tab")).filter(function(panel){return panel.id&&!panel.closest("nav")&&!panel.parentElement.closest(".tab-content,.tab-panel,.panel,section.tab,div.tab")});
+    if(!panels.length&&found)panels=[target];
+    var marks=[];
+    if(found)panels.forEach(function(panel){marks=marks.concat(highlightQuery(panel,query,true))});
     var focusMatch = found ? searchContext(target, key, preferredControl, query, marks) : null;
     var run = ++focusRun;
 

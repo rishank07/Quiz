@@ -3,7 +3,8 @@
   "use strict";
   if (window.EFP_SEARCH_CONTEXT || /^\/Mind(?:%20| )Maps\//i.test(location.pathname)) return;
   var bar=null,target=null,marks=[],current=0,activeKey="";
-  var dismissed=new Set(),processed=new Set(),scheduled=false,pdfAdapter=null,pdfObserver=null;
+  var dismissed=new Set(),scheduled=false,pdfAdapter=null,pdfObserver=null;
+  var pageRecords=[],recordCache="",recordProvider=null,viewKey="",viewRoots=[],selection="",scrollNext=false;
   var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context.css?v=20261004context1";document.head.appendChild(style);
   function savedQuery(){
     try{
@@ -44,7 +45,7 @@
     var excluded="script,style,button,a,label,input,textarea,select,svg,mark,[hidden],.hidden,"+
       ".options,.option,.option-text,.option-btn,.quiz-option,.explanation,.explanation-box,.explain-box,.exp-box,"+
       ".answer,.answer-box,.exp,.explain,.opt,.opts,.opt-en,.opt-hi,details,"+
-      ".q-options,.q-exp,[id^='opts-'],[id^='exp-'],[onclick],.efp-search-context";
+      ".q-options,.q-exp,[id^='opts-'],[id^='exp-'],[onclick],header,footer,nav,.efp-search-context";
     var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(node){
       var parent=node.parentElement;if(!parent||parent.closest(excluded))return NodeFilter.FILTER_REJECT;
       return parent.getClientRects().length?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
@@ -68,19 +69,6 @@
     if(/^ca-ol-/.test(id))return "One-liner "+id.split("-").pop();
     return "Matched section / खोज से खुला भाग";
   }
-  function matchGroups(root,items){
-    var units=".question-box,.qcard,.question-card,.quiz-question,[data-qid],tr,li,.section-card,.card,.flow-box,.fact,.event,.timeline-item,.node,.branch,.item,.box,.step";
-    var isQuestion=/^(?:q-?\d+|bbq-\d+|rp-\d+-\d+|s\d+-\d+|ca-ol-.+)$/.test(root.id||"")||root.matches(".question-box,.qcard,.question-card,.quiz-question,[data-qid]");
-    var groups=[],owners=new Map();
-    items.forEach(function(mark){
-      if(!mark.isConnected||!mark.getClientRects().length)return;
-      var owner=isQuestion?root:mark.closest(units);
-      if(!owner||!root.contains(owner))owner=root;
-      var group=owners.get(owner);
-      if(!group){group={anchor:owner,marks:[]};owners.set(owner,group);groups.push(group)}
-      group.marks.push(mark);
-    });return groups;
-  }
   function findTarget(){
     var hash;try{hash=decodeURIComponent(location.hash.slice(1))}catch(_){hash=""}
     var el=hash&&document.getElementById(hash);
@@ -89,28 +77,104 @@
     if(!el||/^(BUTTON|A|INPUT|SELECT|TEXTAREA)$/.test(el.tagName)||!el.getClientRects().length||el.closest("#results,#searchResults,.efp-op-search-results,.efp-search-context"))return null;
     return el;
   }
+  function textMatches(query,value){
+    var parts=[];function text(v){if(typeof v==="string")parts.push(v.replace(/<[^>]*>/g," "));else if(v&&typeof v==="object")Object.keys(v).forEach(function(k){text(v[k])})}text(value);
+    var hay=parts.join(" ");
+    if(typeof efTextMatches==="function")return efTextMatches(query,hay,false);
+    var terms=query.toLocaleLowerCase().split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean);
+    hay=hay.toLocaleLowerCase();return terms.length&&terms.every(function(term){return hay.indexOf(term)>=0});
+  }
+  function resultText(root){
+    var text=[],walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(node){return node.parentElement&&!node.parentElement.closest("script,style,button,a,label,input,textarea,select,svg,nav,header,footer,.options,.option,.option-text,.opt,.opts,.q-options,[id^='opts-'],.efp-search-context")?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}}),node;
+    while((node=walker.nextNode()))text.push(node.nodeValue);return text.join(" ");
+  }
+  var lazyProvider=null;
+  function provider(){
+    if(window.EFP_HTML_SEARCH_PAGE)return window.EFP_HTML_SEARCH_PAGE;
+    if(lazyProvider)return lazyProvider;
+    try{
+      if(typeof SECTIONS!=="undefined"&&Array.isArray(SECTIONS)&&typeof openSection==="function"){
+        lazyProvider={
+          viewKey:function(){return "rapid|"+current},currentKey:function(el){return el&&el.id||""},
+          results:function(query,matches){var out=[];SECTIONS.forEach(function(sec,si){sec.questions.forEach(function(q,qi){if(matches(query,[q.q,q.a,q.exp]))out.push({key:"rp-"+si+"-"+qi,id:"rp-"+si+"-"+qi,section:si,label:"Section "+(si+1)+" · Question "+(qi+1)})})});return out},
+          element:function(row){return document.getElementById(row.id)},
+          open:function(row){if(typeof onlyBookmarks!=="undefined"&&onlyBookmarks&&typeof toggleBookmarkFilter==="function")toggleBookmarkFilter();openSection(row.section)}
+        };return lazyProvider;
+      }
+      if(typeof vocabData!=="undefined"&&Array.isArray(vocabData)&&typeof showSection==="function"&&document.getElementById("quiz-container")){
+        lazyProvider={
+          viewKey:function(){return "blackbook|"+(typeof activeLetter!=="undefined"?activeLetter:"")},currentKey:function(el){return el&&el.id||""},
+          results:function(query,matches){return vocabData.filter(function(q){return matches(query,q)}).map(function(q){return {key:"bbq-"+q.sn,id:"bbq-"+q.sn,letter:String(q.word).trim().charAt(0).toUpperCase(),label:"Question "+q.sn}})},
+          element:function(row){return document.getElementById(row.id)},open:function(row){showSection(row.letter)}
+        };return lazyProvider;
+      }
+    }catch(_){}return null;
+  }
+  function domRoots(el){
+    var questions=Array.from(document.querySelectorAll(".question-box,.qcard,.question-card,.quiz-question,.oneliner-item,[data-qid],[data-efp-bb-sn],[id]"))
+      .filter(function(node){return !/^(BUTTON|A|INPUT|SELECT|TEXTAREA)$/.test(node.tagName)&&
+        (node.matches(".question-box,.qcard,.question-card,.quiz-question,.oneliner-item,[data-qid],[data-efp-bb-sn]")||/^(?:q-?\d+|bbq-\d+|rp-\d+-\d+|s\d+-\d+|ca-ol-.+)$/.test(node.id))});
+    if(questions.length){
+      var owners=new Set(questions);
+      return questions.filter(function(node){for(var parent=node.parentElement;parent;parent=parent.parentElement)if(owners.has(parent))return false;return node.getClientRects().length||(/^s\d+-\d+$/.test(node.id)&&typeof showSet==="function")});
+    }
+    var units="tr,li,.section-card,.card,.flow-box,.fact,.event,.timeline-item,.node,.branch,.item,.box,.step";
+    var scope=el&&el.closest("main")||document.body;
+    var roots=Array.from(scope.querySelectorAll(units)).filter(function(node){return node.getClientRects().length&&!node.closest("header,footer,nav,#results,#searchResults,.efp-search-context")&&!node.querySelector(units)});
+    return roots.length?roots:el?[el]:[];
+  }
   function syncQuiz(){
-    if(pdfAdapter)return;var saved=savedQuery();if(!saved)return;var el=findTarget();
-    if(!el){if(target&&!target.isConnected)clear();return}
-    var key=saved.token+":"+el.id;if(dismissed.has(key)){clearOutline(el);return}
-    if(processed.has(key)&&(!target||target===el||target.isConnected))return;
-    processed.add(key);clear();activeKey=key;target=el;marks=markWords(el,saved.query);
-    bar=createBar(saved.query,questionLabel(el),function(){
-      dismissed.add(activeKey);window.scrollTo({top:scrollY,left:scrollX,behavior:"instant"});
+    if(pdfAdapter)return;var saved=savedQuery();if(!saved)return;var adapter=provider(),el=findTarget();
+    if(dismissed.has(saved.token)){if(el)clearOutline(el);return}
+    var stamp=adapter?adapter.viewKey():"dom",cache=saved.token+":"+saved.query;
+    if(adapter&&(recordCache!==cache||recordProvider!==adapter||!pageRecords.length)){
+      pageRecords=adapter.results(saved.query,textMatches);recordCache=cache;recordProvider=adapter;
+    }
+    // Cached records include lazy sections. Only decorate the currently rendered
+    // cards; opening another result uses the page's progress-preserving switcher.
+    var roots=adapter?pageRecords.map(function(row){return adapter.element(row)}).filter(function(node){return node&&node.getClientRects().length}):domRoots(el);
+    if(!roots.length){if(target&&!target.isConnected){clear();viewRoots=[]}return}
+    var signature=stamp+"|"+cache+"|"+roots.map(function(node){return node.id+":"+!!node.getClientRects().length+":"+node.textContent}).join("\n");
+    if(viewKey===signature&&bar&&bar.isConnected&&roots.length===viewRoots.length&&roots.every(function(node,i){return node===viewRoots[i]}))return;
+    if(stamp!==activeKey&&!scrollNext)selection="";
+    clear();viewKey=signature;viewRoots=roots;activeKey=stamp;
+    if(!adapter)pageRecords=roots.filter(function(node){return textMatches(saved.query,resultText(node))}).map(function(node,i){return {key:node.id||"dom-"+i,id:node.id,anchor:node,label:questionLabel(node)}});
+    function element(row){return adapter?adapter.element(row):row.anchor}
+    var selected=selection&&pageRecords.find(function(row){return row.key===selection});
+    if(!selected&&(el||adapter))selected=pageRecords.find(function(row){return adapter?row.key===adapter.currentKey(el):row.anchor===el||row.anchor.contains(el)||el.contains(row.anchor)});
+    if(!selected)selected=pageRecords.find(function(row){var node=element(row);return node&&node.getClientRects().length});
+    target=selected&&element(selected)||el;if(!target)return;
+    selection=selected&&selected.key||"";current=Math.max(0,pageRecords.indexOf(selected));
+    var groups=pageRecords.map(function(row){var node=element(row);var items=node&&node.getClientRects().length?markWords(node,saved.query):[];marks=marks.concat(items);return {record:row,anchor:node,marks:items}});
+    bar=createBar(saved.query,selected?selected.label:questionLabel(target),function(){
+      dismissed.add(saved.token);window.scrollTo({top:scrollY,left:scrollX,behavior:"instant"});
       var anchor=target,top=anchor.getBoundingClientRect().top;clear();
       window.scrollBy({top:anchor.getBoundingClientRect().top-top,behavior:"instant"});
     });
+    function focusGroup(scroll){
+      marks.forEach(function(mark){mark.classList.remove("efp-context-current")});
+      var group=groups[current];if(!group||!group.anchor)return;
+      target=group.anchor;group.marks.forEach(function(mark){mark.classList.add("efp-context-current")});
+      target.parentNode.insertBefore(bar,target);bar.querySelector(".efp-context-location").textContent=group.record.label;
+      if(scroll)(group.marks[0]||target).scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
+    }
     // Keep quiz card content and option event listeners independent of controls.
-    el.parentNode.insertBefore(bar,el);
-    var groups=matchGroups(el,marks);
+    target.parentNode.insertBefore(bar,target);
     if(groups.length){
-      var next=button("Next matched question or section / अगला मिला प्रश्न या भाग","1/"+groups.length+(groups.length>1?" ↓":""),function(){
+      var next=button("Next matched question or section / अगला मिला प्रश्न या भाग",(current+1)+"/"+groups.length+(groups.length>1?" ↓":""),function(){
         if(groups.length<2)return;
-        groups[current].marks.forEach(function(mark){mark.classList.remove("efp-context-current")});current=(current+1)%groups.length;
-        groups[current].marks.forEach(function(mark){mark.classList.add("efp-context-current")});groups[current].marks[0].scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
+        current=(current+1)%groups.length;selection=groups[current].record.key;
+        var node=element(groups[current].record);
+        var record=groups[current].record;
+        function remember(){try{var url=new URL(location.href);if(adapter&&record.qi!==undefined){url.searchParams.set("q",String(record.qi+1));url.hash=""}else if(record.id)url.hash=record.id;history.replaceState(history.state,"",url.pathname+url.search+url.hash)}catch(_){}}
+        if(adapter){scrollNext=true;viewKey="";adapter.open(record);remember();schedule();return}
+        if(node&&!node.getClientRects().length&&/^s(\d+)-/.test(node.id)&&typeof showSet==="function"){
+          scrollNext=true;showSet(/^s(\d+)-/.exec(node.id)[1]);remember();schedule();return;
+        }
+        remember();focusGroup(true);
         next.textContent=(current+1)+"/"+groups.length+" ↓";
       });next.className="efp-context-next";next.disabled=groups.length===1;bar.insertBefore(next,bar.lastChild);
-      groups[0].marks.forEach(function(mark){mark.classList.add("efp-context-current")});
+      focusGroup(scrollNext);scrollNext=false;
     }
   }
   function measurePdfHeader(){
@@ -139,11 +203,11 @@
   function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(function(){scheduled=false;syncQuiz()})}
   window.EFP_SEARCH_CONTEXT={
     refresh:schedule,
-    isDismissed:function(el){var saved=savedQuery();return !!(saved&&el&&dismissed.has(saved.token+":"+el.id))},
+    isDismissed:function(el){var saved=savedQuery();return !!(saved&&el&&dismissed.has(saved.token))},
     registerPdf:function(adapter){pdfAdapter=adapter;syncPdf()}
   };
   window.addEventListener("efp-pdf-search-context",function(){if(window.EFP_PDF_SEARCH_CONTEXT)pdfAdapter=window.EFP_PDF_SEARCH_CONTEXT;syncPdf()});
-  window.addEventListener("hashchange",schedule);
+  window.addEventListener("hashchange",function(){viewKey="";selection="";schedule()});
   window.addEventListener("pageshow",function(){schedule();syncPdf()});
   window.addEventListener("resize",measurePdfHeader,{passive:true});
   function init(){

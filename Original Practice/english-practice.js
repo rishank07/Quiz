@@ -8,6 +8,8 @@ var BOOKMARK_KEY="efp_bookmarks";
 var ATTEMPT_PREFIX="efp_original_practice_attempt_v2:";
 var bookmarkOnly=false;
 var pendingDeepQuestion=null;
+var deepFocusTimer=null;
+var searchEntryQuestion=Number(new URL(location.href).searchParams.get("q"))||0;
 
 function attemptStorageKey(chapter){return ATTEMPT_PREFIX+"english:"+encodeURIComponent(String(chapter||""))}
 function chapterSignature(chapter){
@@ -308,7 +310,7 @@ function enhance(){addTopbar();if(state.screen==="quiz")enhanceQuiz();else enhan
 var baseRender=render;
 render=function(){
  baseRender();enhance();efpApplySeoMeta();
- if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;if(window.EFP_SEARCH_CONTEXT&&window.EFP_SEARCH_CONTEXT.isDismissed(card))return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}
+ if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;clearTimeout(deepFocusTimer);deepFocusTimer=setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;if(window.EFP_SEARCH_CONTEXT&&window.EFP_SEARCH_CONTEXT.isDismissed(card))return;card.classList.add("efp-op-deep-focus");try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}
 };
 var baseSelectOption=selectOption;
 selectOption=function(qi,origIdx){var q=state.quizData&&state.quizData[state.currentSection]&&state.quizData[state.currentSection].questions[qi];baseSelectOption(qi,origIdx);saveAttempt();if(q)track("original_practice_answer",{practice:CFG.label,subject:SUBJECT,chapter:state.chapterName,section:state.currentSection+1,question:qi+1,correct:origIdx===q.answer})};
@@ -341,5 +343,21 @@ document.addEventListener("freeze",saveAttempt);
 window.addEventListener("pagehide",saveAttempt);
 window.addEventListener("beforeunload",saveAttempt);
 window.addEventListener("pageshow",function(event){if(!event.persisted||state.screen!=="quiz")return;restoreAttempt(true);render()});
+window.EFP_HTML_SEARCH_PAGE={
+ viewKey:function(){return state.screen+"|"+state.chapterName+"|"+state.currentSection+"|"+bookmarkOnly},
+ currentKey:function(el){return state.chapterName+"|"+state.currentSection+"|"+(el&&el.id||searchEntryQuestion&&"q-"+(searchEntryQuestion-1)||"")},
+ results:function(query,matches){
+  if(state.screen!=="quiz")return [];
+  var out=[];Object.keys(MASTER).forEach(function(chapter){MASTER[chapter].forEach(function(section,si){section.questions.forEach(function(q,qi){
+   if(matches(query,[q.prompt,q.sentence,(q.options||[])[q.answer],q.explanation,q.englishExplanation,q.rule]))out.push({key:chapter+"|"+si+"|q-"+qi,id:"q-"+qi,chapter:chapter,section:si,qi:qi,label:chapter+" · Section "+(si+1)+" · Question "+(qi+1)});
+  })})});return out;
+ },
+ element:function(record){return state.screen==="quiz"&&state.chapterName===record.chapter&&state.currentSection===record.section?document.getElementById(record.id):null},
+ open:function(record){
+  pendingDeepQuestion=null;clearTimeout(deepFocusTimer);searchEntryQuestion=record.qi+1;bookmarkOnly=false;
+  if(state.chapterName!==record.chapter){saveAttempt();state.chapterName=record.chapter;state.quizData=MASTER[record.chapter];state.screen="quiz";state.shuffleMap={};restoreAttempt(true);markVisited(record.chapter)}
+  state.currentSection=record.section;syncUrl("quiz",false);render();saveAttempt();
+ }
+};
 applyDeepLink();if(state.screen==="quiz")restoreAttempt(true);syncUrl(state.screen==="quiz"?"quiz":"chapters",false);render();
 })();
