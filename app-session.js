@@ -10,6 +10,13 @@
   var INSTALLED_APP_CONTEXT_KEY = "efp_installed_app_context_v1";
   var MAX_RESUME_AGE = 24 * 60 * 60 * 1000;
   var intentionalHome = false;
+  var SEARCH_RETURN_PREFIX = "efp_search_return_v1:";
+  var resumedPage = null;
+  var resumedSearchView = null;
+  var searchViewApplied = false;
+  var searchScrollRestored = false;
+  var searchPositionApplied = false;
+  var resumeInteracted = false;
 
   // Original Practice answers are intentionally attempt-only. Remove data
   // written by the retired cross-refresh answer persistence feature.
@@ -122,6 +129,52 @@
     }
   }
 
+  function validSearchTrip(trip, token) {
+    try {
+      return trip && typeof token === "string" && token && trip.token === token &&
+        Array.isArray(trip.inputs) && Array.isArray(trip.filters) &&
+        new URL(trip.source, location.origin).origin === location.origin;
+    } catch (_) { return false; }
+  }
+
+  function searchToken(url) {
+    try { return new URL(url, location.origin).searchParams.get("efSearchReturn") ||
+      (history.state && history.state.efpSearchReturnToken) || ""; } catch (_) { return ""; }
+  }
+
+  function captureSearchState(url) {
+    if (!isInstalledAppContext()) return null;
+    var token = searchToken(url), trip = null, view = null;
+    try {
+      trip = safeParse(sessionStorage.getItem(SEARCH_RETURN_PREFIX + token), null);
+      if (!validSearchTrip(trip, token)) trip = null;
+      var adapter = window.EFP_PDF_SEARCH_CONTEXT || window.EFP_MINDMAP_SEARCH_CONTEXT || window.EFP_SEARCH_CONTEXT;
+      if (resumedSearchView && !searchViewApplied) view = resumedSearchView;
+      else if (adapter && typeof adapter.snapshot === "function") view = adapter.snapshot();
+    } catch (_) {}
+    return { trip: trip, view: view || resumedSearchView };
+  }
+
+  function restoreSearchTrip(saved) {
+    if (!isInstalledAppContext() || !saved || !saved.searchState) return;
+    var trip = saved.searchState.trip, token = searchToken(saved.url);
+    if (!validSearchTrip(trip, token)) return;
+    try { sessionStorage.setItem(SEARCH_RETURN_PREFIX + token, JSON.stringify(trip)); } catch (_) {}
+  }
+
+  function restoreSearchScroll() {
+    if (!resumedPage || searchScrollRestored || resumeInteracted) return;
+    searchScrollRestored = true;
+    // Lazy question renderers also focus their deep link shortly after load.
+    // Finish the resume layout first, then retain the actual reading position.
+    [0, 300, 700].forEach(function (delay) {
+      setTimeout(function () {
+        if (!resumeInteracted) window.scrollTo(0, Math.max(0, Number(resumedPage.scrollY) || 0));
+        if (delay === 700) searchPositionApplied = true;
+      }, delay);
+    });
+  }
+
   function writeSession(urlOverride) {
     try {
       if (intentionalHome || launchMarker()) return;
@@ -130,8 +183,9 @@
       localStorage.setItem(SESSION_KEY, JSON.stringify({
         url: url,
         ts: Date.now(),
-        scrollY: Math.max(0, Math.round(window.scrollY || 0)),
-        historyState: serializableHistoryState()
+        scrollY: Math.max(0, Math.round(resumedPage && resumedSearchView && !searchPositionApplied && !resumeInteracted ? resumedPage.scrollY || 0 : window.scrollY || 0)),
+        historyState: serializableHistoryState(),
+        searchState: captureSearchState(url)
       }));
     } catch (_) {}
   }
@@ -183,6 +237,7 @@
     if (isHistoryTraversal()) { markIntentionalHome(); return false; }
     var saved = readSession();
     if (!saved) return false;
+    restoreSearchTrip(saved);
     try { sessionStorage.setItem(PENDING_KEY, JSON.stringify(saved)); } catch (_) {}
     /* Preserve the launch Home entry underneath the restored page. Using
        replace() here erased the only real history entry after an Android
@@ -212,6 +267,10 @@
     var target = Math.max(0, Number(data.scrollY) || 0);
     var tries = 0;
     function attempt() {
+      if (resumeInteracted) {
+        try { sessionStorage.removeItem(PENDING_KEY); } catch (_) {}
+        return;
+      }
       tries += 1;
       try { window.scrollTo(0, target); } catch (_) {}
       if (tries < 12 && Math.abs((window.scrollY || 0) - target) > 8) {
@@ -1403,6 +1462,15 @@
 
   if (maybeResumeSameDeviceLaunch()) return;
 
+  if (isInstalledAppContext()) {
+    resumedPage = pendingForThisPage();
+    restoreSearchTrip(resumedPage);
+    resumedSearchView = resumedPage && resumedPage.searchState && resumedPage.searchState.view || null;
+    if (resumedPage) ["pointerdown", "touchstart", "wheel", "keydown"].forEach(function (name) {
+      window.addEventListener(name, function () { resumeInteracted = true; }, { passive: true });
+    });
+  }
+
   installHistoryTracking();
   installQuizProgressWarning();
   installLifecycleTracking();
@@ -1413,6 +1481,13 @@
 
   window.EFP_APP_SESSION = {
     save: writeSession,
-    markHome: markIntentionalHome
+    markHome: markIntentionalHome,
+    getSearchState: function (kind) {
+      var state = isInstalledAppContext() && resumedSearchView && resumedSearchView.kind === kind ? resumedSearchView : null;
+      if (state) searchViewApplied = true;
+      return state;
+    },
+    restoreSearchScroll: restoreSearchScroll
   };
+  if (resumedSearchView) window.dispatchEvent(new CustomEvent("efp-app-search-resume"));
 })();

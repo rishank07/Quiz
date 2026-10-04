@@ -145,6 +145,33 @@ for (const [name, home, surface] of surfaces.slice(0, 3)) {
   console.log('PASS', name, 'ordinary app launch still resumes');
 }
 // Internal search must keep its existing destination and session behavior.
+// A process kill loses all sessionStorage. Only local app resume data survives.
+for (const [name, home, surface] of surfaces.slice(0, 3)) {
+  for (const dismissed of [false, true]) {
+    const t = trip(home, surface), leaf = page(t.url, surface, t.source.session, t.source.local);
+    const token = new URL(t.url).searchParams.get('efSearchReturn');
+    const view = { kind:'html', token, selection:'q3', revealed:dismissed?[]:['q3'], dismissed };
+    leaf.run(app); leaf.run(back); leaf.flush();
+    leaf.w.EFP_SEARCH_CONTEXT = { snapshot: () => view };
+    leaf.w.scrollY = 735; leaf.w.dispatchEvent(event('pagehide'));
+    const saved = JSON.parse(leaf.local.getItem(SESSION));
+    assert.equal(saved.searchState.trip.token, token);assert.deepEqual(saved.searchState.view, view);
+    const fresh = storage(), launch = page(home, surface, fresh, leaf.local);launch.run(app);
+    assert.equal(launch.w.navigation, leaf.w.location.href);
+    assert(fresh.getItem('efp_search_return_v1:'+token), 'Cold launch must rehydrate the original search snapshot');
+    const resumed = page(launch.w.navigation, surface, fresh, leaf.local);resumed.run(app);resumed.run(back);resumed.flush();
+    assert.deepEqual(JSON.parse(JSON.stringify(resumed.w.EFP_APP_SESSION.getSearchState('html'))), view);
+    resumed.click(resumed.button);
+    const returned = page(resumed.w.navigation, surface, fresh, leaf.local);returned.run(app);returned.run(back);returned.flush();
+    assert.equal(returned.input.value,'ancient history');assert.equal(returned.results.innerHTML,'<a>Ancient match</a>');assert(!returned.w.navigation);
+  }
+  console.log('PASS',name,'cold process relaunch: search trip/view/dismissal restored and Back returns original results');
+}
+const browserTrip=trip('/',{}),browserLeaf=page(browserTrip.url,{},browserTrip.source.session,browserTrip.source.local);
+browserLeaf.w.EFP_SEARCH_CONTEXT={snapshot:()=>({kind:'html',dismissed:false})};browserLeaf.run(app);browserLeaf.flush();
+assert.equal(JSON.parse(browserLeaf.local.getItem(SESSION)).searchState,null,'Ordinary browsers must not persist app search context');
+const browserLaunch=page('/',{},storage(),browserLeaf.local);browserLaunch.run(app);assert(!browserLaunch.w.navigation);
+console.log('PASS ordinary browser: no durable app search state or cold-launch resume');
 const internal = trip('/Mind%20Maps/SubjectName.html', {});
 const child = page(internal.url, {}, internal.source.session, internal.source.local);
 child.run(app); child.run(back); child.flush(); child.click(child.button);

@@ -10,6 +10,18 @@
 
   var openedKey = "";
   var focusRun = 0;
+  var searchView = null, appResume = null, appRestored = false, searchDismissed = false;
+  function searchToken() {
+    try { return new URL(location.href).searchParams.get("efSearchReturn") ||
+      (history.state && history.state.efpSearchReturnToken) || ""; } catch (_) { return ""; }
+  }
+  function readAppResume() {
+    if (appRestored || !window.EFP_APP_SESSION || !window.EFP_APP_SESSION.getSearchState) return;
+    var state = window.EFP_APP_SESSION.getSearchState("mindmap");
+    if (!state || state.token !== searchToken()) return;
+    appRestored = true; appResume = state; searchDismissed = !!state.dismissed; searchView = state;
+  }
+  window.EFP_MINDMAP_SEARCH_CONTEXT = { snapshot: function () { return searchView; } };
   var readerLink = document.createElement("link");
   readerLink.rel = "stylesheet";
   readerLink.href = "/mindmap-reader.css?v=20261004pagehtml1";
@@ -222,6 +234,10 @@
     detail.textContent = query ? "Search: " + query : "Opened section / खुला हुआ भाग";
     label.appendChild(detail); bar.appendChild(label);
     var index = Math.max(0,groups.findIndex(function(group){return group.panel===target}));
+    if (appResume && !appResume.dismissed && groups.length) {
+      var restoredIndex = appResume.anchorId ? groups.findIndex(function(group){return group.anchor.id===appResume.anchorId&&group.panel.id===appResume.panel}) : -1;
+      index = restoredIndex >= 0 ? restoredIndex : Math.max(0, Math.min(groups.length-1, Number(appResume.index)||0));
+    }
     function scrollMatch() {
       marks.forEach(function (mark) { mark.classList.remove("efp-mm-current-match"); });
       if (!groups.length) return;
@@ -239,8 +255,9 @@
         try{var url=new URL(location.href);url.hash=group.panel.id;history.replaceState(history.state,"",url.pathname+url.search+url.hash);openedKey=group.panel.id}catch(_){}
       }
       groups[index].marks.forEach(function (mark) { mark.classList.add("efp-mm-current-match"); });
-      groups[index].marks[0].scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });
+      if (!appResume) groups[index].marks[0].scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });
       if (next) next.textContent = (index + 1) + "/" + groups.length + (groups.length > 1 ? " ↓" : "");
+      searchView = query ? {kind:"mindmap",token:searchToken(),index:index,panel:group.panel.id,anchorId:group.anchor.id||"",dismissed:false} : null;
     }
     var next;
     if (groups.length) {
@@ -265,6 +282,8 @@
       window.scrollTo({ top: window.scrollY, left: window.scrollX, behavior: "instant" });
       var anchor = groups.length ? groups[index].anchor : target;
       var top = anchor.getBoundingClientRect().top;
+      searchDismissed = true;
+      if (searchView) searchView.dismissed = true;
       clearSearchFocus();
       var delta = anchor.getBoundingClientRect().top - top;
       if (delta) window.scrollBy({ top: delta, behavior: "instant" });
@@ -280,6 +299,11 @@
     if (!target) return false;
 
     clearSearchFocus();
+    readAppResume();
+    if (searchDismissed) {
+      if (appResume) { appResume=null; window.EFP_APP_SESSION.restoreSearchScroll(); }
+      return true;
+    }
     var query = searchQuery();
     var panels=Array.from(document.querySelectorAll(".tab-content,.tab-panel,.panel,section.tab,div.tab")).filter(function(panel){return panel.id&&!panel.closest("nav")&&!panel.parentElement.closest(".tab-content,.tab-panel,.panel,section.tab,div.tab")});
     if(!panels.length&&found)panels=[target];
@@ -306,6 +330,7 @@
         target.__efpDeepFocusTimer = setTimeout(function () {
           target.classList.remove("efp-deep-focus");
         }, 8000);
+        if (appResume) { appResume=null; window.EFP_APP_SESSION.restoreSearchScroll(); }
       });
     });
     return true;
@@ -363,6 +388,9 @@
   }
 
   window.addEventListener("hashchange", runWithRetry);
+  window.addEventListener("efp-app-search-resume", function () {
+    readAppResume(); if (appResume) { openedKey=""; runWithRetry(); }
+  });
   window.addEventListener("pageshow", function () {
     if (hashKey()) setTimeout(runWithRetry, 0);
   });

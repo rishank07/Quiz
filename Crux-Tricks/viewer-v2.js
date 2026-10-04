@@ -75,6 +75,7 @@
   var pdfSearchHits=[];
   var pdfSearchModes={};
   var pdfHighlightKinds={};
+  var appSearchRestored=false,pdfResume=null,pdfResumePositionReady=false,pdfResumePositionApplied=false,pdfResumeInteracted=false;
   var PAGE_BATCH_SIZE=20;
   var BATCH_PREFETCH_THRESHOLD=5;
   var KEEP_RENDER_RADIUS=4;
@@ -142,6 +143,11 @@
     else if(samePage)renderSearchHighlights(n);
   }
   window.EFP_PDF_SEARCH_CONTEXT={
+    snapshot:function(){
+      var shell=continuous?pageShell(page):null;
+      return {kind:'pdf',id:doc.id,query:docSearch.value,visible:pdfContextVisible,page:pdfContextPage,
+        stageOffset:pdfResume&&!pdfResumePositionApplied&&!pdfResumeInteracted?pdfResume.stageOffset:pdfStage.scrollTop-(shell?shell.offsetTop:0),stageLeft:pdfStage.scrollLeft};
+    },
     getState:function(){
       var index=pdfSearchHits.indexOf(pdfContextPage);
       return {host:document.querySelector('.reader-head'),visible:pdfContextVisible,query:docSearch.value,
@@ -155,6 +161,29 @@
       jumpToSearchPage(pdfSearchHits[(index+direction+pdfSearchHits.length)%pdfSearchHits.length]);
     }
   };
+  function restorePdfPosition(){
+    if(!pdfResume||!pdfDoc||!pdfResumePositionReady||pdfResumePositionApplied||pdfResumeInteracted)return;
+    pdfResumePositionApplied=true;
+    requestAnimationFrame(function(){
+      if(pdfResumeInteracted)return;
+      var shell=continuous?pageShell(page):null;
+      pdfStage.scrollTop=Math.max(0,(shell?shell.offsetTop:0)+(Number(pdfResume.stageOffset)||0));
+      pdfStage.scrollLeft=Math.max(0,Number(pdfResume.stageLeft)||0);
+    });
+  }
+  function restoreAppPdfSearch(){
+    if(appSearchRestored||!window.EFP_APP_SESSION||!window.EFP_APP_SESSION.getSearchState)return;
+    var state=window.EFP_APP_SESSION.getSearchState('pdf');if(!state||state.id!==doc.id)return;
+    appSearchRestored=true;pdfResume=state;
+    docSearch.value=String(state.query||'').slice(0,160);if(mobileSearchInput)mobileSearchInput.value=docSearch.value;
+    searchQuery=normalizeSearchText(docSearch.value);pdfContextVisible=!!state.visible;
+    pdfContextPage=Math.max(1,Math.min(doc.pages,Number(state.page)||page));
+    activeSearchPage=pdfContextVisible?pdfContextPage:0;searchFocusPending=false;searchGeneration++;
+    clearSearchHighlightLayers();runDocSearch();restorePdfPosition();notifySearchContext();
+  }
+  window.addEventListener('efp-app-search-resume',restoreAppPdfSearch);
+  ['pointerdown','touchstart','wheel','keydown'].forEach(function(name){pdfStage.addEventListener(name,function(){pdfResumeInteracted=true},{passive:true})});
+  restoreAppPdfSearch();
   notifySearchContext();
 
   function installStyles(){
@@ -620,7 +649,10 @@
     Array.prototype.forEach.call(continuousRoot.children,function(el){continuousObserver.observe(el)});
     pdfStage.removeEventListener('scroll',onContinuousScroll);pdfStage.addEventListener('scroll',onContinuousScroll,{passive:true});
     pdfStage.addEventListener('pointerdown',showMobileControlsBriefly,{passive:true});
-    requestAnimationFrame(function(){go(page,false);warmContinuousPages(page);showMobileControlsBriefly()});
+    requestAnimationFrame(function(){
+      Promise.resolve(go(page,false)).then(function(){pdfResumePositionReady=true;restorePdfPosition()});
+      warmContinuousPages(page);showMobileControlsBriefly();
+    });
   }
   function reflowContinuous(anchor){
     if(!continuous||!continuousRoot)return;
@@ -717,6 +749,7 @@
       pdfLoading.hidden=true;pdfCanvas.hidden=false;markVisited();updateUrl();updateControls();
       if(anchor)restoreZoomAnchor(anchor);
       if(searchQuery&&page===activeSearchPage)renderSearchHighlights(page);
+      pdfResumePositionReady=true;restorePdfPosition();
     }).catch(function(err){
       if(generation!==singleRenderGeneration)return;
       if(err&&err.name==='RenderingCancelledException')return;
@@ -762,6 +795,7 @@
   }
 
   function chooseReaderAfterLoad(){
+    pdfResumePositionReady=false;
     return pdfDoc.getPage(page).then(function(pg){
       var b=pg.getViewport({scale:1});
       var landscape=b.width>b.height*1.03;

@@ -6,6 +6,7 @@
   var dismissed=new Set(),scheduled=false,pdfAdapter=null,pdfObserver=null;
   var pageRecords=[],recordCache="",recordProvider=null,viewKey="",viewRoots=[],selection="",scrollNext=false,entryCache="";
   var revealed=[];
+  var appRestored=false,resumeState=null;
   var explanationSelector=".explanation,.explanation-box,.explain-box,.exp-box,.exp,.explain,.q-exp,[id^='exp-']";
   var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context.css?v=20261004explain1";document.head.appendChild(style);
   function savedQuery(){
@@ -75,10 +76,10 @@
     var terms=queryTerms(query);
     return explanationRoots(root).filter(function(node){var text=resultText(node);return terms.some(function(term){return textMatches(term,text)})});
   }
-  function revealExplanation(node){
+  function revealExplanation(node,key){
     if(explanationVisible(node))return;
     revealed=revealed.filter(function(entry){return entry.node.isConnected});
-    if(!revealed.some(function(entry){return entry.node===node}))revealed.push({node:node,hidden:node.hidden,open:node.open});
+    if(!revealed.some(function(entry){return entry.node===node}))revealed.push({node:node,key:key,hidden:node.hidden,open:node.open});
     // A temporary display override leaves the quiz's own hidden/show classes
     // untouched. Answering normally still controls its permanent visibility.
     node.hidden=false;node.classList.add("efp-context-revealed");
@@ -157,7 +158,17 @@
   }
   function syncQuiz(){
     if(pdfAdapter)return;var saved=savedQuery();if(!saved)return;var adapter=provider(),el=findTarget();
-    if(dismissed.has(saved.token)){if(el)clearOutline(el);return}
+    if(!appRestored&&window.EFP_APP_SESSION&&window.EFP_APP_SESSION.getSearchState){
+      var state=window.EFP_APP_SESSION.getSearchState("html");
+      if(state&&state.token===saved.token){
+        appRestored=true;resumeState=state;viewKey="";
+        if(state.dismissed)dismissed.add(saved.token);
+      }
+    }
+    if(dismissed.has(saved.token)){
+      if(bar){clear();clearRevealed()}if(el)clearOutline(el);
+      if(resumeState){resumeState=null;window.EFP_APP_SESSION.restoreSearchScroll()}return;
+    }
     var stamp=adapter?adapter.viewKey():"dom",cache=saved.token+":"+saved.query;
     if(adapter&&(recordCache!==cache||recordProvider!==adapter||!pageRecords.length)){
       pageRecords=adapter.results(saved.query,textMatches);recordCache=cache;recordProvider=adapter;
@@ -169,6 +180,7 @@
     var signature=stamp+"|"+cache+"|"+roots.map(function(node){return node.id+":"+!!node.getClientRects().length+":"+node.textContent+":"+explanationRoots(node).map(explanationVisible).join(",")}).join("\n");
     if(viewKey===signature&&bar&&bar.isConnected&&roots.length===viewRoots.length&&roots.every(function(node,i){return node===viewRoots[i]}))return;
     if(stamp!==activeKey&&!scrollNext)selection="";
+    if(resumeState)selection=resumeState.selection||"";
     var firstEntry=entryCache!==cache;entryCache=cache;
     clear();viewKey=signature;viewRoots=roots;activeKey=stamp;
     if(!adapter)pageRecords=roots.filter(function(node){return textMatches(saved.query,resultText(node))}).map(function(node,i){return {key:node.id||"dom-"+i,id:node.id,anchor:node,label:questionLabel(node)}});
@@ -182,6 +194,7 @@
       var node=element(row),items=[],explanations=[],explanationMarks=[];
       if(node&&node.getClientRects().length){
         items=markWords(node,saved.query);explanations=matchingExplanations(node,saved.query);
+        if(resumeState&&Array.isArray(resumeState.revealed)&&resumeState.revealed.indexOf(row.key)>=0)explanations.forEach(function(exp){revealExplanation(exp,row.key)});
         explanations.forEach(function(exp){if(explanationVisible(exp))explanationMarks=explanationMarks.concat(markWords(exp,saved.query,true))});
       }
       items=items.concat(explanationMarks);marks=marks.concat(items);
@@ -195,7 +208,7 @@
     var explanationButton=button("Show matching explanation without attempting / बिना प्रयास के मिली व्याख्या देखें","Dekho",function(){
       var group=groups[current];if(!group||!group.explanations.length)return;
       group.explanations.forEach(function(exp){
-        revealExplanation(exp);
+        revealExplanation(exp,group.record.key);
         if(!exp.querySelector("mark.efp-context-match")){
           var found=markWords(exp,saved.query,true);group.explanationMarks=group.explanationMarks.concat(found);group.marks=group.marks.concat(found);marks=marks.concat(found);
         }
@@ -232,8 +245,9 @@
         next.textContent=(current+1)+"/"+groups.length+" ↓";
       });next.className="efp-context-next";next.disabled=groups.length===1;bar.insertBefore(next,bar.lastChild);
       var entryGroup=groups[current];
-      focusGroup(scrollNext||(firstEntry&&entryGroup.explanationMarks.length>0&&entryGroup.marks.length===entryGroup.explanationMarks.length));scrollNext=false;
+      focusGroup(scrollNext||(!resumeState&&firstEntry&&entryGroup.explanationMarks.length>0&&entryGroup.marks.length===entryGroup.explanationMarks.length));scrollNext=false;
     }
+    if(resumeState){resumeState=null;window.EFP_APP_SESSION.restoreSearchScroll()}
   }
   function measurePdfHeader(){
     var head=bar&&bar.parentElement;if(!head)return;
@@ -261,10 +275,17 @@
   function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(function(){scheduled=false;syncQuiz()})}
   window.EFP_SEARCH_CONTEXT={
     refresh:schedule,
+    snapshot:function(){
+      if(pdfAdapter&&pdfAdapter.snapshot)return pdfAdapter.snapshot();
+      var saved=savedQuery();if(!saved||(!bar&&!dismissed.has(saved.token)))return null;
+      return {kind:"html",token:saved.token,selection:selection,dismissed:dismissed.has(saved.token),
+        revealed:revealed.filter(function(entry){return entry.node.isConnected}).map(function(entry){return entry.key})};
+    },
     isDismissed:function(el){var saved=savedQuery();return !!(saved&&el&&dismissed.has(saved.token))},
     registerPdf:function(adapter){pdfAdapter=adapter;syncPdf()}
   };
   window.addEventListener("efp-pdf-search-context",function(){if(window.EFP_PDF_SEARCH_CONTEXT)pdfAdapter=window.EFP_PDF_SEARCH_CONTEXT;syncPdf()});
+  window.addEventListener("efp-app-search-resume",function(){viewKey="";schedule()});
   window.addEventListener("hashchange",function(){viewKey="";selection="";schedule()});
   window.addEventListener("pageshow",function(){schedule();syncPdf()});
   window.addEventListener("resize",measurePdfHeader,{passive:true});
