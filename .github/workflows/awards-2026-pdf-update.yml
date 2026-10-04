@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths:
       - "tools/update-awards-2026-pdf.py"
+      - "tools/fix-awards-rapid-landing-count.py"
       - "tools/awards_2026_pdf_data1.json"
       - "tools/awards_2026_pdf_data2.json"
       - ".github/workflows/awards-2026-pdf-update.yml"
@@ -40,9 +41,11 @@ jobs:
           python tools/update-home-integrations.py --repo .
           python tools/update-back-parent-map.py --repo .
           python tools/add-home-nav.py --repo .
+      - name: Sync visible Rapid Practice landing counts
+        run: python tools/fix-awards-rapid-landing-count.py
       - name: Validate generated assets
         run: |
-          python -m py_compile tools/update-awards-2026-pdf.py
+          python -m py_compile tools/update-awards-2026-pdf.py tools/fix-awards-rapid-landing-count.py
           node --check search-snippets-current-affairs.js
           node --check search-snippets-current-affairs-rapid.js
           node --check homepage-fulltext-search.js
