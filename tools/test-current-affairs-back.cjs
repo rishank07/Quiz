@@ -31,6 +31,12 @@ function page(file, url, surface, local = {}, session = {}, referrer = '') {
   });
   pages.push(dom);
   const w = dom.window;
+  // Disconnect queued observers before jsdom destroys document at teardown.
+  const observers = [], Observer = w.MutationObserver, close = w.close.bind(w);
+  w.MutationObserver = function (...args) {
+    const observer = new Observer(...args); observers.push(observer); return observer;
+  };
+  w.close = () => { observers.forEach(observer => observer.disconnect()); close(); };
   w.matchMedia = () => ({ matches: !!surface.standalone, addEventListener() {} });
   Object.defineProperty(w.navigator, 'userAgent', { value: surface.android ? 'Android' : 'Windows' });
   w.HTMLElement.prototype.getClientRects = function () {
@@ -69,6 +75,16 @@ function page(file, url, surface, local = {}, session = {}, referrer = '') {
       if (!file.includes('book-question-counts')) run(read(file));
     }
   }
+  // outside-only executes scripts through run(), but does not compile HTML
+  // onclick attributes. Compile them so answers really save, not just arm Quit.
+  function bindInlineAnswers() {
+    for (const node of w.document.querySelectorAll('[onclick]')) {
+      if (!node.onclick) node.onclick = new w.Function('event', node.getAttribute('onclick'));
+    }
+  }
+  bindInlineAnswers();
+  const inlineObserver = new w.MutationObserver(bindInlineAnswers);
+  inlineObserver.observe(w.document, { childList: true, subtree: true });
   return { w, run, local: () => dump(w.localStorage), session: () => dump(w.sessionStorage) };
 }
 async function settle() { await pause(40); }
@@ -142,6 +158,112 @@ async function until(test) {
         console.log('PASS', name, label, action, 'Stay/Quit -> exact parent -> next Back');
         quiz.w.close(); hub.w.close();
       }
+    }
+  }
+  for (const [name, surface] of surfaces) {
+    for (const [label, file, selector] of fixtures) {
+      const url = '/' + file.split('/').map(encodeURIComponent).join('/');
+      const original = page(file, url, surface);
+      await settle();
+      original.w.document.querySelector(selector).click();
+      await settle();
+      assert(original.w.EFP_QUIZ_PROGRESS_WARNING.isArmed());
+      const local = original.local();
+      if (label === 'Blackbook quiz') assert(Object.keys(JSON.parse(local.efp_quiz_progress_v2)['/' + file].answers).length > 0, 'Blackbook answer must actually save');
+      const originalSession = original.session();
+      original.w.close();
+      // Older app versions persisted dirty flags; a cold auto-resume must
+      // restore the attempt without reviving that previous visit's warning.
+      local.efp_app_quiz_warning_v1 = JSON.stringify({ url, ts: Date.now() });
+      for (const action of ['button', 'system', 'new-answer', 'bfcache']) {
+        const reopened = page(file, url, surface, local, {
+          ...originalSession,
+          efp_app_resume_pending_v1: JSON.stringify({ url, ts: Date.now() })
+        });
+        await until(() => reopened.w.document.querySelector(selector + ':disabled'));
+        await settle();
+        const warning = reopened.w.EFP_QUIZ_PROGRESS_WARNING;
+        assert(reopened.w.document.querySelector(selector + ':disabled'), label + ': saved answer must restore');
+        assert(!warning.isArmed(), name + ': saved ticks must not arm Quit');
+        assert.equal(reopened.w.localStorage.getItem('efp_app_quiz_warning_v1'), null);
+        reopened.w.document.querySelector(selector + ':disabled').click();
+        reopened.w.dispatchEvent(new reopened.w.Event('scroll'));
+        assert(!warning.isArmed(), 'repeated saved ticks and scrolling must stay clean');
+        if (action === 'new-answer' || action === 'bfcache') {
+          reopened.w.document.querySelector(selector + ':not(:disabled)').click();
+          assert(warning.isArmed(), 'a new answer after restore must arm Quit');
+          if (action === 'bfcache') {
+            reopened.w.dispatchEvent(new reopened.w.PageTransitionEvent('pageshow', { persisted: true }));
+            assert(!warning.isArmed(), 'returning through BFCache begins a clean visit');
+          } else {
+            reopened.w.document.getElementById('efp-app-back-button').click();
+            await until(() => reopened.w.document.querySelector('#efp-quiz-exit-modal.show'));
+            reopened.w.document.querySelector('.efp-qw-stay').click();
+            assert(warning.isArmed(), 'Stay keeps the current visit protected');
+            reopened.w.close();
+            continue;
+          }
+        }
+        if (action === 'system') reopened.w.history.back();
+        else reopened.w.document.getElementById('efp-app-back-button').click();
+        await until(() => reopened.w.__navigation);
+        assert(!reopened.w.document.querySelector('#efp-quiz-exit-modal.show'));
+        assert.equal(decodeURIComponent(new URL(reopened.w.__navigation).pathname), reopened.w.EFP_BACK_PARENT_MAP['/' + file]);
+        reopened.w.close();
+      }
+      console.log('PASS', name, label, 'saved ticks, cold resume, BFCache, unchanged Back, new-answer warning');
+    }
+  }
+  for (const [name, surface] of surfaces) {
+    const file = "Books/Lucent's Objective/Economics/ChapterNames/Money.html";
+    const url = '/' + file.split('/').map(encodeURIComponent).join('/');
+    const original = page(file, url, surface);
+    await settle();
+    original.w.document.querySelector('.options input[type=radio]').click();
+    assert(original.w.EFP_QUIZ_PROGRESS_WARNING.isArmed(), 'a radio change must arm Quit');
+    await settle();
+    const reopened = page(file, url, surface, original.local(), original.session());
+    await settle();
+    const radio = reopened.w.document.querySelector('.options input:checked');
+    assert(radio, 'unchecked saved selection must restore');
+    assert(!reopened.w.EFP_QUIZ_PROGRESS_WARNING.isArmed());
+    radio.click();
+    assert(!reopened.w.EFP_QUIZ_PROGRESS_WARNING.isArmed(), 'clicking the same selected radio does not change an answer');
+    radio.closest('.options').querySelector('input:not(:checked)').click();
+    assert(reopened.w.EFP_QUIZ_PROGRESS_WARNING.isArmed(), 'changing a saved radio answer must arm Quit');
+    reopened.w.EFP_QUIZ_PROGRESS_WARNING.disarm();
+    reopened.w.document.querySelector('.check-btn').click();
+    await settle();
+    const checked = page(file, url, surface, reopened.local(), reopened.session());
+    await settle();
+    assert(checked.w.document.querySelector('.question-box.answered'));
+    assert(!checked.w.EFP_QUIZ_PROGRESS_WARNING.isArmed(), 'restoring checked static answers must remain clean');
+    original.w.close(); reopened.w.close(); checked.w.close();
+    console.log('PASS', name, 'static radio: restore, same tick, changed tick, checked-answer restore');
+  }
+  for (const [name, surface] of surfaces) {
+    for (const [file, open] of [
+      ['Original Practice/English_Grammar_Complete_Practice.html', "goToQuiz('01. Basics')"],
+      ['Original Practice/Static_GK_Complete_Practice.html', "goToQuiz(Object.keys(MASTER['Static GK'])[0])"]
+    ]) {
+      const url = '/' + file.split('/').map(encodeURIComponent).join('/');
+      const original = page(file, url, surface);
+      original.run(open); await settle();
+      original.w.document.querySelector('.option-btn').click();
+      assert(original.w.EFP_QUIZ_PROGRESS_WARNING.isArmed());
+      await settle();
+      const reopened = page(file, url, surface, original.local(), original.session());
+      reopened.run(open); await settle();
+      const savedOption = reopened.w.document.querySelector('.option-btn.answered,.option-btn:disabled');
+      // General Original Practice attempt restoration is installed-app only.
+      if (surface.installed || file.includes('English_Grammar')) assert(savedOption, name + ': Original Practice saved ticks must restore');
+      assert(!reopened.w.EFP_QUIZ_PROGRESS_WARNING.isArmed());
+      if (savedOption) savedOption.click();
+      assert(!reopened.w.EFP_QUIZ_PROGRESS_WARNING.isArmed(), 'old disabled/answered buttons stay clean');
+      reopened.w.document.querySelector('.option-btn:not(.answered):not(:disabled)').click();
+      assert(reopened.w.EFP_QUIZ_PROGRESS_WARNING.isArmed(), 'a fresh Original Practice answer arms Quit');
+      original.w.close(); reopened.w.close();
+      console.log('PASS', name, file, 'saved ticks and new-answer warning');
     }
   }
 })().finally(() => pages.forEach(dom => dom.window.close())).catch(error => {

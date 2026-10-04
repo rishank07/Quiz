@@ -10,6 +10,7 @@
   var INSTALLED_APP_CONTEXT_KEY = "efp_installed_app_context_v1";
   var MAX_RESUME_AGE = 24 * 60 * 60 * 1000;
   var intentionalHome = false;
+  var replayingSavedAnswer = false;
   var SEARCH_RETURN_PREFIX = "efp_search_return_v1:";
   var resumedPage = null;
   var resumedSearchView = null;
@@ -364,7 +365,6 @@
     }
     function restore(root) {
       if (!cards().length) return;
-      var restoredAny = false;
       try {
         var store = migrateLegacy(readStore());
         var saved = store[path];
@@ -378,12 +378,11 @@
         }
         Array.prototype.forEach.call(groups, function (group) {
           var card = group.closest(".question-box[id]");
-          if (card && restoreGroup(group, saved.answers[card.id])) restoredAny = true;
+          if (card) restoreGroup(group, saved.answers[card.id]);
         });
       } catch (_) {
       } finally {
         restoring = false;
-        if (restoredAny && window.EFP_QUIZ_PROGRESS_WARNING) window.EFP_QUIZ_PROGRESS_WARNING.arm();
       }
     }
     function resetDom(scope) {
@@ -702,7 +701,12 @@
             var optionText = button && button.querySelector(".option-text");
             if (optionText) optionText.textContent = wanted;
           }
-          if (button) button.click();
+          if (button) {
+            // Replaying saved Blackbook answers updates score/colour only.
+            // Never treat these programmatic clicks as activity on this visit.
+            replayingSavedAnswer = true;
+            try { button.click(); } finally { replayingSavedAnswer = false; }
+          }
         }
         if (index < ids.length) {
           (window.requestAnimationFrame || window.setTimeout)(batch);
@@ -799,50 +803,12 @@
     var pendingSystemBackPrompt = false;
     var systemBackRestoreTimer = 0;
 
-    function warningPageKey(value) {
-      try {
-        var url = new URL(String(value || ""), location.origin);
-        if (url.origin !== location.origin) return "";
-        return url.pathname + url.search;
-      } catch (_) {
-        return "";
-      }
-    }
-
     function clearPersistedWarning() {
-      if (!isInstalledAppContext() && !pendingForThisPage()) return;
+      // Quit confirmation belongs to this visit, not to the saved attempt.
+      // Retire warning flags written by older app versions on cold resume.
       try { localStorage.removeItem(QUIZ_WARNING_KEY); } catch (_) {}
     }
-
-    function persistWarning() {
-      if (!dirty || !isInstalledAppContext()) return;
-      try {
-        localStorage.setItem(QUIZ_WARNING_KEY, JSON.stringify({
-          url: relativeUrl(),
-          ts: Date.now()
-        }));
-      } catch (_) {}
-    }
-
-    function restorePersistedWarning() {
-      var pending = pendingForThisPage();
-      if (!pending || dirty) return false;
-      try {
-        var saved = safeParse(localStorage.getItem(QUIZ_WARNING_KEY), null);
-        if (!saved || !Number.isFinite(Number(saved.ts)) ||
-            Date.now() - Number(saved.ts) > MAX_RESUME_AGE) return false;
-        var savedKey = warningPageKey(saved.url);
-        var pendingKey = warningPageKey(pending.url);
-        var currentKey = warningPageKey(relativeUrl());
-        if (!savedKey || savedKey !== pendingKey || savedKey !== currentKey) return false;
-        if (!hasVisibleQuizSurface() || isClearlyFinished()) return false;
-        dirty = true;
-        ensureSystemBackGuard();
-        return true;
-      } catch (_) {
-        return false;
-      }
-    }
+    clearPersistedWarning();
 
     var QUIZ_SURFACES = [
       ".question-box",
@@ -881,23 +847,6 @@
       return false;
     }
 
-    function hasAnsweredQuizSurface() {
-      var selectors = [
-        ".question-box.answered",
-        ".option-btn.answered",
-        ".quiz-option:disabled",
-        ".qcard .opt:disabled",
-        ".qcard button.opt:disabled",
-        ".question-card button:disabled"
-      ];
-      try {
-        var node = document.querySelector(selectors.join(","));
-        return !!(node && hasVisibleQuizSurface());
-      } catch (_) {
-        return false;
-      }
-    }
-
     function isClearlyFinished() {
       var finishSelectors = [
         "#finishView",
@@ -924,9 +873,8 @@
     }
 
     function arm() {
-      if (!hasVisibleQuizSurface()) return;
+      if (replayingSavedAnswer || !hasVisibleQuizSurface()) return;
       dirty = true;
-      persistWarning();
       ensureSystemBackGuard();
     }
 
@@ -965,7 +913,8 @@
         "#kbArea button",
         "#mcqArea button"
       ].join(","));
-      return !!direct;
+      return !!(direct && !direct.disabled && !direct.closest(".answered") &&
+        !(direct.matches && direct.matches(":disabled")));
     }
 
     function navigationTarget(target) {
@@ -1362,7 +1311,11 @@
         return;
       }
 
-      if (isAnswerInteraction(target)) arm();
+      // Radio/label clicks can repeat an already selected answer. Only their
+      // change event proves a new selection; option buttons use enabled clicks.
+      var radio = target.closest && target.closest("input[type='radio'],label");
+      if (radio && radio.tagName === "LABEL") radio = radio.control || radio.querySelector("input[type='radio']");
+      if (!radio && isAnswerInteraction(target)) arm();
       else if (!systemBackGuardActive) {
         // Many quiz screens are built after a chapter/set click. Let that
         // click finish rendering before protecting the newly visible screen.
@@ -1374,27 +1327,19 @@
       if (isAnswerInteraction(event.target)) arm();
     }, true);
 
-    window.addEventListener("pageshow", function () {
+    window.addEventListener("pageshow", function (event) {
+      // A BFCache return is a fresh visit with the previous ticks intact.
+      if (event.persisted) disarm();
       allowNavigation = false;
-      if (!dirty) restorePersistedWarning();
       ensureSystemBackGuard();
     });
 
-    // Re-arm only for an installed-app auto-resume. Normal browser visits
-    // never receive PENDING_KEY, so browser navigation cannot resurrect a
-    // warning from an earlier app session.
-    restorePersistedWarning();
-    if (!dirty && document.readyState !== "complete") {
-      window.addEventListener("load", function () {
-        restorePersistedWarning();
-        if (!dirty && hasAnsweredQuizSurface()) arm();
-        ensureSystemBackGuard();
-      }, { once: true });
-    } else if (!dirty) {
-      setTimeout(function () {
-        if (!dirty && hasAnsweredQuizSurface()) arm();
-        ensureSystemBackGuard();
-      }, 0);
+    // Restored ticks, disabled answered buttons and app resume never arm Quit.
+    // Protect the logical Back destination even when this visit is unchanged.
+    if (document.readyState !== "complete") {
+      window.addEventListener("load", ensureSystemBackGuard, { once: true });
+    } else {
+      setTimeout(ensureSystemBackGuard, 0);
     }
 
     window.EFP_QUIZ_PROGRESS_WARNING = {
