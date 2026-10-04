@@ -13,8 +13,8 @@
   var noResults = document.getElementById("noResults");
   if (!box || !menuList) return;
 
-  var WORKER_URL = new URL("search-worker.js?v=20260924casespace1", document.baseURI).href;
-  var LOGIC_URL = new URL("search-logic.js?v=20260924androidperf1", document.baseURI).href;
+  var WORKER_URL = new URL("search-worker.js?v=20261004rank1", document.baseURI).href;
+  var LOGIC_URL = new URL("search-logic.js?v=20261004rank1", document.baseURI).href;
 
   // Search the large indexes sequentially so a single query never makes
   // several 10–30 MB indexes parse at the same instant. Share the homepage
@@ -296,6 +296,9 @@
 
     function search(query) {
       var token = ++latestToken;
+      var key = "home:" + JSON.stringify(source) + "|" + query.toLowerCase().replace(/\s+/g, " ").trim();
+      var cached = typeof efCachedSearchResults === "function" ? efCachedSearchResults(key) : null;
+      if (cached) return Promise.resolve().then(function(){return token === latestToken ? cached : [];});
       return start().then(function () {
         if (token !== latestToken || !worker) return [];
         return new Promise(function (resolve, reject) {
@@ -304,7 +307,8 @@
           worker.postMessage({ type: "search", id: id, query: query });
         });
       }).then(function (rows) {
-        return token === latestToken ? (rows || []) : [];
+        if (token !== latestToken) return [];
+        return typeof efCachedSearchResults === "function" ? efCachedSearchResults(key, rows || []) : (rows || []);
       });
     }
 
@@ -418,6 +422,7 @@
       li.setAttribute("data-deepresult", "");
       li.setAttribute("data-bookfullresult", "");
       li.setAttribute("data-bookfullitem", "");
+      li.setAttribute("data-search-score", String(typeof hit.score === "number" ? hit.score : 10000));
 
       var a = document.createElement("a");
       a.href = homeSearchUrl(url);
@@ -438,7 +443,13 @@
       a.appendChild(span);
       a.appendChild(chevron);
       li.appendChild(a);
-      menuList.appendChild(li);
+      // Rank all book/mindmap sources together as they stream in. Keep their
+      // shared heading and exact routes; source load order adds no rank boost.
+      var siblings = menuList.querySelectorAll("li[data-bookfullitem]");
+      var before = Array.from(siblings).find(function (row) {
+        return Number(row.getAttribute("data-search-score")) > Number(li.getAttribute("data-search-score"));
+      });
+      if (before) menuList.insertBefore(li, before); else menuList.appendChild(li);
       added++;
     });
 

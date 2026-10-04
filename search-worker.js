@@ -1,4 +1,4 @@
-/* ExamFusion Prep fast background full-text search (v9).
+/* ExamFusion Prep bounded relevance search (v10).
  *
  * IMPORTANT: Large Original Practice / Crux indexes must NOT be normalized or
  * warmed in full during worker startup. The previous implementation warmed
@@ -6,7 +6,7 @@
  * results effectively never appear on slower browsers/WebViews.
  *
  * This worker loads the static index, posts ready immediately, then performs
- * a lightweight case-insensitive scan only when a query is submitted. The UI
+ * a candidate scan and bounded relevance selection only when queried. The UI
  * thread remains free because all heavy work stays inside the worker.
  *
  * Crux & Tricks note: its full-text index predates the PDF.js reader migration,
@@ -96,23 +96,6 @@
     }
     var base = String(url || "").split("#")[0];
     return base + "#" + anchor;
-  }
-
-  function containsAll(terms, body, head) {
-    var bodyOnly = true;
-    var positionSum = 0;
-    for (var i = 0; i < terms.length; i++) {
-      var p = body.indexOf(terms[i]);
-      if (p >= 0) {
-        positionSum += p;
-        continue;
-      }
-      bodyOnly = false;
-      p = head.indexOf(terms[i]);
-      if (p < 0) return null;
-      positionSum += 100000 + p;
-    }
-    return { bodyOnly: bodyOnly, positionSum: positionSum };
   }
 
   function wholePhrasePosition(text, phrase) {
@@ -269,7 +252,7 @@
     var normalizeUrl = typeof self.efNormalizeCruxSearchUrl === "function"
       ? self.efNormalizeCruxSearchUrl
       : function (value) { return String(value || "").replace(/^(?:\.\/)?Crux-Tricks\//, "/Crux-Tricks/"); };
-    var copy = { f: normalizeUrl("/Crux-Tricks/index.html"), t: hit.t, b: hit.b, x: hit.x };
+    var copy = { f: normalizeUrl("/Crux-Tricks/index.html"), t: hit.t, b: hit.b, x: hit.x, score: hit.score, matchType: hit.matchType };
     if (doc && doc.id) {
       copy.f = normalizeUrl("/Crux-Tricks/viewer.html?id=" + encodeURIComponent(String(doc.id)));
     }
@@ -310,88 +293,73 @@
   }
 
   function fastSnippetSearch(query) {
-    var parsed = queryTerms(query);
-    var terms = parsed.terms;
-    var phrase = parsed.phrase;
-    if (!terms.length || !Array.isArray(records)) return [];
-
+    var parsed = efRelevanceQuery(query);
+    if (!parsed.terms.length || !Array.isArray(records)) return [];
+    // Compile normalization-aware retrieval patterns once per query, rather
+    // than normalizing every rejected snippet just because it has an apostrophe.
+    var ignored = "[\\u200B-\\u200D\\u2060\\uFEFF'’‘`´\"]*";
+    var candidates = parsed.alternatives.map(function(choices) {
+      return choices.map(function(term) {
+        var pattern = Array.from(term).map(function(ch) {
+          if (ch === " ") return "[^a-z0-9\\u0900-\\u097f]+";
+          if (/[a-z]/.test(ch)) return "[" + ch + String.fromCharCode(ch.charCodeAt(0) + 0xFEE0) + "]";
+          if (/[0-9]/.test(ch)) return "[" + ch + "०१२३४५६७८९".charAt(Number(ch)) + String.fromCharCode(ch.charCodeAt(0) + 0xFEE0) + "]";
+          return efRegexEscape(ch);
+        }).join(ignored);
+        return {term:term,pattern:new RegExp(pattern)};
+      });
+    });
+    var limit = config.limit || 40, top = efTopSearchHits(limit);
     var prefix = config.sectionPrefix || null;
-    var scored = [];
-
-    // Keep the common scan cheap. Only retry with full Unicode/punctuation
-    // normalization (and finally joined words) when it found nothing.
-    function scan(normalized, compact) {
+    function scan(compact, fuzzy) {
       var sequence = 0;
-      var searchTerms = compact ? [phrase.replace(/ /g, "")] : terms;
-      var searchPhrase = compact ? searchTerms[0] : phrase;
       for (var i = 0; i < records.length; i++) {
         var group = records[i];
         if (!group || (prefix && String(group.f || "").indexOf(prefix) !== 0)) continue;
-        var headRaw = String(group.t || "") + " " + String(group.b || "");
-        var head = normalized ? normalizeQuery(headRaw) : headRaw.toLowerCase().replace(/\s+/g, " ");
-        if (compact) head = head.replace(/ /g, "");
+        var title = normalizeQuery(group.t), breadcrumb = normalizeQuery(group.b);
+        var head = title + " " + breadcrumb;
         var snippets = Array.isArray(group.x) ? group.x : [];
         var aliases = Array.isArray(group.a) ? group.a : [];
-
-        for (var j = 0; j < snippets.length; j++) {
-          var raw = String(snippets[j] == null ? "" : snippets[j]);
-          var visible = stripMarker(raw);
+        for (var j = 0; j < snippets.length; j++, sequence++) {
+          var raw = String(snippets[j] == null ? "" : snippets[j]), visible = stripMarker(raw);
+          var match;
           if (config.strictOcr) {
-            var strictScore = strictOcrScore(parsed, aliases[j] || "", visible);
-            if (strictScore === null) { sequence++; continue; }
-            scored.push({
-              score: strictScore,
-              sequence: sequence,
-              f: withAnchor(group.f, extractAnchor(raw)),
-              t: group.t,
-              b: group.b,
-              x: raw
-            });
-            sequence++;
-            continue;
+            var score = strictOcrScore(parsed, aliases[j] || "", visible);
+            if (score === null) continue;
+            match = {score: score, matchType: "exact"};
+          } else {
+            // Cheap substring candidate retrieval precedes expensive Unicode
+            // normalization/ranking. No second full normalized index is stored.
+            var cheap = visible.toLowerCase(), possible = compact || fuzzy;
+            if (!possible) {
+              possible = candidates.every(function(choices) {
+                return choices.some(function(candidate) {
+                  return cheap.indexOf(candidate.term) >= 0 || head.indexOf(candidate.term) >= 0 || candidate.pattern.test(cheap);
+                });
+              });
+              // Rare compatibility ligatures/circled characters still use the
+              // complete NFKC path; ordinary quote-bearing records do not.
+              if (!possible && /[\u2100-\u214f\u2460-\u24ff\ufb00-\ufb06]/.test(visible)) possible = true;
+            }
+            if (!possible) continue;
+            match = efRelevanceScore(parsed, normalizeQuery(visible), title, breadcrumb, compact, fuzzy);
+            if (!match) continue;
           }
-          var body = normalized ? normalizeQuery(visible) : visible.toLowerCase().replace(/\s+/g, " ");
-          if (compact) body = body.replace(/ /g, "");
-          var match = containsAll(searchTerms, body, head);
-          if (!match) { sequence++; continue; }
-
-          // Strongly prefer an exact query phrase in actual question/page text,
-          // then all query words in body text, then mixed body/title matches.
-          var phraseBody = searchPhrase ? body.indexOf(searchPhrase) : -1;
-          var phraseHead = searchPhrase ? head.indexOf(searchPhrase) : -1;
-          var score;
-          if (phraseBody >= 0) score = phraseBody * 0.00001;
-          else if (match.bodyOnly) score = 10 + match.positionSum * 0.000001;
-          else if (phraseHead >= 0) score = 20 + phraseHead * 0.00001;
-          else score = 30 + match.positionSum * 0.0000001;
-
-          scored.push({
-            score: score,
-            sequence: sequence,
-            f: withAnchor(group.f, extractAnchor(raw)),
-            t: group.t,
-            b: group.b,
-            x: raw
-          });
-          sequence++;
+          top.add({score: match.score, matchType: match.matchType, sequence: sequence,
+            f: withAnchor(group.f, extractAnchor(raw)), t: group.t, b: group.b, x: raw});
         }
       }
     }
-
     scan(false, false);
-    if (!scored.length && !config.strictOcr) scan(true, false);
-    if (!scored.length && !config.strictOcr && phrase.length > 2) scan(true, true);
-
-    scored.sort(function (a, b) { return a.score - b.score || a.sequence - b.sequence; });
-    var limit = config.limit || 40;
-    var out = [];
-    for (var k = 0; k < scored.length && k < limit; k++) {
-      out.push(routeCruxHit({ f: scored[k].f, t: scored[k].t, b: scored[k].b, x: scored[k].x }));
-    }
+    if (!top.size() && !config.strictOcr && parsed.phrase.length > 2) scan(true, false);
+    if (!top.size() && !config.strictOcr && config.fuzzy !== false && parsed.terms.some(function(term){return efAllowedEditDistance(term)>0;})) scan(false, true);
+    var out = top.sorted().map(function(hit) {
+      return routeCruxHit({f: hit.f, t: hit.t, b: hit.b, x: hit.x, score: hit.score, matchType: hit.matchType});
+    });
     if (isCruxSearch()) {
       var topics = cruxTopicSearch(query), merged = [], seen = {};
-      topics.concat(out).forEach(function (hit) {
-        var key = String(hit && hit.f || "") + "|" + String(hit && hit.t || "");
+      topics.concat(out).forEach(function(hit) {
+        var key = String(hit && hit.f || "") + "|" + String(hit && hit.x || "").charAt(0);
         if (!hit || seen[key]) return;
         seen[key] = true; merged.push(hit);
       });
@@ -412,8 +380,8 @@
     config = options || {};
     if (!config.indexUrl || !config.globalName) throw new Error("Incomplete search-worker configuration");
 
-    // For snippet mode, intentionally do not import/warm search-logic.js.
-    // The index itself is all this fast worker needs.
+    // Shared scoring is small and does not warm/normalize any records.
+    importScripts(config.logicUrl || "/search-logic.js?v=20261004rank1");
     importScripts(config.indexUrl);
     // Polity audit overlay
     if (config.globalName === "EF_ORIGINAL_PRACTICE_SNIPPET_INDEX") {
@@ -427,7 +395,6 @@
     // Keep compatibility for any non-snippet clients that use the shared worker.
     if (config.mode !== "snippet") {
       if (!config.logicUrl) throw new Error("Missing search logic URL");
-      importScripts(config.logicUrl);
       if (config.mapCompactContent) records = compactContentRecords(records);
     }
   }

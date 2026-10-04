@@ -206,15 +206,8 @@ function efBoundedEditDistance(a, b, maximum) {
 }
 
 function efFindSingleTermInPreparedText(field, term, allowFuzzy, allowCompact) {
-  var position = field.normalized.indexOf(term);
-  if (position !== -1) {
-    var before = position === 0 ? " " : field.normalized.charAt(position - 1);
-    var afterPosition = position + term.length;
-    var after = afterPosition >= field.normalized.length ? " " : field.normalized.charAt(afterPosition);
-    var exactWord = before === " " && after === " ";
-    var wordStart = before === " ";
-    return { score: exactWord ? -12 : (wordStart ? -5 : 0), position: position, word: term };
-  }
+  var literal = efRelevanceTerm(field.normalized, term);
+  if (literal) return {score: [-12, -5, 0][literal.quality], position: literal.position, word: term};
 
   if (allowCompact !== false) {
     var compactTerm = term.replace(/\s+/g, "");
@@ -322,35 +315,152 @@ function efMatchPreparedFields(terms, fields, allowFuzzy, allowCompact) {
   return total + Math.min(earliest, 999) * 0.001;
 }
 
+// Lower scores are better. Quality tiers are deliberately wider than field,
+// proximity and length boosts: an embedded substring cannot outrank a word.
+// This is local relevance ranking, not web authority/PageRank.
+function efRelevanceQuery(query) {
+  var phrase = efNormalizeSearchText(query), terms = efSearchTerms(query);
+  return { phrase: phrase, terms: terms, alternatives: terms.map(efSearchTermAlternatives) };
+}
+function efWholeSearchPosition(text, term) {
+  var from=0,p;
+  while((p=text.indexOf(term,from))>=0) {
+    var end=p+term.length;
+    if((p===0||text.charAt(p-1)===" ")&&(end===text.length||text.charAt(end)===" "))return p;
+    from=p+1;
+  }
+  return -1;
+}
+function efRelevanceTerm(text, term) {
+  var p=efWholeSearchPosition(text,term);
+  if(p>=0)return {quality:0,position:p};
+  var from=0;
+  while((p=text.indexOf(term,from))>=0) {if(p===0||text.charAt(p-1)===" ")return {quality:1,position:p};from=p+1;}
+  p=text.indexOf(term);
+  return p>=0?{quality:2,position:p}:null;
+}
+
+function efRelevanceScore(parsed, body, title, breadcrumb, allowCompact, allowFuzzy) {
+  var fields = [body, title, breadcrumb], quality = 0, allBody = true;
+  var questionEnd = body.search(/ (?:answer|explanation|उत्तर|व्याख्या) /);
+  var question = questionEnd < 0 ? body : body.slice(0, questionEnd);
+  var allQuestion = true, earliest = body.length, latest = 0;
+  for (var i = 0; i < parsed.terms.length; i++) {
+    var alternatives = parsed.alternatives[i], best = null;
+    for (var j = 0; j < fields.length; j++) {
+      for (var a = 0; a < alternatives.length; a++) {
+        var match = efRelevanceTerm(fields[j], alternatives[a]);
+        if (!match && allowCompact) {
+          var at = fields[j].replace(/ /g, "").indexOf(alternatives[a].replace(/ /g, ""));
+          if (at >= 0) match = { quality: 4, position: at };
+        }
+        if (!match && allowFuzzy) {
+          var fuzzy = efFindSingleTermInPreparedText({normalized: fields[j], compact: null, tokens: null}, alternatives[a], true, false);
+          if (fuzzy) match = {quality: 5, position: fuzzy.position};
+        }
+        if (!match) continue;
+        var q = Math.max(match.quality, a ? 3 : 0);
+        if (!best || q < best.quality || (q === best.quality && j < best.field)) {
+          best = {quality: q, position: match.position, field: j};
+        }
+        if (best && best.quality === 0 && best.field === 0) break;
+      }
+      if (best && best.quality === 0 && best.field === 0) break;
+    }
+    if (!best) return null;
+    quality = Math.max(quality, best.quality);
+    if (best.field !== 0) allBody = false;
+    if (efWholeSearchPosition(question, parsed.terms[i]) < 0) allQuestion = false;
+    if (best.field === 0) { earliest = Math.min(earliest, best.position); latest = Math.max(latest, best.position); }
+  }
+  var phrase = parsed.phrase, tier;
+  if (title === phrase) tier = 0;
+  else if (efWholeSearchPosition(question, phrase) >= 0) tier = 1;
+  else if (allQuestion) tier = 2;
+  else if (efWholeSearchPosition(body, phrase) >= 0) tier = 3;
+  else if (allBody) tier = 4;
+  else if (efWholeSearchPosition(title, phrase) >= 0) tier = 5;
+  else tier = 6;
+  // Saturated length/proximity signals avoid rewarding repeated keyword spam.
+  var proximity = allBody ? Math.min(20, Math.max(0, latest - earliest - phrase.length) / 20) : 20;
+  var length = Math.min(10, Math.log(1 + body.length) / 2);
+  return {score: quality * 1000 + tier * 50 + proximity + length + Math.min(earliest, 1000) / 10000,
+    matchType: ["exact", "prefix", "substring", "alias", "compact", "typo"][quality]};
+}
+
+// Bounded, deduplicating max-heap. Only K hits and their routing metadata are
+// retained, even for a query matching every question. Final output is stable.
+function efTopSearchHits(limit) {
+  var heap = [], locations = new Map();
+  function compare(a, b) { return a.score - b.score || a.sequence - b.sequence; }
+  function key(hit) {
+    var raw = String(hit.x || ""), code = raw.charCodeAt(0);
+    // PDF pages and Original Practice questions carry a private-use marker.
+    // Hash/query anchors are already part of f for ordinary HTML questions.
+    return String(hit.f || "") + (code >= 0xE000 && code <= 0xF8FF ? "|" + code : "");
+  }
+  function swap(a, b) { var t = heap[a]; heap[a] = heap[b]; heap[b] = t; locations.set(heap[a]._key, a); locations.set(heap[b]._key, b); }
+  function down(i) { while (true) { var l=i*2+1,r=l+1,w=i; if(l<heap.length&&compare(heap[l],heap[w])>0)w=l; if(r<heap.length&&compare(heap[r],heap[w])>0)w=r; if(w===i)break;swap(i,w);i=w; } }
+  return {
+    add: function (hit) {
+      var k=key(hit), at=locations.get(k);
+      if (at !== undefined) { if(compare(hit,heap[at])>=0)return; hit._key=k;heap[at]=hit;down(at);return; }
+      hit._key=k;
+      if(heap.length<limit) { var i=heap.length;heap.push(hit);locations.set(k,i);while(i>0){var p=(i-1)>>1;if(compare(heap[i],heap[p])<=0)break;swap(i,p);i=p;} }
+      else if(compare(hit,heap[0])<0) { locations.delete(heap[0]._key);heap[0]=hit;locations.set(k,0);down(0); }
+    },
+    size: function () { return heap.length; },
+    sorted: function () { return heap.slice().sort(compare).map(function (hit) { delete hit._key; return hit; }); }
+  };
+}
+
+// Cache only small result lists, never another copy of the source index.
+// Config/revision is part of the key; requests still keep cancellation guards.
+var efSearchResultCache = new Map(), efSearchResultCacheBytes = 0;
+function efCachedSearchResults(key, rows) {
+  if (arguments.length === 1) {
+    var item = efSearchResultCache.get(key);
+    if (!item) return null;
+    efSearchResultCache.delete(key);efSearchResultCache.set(key,item);
+    return item.rows;
+  }
+  if (!rows || !rows.length) return rows;
+  var bytes = JSON.stringify(rows).length * 2;
+  if (bytes > 131072) return rows;
+  var old = efSearchResultCache.get(key);
+  if(old) {efSearchResultCacheBytes-=old.bytes;efSearchResultCache.delete(key);}
+  efSearchResultCache.set(key,{rows:rows,bytes:bytes});efSearchResultCacheBytes+=bytes;
+  while(efSearchResultCacheBytes>262144||efSearchResultCache.size>32) {
+    var oldest=efSearchResultCache.keys().next().value;
+    efSearchResultCacheBytes-=efSearchResultCache.get(oldest).bytes;efSearchResultCache.delete(oldest);
+  }
+  return rows;
+}
+
 function efSearchRecords(query, records, options) {
   options = options || {};
-  var limit = options.limit || 40;
-  var fieldNames = options.fields || ["title", "breadcrumb", "text"];
-  var terms = efSearchTerms(query);
-  var normalizedPhrase = efNormalizeSearchText(query);
-  if (!terms.length || !records) return [];
-
-  function collect(allowFuzzy, allowCompact) {
+  var limit = options.limit || 40, fields = options.fields || ["title", "breadcrumb", "text"];
+  var parsed = efRelevanceQuery(query);
+  if (!parsed.terms.length || !records) return [];
+  function collect(compact, fuzzy) {
     var found = [];
     for (var i = 0; i < records.length; i++) {
-      var fields = efPreparedRecordFields(records[i], fieldNames);
-      var score = efMatchPreparedFields(terms, fields, allowFuzzy, allowCompact);
-      if (score !== null) {
-        score += efSearchPhraseBonus(normalizedPhrase, fields, options.phraseWeights, true);
-        found.push({ index: i, score: score, record: records[i] });
-      }
+      var record = records[i], prepared = efPreparedRecordFields(record, fields);
+      var title = efNormalizeSearchText(record.title || record.t || prepared[0].normalized);
+      var body = efNormalizeSearchText(record.text || record.x || prepared.map(function(f){return f.normalized;}).join(" "));
+      var breadcrumb = efNormalizeSearchText(record.breadcrumb || record.b || "");
+      var match = efRelevanceScore(parsed, body, title, breadcrumb, compact, fuzzy);
+      if(match) found.push({record: record, score: match.score, index: i, matchType: match.matchType});
     }
     return found;
   }
-
-  var scored = collect(false, false);
-  if (scored.length === 0 && options.compact !== false) scored = collect(false, true);
-  if (scored.length === 0 && options.fuzzy !== false) scored = collect(true, false);
-  scored.sort(function (a, b) { return a.score - b.score || a.index - b.index; });
-
-  var output = [];
-  for (var k = 0; k < scored.length && k < limit; k++) output.push(scored[k].record);
-  return output;
+  var scored=collect(false,false);
+  if(!scored.length&&options.compact!==false)scored=collect(true,false);
+  if(!scored.length&&options.fuzzy!==false)scored=collect(false,true);
+  scored.sort(function(a,b){return a.score-b.score||a.index-b.index;});
+  return scored.slice(0,limit).map(function(item){
+    return Object.assign({},item.record,{score:item.score,matchType:item.matchType});
+  });
 }
 
 function efTextMatches(query, text, allowFuzzy) {
@@ -366,7 +476,7 @@ function efSearchRank(query, options) {
   var excludeTitleMatches = !!options.excludeTitleMatches;
   var limit = options.limit || 40;
   var terms = efSearchTerms(query);
-  var normalizedPhrase = efNormalizeSearchText(query);
+  var parsed = efRelevanceQuery(query);
   if (!terms.length || typeof SEARCH_INDEX === "undefined") return [];
   var hasContent = typeof CONTENT_INDEX !== "undefined";
 
@@ -381,15 +491,14 @@ function efSearchRank(query, options) {
       if (excludeTitleMatches &&
           efMatchPreparedFields(terms, titleFields, allowFuzzy, allowCompact) !== null) continue;
 
-      var fields = titleFields.concat([
-        cachedFields[2],
-        efPrepareSearchText(hasContent ? (CONTENT_INDEX[record.url] || "") : "")
-      ]);
-      var score = efMatchPreparedFields(terms, fields, allowFuzzy, allowCompact);
-      if (score !== null) {
-        score += efSearchPhraseBonus(normalizedPhrase, fields, [300, 300, 125, 65], true);
-        score += efSearchSectionIntentBonus(query, record);
-        found.push({ index: i, score: score, record: record });
+      var title = cachedFields[0].normalized + " " + cachedFields[1].normalized;
+      var content = efNormalizeSearchText(hasContent ? (CONTENT_INDEX[record.url] || "") : "");
+      var match = efRelevanceScore(parsed, content, title.trim(), cachedFields[2].normalized, allowCompact, allowFuzzy);
+      if (match) {
+        // Preserve an exact English OR Hindi title as the strongest title hit.
+        if (cachedFields[0].normalized === parsed.phrase || cachedFields[1].normalized === parsed.phrase) match.score = 0;
+        var intent = Math.max(-40, efSearchSectionIntentBonus(query, record));
+        found.push({index:i,score:match.score+intent,record:record});
       }
     }
     return found;
@@ -492,11 +601,11 @@ function efSnippetSearch(query, options) {
   var excludeTitleMatches = !!options.excludeTitleMatches;
   var limit = options.limit || 40;
   var terms = efSearchTerms(query);
-  var normalizedPhrase = efNormalizeSearchText(query);
+  var parsed = efRelevanceQuery(query);
   if (!terms.length || typeof EF_SNIPPET_INDEX === "undefined") return [];
 
   function collect(allowFuzzy, allowCompact) {
-    var found = [];
+    var found = efTopSearchHits(limit);
     var sequence = 0;
     for (var i = 0; i < EF_SNIPPET_INDEX.length; i++) {
       var group = EF_SNIPPET_INDEX[i];
@@ -509,12 +618,11 @@ function efSnippetSearch(query, options) {
           efMatchPreparedFields(terms, [titleField], allowFuzzy, allowCompact) !== null) continue;
 
       for (var j = 0; j < group.x.length; j++) {
-        var fields = [preparedGroup.snippets[j], titleField, breadcrumbField];
-        var score = efMatchPreparedFields(terms, fields, allowFuzzy, allowCompact);
-        if (score !== null) {
-          score += efSearchPhraseBonus(normalizedPhrase, fields, [175, 230, 105], true);
-          found.push({
-            score: score,
+        var match = efRelevanceScore(parsed, efNormalizeSearchText(efFallbackStripMarker(group.x[j])), titleField.normalized, breadcrumbField.normalized, allowCompact, allowFuzzy);
+        if (match) {
+          found.add({
+            score: match.score,
+            matchType: match.matchType,
             sequence: sequence,
             f: efFallbackWithAnchor(group.f, efFallbackExtractAnchor(group.x[j])),
             t: group.t,
@@ -525,7 +633,7 @@ function efSnippetSearch(query, options) {
         sequence++;
       }
     }
-    return found;
+    return found.sorted();
   }
 
   var scored = collect(false, false);
@@ -535,7 +643,7 @@ function efSnippetSearch(query, options) {
 
   var output = [];
   for (var i = 0; i < scored.length && i < limit; i++) {
-    output.push({ f: scored[i].f, t: scored[i].t, b: scored[i].b, x: scored[i].x });
+    output.push({ f: scored[i].f, t: scored[i].t, b: scored[i].b, x: scored[i].x, score: scored[i].score, matchType: scored[i].matchType });
   }
   return output;
 }
@@ -667,13 +775,14 @@ function efFallbackWithAnchor(url, anchor) {
 
 function efFallbackSnippetSearchAsync(query, records, options) {
   options = options || {};
-  var parsed = efFallbackQueryTerms(query);
+  var parsed = efRelevanceQuery(query);
   var terms = parsed.terms;
   var phrase = parsed.phrase;
   if (!terms.length || !Array.isArray(records)) return Promise.resolve([]);
 
   var prefix = options.sectionPrefix || null;
-  var scored = [];
+  var top = efTopSearchHits(options.limit || 40);
+  var compact = false, fuzzy = false;
   var i = 0, sequence = 0;
   var limit = options.limit || 40;
 
@@ -683,7 +792,7 @@ function efFallbackSnippetSearchAsync(query, records, options) {
       while (i < records.length && Date.now() - started < 12) {
         var group = records[i++];
         if (!group || (prefix && String(group.f || "").indexOf(prefix) !== 0)) continue;
-        var head = (String(group.t || "") + " " + String(group.b || "")).toLowerCase();
+        var title = efNormalizeSearchText(group.t), breadcrumb = efNormalizeSearchText(group.b);
         var snippets = Array.isArray(group.x) ? group.x : [];
         var aliases = Array.isArray(group.a) ? group.a : [];
 
@@ -693,7 +802,7 @@ function efFallbackSnippetSearchAsync(query, records, options) {
           if (options.strictOcr) {
             var strictScore = efFallbackStrictOcrScore(parsed, aliases[j] || "", visible);
             if (strictScore === null) { sequence++; continue; }
-            scored.push({
+            top.add({
               score: strictScore,
               sequence: sequence,
               f: efFallbackWithAnchor(group.f, efFallbackExtractAnchor(raw)),
@@ -704,27 +813,12 @@ function efFallbackSnippetSearchAsync(query, records, options) {
             sequence++;
             continue;
           }
-          var body = visible.toLowerCase();
-          var all = true, bodyOnly = true, positionSum = 0;
-          for (var k = 0; k < terms.length; k++) {
-            var pos = body.indexOf(terms[k]);
-            if (pos >= 0) { positionSum += pos; continue; }
-            bodyOnly = false;
-            pos = head.indexOf(terms[k]);
-            if (pos < 0) { all = false; break; }
-            positionSum += 100000 + pos;
-          }
-          if (!all) { sequence++; continue; }
-
-          var phraseBody = phrase ? body.indexOf(phrase) : -1;
-          var phraseHead = phrase ? head.indexOf(phrase) : -1;
-          var score;
-          if (phraseBody >= 0) score = phraseBody * 0.00001;
-          else if (bodyOnly) score = 10 + positionSum * 0.000001;
-          else if (phraseHead >= 0) score = 20 + phraseHead * 0.00001;
-          else score = 30 + positionSum * 0.0000001;
-          scored.push({
+          var match = efRelevanceScore(parsed, efNormalizeSearchText(visible), title, breadcrumb, compact, fuzzy);
+          if (!match) { sequence++; continue; }
+          var score = match.score;
+          top.add({
             score: score,
+            matchType: match.matchType,
             sequence: sequence,
             f: efFallbackWithAnchor(group.f, efFallbackExtractAnchor(raw)),
             t: group.t,
@@ -738,11 +832,13 @@ function efFallbackSnippetSearchAsync(query, records, options) {
         setTimeout(step, 0);
         return;
       }
-      scored.sort(function (a, b) { return a.score - b.score || a.sequence - b.sequence; });
-      var out = [];
-      for (var n = 0; n < scored.length && n < limit; n++) {
-        out.push({ f: scored[n].f, t: scored[n].t, b: scored[n].b, x: scored[n].x });
+      if (!top.size() && !options.strictOcr) {
+        if (!compact && !fuzzy && phrase.length > 2) { compact=true;i=0;sequence=0;setTimeout(step,0);return; }
+        if (!fuzzy && options.fuzzy !== false && terms.some(function(term){return efAllowedEditDistance(term)>0;})) { compact=false;fuzzy=true;i=0;sequence=0;setTimeout(step,0);return; }
       }
+      var out = top.sorted().map(function(hit) {
+        return {f:hit.f,t:hit.t,b:hit.b,x:hit.x,score:hit.score,matchType:hit.matchType};
+      });
       resolve(out);
     }
     step();
@@ -919,8 +1015,12 @@ function efCreateSearchWorker(options) {
     });
   }
 
+  var cachePrefix = JSON.stringify(options) + "|";
   function search(query) {
     var token = ++latestSearchToken;
+    var cacheKey = cachePrefix + efNormalizeSearchText(query);
+    var cached = efCachedSearchResults(cacheKey);
+    if (cached) return Promise.resolve().then(function(){return token === latestSearchToken ? cached : [];});
     if (!canUseWorker() || workerFailed) {
       // Homepage indexes can exceed 30 MB. If a WebView cannot start a
       // worker, injecting those indexes into the page freezes navigation.
@@ -934,6 +1034,8 @@ function efCreateSearchWorker(options) {
         pending[id] = { resolve: resolve, reject: reject };
         worker.postMessage({ type: "search", id: id, query: query });
       });
+    }).then(function (rows) {
+      return token === latestSearchToken ? efCachedSearchResults(cacheKey, rows) : [];
     }).catch(function (error) {
       if (error && error.efCancelled) return [];
       workerFailed = true;

@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261004pagehtml1";
+const CACHE_VERSION = "efp-pwa-20261004rank1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261001homesearchapp2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -44,11 +44,10 @@ const APP_SHELL = [
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js",
   "/section-search-ui.js?v=20261001searchreturn2",
-  "/search-worker.js?v=20261001polity22-583a40e433b0",
-  "/search-index-main.js",
+  "/search-worker.js?v=20261004rank1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261001searchreturn2",
-  "/homepage-fulltext-search.js?v=20261003historymindmaps1",
+  "/homepage-fulltext-search.js?v=20261004rank1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
@@ -304,6 +303,52 @@ async function staleWhileRevalidate(event, allowOpaque) {
   return new Response("", { status: 503, statusText: "Offline" });
 }
 
+// Store one compressed copy of each large index, regardless of the cache
+// version strings used by older section shells. Content is lossless; workers
+// receive the original JavaScript bytes. Unsupported browsers keep plain data.
+async function readSearchIndex(response) {
+  if (!response || response.headers.get("x-efp-search-compression") !== "gzip") return response;
+  if (typeof DecompressionStream !== "function") return null;
+  const headers = new Headers(response.headers);
+  headers.delete("x-efp-search-compression");headers.delete("content-length");
+  return new Response(response.body.pipeThrough(new DecompressionStream("gzip")), {status: 200, headers});
+}
+async function storeSearchIndex(cache, key, response, revision) {
+  const headers = new Headers(response.headers);
+  headers.delete("content-length");headers.delete("content-encoding");
+  headers.set("x-efp-search-revision", revision);
+  headers.set("x-efp-search-cached-at", String(Date.now()));
+  let body = response.body;
+  if (typeof CompressionStream === "function" && typeof DecompressionStream === "function") {
+    body = body.pipeThrough(new CompressionStream("gzip"));
+    headers.set("x-efp-search-compression", "gzip");
+  }
+  await cache.put(key, new Response(body, {status:200,headers}));
+}
+async function searchIndexAsset(event) {
+  const request = event.request, url = new URL(request.url);
+  const key = new Request(url.origin + url.pathname), cache = await caches.open(CACHE_VERSION);
+  const cached = await cache.match(key), revision = url.search;
+  // Short freshness window avoids repeated downloads/import requests while
+  // typing. A changed revision bypasses it; offline still uses the last copy.
+  if (cached && cached.headers.get("x-efp-search-revision") === revision &&
+      Date.now() - Number(cached.headers.get("x-efp-search-cached-at")) < 300000) {
+    const served = await readSearchIndex(cached);
+    if (served) return served;
+  }
+  try {
+    const response = await fetch(request, {cache:"no-cache"});
+    if (response.ok && (response.type === "basic" || response.type === "cors" || response.type === "default")) {
+      event.waitUntil(storeSearchIndex(cache,key,response.clone(),revision).catch(() => {}));
+      return response;
+    }
+    const fallback = await readSearchIndex(cached);
+    return fallback || response;
+  } catch (_) {
+    return (await readSearchIndex(cached)) || new Response("", {status:503,statusText:"Offline"});
+  }
+}
+
 async function freshCoreAsset(request) {
   const cache = await caches.open(CACHE_VERSION);
   try {
@@ -382,6 +427,11 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  if (/\/(?:search-snippets-[^/]+|search-index-main)\.js$/.test(url.pathname)) {
+    event.respondWith(searchIndexAsset(event));
+    return;
+  }
+
   // Navigation chrome and Original Practice shared assets change often;
   // never let an old app-shell copy win on a normal refresh.
   if (url.pathname === "/home-nav.js" ||
@@ -399,6 +449,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/mindmap-reader.css" ||
       url.pathname === "/progress.js" ||
       url.pathname === "/search-logic.js" ||
+      url.pathname === "/search-worker.js" ||
       url.pathname === "/section-search-ui.js" ||
       url.pathname === "/homepage-search-ui.js" ||
       url.pathname === "/homepage-fulltext-search.js" ||

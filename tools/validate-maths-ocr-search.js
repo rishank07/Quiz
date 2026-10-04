@@ -71,7 +71,9 @@ const context = {
 context.self = context;
 context.window = context;
 context.importScripts = function (url) {
-  if (url.includes("crux-search-route.js")) {
+  if (url.includes("search-logic.js")) {
+    vm.runInContext(fs.readFileSync(path.join(root, "search-logic.js"), "utf8"), context);
+  } else if (url.includes("crux-search-route.js")) {
     vm.runInContext(routeCode, context);
   } else if (url.includes("crux-manifest.js")) {
     context.EF_CRUX_DOCS = [
