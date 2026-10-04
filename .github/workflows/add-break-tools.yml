@@ -8,6 +8,7 @@ on:
       - "chess.html"
       - "radio-launch.js"
       - "tools/add-break-tools.py"
+      - "tools/preserve-maintenance-cache.py"
       - "tools/fix-radio-browser-flow.py"
       - "tools/fix-radio-browser-launch.py"
       - "tools/reorder-radio-playlist.py"
@@ -46,6 +47,7 @@ jobs:
       - name: Validate installers
         run: |
           python -m py_compile tools/add-break-tools.py
+          python -m py_compile tools/preserve-maintenance-cache.py
           python -m py_compile tools/fix-radio-browser-flow.py
           python -m py_compile tools/fix-radio-browser-launch.py
           python -m py_compile tools/reorder-radio-playlist.py
@@ -59,6 +61,7 @@ jobs:
           python -m py_compile tools/fix-chess-captured-pieces.py
       - name: Maintain break tools, analytics, chess engine and PWA cache
         run: |
+          python tools/preserve-maintenance-cache.py snapshot "$RUNNER_TEMP/efp-break-cache.json"
           python tools/install-stockfish-assets.py
           python tools/add-break-tools.py
           python tools/fix-radio-browser-flow.py
@@ -80,8 +83,9 @@ jobs:
           # Let users inspect earlier chess positions without changing the live game.
           python tools/fix-chess-review-mode.py
           # Show which pieces You/Computer captured; also follows move review position.
-          # Run last so this feature owns the final PWA cache bump.
+          # Install captured pieces last, then reconcile the legacy cache bumps.
           python tools/fix-chess-captured-pieces.py
+          python tools/preserve-maintenance-cache.py restore "$RUNNER_TEMP/efp-break-cache.json"
       - name: Commit generated integration changes
         shell: bash
         run: |
