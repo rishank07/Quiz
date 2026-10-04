@@ -12,6 +12,7 @@
   var intentionalHome = false;
   var replayingSavedAnswer = false;
   var SEARCH_RETURN_PREFIX = "efp_search_return_v1:";
+  var HOME_RESULTS_KEY = "efp_home_search_results_v1";
   var resumedPage = null;
   var resumedSearchView = null;
   var searchViewApplied = false;
@@ -143,17 +144,28 @@
       (history.state && history.state.efpSearchReturnToken) || ""; } catch (_) { return ""; }
   }
 
+  function validHomeResults(snapshot, trip) {
+    try {
+      if (!trip || !isHomePath(new URL(trip.source, location.origin).pathname) || !snapshot || typeof snapshot.html !== "string") return false;
+      var input = trip.inputs.find(function (field) { return field.id === "searchBox"; });
+      function key(value) { return String(value || "").normalize("NFKC").toLowerCase().replace(/\s+/g, " ").trim(); }
+      return input && key(input.value) && key(snapshot.query) === key(input.value);
+    } catch (_) { return false; }
+  }
+
   function captureSearchState(url) {
     if (!isInstalledAppContext()) return null;
-    var token = searchToken(url), trip = null, view = null;
+    var token = searchToken(url), trip = null, view = null, homeResults = null;
     try {
       trip = safeParse(sessionStorage.getItem(SEARCH_RETURN_PREFIX + token), null);
       if (!validSearchTrip(trip, token)) trip = null;
+      homeResults = safeParse(sessionStorage.getItem(HOME_RESULTS_KEY), null);
+      if (!validHomeResults(homeResults, trip)) homeResults = null;
       var adapter = window.EFP_PDF_SEARCH_CONTEXT || window.EFP_MINDMAP_SEARCH_CONTEXT || window.EFP_SEARCH_CONTEXT;
       if (resumedSearchView && !searchViewApplied) view = resumedSearchView;
       else if (adapter && typeof adapter.snapshot === "function") view = adapter.snapshot();
     } catch (_) {}
-    return { trip: trip, view: view || resumedSearchView };
+    return { trip: trip, view: view || resumedSearchView, homeResults: homeResults };
   }
 
   function restoreSearchTrip(saved) {
@@ -161,6 +173,11 @@
     var trip = saved.searchState.trip, token = searchToken(saved.url);
     if (!validSearchTrip(trip, token)) return;
     try { sessionStorage.setItem(SEARCH_RETURN_PREFIX + token, JSON.stringify(trip)); } catch (_) {}
+    // Homepage results use their own renderer snapshot, outside #results.
+    // Restore it before either the leaf or Home scripts can run after a kill.
+    if (validHomeResults(saved.searchState.homeResults, trip)) {
+      try { sessionStorage.setItem(HOME_RESULTS_KEY, JSON.stringify(saved.searchState.homeResults)); } catch (_) {}
+    }
   }
 
   function restoreSearchScroll() {

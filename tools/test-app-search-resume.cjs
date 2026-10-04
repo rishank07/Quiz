@@ -3,6 +3,8 @@ const {JSDOM,VirtualConsole}=require(process.env.EFP_TEST_JSDOM||'jsdom');
 const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('assert/strict');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8'),delay=ms=>new Promise(r=>setTimeout(r,ms));
 const SESSION='efp_app_session_v1',PENDING='efp_app_resume_pending_v1',TRIP='efp_search_return_v1:test';
+const HOME_RESULTS='efp_home_search_results_v1';
+const homeResults={query:'Pakistan',html:'<li data-deepresult="1"><a href="/Mind%20Maps/sample.html#one">Pakistan first</a></li><li data-deepresult="1"><a href="/Mind%20Maps/sample.html#two">Pakistan second</a></li>',filter:'mindmaps',pages:2,scrollTop:65};
 const trip={token:'test',source:'https://examfusionprep.com/?source=windows-pwa',inputs:[{id:'searchBox',value:'Pakistan'}],filters:[],results:[{index:0,html:'<a href="/practice.html">Saved match</a>',view:{hidden:false,className:null,style:null},scroll:0}],presentation:[]};
 function create(html,url,local={},session={},installed=true){
  const dom=new JSDOM(html,{url:'https://examfusionprep.com'+url,runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window,scrolls=[];
@@ -29,15 +31,16 @@ async function practice(local={},session={[TRIP]:JSON.stringify(trip)},installed
  return p;
 }
 (async()=>{
- const first=await practice();first.w.document.querySelector('.efp-context-next').click();await delay(70);first.w.document.querySelector('.efp-context-explanation').click();await delay(60);
+ const first=await practice({}, {[TRIP]:JSON.stringify(trip),[HOME_RESULTS]:JSON.stringify(homeResults)});first.w.localStorage.setItem('efp_home_search_query_v1','Pakistan');first.w.document.querySelector('.efp-context-next').click();await delay(70);first.w.document.querySelector('.efp-context-explanation').click();await delay(60);
  Object.defineProperty(first.w,'scrollY',{value:735});first.w.EFP_APP_SESSION.save();
  const saved=JSON.parse(first.w.localStorage.getItem(SESSION)),local=first.local();
- assert(saved.searchState.view.revealed.length);assert.equal(saved.searchState.trip.token,'test');assert.equal(first.run('state.score.attempted'),0);
+ assert(saved.searchState.view.revealed.length);assert.equal(saved.searchState.trip.token,'test');assert.deepEqual(saved.searchState.homeResults,homeResults);assert.equal(first.run('state.score.attempted'),0);
  first.dom.window.close();
  // Fresh sessionStorage, as after a full Android/Windows process recreation.
  for(const late of [false,true]){
   const resumed=await practice(local,{[PENDING]:JSON.stringify(saved)},true,late);await delay(760);
   assert(resumed.w.sessionStorage.getItem(TRIP));assert.equal(resumed.w.document.querySelector('.efp-context-next').textContent,'2/2 ↓');
+  assert.deepEqual(JSON.parse(resumed.w.sessionStorage.getItem(HOME_RESULTS)),homeResults);
   assert.equal(resumed.w.document.querySelector('#exp-1 mark').textContent,'Pakistan');assert(resumed.w.document.querySelector('#exp-1').getClientRects().length);
   assert.equal(resumed.run('state.score.attempted'),0);assert.equal(resumed.w.document.querySelectorAll('.option-btn.answered').length,0);assert.equal(resumed.scrolls.at(-1),735);
   resumed.w.document.querySelector('.efp-context-dismiss').click();await delay(40);resumed.w.EFP_APP_SESSION.save();
@@ -47,6 +50,16 @@ async function practice(local={},session={[TRIP]:JSON.stringify(trip)},installed
   assert.equal(again.run('state.score.attempted'),0);again.dom.window.close();resumed.dom.window.close();
  }
  console.log('PASS real Original Practice cold reload: selected result, explanation highlight, reading position and zero attempts; dismissed context stays cleared with early/late app scripts');
+ // Run the actual homepage renderers after cold hydration, not just a #results stub.
+ const coldLeaf=await practice(local,{[PENDING]:JSON.stringify(saved)});
+ const home=create(read('index.html'),'/?source=windows-pwa&efSearchRestore=test',coldLeaf.local(),{[TRIP]:coldLeaf.w.sessionStorage.getItem(TRIP),[HOME_RESULTS]:coldLeaf.w.sessionStorage.getItem(HOME_RESULTS)});
+ let workers=0;home.w.Worker=class{constructor(){workers++;throw new Error('Restored results must not restart workers')}};
+ home.run(read('search-logic.js'));home.w.document.querySelectorAll('script').forEach(s=>{if(!s.src&&!/json/i.test(s.type))home.run(s.textContent)});
+ home.run(read('app-session.js'));home.run(read('homepage-fulltext-search.js'));home.run(read('homepage-search-ui.js'));home.run(read('back-nav.js'));await delay(160);
+ assert.equal(home.w.document.getElementById('searchBox').value,'Pakistan');assert.equal(home.w.document.querySelectorAll('li[data-deepresult]').length,2);
+ assert.equal(home.w.document.querySelector('[data-search-filter="mindmaps"]').getAttribute('aria-selected'),'true');assert.equal(workers,0);
+ assert(!/Searching|No matching/.test(home.w.document.getElementById('efSearchStatus').textContent));home.dom.window.close();coldLeaf.dom.window.close();
+ console.log('PASS actual homepage after cold return: original cards and selected filter restored without a new worker search');
  const interacting=await practice(local,{[PENDING]:JSON.stringify(saved)});
  interacting.w.dispatchEvent(new interacting.w.Event('pointerdown'));const scrollCount=interacting.scrolls.length;await delay(740);
  assert.equal(interacting.scrolls.length,scrollCount,'Resume timers must not override the learner after interaction');interacting.dom.window.close();

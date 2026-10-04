@@ -149,6 +149,8 @@ for (const [name, home, surface] of surfaces.slice(0, 3)) {
 for (const [name, home, surface] of surfaces.slice(0, 3)) {
   for (const dismissed of [false, true]) {
     const t = trip(home, surface), leaf = page(t.url, surface, t.source.session, t.source.local);
+    const homeRows = {query:'ancient history',html:'<li data-deepresult="1"><a href="/practice.html">Ancient match</a></li>',filter:'practice',pages:2,scrollTop:65};
+    leaf.session.setItem('efp_home_search_results_v1',JSON.stringify(homeRows));
     const token = new URL(t.url).searchParams.get('efSearchReturn');
     const view = { kind:'html', token, selection:'q3', revealed:dismissed?[]:['q3'], dismissed };
     leaf.run(app); leaf.run(back); leaf.flush();
@@ -156,9 +158,11 @@ for (const [name, home, surface] of surfaces.slice(0, 3)) {
     leaf.w.scrollY = 735; leaf.w.dispatchEvent(event('pagehide'));
     const saved = JSON.parse(leaf.local.getItem(SESSION));
     assert.equal(saved.searchState.trip.token, token);assert.deepEqual(saved.searchState.view, view);
+    assert.deepEqual(saved.searchState.homeResults,homeRows);
     const fresh = storage(), launch = page(home, surface, fresh, leaf.local);launch.run(app);
     assert.equal(launch.w.navigation, leaf.w.location.href);
     assert(fresh.getItem('efp_search_return_v1:'+token), 'Cold launch must rehydrate the original search snapshot');
+    assert.deepEqual(JSON.parse(fresh.getItem('efp_home_search_results_v1')),homeRows,'Homepage cards/filter/limit must survive empty sessionStorage');
     const resumed = page(launch.w.navigation, surface, fresh, leaf.local);resumed.run(app);resumed.run(back);resumed.flush();
     assert.deepEqual(JSON.parse(JSON.stringify(resumed.w.EFP_APP_SESSION.getSearchState('html'))), view);
     resumed.click(resumed.button);
