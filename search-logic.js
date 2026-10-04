@@ -424,7 +424,7 @@ function efCachedSearchResults(key, rows) {
     efSearchResultCache.delete(key);efSearchResultCache.set(key,item);
     return item.rows;
   }
-  if (!rows || !rows.length) return rows;
+  if (!Array.isArray(rows)) return rows;
   var bytes = JSON.stringify(rows).length * 2;
   if (bytes > 131072) return rows;
   var old = efSearchResultCache.get(key);
@@ -917,6 +917,7 @@ function efCreateSearchWorker(options) {
 
   function rejectPending(error) {
     Object.keys(pending).forEach(function (id) {
+      clearTimeout(pending[id].timer);
       pending[id].reject(error);
       delete pending[id];
     });
@@ -951,7 +952,7 @@ function efCreateSearchWorker(options) {
         try { worker.terminate(); } catch (_) {}
         worker = null;
         reject(new Error("Search worker startup timed out"));
-      }, 12000);
+      }, options.startupTimeout || 60000);
 
       cancelStartup = function () {
         if (settled) return;
@@ -968,6 +969,7 @@ function efCreateSearchWorker(options) {
           return;
         }
         if (message.type === "result" && pending[message.id]) {
+          clearTimeout(pending[message.id].timer);
           pending[message.id].resolve(message.results || []);
           delete pending[message.id];
           return;
@@ -975,6 +977,7 @@ function efCreateSearchWorker(options) {
         if (message.type === "error") {
           var error = new Error(message.message || "Search worker failed");
           if (message.id && pending[message.id]) {
+            clearTimeout(pending[message.id].timer);
             pending[message.id].reject(error);
             delete pending[message.id];
           } else if (!settled) {
@@ -1021,6 +1024,13 @@ function efCreateSearchWorker(options) {
   }
 
   var cachePrefix = JSON.stringify(options) + "|";
+  function reportFailure(query) {
+    if (!managedSection && typeof window !== "undefined" && typeof CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("efp-search-state", {detail:{
+        phase:"source-error",query:query,source:options.indexUrl
+      }}));
+    }
+  }
   function search(query) {
     query = efNormalizeSearchText(query);
     var token = ++latestSearchToken;
@@ -1030,7 +1040,7 @@ function efCreateSearchWorker(options) {
     if (!canUseWorker() || workerFailed) {
       // Homepage indexes can exceed 30 MB. If a WebView cannot start a
       // worker, injecting those indexes into the page freezes navigation.
-      if (options.workerOnly) return Promise.resolve([]);
+      if (options.workerOnly) { reportFailure(query); return Promise.resolve([]); }
       return fallbackSearch(query).then(function (rows) { return token === latestSearchToken ? rows : []; });
     }
     return startWorker().then(function () {
@@ -1038,6 +1048,11 @@ function efCreateSearchWorker(options) {
       return new Promise(function (resolve, reject) {
         var id = nextId++;
         pending[id] = { resolve: resolve, reject: reject };
+        pending[id].timer = setTimeout(function(){
+          if (!pending[id]) return;
+          delete pending[id];
+          reject(new Error("Search worker response timed out"));
+        }, options.searchTimeout || 30000);
         worker.postMessage({ type: "search", id: id, query: query });
       });
     }).then(function (rows) {
@@ -1045,6 +1060,7 @@ function efCreateSearchWorker(options) {
     }).catch(function (error) {
       if (error && error.efCancelled) return [];
       workerFailed = true;
+      reportFailure(query);
       if (options.workerOnly) return [];
       return fallbackSearch(query).then(function (rows) { return token === latestSearchToken ? rows : []; });
     });
@@ -1069,6 +1085,7 @@ function efCreateSearchWorker(options) {
     rejectPending(cancellation());
     worker = null;
     workerStartPromise = null;
+    workerFailed = false;
   }
 
   // Always return a client when an index is configured. This prevents UI code

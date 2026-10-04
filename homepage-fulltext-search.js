@@ -14,7 +14,7 @@
   if (!box || !menuList) return;
 
   var WORKER_URL = new URL("search-worker.js?v=20261004rank1", document.baseURI).href;
-  var LOGIC_URL = new URL("search-logic.js?v=20261004casefold1", document.baseURI).href;
+  var LOGIC_URL = new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href;
 
   // Search the large indexes sequentially so a single query never makes
   // several 10–30 MB indexes parse at the same instant. Share the homepage
@@ -64,7 +64,7 @@
       id: "mindmaps",
       label: "Mind Maps",
       icon: "fa-sitemap",
-      indexUrl: "search-snippets-mindmaps.js?v=20261003historymindmaps1",
+      indexUrl: "search-snippets-mindmaps.js?v=20261004searchaudit1",
       mode: "snippet",
       globalName: "EF_SNIPPET_INDEX",
       sectionPrefix: "./Mind%20Maps/",
@@ -86,7 +86,7 @@
       icon: "fa-bolt",
       indexUrl: "search-snippets-current-affairs-rapid.js?v=20261004awards19",
       mode: "snippet",
-      globalName: "EF_SNIPPET_INDEX",
+      globalName: "EF_SNIPPET_INDEX_RAPID",
       sectionPrefix: "./Current%20Affairs/Topic%20Names/Rapid%20Practice/",
       limit: 8
     },
@@ -112,8 +112,12 @@
     }
   ];
 
+  // Useful compact sources arrive first on a cold mobile connection. Global
+  // relevance scores still determine display order as the books arrive.
+  var sourceOrder = ["mindmaps","currentaffairs","lucent","blackbook","bihar60sets","currentaffairsrapidextra","currentaffairsrapid","pinnacle","ghatna"];
+  SOURCES.sort(function(a,b){return sourceOrder.indexOf(a.id)-sourceOrder.indexOf(b.id)});
+
   var clients = {};
-  var disabled = {};
   var timer = null;
   var sequence = 0;
 
@@ -164,6 +168,7 @@
       var url = new URL(rawUrl, document.baseURI);
       if (url.origin !== window.location.origin) return rawUrl;
       url.searchParams.set("from", "home-search");
+      url.searchParams.set("efSearchQuery", box.value.trim().slice(0,160));
       return url.href;
     } catch (_) {
       return rawUrl;
@@ -202,6 +207,7 @@
 
     function failAll(error) {
       Object.keys(pending).forEach(function (id) {
+        clearTimeout(pending[id].timer);
         pending[id].reject(error);
         delete pending[id];
       });
@@ -236,7 +242,7 @@
           try { worker.terminate(); } catch (_) {}
           worker = null;
           reject(new Error("Search worker startup timed out"));
-        }, 15000);
+        }, 60000);
 
         cancelStartup = function () {
           if (settled) return;
@@ -258,6 +264,7 @@
             return;
           }
           if (message.type === "result" && pending[message.id]) {
+            clearTimeout(pending[message.id].timer);
             pending[message.id].resolve(message.results || []);
             delete pending[message.id];
             return;
@@ -265,6 +272,7 @@
           if (message.type === "error") {
             var error = new Error(message.message || "Search worker failed");
             if (message.id && pending[message.id]) {
+              clearTimeout(pending[message.id].timer);
               pending[message.id].reject(error);
               delete pending[message.id];
             } else if (!settled) {
@@ -312,6 +320,11 @@
         return new Promise(function (resolve, reject) {
           var id = nextId++;
           pending[id] = { resolve: resolve, reject: reject };
+          pending[id].timer = setTimeout(function(){
+            if (!pending[id]) return;
+            delete pending[id];
+            reject(new Error("Search worker response timed out"));
+          }, 30000);
           worker.postMessage({ type: "search", id: id, query: query });
         });
       }).then(function (rows) {
@@ -335,7 +348,6 @@
   }
 
   function getClient(source) {
-    if (disabled[source.id]) return null;
     if (!clients[source.id]) clients[source.id] = createClient(source);
     return clients[source.id];
   }
@@ -518,8 +530,10 @@
         nextSource();
       }).catch(function (error) {
         if (error && error.efCancelled) return;
-        disabled[source.id] = true;
         clients[source.id] = null;
+        try { window.dispatchEvent(new CustomEvent("efp-search-state", {
+          detail: {phase:"source-error",query:query,source:source.id}
+        })); } catch (_) {}
         if (sameQuery(box.value, query) && mySequence === sequence) nextSource();
       });
     }
@@ -528,7 +542,7 @@
 
   box.addEventListener("input", function (event) {
     var key = queryKey(box.value);
-    if (!(event.detail && event.detail.efpRestoredSearch) && key === lastInputQueryKey) return;
+    if (!(event.detail && (event.detail.efpRestoredSearch || event.detail.efpRetrySearch)) && key === lastInputQueryKey) return;
     lastInputQueryKey = key;
     clearTimeout(timer);
     disposeWorkers();

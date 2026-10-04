@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261004awards19";
+const CACHE_VERSION = "efp-pwa-20261004searchaudit1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261004resumeunlimited1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -31,13 +31,13 @@ const APP_SHELL = [
   "/blackbook-topic-bookmarks.js",
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
-  "/home-nav.js?v=20261001navbuttons1",
+  "/home-nav.js?v=20261004searchaudit1",
   "/app-session.js?v=20261004resumeunlimited1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20261004pagehtml1",
-  "/search-context.js?v=20261004inlinecenter1",
+  "/back-nav.js?v=20261004searchaudit1",
+  "/search-context.js?v=20261004searchaudit1",
   "/search-context.css?v=20261004inlinecenter1",
-  "/mindmap-deeplink.js?v=20261004searchresume1",
+  "/mindmap-deeplink.js?v=20261004searchaudit1",
   "/mindmap-reader.css?v=20261004pagehtml1",
   "/progress.js?v=20261001caback1",
   "/rapid-practice-deeplink.js?v=20261004context1",
@@ -46,15 +46,15 @@ const APP_SHELL = [
   "/section-search-ui.js?v=20261001searchreturn2",
   "/search-worker.js?v=20261004rank1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
-  "/homepage-search-ui.js?v=20261004casefold1",
-  "/homepage-fulltext-search.js?v=20261004casefold1",
+  "/homepage-search-ui.js?v=20261004searchaudit1",
+  "/homepage-fulltext-search.js?v=20261004searchaudit1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
-  "/Original%20Practice/original-practice.js?v=20261004pagehtml1",
-  "/Original%20Practice/english-practice.js?v=20261004pagehtml1",
+  "/Original%20Practice/original-practice.js?v=20261004searchaudit1",
+  "/Original%20Practice/english-practice.js?v=20261004searchaudit1",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
   "/Crux-Tricks/all-topics.html",
@@ -454,6 +454,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/section-search-ui.js" ||
       url.pathname === "/homepage-search-ui.js" ||
       url.pathname === "/homepage-fulltext-search.js" ||
+      url.pathname === "/Current%20Affairs/Topic%20Names/rapid-search-enhancer.js" ||
       url.pathname === "/search-snippets-current-affairs.js" ||
       url.pathname === "/blackbook-quiz-bookmarks.js" ||
       url.pathname === "/blackbook-topic-bookmarks.js" ||

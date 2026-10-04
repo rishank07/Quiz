@@ -102,7 +102,7 @@ def extract(raw):
         anchor_node = node
         while anchor_node is not None:
             anchor = anchor_node.attrs.get('id', '')
-            if anchor.startswith(('panel-', 'tab-')):
+            if anchor and (anchor_node.classes & {'tab-content', 'tab-panel', 'panel', 'tab'} or anchor.startswith(('panel-', 'tab-'))):
                 assert anchor in ids
                 text = '\x01' + anchor + '\x02' + text
                 break
@@ -129,7 +129,10 @@ def extract(raw):
 
     walk(body)
     # Catch omissions in any chapter layout, including bare text between cards.
-    assert clean(' '.join(covered)) == clean(visible_text(body)), 'Visible text coverage mismatch'
+    # Minified templates can concatenate inline/block boundaries without a
+    # literal space. Snippets add readable separators; every text byte must
+    # still be covered, in document order.
+    assert re.sub(r'\s+', '', ''.join(covered)) == re.sub(r'\s+', '', visible_text(body)), 'Visible text coverage mismatch'
     return list(dict.fromkeys(snippets))
 
 
@@ -147,34 +150,35 @@ def group_spans(raw):
             pos = end
 
 
-def synchronize(repo, check=False):
+def synchronize(repo, check=False, all_subjects=False):
     index = repo / 'search-snippets-mindmaps.js'
     raw = index.read_text(encoding='utf-8')
     replacements = []
     count = 0
     for start, end, group in group_spans(raw):
         path = unquote(group['f']).removeprefix('./')
-        if not any(path.startswith('Mind Maps/History/' + subject + '/ChapterNames/')
+        if not all_subjects and not any(path.startswith('Mind Maps/History/' + subject + '/ChapterNames/')
                    for subject in ('Medieval History', 'Modern History')):
             continue
         count += 1
         updated = dict(group)
-        updated['x'] = list(dict.fromkeys(group['x'][:3] + extract((repo / path).read_text(encoding='utf-8'))))
+        updated['x'] = extract((repo / path).read_text(encoding='utf-8'))
         if group != updated:
             encoded = json.dumps(updated, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
             replacements.append((start, end, encoded))
-    assert count == 22, f'Expected 22 history chapters, found {count}'
+    assert count > 0 if all_subjects else count == 22, f'Unexpected chapter count: {count}'
     if check and replacements:
-        raise SystemExit(f'{len(replacements)} history chapter indexes need refreshing')
+        raise SystemExit(f'{len(replacements)} mindmap chapter indexes need refreshing')
     for start, end, encoded in reversed(replacements):
         raw = raw[:start] + encoded + raw[end:]
     if replacements:
         index.write_text(raw, encoding='utf-8')
-    print(f'Checked {count} history chapters; refreshed {len(replacements)} groups.')
+    print(f'Checked {count} mindmap chapters; refreshed {len(replacements)} groups.')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
+    parser.add_argument('--all', action='store_true', help='Synchronize every indexed mindmap, including exact panel anchors.')
     args = parser.parse_args()
-    synchronize(Path(__file__).resolve().parents[1], args.check)
+    synchronize(Path(__file__).resolve().parents[1], args.check, args.all)

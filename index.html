@@ -1581,7 +1581,7 @@
   </style>
   <script defer src="/home-nav.js?v=20260924appresume4"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
-  <script defer src="/back-nav.js?v=20261001searchreturn2"></script>
+  <script defer src="/back-nav.js?v=20261004searchaudit1"></script>
 </head>
 
 <body>
@@ -1907,6 +1907,7 @@
           const url = new URL(rawUrl, document.baseURI);
           if (url.origin !== window.location.origin) return rawUrl;
           url.searchParams.set("from", "home-search");
+          url.searchParams.set("efSearchQuery", box.value.trim().slice(0,160));
           return url.href;
         } catch (_) {
           return rawUrl;
@@ -1959,12 +1960,13 @@
             loadScriptOnce("search-index-main.js?v=20260915staticgk1", function () {
               return typeof SEARCH_INDEX !== "undefined";
             }),
-            loadScriptOnce("search-logic.js?v=20261004casefold1", function () {
+            loadScriptOnce("search-logic.js?v=20261004searchaudit1", function () {
               return typeof efSearchRank === "function";
             })
           ]).then(function () {
             return typeof SEARCH_INDEX !== "undefined" && typeof efSearchRank === "function";
           }).catch(function () {
+            deepSearchPromise = null;
             // Search assets are enhancement-only. The ten main cards remain usable.
             return false;
           });
@@ -1982,8 +1984,8 @@
         originalPracticeSearchClients = [
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
-            indexUrl: new URL("search-snippets-original-practice.js?v=20261001polity22-583a40e433b0", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href,
+            indexUrl: new URL("search-snippets-original-practice.js?v=20261004searchaudit1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
             globalName: "EF_ORIGINAL_PRACTICE_SNIPPET_INDEX",
@@ -1992,8 +1994,8 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
-            indexUrl: new URL("search-snippets-economics-original-practice.js?v=20261001genericq1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href,
+            indexUrl: new URL("search-snippets-economics-original-practice.js?v=20261004searchaudit1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
             globalName: "EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX",
@@ -2002,8 +2004,8 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
-            indexUrl: new URL("search-snippets-ecology-original-practice.js?v=20260912ecology1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href,
+            indexUrl: new URL("search-snippets-ecology-original-practice.js?v=20261004searchaudit1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
             globalName: "EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX",
@@ -2012,8 +2014,8 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
-            indexUrl: new URL("search-snippets-english-original-practice.js?v=20261003grammaraudit1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href,
+            indexUrl: new URL("search-snippets-english-original-practice.js?v=20261004searchaudit1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
             globalName: "EF_ENGLISH_ORIGINAL_PRACTICE_SNIPPET_INDEX",
@@ -2022,8 +2024,8 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
-            indexUrl: new URL("search-snippets-static-gk-original-practice.js?v=20260915staticgk1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href,
+            indexUrl: new URL("search-snippets-static-gk-original-practice.js?v=20261004searchaudit1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
             globalName: "EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX",
@@ -2031,15 +2033,24 @@
             limit: 24
           })
         ].filter(Boolean);
+        // Smaller subject indexes can answer while the 34 MB shared bank is
+        // still cold. Keep the large bank last, without changing global rank.
+        originalPracticeSearchClients.push(originalPracticeSearchClients.shift());
         return originalPracticeSearchClients;
       }
 
       function mergeOriginalPracticeHits(groups, limit) {
         // Compare relevance before taking the global cap; round-robin source
         // order previously let weak hits displace exact question matches.
+        var seen = {};
         return groups.reduce(function(all,group){return all.concat(group || []);}, [])
           .map(function(hit,index){return {hit:hit,index:index};})
           .sort(function(a,b){return (a.hit.score || 0)-(b.hit.score || 0)||a.index-b.index;})
+          .filter(function(item){
+            var raw=String(item.hit.x || ""),code=raw.charCodeAt(0);
+            var key=item.hit.f+"|"+(code>=0xE000&&code<=0xF8FF?code:"");
+            if(seen[key])return false;seen[key]=true;return true;
+          })
           .slice(0,limit).map(function(item){return item.hit;});
       }
 
@@ -2124,7 +2135,7 @@
         cruxTricksSearchClients = [
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20261002pdfsearch1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2134,7 +2145,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-economics-crux.js?v=20260908econcrux1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2144,7 +2155,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-original-geo-economics-tricks.js?v=20260915staticgktricks1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2154,7 +2165,7 @@
           }),
           efCreateSearchWorker({
             workerUrl: new URL("search-worker.js?v=20261004rank1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261004casefold1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-maths-ocr.js?v=20260923mathsstrict1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2399,7 +2410,7 @@
       box.addEventListener("input", function (event) {
         const q = box.value.trim();
         const queryKey = searchQueryKey(q);
-        if (!(event.detail && event.detail.efpRestoredSearch) && queryKey === deepSearchQueryKey) return;
+        if (!(event.detail && (event.detail.efpRestoredSearch || event.detail.efpRetrySearch)) && queryKey === deepSearchQueryKey) return;
         deepSearchQueryKey = queryKey;
         const sequence = ++deepSearchSequence;
         clearTimeout(deepSearchTimer);
@@ -2439,6 +2450,7 @@
           ensureDeepSearch().then(function (ready) {
             if (!sameSearchQuery(box.value, q) || sequence !== deepSearchSequence) return;
             const deepCount = ready ? renderDeepResults(q) : 0;
+            if (!ready) reportSearchState("source-error", q);
             const opClients = ready ? getOriginalPracticeSearchClients() : [];
             const ctClients = ready ? getCruxTricksSearchClients() : [];
             if (!opClients.length && !ctClients.length) {
@@ -2473,8 +2485,8 @@
     .ef-op-search-snippet mark{background:#ffe28a;color:inherit;padding:0 1px;border-radius:2px}
   </style>
   <!-- ExamFusion homepage full-text bridge -->
-  <script src="./homepage-search-ui.js?v=20261004casefold1" defer></script>
-  <script src="./homepage-fulltext-search.js?v=20261004casefold1" defer></script>
+  <script src="./homepage-search-ui.js?v=20261004searchaudit1" defer></script>
+  <script src="./homepage-fulltext-search.js?v=20261004searchaudit1" defer></script>
   <!-- ExamFusion landing counts: start -->
   <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5036,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":12353,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":46414,"unit":"Questions"},"./PYQ/index.html":{"total":2278,"unit":"PYQs"},"./Crux-Tricks/index.html":{"total":591,"unit":"PDFs"}}</script>
   <style>
@@ -2552,4 +2564,3 @@
 </body>
 
 </html>
-

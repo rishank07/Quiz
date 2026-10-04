@@ -68,7 +68,7 @@
     if (!isCurrentAffairsRapidPracticePage() || !document.head || document.getElementById(CA_RAPID_ENHANCER_ID)) return;
     var script = document.createElement("script");
     script.id = CA_RAPID_ENHANCER_ID;
-    script.src = "/Current%20Affairs/Topic%20Names/rapid-search-enhancer.js?v=20260919ca5";
+    script.src = "/Current%20Affairs/Topic%20Names/rapid-search-enhancer.js?v=20261004searchaudit1";
     script.async = false;
     document.head.appendChild(script);
   }

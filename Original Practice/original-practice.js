@@ -264,9 +264,11 @@ function opBackToParent(fallback){
 }
 function syncUrl(mode,push){
  try{
-  var u=new URL(location.href),searchReturn=u.searchParams.get("efSearchReturn"),searchRestore=u.searchParams.get("efSearchRestore");u.search="";
+  var u=new URL(location.href),searchReturn=u.searchParams.get("efSearchReturn"),searchRestore=u.searchParams.get("efSearchRestore"),searchQuery=u.searchParams.get("efSearchQuery"),searchFrom=u.searchParams.get("from");u.search="";
   if(searchReturn)u.searchParams.set("efSearchReturn",searchReturn);
   if(searchRestore)u.searchParams.set("efSearchRestore",searchRestore);
+  if(searchQuery)u.searchParams.set("efSearchQuery",searchQuery);
+  if(searchQuery&&searchFrom)u.searchParams.set("from",searchFrom);
   if(mode!=="home"&&state.subject)u.searchParams.set("subject",state.subject);
   if(mode==="quiz"&&state.chapterName){u.searchParams.set("chapter",state.chapterName);u.searchParams.set("section",String((state.currentSection||0)+1))}
   var previous=history.state,hasParent=push?true:!!(previous&&previous[OP_HISTORY_KEY]===true&&previous.hasParent);
@@ -483,7 +485,7 @@ window.EFP_HTML_SEARCH_PAGE={
  results:function(query,matches){
   if(state.screen!=="quiz")return [];
   var out=[];Object.keys(MASTER).forEach(function(subject){Object.keys(MASTER[subject]).forEach(function(chapter){MASTER[subject][chapter].forEach(function(section,si){section.questions.forEach(function(q,qi){
-   if(!matches(query,[q.q,q.a,q.exp]))return;
+   if(!matches(query,[q.q,q.o,q.a,q.exp]))return;
    out.push({key:subject+"|"+chapter+"|"+si+"|q-"+qi,id:"q-"+qi,subject:subject,chapter:chapter,section:si,qi:qi,label:chapterDisplayName(chapter)+" · Section "+(si+1)+" · Question "+(qi+1)});
   })})})});return out;
  },
