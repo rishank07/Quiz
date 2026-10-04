@@ -73,6 +73,8 @@
   var pdfContextVisible=!!initialSearch;
   var pdfContextPage=page;
   var pdfSearchHits=[];
+  var pdfSearchModes={};
+  var pdfHighlightKinds={};
   var PAGE_BATCH_SIZE=20;
   var BATCH_PREFETCH_THRESHOLD=5;
   var KEEP_RENDER_RADIUS=4;
@@ -143,7 +145,7 @@
     getState:function(){
       var index=pdfSearchHits.indexOf(pdfContextPage);
       return {host:document.querySelector('.reader-head'),visible:pdfContextVisible,query:docSearch.value,
-        label:'Page '+pdfContextPage+(index>=0?' · '+(index+1)+'/'+pdfSearchHits.length+' matching pages':''),total:pdfSearchHits.length};
+        label:'Page '+pdfContextPage+(index>=0?' · '+(index+1)+'/'+pdfSearchHits.length+' matching pages':'')+(pdfHighlightKinds[pdfContextPage]==='words'?' · word matches':pdfHighlightKinds[pdfContextPage]==='scan'?' · scanned page':''),total:pdfSearchHits.length};
     },
     dismiss:function(){pdfContextVisible=false;clearSearchHighlightState(true);notifySearchContext()},
     move:function(direction){
@@ -245,9 +247,7 @@
   function sizeShell(el,ratio){if(!el)return;var s=currentTargetSize(ratio);el.style.width=s.width+'px';el.style.height=s.height+'px';el.style.minHeight=s.height+'px'}
 
   function normalizeSearchText(v){
-    v=String(v||'');
-    if(v.normalize){try{v=v.normalize('NFKC')}catch(e){}}
-    return v.toLowerCase().replace(/[^a-z0-9\u0900-\u097f]+/g,' ').replace(/\s+/g,' ').trim();
+    return efNormalizeSearchText(v);
   }
   function wholePhrasePosition(text,phrase){
     if(!text||!phrase)return -1;
@@ -273,42 +273,8 @@
     for(var i=0;i<layers.length;i++)layers[i].remove();
   }
   function clearSearchHighlightState(keepQuery){
-    activeSearchPage=0;searchFocusPending=false;searchGeneration++;searchHighlightKeepUntil=0;clearSearchHighlightLayers();
+    activeSearchPage=0;searchFocusPending=false;searchGeneration++;searchHighlightKeepUntil=0;pdfHighlightKinds={};clearSearchHighlightLayers();
     if(!keepQuery)searchQuery='';
-  }
-  function addSearchRange(out,index,start,end){
-    start=Math.max(0,Math.min(1,start));end=Math.max(start,Math.min(1,end));if(end<=start)return;
-    if(!out[index])out[index]=[];out[index].push({start:start,end:end});
-  }
-  function matchedTextRanges(items,q){
-    var normalized=[],matched={};
-    for(var i=0;i<items.length;i++){
-      var raw=String(items[i]&&items[i].str||'');
-      var lower=raw.toLowerCase();
-      normalized.push(normalizeSearchText(raw));
-      if(!raw||!q)continue;
-      var from=0,pos=-1,found=false,denom=Math.max(1,raw.length);
-      while((pos=lower.indexOf(q,from))>=0){
-        addSearchRange(matched,i,pos/denom,(pos+q.length)/denom);found=true;from=pos+Math.max(1,q.length);
-      }
-      if(!found&&normalizeSearchText(raw)===q)addSearchRange(matched,i,0,1);
-    }
-    if(q.indexOf(' ')>=0){
-      for(var start=0;start<normalized.length;start++){
-        if(!normalized[start])continue;
-        var combined='';
-        for(var end=start;end<normalized.length&&end<start+8;end++){
-          if(!normalized[end])continue;
-          combined=(combined+' '+normalized[end]).trim();
-          if(combined.indexOf(q)>=0){
-            for(var k=start;k<=end;k++)if(normalized[k]&&!matched[k])addSearchRange(matched,k,0,1);
-            break;
-          }
-          if(combined.length>Math.max(120,q.length*4))break;
-        }
-      }
-    }
-    return matched;
   }
   function renderSearchHighlights(n){
     if(!pdfDoc||!searchQuery||n!==activeSearchPage)return Promise.resolve(false);
@@ -331,8 +297,10 @@
         if(generation!==searchGeneration||n!==activeSearchPage||!searchQuery)return false;
         var old=container.querySelector(continuous?':scope > .efp-search-layer':'#efpSingleSearchLayer');if(old)old.remove();
         var items=tc&&Array.isArray(tc.items)?tc.items:[];
-        if(!items.length)return false;
-        var matched=matchedTextRanges(items,searchQuery);
+        if(!items.some(function(item){return String(item.str||'').trim()})){pdfHighlightKinds[n]='scan';notifySearchContext();return false;}
+        var matchResult=EFP_PDF_TEXT_SEARCH.ranges(items,searchQuery,pdfSearchModes[n]);
+        pdfHighlightKinds[n]=matchResult.kind;notifySearchContext();
+        var matched=matchResult.ranges;
         var keys=Object.keys(matched);if(!keys.length)return false;
         var layer=document.createElement('div');layer.className='efp-search-layer';
         if(!continuous)layer.id='efpSingleSearchLayer';
@@ -593,8 +561,8 @@
       clearTimeout(scrollTimer);
       if(devicePortrait())scrollTimer=setTimeout(showMobileControlsBriefly,520);
     }
-    var now=Date.now();
-    if(activeSearchPage&&now>searchHighlightKeepUntil&&now>programmaticScrollUntil)clearSearchHighlightState(true);
+    // Keep the selected result highlighted while reading/scrolling. Dismiss or
+    // a new query clears it; virtualization releases distant page canvases.
     if(!scrollRAF)scrollRAF=requestAnimationFrame(function(){
       scrollRAF=0;
       var n=visibleContinuousPage();
@@ -910,13 +878,20 @@
   }
   function runDocSearch(){
     var q=normalizeSearchText(docSearch.value);docHits.innerHTML='';
-    if(q!==searchQuery){searchQuery=q;activeSearchPage=0;searchFocusPending=false;searchGeneration++;clearSearchHighlightLayers();pdfContextVisible=false}
+    if(q!==searchQuery){searchQuery=q;activeSearchPage=0;searchFocusPending=false;searchGeneration++;pdfHighlightKinds={};clearSearchHighlightLayers();pdfContextVisible=false}
     pdfSearchHits=[];
     if(q.length<2||!pages.length){notifySearchContext();return}
-    var hits=[];for(var i=0;i<pages.length;i++){
-      if(isHandwrittenMaths){var score=handwrittenPageScore(pages[i],pageAliases[i]||'',q);if(score!==null)hits.push({page:i+1,score:score})}
-      else if(normalizeSearchText(pages[i]).includes(q))hits.push({page:i+1,score:i});
+    var hits=[],parsed=efRelevanceQuery(q);pdfSearchModes={};
+    function collect(compact,fuzzy){
+      for(var i=0;i<pages.length;i++){
+        if(isHandwrittenMaths){var score=handwrittenPageScore(pages[i],pageAliases[i]||'',q);if(score!==null)hits.push({page:i+1,score:score,matchType:'exact'})}
+        else {var match=efRelevanceScore(parsed,normalizeSearchText(pages[i]),normalizeSearchText(doc.title),normalizeSearchText(doc.breadcrumb),compact,fuzzy);if(match)hits.push({page:i+1,score:match.score,matchType:match.matchType})}
+      }
     }
+    collect(false,false);
+    if(!hits.length&&!isHandwrittenMaths&&q.length>2)collect(true,false);
+    if(!hits.length&&!isHandwrittenMaths&&parsed.terms.some(function(term){return efAllowedEditDistance(term)>0}))collect(false,true);
+    hits.forEach(function(hit){pdfSearchModes[hit.page]=hit.matchType});
     hits.sort(function(a,b){return a.score-b.score||a.page-b.page});
     pdfSearchHits=hits.map(function(hit){return hit.page});
     notifySearchContext();
@@ -929,6 +904,7 @@
     });
     if(!hits.length){var empty=document.createElement('span');empty.textContent='No matching page';docHits.appendChild(empty)}
     else if(hits.length>30){var more=document.createElement('span');more.textContent=' +'+(hits.length-30)+' more';docHits.appendChild(more)}
+    if(pdfDoc&&activeSearchPage)renderSearchHighlights(activeSearchPage);
   }
 
   title.textContent=doc.title;crumb.textContent=doc.breadcrumb+' · '+doc.pages+' pages';
@@ -1193,8 +1169,6 @@
     if(normalizeSearchText(docSearch.value).length<2){docHits.innerHTML='';clearSearchHighlightState(false);return;}
     st=setTimeout(runDocSearch,120);
   });
-  pdfStage.addEventListener('pointerdown',function(){if(activeSearchPage&&Date.now()>searchHighlightKeepUntil)clearSearchHighlightState(true)},{passive:true});
-  pdfStage.addEventListener('wheel',function(e){if(!(e.ctrlKey||e.metaKey)&&activeSearchPage&&Date.now()>searchHighlightKeepUntil)clearSearchHighlightState(true)},{passive:true});
 
   function refitForViewport(){
     clearTimeout(resizeTimer);resizeTimer=setTimeout(function(){
