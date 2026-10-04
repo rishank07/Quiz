@@ -45,14 +45,14 @@ function clear(p){p.w.document.querySelector('.efp-context-dismiss').click()}
   button(p).click();await delay(30);option.click();await delay(30);clear(p);await delay(30);
   assert(exp.getClientRects().length);assert(option.disabled);assert(option.classList.contains('correct'));p.dom.window.close();
  }
- // Native style-only reveal is observed; visible explanations scroll directly on Next.
+ // Native style-only reveal is observed; Next centers the inline control.
  const visible=await load(setup('<main><article class="question-box" id="q1"><h2>Organisation?</h2><div class="explanation" style="display:none">BRICS hidden</div></article><article class="question-box" id="q2"><h2>Members?</h2><div class="explanation">BRICS visible</div></article></main>'));
  assert.equal(visible.w.document.querySelectorAll('#q1 mark').length,0);assert.equal(visible.w.document.querySelectorAll('#q2 mark').length,1);
  visible.w.document.querySelector('#q1 .explanation').style.display='block';await delay(60);assert.equal(visible.w.document.querySelectorAll('#q1 mark').length,1);
- visible.w.document.querySelector('.efp-context-next').click();await delay(30);assert.equal(visible.scrolled.at(-1).closest('article').id,'q2');assert.equal(visible.scrolled.at(-1).tagName,'MARK');visible.dom.window.close();
+ visible.w.document.querySelector('.efp-context-next').click();await delay(30);assert.equal(visible.scrolled.at(-1).nextElementSibling.id,'q2');assert(visible.scrolled.at(-1).classList.contains('efp-search-context'));visible.dom.window.close();
  console.log('PASS normal answer selection, native style reveal and direct navigation to already-visible explanation matches');
  const entered=await load(setup('<main><article class="question-box" id="q1"><h2>Organisation?</h2><div class="explanation">BRICS already open</div></article></main>'));
- assert.equal(entered.scrolled.at(-1).tagName,'MARK');entered.dom.window.close();
+ assert(entered.scrolled.at(-1).classList.contains('efp-search-context'));entered.dom.window.close();
  // Words spanning question/explanation remain one result; next question never auto-reveals.
  const mixed=await load(setup('<main><article class="question-card" id="q1"><h2>BRICS</h2><div class="explanation hidden">Pakistan membership</div></article><article class="question-card" id="q2"><h2>BRICS Pakistan?</h2><div class="explanation hidden">Unrelated</div></article></main>',undefined,'brics pakistan'));
  assert.equal(mixed.w.document.querySelector('.efp-context-next').textContent,'1/2 ↓');assert(!button(mixed).hidden);button(mixed).click();await delay(30);

@@ -9,7 +9,7 @@
 
   var HUB_PATH = "/current affairs/topic names/rapid practice.html";
   var INNER_PREFIX = "/current affairs/topic names/rapid practice/";
-  var LOGIC_SRC = "/search-logic.js?v=20260919ca3";
+  var LOGIC_SRC = "/search-logic.js?v=20261004searchaudit1";
   var WORKER_SRC = "/search-worker.js?v=20260919ca3";
   var INDEX_SRC = "/search-snippets-current-affairs-rapid.js?v=20261004awards19";
   var EXTRA_INDEX_SRC = "/search-snippets-current-affairs-rapid-extra.js?v=20261003caquiz29";
@@ -173,7 +173,7 @@
           logicUrl: LOGIC_SRC,
           indexUrl: INDEX_SRC,
           mode: "snippet",
-          globalName: "EF_SNIPPET_INDEX",
+          globalName: "EF_SNIPPET_INDEX_RAPID",
           sectionPrefix: INDEX_PREFIX,
           limit: 36
         }),
@@ -317,4 +317,3 @@
   }
   window.addEventListener("pageshow", init);
 })();
-

@@ -39,6 +39,11 @@
 
   var filterBar = tools.querySelector(".ef-search-filters");
   var statusText = tools.querySelector("#efSearchStatus");
+  var retryButton = document.createElement("button");
+  retryButton.type = "button"; retryButton.className = "ef-search-more";
+  retryButton.textContent = "Retry search / दोबारा खोजें"; retryButton.hidden = true;
+  tools.appendChild(retryButton);
+  var pendingSources = {core:false,fulltext:false}, failedSources = new Set(), slowSearch = false;
   CATEGORY_ORDER.forEach(function (category) {
     var meta = CATEGORY_META[category];
     var button = document.createElement("button");
@@ -200,6 +205,8 @@
     try {
       var url = new URL(anchor.href, document.baseURI);
       url.searchParams.delete("from");
+      url.searchParams.delete("efSearchQuery");
+      url.searchParams.delete("efSearchReturn");
       return url.pathname.replace(/\/+$/, "") + url.search + url.hash;
     } catch (_) {
       return anchor.getAttribute("href") || "";
@@ -334,6 +341,9 @@
       statusText.textContent = count
         ? count + " matches found · searching remaining hubs…"
         : "Searching questions, PDFs and study hubs…";
+      if (slowSearch) statusText.textContent += " Slow connection · search is still running.";
+    } else if (failedSources.size) {
+      statusText.textContent = count + " matches found · some hubs could not load. Retry to complete search.";
     } else {
       statusText.textContent = count
         ? count + " relevant result" + (count === 1 ? "" : "s") + " found"
@@ -419,7 +429,7 @@
     applyFilterAndLimit(items, counts);
     setStatus(counts.all);
     if (!isSearching) {
-      if (counts.all === 0) renderNoResults();
+      if (counts.all === 0 && !failedSources.size) renderNoResults();
       else noResults.classList.remove("show");
     }
   }
@@ -445,12 +455,13 @@
     tools.classList.remove("is-searching");
     menuList.classList.remove("ef-search-loading");
     clearTimeout(completionTimer);
-    scheduleReconcile();
+    reconcile();
     setTimeout(function () {
       if (query !== currentQuery) return;
       var count = totalResultCount();
       setStatus(count);
-      if (!count) renderNoResults();
+      if (!count && !failedSources.size) renderNoResults();
+      retryButton.hidden = !failedSources.size;
       sendSearchAnalytics(query, count);
     }, 80);
   }
@@ -458,10 +469,12 @@
   box.addEventListener("input", function (event) {
     var query = box.value.trim();
     var restored = !!(event.detail && event.detail.efpRestoredSearch);
-    if (!restored && normalized(query) === normalized(currentQuery)) { saveQuery(query); return; }
+    if (!restored && !(event.detail && event.detail.efpRetrySearch) && normalized(query) === normalized(currentQuery)) { saveQuery(query); return; }
     if (!restored) clearSavedResults();
     saveQuery(query);
     currentQuery = query;
+    pendingSources = {core:typeof window.efpWithHomeSearchWorker === "function",fulltext:query.length>=3};
+    failedSources.clear(); slowSearch = false; retryButton.hidden = true;
     activeFilter = restored && CATEGORY_META[event.detail.filter] ? event.detail.filter : "all";
     extraPages = restored ? Math.max(0, Number(event.detail.pages) || 0) : 0;
     clearTimeout(completionTimer);
@@ -491,8 +504,17 @@
     statusText.textContent = "Searching questions, PDFs and study hubs…";
     noResults.classList.remove("show");
     updateFilterButtons({ all: 0, practice: 0, pyq: 0, current: 0, crux: 0, books: 0, mindmaps: 0 });
-    completionTimer = setTimeout(function () { finishSearch(query); }, query.length < 3 ? 3500 : 20000);
+    // A timer may explain a slow connection, but cannot declare unsearched
+    // sources empty. Completion requires both independent pipelines to finish.
+    completionTimer = setTimeout(function () {
+      if (normalized(query)!==normalized(currentQuery)||!isSearching) return;
+      slowSearch = true; retryButton.hidden = false; scheduleReconcile();
+    }, 20000);
     scheduleReconcile();
+  });
+
+  retryButton.addEventListener("click", function () {
+    box.dispatchEvent(new CustomEvent("input", {bubbles:true, detail:{efpRetrySearch:true}}));
   });
 
   filterBar.addEventListener("click", function (event) {
@@ -544,8 +566,10 @@
   window.addEventListener("efp-search-state", function (event) {
     var detail = event.detail || {};
     if (!detail.query || normalized(detail.query) !== normalized(currentQuery)) return;
-    if (detail.phase === "core-done" && currentQuery.length < 3) finishSearch(currentQuery);
-    if (detail.phase === "fulltext-done") finishSearch(currentQuery);
+    if (detail.phase === "source-error") {failedSources.add(detail.source || "core");retryButton.hidden=false;scheduleReconcile();return;}
+    if (detail.phase === "core-done") pendingSources.core=false;
+    if (detail.phase === "fulltext-done") pendingSources.fulltext=false;
+    if (!pendingSources.core && !pendingSources.fulltext) finishSearch(currentQuery);
   });
 
   var observer = new MutationObserver(scheduleReconcile);
@@ -556,7 +580,6 @@
   });
 
   window.addEventListener("pageshow", function () {
-    if (box.value.trim() && isSearching) finishSearch(currentQuery);
     if (!box.value.trim()) {
       if (readSavedQuery().trim()) {
         setTimeout(restoreSavedQuery, 0);

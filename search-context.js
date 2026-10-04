@@ -26,12 +26,14 @@
   }
   function savedQuery(){
     try{
-      var token=new URL(location.href).searchParams.get("efSearchReturn")||(history.state&&history.state.efpSearchReturnToken);
+      var params=new URL(location.href).searchParams;
+      var token=params.get("efSearchReturn")||(history.state&&history.state.efpSearchReturnToken);
+      var direct=String(params.get("efSearchQuery")||"").trim().slice(0,160);
       var saved=JSON.parse(sessionStorage.getItem("efp_search_return_v1:"+token)||"null");
-      if(!saved||saved.token!==token||!Array.isArray(saved.inputs)||new URL(saved.source,location.origin).origin!==location.origin)return null;
+      if(!saved||saved.token!==token||!Array.isArray(saved.inputs)||new URL(saved.source,location.origin).origin!==location.origin)return direct?{token:token||"query:"+direct,query:direct}:null;
       var input=saved.inputs.find(function(field){return String(field.value||"").trim()});
       return input?{token:token,query:String(input.value).trim().slice(0,160)}:null;
-    }catch(_){return null}
+    }catch(_){return direct?{token:token||"query:"+direct,query:direct}:null}
   }
   function clearOutline(el){if(el)el.classList.remove("efp-deep-focus","efp-op-deep-focus","efp-bb-deep-focus")}
   function clear(){
@@ -168,7 +170,7 @@
       if(typeof SECTIONS!=="undefined"&&Array.isArray(SECTIONS)&&typeof openSection==="function"){
         lazyProvider={
           viewKey:function(){return "rapid|"+current},currentKey:function(el){return el&&el.id||""},
-          results:function(query,matches){var out=[];SECTIONS.forEach(function(sec,si){sec.questions.forEach(function(q,qi){if(matches(query,[q.q,q.a,q.exp]))out.push({key:"rp-"+si+"-"+qi,id:"rp-"+si+"-"+qi,section:si,label:"Section "+(si+1)+" · Question "+(qi+1)})})});return out},
+          results:function(query,matches){var out=[];SECTIONS.forEach(function(sec,si){sec.questions.forEach(function(q,qi){if(matches(query,[q.q,q.o,q.options,q.a,q.exp]))out.push({key:"rp-"+si+"-"+qi,id:"rp-"+si+"-"+qi,section:si,label:"Section "+(si+1)+" · Question "+(qi+1)})})});return out},
           element:function(row){return document.getElementById(row.id)},
           open:function(row){if(typeof onlyBookmarks!=="undefined"&&onlyBookmarks&&typeof toggleBookmarkFilter==="function")toggleBookmarkFilter();openSection(row.section)}
         };return lazyProvider;

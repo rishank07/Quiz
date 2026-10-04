@@ -138,15 +138,16 @@
 
   function searchQuery() {
     try {
+      var direct = String(new URL(location.href).searchParams.get("efSearchQuery") || "").trim().slice(0, 160);
       var token = new URL(location.href).searchParams.get("efSearchReturn") ||
         (history.state && history.state.efpSearchReturnToken);
-      if (!token) return "";
+      if (!token) return direct;
       var saved = JSON.parse(sessionStorage.getItem("efp_search_return_v1:" + token) || "null");
       if (!saved || saved.token !== token || !Array.isArray(saved.inputs) ||
-          new URL(saved.source, location.origin).origin !== location.origin) return "";
+          new URL(saved.source, location.origin).origin !== location.origin) return direct;
       var field = saved.inputs.find(function (input) { return String(input.value || "").trim(); });
       return field ? String(field.value).trim().slice(0, 160) : "";
-    } catch (_) { return ""; }
+    } catch (_) { return direct || ""; }
   }
 
   function clearSearchFocus() {
@@ -320,7 +321,7 @@
           nav.scrollLeft = preferredControl.offsetLeft - (nav.clientWidth - preferredControl.offsetWidth) / 2;
         }
         try {
-          if (marks.length) focusMatch();
+          if (query) focusMatch();
           else target.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
         } catch (_) {
           target.scrollIntoView();
@@ -367,6 +368,21 @@
 
   function runWithRetry() {
     var key = hashKey();
+    // Older generated indexes have unanchored facts. Resolve their actual
+    // matching panel on entry instead of silently dropping all decoration.
+    if (!key && searchQuery()) {
+      var query = searchQuery();
+      var panels = Array.from(document.querySelectorAll(".tab-content[id],.tab-panel[id],.panel[id],section.tab[id],div.tab[id]"));
+      var matched = panels.find(function(panel) {
+        return typeof efTextMatches === "function" ? efTextMatches(query, panel.textContent, false)
+          : query.toLocaleLowerCase().split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean).every(function(term){return panel.textContent.toLocaleLowerCase().indexOf(term)>=0});
+      });
+      if (matched) {
+        key = matched.id;
+        var url = new URL(location.href); url.hash = key;
+        history.replaceState(history.state, "", url.pathname + url.search + url.hash);
+      }
+    }
     if (!key) { openedKey = ""; ++focusRun; clearSearchFocus(); return; }
     if (key === openedKey) return;
     var attempts = 0;

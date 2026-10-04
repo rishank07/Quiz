@@ -144,9 +144,11 @@ function opBackToParent(fallback){
 }
 function syncUrl(mode,push){
  try{
-  var url=new URL(location.href),searchReturn=url.searchParams.get("efSearchReturn"),searchRestore=url.searchParams.get("efSearchRestore");url.search="";
+  var url=new URL(location.href),searchReturn=url.searchParams.get("efSearchReturn"),searchRestore=url.searchParams.get("efSearchRestore"),searchQuery=url.searchParams.get("efSearchQuery"),searchFrom=url.searchParams.get("from");url.search="";
   if(searchReturn)url.searchParams.set("efSearchReturn",searchReturn);
   if(searchRestore)url.searchParams.set("efSearchRestore",searchRestore);
+  if(searchQuery)url.searchParams.set("efSearchQuery",searchQuery);
+  if(searchQuery&&searchFrom)url.searchParams.set("from",searchFrom);
   if(mode==="quiz"&&state.chapterName){url.searchParams.set("chapter",state.chapterName);url.searchParams.set("section",String((state.currentSection||0)+1))}
   var previous=history.state,hasParent=push?true:!!(previous&&previous[OP_HISTORY_KEY]===true&&previous.hasParent);
   var entry=opHistoryEntry(mode,hasParent);
@@ -349,7 +351,7 @@ window.EFP_HTML_SEARCH_PAGE={
  results:function(query,matches){
   if(state.screen!=="quiz")return [];
   var out=[];Object.keys(MASTER).forEach(function(chapter){MASTER[chapter].forEach(function(section,si){section.questions.forEach(function(q,qi){
-   if(matches(query,[q.prompt,q.sentence,(q.options||[])[q.answer],q.explanation,q.englishExplanation,q.rule]))out.push({key:chapter+"|"+si+"|q-"+qi,id:"q-"+qi,chapter:chapter,section:si,qi:qi,label:chapter+" · Section "+(si+1)+" · Question "+(qi+1)});
+   if(matches(query,[q.prompt,q.sentence,q.options,q.explanation,q.englishExplanation,q.rule]))out.push({key:chapter+"|"+si+"|q-"+qi,id:"q-"+qi,chapter:chapter,section:si,qi:qi,label:chapter+" · Section "+(si+1)+" · Question "+(qi+1)});
   })})});return out;
  },
  element:function(record){return state.screen==="quiz"&&state.chapterName===record.chapter&&state.currentSection===record.section?document.getElementById(record.id):null},

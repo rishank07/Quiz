@@ -6,7 +6,7 @@
   if (!document.getElementById("efp-shared-search-context")) {
     var searchContext = document.createElement("script");
     searchContext.id = "efp-shared-search-context";
-    searchContext.src = "/search-context.js?v=20261004searchresume1";
+    searchContext.src = "/search-context.js?v=20261004searchaudit1";
     document.head.appendChild(searchContext);
   }
   if (!/^\/(?:index\.html)?$/i.test(location.pathname) && !document.getElementById("efp-section-search-ui")) {
@@ -246,7 +246,13 @@
     // Once inside a search trip, every deeper page belongs to the original
     // search. A PDF's own find bar must not become the trip's new origin.
     var saved = /\/viewer\.html$/i.test(location.pathname) ? active : (snapshot() || active);
-    if (!saved) return;
+    var queryInput = fields().find(function(input){return input.value.trim() && !input.closest('[hidden]')});
+    var query = saved && saved.inputs.find(function(input){return String(input.value || "").trim()});
+    query = query ? query.value : queryInput ? queryInput.value : new URL(location.href).searchParams.get("efSearchQuery");
+    // The query travels with a result even if storage is unavailable or the
+    // result is opened in a new tab. It never represents a quiz attempt.
+    if (query) url.searchParams.set("efSearchQuery", String(query).trim().slice(0,160));
+    if (!saved) { if(query) link.href=url.href; return; }
     url.searchParams.set(PARAM, saved.token);
     link.href = url.href;
     link.setAttribute("data-efp-search-trip", saved.token);
@@ -259,7 +265,7 @@
     // An edited query is a new search; stale link tokens must not turn a later
     // manual click into a search entry after the user clears the bar.
     document.querySelectorAll('a[data-efp-search-trip]').forEach(function (link) {
-      var url = new URL(link.href); url.searchParams.delete(PARAM); link.href = url.href;
+      var url = new URL(link.href); url.searchParams.delete(PARAM); url.searchParams.delete("efSearchQuery"); link.href = url.href;
       link.removeAttribute("data-efp-search-trip");
     });
     if (history.state && history.state.efpSearchSnapshot) {
