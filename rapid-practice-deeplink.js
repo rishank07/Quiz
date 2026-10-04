@@ -336,6 +336,45 @@
     return null;
   }
 
+  function searchDrivenNavigationActive() {
+    if (document.querySelector(".efp-search-context")) return true;
+    try {
+      var params = new URLSearchParams(window.location.search || "");
+      if (params.get("efSearchReturn") || params.get("efSearchQuery")) return true;
+    } catch (_) {}
+    return /^#rp-\d+-\d+$/.test(window.location.hash || "");
+  }
+
+  function installSearchSafeOpenSection() {
+    var original = window.openSection;
+    if (typeof original !== "function" || original.__efpSearchSafeOpenSection) return;
+
+    function patchedOpenSection() {
+      if (!searchDrivenNavigationActive()) return original.apply(this, arguments);
+
+      // Legacy Rapid Practice pages call window.scrollTo({top:310,behavior:'smooth'})
+      // at the end of openSection(). During search/deep-link navigation that
+      // smooth scroll races the result focuser and drags the viewport away from
+      // the yellow search context. Suppress only that synchronous legacy scroll;
+      // search-context / focusArticle owns the final centered position.
+      var nativeScrollTo = window.scrollTo;
+      var replaced = false;
+      try {
+        window.scrollTo = function () {};
+        replaced = window.scrollTo !== nativeScrollTo;
+        return original.apply(this, arguments);
+      } finally {
+        if (replaced) {
+          try { window.scrollTo = nativeScrollTo; } catch (_) {}
+        }
+      }
+    }
+
+    patchedOpenSection.__efpSearchSafeOpenSection = true;
+    patchedOpenSection.__efpOriginalOpenSection = original;
+    window.openSection = patchedOpenSection;
+  }
+
   function focusArticle(el) {
     if (window.EFP_SEARCH_CONTEXT && window.EFP_SEARCH_CONTEXT.isDismissed(el)) return;
     if (!(window.EFP_SEARCH_CONTEXT && window.EFP_SEARCH_CONTEXT.focusTarget && window.EFP_SEARCH_CONTEXT.focusTarget(el))) {
@@ -356,6 +395,7 @@
     var target = getTarget();
     if (!target || isNaN(target.section) || isNaN(target.q)) return;
 
+    installSearchSafeOpenSection();
     var opened = false;
     var attempt = 0;
 
@@ -384,12 +424,14 @@
       installOriginalPracticeScoreLook();
       installLogicalSectionRanges();
       installDesktopBookmarkScrollBehavior();
+      installSearchSafeOpenSection();
       run();
     }, { once: true });
   } else {
     installOriginalPracticeScoreLook();
     installLogicalSectionRanges();
     installDesktopBookmarkScrollBehavior();
+    installSearchSafeOpenSection();
     setTimeout(run, 0);
   }
   window.addEventListener("hashchange", run);
@@ -397,6 +439,7 @@
     installOriginalPracticeScoreLook();
     installLogicalSectionRanges();
     installDesktopBookmarkScrollBehavior();
+    installSearchSafeOpenSection();
     if (getTarget()) setTimeout(run, 0);
   });
 })();
