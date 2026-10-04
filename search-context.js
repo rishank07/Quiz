@@ -68,6 +68,19 @@
     if(/^ca-ol-/.test(id))return "One-liner "+id.split("-").pop();
     return "Matched section / खोज से खुला भाग";
   }
+  function matchGroups(root,items){
+    var units=".question-box,.qcard,.question-card,.quiz-question,[data-qid],tr,li,.section-card,.card,.flow-box,.fact,.event,.timeline-item,.node,.branch,.item,.box,.step";
+    var isQuestion=/^(?:q-?\d+|bbq-\d+|rp-\d+-\d+|s\d+-\d+|ca-ol-.+)$/.test(root.id||"")||root.matches(".question-box,.qcard,.question-card,.quiz-question,[data-qid]");
+    var groups=[],owners=new Map();
+    items.forEach(function(mark){
+      if(!mark.isConnected||!mark.getClientRects().length)return;
+      var owner=isQuestion?root:mark.closest(units);
+      if(!owner||!root.contains(owner))owner=root;
+      var group=owners.get(owner);
+      if(!group){group={anchor:owner,marks:[]};owners.set(owner,group);groups.push(group)}
+      group.marks.push(mark);
+    });return groups;
+  }
   function findTarget(){
     var hash;try{hash=decodeURIComponent(location.hash.slice(1))}catch(_){hash=""}
     var el=hash&&document.getElementById(hash);
@@ -89,12 +102,15 @@
     });
     // Keep quiz card content and option event listeners independent of controls.
     el.parentNode.insertBefore(bar,el);
-    if(marks.length){
-      var next=button("Next search match / अगला खोज परिणाम","1/"+marks.length+" ↓",function(){
-        marks[current].classList.remove("efp-context-current");current=(current+1)%marks.length;
-        marks[current].classList.add("efp-context-current");marks[current].scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
-        next.textContent=(current+1)+"/"+marks.length+" ↓";
-      });next.className="efp-context-next";bar.insertBefore(next,bar.lastChild);marks[0].classList.add("efp-context-current");
+    var groups=matchGroups(el,marks);
+    if(groups.length){
+      var next=button("Next matched question or section / अगला मिला प्रश्न या भाग","1/"+groups.length+(groups.length>1?" ↓":""),function(){
+        if(groups.length<2)return;
+        groups[current].marks.forEach(function(mark){mark.classList.remove("efp-context-current")});current=(current+1)%groups.length;
+        groups[current].marks.forEach(function(mark){mark.classList.add("efp-context-current")});groups[current].marks[0].scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
+        next.textContent=(current+1)+"/"+groups.length+" ↓";
+      });next.className="efp-context-next";next.disabled=groups.length===1;bar.insertBefore(next,bar.lastChild);
+      groups[0].marks.forEach(function(mark){mark.classList.add("efp-context-current")});
     }
   }
   function measurePdfHeader(){

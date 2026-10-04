@@ -12,7 +12,7 @@
   var focusRun = 0;
   var readerLink = document.createElement("link");
   readerLink.rel = "stylesheet";
-  readerLink.href = "/mindmap-reader.css?v=20261004dismiss1";
+  readerLink.href = "/mindmap-reader.css?v=20261004uniquehtml1";
   document.documentElement.classList.add("efp-mindmap-reader");
   document.head.appendChild(readerLink);
 
@@ -156,7 +156,7 @@
     }).join("|") + ")(?=$|[^\\p{L}\\p{M}\\p{N}])", "giu");
     var walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT, {
       acceptNode: function (node) {
-        return node.parentElement && !node.parentElement.closest(
+        return node.parentElement && node.parentElement.getClientRects().length && !node.parentElement.closest(
           "script,style,button,a,textarea,select,svg,.efp-mm-table-hint,.efp-mindmap-search-context"
         ) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
       }
@@ -185,6 +185,15 @@
   }
 
   function searchContext(target, key, control, query, marks) {
+    // Count reading units, not repeated words or bilingual text in one unit.
+    var groups = [], owners = new Map();
+    marks.forEach(function (mark) {
+      var owner = mark.closest("tr,li,.section-card,.card,.flow-box,.fact,.event,.timeline-item,.node,.branch,.item,.box,.step");
+      if (!owner || !target.contains(owner)) owner = target;
+      var group = owners.get(owner);
+      if (!group) { group = {anchor: owner, marks: []}; owners.set(owner, group); groups.push(group); }
+      group.marks.push(mark);
+    });
     var bar = document.createElement("div");
     bar.className = "efp-mindmap-search-context";
     var label = document.createElement("div");
@@ -197,18 +206,19 @@
     var index = 0;
     function scrollMatch() {
       marks.forEach(function (mark) { mark.classList.remove("efp-mm-current-match"); });
-      if (!marks.length) return;
-      marks[index].classList.add("efp-mm-current-match");
-      marks[index].scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });
-      if (next) next.textContent = (index + 1) + "/" + marks.length + " ↓";
+      if (!groups.length) return;
+      groups[index].marks.forEach(function (mark) { mark.classList.add("efp-mm-current-match"); });
+      groups[index].marks[0].scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });
+      if (next) next.textContent = (index + 1) + "/" + groups.length + (groups.length > 1 ? " ↓" : "");
     }
     var next;
-    if (marks.length) {
+    if (groups.length) {
       next = document.createElement("button");
       next.className = "efp-mm-next";
       next.type = "button";
-      next.setAttribute("aria-label", "Next search match / अगला खोज परिणाम");
-      next.addEventListener("click", function () { index = (index + 1) % marks.length; scrollMatch(); });
+      next.disabled = groups.length === 1;
+      next.setAttribute("aria-label", "Next matched section / अगला मिला भाग");
+      next.addEventListener("click", function () { if (groups.length > 1) { index = (index + 1) % groups.length; scrollMatch(); } });
       bar.appendChild(next);
     }
     var close = document.createElement("button");
@@ -222,7 +232,7 @@
       // token and the learner's current reading position intact.
       // Cancel any in-flight smooth scroll before removing the banner.
       window.scrollTo({ top: window.scrollY, left: window.scrollX, behavior: "instant" });
-      var anchor = marks.length ? marks[index].parentElement : target;
+      var anchor = groups.length ? groups[index].anchor : target;
       var top = anchor.getBoundingClientRect().top;
       clearSearchFocus();
       var delta = anchor.getBoundingClientRect().top - top;
