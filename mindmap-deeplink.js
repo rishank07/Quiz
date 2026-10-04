@@ -162,7 +162,14 @@
     });
   }
 
-  function highlightQuery(target, query, includePanel) {
+  function textMatches(query, text, fuzzy) {
+    if (typeof efTextMatches === "function") return efTextMatches(query, text, !!fuzzy);
+    var terms=query.toLocaleLowerCase().split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean);
+    text=String(text||"").toLocaleLowerCase();
+    return terms.every(function(term){return text.indexOf(term)>=0});
+  }
+
+  function highlightQuery(target, query, includePanel, fuzzy) {
     if (!query) return [];
     var ignored = /^(?:the|a|an|and|or|of|in|on|to|for|is|was|are|were|by|with|da|de|ka|ki|ke|hai|hain|में|का|की|के|है|हैं|और|से)$/i;
     var terms = query.split(/[^\p{L}\p{M}\p{N}]+/u).filter(function (term) {
@@ -170,6 +177,13 @@
     });
     terms.unshift(query);
     terms = terms.filter(function (term, i) { return term && terms.indexOf(term) === i; });
+    // Retrieval accepts partial words and bounded typos. Decorate the actual
+    // matching word (Nand -> Nagananda), while leaving its spelling intact.
+    var typedTerms=terms.slice();
+    Array.from(new Set((target.textContent||"").match(/[\p{L}\p{M}\p{N}]+/gu)||[])).forEach(function(word){
+      if(typedTerms.some(function(term){return textMatches(term,word,fuzzy)}))terms.push(word);
+    });
+    terms=Array.from(new Set(terms));
     terms.sort(function (a, b) { return b.length - a.length; });
     var pattern = new RegExp("(^|[^\\p{L}\\p{M}\\p{N}])(" + terms.map(function (term) {
       return term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -205,11 +219,11 @@
     return marks;
   }
 
-  function searchContext(target, key, control, query, marks) {
+  function matchingGroups(target, query, marks, fuzzy) {
     // Count reading units, not repeated words or bilingual text in one unit.
     var groups = [], owners = new Map();
     marks.forEach(function (mark) {
-      var owner = mark.closest("tr,li,.section-card,.card,.flow-box,.fact,.event,.timeline-item,.node,.branch,.item,.box,.step");
+      var owner = mark.closest("tr,li,.section-card,.card,.flow-box,.fact,.event,.timeline-item,.node,.branch,.item,.box,.step,.recall-qa,.intro-item");
       var panel=mark.closest(".tab-content,.tab-panel,.panel,section.tab,div.tab")||target;
       if (!owner || !panel.contains(owner)) owner = panel;
       var group = owners.get(owner);
@@ -219,12 +233,16 @@
     if(query){
       groups=groups.filter(function(group){
         var content=group.anchor.textContent;
-        var matches=typeof efTextMatches==="function"?efTextMatches(query,content,false):query.toLocaleLowerCase().split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean).every(function(term){return content.toLocaleLowerCase().indexOf(term)>=0});
+        var matches=textMatches(query,content,fuzzy);
         if(!matches)group.marks.forEach(function(mark){mark.replaceWith(document.createTextNode(mark.textContent))});
         return matches;
       });
-      marks=groups.reduce(function(all,group){return all.concat(group.marks)},[]);
     }
+    return groups;
+  }
+
+  function searchContext(target, key, control, query, groups) {
+    var marks=groups.reduce(function(all,group){return all.concat(group.marks)},[]);
     var bar = document.createElement("div");
     bar.className = "efp-mindmap-search-context";
     var label = document.createElement("div");
@@ -232,7 +250,7 @@
     section.textContent = control ? control.textContent.trim() : key.replace(/[-_]/g, " ");
     label.appendChild(section);
     var detail = document.createElement("span");
-    detail.textContent = query ? "Search: " + query : "Opened section / खुला हुआ भाग";
+    detail.textContent = query ? "Search: " + query + (groups.length ? "" : " · No matching text / मिलान नहीं मिला") : "Opened section / खुला हुआ भाग";
     label.appendChild(detail); bar.appendChild(label);
     var index = Math.max(0,groups.findIndex(function(group){return group.panel===target}));
     if (appResume && !appResume.dismissed && groups.length) {
@@ -308,9 +326,16 @@
     var query = searchQuery();
     var panels=Array.from(document.querySelectorAll(".tab-content,.tab-panel,.panel,section.tab,div.tab")).filter(function(panel){return panel.id&&!panel.closest("nav")&&!panel.parentElement.closest(".tab-content,.tab-panel,.panel,section.tab,div.tab")});
     if(!panels.length&&found)panels=[target];
-    var marks=[];
+    var marks=[],groups=[];
     if(found)panels.forEach(function(panel){marks=marks.concat(highlightQuery(panel,query,true))});
-    var focusMatch = found ? searchContext(target, key, preferredControl, query, marks) : null;
+    groups=matchingGroups(target,query,marks,false);
+    // Typo matches are a fallback only when no exact/partial reading unit
+    // matches, consistent with the shared search engine's result ranking.
+    if(found&&query&&!groups.length&&typeof efTextMatches==="function"){
+      marks=[];panels.forEach(function(panel){marks=marks.concat(highlightQuery(panel,query,true,true))});
+      groups=matchingGroups(target,query,marks,true);
+    }
+    var focusMatch = found ? searchContext(target, key, preferredControl, query, groups) : null;
     var run = ++focusRun;
 
     requestAnimationFrame(function () {
@@ -374,9 +399,9 @@
       var query = searchQuery();
       var panels = Array.from(document.querySelectorAll(".tab-content[id],.tab-panel[id],.panel[id],section.tab[id],div.tab[id]"));
       var matched = panels.find(function(panel) {
-        return typeof efTextMatches === "function" ? efTextMatches(query, panel.textContent, false)
-          : query.toLocaleLowerCase().split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean).every(function(term){return panel.textContent.toLocaleLowerCase().indexOf(term)>=0});
+        return textMatches(query,panel.textContent,false);
       });
+      if(!matched&&typeof efTextMatches==="function")matched=panels.find(function(panel){return textMatches(query,panel.textContent,true)});
       if (matched) {
         key = matched.id;
         var url = new URL(location.href); url.hash = key;

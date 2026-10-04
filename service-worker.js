@@ -1,5 +1,5 @@
 // v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261004opentry1";
+const CACHE_VERSION = "efp-pwa-20261004mmpartial1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261004resumeunlimited1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -37,7 +37,7 @@ const APP_SHELL = [
   "/back-nav.js?v=20261004searchaudit1",
   "/search-context.js?v=20261004opentry1",
   "/search-context.css?v=20261004inlinecenter1",
-  "/mindmap-deeplink.js?v=20261004searchaudit1",
+  "/mindmap-deeplink.js?v=20261004mmpartial1",
   "/mindmap-reader.css?v=20261004scrollfix1",
   "/progress.js?v=20261001caback1",
   "/rapid-practice-deeplink.js?v=20261004context1",
