@@ -8,7 +8,27 @@
   var revealed=[];
   var appRestored=false,resumeState=null;
   var explanationSelector=".explanation,.explanation-box,.explain-box,.exp-box,.exp,.explain,.q-exp,[id^='exp-']";
-  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context.css?v=20261004explain1";document.head.appendChild(style);
+  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context.css?v=20261004contextcenter1";document.head.appendChild(style);
+  function positionFloatingBar(){
+    if(!bar||!bar.classList.contains("efp-floating-search-context"))return;
+    var viewport=window.visualViewport,width=viewport?viewport.width:window.innerWidth,height=viewport?viewport.height:window.innerHeight;
+    bar.style.left=((viewport?viewport.offsetLeft:0)+width/2)+"px";
+    bar.style.top=((viewport?viewport.offsetTop:0)+height/2)+"px";
+    bar.style.width=Math.max(0,Math.min(640,width-24))+"px";
+    bar.style.maxHeight=Math.max(0,height-32)+"px";
+  }
+  function showFloatingBar(){
+    bar.classList.add("efp-floating-search-context");
+    // BODY inversion/filter and card transforms can trap fixed descendants.
+    // Keep this viewport control outside those page-specific containers.
+    document.documentElement.appendChild(bar);positionFloatingBar();
+  }
+  function focusMatch(node){
+    node.scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
+    // Keep the highlighted text below the centered control, so Dekho/Next
+    // never place their result behind the yellow bar.
+    if(bar&&bar.classList.contains("efp-floating-search-context"))window.scrollBy({top:-bar.getBoundingClientRect().height/2-24,behavior:"instant"});
+  }
   function savedQuery(){
     try{
       var token=new URL(location.href).searchParams.get("efSearchReturn")||(history.state&&history.state.efpSearchReturnToken);
@@ -214,7 +234,7 @@
         }
       });
       focusGroup(false);
-      (group.explanationMarks[0]||group.explanations[0]).scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
+      focusMatch(group.explanationMarks[0]||group.explanations[0]);
       schedule();
     });explanationButton.className="efp-context-explanation";bar.insertBefore(explanationButton,bar.lastChild);
     var explanationStatus=document.createElement("small");explanationStatus.className="efp-context-explanation-status";bar.querySelector(".efp-context-description").appendChild(explanationStatus);
@@ -222,14 +242,14 @@
       marks.forEach(function(mark){mark.classList.remove("efp-context-current")});
       var group=groups[current];if(!group||!group.anchor)return;
       target=group.anchor;group.marks.forEach(function(mark){mark.classList.add("efp-context-current")});
-      target.parentNode.insertBefore(bar,target);bar.querySelector(".efp-context-location").textContent=group.record.label;
+      showFloatingBar();bar.querySelector(".efp-context-location").textContent=group.record.label;
       explanationButton.hidden=!group.explanations.length;explanationStatus.hidden=!group.explanations.length;
       explanationStatus.textContent=group.explanations.length?"Match explanation mein hai":"";
       explanationButton.textContent=group.explanations.some(function(exp){return !explanationVisible(exp)})?"Dekho":"Dekho ↓";
-      if(scroll)(group.marks[0]||target).scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
+      if(scroll)focusMatch(group.marks[0]||target);
     }
     // Keep quiz card content and option event listeners independent of controls.
-    target.parentNode.insertBefore(bar,target);
+    showFloatingBar();
     if(groups.length){
       var next=button("Next matched question or section / अगला मिला प्रश्न या भाग",(current+1)+"/"+groups.length+(groups.length>1?" ↓":""),function(){
         if(groups.length<2)return;
@@ -250,7 +270,7 @@
     if(resumeState){resumeState=null;window.EFP_APP_SESSION.restoreSearchScroll()}
   }
   function measurePdfHeader(){
-    var head=bar&&bar.parentElement;if(!head)return;
+    var head=bar&&bar.parentElement;if(!head||!bar.classList.contains("efp-pdf-search-context"))return;
     document.documentElement.style.setProperty("--efp-search-head-height",Math.ceil(head.getBoundingClientRect().height)+"px");
     document.documentElement.style.setProperty("--efp-search-bar-height",Math.ceil(bar.getBoundingClientRect().height)+"px");
   }
@@ -289,6 +309,11 @@
   window.addEventListener("hashchange",function(){viewKey="";selection="";schedule()});
   window.addEventListener("pageshow",function(){schedule();syncPdf()});
   window.addEventListener("resize",measurePdfHeader,{passive:true});
+  window.addEventListener("resize",positionFloatingBar,{passive:true});
+  if(window.visualViewport){
+    window.visualViewport.addEventListener("resize",positionFloatingBar,{passive:true});
+    window.visualViewport.addEventListener("scroll",positionFloatingBar,{passive:true});
+  }
   function init(){
     if(window.EFP_PDF_SEARCH_CONTEXT){pdfAdapter=window.EFP_PDF_SEARCH_CONTEXT;syncPdf()}
     else if(document.getElementById("pdfFrame")){
