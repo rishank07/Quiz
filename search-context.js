@@ -9,25 +9,56 @@
   var optionPreviews=new Set();
   var appRestored=false,resumeState=null;
   var fuzzyMatches=false;
+  var dockTopValue=null;
   var explanationSelector=".explanation,.explanation-box,.explain-box,.exp-box,.exp,.explain,.q-exp,[id^='exp-']";
   var optionSelector=".option,.option-text,.option-btn,.quiz-option,.opt,.opt-en,.opt-hi,.options label,.q-options label,[id^='opts-'] label,.options [onclick],.q-options [onclick],[id^='opts-'] [onclick]";
-  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context.css?v=20261004inlinecenter1";document.head.appendChild(style);
+  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context-dock.css?v=20261005dock1";document.head.appendChild(style);
   var allowEntryFocus=true;
+  function resolveDockTop(){
+    if(dockTopValue!==null)return dockTopValue;
+    var top=6;
+    try{
+      document.querySelectorAll("header,nav,.topnav,.tab-nav,.sticky-nav,.efp-op-topbar,.reader-head,.shell .head,#app>.max-w-3xl>.flex.items-center.justify-between.mb-3").forEach(function(el){
+        if(!el||!el.getClientRects().length)return;
+        var cs=getComputedStyle(el),pos=cs.position;if(pos!=="sticky"&&pos!=="fixed")return;
+        var r=el.getBoundingClientRect();if(r.height<=0||r.height>180||r.bottom<=0||r.top>140)return;
+        top=Math.max(top,Math.ceil(r.bottom)+4);
+      });
+    }catch(_){}
+    dockTopValue=top;return top;
+  }
+  function measureDock(){
+    if(!bar||!bar.isConnected||pdfAdapter||bar.classList.contains("efp-pdf-search-context"))return;
+    document.documentElement.style.setProperty("--efp-search-dock-top",resolveDockTop()+"px");
+    document.documentElement.classList.add("efp-has-search-dock");
+    document.documentElement.style.setProperty("--efp-search-dock-height",Math.ceil(bar.getBoundingClientRect().height)+"px");
+  }
+  function mountDock(){
+    if(!bar||pdfAdapter)return;
+    if(bar.parentElement!==document.body)document.body.appendChild(bar);
+    measureDock();
+  }
+  function scrollTargetBelowDock(){
+    if(!target||!target.isConnected||!bar||!bar.isConnected||pdfAdapter)return;
+    measureDock();
+    var br=bar.getBoundingClientRect(),tr=target.getBoundingClientRect();
+    var desired=Math.ceil(br.bottom)+10,delta=tr.top-desired;
+    if(Math.abs(delta)>1)window.scrollBy({top:delta,left:0,behavior:"instant"});
+  }
   // The stylesheet and the quiz's lazy section can finish in either order.
   // Re-measure only while entry focus is still ours, never after interaction
   // or an installed-app reading-position restore.
   style.addEventListener("load",function(){
+    measureDock();
     if(allowEntryFocus&&!appRestored)requestAnimationFrame(centerBar);
   },{once:true});
   function centerBar(){
     if(!bar||!bar.isConnected||pdfAdapter)return;
-    bar.scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});
+    mountDock();scrollTargetBelowDock();
   }
   function focusTarget(el){
     var saved=savedQuery();
     if(!saved||dismissed.has(saved.token)||pdfAdapter)return false;
-    // The inline search control, rather than a possibly very tall question,
-    // owns the entry scroll. Leave resumed reading positions untouched.
     if(!bar){schedule();return true}
     if(allowEntryFocus&&!appRestored&&(target===el||target&&el&&(target.contains(el)||el.contains(target))))centerBar();
     return true;
@@ -47,11 +78,13 @@
   function clear(){
     if(bar)bar.remove();
     marks.forEach(function(mark){if(mark.isConnected)mark.replaceWith(document.createTextNode(mark.textContent))});
-    clearOutline(target);bar=null;target=null;marks=[];current=0;
+    clearOutline(target);bar=null;target=null;marks=[];current=0;dockTopValue=null;
     if(pdfObserver){pdfObserver.disconnect();pdfObserver=null}
-    document.documentElement.classList.remove("efp-has-pdf-search-context");
+    document.documentElement.classList.remove("efp-has-pdf-search-context","efp-has-search-dock");
     document.documentElement.style.removeProperty("--efp-search-head-height");
     document.documentElement.style.removeProperty("--efp-search-bar-height");
+    document.documentElement.style.removeProperty("--efp-search-dock-top");
+    document.documentElement.style.removeProperty("--efp-search-dock-height");
   }
   function button(label,text,handler){
     var el=document.createElement("button");el.type="button";el.textContent=text;el.setAttribute("aria-label",label);el.title=label;
@@ -71,8 +104,6 @@
   }
   function highlightTerms(root,query){
     var terms=queryTerms(query),typedTerms=terms.slice(),tokens=Array.from(new Set((root.textContent||"").match(/[\p{L}\p{M}\p{N}]+/gu)||[]));
-    // Use the same bounded typo/partial-word matching as search retrieval.
-    // The original text remains intact: mark its actual word, not the typo.
     if(typeof efTextMatches==="function")tokens.forEach(function(word){
       if(typedTerms.some(function(term){return efTextMatches(term,word,fuzzyMatches)}))terms.push(word);
     });
@@ -136,8 +167,6 @@
     if(explanationVisible(node))return;
     revealed=revealed.filter(function(entry){return entry.node.isConnected});
     if(!revealed.some(function(entry){return entry.node===node}))revealed.push({node:node,key:key,hidden:node.hidden,open:node.open});
-    // A temporary display override leaves the quiz's own hidden/show classes
-    // untouched. Answering normally still controls its permanent visibility.
     node.hidden=false;node.classList.add("efp-context-revealed");
     if(node.matches("details"))node.open=true;
   }
@@ -231,16 +260,12 @@
       if(resumeState){resumeState=null;window.EFP_APP_SESSION.restoreSearchScroll()}return;
     }
     var stamp=adapter?adapter.viewKey():"dom",cache=saved.token+":"+saved.query;
-    // Do not consume first-entry focus on the saved/default section while
-    // the exact search anchor is still waiting for the native deep link.
     if(entryCache!==cache&&adapter&&adapter.ready&&!adapter.ready())return;
     if(adapter&&(recordCache!==cache||recordProvider!==adapter||!pageRecords.length)){
       fuzzyMatches=false;
       pageRecords=adapter.results(saved.query,textMatches);recordCache=cache;recordProvider=adapter;
       if(!pageRecords.length){fuzzyMatches=true;pageRecords=adapter.results(saved.query,textMatches)}
     }
-    // Cached records include lazy sections. Only decorate the currently rendered
-    // cards; opening another result uses the page's progress-preserving switcher.
     var roots=adapter?pageRecords.map(function(row){return adapter.element(row)}).filter(function(node){return node&&node.getClientRects().length}):domRoots(el);
     if(!roots.length){if(target&&!target.isConnected){clear();viewRoots=[]}return}
     var signature=stamp+"|"+cache+"|"+roots.map(function(node){return node.id+":"+!!node.getClientRects().length+":"+node.textContent+":"+explanationRoots(node).map(explanationVisible).join(",")}).join("\n");
@@ -301,16 +326,15 @@
       marks.forEach(function(mark){mark.classList.remove("efp-context-current")});
       var group=groups[current];if(!group||!group.anchor)return;
       target=group.anchor;group.marks.forEach(function(mark){mark.classList.add("efp-context-current")});
-      target.parentNode.insertBefore(bar,target);bar.querySelector(".efp-context-location").textContent=group.record.label;
+      mountDock();bar.querySelector(".efp-context-location").textContent=group.record.label;
       var hasOptions=group.options.length>0,hasExplanations=group.explanations.length>0,hasSpecial=hasOptions||hasExplanations;
       explanationButton.hidden=!hasSpecial;explanationStatus.hidden=!hasSpecial;
       explanationStatus.textContent=hasOptions&&hasExplanations?"Match option/explanation mein hai":hasOptions?"Match option mein hai":hasExplanations?"Match explanation mein hai":"";
       var optionPending=hasOptions&&!group.optionMarks.length;
       explanationButton.textContent=(optionPending||group.explanations.some(function(exp){return !explanationVisible(exp)}))?"Dekho":"Dekho ↓";
-      if(scroll)centerBar();
+      measureDock();if(scroll)centerBar();
     }
-    // Keep quiz card content and option event listeners independent of controls.
-    target.parentNode.insertBefore(bar,target);
+    mountDock();
     if(groups.length){
       var next=button("Next matched question or section / अगला मिला प्रश्न या भाग",(current+1)+"/"+groups.length+(groups.length>1?" ↓":""),function(){
         if(groups.length<2)return;
@@ -356,8 +380,6 @@
   window.EFP_SEARCH_CONTEXT={
     refresh:schedule,
     beginEntry:function(){
-      // A deliberate in-page result click starts a new focus cycle after the
-      // typing/touch events that previously protected the learner's scroll.
       clear();clearRevealed();allowEntryFocus=true;appRestored=false;
       resumeState=null;viewKey="";entryCache="";selection="";scrollNext=false;
       schedule();
@@ -377,7 +399,7 @@
   window.addEventListener("efp-app-search-resume",function(){viewKey="";schedule()});
   window.addEventListener("hashchange",function(){viewKey="";selection="";schedule()});
   window.addEventListener("pageshow",function(){schedule();syncPdf()});
-  window.addEventListener("resize",measurePdfHeader,{passive:true});
+  window.addEventListener("resize",function(){dockTopValue=null;measurePdfHeader();measureDock()},{passive:true});
   ["pointerdown","touchstart","wheel","keydown"].forEach(function(name){
     window.addEventListener(name,function(){allowEntryFocus=false},{passive:true});
   });
