@@ -1,11 +1,15 @@
-// v210 desktop/Windows search parity and fresh search context dock
-const CACHE_VERSION = "efp-pwa-20261005desktopsearch1";
+// v211 generic desktop/Windows search parity across all section searches
+const CACHE_VERSION = "efp-pwa-20261005desktopsearch2";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261004resumeunlimited1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
+
+const DESKTOP_SEARCH_COMPAT = '\n/* efp-desktop-section-search-compat-v1 */\n;(function(){\n  if(window.__EFP_DESKTOP_SECTION_FALLBACK__)return;\n  var ua=String(navigator.userAgent||"");\n  var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);\n  if(mobile){window.__EFP_DESKTOP_SECTION_FALLBACK__=true;return;}\n  if(typeof window.efCreateSearchWorker!=="function")return;\n  var create=window.efCreateSearchWorker;\n  window.efCreateSearchWorker=function(options){\n    var client=create(options);\n    var section=typeof window.efIsSectionSearchPage==="function"&&window.efIsSectionSearchPage();\n    if(!section||!client||!options||!options.indexUrl||!options.globalName||typeof client.search!=="function")return client;\n    var baseSearch=client.search;\n    client.search=function(query){\n      return Promise.resolve(baseSearch.call(client,query)).then(function(rows){\n        if(Array.isArray(rows)&&rows.length)return rows;\n        if(options.mode!=="snippet"||typeof window.efLoadSearchIndexScript!=="function"||typeof window.efFallbackSnippetSearchAsync!=="function")return rows||[];\n        return window.efLoadSearchIndexScript(options.indexUrl,options.globalName).then(function(records){\n          return window.efFallbackSnippetSearchAsync(query,records,options);\n        }).catch(function(){return rows||[];});\n      });\n    };\n    return client;\n  };\n  window.__EFP_DESKTOP_SECTION_FALLBACK__=true;\n})();\n';
+
+const DESKTOP_SEARCH_ENTRY_BOOTSTRAP = '<script id="efp-desktop-search-entry-bootstrap">(function(){var ua=String(navigator.userAgent||"");var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);if(mobile)return;if(window.EFP_SEARCH_CONTEXT||document.getElementById("efp-shared-search-context"))return;var s=document.createElement("script");s.id="efp-shared-search-context";s.src="/search-context.js?v=20261005rootdock2";s.defer=true;document.head.appendChild(s)})();</script>';
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
@@ -43,7 +47,7 @@ const APP_SHELL = [
   "/progress.js?v=20261001caback1",
   "/rapid-practice-deeplink.js?v=20261004context1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
-  "/search-logic.js?v=20261005desktop1",
+  "/search-logic.js?v=20261005desktop2",
   "/section-search-ui.js?v=20261001searchreturn2",
   "/search-worker.js?v=20261005desktop1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
@@ -237,6 +241,20 @@ async function injectCurrentAffairsMoveTop(response, url) {
   return rebuiltHtmlResponse(response, html);
 }
 
+async function injectDesktopSearchEntry(response, url) {
+  if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.toLowerCase().includes("text/html")) return response;
+  if (!url.searchParams.has("efSearchQuery") && !url.searchParams.has("efSearchReturn")) return response;
+
+  let html = await response.text();
+  if (!html.includes("efp-desktop-search-entry-bootstrap")) {
+    const headMatch = html.match(/<head(?:\s[^>]*)?>/i);
+    if (headMatch) html = html.replace(headMatch[0], headMatch[0] + "\n  " + DESKTOP_SEARCH_ENTRY_BOOTSTRAP);
+  }
+  return rebuiltHtmlResponse(response, html);
+}
+
 async function injectOwnerDebug(response) {
   if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
   const contentType = response.headers.get("content-type") || "";
@@ -255,6 +273,7 @@ async function injectOwnerDebug(response) {
 async function prepareNavigationResponse(response, injectDebug, url) {
   let served = await injectEdgeToEdge(response);
   served = await injectCurrentAffairsMoveTop(served, url);
+  served = await injectDesktopSearchEntry(served, url);
   if (injectDebug) served = await injectOwnerDebug(served);
   return served;
 }
@@ -365,6 +384,29 @@ async function freshCoreAsset(request) {
   }
 }
 
+async function withDesktopSearchCompat(response) {
+  if (!response || !response.ok || (response.type !== "basic" && response.type !== "cors" && response.type !== "default")) return response;
+  const text = await response.text();
+  const headers = new Headers(response.headers);
+  headers.delete("content-length");headers.delete("content-encoding");headers.delete("etag");
+  const body = text.includes("efp-desktop-section-search-compat-v1") ? text : text + DESKTOP_SEARCH_COMPAT;
+  return new Response(body, {status:response.status,statusText:response.statusText,headers});
+}
+
+async function freshSearchLogicAsset(request) {
+  const cache = await caches.open(CACHE_VERSION);
+  try {
+    const response = await fetch(request, { cache: "no-store" });
+    const served = await withDesktopSearchCompat(response);
+    if (served && served.ok) await cache.put(request, served.clone());
+    return served;
+  } catch (_) {
+    const cached = await caches.match(request) || await caches.match(request, { ignoreSearch: true });
+    if (cached) return withDesktopSearchCompat(cached);
+    return new Response("", { status: 503, statusText: "Offline" });
+  }
+}
+
 async function freshCurrentAffairsBookmarkAsset() {
   const currentAsset = "/ca-question-deeplink.js?v=20261004context1";
   const cache = await caches.open(CACHE_VERSION);
@@ -434,6 +476,13 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Search logic gets a desktop-only compatibility layer in the same response,
+  // so every section hub benefits without editing each individual HTML file.
+  if (url.pathname === "/search-logic.js") {
+    event.respondWith(freshSearchLogicAsset(request));
+    return;
+  }
+
   // Navigation chrome and Original Practice shared assets change often;
   // never let an old app-shell copy win on a normal refresh.
   if (url.pathname === "/home-nav.js" ||
@@ -452,7 +501,6 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/mindmap-deeplink.js" ||
       url.pathname === "/mindmap-reader.css" ||
       url.pathname === "/progress.js" ||
-      url.pathname === "/search-logic.js" ||
       url.pathname === "/search-worker.js" ||
       url.pathname === "/section-search-ui.js" ||
       url.pathname === "/homepage-search-ui.js" ||
