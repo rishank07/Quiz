@@ -281,7 +281,7 @@
 </style>
   <script defer src="/home-nav.js?v=20260906"></script>
   <script defer src="/back-parent-map.js?v=20260906hier1"></script>
-  <script defer src="/back-nav.js?v=20261004searchaudit1"></script>
+  <script defer src="/back-nav.js?v=20261005desktop1"></script>
 </head>
 
 <body>
@@ -338,7 +338,7 @@
 
   <!-- Site-wide search indexes (title index + deep content index), scoped below to this section only -->
   <script src="../../search-index-main.js?v=20260909august1"></script>
-  <script src="../../search-logic.js?v=20260901a"></script>
+  <script src="../../search-logic.js?v=20261005desktop1"></script>
   <script>
     (function () {
       var SECTION_PREFIX = "./Books/Ghatnachakra%20Purvalokan/";
@@ -348,6 +348,7 @@
       var resultsEl = document.getElementById("efScopedResults");
       var noResultsEl = document.getElementById("efScopedNoResults");
       var origPlaceholder = input.placeholder;
+      var DESKTOP_FALLBACK = !/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
 
       function ready() { return typeof SEARCH_INDEX !== "undefined"; }
       if (!ready()) {
@@ -400,7 +401,9 @@
         results.forEach(function (rec) {
           var li = document.createElement("li");
           var a = document.createElement("a");
-          a.href = REL_ROOT + rec.f.slice(2);
+          var targetUrl = new URL(REL_ROOT + rec.f.slice(2), document.baseURI);
+          targetUrl.searchParams.set("efSearchQuery", q.slice(0, 160));
+          a.href = targetUrl.href;
           var titleSpan = document.createElement("span");
           titleSpan.className = "ef-result-title";
           titleSpan.textContent = rec.t;
@@ -425,9 +428,9 @@
 
       var deepClient = (typeof efCreateSearchWorker === "function")
         ? efCreateSearchWorker({
-            workerUrl: new URL(REL_ROOT + "search-worker.js?v=20260901a", document.baseURI).href,
-            logicUrl: new URL(REL_ROOT + "search-logic.js?v=20260901a", document.baseURI).href,
-            indexUrl: new URL(REL_ROOT + "search-snippets-ghatnachakra.js", document.baseURI).href,
+            workerUrl: new URL(REL_ROOT + "search-worker.js?v=20261005desktop1", document.baseURI).href,
+            logicUrl: new URL(REL_ROOT + "search-logic.js?v=20261005desktop1", document.baseURI).href,
+            indexUrl: new URL(REL_ROOT + "search-snippets-ghatnachakra.js?v=20261005desktop1", document.baseURI).href,
             mode: "snippet",
             globalName: "EF_SNIPPET_INDEX",
             sectionPrefix: SECTION_PREFIX,
@@ -443,7 +446,7 @@
         if (fallbackPromise) return fallbackPromise;
         fallbackPromise = new Promise(function (resolve, reject) {
           var script = document.createElement("script");
-          script.src = REL_ROOT + "search-snippets-ghatnachakra.js";
+          script.src = REL_ROOT + "search-snippets-ghatnachakra.js?v=20261005desktop1";
           script.onload = resolve;
           script.onerror = reject;
           document.body.appendChild(script);
@@ -470,6 +473,15 @@
         }
         deepClient.search(q).then(function (hits) {
           if (sequence !== searchSequence || input.value.trim() !== q) return;
+          // Section search intentionally keeps the huge Ghatna index out of the
+          // main thread. Some desktop Chromium/Windows PWA contexts block or fail
+          // the dedicated worker, which previously looked like a genuine zero-hit
+          // search. Desktop has enough headroom for the existing chunked fallback,
+          // so recover there instead of silently showing no results.
+          if (DESKTOP_FALLBACK && (!Array.isArray(hits) || hits.length === 0)) {
+            runFallbackSearch(q, sequence);
+            return;
+          }
           runSearch(q, hits, false);
         }).catch(function () {
           deepClient = null;
