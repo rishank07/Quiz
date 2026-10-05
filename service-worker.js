@@ -1,5 +1,5 @@
-// v209 professional Fit Width PDF zoom controls
-const CACHE_VERSION = "efp-pwa-20261004mmpartial1";
+// v210 desktop/Windows search parity and fresh search context dock
+const CACHE_VERSION = "efp-pwa-20261005desktopsearch1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261004resumeunlimited1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -34,17 +34,18 @@ const APP_SHELL = [
   "/home-nav.js?v=20261004searchaudit1",
   "/app-session.js?v=20261004resumeunlimited1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20261004searchaudit1",
-  "/search-context.js?v=20261004opentry1",
+  "/back-nav.js?v=20261005desktop1",
+  "/search-context.js?v=20261005rootdock2",
   "/search-context.css?v=20261004inlinecenter1",
+  "/search-context-dock-v3.css?v=20261005rootdock2",
   "/mindmap-deeplink.js?v=20261004mmpartial1",
   "/mindmap-reader.css?v=20261004scrollfix1",
   "/progress.js?v=20261001caback1",
   "/rapid-practice-deeplink.js?v=20261004context1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
-  "/search-logic.js",
+  "/search-logic.js?v=20261005desktop1",
   "/section-search-ui.js?v=20261001searchreturn2",
-  "/search-worker.js?v=20261004rank1",
+  "/search-worker.js?v=20261005desktop1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261004searchaudit1",
   "/homepage-fulltext-search.js?v=20261004searchaudit1",
@@ -443,6 +444,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/back-nav.js" ||
       url.pathname === "/search-context.js" ||
       url.pathname === "/search-context.css" ||
+      url.pathname === "/search-context-dock-v3.css" ||
       url.pathname === "/back-parent-map.js" ||
       url.pathname === "/question-deeplink.js" ||
       url.pathname === "/rapid-practice-deeplink.js" ||
