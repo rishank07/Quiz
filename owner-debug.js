@@ -145,8 +145,10 @@
 
     function refresh() {
       var enabled = isEnabled();
-      status.textContent = enabled ? "Status: ON — your GA4 traffic is blocked" : "Status: OFF — normal GA4 tracking";
-      status.style.color = enabled ? "#7ee2a8" : "#ffb1b1";
+      var preview = window.EFP_ANALYTICS_PREVIEW === true;
+      status.textContent = preview ? "Status: PREVIEW — GA4 traffic is blocked" :
+        (enabled ? "Status: ON — your GA4 traffic is blocked" : "Status: OFF — normal GA4 tracking");
+      status.style.color = (enabled || preview) ? "#7ee2a8" : "#ffb1b1";
       onBtn.disabled = enabled;
       offBtn.disabled = !enabled;
       onBtn.style.opacity = enabled ? ".45" : "1";
