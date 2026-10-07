@@ -8,14 +8,14 @@ function setup(html,url){
  const w=dom.window,scrolled=[];
  w.HTMLElement.prototype.getClientRects=function(){return this.closest('[hidden],.hidden')?[]:[{width:100,height:40}]};
  w.HTMLElement.prototype.scrollIntoView=function(){scrolled.push(this)};
- w.scrollTo=()=>{};w.scrollBy=()=>{};
+ w.scrollTo=()=>{};w.scrollBy=()=>{const dock=w.document.querySelector("html>.efp-search-context");if(dock)scrolled.push(dock)};
  w.sessionStorage.setItem('efp_search_return_v1:test',JSON.stringify({token:'test',source:'https://examfusionprep.com/',inputs:[{id:'searchBox',value:'BRICS'}]}));
  w.localStorage.setItem('attempt','{"q6":1,"bookmark":true}');
  return {dom,w,scrolled,storage:JSON.stringify(w.localStorage),session:JSON.stringify(w.sessionStorage)};
 }
 async function quiz(html,hash){const p=setup(html,'/Books/sample.html?efSearchReturn=test#'+hash);p.w.eval(read('search-context.js'));await delay(50);return p}
 async function mindmap(html){const p=setup(html,'/Mind%20Maps/sample.html?efSearchReturn=test#facts');p.w.eval(read('mindmap-deeplink.js'));await delay(70);return p}
-function scrollTarget(p){const node=p.scrolled.at(-1);return node.classList.contains('efp-search-context')?node.nextElementSibling:node}
+function scrollTarget(p){const node=p.scrolled.at(-1);return node.classList.contains('efp-search-context')?p.w.document.getElementById(p.w.location.hash.slice(1))||p.w.document.querySelector('mark.efp-context-current'):node}
 function preserve(p){assert.equal(JSON.stringify(p.w.localStorage),p.storage);assert.equal(JSON.stringify(p.w.sessionStorage),p.session)}
 (async()=>{
  // Same bilingual question, repeated term, split markup, answers and hidden text.

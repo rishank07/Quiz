@@ -7,7 +7,7 @@ async function until(check){for(let i=0;i<500;i++){if(check())return;await delay
 function page(html,url='/'){
  const dom=new JSDOM(html,{url:'https://examfusionprep.com'+url,runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window,scrolls=[];
  w.HTMLElement.prototype.getClientRects=function(){for(let el=this;el;el=el.parentElement){if(!el.classList.contains('efp-context-revealed')&&w.getComputedStyle(el).display==='none')return []}return [{width:100,height:40}]};
- w.HTMLElement.prototype.scrollIntoView=function(){scrolls.push(this)};w.scrollTo=()=>{};w.scrollBy=()=>{};w.confirm=()=>true;w.alert=()=>{};w.matchMedia=()=>({matches:false});
+ w.HTMLElement.prototype.scrollIntoView=function(){scrolls.push(this)};w.scrollTo=()=>{};w.scrollBy=()=>{const dock=w.document.querySelector("html>.efp-search-context");if(dock)scrolls.push(dock)};w.confirm=()=>true;w.alert=()=>{};w.matchMedia=()=>({matches:false});
  const run=s=>vm.runInContext(s,dom.getInternalVMContext());
  return {dom,w,run,scrolls,inline:()=>Array.from(w.document.scripts).forEach(s=>{if(!s.src&&!/json/i.test(s.type))run(s.textContent)})};
 }
@@ -48,9 +48,20 @@ async function lifecycle(){
  phase(p,'source-error');phase(p,'core-done');await delay(100);assert(!p.w.document.getElementById('efSearchTools').classList.contains('is-searching'));assert(!p.w.document.getElementById('noResults').classList.contains('show'),'A failed source is not a genuine zero result');assert(p.w.document.getElementById('efSearchStatus').textContent.includes('could not load'));
  let retries=0;p.w.document.getElementById('searchBox').addEventListener('input',e=>{if(e.detail?.efpRetrySearch)retries++});p.w.document.querySelector('#efSearchTools > button').click();assert.equal(retries,1);assert(p.w.document.getElementById('efSearchTools').classList.contains('is-searching'));
  phase(p,'core-done');phase(p,'fulltext-done');await delay(100);assert(p.w.document.getElementById('noResults').classList.contains('show'));p.dom.window.close();
- const retry=page(mini),stats=workers(retry,{failFirst:true});retry.run(read('search-logic.js'));retry.run(read('homepage-fulltext-search.js'));retry.run(read('homepage-search-ui.js'));await delay(20);type(retry,'Nitish');await until(()=>retry.w.document.querySelector('[data-bookfullitem]')&&!retry.w.document.getElementById('efSearchTools').classList.contains('is-searching'));
+ const retry=page(mini),stats=workers(retry,{failFirst:true});retry.run(read('search-logic.js'));retry.run('efLoadSearchIndexScript=function(){return Promise.reject(new Error("Index offline"))}');retry.run(read('homepage-fulltext-search.js'));retry.run(read('homepage-search-ui.js'));await delay(20);type(retry,'Nitish');await until(()=>retry.w.document.querySelector('[data-bookfullitem]')&&!retry.w.document.getElementById('efSearchTools').classList.contains('is-searching'));
  await until(()=>retry.w.document.getElementById('efSearchStatus').textContent.includes('could not load'));const before=stats.created;type(retry,'Nitish',{efpRetrySearch:true});await until(()=>!retry.w.document.getElementById('efSearchTools').classList.contains('is-searching'));await delay(100);assert.equal(stats.created,before+1,'Retry only needs to reload the failed source; successful sources reuse cached hits');assert(!retry.w.document.getElementById('efSearchStatus').textContent.includes('could not load'));assert.equal(stats.alive,0);retry.dom.window.close();
  console.log('PASS truthful slow/completion/zero-result status, two-pipeline barrier, recoverable failed-source retry and bounded worker lifetime');
+}
+async function interruptedSnapshot(){
+ const p=page(mini);let reruns=0;p.w.efpWithHomeSearchWorker=fn=>Promise.resolve().then(fn);
+ p.w.localStorage.setItem('efp_home_search_query_v1','Nitish');
+ p.w.sessionStorage.setItem('efp_home_search_results_v1',JSON.stringify({query:'Nitish',html:'',complete:false}));
+ p.w.document.getElementById('searchBox').addEventListener('input',e=>{if(!e.detail?.efpRestoredSearch)reruns++});
+ p.run(read('homepage-search-ui.js'));p.w.dispatchEvent(new p.w.Event('load'));await delay(50);
+ assert.equal(reruns,1,'Interrupted empty snapshot restarts a genuine cold search');assert(p.w.document.getElementById('efSearchTools').classList.contains('is-searching'));
+ phase(p,'core-done');phase(p,'fulltext-done');await delay(60);p.w.dispatchEvent(new p.w.PageTransitionEvent('pagehide',{persisted:false}));
+ assert.equal(JSON.parse(p.w.sessionStorage.getItem('efp_home_search_results_v1')).complete,true,'A valid empty search is marked complete');p.dom.window.close();
+ console.log('PASS interrupted empty snapshot recovery and completed-empty snapshot distinction');
 }
 async function coldHome(){
  const p=page(read('index.html')),stats=workers(p,{real:true});p.run(read('search-logic.js'));p.run(read('search-index-main.js'));
@@ -76,4 +87,4 @@ async function mindmap(){
  assert.equal(p.w.location.hash,'#compare');assert(p.w.document.querySelector('#compare.active'));assert(p.w.document.querySelector('.efp-mindmap-search-context'));assert(p.w.document.querySelector('mark.efp-mindmap-match'));p.w.document.querySelector('.efp-mm-dismiss').click();p.w.dispatchEvent(new p.w.PageTransitionEvent('pageshow',{persisted:true}));await delay(30);assert.equal(p.w.document.querySelectorAll('.efp-mindmap-search-context,mark').length,0);p.dom.window.close();
  console.log('PASS actual unanchored Polity screenshot route: resolves matching panel, query works without sessionStorage, persistent dismissal');
 }
-(async()=>{await lifecycle();await coldHome();await options();await mindmap()})().catch(e=>{console.error(e);process.exitCode=1});
+(async()=>{await lifecycle();await interruptedSnapshot();await coldHome();await options();await mindmap()})().catch(e=>{console.error(e);process.exitCode=1});

@@ -8,7 +8,7 @@ function setup(html,url='/practice.html?efSearchReturn=test#q1',query='BRICS'){
  const style=w.document.createElement('style');style.textContent='.hidden{display:none}'+read('search-context.css');w.document.head.appendChild(style);
  // jsdom does not implement stylesheet !important overriding inline display.
  w.HTMLElement.prototype.getClientRects=function(){for(let el=this;el;el=el.parentElement){if(!el.classList.contains('efp-context-revealed')&&w.getComputedStyle(el).display==='none')return []}return [{width:100,height:40}]};
- w.HTMLElement.prototype.scrollIntoView=function(){scrolled.push(this)};w.scrollTo=()=>{};w.scrollBy=()=>{};
+ w.HTMLElement.prototype.scrollIntoView=function(){scrolled.push(this)};w.scrollTo=()=>{};w.scrollBy=()=>{const dock=w.document.querySelector("html>.efp-search-context");if(dock)scrolled.push(dock)};
  w.sessionStorage.setItem('efp_search_return_v1:test',JSON.stringify({token:'test',source:'https://examfusionprep.com/',inputs:[{id:'searchBox',value:query}]}));
  w.localStorage.setItem('attempt','{"q6":1,"bookmark":true}');
  const run=s=>vm.runInContext(s,dom.getInternalVMContext());
@@ -49,7 +49,7 @@ function clear(p){p.w.document.querySelector('.efp-context-dismiss').click()}
  const visible=await load(setup('<main><article class="question-box" id="q1"><h2>Organisation?</h2><div class="explanation" style="display:none">BRICS hidden</div></article><article class="question-box" id="q2"><h2>Members?</h2><div class="explanation">BRICS visible</div></article></main>'));
  assert.equal(visible.w.document.querySelectorAll('#q1 mark').length,0);assert.equal(visible.w.document.querySelectorAll('#q2 mark').length,1);
  visible.w.document.querySelector('#q1 .explanation').style.display='block';await delay(60);assert.equal(visible.w.document.querySelectorAll('#q1 mark').length,1);
- visible.w.document.querySelector('.efp-context-next').click();await delay(30);assert.equal(visible.scrolled.at(-1).nextElementSibling.id,'q2');assert(visible.scrolled.at(-1).classList.contains('efp-search-context'));visible.dom.window.close();
+ visible.w.document.querySelector('.efp-context-next').click();await delay(30);assert.equal(visible.w.document.getElementById(visible.w.location.hash.slice(1)).id,'q2');assert(visible.scrolled.at(-1).classList.contains('efp-search-context'));visible.dom.window.close();
  console.log('PASS normal answer selection, native style reveal and direct navigation to already-visible explanation matches');
  const entered=await load(setup('<main><article class="question-box" id="q1"><h2>Organisation?</h2><div class="explanation">BRICS already open</div></article></main>'));
  assert(entered.scrolled.at(-1).classList.contains('efp-search-context'));entered.dom.window.close();

@@ -419,7 +419,7 @@
           var script = document.createElement("script");
           script.src = REL_ROOT + "search-snippets-pinnacle.js";
           script.onload = resolve;
-          script.onerror = reject;
+          script.onerror = function(error){fallbackPromise=null;reject(error)};
           document.body.appendChild(script);
         });
         return fallbackPromise;
@@ -446,7 +446,6 @@
           if (sequence !== searchSequence || input.value.trim() !== q) return;
           runSearch(q, hits, false);
         }).catch(function () {
-          deepClient = null;
           runFallbackSearch(q, sequence);
         });
       }

@@ -13,8 +13,8 @@
   var noResults = document.getElementById("noResults");
   if (!box || !menuList) return;
 
-  var WORKER_URL = new URL("search-worker.js?v=20261004rank1", document.baseURI).href;
-  var LOGIC_URL = new URL("search-logic.js?v=20261004searchaudit1", document.baseURI).href;
+  var WORKER_URL = new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href;
+  var LOGIC_URL = new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href;
 
   // Search the large indexes sequentially so a single query never makes
   // several 10–30 MB indexes parse at the same instant. Share the homepage
@@ -204,6 +204,7 @@
     var nextId = 1;
     var latestToken = 0;
     var pending = {};
+    var fallbackClient = null;
 
     function failAll(error) {
       Object.keys(pending).forEach(function (id) {
@@ -330,11 +331,19 @@
       }).then(function (rows) {
         if (token !== latestToken) return [];
         return typeof efCachedSearchResults === "function" ? efCachedSearchResults(key, rows || []) : (rows || []);
+      }).catch(function(error){
+        if(error&&error.efCancelled||token!==latestToken)return [];
+        if(typeof efCreateSearchWorker!=="function")throw error;
+        fallbackClient=efCreateSearchWorker({indexUrl:new URL(source.indexUrl,document.baseURI).href,globalName:source.globalName,mode:source.mode,fields:source.fields,sectionPrefix:source.sectionPrefix,limit:source.limit});
+        return fallbackClient.search(query).then(function(rows){
+          return token===latestToken?efCachedSearchResults(key,rows):[];
+        });
       });
     }
 
     function terminate() {
       latestToken++;
+      if(fallbackClient){fallbackClient.terminate();fallbackClient=null;}
       if (cancelStartup) cancelStartup();
       failAll(cancelledError());
       if (worker) {

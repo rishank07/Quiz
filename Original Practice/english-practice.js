@@ -50,7 +50,7 @@ function ensureNavigation(){
   [
    {needle:"/home-nav.js",src:"/home-nav.js?v=20260909mobilecompact1"},
    {needle:"/back-parent-map.js",src:"/back-parent-map.js?v=20260913english1"},
-   {needle:"/back-nav.js",src:"/back-nav.js?v=20260913english1"}
+   {needle:"/back-nav.js",src:"/back-nav.js?v=20261007searchaudit1"}
   ].forEach(function(def){
    var loaded=Array.prototype.some.call(document.scripts||[],function(s){return (s.src||"").indexOf(def.needle)>=0});
    if(loaded)return;

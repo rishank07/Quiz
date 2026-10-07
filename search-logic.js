@@ -33,7 +33,7 @@ function efSearchTerms(query) {
   var normalized = efNormalizeSearchText(query);
   if (!normalized) return [];
   var raw = normalized.split(" ");
-  var seen = {};
+  var seen = Object.create(null);
   var terms = [];
   for (var i = 0; i < raw.length; i++) {
     if (!raw[i] || seen[raw[i]]) continue;
@@ -144,9 +144,9 @@ var EF_SEARCH_ALIASES = {
 };
 
 function efSearchTermAlternatives(term) {
-  var aliases = EF_SEARCH_ALIASES[term] || [];
+  var aliases = Object.prototype.hasOwnProperty.call(EF_SEARCH_ALIASES, term) ? EF_SEARCH_ALIASES[term] : [];
   var output = [term];
-  var seen = {};
+  var seen = Object.create(null);
   seen[term] = true;
   for (var i = 0; i < aliases.length; i++) {
     var normalized = efNormalizeSearchText(aliases[i]);
@@ -582,16 +582,19 @@ function efSnippetWithHighlight(text, queryOrTerms) {
   }
   highlightWords.sort(function (a, b) { return b.length - a.length; });
 
-  var escaped = efEscapeHtml(raw);
-  var used = {};
-  for (var h = 0; h < highlightWords.length; h++) {
-    var word = highlightWords[h];
-    var key = word.toLowerCase();
-    if (!word || used[key]) continue;
-    used[key] = true;
-    escaped = escaped.replace(new RegExp("(" + efRegexEscape(efEscapeHtml(word)) + ")", "ig"), "<mark>$1</mark>");
+  // Match raw text once; never run later replacements through generated tags.
+  // Overlapping terms and a query such as "mark" must not corrupt the markup.
+  var words = highlightWords.filter(function(word,index,all){
+    return word && all.findIndex(function(other){return other.toLowerCase()===word.toLowerCase()})===index;
+  });
+  if (!words.length) return efEscapeHtml(raw);
+  var pattern = new RegExp(words.map(efRegexEscape).join("|"), "ig");
+  var output = "", offset = 0, match;
+  while ((match = pattern.exec(raw))) {
+    output += efEscapeHtml(raw.slice(offset, match.index)) + "<mark>" + efEscapeHtml(match[0]) + "</mark>";
+    offset = match.index + match[0].length;
   }
-  return escaped;
+  return output + efEscapeHtml(raw.slice(offset));
 }
 
 // Full-content snippet search used by Ghatnachakra, Lucent, Pinnacle and Mind Maps.
@@ -654,48 +657,51 @@ function efSnippetSearch(query, options) {
 // pages and some restrictive embedded contexts. ExamFusion pages are often
 // tested locally before upload, so full-text search must still work there.
 // On normal https:// hosting the worker remains the preferred fast path.
-var EF_FALLBACK_SCRIPT_PROMISES = {};
-
+var EF_FALLBACK_SCRIPT_PROMISES = Object.create(null);
+var EF_FALLBACK_GLOBAL_URLS = Object.create(null);
+var efFallbackLoadQueue = Promise.resolve();
 function efLoadSearchIndexScript(url, globalName) {
-  if (typeof window !== "undefined" && Array.isArray(window[globalName])) {
-    return Promise.resolve(window[globalName]);
-  }
-  var key = String(globalName || url || "index");
+  var key = new URL(url, document.baseURI).href + "|" + globalName;
   if (EF_FALLBACK_SCRIPT_PROMISES[key]) return EF_FALLBACK_SCRIPT_PROMISES[key];
-
-  EF_FALLBACK_SCRIPT_PROMISES[key] = new Promise(function (resolve, reject) {
-    if (typeof document === "undefined") {
-      reject(new Error("Search fallback requires a document"));
-      return;
-    }
-    var triedPlain = false;
-    function attach(src) {
-      var script = document.createElement("script");
-      script.async = true;
-      script.src = src;
-      script.onload = function () {
-        if (Array.isArray(window[globalName])) resolve(window[globalName]);
-        else reject(new Error("Search index did not expose " + globalName));
-      };
-      script.onerror = function () {
-        // Some file:// Chromium builds are happier without cache-bust query strings.
-        if (!triedPlain && String(src).indexOf("?") !== -1) {
-          triedPlain = true;
-          attach(String(src).split("?")[0]);
-          return;
-        }
-        reject(new Error("Search index script could not load"));
-      };
-      (document.head || document.documentElement).appendChild(script);
-    }
-    attach(url);
+  // Several independent corpora export EF_SNIPPET_INDEX. Serialize loading and
+  // retain the array belonging to this URL instead of reusing another corpus.
+  var job = efFallbackLoadQueue.then(function () {
+    if (EF_FALLBACK_GLOBAL_URLS[globalName] === key && Array.isArray(window[globalName])) return window[globalName];
+    return new Promise(function (resolve, reject) {
+      var triedPlain = false;
+      window[globalName]=undefined;
+      function attach(src) {
+        var script = document.createElement("script"), timer;
+        script.async = true; script.src = src;
+        function fail(error) { clearTimeout(timer); script.remove(); reject(error); }
+        script.onload = function () {
+          clearTimeout(timer); script.remove();
+          if (!Array.isArray(window[globalName])) { reject(new Error("Search index did not expose " + globalName)); return; }
+          EF_FALLBACK_GLOBAL_URLS[globalName] = key;
+          resolve(window[globalName]);
+        };
+        script.onerror = function () {
+          clearTimeout(timer); script.remove();
+          if (!triedPlain && String(src).indexOf("?") !== -1) { triedPlain = true; attach(String(src).split("?")[0]); return; }
+          fail(new Error("Search index script could not load"));
+        };
+        timer = setTimeout(function(){fail(new Error("Search index load timed out"))},60000);
+        (document.head || document.documentElement).appendChild(script);
+      }
+      attach(url);
+    });
   });
+  EF_FALLBACK_SCRIPT_PROMISES[key] = job.catch(function(error){delete EF_FALLBACK_SCRIPT_PROMISES[key];throw error});
+  efFallbackLoadQueue = job.catch(function(){});
+  // Bound retained fallback corpora. The caller keeps its own array while it
+  // searches; future jobs can reload an evicted source without mixing globals.
+  Object.keys(EF_FALLBACK_SCRIPT_PROMISES).slice(0,-2).forEach(function(old){delete EF_FALLBACK_SCRIPT_PROMISES[old]});
   return EF_FALLBACK_SCRIPT_PROMISES[key];
 }
 
 function efFallbackQueryTerms(query) {
   var normalized = efNormalizeSearchText(query);
-  var raw = normalized.split(/\s+/), seen = {}, out = [];
+  var raw = normalized.split(/\s+/), seen = Object.create(null), out = [];
   for (var i = 0; i < raw.length; i++) {
     if (!raw[i] || seen[raw[i]]) continue;
     seen[raw[i]] = true;
@@ -783,20 +789,22 @@ function efFallbackSnippetSearchAsync(query, records, options) {
   var prefix = options.sectionPrefix || null;
   var top = efTopSearchHits(options.limit || 40);
   var compact = false, fuzzy = false;
-  var i = 0, sequence = 0;
+  var i = 0, j = 0, sequence = 0;
   var limit = options.limit || 40;
 
   return new Promise(function (resolve) {
     function step() {
+      if (options.cancelled && options.cancelled()) { resolve([]); return; }
       var started = Date.now();
       while (i < records.length && Date.now() - started < 12) {
-        var group = records[i++];
-        if (!group || (prefix && String(group.f || "").indexOf(prefix) !== 0)) continue;
+        var group = records[i];
+        if (!group || (prefix && String(group.f || "").indexOf(prefix) !== 0)) { i++; j=0; continue; }
         var title = efNormalizeSearchText(group.t), breadcrumb = efNormalizeSearchText(group.b);
         var snippets = Array.isArray(group.x) ? group.x : [];
         var aliases = Array.isArray(group.a) ? group.a : [];
 
-        for (var j = 0; j < snippets.length; j++) {
+        for (; j < snippets.length; j++) {
+          if (Date.now() - started >= 12) break;
           var raw = String(snippets[j] == null ? "" : snippets[j]);
           var visible = efFallbackStripMarker(raw);
           if (options.strictOcr) {
@@ -827,14 +835,15 @@ function efFallbackSnippetSearchAsync(query, records, options) {
           });
           sequence++;
         }
+        if (j >= snippets.length) { i++; j=0; }
       }
       if (i < records.length) {
         setTimeout(step, 0);
         return;
       }
       if (!top.size() && !options.strictOcr) {
-        if (!compact && !fuzzy && phrase.length > 2) { compact=true;i=0;sequence=0;setTimeout(step,0);return; }
-        if (!fuzzy && options.fuzzy !== false && terms.some(function(term){return efAllowedEditDistance(term)>0;})) { compact=false;fuzzy=true;i=0;sequence=0;setTimeout(step,0);return; }
+        if (!compact && !fuzzy && phrase.length > 2) { compact=true;i=0;j=0;sequence=0;setTimeout(step,0);return; }
+        if (!fuzzy && options.fuzzy !== false && terms.some(function(term){return efAllowedEditDistance(term)>0;})) { compact=false;fuzzy=true;i=0;j=0;sequence=0;setTimeout(step,0);return; }
       }
       var out = top.sorted().map(function(hit) {
         return {f:hit.f,t:hit.t,b:hit.b,x:hit.x,score:hit.score,matchType:hit.matchType};
@@ -898,9 +907,8 @@ if (efIsSectionSearchPage()) {
 function efCreateSearchWorker(options) {
   options = options || {};
   var managedSection = efIsSectionSearchPage();
-  // A failed worker must not suddenly inject a tens-of-MB index into the UI
-  // thread. Existing title/chapter filtering stays available in that case.
-  if (managedSection) options = Object.assign({}, options, { workerOnly: true });
+  // Worker policy is the same across layouts. Fall back only after failure,
+  // with yielding/cancellable scans; a successful empty search is final.
   var worker = null;
   var workerStartPromise = null;
   var cancelStartup = null;
@@ -1007,29 +1015,46 @@ function efCreateSearchWorker(options) {
     if (!options.indexUrl || !options.globalName) {
       fallbackRecordsPromise = Promise.reject(new Error("No fallback search index configured"));
     } else {
-      fallbackRecordsPromise = efLoadSearchIndexScript(options.indexUrl, options.globalName);
+      fallbackRecordsPromise = efLoadSearchIndexScript(options.indexUrl, options.globalName).then(function(records){
+        if(options.globalName!=="EF_ORIGINAL_PRACTICE_SNIPPET_INDEX")return records;
+        window.EF_ORIGINAL_PRACTICE_SNIPPET_INDEX=records;
+        return efLoadSearchIndexScript(new URL("./search-snippets-polity-original-practice.js?v=20261001polity22-583a40e433b0",options.indexUrl).href,"EF_POLITY_ORIGINAL_PRACTICE_SNIPPET_INDEX").then(function(updates){
+          var byRoute=Object.create(null);updates.forEach(function(row){byRoute[row.f]=row});
+          return records.map(function(row){return byRoute[row.f]||row});
+        });
+      }).catch(function(error){fallbackRecordsPromise=null;throw error});
     }
     return fallbackRecordsPromise;
   }
 
-  function fallbackSearch(query) {
+  function fallbackSearch(query, token) {
     return getFallbackRecords().then(function (records) {
-      if (options.mode === "snippet") return efFallbackSnippetSearchAsync(query, records, options);
-      // Current ExamFusion full-content clients all use snippet mode. Keep a
-      // compact compatibility path for future non-snippet clients.
-      var compact = [];
-      for (var i = 0; i < records.length; i++) compact.push({ file: records[i].f, title: records[i].t, text: records[i].x });
-      return efSearchRecords(query, compact, { fields: options.fields || ["title", "text"], limit: options.limit || 40 });
+      if(token!==latestSearchToken)return [];
+      if (options.mode === "snippet") return efFallbackSnippetSearchAsync(query, records, Object.assign({},options,{cancelled:function(){return token!==latestSearchToken}})).then(function(rows){
+        if(options.globalName!=="EF_CRUX_TRICKS_SNIPPET_INDEX")return rows;
+        return efCruxFallbackRouter().then(function(router){
+          var seen=Object.create(null),merged=[];
+          router.topics(query,options.limit).concat(rows.map(router.route)).forEach(function(hit){
+            var key=hit.f+"|"+String(hit.x||"").charAt(0);if(seen[key])return;seen[key]=true;merged.push(hit);
+          });return merged.slice(0,options.limit||40);
+        });
+      });
+      return efSearchRecords(query, records, { fields: options.fields || ["title", "text"], limit: options.limit || 40 });
     });
   }
 
   var cachePrefix = JSON.stringify(options) + "|";
   function reportFailure(query) {
-    if (!managedSection && typeof window !== "undefined" && typeof CustomEvent === "function") {
+    if (typeof window !== "undefined" && typeof CustomEvent === "function") {
       window.dispatchEvent(new CustomEvent("efp-search-state", {detail:{
         phase:"source-error",query:query,source:options.indexUrl
       }}));
     }
+  }
+  function recover(query, token, cacheKey) {
+    return fallbackSearch(query,token).then(function(rows){
+      return token===latestSearchToken?efCachedSearchResults(cacheKey,rows):[];
+    }).catch(function(error){if(token===latestSearchToken){reportFailure(query);throw error}return []});
   }
   function search(query) {
     query = efNormalizeSearchText(query);
@@ -1038,10 +1063,8 @@ function efCreateSearchWorker(options) {
     var cached = efCachedSearchResults(cacheKey);
     if (cached) return Promise.resolve().then(function(){return token === latestSearchToken ? cached : [];});
     if (!canUseWorker() || workerFailed) {
-      // Homepage indexes can exceed 30 MB. If a WebView cannot start a
-      // worker, injecting those indexes into the page freezes navigation.
-      if (options.workerOnly) { reportFailure(query); return Promise.resolve([]); }
-      return fallbackSearch(query).then(function (rows) { return token === latestSearchToken ? rows : []; });
+      // Worker unavailable: retain search coverage with the yielding fallback.
+      return recover(query, token, cacheKey);
     }
     return startWorker().then(function () {
       if (token !== latestSearchToken) return [];
@@ -1060,9 +1083,8 @@ function efCreateSearchWorker(options) {
     }).catch(function (error) {
       if (error && error.efCancelled) return [];
       workerFailed = true;
-      reportFailure(query);
-      if (options.workerOnly) return [];
-      return fallbackSearch(query).then(function (rows) { return token === latestSearchToken ? rows : []; });
+      if(token!==latestSearchToken)return [];
+      return recover(query, token, cacheKey);
     });
   }
 
@@ -1070,12 +1092,10 @@ function efCreateSearchWorker(options) {
     if (canUseWorker() && !workerFailed) {
       return startWorker().catch(function () {
         workerFailed = true;
-        if (options.workerOnly) return false;
-        return getFallbackRecords().then(function(){ return true; });
+        return false;
       });
     }
-    if (options.workerOnly) return Promise.resolve(false);
-    return getFallbackRecords().then(function(){ return true; });
+    return Promise.resolve(false);
   }
 
   function terminate() {
@@ -1086,6 +1106,7 @@ function efCreateSearchWorker(options) {
     worker = null;
     workerStartPromise = null;
     workerFailed = false;
+    fallbackRecordsPromise = null;
   }
 
   // Always return a client when an index is configured. This prevents UI code
@@ -1093,4 +1114,143 @@ function efCreateSearchWorker(options) {
   if (!options.indexUrl || !options.globalName) return null;
   var client = { warm: warm, search: search, terminate: terminate };
   return managedSection ? efManageSectionSearchClient(client) : client;
+}
+
+if (typeof window!=="undefined" && window.dispatchEvent && typeof CustomEvent==="function") window.dispatchEvent(new CustomEvent("efp-search-logic-ready"));
+
+// One PDF-route contract for workers and browsers without worker support.
+function efCreateCruxSearchRouter(cruxDocs) {
+  var normalizeQuery=efNormalizeSearchText, queryTerms=efRelevanceQuery;
+  function safeDecode(value) {
+    var text = String(value == null ? "" : value);
+    try { return decodeURIComponent(text); } catch (_) { return text; }
+  }
+
+  function stripCruxSerial(value) {
+    return normalizeQuery(value)
+      .replace(/^\d+\s+(?:[ivxlcdm]+\s+)?/i, "")
+      .trim();
+  }
+
+  function cruxBasename(value) {
+    var text = safeDecode(value).replace(/\\/g, "/");
+    text = text.split(/[?#]/)[0];
+    text = text.slice(text.lastIndexOf("/") + 1).replace(/\.(?:html?|pdf|js)$/i, "");
+    return normalizeQuery(text.replace(/[_-]+/g, " "));
+  }
+
+  function resolveCruxDoc(hit) {
+    if (!Array.isArray(cruxDocs) || !cruxDocs.length) return null;
+
+    var f = safeDecode(hit && hit.f || "");
+    var directId = (f + " " + String(hit && hit.t || "")).match(/\bct\d{1,6}\b/i);
+    if (directId) {
+      var wantedId = directId[0].toLowerCase();
+      for (var d0 = 0; d0 < cruxDocs.length; d0++) {
+        if (String(cruxDocs[d0].id || "").toLowerCase() === wantedId) return cruxDocs[d0];
+      }
+    }
+
+    var hitTitle = normalizeQuery(hit && hit.t || "");
+    var hitTitleLoose = stripCruxSerial(hit && hit.t || "");
+    var fileBase = cruxBasename(f);
+    var fileBaseLoose = stripCruxSerial(fileBase);
+    var breadcrumb = normalizeQuery(hit && hit.b || "");
+    var best = null;
+    var bestScore = 0;
+
+    for (var i = 0; i < cruxDocs.length; i++) {
+      var doc = cruxDocs[i] || {};
+      var title = normalizeQuery(doc.title || "");
+      var titleLoose = stripCruxSerial(doc.title || "");
+      var sourceTitle = normalizeQuery(doc.sourceTitle || "");
+      var sourceTitleLoose = stripCruxSerial(doc.sourceTitle || "");
+      var pdf = safeDecode(doc.pdf || "").replace(/^\.\//, "");
+      var score = 0;
+
+      if (pdf && f.replace(/^\.\/Crux-Tricks\//, "").indexOf(pdf) !== -1) score = Math.max(score, 1400);
+      if (hitTitle && title && hitTitle === title) score = Math.max(score, 1200);
+      if (hitTitle && sourceTitle && hitTitle === sourceTitle) score = Math.max(score, 1160);
+      if (hitTitleLoose && titleLoose && hitTitleLoose === titleLoose) score = Math.max(score, 1100);
+      if (hitTitleLoose && sourceTitleLoose && hitTitleLoose === sourceTitleLoose) score = Math.max(score, 1060);
+      if (fileBase && title && fileBase === title) score = Math.max(score, 1040);
+      if (fileBase && sourceTitle && fileBase === sourceTitle) score = Math.max(score, 1020);
+      if (fileBaseLoose && titleLoose && fileBaseLoose === titleLoose) score = Math.max(score, 1000);
+      if (fileBaseLoose && sourceTitleLoose && fileBaseLoose === sourceTitleLoose) score = Math.max(score, 980);
+
+      // Breadcrumb/source metadata is only a tie-breaker; title/path equality
+      // remains the authoritative match so similarly named chapters are safe.
+      if (score && breadcrumb) {
+        var subject = normalizeQuery(doc.subject || "");
+        var branch = normalizeQuery(doc.branch || "");
+        var source = normalizeQuery(doc.source || "");
+        if (subject && breadcrumb.indexOf(subject) !== -1) score += 8;
+        if (branch && breadcrumb.indexOf(branch) !== -1) score += 8;
+        if (source && breadcrumb.indexOf(source) !== -1) score += 4;
+      }
+
+      if (score > bestScore) {
+        bestScore = score;
+        best = doc;
+      }
+    }
+
+    return bestScore >= 980 ? best : null;
+  }
+
+  function routeCruxHit(hit) {
+    if (!hit) return hit;
+    var doc = resolveCruxDoc(hit);
+    var normalizeUrl = function (value) { return String(value || "").replace(/^(?:\.\/)?Crux-Tricks\//, "/Crux-Tricks/"); };
+    var copy = { f: normalizeUrl("/Crux-Tricks/index.html"), t: hit.t, b: hit.b, x: hit.x, score: hit.score, matchType: hit.matchType };
+    if (doc && doc.id) {
+      copy.f = normalizeUrl("/Crux-Tricks/viewer.html?id=" + encodeURIComponent(String(doc.id)));
+    }
+    return copy;
+  }
+
+  function cruxTopicSearch(query,limit) {
+    if (!Array.isArray(cruxDocs) || !cruxDocs.length) return [];
+    var parsed = queryTerms(query);
+    if (!parsed.terms.length) return [];
+    var results = [];
+    for (var i = 0; i < cruxDocs.length; i++) {
+      var doc = cruxDocs[i] || {};
+      var title = normalizeQuery(doc.title || "");
+      var sourceTitle = normalizeQuery(doc.sourceTitle || "");
+      var meta = normalizeQuery([doc.subject || "", doc.branch || "", doc.source || "", doc.exam || "", doc.breadcrumb || ""].join(" "));
+      var all = title + " " + sourceTitle + " " + meta;
+      var ok = true;
+      for (var t = 0; t < parsed.terms.length; t++) {
+        if (all.indexOf(parsed.terms[t]) === -1) { ok = false; break; }
+      }
+      if (!ok) continue;
+      var score = 30;
+      if (title === parsed.phrase || sourceTitle === parsed.phrase) score = 0;
+      else if (title.indexOf(parsed.phrase) !== -1 || sourceTitle.indexOf(parsed.phrase) !== -1) score = 4;
+      else {
+        var everyInTitle = true;
+        for (var j = 0; j < parsed.terms.length; j++) {
+          if (title.indexOf(parsed.terms[j]) === -1 && sourceTitle.indexOf(parsed.terms[j]) === -1) { everyInTitle = false; break; }
+        }
+        if (everyInTitle) score = 8;
+        else if (meta.indexOf(parsed.phrase) !== -1) score = 16;
+      }
+      results.push({score:score,sequence:i,f:"/Crux-Tricks/viewer.html?id="+encodeURIComponent(String(doc.id||"")),t:doc.title||doc.sourceTitle||"Crux topic",b:doc.breadcrumb||[doc.source,doc.subject,doc.branch].filter(Boolean).join(" / "),x:"Topic · "+(doc.sourceTitle||doc.title||"Crux revision")});
+    }
+    results.sort(function (a, b) { return a.score - b.score || a.sequence - b.sequence; });
+    return results.slice(0, Math.min(limit || 40, 40));
+  }
+
+  return {route:routeCruxHit,topics:cruxTopicSearch};
+}
+
+var efCruxFallbackRouterPromise=null;
+function efCruxFallbackRouter(){
+  if(!efCruxFallbackRouterPromise)efCruxFallbackRouterPromise=fetch("/Crux-Tricks/crux-manifest.js").then(function(response){
+    if(!response.ok)throw new Error("PDF search routing could not load");return response.text();
+  }).then(function(text){
+    return efCreateCruxSearchRouter(JSON.parse(text.replace(/^\s*window\.EF_CRUX_DOCS\s*=\s*/," ").replace(/;\s*$/,"")));
+  }).catch(function(error){efCruxFallbackRouterPromise=null;throw error});
+  return efCruxFallbackRouterPromise;
 }

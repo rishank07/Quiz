@@ -12,7 +12,7 @@
   var dockTopValue=null;
   var explanationSelector=".explanation,.explanation-box,.explain-box,.exp-box,.exp,.explain,.q-exp,[id^='exp-']";
   var optionSelector=".option,.option-text,.option-btn,.quiz-option,.opt,.opt-en,.opt-hi,.options label,.q-options label,[id^='opts-'] label,.options [onclick],.q-options [onclick],[id^='opts-'] [onclick]";
-  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context-dock-v3.css?v=20261005rootdock2";document.head.appendChild(style);
+  var style=document.createElement("link");style.rel="stylesheet";style.href="/search-context-dock-v3.css?v=20261007searchaudit1";document.head.appendChild(style);
   var allowEntryFocus=true;
   function resolveDockTop(){
     if(dockTopValue!==null)return dockTopValue;
@@ -393,6 +393,7 @@
     registerPdf:function(adapter){pdfAdapter=adapter;syncPdf()}
   };
   window.addEventListener("efp-pdf-search-context",function(){if(window.EFP_PDF_SEARCH_CONTEXT)pdfAdapter=window.EFP_PDF_SEARCH_CONTEXT;syncPdf()});
+  window.addEventListener("efp-search-logic-ready",function(){recordCache="";entryCache="";viewKey="";schedule()});
   window.addEventListener("efp-app-search-resume",function(){viewKey="";schedule()});
   window.addEventListener("hashchange",function(){viewKey="";selection="";schedule()});
   window.addEventListener("pageshow",function(){schedule();syncPdf()});

@@ -6,20 +6,20 @@
   if(typeof window.efTextMatches!=="function"&&!document.querySelector('script[src*="search-logic.js"]')){
     var searchLogic=document.createElement("script");
     searchLogic.id="efp-shared-search-logic";
-    searchLogic.src="/search-logic.js?v=20261004searchaudit1";
+    searchLogic.src="/search-logic.js?v=20261007searchaudit1";
     searchLogic.async=false;document.head.appendChild(searchLogic);
   }
   if (!document.getElementById("efp-shared-search-context")) {
     var searchContext = document.createElement("script");
     searchContext.id = "efp-shared-search-context";
-    searchContext.src = "/search-context.js?v=20261004opentry1";
+    searchContext.src = "/search-context.js?v=20261007searchaudit1";
     searchContext.async = false;
     document.head.appendChild(searchContext);
   }
   if (!/^\/(?:index\.html)?$/i.test(location.pathname) && !document.getElementById("efp-section-search-ui")) {
     var searchUi = document.createElement("script");
     searchUi.id = "efp-section-search-ui";
-    searchUi.src = "/section-search-ui.js?v=20261001searchreturn2";
+    searchUi.src = "/section-search-ui.js?v=20261007searchaudit1";
     searchUi.async = false;
     document.head.appendChild(searchUi);
   }

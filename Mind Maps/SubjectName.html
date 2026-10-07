@@ -2134,7 +2134,7 @@
           var script = document.createElement("script");
           script.src = REL_ROOT + "search-snippets-mindmaps.js?v=20261004searchaudit1";
           script.onload = resolve;
-          script.onerror = reject;
+          script.onerror = function(error){fallbackPromise=null;reject(error)};
           document.body.appendChild(script);
         });
         return fallbackPromise;
@@ -2165,7 +2165,6 @@
           if (sequence !== contentSearchSequence || searchInput.value.trim() !== q) return;
           runContentSearch(q, hits);
         }).catch(function () {
-          deepClient = null;
           runFallbackSearch(q, sequence);
         });
       }

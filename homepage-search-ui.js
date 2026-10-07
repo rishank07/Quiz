@@ -110,6 +110,7 @@
       }).join("");
       sessionStorage.setItem(SEARCH_RESULTS_KEY, JSON.stringify({
         query: currentQuery,
+        complete: !isSearching && failedSources.size === 0,
         html: html,
         filter: activeFilter,
         pages: extraPages,
@@ -118,10 +119,11 @@
     } catch (_) { clearSavedResults(); }
   }
 
-  function readSavedResults(query) {
+  function readSavedResults(query, allowPartial) {
     try {
       var saved = JSON.parse(sessionStorage.getItem(SEARCH_RESULTS_KEY) || "null");
-      return saved && normalized(saved.query) === normalized(query) && typeof saved.html === "string" ? saved : null;
+      return saved && normalized(saved.query) === normalized(query) && typeof saved.html === "string" &&
+        (allowPartial || saved.complete === true || (saved.complete !== false && !!saved.html)) ? saved : null;
     } catch (_) { return null; }
   }
 
@@ -149,7 +151,7 @@
     // The shared return snapshot is authoritative when another search was
     // subsequently used elsewhere in this tab.
     saveQuery(field.value.trim());
-    var snapshot = readSavedResults(field.value.trim());
+    var snapshot = readSavedResults(field.value.trim(), true);
     if (snapshot && !menuList.querySelector("li[data-deepresult]")) {
       menuList.insertAdjacentHTML("beforeend", snapshot.html);
       if (snapshot.html) menuList.classList.add("has-deep-results");

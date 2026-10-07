@@ -1,5 +1,5 @@
-// v211 generic desktop/Windows search parity across all section searches
-const CACHE_VERSION = "efp-pwa-20261005desktopsearch2";
+// Shared search recovery and cache refresh across browsers and device layouts.
+const CACHE_VERSION = "efp-pwa-20261007searchaudit1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261004resumeunlimited1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -7,9 +7,9 @@ const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
 
-const DESKTOP_SEARCH_COMPAT = '\n/* efp-desktop-section-search-compat-v1 */\n;(function(){\n  if(window.__EFP_DESKTOP_SECTION_FALLBACK__)return;\n  var ua=String(navigator.userAgent||"");\n  var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);\n  if(mobile){window.__EFP_DESKTOP_SECTION_FALLBACK__=true;return;}\n  if(typeof window.efCreateSearchWorker!=="function")return;\n  var create=window.efCreateSearchWorker;\n  window.efCreateSearchWorker=function(options){\n    var client=create(options);\n    var section=typeof window.efIsSectionSearchPage==="function"&&window.efIsSectionSearchPage();\n    if(!section||!client||!options||!options.indexUrl||!options.globalName||typeof client.search!=="function")return client;\n    var baseSearch=client.search;\n    client.search=function(query){\n      return Promise.resolve(baseSearch.call(client,query)).then(function(rows){\n        if(Array.isArray(rows)&&rows.length)return rows;\n        if(options.mode!=="snippet"||typeof window.efLoadSearchIndexScript!=="function"||typeof window.efFallbackSnippetSearchAsync!=="function")return rows||[];\n        return window.efLoadSearchIndexScript(options.indexUrl,options.globalName).then(function(records){\n          return window.efFallbackSnippetSearchAsync(query,records,options);\n        }).catch(function(){return rows||[];});\n      });\n    };\n    return client;\n  };\n  window.__EFP_DESKTOP_SECTION_FALLBACK__=true;\n})();\n';
 
-const DESKTOP_SEARCH_ENTRY_BOOTSTRAP = '<script id="efp-desktop-search-entry-bootstrap">(function(){var ua=String(navigator.userAgent||"");var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);if(mobile)return;if(window.EFP_SEARCH_CONTEXT||document.getElementById("efp-shared-search-context"))return;var s=document.createElement("script");s.id="efp-shared-search-context";s.src="/search-context.js?v=20261005rootdock2";s.defer=true;document.head.appendChild(s)})();</script>';
+
+const DESKTOP_SEARCH_ENTRY_BOOTSTRAP = '<script id="efp-desktop-search-entry-bootstrap">(function(){var ua=String(navigator.userAgent||"");var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);if(mobile)return;if(window.EFP_SEARCH_CONTEXT||document.getElementById("efp-shared-search-context"))return;var s=document.createElement("script");s.id="efp-shared-search-context";s.src="/search-context.js?v=20261007searchaudit1";s.defer=true;document.head.appendChild(s)})();</script>';
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
@@ -38,21 +38,21 @@ const APP_SHELL = [
   "/home-nav.js?v=20261004searchaudit1",
   "/app-session.js?v=20261004resumeunlimited1",
   "/back-parent-map.js",
-  "/back-nav.js?v=20261005desktop1",
-  "/search-context.js?v=20261005rootdock2",
+  "/back-nav.js?v=20261007searchaudit1",
+  "/search-context.js?v=20261007searchaudit1",
   "/search-context.css?v=20261004inlinecenter1",
-  "/search-context-dock-v3.css?v=20261005rootdock2",
-  "/mindmap-deeplink.js?v=20261004mmpartial1",
-  "/mindmap-reader.css?v=20261004scrollfix1",
+  "/search-context-dock-v3.css?v=20261007searchaudit1",
+  "/mindmap-deeplink.js?v=20261007searchaudit1",
+  "/mindmap-reader.css?v=20261007searchaudit1",
   "/progress.js?v=20261001caback1",
   "/rapid-practice-deeplink.js?v=20261004context1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
-  "/search-logic.js?v=20261005desktop2",
-  "/section-search-ui.js?v=20261001searchreturn2",
-  "/search-worker.js?v=20261005desktop1",
+  "/search-logic.js?v=20261007searchaudit1",
+  "/section-search-ui.js?v=20261007searchaudit1",
+  "/search-worker.js?v=20261007searchaudit1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
-  "/homepage-search-ui.js?v=20261004searchaudit1",
-  "/homepage-fulltext-search.js?v=20261004searchaudit1",
+  "/homepage-search-ui.js?v=20261007searchaudit1",
+  "/homepage-fulltext-search.js?v=20261007searchaudit1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
@@ -384,12 +384,12 @@ async function freshCoreAsset(request) {
   }
 }
 
-async function withDesktopSearchCompat(response) {
+async function stripLegacySearchWrapper(response) {
   if (!response || !response.ok || (response.type !== "basic" && response.type !== "cors" && response.type !== "default")) return response;
   const text = await response.text();
   const headers = new Headers(response.headers);
   headers.delete("content-length");headers.delete("content-encoding");headers.delete("etag");
-  const body = text.includes("efp-desktop-section-search-compat-v1") ? text : text + DESKTOP_SEARCH_COMPAT;
+  const body = text.split("\n/* efp-desktop-section-search-compat-v1 */")[0];
   return new Response(body, {status:response.status,statusText:response.statusText,headers});
 }
 
@@ -397,12 +397,12 @@ async function freshSearchLogicAsset(request) {
   const cache = await caches.open(CACHE_VERSION);
   try {
     const response = await fetch(request, { cache: "no-store" });
-    const served = await withDesktopSearchCompat(response);
+    const served = await stripLegacySearchWrapper(response);
     if (served && served.ok) await cache.put(request, served.clone());
     return served;
   } catch (_) {
     const cached = await caches.match(request) || await caches.match(request, { ignoreSearch: true });
-    if (cached) return withDesktopSearchCompat(cached);
+    if (cached) return stripLegacySearchWrapper(cached);
     return new Response("", { status: 503, statusText: "Offline" });
   }
 }
@@ -476,8 +476,8 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Search logic gets a desktop-only compatibility layer in the same response,
-  // so every section hub benefits without editing each individual HTML file.
+  // Retire the previous desktop-only fallback wrapper from cached responses.
+  // Shared search now recovers consistently across browser/device layouts.
   if (url.pathname === "/search-logic.js") {
     event.respondWith(freshSearchLogicAsset(request));
     return;

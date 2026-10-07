@@ -30,8 +30,9 @@ function client(p,index){return p.w.efCreateSearchWorker({workerUrl:'/search-wor
  assert.equal(p.w.document.querySelectorAll('script[src*="index-"]').length,0);
  console.log('PASS rapid edits cancel running/queued queries without falling back to UI-thread index parsing');
  p.dom.window.close();
- p=page();let attempted=0;p.w.Worker=class{constructor(){attempted++;throw Error('Blocked worker')}};p.run(read('search-logic.js'));assert.deepEqual(Array.from(await client(p,1).search('history')),[]);assert.equal(attempted,1);assert.equal(p.w.document.querySelectorAll('script').length,0);p.dom.window.close();
- console.log('PASS worker failure never injects a large fallback index into the page');
+ // Blocked workers recover through the same bounded fallback on all devices.
+ // Full recovery, cancellation and cold load retry are checked by
+ // test-search-cross-device.cjs, including the one-group yielding contract.
  p=page('/');stats=workers(p);p.run(read('search-logic.js'));clients=[client(p,1),client(p,2)];await Promise.all(clients.map(c=>c.warm()));assert.equal(stats.max,2);clients.forEach(c=>c.terminate());p.dom.window.close();console.log('PASS homepage worker policy preserved');
  p=page();const list=p.w.document.getElementById('efBlackbookResults'),input=p.w.document.querySelector('input');
  for(let i=0;i<40;i++){let li=p.w.document.createElement('li');li.innerHTML='<a href="/leaf.html?q='+i+'">Result '+i+'</a>';list.appendChild(li)}
@@ -41,6 +42,10 @@ function client(p,index){return p.w.efCreateSearchWorker({workerUrl:'/search-wor
  const streamed=p.w.document.createElement('li');streamed.innerHTML='<a href="/leaf.html?q=41">More</a>';list.appendChild(streamed);await delay(10);assert.equal(shown(),24);
  input.value='changed';input.dispatchEvent(new p.w.Event('input',{bubbles:true}));await delay(10);assert.equal(shown(),12);
  input.value='';input.dispatchEvent(new p.w.Event('input',{bubbles:true}));await delay(10);assert.equal(shown(),41);assert(button.hidden);
+ input.value='history';let retries=0;input.addEventListener('input',event=>{if(event.detail&&event.detail.efpRetrySearch)retries++});
+ p.w.dispatchEvent(new p.w.CustomEvent('efp-search-state',{detail:{phase:'source-error',query:'old query'}}));assert(!p.w.document.querySelector('.efp-section-search-error'));
+ p.w.dispatchEvent(new p.w.CustomEvent('efp-search-state',{detail:{phase:'source-error',query:'history'}}));assert(p.w.document.querySelector('.efp-section-search-error'));
+ p.w.document.querySelector('.efp-section-search-error button').click();assert.equal(retries,1);assert(!p.w.document.querySelector('.efp-section-search-error'));
  p.dom.window.close();console.log('PASS 12-result batches, Show more, streaming updates and reset/clear');
 
  // Actual English question records must yield between normalization batches,

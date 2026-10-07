@@ -103,12 +103,25 @@
       sync();
     }
   };
+  var failureNotice=null;
+  function clearFailure(){if(failureNotice)failureNotice.remove();failureNotice=null;}
+  window.addEventListener("efp-search-state",function(event){
+    var detail=event.detail||{};if(detail.phase!=="source-error")return;
+    var normalize=typeof efNormalizeSearchText==="function"?efNormalizeSearchText:function(q){return String(q||"").trim().toLowerCase()};
+    var input=Array.from(document.querySelectorAll('input[type="search"],input[id*="earch"]')).find(function(field){return normalize(field.value)===normalize(detail.query)});
+    if(!input||!input.value.trim())return;
+    clearFailure();failureNotice=document.createElement("div");failureNotice.className="efp-section-search-error";failureNotice.setAttribute("role","status");
+    failureNotice.textContent="Some search results could not load / खोज अधूरी है। ";
+    var retry=document.createElement("button");retry.type="button";retry.textContent="Retry / फिर खोजें";
+    retry.addEventListener("click",function(){clearFailure();input.dispatchEvent(new CustomEvent("input",{bubbles:true,detail:{efpRetrySearch:true}}))});
+    failureNotice.appendChild(retry);input.parentElement.insertAdjacentElement("afterend",failureNotice);
+  });
   function start() {
     if (observer && document.body) observer.observe(document.body, { childList: true, subtree: true });
     sync();
   }
   document.addEventListener("input", function (event) {
-    if (event.target.matches && event.target.matches('input[type="search"], input[id*="earch"]')) schedule();
+    if (event.target.matches && event.target.matches('input[type="search"], input[id*="earch"]')) { clearFailure();schedule(); }
   }, true);
   window.addEventListener("pageshow", schedule);
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });

@@ -9,7 +9,7 @@ async function page(early){
   const errors=[],vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e.message));
   const dom=new JSDOM(read(file),{url:'https://examfusionprep.com/'+encodeURI(file)+'?efSearchQuery=modi#rp-1-0',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:vc}),w=dom.window,scrolls=[];
   w.HTMLElement.prototype.getClientRects=function(){for(let el=this;el;el=el.parentElement)if(w.getComputedStyle(el).display==='none')return [];return [{width:100,height:40}]};
-  w.HTMLElement.prototype.scrollIntoView=function(){scrolls.push(this)};w.scrollTo=()=>{};w.scrollBy=()=>{};w.matchMedia=()=>({matches:false});
+  w.HTMLElement.prototype.scrollIntoView=function(){scrolls.push(this)};w.scrollTo=()=>{};w.scrollBy=()=>{const dock=w.document.querySelector("html>.efp-search-context");if(dock)scrolls.push(dock)};w.matchMedia=()=>({matches:false});
   const run=s=>vm.runInContext(s,dom.getInternalVMContext());
   Array.from(w.document.scripts).forEach(s=>{if(!s.src&&!/json/i.test(s.type))run(s.textContent)});
   if(early){
@@ -25,8 +25,8 @@ async function page(early){
     const p=await page(early),doc=p.w.document;
     assert.equal(doc.querySelector('.efp-context-location').textContent,'Section 2 · Q31');
     assert.equal(doc.querySelector('.efp-context-next').textContent,'3/35 ↓');
-    assert.equal(p.scrolls.at(-1).nextElementSibling.id,'rp-1-0');
-    const style=doc.querySelector('link[href*="search-context.css"]'),count=p.scrolls.length;
+    assert.equal(p.w.document.getElementById(p.w.location.hash.slice(1)).id,'rp-1-0');
+    const style=doc.querySelector('link[href*="search-context-dock-v3.css"]'),count=p.scrolls.length;
     style.dispatchEvent(new p.w.Event('load'));await delay(30);
     assert(p.scrolls.length>count,'Late CSS recenters the inline control');
     const answers=p.run('JSON.stringify(saved.answers)'),bookmarks=p.run('JSON.stringify(saved.bookmarks)'),length=p.w.history.length;
@@ -44,7 +44,7 @@ async function page(early){
     assert.equal(doc.querySelectorAll('.efp-search-context,mark.efp-context-match').length,0);p.dom.window.close();
   }
   const touched=await page(false);touched.w.dispatchEvent(new touched.w.Event('pointerdown'));const before=touched.scrolls.length;
-  touched.w.document.querySelector('link[href*="search-context.css"]').dispatchEvent(new touched.w.Event('load'));await delay(30);
+  touched.w.document.querySelector('link[href*="search-context-dock-v3.css"]').dispatchEvent(new touched.w.Event('load'));await delay(30);
   assert.equal(touched.scrolls.length,before,'Delayed styles cannot override learner interaction');touched.dom.window.close();
   console.log('PASS actual Modi/Q31: early/late runtime, late CSS, 35-result wraparound, one visible inline control, no attempts/bookmark/history changes, dismissal and no scroll after interaction');
 })().catch(e=>{console.error(e);process.exitCode=1});

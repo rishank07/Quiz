@@ -59,7 +59,7 @@ const normalize = text => text.replace(/\s+/g, ' ').trim();
         const errors = [];
         page.on('pageerror', error => errors.push(error.message));
         await page.goto('https://examfusionprep.com/' + encodeURI(file) + '?efSearchReturn=reader-test#' + key);
-        await page.locator('.efp-mm-current-match').waitFor();
+        await page.locator('.efp-mm-current-match').first().waitFor();
         const result = await page.evaluate(({ id }) => {
           const target = document.getElementById(id);
           const clone = target.cloneNode(true);
@@ -99,7 +99,7 @@ const normalize = text => text.replace(/\s+/g, ' ').trim();
         assert.equal(await page.locator('.efp-mm-next').textContent(), before);
         const urlBefore = page.url();
         const bannerHeight = await page.locator('.efp-mindmap-search-context').evaluate(el => el.getBoundingClientRect().height + parseFloat(getComputedStyle(el).marginBottom));
-        const anchor = await page.locator('.efp-mm-current-match').evaluate(el => {
+        const anchor = await page.locator('.efp-mm-current-match').first().evaluate(el => {
           el.parentElement.dataset.dismissAnchor = 'true';
           return el.parentElement.getBoundingClientRect().top;
         });

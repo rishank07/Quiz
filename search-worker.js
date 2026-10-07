@@ -45,7 +45,7 @@
   function queryTerms(query) {
     var n = normalizeQuery(query);
     if (!n) return { phrase: "", terms: [] };
-    var raw = n.split(" "), seen = {}, out = [];
+    var raw = n.split(" "), seen = Object.create(null), out = [];
     for (var i = 0; i < raw.length; i++) {
       if (!raw[i] || seen[raw[i]]) continue;
       seen[raw[i]] = true;
@@ -151,146 +151,16 @@
     return !!(config && config.globalName === "EF_CRUX_TRICKS_SNIPPET_INDEX");
   }
 
-  function safeDecode(value) {
-    var text = String(value == null ? "" : value);
-    try { return decodeURIComponent(text); } catch (_) { return text; }
-  }
-
-  function stripCruxSerial(value) {
-    return normalizeQuery(value)
-      .replace(/^\d+\s+(?:[ivxlcdm]+\s+)?/i, "")
-      .trim();
-  }
-
-  function cruxBasename(value) {
-    var text = safeDecode(value).replace(/\\/g, "/");
-    text = text.split(/[?#]/)[0];
-    text = text.slice(text.lastIndexOf("/") + 1).replace(/\.(?:html?|pdf|js)$/i, "");
-    return normalizeQuery(text.replace(/[_-]+/g, " "));
-  }
-
+  var cruxRouter=null;
   function loadCruxManifest() {
-    cruxDocs = null;
-    if (!isCruxSearch()) return;
+    if(!isCruxSearch())return;
     try {
-      if (typeof self.efNormalizeCruxSearchUrl !== "function") {
-        importScripts("/Crux-Tricks/crux-search-route.js");
-      }
-      if (!Array.isArray(self.EF_CRUX_DOCS)) {
-        importScripts("/Crux-Tricks/crux-manifest.js");
-      }
-      if (Array.isArray(self.EF_CRUX_DOCS)) cruxDocs = self.EF_CRUX_DOCS;
-    } catch (_) {
-      // Search itself should remain available even if manifest routing cannot
-      // initialize. routeCruxHit() will use the non-404 landing-page fallback.
-      cruxDocs = null;
-    }
+      importScripts("/Crux-Tricks/crux-manifest.js");
+      cruxRouter=efCreateCruxSearchRouter(self.EF_CRUX_DOCS);
+    } catch (_) { cruxRouter=efCreateCruxSearchRouter([]); }
   }
-
-  function resolveCruxDoc(hit) {
-    if (!Array.isArray(cruxDocs) || !cruxDocs.length) return null;
-
-    var f = safeDecode(hit && hit.f || "");
-    var directId = (f + " " + String(hit && hit.t || "")).match(/\bct\d{1,6}\b/i);
-    if (directId) {
-      var wantedId = directId[0].toLowerCase();
-      for (var d0 = 0; d0 < cruxDocs.length; d0++) {
-        if (String(cruxDocs[d0].id || "").toLowerCase() === wantedId) return cruxDocs[d0];
-      }
-    }
-
-    var hitTitle = normalizeQuery(hit && hit.t || "");
-    var hitTitleLoose = stripCruxSerial(hit && hit.t || "");
-    var fileBase = cruxBasename(f);
-    var fileBaseLoose = stripCruxSerial(fileBase);
-    var breadcrumb = normalizeQuery(hit && hit.b || "");
-    var best = null;
-    var bestScore = 0;
-
-    for (var i = 0; i < cruxDocs.length; i++) {
-      var doc = cruxDocs[i] || {};
-      var title = normalizeQuery(doc.title || "");
-      var titleLoose = stripCruxSerial(doc.title || "");
-      var sourceTitle = normalizeQuery(doc.sourceTitle || "");
-      var sourceTitleLoose = stripCruxSerial(doc.sourceTitle || "");
-      var pdf = safeDecode(doc.pdf || "").replace(/^\.\//, "");
-      var score = 0;
-
-      if (pdf && f.replace(/^\.\/Crux-Tricks\//, "").indexOf(pdf) !== -1) score = Math.max(score, 1400);
-      if (hitTitle && title && hitTitle === title) score = Math.max(score, 1200);
-      if (hitTitle && sourceTitle && hitTitle === sourceTitle) score = Math.max(score, 1160);
-      if (hitTitleLoose && titleLoose && hitTitleLoose === titleLoose) score = Math.max(score, 1100);
-      if (hitTitleLoose && sourceTitleLoose && hitTitleLoose === sourceTitleLoose) score = Math.max(score, 1060);
-      if (fileBase && title && fileBase === title) score = Math.max(score, 1040);
-      if (fileBase && sourceTitle && fileBase === sourceTitle) score = Math.max(score, 1020);
-      if (fileBaseLoose && titleLoose && fileBaseLoose === titleLoose) score = Math.max(score, 1000);
-      if (fileBaseLoose && sourceTitleLoose && fileBaseLoose === sourceTitleLoose) score = Math.max(score, 980);
-
-      // Breadcrumb/source metadata is only a tie-breaker; title/path equality
-      // remains the authoritative match so similarly named chapters are safe.
-      if (score && breadcrumb) {
-        var subject = normalizeQuery(doc.subject || "");
-        var branch = normalizeQuery(doc.branch || "");
-        var source = normalizeQuery(doc.source || "");
-        if (subject && breadcrumb.indexOf(subject) !== -1) score += 8;
-        if (branch && breadcrumb.indexOf(branch) !== -1) score += 8;
-        if (source && breadcrumb.indexOf(source) !== -1) score += 4;
-      }
-
-      if (score > bestScore) {
-        bestScore = score;
-        best = doc;
-      }
-    }
-
-    return bestScore >= 980 ? best : null;
-  }
-
-  function routeCruxHit(hit) {
-    if (!isCruxSearch() || !hit) return hit;
-    var doc = resolveCruxDoc(hit);
-    var normalizeUrl = typeof self.efNormalizeCruxSearchUrl === "function"
-      ? self.efNormalizeCruxSearchUrl
-      : function (value) { return String(value || "").replace(/^(?:\.\/)?Crux-Tricks\//, "/Crux-Tricks/"); };
-    var copy = { f: normalizeUrl("/Crux-Tricks/index.html"), t: hit.t, b: hit.b, x: hit.x, score: hit.score, matchType: hit.matchType };
-    if (doc && doc.id) {
-      copy.f = normalizeUrl("/Crux-Tricks/viewer.html?id=" + encodeURIComponent(String(doc.id)));
-    }
-    return copy;
-  }
-
-  function cruxTopicSearch(query) {
-    if (!isCruxSearch() || !Array.isArray(cruxDocs) || !cruxDocs.length) return [];
-    var parsed = queryTerms(query);
-    if (!parsed.terms.length) return [];
-    var results = [];
-    for (var i = 0; i < cruxDocs.length; i++) {
-      var doc = cruxDocs[i] || {};
-      var title = normalizeQuery(doc.title || "");
-      var sourceTitle = normalizeQuery(doc.sourceTitle || "");
-      var meta = normalizeQuery([doc.subject || "", doc.branch || "", doc.source || "", doc.exam || "", doc.breadcrumb || ""].join(" "));
-      var all = title + " " + sourceTitle + " " + meta;
-      var ok = true;
-      for (var t = 0; t < parsed.terms.length; t++) {
-        if (all.indexOf(parsed.terms[t]) === -1) { ok = false; break; }
-      }
-      if (!ok) continue;
-      var score = 30;
-      if (title === parsed.phrase || sourceTitle === parsed.phrase) score = 0;
-      else if (title.indexOf(parsed.phrase) !== -1 || sourceTitle.indexOf(parsed.phrase) !== -1) score = 4;
-      else {
-        var everyInTitle = true;
-        for (var j = 0; j < parsed.terms.length; j++) {
-          if (title.indexOf(parsed.terms[j]) === -1 && sourceTitle.indexOf(parsed.terms[j]) === -1) { everyInTitle = false; break; }
-        }
-        if (everyInTitle) score = 8;
-        else if (meta.indexOf(parsed.phrase) !== -1) score = 16;
-      }
-      results.push({score:score,sequence:i,f:"/Crux-Tricks/viewer.html?id="+encodeURIComponent(String(doc.id||"")),t:doc.title||doc.sourceTitle||"Crux topic",b:doc.breadcrumb||[doc.source,doc.subject,doc.branch].filter(Boolean).join(" / "),x:"Topic · "+(doc.sourceTitle||doc.title||"Crux revision")});
-    }
-    results.sort(function (a, b) { return a.score - b.score || a.sequence - b.sequence; });
-    return results.slice(0, Math.min(config && config.limit || 40, 40));
-  }
+  function routeCruxHit(hit){return cruxRouter?cruxRouter.route(hit):hit}
+  function cruxTopicSearch(query){return cruxRouter?cruxRouter.topics(query,config.limit):[]}
 
   function fastSnippetSearch(query) {
     var parsed = efRelevanceQuery(query);

@@ -24,7 +24,7 @@
   window.EFP_MINDMAP_SEARCH_CONTEXT = { snapshot: function () { return searchView; } };
   var readerLink = document.createElement("link");
   readerLink.rel = "stylesheet";
-  readerLink.href = "/mindmap-reader.css?v=20261004scrollfix1";
+  readerLink.href = "/mindmap-reader.css?v=20261007searchaudit1";
   document.documentElement.classList.add("efp-mindmap-reader");
   document.head.appendChild(readerLink);
 
@@ -299,7 +299,8 @@
       // token and the learner's current reading position intact.
       // Cancel any in-flight smooth scroll before removing the banner.
       window.scrollTo({ top: window.scrollY, left: window.scrollX, behavior: "instant" });
-      var anchor = groups.length ? groups[index].anchor : target;
+      var readingMark=groups.length&&groups[index].marks.find(function(mark){return mark.isConnected&&mark.getClientRects().length});
+      var anchor = readingMark ? readingMark.parentElement : groups.length ? groups[index].anchor : target;
       var top = anchor.getBoundingClientRect().top;
       searchDismissed = true;
       if (searchView) searchView.dismissed = true;
@@ -428,6 +429,7 @@
     runWithRetry();
   }
 
+  window.addEventListener("efp-search-logic-ready",function(){openedKey="";runWithRetry()});
   window.addEventListener("hashchange", runWithRetry);
   window.addEventListener("efp-app-search-resume", function () {
     readAppResume(); if (appResume) { openedKey=""; runWithRetry(); }

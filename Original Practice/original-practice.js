@@ -77,7 +77,7 @@ function ensureGlobalOriginalPracticeNavigation(){
   var defs=[
    {needle:"/home-nav.js",src:"/home-nav.js?v=20260909mobilecompact1"},
    {needle:"/back-parent-map.js",src:"/back-parent-map.js?v=20260915staticgk1"},
-   {needle:"/back-nav.js",src:"/back-nav.js?v=20261001opnav1"}
+   {needle:"/back-nav.js",src:"/back-nav.js?v=20261007searchaudit1"}
   ];
   function alreadyLoaded(needle){
    var scripts=document.scripts||[];
@@ -356,8 +356,8 @@ function getOpFullSearchClient(){
  if(typeof efCreateSearchWorker!=="function")return null;
  var specialIndex=CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20260912ecology1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261001polity22-583a40e433b0",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
  opFullSearchClient=efCreateSearchWorker({
-  workerUrl:new URL("../search-worker.js?v=20261001polity22-583a40e433b0",document.baseURI).href,
-  logicUrl:new URL("../search-logic.js?v=20260904v8",document.baseURI).href,
+  workerUrl:new URL("../search-worker.js?v=20261007searchaudit1",document.baseURI).href,
+  logicUrl:new URL("../search-logic.js?v=20261007searchaudit1",document.baseURI).href,
   indexUrl:new URL(specialIndex.file,document.baseURI).href,
   mode:"snippet",
   globalName:specialIndex.global,
