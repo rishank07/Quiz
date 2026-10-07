@@ -19,7 +19,7 @@ return/resume snapshots and service-worker delivery.
 | Removing mindmap highlights could reflow lines and anchor the viewport to the start of a broad card. | Remove highlight padding and preserve the first current match's connected reading anchor. |
 | First PWA installation could reload an active cold homepage search, then restore its unfinished empty snapshot as completed. | Ignore the first controller claim; retain reload behavior for replacement controllers. Record snapshot completion and rerun interrupted cold searches. Explicit search-back restoration still accepts the original partial snapshot. |
 | Six Bihar catalogue entries targeted HTML files that do not exist in the repository. | Remove only those catalogue links. No question/fact content or destination pages were removed. |
-| Older cached assets could retain the desktop-only wrapper. | Refresh the app-shell version and strip the legacy injected wrapper from cached search logic. Update shared entry points and the homepage integration generator. |
+| Older cached assets could retain the desktop-only wrapper, and automated navigation generation downgraded newly versioned Back scripts. | Refresh the app-shell version and strip the legacy injected wrapper from cached search logic. Update shared entry points and both homepage/navigation generators; automated regeneration refreshes the shared Back URL across every HTML page. |
 
 ## Verification
 
