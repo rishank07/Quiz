@@ -1,0 +1,63 @@
+name: Apply homepage-only Hindi tagline
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/apply-homepage-tagline-20261007.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+      - name: Apply verified footer changes
+        run: |
+          python - . <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+          
+          root = Path(sys.argv[1]).resolve()
+          tagline = "मेहनत आपकी, साथ हमारा 🎯"
+          paths = [
+              "Crux-Tricks/index.html",
+              "Original Practice/English_Grammar_Complete_Practice.html",
+              "Original Practice/Environment_Ecology_Complete_Practice.html",
+              "Original Practice/Static_GK_Complete_Practice.html",
+              "Current Affairs/Topic Names/Rapid Practice.html",
+              "Current Affairs/Topic Names/2026/Topic Wise/BRICS2026.html",
+              "Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/BRICS_2026_Current_Affairs_Rapid_Practice.html",
+              "tools/integrate-ecology-original-practice.py",
+          ]
+          homepage = (root / "index.html").read_bytes()
+          for name in paths:
+              path = root / name
+              text = path.read_text(encoding="utf-8")
+              updated, count = re.subn(r"(?: ·)? " + re.escape(tagline), "", text)
+              assert count == 1, (name, count)
+              path.write_text(updated, encoding="utf-8")
+          worker = root / "service-worker.js"
+          text = worker.read_text(encoding="utf-8")
+          updated, count = re.subn(r'const CACHE_VERSION = "efp-pwa-[^"]+";', 'const CACHE_VERSION = "efp-pwa-20261007homepagetagline1";', text, count=1)
+          assert count == 1
+          worker.write_text(updated, encoding="utf-8")
+          remaining = [str(p.relative_to(root)) for p in root.rglob("*.html") if tagline in p.read_text(encoding="utf-8-sig")]
+          assert remaining == ["index.html"], remaining
+          assert (root / "index.html").read_bytes() == homepage
+          print("PASS: homepage tagline preserved; removed from all 7 internal pages and the footer template.")
+          PY
+          python tools/install-analytics-guard.py
+          node tools/test-analytics-guard.cjs
+          node --check service-worker.js
+          git diff --check
+          rm '.github/workflows/apply-homepage-tagline-20261007.yml'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 'Crux-Tricks/index.html' 'Original Practice/English_Grammar_Complete_Practice.html' 'Original Practice/Environment_Ecology_Complete_Practice.html' 'Original Practice/Static_GK_Complete_Practice.html' 'Current Affairs/Topic Names/Rapid Practice.html' 'Current Affairs/Topic Names/2026/Topic Wise/BRICS2026.html' 'Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/BRICS_2026_Current_Affairs_Rapid_Practice.html' tools/integrate-ecology-original-practice.py service-worker.js '.github/workflows/apply-homepage-tagline-20261007.yml'
+          git commit -m 'fix: display Hindi tagline only on homepage'
+          git pull --rebase origin master
+          git push origin HEAD:master
