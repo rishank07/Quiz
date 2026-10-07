@@ -76,7 +76,7 @@
 
   function explicitTarget(params, hash) {
     return ["q", "efq", "efSearchQuery", "efsearch", "search"].some(function (key) { return !!params.get(key); }) ||
-      /^(?:#rp-\d+-\d+|#(?:q|question|opts|exp)-|#s\d+-\d+|#bihar-fact-|#op\|)/.test(hash || "");
+      /^(?:#rp-\d+-\d+|#(?:q|question|opts|exp)-|#s\d+-\d+|#bihar-(?:fact|ca)-|#op\|)/.test(hash || "");
   }
   function searchOwnsPosition() {
     if (explicitTarget(new URLSearchParams(location.search), location.hash)) return true;
@@ -136,6 +136,16 @@
       } };
     }
     if (/\/(?:current affairs|bihar special)\/topic names\//.test(path)) {
+      var sections = document.querySelectorAll("#content .state-section[id]");
+      if (sections.length) return { key: "topic-accordion", kind: "accordion", section: 0,
+        // Collapsed lists still have client rects beneath their clipping wrapper.
+        // Only their headings are readable until the native dropdown is opened.
+        cards: cardsIn(document, "#content .state-section.open .data-list > li,#content .state-section:not(.open) > .state-title"),
+        expanded: Array.prototype.filter.call(sections, function (section) { return section.classList.contains("open"); }).map(function (section) { return section.id; }),
+        prepare: function (record) {
+          Array.prototype.forEach.call(sections, function (section) { section.classList.toggle("open", (record.expanded || []).indexOf(section.id) >= 0); });
+        }
+      };
       var topicCards = cardsIn(document, ".question-card,.qcard,.oneliner-item,#content > .cd");
       if (topicCards.length) return { key: "topic", kind: "reader", section: 0, cards: topicCards };
     }
@@ -149,10 +159,17 @@
       return String(window.EFP_BLACKBOOK_QUIZ.correctFor(group.id)).replace(/\s+/g, " ").trim().slice(0, 160);
     }
     var prompt = card.querySelector(".qen,.q-en,.q-text-en,#questionEn,.question-text,.font-bold.text-xl,.font-bold.text-lg");
-    if (!prompt) prompt = card.querySelector(":scope > p,.card-header,.en");
+    if (!prompt) prompt = card.querySelector(":scope > p,.card-header,.en,.en-txt,.title-text");
     return (prompt ? prompt.textContent : card.textContent).replace(/\s+/g, " ").trim().slice(0, 160);
   }
-  function cardId(card) { var group = card.querySelector("[id^='opts-']"); return card.id || group && group.id || ""; }
+  function cardId(card) {
+    var group = card.querySelector("[id^='opts-']");
+    if (card.id || group && group.id) return card.id || group.id;
+    var section = card.closest(".state-section[id]");
+    if (section && card.matches(".state-title")) return section.id + "|title";
+    if (section && card.matches(".data-list > li")) return section.id + "|fact|" + Array.prototype.indexOf.call(card.parentElement.children, card);
+    return "";
+  }
   function topInset() {
     var bottom = 12;
     document.querySelectorAll("header,.toolbar,.reader-head,.quiz-head,#efp-top-nav").forEach(function (node) {
@@ -166,6 +183,13 @@
     var view = currentView(); if (!view) return;
     if (storageKey(view) === resetKey) return;
     var record = { kind: view.kind, section: view.section, ts: Date.now() };
+    if (view.kind === "accordion") {
+      // Search and bookmark filters temporarily reshape the dropdowns; retain
+      // the last unfiltered reading position instead of saving that layout.
+      var input = document.getElementById("searchInput");
+      if (searchOwnsPosition() || input && input.value.trim() || document.querySelector("#efpBiharBookmarkFilter.active")) return;
+      record.expanded = view.expanded;
+    }
     if (view.kind === "pdf") { if (!view.snapshot.ready) return; record.pdf = view.snapshot; }
     else {
       var cards = view.cards || []; if (!cards.length) return;
@@ -234,6 +258,9 @@
       if (run !== generation) return;
       var now = currentView();
       if (!now || now.key !== view.key || searchOwnsPosition()) { cancelRestore(); return; }
+      if (now.prepare && !opened) {
+        opened = true; now.prepare(record); restoreTimer = setTimeout(attempt, 100); return;
+      }
       if (now.kind === "pdf") {
         if (!now.snapshot.ready) { if (++tries < 50) { restoreTimer = setTimeout(attempt, 100); return; } cancelRestore(); return; }
         Promise.resolve(now.api.restore(record.pdf, function () { return run === generation; })).then(function () { if (run === generation) cancelRestore(); }, function () { if (run === generation) cancelRestore(); }); return;
