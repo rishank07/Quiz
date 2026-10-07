@@ -76,7 +76,7 @@
 
   function explicitTarget(params, hash) {
     return ["q", "efq", "efSearchQuery", "efsearch", "search"].some(function (key) { return !!params.get(key); }) ||
-      /^(?:#rp-\d+-\d+|#(?:q|question|opts|exp)-|#q\d+\b|#ca-ol-\d+|#s\d+-\d+|#bihar-(?:fact|ca)-|#op\|)/.test(hash || "");
+      /^(?:#rp-\d+-\d+|#(?:q|question|opts|exp|bbt|bbq)-|#q\d+\b|#ca-ol-\d+|#s\d+-\d+|#bihar-(?:fact|ca)-|#op\|)/.test(hash || "");
   }
   function searchOwnsPosition() {
     if (explicitTarget(new URLSearchParams(location.search), location.hash)) return true;
@@ -100,6 +100,11 @@
       var letter = alphabet.dataset.letter, section = document.getElementById("section-" + letter);
       return { key: "blackbook", kind: "blackbook", section: letter, cards: cardsIn(section, "[id^='opts-']").map(function (group) { return group.parentElement; }),
         open: function (label) { var button = document.querySelector('#alphabet-container button[data-letter="' + String(label).replace(/[^A-Z]/g, "") + '"]'); if (button && !button.disabled) button.click(); } };
+    }
+    if (/\/Books\/BlackBook\/Files\//i.test(pagePath())) {
+      var vocabCards = cardsIn(document, "tbody tr[data-efp-bb-sn],#mobile-cards > .vocab-card[data-efp-bb-sn]");
+      if (vocabCards.length) return { key: "blackbook-vocab", kind: "vocab", section: 0, cards: vocabCards,
+        scroller: vocabCards[0].closest(".table-container") };
     }
     var setButton = document.querySelector(".set-tab.active[data-set]");
     if (setButton && typeof window.showSet === "function") {
@@ -156,6 +161,15 @@
   function storageKey(view) { return POSITION_PREFIX + encodeURIComponent(pagePath()) + ":" + encodeURIComponent(view.key); }
   function readPosition(view) { try { return parse(localStorage.getItem(storageKey(view)), null); } catch (_) { return null; } }
   function textFor(card) {
+    if (card.hasAttribute("data-efp-bb-sn")) {
+      // Desktop rows and phone cards share a serial and canonical vocabulary
+      // text, regardless of their different markup and bookmark controls.
+      try {
+        var bank = typeof vocabData !== "undefined" ? vocabData : typeof idiomsData !== "undefined" ? idiomsData : typeof spellingData !== "undefined" ? spellingData : [];
+        var entry = bank.find(function (item) { return String(item.sn) === card.getAttribute("data-efp-bb-sn"); });
+        if (entry) return String(entry.word || entry.idiom || "").replace(/\s+/g, " ").trim().slice(0, 160);
+      } catch (_) {}
+    }
     var group = card.querySelector("[id^='opts-']");
     if (group && document.getElementById("alphabet-container") && window.EFP_BLACKBOOK_QUIZ) {
       return String(window.EFP_BLACKBOOK_QUIZ.correctFor(group.id)).replace(/\s+/g, " ").trim().slice(0, 160);
@@ -210,13 +224,20 @@
       if (searchOwnsPosition() || input && input.value.trim() || document.querySelector("#efpBiharBookmarkFilter.active,#efpCaBookmarkFilter .is-active")) return;
     }
     if (view.kind === "accordion") record.expanded = view.expanded;
+    if (view.kind === "vocab") {
+      var vocabSearch = document.getElementById("search-input"), randomModal = document.getElementById("random-modal");
+      if (searchOwnsPosition() || vocabSearch && vocabSearch.value.trim() ||
+          document.querySelector("#efp-bb-topic-filter.is-active") || visible(randomModal)) return;
+      if (view.scroller) record.windowY = window.scrollY;
+    }
     if (view.kind === "pdf") { if (!view.snapshot.ready) return; record.pdf = view.snapshot; }
     else {
       var cards = view.cards || []; if (!cards.length) return;
-      var inset = topInset(), card = preferred && cards.indexOf(preferred) >= 0 ? preferred : null;
+      var inset = readingInset(view), bottom = view.scroller ? Math.min(innerHeight, view.scroller.getBoundingClientRect().bottom) : innerHeight;
+      var card = preferred && cards.indexOf(preferred) >= 0 ? preferred : null;
       if (!card) {
         var distance = Infinity;
-        cards.forEach(function (candidate) { var box = candidate.getBoundingClientRect(); if (box.bottom <= inset || box.top >= innerHeight) return;
+        cards.forEach(function (candidate) { var box = candidate.getBoundingClientRect(); if (box.bottom <= inset || box.top >= bottom) return;
           if (box.top <= inset && box.bottom > inset) { card = candidate; distance = -1; return; }
           var d = Math.abs(box.top - inset); if (d < distance) { distance = d; card = candidate; } });
       }
@@ -239,6 +260,14 @@
     setTimeout(function () { var now = currentView(); if (now && storageKey(now) === resetKey) window.scrollTo({ top: 0, behavior: "instant" }); }, 0);
   }
   function cancelRestore() { generation++; clearTimeout(restoreTimer); restoring = false; pending = null; }
+  function readingInset(view) {
+    var inset = topInset();
+    if (view.scroller) {
+      var head = view.scroller.querySelector("thead");
+      inset = Math.max(inset, view.scroller.getBoundingClientRect().top + (head ? head.getBoundingClientRect().height : 0) + 2);
+    }
+    return inset;
+  }
   function legacyPosition(view) {
     // Existing attempts predate reading checkpoints. Continue at their latest
     // answered question in the saved section until a real reading position exists.
@@ -291,11 +320,18 @@
       }
       if (String(now.section) !== String(record.section)) { cancelRestore(); return; }
       var cards = now.cards || [], card = record.id ? cards.find(function (node) { return cardId(node) === record.id; }) : cards[record.index];
-      if (!card || !visible(card)) { if (++tries < 40) { restoreTimer = setTimeout(attempt, 80); return; } cancelRestore(); return; }
+      if (!card || !visible(card)) {
+        // Long vocabulary banks render in frame-sized batches. Give late
+        // entries time to arrive on phones; learner input still cancels at once.
+        if (++tries < (now.kind === "vocab" ? 150 : 40)) { restoreTimer = setTimeout(attempt, now.kind === "vocab" ? 200 : 80); return; }
+        cancelRestore(); return;
+      }
       // Stable IDs plus the prompt protect against changed/reordered question banks.
       if (textFor(card) !== record.text) { cancelRestore(); return; }
-      var wantedTop = Math.max(topInset(), Math.min(innerHeight * .4, Number(record.top) || topInset()));
-      scrollReadingCard(card, wantedTop, record.offset);
+      if (now.scroller) window.scrollTo({ top: Number.isFinite(record.windowY) ? record.windowY : Math.max(0, window.scrollY + now.scroller.getBoundingClientRect().top - topInset()), behavior: "instant" });
+      var wantedTop = Math.max(readingInset(now), Math.min(innerHeight * .4, Number(record.top) || topInset()));
+      if (now.scroller) now.scroller.scrollTop += card.getBoundingClientRect().top - wantedTop;
+      else scrollReadingCard(card, wantedTop, record.offset);
       // Native page-load section restoration and lazy answer replay may finish a
       // frame later. Settle once, with bounded retries, and yield on user input.
       if (++tries < 4) restoreTimer = setTimeout(attempt, 100); else cancelRestore();
