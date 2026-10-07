@@ -6,7 +6,7 @@
   if (!document.getElementById("efp-quiz-continuity-script")) {
     var continuityScript = document.createElement("script");
     continuityScript.id = "efp-quiz-continuity-script";
-    continuityScript.src = "/quiz-continuity.js?v=20261007accordion1";
+    continuityScript.src = "/quiz-continuity.js?v=20261007reading2";
     continuityScript.async = false;
     (document.head || document.documentElement).appendChild(continuityScript);
   }

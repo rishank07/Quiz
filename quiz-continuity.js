@@ -76,7 +76,7 @@
 
   function explicitTarget(params, hash) {
     return ["q", "efq", "efSearchQuery", "efsearch", "search"].some(function (key) { return !!params.get(key); }) ||
-      /^(?:#rp-\d+-\d+|#(?:q|question|opts|exp)-|#s\d+-\d+|#bihar-(?:fact|ca)-|#op\|)/.test(hash || "");
+      /^(?:#rp-\d+-\d+|#(?:q|question|opts|exp)-|#q\d+\b|#ca-ol-\d+|#s\d+-\d+|#bihar-(?:fact|ca)-|#op\|)/.test(hash || "");
   }
   function searchOwnsPosition() {
     if (explicitTarget(new URLSearchParams(location.search), location.hash)) return true;
@@ -122,7 +122,7 @@
       return { key: "mixed|" + prompt.textContent.trim(), kind: "mixed", section: 0, cards: [card] };
     }
     var staticCards = cardsIn(document, ".question-box[id]");
-    if (staticCards.length) return { key: "static", kind: "static", section: 0, cards: staticCards };
+    if (staticCards.length) return { key: "static", kind: "static", section: 0, cards: staticCards, reading: /\/current affairs\/topic names\//.test(path) };
     if (path.indexOf("/mind maps/") >= 0 && path.indexOf("/chapternames/") >= 0) {
       var panel = document.querySelector(".tab-content.active[id],.tab-panel.active[id],.panel.show[id],.panel.active[id],section.tab.active[id],div.tab.active[id]:not([onclick])");
       var readerCards = cardsIn(panel || document, ".card,.branch,.node-card");
@@ -146,7 +146,9 @@
           Array.prototype.forEach.call(sections, function (section) { section.classList.toggle("open", (record.expanded || []).indexOf(section.id) >= 0); });
         }
       };
-      var topicCards = cardsIn(document, ".question-card,.qcard,.oneliner-item,#content > .cd");
+      var topicCards = cardsIn(document, ".question-card,.qcard,.oneliner-item,.oneliner-row,#content > .cd,.table-scroll").filter(function (card) {
+        return !card.matches(".table-scroll") || !card.closest(".question-card,.qcard");
+      });
       if (topicCards.length) return { key: "topic", kind: "reader", section: 0, cards: topicCards };
     }
     return null;
@@ -159,7 +161,7 @@
       return String(window.EFP_BLACKBOOK_QUIZ.correctFor(group.id)).replace(/\s+/g, " ").trim().slice(0, 160);
     }
     var prompt = card.querySelector(".qen,.q-en,.q-text-en,#questionEn,.question-text,.font-bold.text-xl,.font-bold.text-lg");
-    if (!prompt) prompt = card.querySelector(":scope > p,.card-header,.en,.en-txt,.title-text");
+    if (!prompt) prompt = card.querySelector(":scope > p,.card-header,.en,.en-txt,.title-text,.oneliner-q");
     return (prompt ? prompt.textContent : card.textContent).replace(/\s+/g, " ").trim().slice(0, 160);
   }
   function cardId(card) {
@@ -178,18 +180,36 @@
     });
     return bottom;
   }
+  function scrollSurface(card) {
+    // Some reading layouts give body (or a panel) its own viewport. With
+    // overflow-x:hidden, overflow-y can compute to auto even without an
+    // explicit vertical-scroll rule; scrolling window then has no effect.
+    for (var parent = card && card.parentElement; parent && parent !== document.documentElement; parent = parent.parentElement) {
+      var css = window.getComputedStyle(parent);
+      if (/^(auto|scroll|overlay)$/.test(css.overflowY) && parent.clientHeight > 0 && parent.scrollHeight > parent.clientHeight + 1) return parent;
+    }
+    return null;
+  }
+  function scrollReadingCard(card, wantedTop, offset) {
+    var surface = scrollSurface(card);
+    if (surface) wantedTop = Math.max(wantedTop, surface.getBoundingClientRect().top + surface.clientTop + 12);
+    wantedTop -= Math.max(0, Math.min(Number(offset) || 0, card.getBoundingClientRect().height - 12));
+    var target = Math.max(0, (surface ? surface.scrollTop : window.scrollY) + card.getBoundingClientRect().top - wantedTop);
+    (surface || window).scrollTo({ top: target, behavior: "instant" });
+  }
   function checkpoint(preferred) {
     if (restoring) return;
     var view = currentView(); if (!view) return;
     if (storageKey(view) === resetKey) return;
     var record = { kind: view.kind, section: view.section, ts: Date.now() };
-    if (view.kind === "accordion") {
+    var reading = view.kind === "reader" || view.kind === "accordion" || view.reading;
+    if (reading && /\/(?:current affairs|bihar special)\/topic names\//.test(pagePath().toLowerCase())) {
       // Search and bookmark filters temporarily reshape the dropdowns; retain
       // the last unfiltered reading position instead of saving that layout.
       var input = document.getElementById("searchInput");
-      if (searchOwnsPosition() || input && input.value.trim() || document.querySelector("#efpBiharBookmarkFilter.active")) return;
-      record.expanded = view.expanded;
+      if (searchOwnsPosition() || input && input.value.trim() || document.querySelector("#efpBiharBookmarkFilter.active,#efpCaBookmarkFilter .is-active")) return;
     }
+    if (view.kind === "accordion") record.expanded = view.expanded;
     if (view.kind === "pdf") { if (!view.snapshot.ready) return; record.pdf = view.snapshot; }
     else {
       var cards = view.cards || []; if (!cards.length) return;
@@ -205,6 +225,7 @@
       if (!card) card = cards.reduce(function (closest, candidate) { return Math.abs(candidate.getBoundingClientRect().top - inset) < Math.abs(closest.getBoundingClientRect().top - inset) ? candidate : closest; }, cards[0]);
       record.id = cardId(card); record.index = cards.indexOf(card); record.text = textFor(card);
       record.top = Math.max(inset, Math.min(innerHeight * .4, card.getBoundingClientRect().top));
+      if (reading) record.offset = Math.max(0, inset - card.getBoundingClientRect().top);
     }
     try { localStorage.setItem(storageKey(view), JSON.stringify(record)); } catch (_) {}
   }
@@ -274,8 +295,7 @@
       // Stable IDs plus the prompt protect against changed/reordered question banks.
       if (textFor(card) !== record.text) { cancelRestore(); return; }
       var wantedTop = Math.max(topInset(), Math.min(innerHeight * .4, Number(record.top) || topInset()));
-      var target = Math.max(0, window.scrollY + card.getBoundingClientRect().top - wantedTop);
-      window.scrollTo({ top: target, behavior: "instant" });
+      scrollReadingCard(card, wantedTop, record.offset);
       // Native page-load section restoration and lazy answer replay may finish a
       // frame later. Settle once, with bounded retries, and yield on user input.
       if (++tries < 4) restoreTimer = setTimeout(attempt, 100); else cancelRestore();
