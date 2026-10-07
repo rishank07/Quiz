@@ -159,6 +159,7 @@ function restoreAppAttempt(preserveSection){
  }catch(e){return false}
 }
 function clearCurrentSavedAttempt(){
+ if(window.EFP_QUIZ_CONTINUITY)window.EFP_QUIZ_CONTINUITY.clear();
  try{if(state.subject&&state.chapterName)localStorage.removeItem(attemptStorageKey())}catch(e){}
 }
 function clearTransientAttempt(){

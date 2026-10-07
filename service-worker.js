@@ -1,7 +1,7 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261007completion1";
+const CACHE_VERSION = "efp-pwa-20261007continue1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261004resumeunlimited1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261007continue1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -13,7 +13,7 @@ const DESKTOP_SEARCH_ENTRY_BOOTSTRAP = '<script id="efp-desktop-search-entry-boo
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
-  "/quiz-continuity.js?v=20261007completion1",
+  "/quiz-continuity.js?v=20261007continue1",
   "/",
   "/index.html",
   "/offline.html",
@@ -37,7 +37,7 @@ const APP_SHELL = [
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
   "/home-nav.js?v=20261004searchaudit1",
-  "/app-session.js?v=20261004resumeunlimited1",
+  "/app-session.js?v=20261007continue1",
   "/back-parent-map.js",
   "/back-nav.js?v=20261007searchaudit1",
   "/search-context.js?v=20261007searchaudit1",
@@ -59,8 +59,8 @@ const APP_SHELL = [
   "/Original%20Practice/index.html",
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
-  "/Original%20Practice/original-practice.js?v=20261004searchaudit1",
-  "/Original%20Practice/english-practice.js?v=20261004opentry1",
+  "/Original%20Practice/original-practice.js?v=20261007continue1",
+  "/Original%20Practice/english-practice.js?v=20261007continue1",
   "/Original%20Practice/original-practice-index.js",
   "/Crux-Tricks/index.html",
   "/Crux-Tricks/all-topics.html",
@@ -72,7 +72,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.js?v=20261004casefold1",
   "/Crux-Tricks/viewer.css",
   "/Crux-Tricks/pdf-search.js?v=20261004pdfmarks1",
-  "/Crux-Tricks/viewer-v2.js?v=20261004searchresume1",
+  "/Crux-Tricks/viewer-v2.js?v=20261007continue1",
 ];
 
 self.addEventListener("install", (event) => {
@@ -498,6 +498,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/search-context-dock-v3.css" ||
       url.pathname === "/back-parent-map.js" ||
       url.pathname === "/question-deeplink.js" ||
+      url.pathname === "/quiz-continuity.js" ||
       url.pathname === "/rapid-practice-deeplink.js" ||
       url.pathname === "/bihar-objective-gk-deeplink.js" ||
       url.pathname === "/mindmap-deeplink.js" ||

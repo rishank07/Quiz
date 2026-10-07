@@ -171,6 +171,37 @@
       pdfStage.scrollLeft=Math.max(0,Number(pdfResume.stageLeft)||0);
     });
   }
+  // Shared reading continuation includes the actual PDF page and its internal
+  // scrollport. Explicit page/search links retain their own entry target.
+  window.EFP_READING_PAGE={
+    snapshot:function(){
+      var shell=continuous?pageShell(page):null;
+      return {id:doc.id,page:page,ready:!!pdfDoc&&pdfLoading.hidden,
+        top:pdfStage.scrollTop-(shell?shell.offsetTop:0),left:pdfStage.scrollLeft};
+    },
+    restore:function(position,stillWanted){
+      if(!position||position.id!==doc.id||!pdfDoc)return Promise.resolve();
+      var target=Math.max(1,Math.min(pdfDoc.numPages,Number(position.page)||1));
+      return Promise.resolve(go(target,false)).then(function(){
+        return new Promise(function(resolve){
+          var attempts=0;
+          function align(){
+            if(stillWanted&&!stillWanted()){resolve();return;}
+            if((!pdfLoading.hidden||page!==target)&&++attempts<40){setTimeout(align,80);return;}
+            requestAnimationFrame(function(){
+              if(!stillWanted||stillWanted()){
+                var shell=continuous?pageShell(target):null;
+                pdfStage.scrollTop=Math.max(0,(shell?shell.offsetTop:0)+(Number(position.top)||0));
+                pdfStage.scrollLeft=Math.max(0,Number(position.left)||0);
+              }
+              resolve();
+            });
+          }
+          align();
+        });
+      });
+    }
+  };
   function restoreAppPdfSearch(){
     if(appSearchRestored||!window.EFP_APP_SESSION||!window.EFP_APP_SESSION.getSearchState)return;
     var state=window.EFP_APP_SESSION.getSearchState('pdf');if(!state||state.id!==doc.id)return;

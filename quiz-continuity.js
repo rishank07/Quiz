@@ -66,8 +66,244 @@
     }
   }
 
+  var POSITION_PREFIX = "efp_reading_position_v1:", activeKey = "", pending = null;
+  var restoring = false, restoreTimer = 0, saveTimer = 0, entryTimer = 0, generation = 0;
+  var resetKey = "";
+  var navigation = window.performance && performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+  var entryUrl = new URL(navigation && navigation.name || location.href);
+  var initialParams = entryUrl.searchParams, initialHash = entryUrl.hash || location.hash;
+  var initialExplicit = explicitTarget(initialParams, initialHash) || initialParams.has("page") || !!(initialHash && !/^#set-\d+$/.test(initialHash)), initialEntry = true;
+
+  function explicitTarget(params, hash) {
+    return ["q", "efq", "efSearchQuery", "efsearch", "search"].some(function (key) { return !!params.get(key); }) ||
+      /^(?:#rp-\d+-\d+|#(?:q|question|opts|exp)-|#s\d+-\d+|#bihar-fact-|#op\|)/.test(hash || "");
+  }
+  function searchOwnsPosition() {
+    if (explicitTarget(new URLSearchParams(location.search), location.hash)) return true;
+    if (document.querySelector(".efp-search-context,.efp-mindmap-search-context")) return true;
+    return false;
+  }
+  function visible(node) { return !!(node && node.getClientRects().length && !node.closest("[hidden],.efp-op-bookmark-hidden")); }
+  function cardsIn(root, selector) { return Array.prototype.filter.call((root || document).querySelectorAll(selector), visible); }
+  function currentView() {
+    var op = opState();
+    if (op) return { key: "op|" + (op.subject || "English Grammar") + "|" + op.chapterName, kind: "op", section: op.currentSection,
+      cards: cardsIn(document.getElementById("questions-container"), ":scope > [id^='q-']"), open: function (section) { switchSection(section); } };
+    var rapid = rapidData();
+    if (rapid && rapid.sections.length && document.getElementById("sectionNav")) {
+      var index = 0; try { index = current; } catch (_) {}
+      return { key: "rapid", kind: "rapid", section: index, cards: cardsIn(document.getElementById("questions"), ".qcard"),
+        open: function (section) { if (rapid.sections[section]) openSection(section); } };
+    }
+    var alphabet = document.querySelector("#alphabet-container button[data-letter].bg-blue-600");
+    if (alphabet) {
+      var letter = alphabet.dataset.letter, section = document.getElementById("section-" + letter);
+      return { key: "blackbook", kind: "blackbook", section: letter, cards: cardsIn(section, "[id^='opts-']").map(function (group) { return group.parentElement; }),
+        open: function (label) { var button = document.querySelector('#alphabet-container button[data-letter="' + String(label).replace(/[^A-Z]/g, "") + '"]'); if (button && !button.disabled) button.click(); } };
+    }
+    var setButton = document.querySelector(".set-tab.active[data-set]");
+    if (setButton && typeof window.showSet === "function") {
+      var setNo = setButton.dataset.set;
+      return { key: "bihar-sets", kind: "sets", section: setNo, cards: cardsIn(document.getElementById("set-" + setNo), ".question-box[id]"), open: function (number) { if (/^\d+$/.test(String(number))) showSet(String(number)); } };
+    }
+    var pdf = window.EFP_READING_PAGE;
+    if (pdf && typeof pdf.snapshot === "function") {
+      var snap = pdf.snapshot();
+      if (snap) return { key: "pdf|" + snap.id, kind: "pdf", section: snap.page, snapshot: snap, api: pdf };
+    }
+    var path = pagePath().toLowerCase();
+    // Single-question Mixed Practice already restores its saved question index.
+    // Scope its reading offset to the actual question, independently of set review.
+    var mixed = document.getElementById("quizView");
+    if (path.indexOf("/original practice/mixed_practice.html") >= 0) {
+      if (!visible(mixed)) return null;
+      var card = mixed.querySelector(".question-card"), prompt = document.getElementById("questionEn");
+      if (!card || !prompt || !prompt.textContent.trim()) return null;
+      return { key: "mixed|" + prompt.textContent.trim(), kind: "mixed", section: 0, cards: [card] };
+    }
+    var staticCards = cardsIn(document, ".question-box[id]");
+    if (staticCards.length) return { key: "static", kind: "static", section: 0, cards: staticCards };
+    if (path.indexOf("/mind maps/") >= 0 && path.indexOf("/chapternames/") >= 0) {
+      var panel = document.querySelector(".tab-content.active[id],.tab-panel.active[id],.panel.show[id],.panel.active[id],section.tab.active[id],div.tab.active[id]:not([onclick])");
+      var readerCards = cardsIn(panel || document, ".card,.branch,.node-card");
+      if (readerCards.length) return { key: "mindmap", kind: "reader", section: panel ? panel.id : "", cards: readerCards, open: function (id) {
+        var tabs = document.querySelectorAll("button,a,.tablink,.tab-btn,.tab[onclick]");
+        var tab = Array.prototype.find.call(tabs, function (button) {
+          var inline = button.getAttribute("onclick") || "";
+          return inline.indexOf("'" + id + "'") >= 0 || inline.indexOf('"' + id + '"') >= 0 || ["data-target", "data-tab", "aria-controls"].some(function (attr) { return (button.getAttribute(attr) || "").replace(/^#/, "") === id; });
+        });
+        if (tab) tab.click();
+      } };
+    }
+    if (/\/(?:current affairs|bihar special)\/topic names\//.test(path)) {
+      var topicCards = cardsIn(document, ".question-card,.qcard,.oneliner-item,#content > .cd");
+      if (topicCards.length) return { key: "topic", kind: "reader", section: 0, cards: topicCards };
+    }
+    return null;
+  }
+  function storageKey(view) { return POSITION_PREFIX + encodeURIComponent(pagePath()) + ":" + encodeURIComponent(view.key); }
+  function readPosition(view) { try { return parse(localStorage.getItem(storageKey(view)), null); } catch (_) { return null; } }
+  function textFor(card) {
+    var group = card.querySelector("[id^='opts-']");
+    if (group && document.getElementById("alphabet-container") && window.EFP_BLACKBOOK_QUIZ) {
+      return String(window.EFP_BLACKBOOK_QUIZ.correctFor(group.id)).replace(/\s+/g, " ").trim().slice(0, 160);
+    }
+    var prompt = card.querySelector(".qen,.q-en,.q-text-en,#questionEn,.question-text,.font-bold.text-xl,.font-bold.text-lg");
+    if (!prompt) prompt = card.querySelector(":scope > p,.card-header,.en");
+    return (prompt ? prompt.textContent : card.textContent).replace(/\s+/g, " ").trim().slice(0, 160);
+  }
+  function cardId(card) { var group = card.querySelector("[id^='opts-']"); return card.id || group && group.id || ""; }
+  function topInset() {
+    var bottom = 12;
+    document.querySelectorAll("header,.toolbar,.reader-head,.quiz-head,#efp-top-nav").forEach(function (node) {
+      var css = window.getComputedStyle(node), box = node.getBoundingClientRect();
+      if ((css.position === "sticky" || css.position === "fixed") && box.top <= 2 && box.bottom > 0 && box.bottom < innerHeight * .55) bottom = Math.max(bottom, box.bottom + 12);
+    });
+    return bottom;
+  }
+  function checkpoint(preferred) {
+    if (restoring) return;
+    var view = currentView(); if (!view) return;
+    if (storageKey(view) === resetKey) return;
+    var record = { kind: view.kind, section: view.section, ts: Date.now() };
+    if (view.kind === "pdf") { if (!view.snapshot.ready) return; record.pdf = view.snapshot; }
+    else {
+      var cards = view.cards || []; if (!cards.length) return;
+      var inset = topInset(), card = preferred && cards.indexOf(preferred) >= 0 ? preferred : null;
+      if (!card) {
+        var distance = Infinity;
+        cards.forEach(function (candidate) { var box = candidate.getBoundingClientRect(); if (box.bottom <= inset || box.top >= innerHeight) return;
+          if (box.top <= inset && box.bottom > inset) { card = candidate; distance = -1; return; }
+          var d = Math.abs(box.top - inset); if (d < distance) { distance = d; card = candidate; } });
+      }
+      // Section headers can fill the phone viewport. Still remember the new
+      // section's first question instead of reopening an older section.
+      if (!card) card = cards.reduce(function (closest, candidate) { return Math.abs(candidate.getBoundingClientRect().top - inset) < Math.abs(closest.getBoundingClientRect().top - inset) ? candidate : closest; }, cards[0]);
+      record.id = cardId(card); record.index = cards.indexOf(card); record.text = textFor(card);
+      record.top = Math.max(inset, Math.min(innerHeight * .4, card.getBoundingClientRect().top));
+    }
+    try { localStorage.setItem(storageKey(view), JSON.stringify(record)); } catch (_) {}
+  }
+  function clearPosition(section) {
+    var view = currentView(); if (!view) return;
+    var record = readPosition(view);
+    if (section != null && record && String(record.section) !== String(section)) return;
+    cancelRestore();
+    resetKey = storageKey(view);
+    try { localStorage.removeItem(storageKey(view)); } catch (_) {}
+    setTimeout(function () { var now = currentView(); if (now && storageKey(now) === resetKey) window.scrollTo({ top: 0, behavior: "instant" }); }, 0);
+  }
+  function cancelRestore() { generation++; clearTimeout(restoreTimer); restoring = false; pending = null; }
+  function legacyPosition(view) {
+    // Existing attempts predate reading checkpoints. Continue at their latest
+    // answered question in the saved section until a real reading position exists.
+    var id = "", section = view.section, card = null, answers = {}, keys = [];
+    if (view.kind === "op") {
+      var op = opState(), english = /English_Grammar_Complete_Practice\.html$/i.test(pagePath());
+      if (english) {
+        try { answers = saved.answers[op.chapterName] || {}; } catch (_) {}
+        var questions = op.quizData[section].questions;
+        Object.keys(answers).forEach(function (key) { var qi = questions.findIndex(function (q) { return q.id === key; }); if (qi >= 0) id = "q-" + qi; });
+      } else Object.keys(op.answerMap || {}).forEach(function (key) { var pair = key.split("-"); if (Number(pair[0]) === section) id = "q-" + pair[1]; });
+    } else if (view.kind === "rapid") {
+      answers = rapidData().answers;
+      Object.keys(answers).forEach(function (key) { var pair = key.split("-"); if (Number(pair[0]) === section) id = "rp-" + key; });
+    } else if (view.kind === "blackbook") {
+      var store = {}; try { store = parse(localStorage.getItem("efp_quiz_progress_v2"), {}); } catch (_) {}
+      var entry = store[pagePath()];
+      if (!entry) return null;
+      section = entry.section || section;
+      var group = []; try { group = groupedData[section] || []; } catch (_) {}
+      Object.keys(entry.answers || {}).forEach(function (key) { if (group.some(function (q) { return "opts-" + q.sn === key; })) id = "bbq-" + key.replace(/^opts-/, ""); });
+      if (id && window.EFP_BLACKBOOK_QUIZ) return { kind: view.kind, section: section, id: id, text: String(window.EFP_BLACKBOOK_QUIZ.correctFor(id.replace(/^bbq-/, "opts-"))).replace(/\s+/g, " ").trim().slice(0, 160), top: topInset() };
+    } else if (view.kind === "static" || view.kind === "sets") {
+      answers = bookAnswers(); keys = Object.keys(answers);
+      if (view.kind === "sets" && keys.length) {
+        id = keys[keys.length - 1]; var match = /^s(\d+)-/.exec(id);
+        if (match) return { kind: view.kind, section: match[1], id: id, text: answers[id].text, top: topInset() };
+      }
+      keys.forEach(function (key) { if (view.cards.some(function (node) { return cardId(node) === key; })) id = key; });
+    }
+    if (id) card = (view.cards || []).find(function (node) { return cardId(node) === id; });
+    return card ? { kind: view.kind, section: section, id: id, text: textFor(card), top: topInset() } : null;
+  }
+  function resume(view, record) {
+    cancelRestore(); restoring = true; pending = record;
+    var run = generation, tries = 0, opened = false;
+    function attempt() {
+      if (run !== generation) return;
+      var now = currentView();
+      if (!now || now.key !== view.key || searchOwnsPosition()) { cancelRestore(); return; }
+      if (now.kind === "pdf") {
+        if (!now.snapshot.ready) { if (++tries < 50) { restoreTimer = setTimeout(attempt, 100); return; } cancelRestore(); return; }
+        Promise.resolve(now.api.restore(record.pdf, function () { return run === generation; })).then(function () { if (run === generation) cancelRestore(); }, function () { if (run === generation) cancelRestore(); }); return;
+      }
+      if (String(now.section) !== String(record.section) && now.open && !opened) {
+        opened = true; now.open(record.section); restoreTimer = setTimeout(attempt, 100); return;
+      }
+      if (String(now.section) !== String(record.section)) { cancelRestore(); return; }
+      var cards = now.cards || [], card = record.id ? cards.find(function (node) { return cardId(node) === record.id; }) : cards[record.index];
+      if (!card || !visible(card)) { if (++tries < 40) { restoreTimer = setTimeout(attempt, 80); return; } cancelRestore(); return; }
+      // Stable IDs plus the prompt protect against changed/reordered question banks.
+      if (textFor(card) !== record.text) { cancelRestore(); return; }
+      var wantedTop = Math.max(topInset(), Math.min(innerHeight * .4, Number(record.top) || topInset()));
+      var target = Math.max(0, window.scrollY + card.getBoundingClientRect().top - wantedTop);
+      window.scrollTo({ top: target, behavior: "instant" });
+      // Native page-load section restoration and lazy answer replay may finish a
+      // frame later. Settle once, with bounded retries, and yield on user input.
+      if (++tries < 4) restoreTimer = setTimeout(attempt, 100); else cancelRestore();
+    }
+    restoreTimer = setTimeout(attempt, 100);
+  }
+  function checkEntry() {
+    var view = currentView(), key = view && storageKey(view) || "";
+    if (key === activeKey) return;
+    cancelRestore(); activeKey = key;
+    if (!view) return;
+    var explicit = initialEntry && initialExplicit || searchOwnsPosition();
+    initialEntry = false;
+    if (explicit) return;
+    var record = readPosition(view) || legacyPosition(view);
+    if (record && record.kind === view.kind) resume(view, record);
+  }
+  function saveSoon() { clearTimeout(saveTimer); saveTimer = setTimeout(function () { checkpoint(); }, 180); }
+  function installContinuity() {
+    checkEntry();
+    // Pointer/wheel/keyboard activity must cancel pending automatic scrolling.
+    ["pointerdown", "touchstart", "wheel", "keydown"].forEach(function (name) { window.addEventListener(name, function (event) { if (event.isTrusted) { resetKey = ""; cancelRestore(); } }, { passive: true }); });
+    document.addEventListener("click", function (event) {
+      if (!event.isTrusted) return;
+      var view = currentView(), target = event.target;
+      var card = view && view.cards && view.cards.find(function (node) { return node.contains(target); });
+      var selectedId = card && cardId(card), selectedIndex = card && view.cards.indexOf(card);
+      checkpoint(card);
+      // Capture the old view before a Chapters/Home/Back handler removes it.
+      // Answer clicks can re-render the card; capture again after that handler.
+      setTimeout(function () {
+        checkEntry(); var now = currentView(), selected = null;
+        if (card && now && view.key === now.key && String(view.section) === String(now.section)) {
+          selected = selectedId ? now.cards.find(function (node) { return cardId(node) === selectedId; }) : now.cards[selectedIndex];
+        }
+        checkpoint(selected);
+      }, 0);
+    }, true);
+    document.addEventListener("change", saveSoon);
+    document.addEventListener("scroll", saveSoon, { passive: true, capture: true });
+    document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") checkpoint(); });
+    window.addEventListener("pagehide", function () { checkpoint(); cancelRestore(); });
+    window.addEventListener("beforeunload", function () { checkpoint(); });
+    window.addEventListener("popstate", schedule);
+    window.addEventListener("efp-pdf-layout-ready", schedule);
+    window.addEventListener("pageshow", function (event) { if (event.persisted) { activeKey = ""; schedule(); } });
+    // A late-loaded runtime (PDF or generated sections) can become ready without
+    // changing its view key. Keep the startup check finite.
+    var startupChecks = 0;
+    function startup() { checkEntry(); if (++startupChecks < 20) entryTimer = setTimeout(startup, 250); }
+    startup();
+  }
+
   var syncTimer = 0;
-  function schedule() { if (!syncTimer) syncTimer = setTimeout(function () { syncTimer = 0; syncCompletion(); }, 0); }
+  function schedule() { if (!syncTimer) syncTimer = setTimeout(function () { syncTimer = 0; syncCompletion(); checkEntry(); }, 0); }
   function ready() {
     if (!document.getElementById("efp-section-completion-style")) {
       var style = document.createElement("style"); style.id = "efp-section-completion-style";
@@ -75,12 +311,13 @@
       document.head.appendChild(style);
     }
     syncCompletion();
+    installContinuity();
     if (window.MutationObserver) new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true });
   }
   document.addEventListener("click", schedule);
   document.addEventListener("change", schedule);
   window.addEventListener("pageshow", schedule);
   window.addEventListener("storage", schedule);
-  window.EFP_QUIZ_CONTINUITY = { syncCompletion: syncCompletion };
+  window.EFP_QUIZ_CONTINUITY = { syncCompletion: syncCompletion, save: checkpoint, clear: clearPosition };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ready, { once: true }); else ready();
 })();

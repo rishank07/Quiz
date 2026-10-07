@@ -6,7 +6,7 @@
   if (!document.getElementById("efp-quiz-continuity-script")) {
     var continuityScript = document.createElement("script");
     continuityScript.id = "efp-quiz-continuity-script";
-    continuityScript.src = "/quiz-continuity.js?v=20261007completion1";
+    continuityScript.src = "/quiz-continuity.js?v=20261007continue1";
     continuityScript.async = false;
     (document.head || document.documentElement).appendChild(continuityScript);
   }
@@ -429,6 +429,7 @@
       });
     }
     function clearSavedFor(scope, setno) {
+      if (window.EFP_QUIZ_CONTINUITY) window.EFP_QUIZ_CONTINUITY.clear(setno);
       var store = readStore();
       var entry = store[path];
       if (entry && entry.answers) {
@@ -773,6 +774,7 @@
       button.textContent = "↻ Reset";
       button.addEventListener("click", function () {
         if (!window.confirm("Reset progress for this quiz? Your bookmarks will stay saved.")) return;
+        if (window.EFP_QUIZ_CONTINUITY) window.EFP_QUIZ_CONTINUITY.clear();
         var store = readStore();
         delete store[path];
         writeStore(store);

@@ -43,7 +43,7 @@ function restoreAttempt(preserveSection){
   return true;
  }catch(e){return false}
 }
-function clearCurrentAttempt(){try{if(state.chapterName)localStorage.removeItem(attemptStorageKey(state.chapterName))}catch(e){}}
+function clearCurrentAttempt(){if(window.EFP_QUIZ_CONTINUITY)window.EFP_QUIZ_CONTINUITY.clear();try{if(state.chapterName)localStorage.removeItem(attemptStorageKey(state.chapterName))}catch(e){}}
 
 function ensureNavigation(){
  try{
