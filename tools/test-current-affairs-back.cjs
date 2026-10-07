@@ -121,8 +121,32 @@ async function until(test) {
   }
   const fixtures = [
     ['Current Affairs quiz', 'Current Affairs/Topic Names/Rapid Practice/2025/Month Wise/June_2025_Current_Affairs_Rapid_Practice.html', '.qcard .opt'],
+    ['Sports 2026 quiz', 'Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/Sports_2026_Current_Affairs_Rapid_Practice.html', '.qcard .opt'],
     ['Blackbook quiz', 'Books/BlackBook/Files/Idioms and Phrases Quiz.html', '.quiz-option']
   ];
+  // No attempts, as in the reported Sports screenshot: neither button nor
+  // system Back may skip the Rapid Practice hub, even after a cold app resume.
+  for (const [name, surface] of surfaces) {
+    for (const [label, file] of fixtures.filter(([, file]) => file.includes('/Rapid Practice/'))) {
+      for (const action of ['button', 'system']) {
+        const url = '/' + file.split('/').map(encodeURIComponent).join('/');
+        const quiz = page(file, url, surface, {}, {
+          efp_app_resume_pending_v1: JSON.stringify({ url, ts: Date.now() })
+        });
+        await settle();
+        assert.equal(quiz.w.EFP_BACK_PARENT_MAP['/' + file],
+          '/Current Affairs/Topic Names/Rapid Practice.html');
+        if (action === 'button') quiz.w.document.getElementById('efp-app-back-button').click();
+        else quiz.w.history.back();
+        await until(() => quiz.w.__navigation);
+        assert(!quiz.w.document.querySelector('#efp-quiz-exit-modal.show'));
+        assert.equal(decodeURIComponent(new URL(quiz.w.__navigation).pathname),
+          '/Current Affairs/Topic Names/Rapid Practice.html');
+        quiz.w.close();
+        console.log('PASS', name, label, action, 'zero attempts / cold resume -> Rapid Practice hub');
+      }
+    }
+  }
   for (const [name, surface] of surfaces) {
     for (const [label, file, selector] of fixtures) {
       for (const action of ['button', 'system']) {

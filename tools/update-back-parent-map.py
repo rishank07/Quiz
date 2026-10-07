@@ -14,6 +14,8 @@ from urllib.parse import unquote, urlsplit
 
 SITE_HOSTS = {"examfusionprep.com", "www.examfusionprep.com"}
 OUTPUT_NAME = "back-parent-map.js"
+RAPID_PRACTICE_HUB = "Current Affairs/Topic Names/Rapid Practice.html"
+RAPID_PRACTICE_PREFIX = "Current Affairs/Topic Names/Rapid Practice/"
 # Redirect-only aliases are not real navigation parents. Using one as a Back
 # target can immediately redirect the user to the same child and create a loop.
 NON_NAV_REDIRECT_STUBS = {
@@ -211,6 +213,13 @@ def generate(root: Path) -> tuple[dict[str, str], int]:
             parent_map[make_url_path(target)] = "/Mind Maps/SubjectName.html"
             continue
 
+        # The Rapid Practice hub renders its quiz cards from JavaScript, so
+        # parsing static anchors cannot discover its outgoing navigation graph.
+        # Every month/topic quiz belongs to that hub, including direct opens.
+        if target.startswith(RAPID_PRACTICE_PREFIX) and RAPID_PRACTICE_HUB in html_files:
+            parent_map[make_url_path(target)] = make_url_path(RAPID_PRACTICE_HUB)
+            continue
+
         nav_candidates = [
             src for src in incoming.get(target, ())
             if src not in NON_NAV_REDIRECT_STUBS
@@ -233,8 +242,11 @@ def validate(parent_map: dict[str, str]) -> None:
     for child, parent in parent_map.items():
         if child == parent:
             raise RuntimeError(f"Back parent self-loop: {child}")
+        if child.startswith("/" + RAPID_PRACTICE_PREFIX) and parent != make_url_path(RAPID_PRACTICE_HUB):
+            raise RuntimeError(f"Rapid Practice quiz must return to its hub: {child} -> {parent}")
 
     sample = {
+        make_url_path(RAPID_PRACTICE_HUB): "/Current Affairs/Topic Names.html",
         "/Books/Ghatnachakra Purvalokan/History/Ancient History/ChapterNames/Stone Age.html":
             "/Books/Ghatnachakra Purvalokan/History/Ancient History/ChapterName.html",
         "/Books/Ghatnachakra Purvalokan/History/Ancient History/ChapterName.html":
