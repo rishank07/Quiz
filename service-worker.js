@@ -1,6 +1,6 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261007searchaudit1";
-const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20260911owner1"></script>';
+const CACHE_VERSION = "efp-pwa-20261007analyticsguard1";
+const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261004resumeunlimited1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -485,7 +485,8 @@ self.addEventListener("fetch", (event) => {
 
   // Navigation chrome and Original Practice shared assets change often;
   // never let an old app-shell copy win on a normal refresh.
-  if (url.pathname === "/home-nav.js" ||
+  if (url.pathname === "/owner-debug.js" ||
+      url.pathname === "/home-nav.js" ||
       url.pathname === "/black-mode.js" ||
       url.pathname === "/ca-move-top-v3.js" ||
       url.pathname === "/ca-move-top.js" ||

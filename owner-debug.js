@@ -18,7 +18,9 @@
   }
 
   function applyAnalyticsState(enabled) {
-    window[GA_DISABLE_KEY] = !!enabled;
+    // Owner OFF must never re-enable GA during preview/live verification.
+    window[GA_DISABLE_KEY] = !!enabled || window.EFP_ANALYTICS_PREVIEW === true;
+    window.EFP_ANALYTICS_EXCLUDED = window[GA_DISABLE_KEY];
   }
 
   // On owner-controlled pages this script is injected at the very start of
