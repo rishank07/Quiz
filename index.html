@@ -1593,6 +1593,55 @@
       html { scroll-behavior: auto; }
     }
   </style>
+  <style id="efHomeAmbient">
+    /* Decorative layers sit below the existing content and never intercept input. */
+    .ef-home-ambient, .ef-ambient-night, .ef-ambient-day {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    .ef-home-ambient { z-index: 0; overflow: hidden; }
+    .ef-ambient-day {
+      background:
+        radial-gradient(ellipse 70vw 52vh at 0% 8%, rgba(230, 184, 73, .13), transparent 72%),
+        radial-gradient(ellipse 65vw 48vh at 100% 95%, rgba(242, 201, 110, .10), transparent 72%);
+      opacity: .35;
+      animation: efAmbientDaylight 14s ease-in-out infinite;
+    }
+    .ef-ambient-night { display: none; }
+    .ef-ambient-star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: #e6eaff;
+      box-shadow: 0 0 4px rgba(221, 230, 255, .22);
+      opacity: .18;
+      animation: efAmbientTwinkle var(--twinkle-duration, 9s) ease-in-out var(--twinkle-delay, 0s) infinite;
+    }
+    html.efp-black .ef-ambient-day, html.efp-black-invert .ef-ambient-day { display: none; }
+    html.efp-black .ef-ambient-night, html.efp-black-invert .ef-ambient-night { display: block; }
+    /* Preserve the glass appearance while keeping the stars behind reading surfaces. */
+    html.efp-black .hero {
+      background: radial-gradient(420px 220px at 0% 0%, rgba(246, 217, 138, .10), transparent 70%),
+        linear-gradient(180deg, rgba(25, 30, 44, .92), rgba(14, 20, 37, .90));
+    }
+    html.efp-black .menu > li > a {
+      background: linear-gradient(180deg, rgba(24, 29, 44, .92), rgba(16, 22, 40, .90));
+    }
+    html.efp-black .menu > li.is-featured > a {
+      background: radial-gradient(420px 180px at 0% 0%, rgba(246, 217, 138, .16), transparent 70%),
+        linear-gradient(135deg, rgba(35, 32, 35, .92), rgba(19, 25, 40, .90));
+    }
+    .ef-home-ambient.is-paused * { animation-play-state: paused; }
+    @keyframes efAmbientDaylight { 0%, 100% { opacity: .25; } 50% { opacity: .85; } }
+    @keyframes efAmbientTwinkle { 0%, 100% { opacity: .12; } 50% { opacity: .65; } }
+    @media (prefers-reduced-motion: reduce) {
+      .ef-home-ambient * { animation: none !important; }
+      .ef-ambient-day { opacity: .35; }
+      .ef-ambient-star { opacity: .22; }
+    }
+  </style>
   <style id="efHomeDayNight">
     /* Colours only: keep the landing layout, logo, motion and navigation. */
     html[data-efp-native-theme="home"]:root {
@@ -1702,6 +1751,31 @@
 </head>
 
 <body>
+  <div class="ef-home-ambient" id="efHomeAmbientLayer" aria-hidden="true">
+    <span class="ef-ambient-day"></span>
+    <div class="ef-ambient-night">
+      <span class="ef-ambient-star" style="left:2%;top:17%;--twinkle-delay:-1s;--twinkle-duration:9s"></span>
+      <span class="ef-ambient-star" style="left:34%;top:9%;--twinkle-delay:-4s;--twinkle-duration:11s"></span>
+      <span class="ef-ambient-star" style="left:98%;top:24%;--twinkle-delay:-2s;--twinkle-duration:8s"></span>
+      <span class="ef-ambient-star" style="left:33%;top:62%;--twinkle-delay:-7s;--twinkle-duration:12s"></span>
+      <span class="ef-ambient-star" style="left:96%;top:82%;--twinkle-delay:-3s;--twinkle-duration:10s"></span>
+      <span class="ef-ambient-star" style="left:2%;top:77%;--twinkle-delay:-6s;--twinkle-duration:9s"></span>
+      <span class="ef-ambient-star" style="left:58%;top:4%;--twinkle-delay:-5s;--twinkle-duration:11s"></span>
+      <span class="ef-ambient-star" style="left:80%;top:96%;--twinkle-delay:-8s;--twinkle-duration:13s"></span>
+      <span class="ef-ambient-star" style="left:24%;top:95%;--twinkle-delay:-2s;--twinkle-duration:10s"></span>
+      <span class="ef-ambient-star" style="left:69%;top:48%;--twinkle-delay:-6s;--twinkle-duration:12s"></span>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var ambient = document.getElementById("efHomeAmbientLayer");
+      function syncAmbientVisibility() { ambient.classList.toggle("is-paused", document.hidden); }
+      document.addEventListener("visibilitychange", syncAmbientVisibility);
+      window.addEventListener("pagehide", function () { ambient.classList.add("is-paused"); });
+      window.addEventListener("pageshow", syncAmbientVisibility);
+      syncAmbientVisibility();
+    })();
+  </script>
   <!-- YouTube Banner -->
   <a href="https://youtube.com/@examfusionprep?si=Kahv2KpUaT31Wv37" target="_blank" class="youtube-banner"
     rel="noopener noreferrer">
