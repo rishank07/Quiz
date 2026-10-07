@@ -96,7 +96,7 @@ def patch_ecology_html(master):
         ga='''\n<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>\n<script>\nwindow.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}\ngtag('js',new Date());gtag('config','G-Q1WNRY8ECV');\n</script>\n'''
         text=text.replace('</head>', ga+'</head>',1)
     if 'data-efp-ecology-footer' not in text:
-        footer='''\n<footer data-efp-ecology-footer style="max-width:1100px;margin:30px auto 16px;padding:14px 18px;text-align:center;font:600 12px/1.6 system-ui;color:#64748b">© 2026 ExamFusion Prep. All Rights Reserved. मेहनत आपकी, साथ हमारा 🎯 · <a href="../privacy-policy.html">Privacy Policy</a> · <a href="../support.html">Support</a></footer>\n'''
+        footer='''\n<footer data-efp-ecology-footer style="max-width:1100px;margin:30px auto 16px;padding:14px 18px;text-align:center;font:600 12px/1.6 system-ui;color:#64748b">© 2026 ExamFusion Prep. All Rights Reserved. मेहनत आपकी, साथ हमारा 🎯</footer>\n'''
         text=text.replace('</body>', footer+'</body>',1)
     if 'original-practice.js' not in text:
         scripts='''\n<script src="../search-logic.js?v=20260904v8"></script>\n<script src="./original-practice.js?v=20260912ecology1"></script>\n'''
