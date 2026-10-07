@@ -2,6 +2,15 @@
 (function () {
   "use strict";
 
+  // Also runs in browsers: section completion is shared by all quiz families.
+  if (!document.getElementById("efp-quiz-continuity-script")) {
+    var continuityScript = document.createElement("script");
+    continuityScript.id = "efp-quiz-continuity-script";
+    continuityScript.src = "/quiz-continuity.js?v=20261007completion1";
+    continuityScript.async = false;
+    (document.head || document.documentElement).appendChild(continuityScript);
+  }
+
   var SESSION_KEY = "efp_app_session_v1";
   var PENDING_KEY = "efp_app_resume_pending_v1";
   var STATIC_QUIZ_KEY = "efp_quiz_progress_v2";
