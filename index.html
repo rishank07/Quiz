@@ -420,6 +420,22 @@
       -webkit-tap-highlight-color: transparent;
       transition: transform .2s ease;
     }
+    .theme-toggle-control {
+      display: inline-flex;
+      flex: 0 0 auto;
+      padding-bottom: 20px;
+    }
+    .theme-toggle-caption {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font: 650 12px/14px "Manrope", system-ui, sans-serif;
+      letter-spacing: .1px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
     .black-mode-toggle:active { transform: scale(.96); }
     .black-mode-toggle:focus-visible {
       outline: 2px solid var(--gold-bright);
@@ -1704,6 +1720,7 @@
             decoding="async" fetchpriority="high">
         </span>
 
+        <span class="theme-toggle-control">
         <button type="button" class="black-mode-toggle" id="blackModeBtn" onclick="toggleBlackMode()"
           aria-pressed="false" aria-label="Turn dark mode on" title="Toggle dark mode">
           <span class="theme-toggle-track" aria-hidden="true">
@@ -1714,7 +1731,9 @@
               <i class="fa-solid fa-moon theme-moon"></i>
             </span>
           </span>
+          <span class="theme-toggle-caption" aria-hidden="true">Day / Dark</span>
         </button>
+        </span>
         <script>
           function syncBlackModeLabel() {
             var isOn = document.documentElement.classList.contains('efp-black') || document.documentElement.classList.contains('efp-black-invert');
