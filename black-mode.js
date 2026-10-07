@@ -657,6 +657,12 @@
   }
 
   function applyOnAfterBodyReady() {
+    // Native landing colours already supply a dark palette; do not invert it.
+    if (document.documentElement.getAttribute("data-efp-native-theme") === "home") {
+      setModeClasses("dark");
+      document.documentElement.style.visibility = "";
+      return;
+    }
     var isLight = detectIsLight();
     setModeClasses(isLight ? "light" : "dark");
     document.documentElement.style.visibility = "";
@@ -751,3 +757,4 @@
     }
   });
 })();
+
