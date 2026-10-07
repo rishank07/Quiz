@@ -132,7 +132,7 @@ function bookmark(qi){const id=qid(current,qi);saved.bookmarks[id]=!saved.bookma
 function toggleBookmarkFilter(){onlyBookmarks=!onlyBookmarks;document.getElementById('bookmarkFilter').classList.toggle('primary',onlyBookmarks);renderQuestions()}
 function openSection(i){current=i;document.getElementById('search').value='';save();renderQuestions();window.scrollTo({top:310,behavior:'smooth'})}
 function moveSection(d){openSection(Math.max(0,Math.min(SECTIONS.length-1,current+d)))}
-function resetAll(){if(!confirm('Reset quiz progress? Your bookmarks will stay saved.'))return;saved.answers={};saved.section=0;current=0;save();if(window.EFP_QUIZ_PROGRESS_WARNING)window.EFP_QUIZ_PROGRESS_WARNING.disarm();renderQuestions()}
+function resetAll(){if(!confirm('Reset quiz progress? Your bookmarks will stay saved.'))return;if(window.EFP_QUIZ_CONTINUITY)window.EFP_QUIZ_CONTINUITY.clear();saved.answers={};saved.section=0;current=0;save();if(window.EFP_QUIZ_PROGRESS_WARNING)window.EFP_QUIZ_PROGRESS_WARNING.disarm();renderQuestions()}
 function toggleDark(){saved.dark=!saved.dark;applyDark();save()}
 function applyDark(){document.body.classList.toggle('dark',!!saved.dark);document.getElementById('darkBtn').textContent=saved.dark?'Light':'Dark'}
 applyDark();renderQuestions();
