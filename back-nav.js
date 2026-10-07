@@ -1,3 +1,78 @@
+/* Durable, bounded, per-tab navigation journal. This records control IDs and
+   paths, never typed answers, search text, key strokes or page content. It is
+   diagnostic evidence, not a guessed history stack used to choose Back. */
+(function () {
+  "use strict";
+  if (window.EFP_NAV_GUARD) return;
+  var PREFIX = "efp_navigation_journal_v1:", TAB_KEY = "efp_navigation_tab_v1";
+  var tab = "", entries = [], timer = 0, lastScroll = 0;
+  function path(value) {
+    try {
+      var url = new URL(value || location.href, location.href);
+      return url.origin === location.origin ? url.pathname : "external";
+    } catch (_) { return ""; }
+  }
+  try { tab = sessionStorage.getItem(TAB_KEY) || ""; } catch (_) {}
+  if (!tab) tab = Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  try { sessionStorage.setItem(TAB_KEY, tab); } catch (_) {}
+  try {
+    var saved = JSON.parse(localStorage.getItem(PREFIX + tab) || "null");
+    if (saved && Array.isArray(saved.entries)) entries = saved.entries.slice(-160);
+  } catch (_) {}
+  function flush() {
+    if (timer) clearTimeout(timer);
+    timer = 0;
+    try {
+      var keys = Object.keys(localStorage).filter(function (key) { return key.indexOf(PREFIX) === 0; }).sort();
+      while (keys.length >= 8) {
+        var old = keys.shift();
+        if (old !== PREFIX + tab) localStorage.removeItem(old);
+      }
+      localStorage.setItem(PREFIX + tab, JSON.stringify({ version: 1, updated: Date.now(), path: path(), entries: entries }));
+    } catch (_) {} // Private mode/full storage must never disable navigation.
+  }
+  function record(type, detail) {
+    var view = {}, current = history.state;
+    if (current && typeof current.level === "string") view.level = current.level.slice(0, 32);
+    try { if (typeof state !== "undefined" && state && typeof state.screen === "string") view.screen = state.screen.slice(0, 32); } catch (_) {}
+    entries.push({ at: Date.now(), type: type, path: path(), view: view, detail: detail || {} });
+    if (entries.length > 160) entries.splice(0, entries.length - 160);
+    if (!timer) timer = setTimeout(flush, 200);
+  }
+  window.EFP_NAV_GUARD = {
+    record: record, flush: flush,
+    diagnostics: function () { return JSON.parse(JSON.stringify(entries)); },
+    clear: function () { entries = []; flush(); }
+  };
+  window.addEventListener("click", function (event) {
+    var control = event.target && event.target.closest && event.target.closest("a,button,input,select,summary,[role='button'],[onclick],.card-header,.nested-header,.sub-nested-header");
+    record("click", control ? { tag: control.tagName, id: control.id || "", destination: control.href ? path(control.href) : "" } : {});
+  }, true);
+  ["change", "submit"].forEach(function (type) {
+    window.addEventListener(type, function (event) {
+      record(type, { id: event.target && event.target.id || "" });
+    }, true);
+  });
+  window.addEventListener("scroll", function () {
+    if (Date.now() - lastScroll < 1000) return;
+    lastScroll = Date.now(); record("scroll", { top: Math.round(window.scrollY || 0) });
+  }, { passive: true });
+  ["pushState", "replaceState"].forEach(function (name) {
+    var original = history[name];
+    history[name] = function () {
+      var result = original.apply(history, arguments);
+      record(name); return result;
+    };
+  });
+  window.addEventListener("popstate", function () { record("system-back"); }, true);
+  window.addEventListener("pagehide", function () { record("pagehide"); flush(); });
+  window.addEventListener("pageshow", function (event) { record("pageshow", { cached: !!event.persisted }); });
+  document.addEventListener("visibilitychange", function () { record("visibility", { hidden: document.hidden }); flush(); });
+  document.addEventListener("freeze", function () { record("freeze"); flush(); });
+  document.addEventListener("resume", function () { record("resume"); });
+  record("entry"); flush();
+})();
+
 /* Search results return to the search that opened them, across every hub.
    Keep this in the shared navigation asset so cached/older content pages use
    the same rule without rewriting the question banks. */
@@ -1205,6 +1280,8 @@
     var parentUrl = logicalParentUrl();
     if (!parentUrl) return false;
 
+    if (window.EFP_NAV_GUARD) window.EFP_NAV_GUARD.record("hierarchy-back", { destination: parentUrl.pathname });
+
     consumeBackEvent(event);
     rememberCruxViewerState(parentUrl);
     rememberLogicalDestination(parentUrl);
@@ -1226,6 +1303,7 @@
      quiz/history guards can add more same-URL entries in front of it. Both the
      universal button and Android/system Back call this after confirmation. */
   function navigateQuizParent() {
+    if (window.EFP_NAV_GUARD) window.EFP_NAV_GUARD.record("back-resolved");
     if (window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.leave()) return true;
     var event = {
       preventDefault: function () {},
@@ -1252,6 +1330,39 @@
   }
 
   window.EFP_BACK_NAV = { navigateQuizParent: navigateQuizParent };
+
+  /* Window capture runs before legacy document/inline Back handlers. Explicit
+     Home remains Home. In-document chapter/section controls remain owned by
+     their renderer. Search has its own higher-priority window interceptor. */
+  window.addEventListener("click", function (event) {
+    if (event.button > 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    var control = event.target && event.target.closest && event.target.closest(
+      "#efp-app-back-button,[data-nav='back'],a.back-btn,a[data-efp-back]"
+    );
+    if (!control || control.disabled || control.hasAttribute("download") || control.target === "_blank") return;
+    if (control.matches("#efp-home-button,.home-btn,[data-nav='home']")) return;
+    if (control.tagName === "A") {
+      var href = control.getAttribute("href") || "";
+      if (!href || href.charAt(0) === "#" || /^javascript:/i.test(href)) return;
+      try { if (new URL(control.href).origin !== location.origin) return; } catch (_) { return; }
+    }
+    if (!logicalParentUrl() && !isOriginalPracticePage() && !isCruxViewer() && !isCruxTricksRoot() &&
+        !(window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.isActive())) {
+      // Unknown/missing mappings are evidence to repair, not permission for a
+      // legacy Home fallback to skip the user's section.
+      consumeBackEvent(event);
+      if (window.EFP_NAV_GUARD) window.EFP_NAV_GUARD.record("missing-parent");
+      return;
+    }
+    consumeBackEvent(event);
+    var warning = window.EFP_QUIZ_PROGRESS_WARNING;
+    var leave = function () {
+      if (warning && warning.releaseBackGuard) warning.releaseBackGuard(navigateQuizParent);
+      else navigateQuizParent();
+    };
+    if (warning && warning.confirmLeave) warning.confirmLeave(leave);
+    else leave();
+  }, true);
 
   function isGenericHomeSearchGuardState(state, phase) {
     return !!(state && state[HOME_SEARCH_GUARD] === true &&
@@ -1294,64 +1405,17 @@
     }
   }
 
-  /* Homepage search can open any leaf directly: a quiz, book topic, Current
-     Affairs page or Mind Map. Add a guard at every non-root page in that
-     logical chain. Browser/Android Back reaches the guard, loads the mapped
-     parent, then that parent installs the next guard. This recreates the same
-     hierarchy the user would have traversed manually. */
+  /* Every mapped document owns a system-Back boundary, regardless of its
+     referrer. Search trips and the two SPA stacks retain their own guards. */
   function installGenericHomeSearchHistoryGuard() {
     if (window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.isActive()) return;
-    /* Original Practice already owns a complete in-document history stack.
-       Adding this generic guard there creates a second same-URL Back layer and
-       makes Quiz/Chapters exits depend on which synthetic guard is on top. */
-    if (isCruxViewer() || isOriginalPracticePage()) return;
-
+    if (isCruxViewer() || isCruxTricksRoot() || isOriginalPracticePage()) return;
     var parentUrl = logicalParentUrl();
     if (!parentUrl) return;
-
-    /* Own hardware/browser Back as well as the visible button. Direct opens,
-       stale chapter-list history and app resume all return to the dashboard.
-       Search trips install their own guard and have already returned above. */
-    if (isMindMapsInnerPage()) {
-      armGenericHomeSearchGuard();
-      return;
-    }
-
-    /* Quiz Quit can replace a leaf with a hub that is also immediately behind
-       it in history. Protect a mapped section root so one hardware/browser
-       Back reaches Home instead of silently traversing that duplicate hub.
-       This also covers an installed app resumed directly on the section. */
-    if (isHomePageUrl(parentUrl.href) && !isCruxTricksRoot()) {
-      clearHomeSearchChain();
-      clearLogicalChain();
-      armGenericHomeSearchGuard();
-      return;
-    }
-
-    var current = normalizePath(window.location.pathname);
-    var expected = expectedLogicalPath();
-    var resumedBoundary = AUTO_RESUMED_BOUNDARY && !isMixedPracticePage() && !isCruxTricksRoot();
-    var initial = hasHomeSearchMarker() || isHomePageUrl(document.referrer) || resumedBoundary;
-    var continuing = expected === current;
-
-    if (!initial && !continuing) {
-      if (hasHomeSearchChain() && expected && expected !== current) {
-        clearHomeSearchChain();
-        clearLogicalChain();
-      }
-      return;
-    }
-
-    /* The section root already has the real Home entry immediately behind it.
-       Let the ordinary Back handler use that entry instead of adding a second
-       synthetic Home step. */
     if (isHomePageUrl(parentUrl.href)) {
       clearHomeSearchChain();
-      if (continuing) clearLogicalChain();
-      return;
+      clearLogicalChain();
     }
-
-    rememberHomeSearchChain();
     armGenericHomeSearchGuard();
   }
 
@@ -1388,7 +1452,13 @@
   }
 
   window.addEventListener("popstate", function (event) {
+    var warning = window.EFP_QUIZ_PROGRESS_WARNING;
+    // Confirmation and guard-release traversals belong to app-session even
+    // when Review is already visible. Do not race its pending Quit callback.
+    if (warning && ((warning.ownsSystemBack && warning.ownsSystemBack()) ||
+        (warning.isQuizVisible && warning.isQuizVisible()))) return;
     if (isCruxViewer() && isHomeSearchGuardState(event.state, "base")) {
+      consumeBackEvent(event);
       if (!navigateCruxViewerToHierarchy()) {
         window.location.replace("/Crux-Tricks/index.html");
       }
@@ -1404,14 +1474,15 @@
 
     var parentUrl = logicalParentUrl();
     if (!parentUrl) {
-      clearHomeSearchChain();
-      window.location.replace("/");
+      consumeBackEvent(event);
+      if (window.EFP_NAV_GUARD) window.EFP_NAV_GUARD.record("missing-parent");
+      armGenericHomeSearchGuard();
       return;
     }
 
     rememberHomeSearchChain();
     useLogicalParent(event);
-  });
+  }, true);
 
   document.addEventListener("click", function (event) {
     if (!isCruxViewer() || !event.target || !event.target.closest) return;
@@ -1422,7 +1493,7 @@
   /* Capture before black-mode.js/home-nav.js own button listener.
      - Crux SPA: climb its visible in-page hierarchy first.
      - Original Practice SPA: Quiz -> Chapters -> Complete Practice Home first.
-     - Normal internal navigation: preserve real browser history.
+     - Mapped documents: climb one declared parent, regardless of referrer.
      - Direct/external open: climb the generated logical hierarchy.
      - Once a logical climb starts: keep climbing parent-by-parent. */
   document.addEventListener("click", function (event) {
@@ -1575,10 +1646,6 @@
       return;
     }
 
-    if (window.history.length > 1 && hasSameOriginReferrer()) {
-      return;
-    }
-
     useLogicalParent(event);
   }, true);
 
@@ -1589,6 +1656,19 @@
   installMixedPracticeInstantCheck();
 installCruxHomeSearchHistoryGuard();
   installGenericHomeSearchHistoryGuard();
+
+  function revalidateNavigationGuard() {
+    if (document.hidden) return;
+    var warning = window.EFP_QUIZ_PROGRESS_WARNING;
+    // A quiz owns its own release/confirmation guard. Never insert a second
+    // entry during its asynchronous Stay/Quit history traversal.
+    if (warning && warning.isQuizVisible && warning.isQuizVisible()) return;
+    installCruxHomeSearchHistoryGuard();
+    installGenericHomeSearchHistoryGuard();
+  }
+  window.addEventListener("pageshow", revalidateNavigationGuard);
+  document.addEventListener("visibilitychange", revalidateNavigationGuard);
+  document.addEventListener("resume", revalidateNavigationGuard);
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", restoreCruxIndexState, { once: true });

@@ -1090,6 +1090,9 @@
 
     function installSystemBackInterceptor() {
       window.addEventListener("popstate", function (event) {
+        if (window.EFP_NAV_GUARD && (systemBackGuardActive || pendingGuardRelease || restoringSystemBackGuard)) {
+          window.EFP_NAV_GUARD.record("quiz-history", { releasing: !!pendingGuardRelease, restoring: restoringSystemBackGuard });
+        }
         if (pendingGuardRelease) {
           consumeSystemBackEvent(event);
           var action = pendingGuardRelease;
@@ -1383,6 +1386,9 @@
         return true;
       },
       isArmed: function () { return dirty; },
+      ownsSystemBack: function () {
+        return systemBackGuardActive || !!pendingGuardRelease || restoringSystemBackGuard;
+      },
       isQuizVisible: function () { return hasVisibleQuizSurface() && !isClearlyFinished(); },
       confirmLeave: function (onLeave) {
         if (typeof onLeave !== "function") return false;
