@@ -43,7 +43,9 @@ def build():
         tree = html.fromstring(page.read_bytes())
         cards = {
             card.get("id"): card
-            for card in tree.xpath("//*[" + CLASS.format("question-card") + "]")
+            for card in tree.xpath("//*[" + CLASS.format("question-card") +
+                                   " or " + CLASS.format("oneliner-item") + "]")
+            if card.get("id")
         }
         snippets = []
         for original in group["x"]:
@@ -51,6 +53,13 @@ def build():
             if not anchor or anchor.group(1) not in cards:
                 raise ValueError(f"Missing question anchor in {page}: {original[:40]}")
             card = cards[anchor.group(1)]
+            if "oneliner-item" in (card.get("class") or "").split():
+                question = first(card, "oneliner-q")
+                answer = first(card, "oneliner-a")
+                if not question or not answer:
+                    raise ValueError(f"Incomplete one-liner {page}#{anchor.group(1)}")
+                snippets.append(f"\x01{anchor.group(1)}\x02{question} Answer: {answer}")
+                continue
             question = first(card, "question-text")
             answer = first(card, "correct-option")
             explanation = first(card, "explanation-box")

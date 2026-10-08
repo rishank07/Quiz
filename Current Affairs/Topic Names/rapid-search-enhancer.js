@@ -11,7 +11,7 @@
   var INNER_PREFIX = "/current affairs/topic names/rapid practice/";
   var LOGIC_SRC = "/search-logic.js?v=20261007searchaudit1";
   var WORKER_SRC = "/search-worker.js?v=20261007searchaudit1";
-  var INDEX_SRC = "/search-snippets-current-affairs-rapid.js?v=20261004awards19";
+  var INDEX_SRC = "/search-snippets-current-affairs-rapid.js?v=20261008september1";
   var EXTRA_INDEX_SRC = "/search-snippets-current-affairs-rapid-extra.js?v=20261003caquiz29";
   var INDEX_PREFIX = "./Current%20Affairs/Topic%20Names/Rapid%20Practice/";
   var LOCAL_HIDE_STYLE_ID = "efp-ca-rapid-local-search-hide";
