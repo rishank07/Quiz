@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261008september4";
+const CACHE_VERSION = "efp-pwa-20261008rapidcounts1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261008navigationguard1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';

@@ -6,17 +6,18 @@ Rapid Practice pages currently exist in multiple formats:
 - generated pages exposing window.RAPID_CONFIG with a total field
 - generated self-contained pages exposing a TOTAL_COUNT constant
 
-This helper understands all three formats, sums every Rapid Practice quiz page,
-and writes one standard <meta name="efp-question-count"> override on the Rapid
-Practice hub. The existing update-book-question-counts.py pipeline then treats
-that total exactly like every other ExamFusion section count.
+This helper understands all three formats, refreshes the hub catalog from each
+quiz, and updates its visible totals and standard question-count meta override.
+The existing section-count workflow runs it whenever quiz content changes.
 """
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import re
 from pathlib import Path
+from urllib.parse import unquote
 
 MASTER_DATA_RE = re.compile(
     r'<script\b[^>]*\bid=["\']master-data["\'][^>]*>(.*?)</script\s*>',
@@ -31,6 +32,7 @@ META_RE = re.compile(
     r'<meta\s+name=["\']efp-question-count["\']\s+content=["\']\d+["\']\s*/?>',
     re.I,
 )
+CATALOG_RE = re.compile(r'\bconst\s+DATA\s*=\s*(\[.*?\]);', re.S)
 
 
 def count_question_records(node) -> int:
@@ -76,15 +78,49 @@ def count_page(path: Path) -> int:
 
 def update_hub_meta(hub: Path, total: int) -> bool:
     raw = hub.read_text(encoding="utf-8", errors="replace")
+    catalog_match = CATALOG_RE.search(raw)
+    if not catalog_match:
+        raise SystemExit(f"Rapid Practice hub has no DATA catalog: {hub}")
+    try:
+        catalog = ast.literal_eval(catalog_match.group(1))
+    except (ValueError, SyntaxError) as exc:
+        raise SystemExit(f"Invalid Rapid Practice DATA catalog: {exc}") from exc
+    rapid_root = (hub.parent / "Rapid Practice").resolve()
+    for row in catalog:
+        if not isinstance(row, list) or len(row) != 6:
+            raise SystemExit("Invalid Rapid Practice catalog row")
+        page = (hub.parent / unquote(row[3])).resolve()
+        if not page.is_relative_to(rapid_root) or not page.is_file():
+            raise SystemExit(f"Missing or invalid Rapid Practice catalog page: {row[3]}")
+        count = count_page(page)
+        if not count:
+            raise SystemExit(f"No questions found in catalog page: {row[3]}")
+        row[4] = count
+    catalog_text = "[\n" + ",\n".join(
+        json.dumps(row, ensure_ascii=False, separators=(",", ":")) for row in catalog
+    ) + "\n]"
+    updated = raw[:catalog_match.start(1)] + catalog_text + raw[catalog_match.end(1):]
     wanted = f'<meta name="efp-question-count" content="{total}">'
 
-    if META_RE.search(raw):
-        updated = META_RE.sub(wanted, raw, count=1)
+    if META_RE.search(updated):
+        updated = META_RE.sub(wanted, updated, count=1)
     else:
-        head = re.search(r"</head\s*>", raw, re.I)
+        head = re.search(r"</head\s*>", updated, re.I)
         if not head:
             raise SystemExit(f"Rapid Practice hub has no </head>: {hub}")
-        updated = raw[: head.start()] + "  " + wanted + "\n" + raw[head.start() :]
+        updated = updated[:head.start()] + "  " + wanted + "\n" + updated[head.start():]
+
+    # Correct initial HTML too, before JavaScript renders the catalog totals.
+    values = {
+        "rapidQuizCount": f"{len(catalog):,}",
+        "rapidQuestionCount": f"{sum(row[4] for row in catalog):,}",
+        "openedCopy": f"0 / {len(catalog)} quizzes opened",
+    }
+    for element_id, value in values.items():
+        pattern = re.compile(r'(<(?:b|span)\b[^>]*\bid="' + element_id + r'"[^>]*>)[^<]*(</(?:b|span)>)')
+        updated, replacements = pattern.subn(lambda match: match[1] + value + match[2], updated)
+        if replacements != 1:
+            raise SystemExit(f"Missing or duplicate hub counter: {element_id}")
 
     if updated == raw:
         return False
