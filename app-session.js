@@ -2,6 +2,14 @@
 (function () {
   "use strict";
 
+  if (!document.getElementById("efp-quiz-unattempted-script")) {
+    var countScript = document.createElement("script");
+    countScript.id = "efp-quiz-unattempted-script";
+    countScript.src = "/quiz-unattempted.js?v=20261009counts1";
+    countScript.async = false;
+    (document.head || document.documentElement).appendChild(countScript);
+  }
+
   // Also runs in browsers: section completion is shared by all quiz families.
   if (!document.getElementById("efp-quiz-continuity-script")) {
     var continuityScript = document.createElement("script");
