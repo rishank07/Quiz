@@ -385,6 +385,7 @@
       #quizView .explanation .exp-hi{font-size:14px!important;line-height:1.55!important}
     }
   </style>
+<link rel="stylesheet" href="./english-highlights.css?v=20261009dark1">
 </head>
 <body>
 <main class="wrap">
@@ -778,7 +779,7 @@
     options.forEach(function(option){identity.push(identityText(option&&option.en));identity.push(identityText(option&&option.hi))});
     var raw=identity.join('|');return'qv3|'+fileKey+'|'+identityHash(raw)+'|'+raw.length
   }
-  function normalizeEnglishQuestion(q){var options=(q.options||[]).map(function(option){return {en:String(option),hi:''}}),correct=Number.isInteger(q.answer)&&options[q.answer]?options[q.answer].en:'';return {q:{en:(q.prompt||'')+(q.sentence?'<div style="margin-top:10px;padding:10px 12px;border-radius:9px;background:rgba(255,255,255,.05);border-left:4px solid #f0cf77">'+q.sentence+'</div>':''),hi:''},o:options,a:{en:correct,hi:''},exp:{en:'<strong>Hinglish Explanation</strong><div>'+(q.explanation||'')+'</div><div class="exp-hi"><strong>English Explanation</strong><div>'+(q.englishExplanation||'')+'</div></div><div class="exp-hi"><strong>Quick Rule</strong><div>'+(q.rule||'')+'</div></div>',hi:''}}}
+  function normalizeEnglishQuestion(q){var options=(q.options||[]).map(function(option){return {en:String(option),hi:''}}),correct=Number.isInteger(q.answer)&&options[q.answer]?options[q.answer].en:'';return {q:{en:(q.prompt||'')+(q.sentence?'<div style="margin-top:10px;padding:10px 12px;border-radius:9px;background:rgba(255,255,255,.05);border-left:4px solid #f0cf77">'+q.sentence+'</div>':''),hi:''},o:options,a:{en:correct,hi:''},exp:{en:'<strong>Hinglish Explanation</strong><div class="grammar-explanation">'+(q.explanation||'')+'</div><div class="exp-hi"><strong>English Explanation</strong><div class="grammar-explanation">'+(q.englishExplanation||'')+'</div></div><div class="exp-hi"><strong>Quick Rule</strong><div class="grammar-explanation">'+(q.rule||'')+'</div></div>',hi:''}}}
   async function buildPool(key){
     if(poolCache[key])return poolCache[key];
     var p=POOLS[key],master=await loadMaster(p.file),list=[];
