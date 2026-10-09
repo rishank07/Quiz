@@ -1,13 +1,19 @@
 /* Add one statistic to the existing navbar; preserve its sticky behaviour. */
 .efp-counter-bar { min-width: 0; max-width: 100%; flex-wrap: wrap; }
-.efp-unattempted { display: inline-flex; align-items: center; gap: 4px; font: inherit; white-space: nowrap; }
-.efp-unattempted-value { font-weight: 800; font-variant-numeric: tabular-nums; }
+.efp-unattempted { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.efp-unattempted-value { font-weight: inherit; font-variant-numeric: tabular-nums; }
+/* Match each native score row instead of making the remaining count heavier. */
+.score-bar > .efp-unattempted, .set-score-bar > .efp-unattempted { color: #2c3e50; }
+.ef-native-score-chip > .efp-unattempted-value { font-weight: bolder; }
 .efp-op-counts { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
 .efp-op-counts > span { white-space: nowrap; }
 .efp-blackbook-counts { flex-wrap: wrap; justify-content: flex-end; gap: 14px; }
-.efp-blackbook-counts > .efp-unattempted { flex-direction: column; gap: 2px; font-size: 11px; }
-.efp-blackbook-counts .efp-unattempted-value { font-size: 24px; }
+.efp-blackbook-counts > .efp-unattempted { flex-direction: column; gap: 2px; font-size: 12px; font-weight: 600; }
+.efp-blackbook-counts .efp-unattempted-value { font-size: 1.875rem; font-weight: 900; }
 .desktop-sticky-score.efp-counter-bar { flex-wrap: wrap; }
+.desktop-sticky-score > .efp-unattempted .efp-unattempted-value { font-size: 1.125rem; font-weight: 800; }
+.efp-mobile-scorebar > .efp-unattempted { color: rgb(71 85 105); font-weight: 600; }
+.efp-mobile-scorebar > .efp-unattempted .efp-unattempted-value { font-size: 1.125rem; font-weight: 700; }
 html.efp-black .efp-op-counts > .efp-unattempted { background: #263445; color: #f8fafc; }
 
 @media (max-width: 700px) {
@@ -66,5 +72,4 @@ html.efp-black .efp-op-counts > .efp-unattempted { background: #263445; color: #
     display: flex; flex-direction: column; align-items: center; min-width: 0;
     gap: 2px !important; font-size: 10px !important; line-height: 1.25;
   }
-  .efp-mobile-scorebar.efp-counter-bar .efp-unattempted-value { font-size: 16px; }
 }
