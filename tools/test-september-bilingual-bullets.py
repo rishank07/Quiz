@@ -3,6 +3,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 import json
 import re
+import unicodedata
 
 ROOT = Path(__file__).resolve().parents[1]
 READING = ROOT / 'Current Affairs/Topic Names/2026/Month Wise/SEPTEMBER2026.html'
@@ -54,6 +55,18 @@ for index, q in enumerate(questions, 1):
         assert ' '.join(points) == q['exp'][lang], f'Q{index}: search text differs from displayed explanation'
         highlights = re.findall(r'<span class="highlight-text">(.*?)</span>', q['exp_html'][lang])
         assert all(len(t) <= 65 and len(t.split()) <= 8 for t in highlights)
+        # Inline styling must never split a word, its vowel marks or a number.
+        for mark in re.finditer(r'<span class="highlight-text">.*?</span>', q['exp_html'][lang]):
+            before = q['exp_html'][lang][mark.start() - 1] if mark.start() else ''
+            after = q['exp_html'][lang][mark.end():mark.end() + 1]
+            assert not any(c and unicodedata.category(c)[0] in 'LMN' for c in (before, after)), f'Q{index}: highlight splits a word/number'
+    for phrase in ('Thermal Infra-Red Imaging', 'Unified Payments Interface', 'प्लेयर ऑफ द सीरीज', 'प्रोजेक्ट', 'लॉन्च', 'Smart engineering', 'Turning Vision into Action'):
+        assert phrase not in q['exp']['hi'], f'Q{index}: unnecessary English in Hindi explanation'
+
+assert '<span class="highlight-text">भारतीय</span>' in questions[25]['exp_html']['hi']
+assert '<span class="highlight-text">फ्रांसीसी</span>' in questions[44]['exp_html']['hi']
+assert 'प्रा<span' not in questions[17]['exp_html']['hi']
+assert 'प्रति<span' not in questions[54]['exp_html']['hi']
 
 reading = READING.read_text()
 cards = re.findall(r'<main class="question-card" id="q(\d+)">(.*?)</main>', reading, re.S)
