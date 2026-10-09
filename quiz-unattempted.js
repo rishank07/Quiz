@@ -98,7 +98,7 @@
     if (books && !document.querySelector(".score-bar,#alphabet-container")) return;
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/quiz-unattempted.css?v=20261009counts1";
+    link.href = "/quiz-unattempted.css?v=20261009compact2";
     document.head.appendChild(link);
     sync();
     new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, characterData: true });

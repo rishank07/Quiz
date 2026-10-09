@@ -11,16 +11,6 @@
 html.efp-black .efp-op-counts > .efp-unattempted { background: #263445; color: #f8fafc; }
 
 @media (max-width: 700px) {
-  .score-bar.efp-counter-bar, .set-score-bar.efp-counter-bar {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 7px 10px; padding: 10px 12px;
-  }
-  .score-bar.efp-counter-bar > .score-item, .set-score-bar.efp-counter-bar > .score-item {
-    min-width: 0; font-size: 12px; line-height: 1.4; white-space: nowrap;
-  }
-  .set-score-bar.efp-counter-bar > .current-set-badge,
-  .efp-counter-bar > .efp-quiz-reset-btn { grid-column: 1 / -1; }
-  .efp-counter-bar > .efp-quiz-reset-btn { justify-self: end; }
   #app .efp-op-counts {
     display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
     flex: 1 0 100%; width: 100%; gap: 5px;
@@ -31,6 +21,39 @@ html.efp-black .efp-op-counts > .efp-unattempted { background: #263445; color: #
   .toolbar > .bar > .row:first-child.efp-rp-native-score-row #scoreTxt.ef-native-score.efp-counter-bar {
     display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     width: 100% !important; gap: 5px !important;
+  }
+}
+
+/* Static book quizzes and Bihar sets only. Keep Reset beside both counter
+   rows, instead of giving the button an otherwise empty third sticky row.
+   Coarse-pointer landscape phones use the same compact mobile layout. */
+@media (max-width: 700px), (hover: none) and (pointer: coarse) and (max-width: 1024px) {
+  .score-bar.efp-counter-bar, .set-score-bar.efp-counter-bar {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center; gap: 4px 8px; padding: 8px 10px;
+    border-radius: 10px;
+  }
+  .score-bar.efp-counter-bar > .score-item,
+  .set-score-bar.efp-counter-bar > .score-item {
+    min-width: 0; font-size: clamp(10px, 2.7vw, 12px);
+    line-height: 1.35; white-space: nowrap;
+  }
+  .score-bar.efp-counter-bar:has(> .efp-quiz-reset-btn) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) 34px;
+  }
+  .score-bar.efp-counter-bar > .efp-quiz-reset-btn {
+    grid-column: 3; grid-row: 1 / span 2; justify-self: end;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; min-width: 34px; padding: 0;
+    margin: 0; font-size: 0; border-radius: 9px;
+  }
+  .score-bar.efp-counter-bar > .efp-quiz-reset-btn::before {
+    content: "\21bb"; font-size: 19px; line-height: 1;
+  }
+  .set-score-bar.efp-counter-bar > .current-set-badge {
+    grid-column: 1 / -1; justify-self: start;
+    font-size: 10px; line-height: 1.2; padding: 2px 7px;
+    margin: 0; border-radius: 5px;
   }
 }
 @media (max-width: 639px) {

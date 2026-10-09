@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261009unattempted1";
+const CACHE_VERSION = "efp-pwa-20261009compactscore2";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261009counts1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
@@ -14,7 +14,7 @@ const DESKTOP_SEARCH_ENTRY_BOOTSTRAP = '<script id="efp-desktop-search-entry-boo
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
   "/quiz-unattempted.js?v=20261009counts1",
-  "/quiz-unattempted.css?v=20261009counts1",
+  "/quiz-unattempted.css?v=20261009compact2",
   "/quiz-continuity.js?v=20261009wake1",
   "/",
   "/index.html",
@@ -502,6 +502,8 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/back-parent-map.js" ||
       url.pathname === "/question-deeplink.js" ||
       url.pathname === "/quiz-continuity.js" ||
+      url.pathname === "/quiz-unattempted.js" ||
+      url.pathname === "/quiz-unattempted.css" ||
       url.pathname === "/rapid-practice-deeplink.js" ||
       url.pathname === "/bihar-objective-gk-deeplink.js" ||
       url.pathname === "/mindmap-deeplink.js" ||
