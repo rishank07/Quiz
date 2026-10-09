@@ -68,6 +68,7 @@
 
   var POSITION_PREFIX = "efp_reading_position_v1:", activeKey = "", pending = null;
   var restoring = false, restoreTimer = 0, saveTimer = 0, entryTimer = 0, generation = 0;
+  var retryRestore = null, restoreDeferred = false;
   var resetKey = "";
   var navigation = window.performance && performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
   var entryUrl = new URL(navigation && navigation.name || location.href);
@@ -214,6 +215,10 @@
   function checkpoint(preferred) {
     if (restoring) return;
     var view = currentView(); if (!view) return;
+    // A throttled observer/scroll timer can run before a newly opened view has
+    // consumed its saved position. Resolve entry first instead of saving Q1
+    // over the learner's previous checkpoint.
+    if (storageKey(view) !== activeKey) { checkEntry(); if (restoring) return; }
     if (storageKey(view) === resetKey) return;
     var record = { kind: view.kind, section: view.section, ts: Date.now() };
     var reading = view.kind === "reader" || view.kind === "accordion" || view.reading;
@@ -259,7 +264,11 @@
     try { localStorage.removeItem(storageKey(view)); } catch (_) {}
     setTimeout(function () { var now = currentView(); if (now && storageKey(now) === resetKey) window.scrollTo({ top: 0, behavior: "instant" }); }, 0);
   }
-  function cancelRestore() { generation++; clearTimeout(restoreTimer); restoring = false; pending = null; }
+  function cancelRestore() { generation++; clearTimeout(restoreTimer); restoring = false; pending = null; retryRestore = null; restoreDeferred = false; }
+  function deferRestore() {
+    clearTimeout(restoreTimer); restoreTimer = 0;
+    restoreDeferred = !!(restoring && retryRestore);
+  }
   function readingInset(view) {
     var inset = topInset();
     if (view.scroller) {
@@ -303,16 +312,22 @@
   }
   function resume(view, record) {
     cancelRestore(); restoring = true; pending = record;
-    var run = generation, tries = 0, opened = false;
+    var run = generation, tries = 0, settled = 0, opened = false;
+    retryRestore = function () {
+      if (run !== generation || document.hidden) return;
+      restoreDeferred = false; tries = 0;
+      restoreTimer = setTimeout(attempt, 100);
+    };
     function attempt() {
       if (run !== generation) return;
+      if (document.hidden) { deferRestore(); return; }
       var now = currentView();
       if (!now || now.key !== view.key || searchOwnsPosition()) { cancelRestore(); return; }
       if (now.prepare && !opened) {
         opened = true; now.prepare(record); restoreTimer = setTimeout(attempt, 100); return;
       }
       if (now.kind === "pdf") {
-        if (!now.snapshot.ready) { if (++tries < 50) { restoreTimer = setTimeout(attempt, 100); return; } cancelRestore(); return; }
+        if (!now.snapshot.ready) { if (++tries < 50) { restoreTimer = setTimeout(attempt, 100); return; } deferRestore(); return; }
         Promise.resolve(now.api.restore(record.pdf, function () { return run === generation; })).then(function () { if (run === generation) cancelRestore(); }, function () { if (run === generation) cancelRestore(); }); return;
       }
       if (String(now.section) !== String(record.section) && now.open && !opened) {
@@ -324,7 +339,10 @@
         // Long vocabulary banks render in frame-sized batches. Give late
         // entries time to arrive on phones; learner input still cancels at once.
         if (++tries < (now.kind === "vocab" ? 150 : 40)) { restoreTimer = setTimeout(attempt, now.kind === "vocab" ? 200 : 80); return; }
-        cancelRestore(); return;
+        // Preserve the pending checkpoint after the finite retry window.
+        // A later DOM/layout-ready event or wake will retry this same entry.
+        // While waiting, automatic saves must not replace it with the top.
+        deferRestore(); return;
       }
       // Stable IDs plus the prompt protect against changed/reordered question banks.
       if (textFor(card) !== record.text) { cancelRestore(); return; }
@@ -334,13 +352,16 @@
       else scrollReadingCard(card, wantedTop, record.offset);
       // Native page-load section restoration and lazy answer replay may finish a
       // frame later. Settle once, with bounded retries, and yield on user input.
-      if (++tries < 4) restoreTimer = setTimeout(attempt, 100); else cancelRestore();
+      if (++settled < 4) restoreTimer = setTimeout(attempt, 100); else cancelRestore();
     }
-    restoreTimer = setTimeout(attempt, 100);
+    if (document.hidden) deferRestore(); else retryRestore();
   }
   function checkEntry() {
     var view = currentView(), key = view && storageKey(view) || "";
-    if (key === activeKey) return;
+    if (key === activeKey) {
+      if (restoreDeferred && retryRestore && !document.hidden) retryRestore();
+      return;
+    }
     cancelRestore(); activeKey = key;
     if (!view) return;
     var explicit = initialEntry && initialExplicit || searchOwnsPosition();
@@ -349,11 +370,18 @@
     var record = readPosition(view) || legacyPosition(view);
     if (record && record.kind === view.kind) resume(view, record);
   }
-  function saveSoon() { clearTimeout(saveTimer); saveTimer = setTimeout(function () { checkpoint(); }, 180); }
+  function saveSoon() {
+    clearTimeout(saveTimer);
+    var view = currentView(), key = view && storageKey(view), section = view && view.section;
+    saveTimer = setTimeout(function () {
+      var now = currentView();
+      if (now && storageKey(now) === key && String(now.section) === String(section)) checkpoint();
+    }, 180);
+  }
   function installContinuity() {
     checkEntry();
     // Pointer/wheel/keyboard activity must cancel pending automatic scrolling.
-    ["pointerdown", "touchstart", "wheel", "keydown"].forEach(function (name) { window.addEventListener(name, function (event) { if (event.isTrusted) { resetKey = ""; cancelRestore(); } }, { passive: true }); });
+    ["pointerdown", "touchstart", "wheel", "keydown"].forEach(function (name) { window.addEventListener(name, function (event) { if (event.isTrusted) { checkEntry(); resetKey = ""; cancelRestore(); } }, { passive: true }); });
     document.addEventListener("click", function (event) {
       if (!event.isTrusted) return;
       var view = currentView(), target = event.target;
@@ -372,7 +400,12 @@
     }, true);
     document.addEventListener("change", saveSoon);
     document.addEventListener("scroll", saveSoon, { passive: true, capture: true });
-    document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") checkpoint(); });
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "hidden") { checkpoint(); deferRestore(); }
+      else schedule();
+    });
+    document.addEventListener("freeze", function () { checkpoint(); deferRestore(); });
+    document.addEventListener("resume", schedule);
     window.addEventListener("pagehide", function () { checkpoint(); cancelRestore(); });
     window.addEventListener("beforeunload", function () { checkpoint(); });
     window.addEventListener("popstate", schedule);
@@ -404,3 +437,4 @@
   window.EFP_QUIZ_CONTINUITY = { syncCompletion: syncCompletion, save: checkpoint, clear: clearPosition };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ready, { once: true }); else ready();
 })();
+

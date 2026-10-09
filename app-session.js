@@ -6,7 +6,7 @@
   if (!document.getElementById("efp-quiz-continuity-script")) {
     var continuityScript = document.createElement("script");
     continuityScript.id = "efp-quiz-continuity-script";
-    continuityScript.src = "/quiz-continuity.js?v=20261007blackbook1";
+    continuityScript.src = "/quiz-continuity.js?v=20261009wake1";
     continuityScript.async = false;
     (document.head || document.documentElement).appendChild(continuityScript);
   }
@@ -1471,3 +1471,4 @@
   };
   if (resumedSearchView) window.dispatchEvent(new CustomEvent("efp-app-search-resume"));
 })();
+
