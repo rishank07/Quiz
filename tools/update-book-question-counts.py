@@ -419,6 +419,14 @@ def build_counts(repo: Path, install_scripts: bool = True) -> tuple[dict, list[P
             page_kinds[key] = "content"
             continue
 
+        # Dynamic CA quizzes link to their hubs, but are not hubs themselves.
+        # A new inline quiz in the same folder must not lend its count to every
+        # neighbouring dynamic quiz that has no static question containers.
+        if config.key == "Current Affairs" and repo_key(path, repo).startswith(
+            "Current Affairs/Topic Names/Rapid Practice/"
+        ) and "/Topic Wise/" in repo_key(path, repo):
+            continue
+
         children = local_html_links(info, known_html)
         if children:
             total = directory_totals.get(path.parent, 0)

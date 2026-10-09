@@ -86,10 +86,11 @@ function files(dir) { return fs.readdirSync(path.join(root,dir),{withFileTypes:t
     assert(source.includes('home-nav.js'));
     rapid++;
   }
-  assert.equal(rapid,41);
+  assert.equal(rapid,42);
   // Run both actual CA runtime shapes (inline data and shared derived data).
   for (const file of [
     'Current Affairs/Topic Names/Rapid Practice/2026/Month Wise/September_2026_Current_Affairs_Rapid_Practice.html',
+    'Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/Asian_Games_2026_Current_Affairs_Rapid_Practice.html',
     'Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/Appointments_2026_Current_Affairs_Rapid_Practice.html',
     'Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/BRICS_2026_Current_Affairs_Rapid_Practice.html'
   ]) {
@@ -110,7 +111,7 @@ function files(dir) { return fs.readdirSync(path.join(root,dir),{withFileTypes:t
     p.run('resetAll()');await delay(p.w);assert.equal(value(host()),total);
     cases+=6;p.close();
   }
-  console.log('PASS 41 CA quiz loaders; native inline/shared runtime counts, section/filter switches and reset');
+  console.log('PASS '+rapid+' CA quiz loaders; native inline/shared runtime counts, section/filter switches and reset');
 
   for (const file of ['Original Practice/Mixed_Practice.html','Books/BlackBook/Files/All one Word.html','Current Affairs/Topic Names/2026/Month Wise/SEPTEMBER2026.html']) {
     const p = make(file,'<div id="scoreTxt">Not Attempted: 7</div>');await delay(p.w);
@@ -119,5 +120,5 @@ function files(dir) { return fs.readdirSync(path.join(root,dir),{withFileTypes:t
   const p=make('Books/test.html','<div class="score-bar"><span class="total-count">Total: <span>0</span>/12</span><span>Not Attempted: 12</span></div>');await delay(p.w);
   assert.equal(p.w.document.querySelectorAll('.efp-unattempted').length,0);p.close();cases++;
   console.log('PASS Mixed Practice remains excluded; no counters on reading pages or duplicate existing labels');
-  console.log('PASS '+cases+' counter regressions across 702 quiz pages / 60 set scorebars');
+  console.log('PASS '+cases+' counter regressions across 703 quiz pages / 60 set scorebars');
 })().catch(error => {console.error(error);process.exit(1);});
