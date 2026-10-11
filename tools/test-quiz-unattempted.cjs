@@ -23,6 +23,18 @@ function make(file, html, runNative = false) {
 }
 function value(host) {
   assert.equal(host.querySelectorAll(':scope > .efp-unattempted').length, 1);
+  if (host.id === 'scoreTxt') {
+    assert.equal(host.querySelectorAll('.efp-quiz-progress').length, 0, 'CA retains its native progress');
+  } else {
+    assert.equal(host.querySelectorAll(':scope > .efp-quiz-progress').length, 1);
+    const track = host.querySelector('[role="progressbar"]');
+    const total = Number(track.getAttribute('aria-valuemax')), attempted = Number(track.getAttribute('aria-valuenow'));
+    assert.equal(total - attempted, Number(host.querySelector('.efp-unattempted-value').textContent));
+    assert.equal(track.getAttribute('aria-valuetext'), `${attempted} of ${total} questions attempted`);
+    assert(Math.abs(parseFloat(track.firstElementChild.style.width) - (total ? attempted / total * 100 : 0)) < 0.0001);
+    assert.equal(host.querySelector('.efp-quiz-progress-pct').textContent,
+      (total && attempted < total ? Math.floor(attempted / total * 100) : total ? 100 : 0) + '%');
+  }
   return Number(host.querySelector('.efp-unattempted-value').textContent);
 }
 function files(dir) { return fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(d=>d.isDirectory()?files(dir+'/'+d.name):[dir+'/'+d.name]); }

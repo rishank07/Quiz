@@ -1,4 +1,4 @@
-/* ExamFusion Prep — Not Attempted in each quiz's existing score row.
+/* ExamFusion Prep — Not Attempted and slim attempted progress in each score row.
    Native counters remain the source of truth; this feature never saves answers. */
 (function () {
   "use strict";
@@ -23,6 +23,30 @@
     return attempted === null || total === null ? null : { total: total, attempted: attempted };
   }
   function remaining(stats) { return Math.max(0, stats.total - stats.attempted); }
+  function addProgress(host, stats) {
+    // Current Affairs already renders its own progress from the same native stats.
+    if (rapid) return;
+    var progress = host.querySelector(":scope > .efp-quiz-progress");
+    if (!progress) {
+      progress = document.createElement("div");
+      progress.className = "efp-quiz-progress";
+      progress.innerHTML = '<div class="efp-quiz-progress-track" role="progressbar" aria-label="Questions attempted" aria-valuemin="0"><i class="efp-quiz-progress-fill"></i></div><span class="efp-quiz-progress-pct" aria-hidden="true"></span>';
+      host.appendChild(progress);
+    }
+    var attempted = Math.min(stats.total, stats.attempted);
+    var percent = stats.total ? attempted / stats.total * 100 : 0;
+    // Keep an incomplete quiz below 100%, even in large Blackbook banks.
+    var label = (attempted < stats.total ? Math.floor(percent) : Math.round(percent)) + "%";
+    var track = progress.firstElementChild;
+    var values = { "aria-valuemax": stats.total, "aria-valuenow": attempted,
+      "aria-valuetext": attempted + " of " + stats.total + " questions attempted" };
+    Object.keys(values).forEach(function (key) {
+      if (track.getAttribute(key) !== String(values[key])) track.setAttribute(key, values[key]);
+    });
+    var width = percent + "%";
+    if (track.firstElementChild.style.width !== width) track.firstElementChild.style.width = width;
+    if (progress.lastElementChild.textContent !== label) progress.lastElementChild.textContent = label;
+  }
   function addCount(host, stats, classes) {
     if (!host || !stats) return;
     var count = host.querySelector(":scope > .efp-unattempted");
@@ -40,6 +64,7 @@
     var text = String(remaining(stats)), valueNode = count.querySelector(".efp-unattempted-value");
     if (valueNode.textContent !== text) valueNode.textContent = text;
     host.classList.add("efp-counter-bar");
+    addProgress(host, stats);
   }
   function originalStats() {
     var spans = document.querySelectorAll("#app .px-2.py-1.rounded.bg-gray-100");
@@ -98,7 +123,7 @@
     if (books && !document.querySelector(".score-bar,#alphabet-container")) return;
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/quiz-unattempted.css?v=20261009type3";
+    link.href = "/quiz-unattempted.css?v=20261011progress1";
     document.head.appendChild(link);
     sync();
     new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, characterData: true });

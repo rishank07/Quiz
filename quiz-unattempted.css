@@ -1,5 +1,30 @@
 /* Add one statistic to the existing navbar; preserve its sticky behaviour. */
 .efp-counter-bar { min-width: 0; max-width: 100%; flex-wrap: wrap; }
+/* A single thin row, using Current Affairs' gold progress colour. */
+.efp-counter-bar > .efp-quiz-progress {
+  display: flex; align-items: center; gap: 7px; min-width: 0;
+  flex: 1 0 100%; width: 100%; grid-column: 1 / -1;
+  height: 12px; line-height: 1; padding: 0; margin: 0;
+}
+.efp-quiz-progress-track {
+  flex: 1; min-width: 0; height: 4px; overflow: hidden;
+  border-radius: 999px; background: rgba(100,116,139,.22);
+}
+.efp-quiz-progress-fill {
+  display: block; height: 100%; width: 0; border-radius: inherit;
+  background: linear-gradient(90deg,#b88628,#d9a84e); transition: width .2s ease;
+}
+.efp-quiz-progress-pct {
+  flex: 0 0 auto; font-family: inherit; font-size: 10px; line-height: 1;
+  font-weight: 600; font-variant-numeric: tabular-nums; color: inherit;
+}
+.efp-blackbook-counts.efp-counter-bar > .efp-quiz-progress,
+.desktop-sticky-score.efp-counter-bar > .efp-quiz-progress {
+  flex: 0 1 120px; width: 120px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .efp-quiz-progress-fill { transition: none; }
+}
 .efp-unattempted { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
 .efp-unattempted-value { font-weight: inherit; font-variant-numeric: tabular-nums; }
 /* Match each native score row instead of making the remaining count heavier. */
@@ -71,5 +96,8 @@ html.efp-black .efp-op-counts > .efp-unattempted { background: #263445; color: #
   .efp-mobile-scorebar.efp-counter-bar > .efp-unattempted {
     display: flex; flex-direction: column; align-items: center; min-width: 0;
     gap: 2px !important; font-size: 10px !important; line-height: 1.25;
+  }
+  .efp-mobile-scorebar.efp-counter-bar > .efp-quiz-progress {
+    flex-direction: row; gap: 7px !important;
   }
 }
