@@ -85,6 +85,7 @@
       var row = originalStats();
       if (row) {
         row.host.classList.add("efp-op-counts");
+        row.host.parentElement.classList.add("efp-op-progress-toolbar");
         addCount(row.host, row.stats, "px-2 py-1 rounded bg-gray-100");
       }
     }
@@ -123,7 +124,7 @@
     if (books && !document.querySelector(".score-bar,#alphabet-container")) return;
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/quiz-unattempted.css?v=20261011progress1";
+    link.href = "/quiz-unattempted.css?v=20261011progress2";
     document.head.appendChild(link);
     sync();
     new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, characterData: true });

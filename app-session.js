@@ -5,7 +5,7 @@
   if (!document.getElementById("efp-quiz-unattempted-script")) {
     var countScript = document.createElement("script");
     countScript.id = "efp-quiz-unattempted-script";
-    countScript.src = "/quiz-unattempted.js?v=20261011progress1";
+    countScript.src = "/quiz-unattempted.js?v=20261011progress2";
     countScript.async = false;
     (document.head || document.documentElement).appendChild(countScript);
   }

@@ -18,9 +18,15 @@
   flex: 0 0 auto; font-family: inherit; font-size: 10px; line-height: 1;
   font-weight: 600; font-variant-numeric: tabular-nums; color: inherit;
 }
-.efp-blackbook-counts.efp-counter-bar > .efp-quiz-progress,
-.desktop-sticky-score.efp-counter-bar > .efp-quiz-progress {
+.efp-blackbook-counts.efp-counter-bar > .efp-quiz-progress {
   flex: 0 1 120px; width: 120px;
+}
+/* Original Practice keeps counters aligned right, while the bar spans the
+   whole sticky toolbar, including the space below Chapters. */
+#app .efp-op-progress-toolbar { padding-bottom: 22px !important; }
+#app .efp-op-progress-toolbar > .efp-op-counts { position: static; }
+#app .efp-op-counts > .efp-quiz-progress {
+  position: absolute; left: 10px; right: 10px; bottom: 5px; width: auto;
 }
 @media (prefers-reduced-motion: reduce) {
   .efp-quiz-progress-fill { transition: none; }

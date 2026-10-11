@@ -658,7 +658,7 @@
   if (typeof document === "undefined" || document.getElementById("efp-app-session-script")) return;
   var script = document.createElement("script");
   script.id = "efp-app-session-script";
-  script.src = "/app-session.js?v=20261011progress1";
+  script.src = "/app-session.js?v=20261011progress2";
   script.async = false;
   (document.head || document.documentElement).appendChild(script);
 })();
