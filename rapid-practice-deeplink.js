@@ -31,7 +31,7 @@
       "padding:0!important;margin:0!important;background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
       ".toolbar>.barcard,.toolbar>.bar{display:contents!important}" +
       ".toolbar>.barcard>.row:first-child,.toolbar>.bar>.row:first-child{" +
-      "position:sticky;top:8px;z-index:130;margin:10px 0 8px!important;padding:7px 8px;gap:4px;" +
+      "position:sticky;top:0;z-index:130;margin:10px 0 8px!important;padding:7px 8px;gap:4px;" +
       "display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:nowrap!important;" +
       "background:var(--card,#fff);border:1px solid rgba(184,134,63,.22);border-radius:12px;" +
       "box-shadow:0 3px 14px rgba(26,31,46,.10);-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
