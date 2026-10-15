@@ -1,5 +1,18 @@
 /* Add one statistic to the existing navbar; preserve its sticky behaviour. */
 .efp-counter-bar { min-width: 0; max-width: 100%; flex-wrap: wrap; }
+/* Phone scorebars sit flush against the viewport when they stick. Include
+   landscape phones without changing the desktop toolbar spacing. */
+@media (max-width: 700px), (hover: none) and (pointer: coarse) and (max-width: 1024px) {
+  .score-bar, .set-score-bar,
+  #app > .max-w-3xl > .flex.items-center.justify-between.mb-3,
+  #quizView > .quiz-head,
+  .efp-mobile-scorebar, .sticky-nav,
+  .toolbar:has(#scoreTxt) {
+    top: 0 !important;
+  }
+  /* CA's card is inside the sticky toolbar; remove the outer top gap only. */
+  .toolbar:has(#scoreTxt) { padding-top: 0 !important; }
+}
 /* A single thin row, using Current Affairs' gold progress colour. */
 .efp-counter-bar > .efp-quiz-progress {
   display: flex; align-items: center; gap: 7px; min-width: 0;

@@ -6,11 +6,12 @@
   var path;
   try { path = decodeURIComponent(location.pathname); } catch (_) { path = location.pathname; }
   var original = /^\/Original Practice\/[^/]+_Complete_Practice\.html$/i.test(path);
+  var mixed = /^\/Original Practice\/Mixed_Practice\.html$/i.test(path);
   var books = /^\/Books\//i.test(path);
   var rapid = /^\/Current Affairs\/Topic Names\/Rapid Practice\/.*\.html$/i.test(path);
   var sets = /\/Bihar Special\/Topic Names\/Bihar Objective GK - 60 Sets\.html$/i.test(path);
-  // Mixed Practice already owns both its live and final unanswered counters.
-  if (!original && !books && !rapid && !sets) return;
+  // Mixed Practice loads only shared mobile positioning, retaining native counters.
+  if (!original && !mixed && !books && !rapid && !sets) return;
 
   function number(text) {
     var value = Number(String(text).replace(/,/g, "").trim());
@@ -124,8 +125,9 @@
     if (books && !document.querySelector(".score-bar,#alphabet-container")) return;
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/quiz-unattempted.css?v=20261011progress2";
+    link.href = "/quiz-unattempted.css?v=20261015mobiletop1";
     document.head.appendChild(link);
+    if (mixed) return;
     sync();
     new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, characterData: true });
     document.addEventListener("visibilitychange", schedule);
