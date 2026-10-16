@@ -51,6 +51,8 @@
   var singlePageJobs={};
   var singleCacheLayout='';
   var singleWarmGeneration=0;
+  var SINGLE_KEEP_RADIUS=8;
+  var SINGLE_WARM_RADIUS=4;
   var pagePaintQueue=[];
   var activePagePaint=null;
   var pagePaintEpoch=0;
@@ -834,7 +836,7 @@
     for(var i=0;i<keys.length;i++){
       var key=keys[i],entry=singlePageCache[key];
       if(entry.canvas===pdfCanvas||Number(key)===page)continue;
-      if(Math.abs(Number(key)-page)>2||bytes>budget){
+      if(Math.abs(Number(key)-page)>SINGLE_KEEP_RADIUS||bytes>budget){
         bytes-=entry.bytes;releaseCanvas(entry.canvas);delete singlePageCache[key];
       }
     }
@@ -871,7 +873,7 @@
           if(renderTask===paint.task)renderTask=null;
           releaseCanvas(c);throw err;
         });
-      },function(){return readerSuspended||continuous||loaded!==pdfDoc||layout!==singleCacheLayout||Math.abs(n-page)>2});
+      },function(){return readerSuspended||continuous||loaded!==pdfDoc||layout!==singleCacheLayout||Math.abs(n-page)>SINGLE_WARM_RADIUS});
     }).then(function(c){
       if(!c)return null;
       if(readerSuspended||continuous||loaded!==pdfDoc||layout!==singleCacheLayout){releaseCanvas(c);return null}
@@ -885,7 +887,8 @@
   }
   function warmSinglePages(){
     var generation=++singleWarmGeneration,layout=singleCacheLayout,center=page;
-    var queue=[center+navigationDirection,center-navigationDirection,center+2*navigationDirection,center-2*navigationDirection];
+    var queue=[center+navigationDirection,center-navigationDirection,center+2*navigationDirection,center-2*navigationDirection,
+      center+3*navigationDirection,center+4*navigationDirection];
     function next(){
       if(generation!==singleWarmGeneration||readerSuspended||continuous||!pdfDoc||layout!==singleCacheLayout||!queue.length)return;
       var n=queue.shift();
@@ -894,7 +897,9 @@
         if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:120});else setTimeout(next,16);
       });
     }
-    if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:80});else setTimeout(next,16);
+    // Start the immediate neighbour without waiting for an idle slot. Yield
+    // between subsequent bitmaps; the scheduler still permits only one paint.
+    next();
   }
   function showSingleBitmap(c,anchor){
     var oldHighlight=document.getElementById('efpSingleSearchLayer');if(oldHighlight)oldHighlight.remove();
@@ -987,7 +992,12 @@
       });
     }
     if(next===page){updateControls();return Promise.resolve(false);}
-    page=next;prioritizePagePaint();updateControls();
+    page=next;
+    // A cached target has no foreground paint to prioritize. Cancelling its
+    // upcoming neighbour here repeatedly restarted heavy pages under arrows.
+    var ready=singlePageCache[page]&&singleLayoutKey()===singleCacheLayout;
+    if(!ready||(activePagePaint&&Math.abs(activePagePaint.n-page)>SINGLE_WARM_RADIUS))prioritizePagePaint();
+    updateControls();
     var painted=renderSinglePage();pdfStage.scrollTo({top:0,left:0,behavior:'auto'});window.scrollTo({top:0,behavior:'auto'});return painted;
   }
 

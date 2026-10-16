@@ -5,11 +5,12 @@ const {JSDOM}=require(process.env.EFP_TEST_JSDOM||'jsdom');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8');
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 async function until(test,message){for(let i=0;i<150;i++){if(test())return;await delay(10)}assert.fail(message)}
-function createReader({mobile=false,lowMemory=false,idle=false,landscape=false}={}){
- const dom=new JSDOM(read('Crux-Tricks/viewer.html'),{url:'https://examfusionprep.com/Crux-Tricks/viewer.html?id=ct0467&efpWorkPreview=1',runScripts:'outside-only',pretendToBeVisual:true});
+function createReader({mobile=false,lowMemory=false,idle=false,landscape=false,advance=false,pixelRatio=mobile?3:1,slowPage=9,slowMs=150}={}){
+ const docId=advance?'ct0468':'ct0467';
+ const dom=new JSDOM(read('Crux-Tricks/viewer.html'),{url:'https://examfusionprep.com/Crux-Tricks/viewer.html?id='+docId+'&efpWorkPreview=1',runScripts:'outside-only',pretendToBeVisual:true});
  const w=dom.window,d=w.document,run=code=>vm.runInContext(code,dom.getInternalVMContext());
  w.innerWidth=mobile?390:1440;w.innerHeight=mobile?844:900;
- w.devicePixelRatio=mobile?3:1;
+ w.devicePixelRatio=pixelRatio;
  if(lowMemory)Object.defineProperty(w.navigator,'deviceMemory',{value:2});
  w.matchMedia=q=>({matches:q.includes('portrait')?w.innerHeight>=w.innerWidth:q.includes('landscape')?w.innerWidth>w.innerHeight:mobile,addEventListener(){},addListener(){}});
  if(idle)w.requestIdleCallback=callback=>w.setTimeout(callback,5);
@@ -24,21 +25,58 @@ function createReader({mobile=false,lowMemory=false,idle=false,landscape=false}=
  d.elementFromPoint=()=>d.querySelector('.efp-cont-page[data-page="'+d.getElementById('pageInput').value+'"]');
  w.IntersectionObserver=class{observe(){}disconnect(){}};
  w.HTMLCanvasElement.prototype.getContext=function(){return {canvas:this,drawImage(){},measureText(s){return {width:s.length*5}}}};
- const counts={},finished={},canvases=[],errors=[];let active=0,maxActive=0;
+ const counts={},finished={},cancelled={},canvases=[],errors=[];let active=0,maxActive=0;
  w.console.error=e=>errors.push(e);
  w.pdfjsLib={GlobalWorkerOptions:{},getDocument(){return {promise:Promise.resolve({numPages:40,getPage(n){return delay(n===20?120:0).then(()=>({getViewport({scale}){return {width:(landscape?800:600)*scale,height:(landscape?600:800)*scale,scale,transform:[scale,0,0,scale,0,0]}},getTextContent(){return Promise.resolve({items:[],styles:{}})},render({canvasContext}){
    counts[n]=(counts[n]||0)+1;active++;maxActive=Math.max(maxActive,active);canvases.push(canvasContext.canvas);
    let complete=false,reject,timer;
-   const promise=new Promise((resolve,r)=>{reject=r;timer=w.setTimeout(()=>{complete=true;active--;finished[n]=(finished[n]||0)+1;resolve()},n===9?150:20)});
-   return {promise,cancel(){if(complete)return;complete=true;active--;w.clearTimeout(timer);const e=new Error('cancelled');e.name='RenderingCancelledException';reject(e)}};
+   const promise=new Promise((resolve,r)=>{reject=r;timer=w.setTimeout(()=>{complete=true;active--;finished[n]=(finished[n]||0)+1;resolve()},n===slowPage?slowMs:20)});
+   return {promise,cancel(){if(complete)return;complete=true;active--;cancelled[n]=(cancelled[n]||0)+1;w.clearTimeout(timer);const e=new Error('cancelled');e.name='RenderingCancelledException';reject(e)}};
  } }))}})}}};
  const append=d.head.appendChild.bind(d.head);
- d.head.appendChild=node=>{const result=append(node);if(node.tagName==='SCRIPT'&&node.src.includes('/pages/'))w.setTimeout(()=>{w.EF_CRUX_DOC_ID='ct0467';w.EF_CRUX_DOC_PAGES=Array.from({length:40},(_,i)=>'page '+(i+1));node.onload()},0);return result};
- w.EF_CRUX_DOCS=[{id:'ct0467',kind:'tricks',subject:'Maths',pages:40,pdf:'maths.pdf',title:'Arithmetic Maths',source:'ExamFusion Original'}];
+ d.head.appendChild=node=>{const result=append(node);if(node.tagName==='SCRIPT'&&node.src.includes('/pages/'))w.setTimeout(()=>{w.EF_CRUX_DOC_ID=docId;w.EF_CRUX_DOC_PAGES=Array.from({length:40},(_,i)=>'page '+(i+1));node.onload()},0);return result};
+ w.EF_CRUX_DOCS=[{id:docId,kind:'tricks',subject:'Maths',pages:40,pdf:'maths.pdf',title:advance?'Advance Maths Formula Book':'Arithmetic Maths',source:'ExamFusion Original'}];
  run(read('search-logic.js'));run(read('Crux-Tricks/pdf-search.js'));run(read('Crux-Tricks/viewer-v2.js'));
  const current=()=>mobile?d.querySelector('.efp-cont-page[data-page="'+d.getElementById('pageInput').value+'"] canvas'):d.getElementById('pdfCanvas');
  const jump=n=>{const input=d.getElementById('pageInput');input.value=String(n);input.dispatchEvent(new w.Event('change'))};
- return {dom,w,d,stage,counts,finished,canvases,errors,scrolls,current,jump,get maxActive(){return maxActive}};
+ return {dom,w,d,stage,counts,finished,cancelled,canvases,errors,scrolls,current,jump,get maxActive(){return maxActive}};
+}
+async function checkDesktopArrowWarmup(){
+ const r=createReader({advance:true,landscape:true,slowPage:3,slowMs:300}),{w,d}=r;
+ try{
+  await until(()=>r.counts[3]&&!r.finished[3],'Heavy neighbour must be rendering');
+  d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
+  assert.equal(r.current().dataset.page,'2','Keyboard arrow must show the ready page synchronously');
+  assert.equal(r.cancelled[3]||0,0,'A ready-page arrow must not cancel the upcoming heavy page');
+  await until(()=>r.finished[3],'Heavy neighbour must finish');
+  d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
+  assert.equal(r.current().dataset.page,'3','The next keyboard arrow reuses the warmed heavy page');
+  assert.equal(r.counts[3],1,'Heavy page must render once');
+  const initial=r.canvases[0];
+  for(let n=4;n<=7;n++){
+   r.jump(n);await until(()=>r.current().dataset.page===String(n),'Forward arrow sequence must finish');
+  }
+  r.jump(1);
+  assert.equal(r.current(),initial,'Recently read pages within the bitmap budget must stay ready for a reverse jump');
+  assert.equal(r.counts[1],1,'Reverse navigation must reuse the completed page');
+  assert.equal(r.maxActive,1);assert.equal(r.errors.length,0);
+  console.log('PASS desktop keyboard arrows preserve heavy-page warmup and recently read bitmaps');
+ }finally{r.dom.window.close()}
+}
+async function checkDesktopBudget(){
+ const r=createReader({advance:true,landscape:true,lowMemory:true,pixelRatio:2});
+ try{
+  await until(()=>r.finished[1],'Desktop must load');
+  for(let n=2;n<=10;n++){
+   r.jump(n);await until(()=>r.current().dataset.page===String(n),'Selected page must survive cache eviction');
+  }
+  await delay(600);
+  const bytes=r.canvases.reduce((sum,c)=>sum+c.width*c.height*4,0);
+  assert(bytes<=32*1024*1024,'Expanded desktop retention must obey the low-memory budget');
+  assert.equal(r.current().dataset.page,'10');assert(r.current().width>1);
+  assert.equal(r.maxActive,1);assert.equal(r.errors.length,0);
+  console.log('PASS high-DPI desktop cache remains within 32 MB on low-memory devices');
+ }finally{r.dom.window.close()}
 }
 async function checkDesktop(){
  const r=createReader(),{w,d}=r;
@@ -89,4 +127,4 @@ async function checkMobile({idle=false,lowMemory=false,landscape=false}={}){
  assert.equal(r.errors.length,0);r.dom.window.close();
  console.log('PASS mobile cache, priority, stale-jump guard, zoom, rotation, memory and BFCache',idle?'idle API':'timer fallback',lowMemory?'low memory':'default memory',landscape?'landscape PDF':'portrait PDF');
 }
-(async()=>{await checkDesktop();await checkMobile();await checkMobile({idle:true,lowMemory:true});await checkMobile({landscape:true})})().catch(e=>{console.error(e);process.exit(1)});
+(async()=>{await checkDesktopArrowWarmup();await checkDesktopBudget();await checkDesktop();await checkMobile();await checkMobile({idle:true,lowMemory:true});await checkMobile({landscape:true})})().catch(e=>{console.error(e);process.exit(1)});
