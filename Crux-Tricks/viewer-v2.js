@@ -69,6 +69,7 @@
   var scrollTimer=null;
   var scrollRAF=0;
   var resizeTimer=null;
+  var desktopSearchLayoutTimer=null;
   var controlsTimer=null;
   var zoomRenderTimer=null;
   var pinchAnchor=null;
@@ -1410,7 +1411,11 @@
   if(resetProgressBtn)resetProgressBtn.addEventListener('click',function(){if(!window.confirm('Reset reading progress for this PDF?\n\nBookmarks and favourites will stay saved.'))return;saveProg([]);updateControls();toast('Reading progress reset to 0%');if(typeof gtag==='function')gtag('event','crux_progress_reset',{document_id:doc.id,document_title:doc.title,source:doc.source})});
   var st;docSearch.addEventListener('input',function(){
     clearTimeout(st);
-    if(normalizeSearchText(docSearch.value).length<2){docHits.innerHTML='';clearSearchHighlightState(false);return;}
+    if(normalizeSearchText(docSearch.value).length<2){
+      docHits.innerHTML='';clearSearchHighlightState(false);
+      if(!isCompactReader()){pdfContextVisible=false;notifySearchContext()}
+      return;
+    }
     st=setTimeout(runDocSearch,120);
   });
 
@@ -1440,6 +1445,21 @@
   if(window.visualViewport)window.visualViewport.addEventListener('resize',refitForViewport);
   if(window.screen&&screen.orientation&&screen.orientation.addEventListener)screen.orientation.addEventListener('change',refitForViewport);
 
+  // Search results and the yellow dock move the page without resizing the
+  // window. Refit desktop PDFs after that layout settles, even while typing.
+  function refitForDesktopSearchLayout(){
+    clearTimeout(desktopSearchLayoutTimer);
+    if(readerSuspended||isCompactReader())return;
+    desktopSearchLayoutTimer=setTimeout(function(){
+      if(readerSuspended||isCompactReader()||continuous||!pdfDoc)return;
+      if(singleLayoutKey()!==singleCacheLayout)renderSinglePage();
+    },80);
+  }
+  if(window.ResizeObserver){
+    var desktopSearchLayoutObserver=new ResizeObserver(refitForDesktopSearchLayout);
+    document.querySelectorAll('.reader-head,.toolbar,.doc-search').forEach(function(el){desktopSearchLayoutObserver.observe(el)});
+  }
+
   function dark(){document.documentElement.classList.toggle('dark',localStorage.getItem('efp_black_mode')==='on');var d=document.getElementById('darkBtn');if(d)d.textContent=document.documentElement.classList.contains('dark')?'Light':'Dark'}
   var darkBtn=document.getElementById('darkBtn');if(darkBtn)darkBtn.addEventListener('click',function(){localStorage.setItem('efp_black_mode',document.documentElement.classList.contains('dark')?'off':'on');dark()});
 
@@ -1452,6 +1472,7 @@
     Object.keys(pageRetryTimers).forEach(function(k){clearTimeout(pageRetryTimers[k])});
     pageRetryTimers={};
     clearTimeout(scrollTimer);clearTimeout(resizeTimer);clearTimeout(controlsTimer);cancelScheduledZoomRender();
+    clearTimeout(desktopSearchLayoutTimer);
     if(wheelZoomFrame){cancelAnimationFrame(wheelZoomFrame);wheelZoomFrame=0;pendingWheelZoom=null}
     if(scrollRAF){try{cancelAnimationFrame(scrollRAF)}catch(_){ }scrollRAF=0}
     if(renderTask){try{renderTask.cancel()}catch(_){ }renderTask=null}
