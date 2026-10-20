@@ -2,7 +2,7 @@
 
 The ten existing Biology mindmaps were compared with the checked-in audited Original Practice Science source. The source fingerprint is recorded in corrections.json; its Biology section contains 4,010 questions. Existing page styles, scripts, IDs and tab structures are preserved. No external fact sources were used and no Original Practice question, option, answer, ID or saved progress was modified.
 
-The plan records 192 sequential HTML edits, original and result Git blob hashes, and exact source question/answer/explanation evidence. References use chapter:section:question with zero-based section and question indexes. A reference may cite another Biology chapter when the audited explanation resolves a fact more precisely.
+The plan records 200 sequential HTML edits, original and result Git blob hashes, and exact source question/answer/explanation evidence. References use chapter:section:question with zero-based section and question indexes. A reference may cite another Biology chapter when the audited explanation resolves a fact more precisely.
 
 Corrections include taxonomic terminology, algal life cycles, gymnosperm exceptions, animal classification, cell comparisons, cork/guard cells/epithelium, vitamin deficiencies and food energy, gallstones, reflexes and joints, plant hormones, reproductive biology, genetic disorders and disease/pathogen distinctions. Repeated facts in tables and recall boxes are corrected as well as main notes.
 

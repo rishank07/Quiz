@@ -56,7 +56,7 @@ vm.runInContext(read('search-logic.js'),ctx);
    for(const s of d.scripts)if(!s.src&&!/json/i.test(s.type))run(s.textContent);
    assert(w.EFP_ANALYTICS_EXCLUDED,'Verification traffic excluded');
    for(const b of d.querySelectorAll('[onclick*="switchTab"],[onclick^="st("]')){
-    b.addEventListener('click',()=>run(b.getAttribute('onclick')));b.click();
+    b.onclick=w.Function('event',b.getAttribute('onclick'));b.click();
     const action=b.getAttribute('onclick'), match=action.match(/(?:switchTab|st)\('([^']+)'/); const id=d.getElementById(match[1])?match[1]:'tab-'+match[1];
     assert(d.getElementById(id).classList.contains('active'));assert.equal(d.querySelectorAll('.tab-content.active,.tab-panel.active').length,1);tabs++;
    }
