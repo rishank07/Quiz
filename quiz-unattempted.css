@@ -74,6 +74,21 @@ html.efp-black .efp-op-counts > .efp-unattempted { background: #263445; color: #
   }
 }
 
+/* Desktop book quizzes keep Reset in the counters row, even when it is
+   appended after the full-width progress bar. Exclude landscape phones. */
+@media (min-width: 701px) and (pointer: fine), (min-width: 1025px) {
+  .score-bar.efp-counter-bar:has(> .efp-quiz-reset-btn) {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) max-content;
+  }
+  .score-bar.efp-counter-bar > .efp-quiz-reset-btn {
+    grid-column: 5; grid-row: 1; justify-self: end;
+  }
+  .score-bar.efp-counter-bar:has(> .efp-quiz-reset-btn) > .efp-quiz-progress {
+    grid-row: 2;
+  }
+}
+
 /* Static book quizzes and Bihar sets only. Keep Reset beside both counter
    rows, instead of giving the button an otherwise empty third sticky row.
    Coarse-pointer landscape phones use the same compact mobile layout. */
