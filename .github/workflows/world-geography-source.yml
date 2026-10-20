@@ -1,0 +1,36 @@
+name: World Geography source review
+on:
+  push:
+    branches: [codex/world-geography-audit]
+    paths: ['.github/workflows/world-geography-source.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        part: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Export bounded audited source chapters
+        env:
+          PART: ${{ matrix.part }}
+        run: |
+          python3 - <<'PY'
+          import json, re, os
+          from pathlib import Path
+          raw = Path('Original Practice/Geography_Complete_Practice.html').read_text()
+          master = json.loads(re.search(r'<script id="master-data"[^>]*>(.*?)</script>', raw, re.S)[1])
+          print('SOURCE_SUBJECTS=' + json.dumps(list(master)))
+          world = next(v for k,v in master.items() if 'world' in k.lower())
+          part = int(os.environ['PART'])
+          for ci,(name,sections) in enumerate(world.items(),1):
+              if not ((part-1)*8 < ci <= part*8): continue
+              out=[]
+              for si,section in enumerate(sections,1):
+                  for qi,q in enumerate(section['questions'],1):
+                      out.append([f'S{si}Q{qi}',q['q']['en'],q['a']['en'],q.get('exp',{}).get('en','')])
+              print('WORLD_SOURCE=' + json.dumps({'number':ci,'name':name,'questions':out},ensure_ascii=False,separators=(',',':')))
+          PY
