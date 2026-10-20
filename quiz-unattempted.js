@@ -108,6 +108,18 @@
           if (top) { top.classList.add("efp-blackbook-counts"); addCount(top, stats); }
           document.querySelectorAll(".efp-mobile-scorebar,.desktop-sticky-score").forEach(function (bar) {
             addCount(bar, stats);
+            if (bar.classList.contains("desktop-sticky-score")) {
+              // Keep each label beside its live value when the desktop row spreads out.
+              bar.querySelectorAll(":scope > .score-value, :scope > .wrong-value").forEach(function (value) {
+                var label = value.previousElementSibling;
+                if (!label) return;
+                var group = document.createElement("span");
+                group.className = "efp-blackbook-score-group";
+                bar.insertBefore(group, label);
+                group.appendChild(label);
+                group.appendChild(value);
+              });
+            }
           });
         }
       }

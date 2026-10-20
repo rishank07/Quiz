@@ -74,6 +74,29 @@ html.efp-black .efp-op-counts > .efp-unattempted { background: #263445; color: #
   }
 }
 
+/* Group Blackbook labels with their values without changing phone layout. */
+.desktop-sticky-score > .efp-blackbook-score-group { display: contents; }
+@media (min-width: 701px) and (pointer: fine), (min-width: 1025px) {
+  .desktop-sticky-score.efp-counter-bar {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 12px;
+  }
+  .desktop-sticky-score > .efp-blackbook-score-group {
+    display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+    grid-row: 1;
+  }
+  .desktop-sticky-score > .efp-blackbook-score-group:first-child {
+    grid-column: 1; justify-self: start;
+  }
+  .desktop-sticky-score > .efp-blackbook-score-group:has(> .wrong-value) {
+    grid-column: 2; justify-self: center;
+  }
+  .desktop-sticky-score > .efp-unattempted {
+    grid-column: 3; grid-row: 1; justify-self: end;
+  }
+  .desktop-sticky-score > span[aria-hidden="true"] { display: none; }
+}
+
 /* Desktop book quizzes keep Reset in the counters row, even when it is
    appended after the full-width progress bar. Exclude landscape phones. */
 @media (min-width: 701px) and (pointer: fine), (min-width: 1025px) {
