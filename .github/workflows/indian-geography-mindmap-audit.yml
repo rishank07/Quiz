@@ -1,0 +1,53 @@
+name: Validate Indian Geography mind maps
+on:
+  push:
+    branches: [master, codex/indian-geography-audit]
+    paths:
+      - 'Mind Maps/Geography/Indian Geography/ChapterNames/**'
+      - 'audits/indian-geography-mindmaps/**'
+      - 'tools/test-indian-geography-mindmaps.cjs'
+      - 'tools/apply-indian-geography-mindmap-audit.py'
+      - 'tools/sync-history-mindmap-index.py'
+      - '.github/workflows/indian-geography-mindmap-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install DOM test dependency outside the repository
+        run: npm install --prefix /tmp/efp-dom-check --no-audit --no-fund jsdom@26
+      - name: Verify reviewed corrections and search snippets
+        run: |
+          python tools/apply-indian-geography-mindmap-audit.py
+          python tools/sync-history-mindmap-index.py --indian-geography --check
+      - name: Check tabs, tables, anchors and mobile/desktop search
+        env:
+          EFP_TEST_JSDOM: /tmp/efp-dom-check/node_modules/jsdom
+        run: node tools/test-indian-geography-mindmaps.cjs
+      - name: Verify analytics guard on changed HTML pages
+        run: |
+          python - <<'PY'
+          import json, pathlib, shutil, subprocess
+          root = pathlib.Path('.')
+          check = pathlib.Path('/tmp/efp-analytics-check')
+          paths = [c['file'] for c in json.loads((root/'audits/indian-geography-mindmaps/corrections.json').read_text())['chapters']]
+          paths += ['index.html', 'Mind Maps/SubjectName.html', 'analytics-guard.js', 'owner-debug.js', 'tools/install-analytics-guard.py', 'tools/test-analytics-guard.cjs']
+          for name in paths:
+              dst = check/name
+              dst.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copyfile(root/name, dst)
+          subprocess.run(['python', str(check/'tools/install-analytics-guard.py')], check=True)
+          subprocess.run(['node', str(check/'tools/test-analytics-guard.cjs')], check=True)
+          for name in paths:
+              if name.endswith('.html'):
+                  assert (check/name).read_bytes() == (root/name).read_bytes(), 'Guard installation changes reviewed page: '+name
+          PY
