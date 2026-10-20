@@ -1,8 +1,8 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261020scorecards1";
-const QUIZ_SCORE_REVISION = "20261020scorecards1";
+const CACHE_VERSION = "efp-pwa-20261020opscore1";
+const QUIZ_SCORE_REVISION = "20261020opscore1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261020scorecards1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261020opscore1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -14,8 +14,8 @@ const DESKTOP_SEARCH_ENTRY_BOOTSTRAP = '<script id="efp-desktop-search-entry-boo
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
-  "/quiz-unattempted.js?v=20261020scorecards1",
-  "/quiz-unattempted.css?v=20261020scorecards1",
+  "/quiz-unattempted.js?v=20261020opscore1",
+  "/quiz-unattempted.css?v=20261020opscore1",
   "/quiz-continuity.js?v=20261009wake1",
   "/",
   "/index.html",
@@ -40,7 +40,7 @@ const APP_SHELL = [
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
   "/home-nav.js?v=20261004searchaudit1",
-  "/app-session.js?v=20261020scorecards1",
+  "/app-session.js?v=20261020opscore1",
   "/back-parent-map.js",
   "/back-nav.js?v=20261008navigationguard1",
   "/search-context.js?v=20261007searchaudit1",
