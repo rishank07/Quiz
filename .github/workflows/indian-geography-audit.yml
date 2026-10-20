@@ -1,0 +1,40 @@
+name: Indian Geography source and audit checks
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/indian-geography-audit.yml'
+      - 'audits/indian-geography-mindmaps/**'
+      - 'tools/check-indian-geography-audit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read audited Original Practice source
+        run: |
+          python3 - <<'PY'
+          import json, re
+          from pathlib import Path
+          raw = Path('Original Practice/Geography_Complete_Practice.html').read_text()
+          master = json.loads(re.search(r'<script id="master-data"[^>]*>(.*?)</script>', raw, re.S)[1])
+          print('SOURCE_SUBJECTS=' + json.dumps(list(master), ensure_ascii=False))
+          india = next(v for k,v in master.items() if 'indian' in k.lower())
+          for ci, (name, sections) in enumerate(india.items(), 1):
+              out = []
+              for si, section in enumerate(sections, 1):
+                  for qi, question in enumerate(section['questions'], 1):
+                      out.append([f'S{si}Q{qi}', question['q']['en'], question['a']['en'], question.get('exp',{}).get('en','')])
+              print('SOURCE_CHAPTER=' + json.dumps({'number': ci, 'name': name, 'questions':out}, ensure_ascii=False, separators=(',',':')))
+          PY
+      - name: Verify reviewed corrections when present
+        run: |
+          if [ -f tools/check-indian-geography-audit.py ]; then
+            python3 tools/check-indian-geography-audit.py
+            python3 tools/install-analytics-guard.py
+            node tools/test-analytics-guard.cjs
+            git diff --exit-code
+          fi
