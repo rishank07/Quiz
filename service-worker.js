@@ -2,7 +2,7 @@
 const CACHE_VERSION = "efp-pwa-20261020scorecards1";
 const QUIZ_SCORE_REVISION = "20261020scorecards1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261020scorecards1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261011progress2"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -40,7 +40,7 @@ const APP_SHELL = [
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
   "/home-nav.js?v=20261004searchaudit1",
-  "/app-session.js?v=20261020scorecards1",
+  "/app-session.js?v=20261011progress2",
   "/back-parent-map.js",
   "/back-nav.js?v=20261008navigationguard1",
   "/search-context.js?v=20261007searchaudit1",
