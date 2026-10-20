@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261020opscore1";
+const CACHE_VERSION = "efp-pwa-20261020economymaps1";
 const QUIZ_SCORE_REVISION = "20261020opscore1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261020opscore1"></script>';
@@ -56,7 +56,7 @@ const APP_SHELL = [
   "/search-worker.js?v=20261007searchaudit1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261007searchaudit1",
-  "/homepage-fulltext-search.js?v=20261007searchaudit1",
+  "/homepage-fulltext-search.js?v=20261020economymaps1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
