@@ -137,7 +137,7 @@
     if (books && !document.querySelector(".score-bar,#alphabet-container")) return;
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/quiz-unattempted.css?v=20261015mobiletop1";
+    link.href = "/quiz-unattempted.css?v=20261020scorecards1";
     document.head.appendChild(link);
     if (mixed) return;
     sync();

@@ -1,7 +1,8 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261017gi5";
+const CACHE_VERSION = "efp-pwa-20261020scorecards1";
+const QUIZ_SCORE_REVISION = "20261020scorecards1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261011progress2"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261020scorecards1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -13,8 +14,8 @@ const DESKTOP_SEARCH_ENTRY_BOOTSTRAP = '<script id="efp-desktop-search-entry-boo
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
-  "/quiz-unattempted.js?v=20261015mobiletop1",
-  "/quiz-unattempted.css?v=20261015mobiletop1",
+  "/quiz-unattempted.js?v=20261020scorecards1",
+  "/quiz-unattempted.css?v=20261020scorecards1",
   "/quiz-continuity.js?v=20261009wake1",
   "/",
   "/index.html",
@@ -39,7 +40,7 @@ const APP_SHELL = [
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
   "/home-nav.js?v=20261004searchaudit1",
-  "/app-session.js?v=20261011progress2",
+  "/app-session.js?v=20261020scorecards1",
   "/back-parent-map.js",
   "/back-nav.js?v=20261008navigationguard1",
   "/search-context.js?v=20261007searchaudit1",
@@ -487,6 +488,15 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Old page/session loaders can still request a previous scorecard version.
+  // Fetch the current revision even when the document has an older asset URL.
+  if (url.pathname === "/quiz-unattempted.js" || url.pathname === "/quiz-unattempted.css") {
+    const current = new URL(request.url);
+    current.searchParams.set("v", QUIZ_SCORE_REVISION);
+    event.respondWith(freshCoreAsset(new Request(current.href, request)));
+    return;
+  }
+
   // Navigation chrome and Original Practice shared assets change often;
   // never let an old app-shell copy win on a normal refresh.
   if (url.pathname === "/owner-debug.js" ||
@@ -502,8 +512,6 @@ self.addEventListener("fetch", (event) => {
       url.pathname === "/back-parent-map.js" ||
       url.pathname === "/question-deeplink.js" ||
       url.pathname === "/quiz-continuity.js" ||
-      url.pathname === "/quiz-unattempted.js" ||
-      url.pathname === "/quiz-unattempted.css" ||
       url.pathname === "/rapid-practice-deeplink.js" ||
       url.pathname === "/bihar-objective-gk-deeplink.js" ||
       url.pathname === "/mindmap-deeplink.js" ||
