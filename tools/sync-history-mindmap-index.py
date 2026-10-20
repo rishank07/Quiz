@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Refresh selected search snippets from their checked-in mindmaps.
 
-By default, refresh Medieval/Modern History; --economics selects Economics.
+By default, refresh Medieval/Modern History; --economics selects Economics and --polity selects Polity.
 Other index groups and chapter metadata retain their original bytes. Run with
 --check to verify that the index is synchronized without writing it.
 """
@@ -151,16 +151,18 @@ def group_spans(raw):
             pos = end
 
 
-def synchronize(repo, check=False, all_subjects=False, economics_only=False):
+def synchronize(repo, check=False, all_subjects=False, economics_only=False, polity_only=False):
     index = repo / 'search-snippets-mindmaps.js'
     raw = index.read_text(encoding='utf-8')
     replacements = []
     count = 0
     for start, end, group in group_spans(raw):
         path = unquote(group['f']).removeprefix('./')
+        if polity_only and not path.startswith('Mind Maps/Polity/ChapterNames/'):
+            continue
         if economics_only and not path.startswith('Mind Maps/Economics/ChapterNames/'):
             continue
-        if not economics_only and not all_subjects and not any(path.startswith('Mind Maps/History/' + subject + '/ChapterNames/')
+        if not economics_only and not polity_only and not all_subjects and not any(path.startswith('Mind Maps/History/' + subject + '/ChapterNames/')
                    for subject in ('Medieval History', 'Modern History')):
             continue
         count += 1
@@ -169,7 +171,7 @@ def synchronize(repo, check=False, all_subjects=False, economics_only=False):
         if group != updated:
             encoded = json.dumps(updated, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
             replacements.append((start, end, encoded))
-    assert (count == 19 if economics_only else count > 0 if all_subjects else count == 22), f'Unexpected chapter count: {count}'
+    assert (count == 22 if polity_only else count == 19 if economics_only else count > 0 if all_subjects else count == 22), f'Unexpected chapter count: {count}'
     if check and replacements:
         raise SystemExit(f'{len(replacements)} mindmap chapter indexes need refreshing')
     for start, end, encoded in reversed(replacements):
@@ -184,7 +186,8 @@ if __name__ == '__main__':
     parser.add_argument('--check', action='store_true')
     parser.add_argument('--all', action='store_true', help='Synchronize every indexed mindmap, including exact panel anchors.')
     parser.add_argument('--economics', action='store_true', help='Synchronize only the 19 Economics chapters.')
+    parser.add_argument('--polity', action='store_true', help='Synchronize only the 22 Polity chapters.')
     args = parser.parse_args()
-    if args.all and args.economics:
-        parser.error('Choose --all or --economics')
-    synchronize(Path(__file__).resolve().parents[1], args.check, args.all, args.economics)
+    if sum((args.all, args.economics, args.polity)) > 1:
+        parser.error('Choose --all, --economics or --polity')
+    synchronize(Path(__file__).resolve().parents[1], args.check, args.all, args.economics, args.polity)
