@@ -1,0 +1,25 @@
+name: Prepare Biology source review
+on:
+  push:
+    branches: [codex/biology-mindmap-audit]
+    paths: ['.github/workflows/biology-source-review.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect audited Science data format
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          raw=Path('Original Practice/Science_Complete_Practice.html').read_text()
+          print('SOURCE_LENGTH',len(raw))
+          print('HEAD',raw[:1500])
+          print('DECLARATIONS',[(m.start(),m.group(0)[:180]) for m in re.finditer(r'(?:const|let|var)\s+\w+\s*=',raw)][:65])
+          for m in list(re.finditer('Biology',raw))[:5]:
+              print('BIOLOGY_CONTEXT',m.start(),repr(raw[max(0,m.start()-120):m.start()+1400]))
+          PY
