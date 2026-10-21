@@ -2,7 +2,7 @@
 
 All eight existing website mindmaps were compared with the user's uploaded Environment_Ecology_Complete_Practice(1).html: 527 questions, with chapter counts 67/64/81/59/85/71/47/53. Its parsed master-data was verified identical to the checked-in Original Practice source, blob 1e8b5004c551d9362573510f3c63d043a0d3c866. No web research or external factual sources were used. The uploaded ZIP could not be materialized in this session; canonical repository HTML pages were used as the edit targets, with exact original Git blob fingerprints retained.
 
-The plan records 262 sequential HTML edits, including repeated facts and recall/table occurrences, rather than 262 distinct errors. Every edit records exact supporting OP question, answer and explanation text. Original Practice questions, answers, IDs and progress behaviour are untouched.
+The plan records 272 sequential HTML edits, including repeated facts and recall/table occurrences, rather than 272 distinct errors. Every edit records exact supporting OP question, answer and explanation text. Original Practice questions, answers, IDs and progress behaviour are untouched.
 
 Changes cover French etymology, abiotic energy inputs, GEAC naming and legal basis, Greenpeace history, Maiti Movement, environmental awards, ecological-pyramid chronology and niche wording, biodiversity levels versus alpha/beta/gamma, IUCN categories/publications, Ramsar names and state lists, Corbett naming, Nilgiri states, dated tiger estimates and reserve areas, wildlife project milestones, greenhouse gases, photosynthesis context, NAPCC dates, COP venues/outcomes, pollutants and health associations, variable noise limits, Iodine-131, waste management, SDG wording and chronology, and disaster definitions/framework updates.
 
