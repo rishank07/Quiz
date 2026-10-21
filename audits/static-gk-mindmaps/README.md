@@ -2,7 +2,7 @@
 
 All 20 existing website mindmaps were reviewed against the user's uploaded Static_GK_Complete_Practice(1).html: 2642 questions. Chapter counts: 199, 57, 119, 98, 53, 67, 160, 105, 168, 168, 186, 147, 61, 103, 119, 179, 96, 215, 186, 156. The validation checks its parsed master-data against the checked-in Original Practice source (blob 709b737bbaddda029cdaf2da9364fe91f3dc87b4). No web research or external factual sources were used. The uploaded ZIP could not be materialized in this session; canonical repository HTML files were used as edit targets, retaining exact original Git blob fingerprints.
 
-The plan records 632 sequential HTML edits, including repeated occurrences and table normalization; this is not a count of distinct factual errors. Every edit carries exact supporting OP question, answer and explanation text. The Original Practice file and its answer keys, IDs and progress behaviour are untouched.
+The plan records 639 sequential HTML edits, including repeated occurrences and table normalization; this is not a count of distinct factual errors. Every edit carries exact supporting OP question, answer and explanation text. The Original Practice file and its answer keys, IDs and progress behaviour are untouched.
 
 The review covers firsts and record criteria, tenures and milestones, capitals/currencies/languages, authors and coauthors, awards, sports, defence/missiles, nuclear and space programmes, organisations, computer concepts, UNESCO properties and categories, classical/folk traditions, abbreviations, and fixed versus variable observance dates. Related summaries were corrected alongside main notes.
 
@@ -25,11 +25,11 @@ Additional mindmap details that have no OP counterpart are not independently ver
 | 09 | 09_authors_books_mindmap.html | 28 |
 | 10 | 10_awards_mindmap.html | 21 |
 | 11 | 11_sports_panorama_mindmap.html | 24 |
-| 12 | 12_indian_defence_security_mindmap.html | 36 |
+| 12 | 12_indian_defence_security_mindmap.html | 37 |
 | 13 | 13_indian_nuclear_program_mindmap.html | 11 |
-| 14 | 14_space_program_india_mindmap.html | 20 |
+| 14 | 14_space_program_india_mindmap.html | 25 |
 | 15 | 15_international_organization_institution_mindmap.html | 22 |
-| 16 | 16_computer_mindmap.html | 47 |
+| 16 | 16_computer_mindmap.html | 48 |
 | 17 | 17_unesco_world_heritage_india_mindmap.html | 20 |
 | 18 | 18_art_culture_mindmap.html | 110 |
 | 19 | 19_abbreviation_mindmap.html | 19 |
