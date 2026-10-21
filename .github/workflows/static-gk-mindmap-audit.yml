@@ -1,0 +1,69 @@
+name: Validate Static GK mind maps
+on:
+  push:
+    branches: [master, codex/static-gk-mindmap-audit]
+    paths:
+      - 'Mind Maps/Static GK/**'
+      - 'audits/static-gk-mindmaps/**'
+      - 'tools/*static-gk-mindmap*'
+      - 'tools/prepare-static-gk-publish.py'
+      - '.github/workflows/static-gk-mindmap-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: static-gk-mindmap-audit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/*/
+            /tools/
+            /audits/static-gk-mindmaps/
+            /Mind Maps/SubjectName.html
+            /Mind Maps/Static GK/
+            /Original Practice/Static_GK_Complete_Practice.html
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install DOM test dependency
+        run: npm install --prefix /tmp/efp-dom-check --no-audit --no-fund jsdom@26
+      - name: Verify reviewed corrections and uploaded-source evidence
+        run: python3 tools/apply-static-gk-mindmap-audit.py
+      - name: Synchronize twenty Static GK search groups and publication metadata
+        run: |
+          python3 tools/sync-static-gk-mindmap-index.py
+          python3 tools/prepare-static-gk-publish.py
+          python3 tools/sync-static-gk-mindmap-index.py --check
+      - name: Validate tables, templates, tabs and mobile/desktop search
+        env:
+          EFP_TEST_JSDOM: /tmp/efp-dom-check/node_modules/jsdom
+        run: node tools/test-static-gk-mindmaps.cjs
+      - name: Verify analytics exclusion and final fingerprints
+        run: |
+          python3 tools/install-analytics-guard.py
+          node tools/test-analytics-guard.cjs
+          python3 tools/apply-static-gk-mindmap-audit.py
+          git diff --check
+      - name: Save validated publication files on audit branch
+        if: github.ref == 'refs/heads/codex/static-gk-mindmap-audit'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add search-snippets-mindmaps.js homepage-fulltext-search.js index.html 'Mind Maps/SubjectName.html' service-worker.js sitemap.xml
+          if ! git diff --cached --quiet; then
+            git commit -m 'Sync audited Static GK search index and publication metadata'
+            git push origin HEAD:codex/static-gk-mindmap-audit
+          fi
+      - name: Require clean validated publication contents on master
+        if: github.ref == 'refs/heads/master'
+        run: git diff --exit-code
