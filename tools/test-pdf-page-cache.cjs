@@ -5,18 +5,19 @@ const {JSDOM}=require(process.env.EFP_TEST_JSDOM||'jsdom');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8');
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 async function until(test,message){for(let i=0;i<150;i++){if(test())return;await delay(10)}assert.fail(message)}
-function createReader({mobile=false,lowMemory=false,idle=false,landscape=false,advance=false,pixelRatio=mobile?3:1,slowPage=9,slowMs=150}={}){
+function createReader({mobile=false,responsive=false,lowMemory=false,idle=false,landscape=false,advance=false,pixelRatio=mobile?3:1,slowPage=9,slowMs=150}={}){
  const docId=advance?'ct0468':'ct0467';
  const dom=new JSDOM(read('Crux-Tricks/viewer.html'),{url:'https://examfusionprep.com/Crux-Tricks/viewer.html?id='+docId+'&efpWorkPreview=1',runScripts:'outside-only',pretendToBeVisual:true});
  const w=dom.window,d=w.document,run=code=>vm.runInContext(code,dom.getInternalVMContext());
  w.innerWidth=mobile?390:1440;w.innerHeight=mobile?844:900;
  w.devicePixelRatio=pixelRatio;
  if(lowMemory)Object.defineProperty(w.navigator,'deviceMemory',{value:2});
- w.matchMedia=q=>({matches:q.includes('portrait')?w.innerHeight>=w.innerWidth:q.includes('landscape')?w.innerWidth>w.innerHeight:mobile,addEventListener(){},addListener(){}});
+ const compact=()=>responsive?w.innerWidth<=900:mobile;
+ w.matchMedia=q=>({matches:q.includes('portrait')?w.innerHeight>=w.innerWidth:q.includes('landscape')?w.innerWidth>w.innerHeight:q.includes('coarse')?mobile:compact(),addEventListener(){},addListener(){}});
  if(idle)w.requestIdleCallback=callback=>w.setTimeout(callback,5);
  const stage=d.getElementById('pdfStage');
- Object.defineProperty(w.HTMLElement.prototype,'clientWidth',{get(){return mobile?w.innerWidth:1200}});
- Object.defineProperty(w.HTMLElement.prototype,'clientHeight',{get(){return mobile?w.innerHeight-38:700}});
+ Object.defineProperty(w.HTMLElement.prototype,'clientWidth',{get(){return compact()?w.innerWidth:1200}});
+ Object.defineProperty(w.HTMLElement.prototype,'clientHeight',{get(){return compact()?w.innerHeight-38:700}});
  Object.defineProperty(w.HTMLElement.prototype,'offsetTop',{get(){return this.classList.contains('efp-cont-page')?(Number(this.dataset.page)-1)*((parseFloat(this.style.height)||520)+9):0}});
  w.HTMLElement.prototype.getBoundingClientRect=function(){const h=this===stage?stage.clientHeight:parseFloat(this.style.height)||0,top=this===stage?38:this.classList.contains('efp-cont-page')?38+this.offsetTop-stage.scrollTop:0;return {top,bottom:top+h,left:0,right:this.clientWidth,width:this.clientWidth,height:h}};
  const scrolls=[];
@@ -37,9 +38,32 @@ function createReader({mobile=false,lowMemory=false,idle=false,landscape=false,a
  d.head.appendChild=node=>{const result=append(node);if(node.tagName==='SCRIPT'&&node.src.includes('/pages/'))w.setTimeout(()=>{w.EF_CRUX_DOC_ID=docId;w.EF_CRUX_DOC_PAGES=Array.from({length:40},(_,i)=>'page '+(i+1));node.onload()},0);return result};
  w.EF_CRUX_DOCS=[{id:docId,kind:'tricks',subject:'Maths',pages:40,pdf:'maths.pdf',title:advance?'Advance Maths Formula Book':'Arithmetic Maths',source:'ExamFusion Original'}];
  run(read('search-logic.js'));run(read('Crux-Tricks/pdf-search.js'));run(read('Crux-Tricks/viewer-v2.js'));
- const current=()=>mobile?d.querySelector('.efp-cont-page[data-page="'+d.getElementById('pageInput').value+'"] canvas'):d.getElementById('pdfCanvas');
+ const current=()=>d.documentElement.classList.contains('efp-continuous-mobile-pdf')?d.querySelector('.efp-cont-page[data-page="'+d.getElementById('pageInput').value+'"] canvas'):d.getElementById('pdfCanvas');
  const jump=n=>{const input=d.getElementById('pageInput');input.value=String(n);input.dispatchEvent(new w.Event('change'))};
  return {dom,w,d,stage,counts,finished,cancelled,canvases,errors,scrolls,current,jump,get maxActive(){return maxActive}};
+}
+async function checkDesktopWindowResize(){
+ const r=createReader({responsive:true}),{w,d}=r;
+ try{
+  await until(()=>r.finished[1],'Desktop must load before resizing');
+  r.jump(11);await until(()=>r.current().dataset.page==='11','Open the same deep page as the reported issue');
+  d.getElementById('bookmarkPage').click();
+  for(let cycle=0;cycle<3;cycle++){
+   w.innerWidth=800;w.innerHeight=900;w.dispatchEvent(new w.Event('resize'));
+   await until(()=>d.documentElement.classList.contains('efp-continuous-mobile-pdf')&&r.current()&&r.current().width>1,'Snapped desktop window must paint the selected page');
+   const shell=d.querySelector('.efp-cont-page[data-page="11"]');
+   r.stage.scrollTop=shell.offsetTop+120;
+   w.innerWidth=1440;w.dispatchEvent(new w.Event('resize'));
+   await until(()=>!d.documentElement.classList.contains('efp-continuous-mobile-pdf')&&!r.current().hidden&&r.current().width>1,'Maximized desktop must repaint without a refresh');
+   assert.equal(w.getComputedStyle(d.getElementById('efpContinuousPages')).display,'none','Hidden continuous placeholders must leave the desktop layout');
+   assert.equal(d.getElementById('pageInput').value,'11','Resizing must preserve the current page');
+   assert.equal(r.current().dataset.page,'11');
+   assert(r.stage.scrollTop<1000,'Desktop must leave the old multi-page scroll position');
+  }
+  assert(w.localStorage.getItem('efp_bookmarks').includes('cruxpage:ct0467:11'));
+  assert.equal(r.maxActive,1);assert.equal(r.errors.length,0);
+  console.log('PASS repeated desktop snap/maximize preserves page, hides empty shells and paints without refresh');
+ }finally{r.dom.window.close()}
 }
 async function checkDesktopArrowWarmup(){
  const r=createReader({advance:true,landscape:true,slowPage:3,slowMs:300}),{w,d}=r;
@@ -127,4 +151,4 @@ async function checkMobile({idle=false,lowMemory=false,landscape=false}={}){
  assert.equal(r.errors.length,0);r.dom.window.close();
  console.log('PASS mobile cache, priority, stale-jump guard, zoom, rotation, memory and BFCache',idle?'idle API':'timer fallback',lowMemory?'low memory':'default memory',landscape?'landscape PDF':'portrait PDF');
 }
-(async()=>{await checkDesktopArrowWarmup();await checkDesktopBudget();await checkDesktop();await checkMobile();await checkMobile({idle:true,lowMemory:true});await checkMobile({landscape:true})})().catch(e=>{console.error(e);process.exit(1)});
+(async()=>{await checkDesktopWindowResize();await checkDesktopArrowWarmup();await checkDesktopBudget();await checkDesktop();await checkMobile();await checkMobile({idle:true,lowMemory:true});await checkMobile({landscape:true})})().catch(e=>{console.error(e);process.exit(1)});

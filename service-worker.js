@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261021staticgk1";
+const CACHE_VERSION = "efp-pwa-20261023pdfresize1";
 const QUIZ_SCORE_REVISION = "20261020opscore1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261020opscore1"></script>';
@@ -76,7 +76,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.js?v=20261004casefold1",
   "/Crux-Tricks/viewer.css",
   "/Crux-Tricks/pdf-search.js?v=20261004pdfmarks1",
-  "/Crux-Tricks/viewer-v2.js?v=20261016pdfarrows1",
+  "/Crux-Tricks/viewer-v2.js?v=20261023pdfresize1",
 ];
 
 self.addEventListener("install", (event) => {

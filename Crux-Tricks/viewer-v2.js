@@ -250,6 +250,7 @@
       'html.efp-pdf-dragging .pdf-stage{cursor:grabbing!important;user-select:none!important}',
       'html.efp-continuous-mobile-pdf #pdfCanvas{display:none!important}',
       '#efpContinuousPages{display:block;width:100%;box-sizing:border-box;padding:6px 0 calc(18px + env(safe-area-inset-bottom))}',
+      '#efpContinuousPages[hidden]{display:none!important}',
       '.efp-cont-page{position:relative;display:flex;align-items:flex-start;justify-content:center;margin:0 auto 9px;overflow:hidden;background:#fff;isolation:isolate}',
       'html.dark .efp-cont-page{background:#0a0f18}',
       '.efp-cont-page canvas{display:block;margin:0 auto!important;max-width:none!important;box-shadow:0 1px 5px rgba(0,0,0,.18)!important;background:#fff}',
@@ -732,7 +733,7 @@
   }
   function buildContinuous(firstPg){
     if(!pdfDoc)return;
-    cancelPagePaints();clearSinglePageCache();continuousNavigationGeneration++;
+    cancelPagePaints();clearSinglePageCache();singleRenderGeneration++;continuousNavigationGeneration++;
     continuousLayoutGeneration++;
     continuousRenders={};
     continuous=true;
@@ -809,9 +810,12 @@
   }
   function disableContinuous(){
     if(continuous){
-      cancelPagePaints();continuousLayoutGeneration++;continuousRenders={};
+      cancelPagePaints();continuousLayoutGeneration++;continuousNavigationGeneration++;neighborWarmGeneration++;continuousRenders={};
       if(continuousObserver){continuousObserver.disconnect();continuousObserver=null}
       if(continuousRoot)Array.prototype.forEach.call(continuousRoot.querySelectorAll('canvas'),function(c){releaseCanvas(c);c.remove()});
+      // A snapped desktop window uses the continuous reader. On maximize its
+      // multi-page scroll offset must not carry into the single-page reader.
+      pdfStage.scrollTop=0;pdfStage.scrollLeft=0;
     }
     continuous=false;document.documentElement.classList.remove('efp-continuous-mobile-pdf','efp-reader-ui-hidden');
     if(continuousRoot)continuousRoot.hidden=true;
