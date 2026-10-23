@@ -31,14 +31,6 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600&display=swap"
     rel="stylesheet">
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-Q1WNRY8ECV');
-  </script>
   <style>
     :root {
       --bg: #0f1117;
@@ -575,6 +567,7 @@
       font-size: 26px;
       font-weight: 700;
       letter-spacing: 1px;
+      overflow-wrap: anywhere;
       transition: border-color .15s, background .15s, color .15s;
       padding: 8px;
     }
@@ -693,6 +686,8 @@
       font-size: 21px;
       font-weight: 700;
       color: var(--text);
+      min-width: 0;
+      overflow-wrap: anywhere;
       cursor: pointer;
       transition: border-color .12s, background .12s;
     }
@@ -937,11 +932,15 @@
       flex: 1;
       font-weight: 600;
       min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .rev-item .aa {
       text-align: right;
-      flex-shrink: 0;
+      flex-shrink: 1;
+      max-width: 45%;
+      min-width: 0;
+      overflow-wrap: anywhere;
       line-height: 1.4;
     }
 
@@ -1300,8 +1299,8 @@
       <div class="hero">
         <p class="eyebrow">SSC &bull; Railway &bull; UPSC &bull; BPSC</p>
         <h2>Calculation speed hi selection ka difference hai.</h2>
-        <p>Choose a topic, set your timer, and race the clock. Wrong answers show the correct solution instantly, and
-          your best score is saved for every topic.</p>
+        <p>Choose a topic, set your timer, and race the clock. Wrong answers show the correct answer instantly, and
+          your best score and speed are saved for each practice pattern.</p>
       </div>
       <div class="best-strip" id="bestStrip"></div>
       <div class="practice-grid" id="practiceGrid"></div>
@@ -1413,12 +1412,13 @@
         </div>
 
         <div class="sheet-section">
-          <h3>Number of digits</h3>
+          <h3 id="digitLabel">Digits in each main number</h3>
           <div class="pill-row" id="digitOptions">
             <button class="pill sel" data-val="2">2 digits</button>
             <button class="pill" data-val="3">3 digits</button>
-            <button class="pill" data-val="4">4+ digits</button>
+            <button class="pill" data-val="4">4 digits</button>
           </div>
+          <p class="note" id="digitNote"></p>
         </div>
 
         <div class="sheet-section">
@@ -1453,7 +1453,7 @@
           <div class="pill-row" id="negOptions">
             <button class="pill sel" data-val="0">None (Practice)</button>
             <button class="pill" data-val="0.25">&minus;0.25</button>
-            <button class="pill" data-val="0.33">&minus;0.33 (&#8531;)</button>
+            <button class="pill" data-val="0.33">&minus;0.33</button>
             <button class="pill" data-val="0.5">&minus;0.50</button>
           </div>
           <p class="note">Negative marks apply per wrong answer (exam pattern). Skipped questions never lose marks.</p>
@@ -1510,642 +1510,7 @@
 
   </div>
 
-  <script>
-    (function () {
-      'use strict';
-
-      /* ================= SAFE STORAGE ================= */
-      var mem = {};
-      var store = {
-        get: function (k) {
-          try { var v = window.localStorage.getItem(k); return v !== null ? v : (k in mem ? mem[k] : null); }
-          catch (e) { return k in mem ? mem[k] : null; }
-        },
-        set: function (k, v) {
-          mem[k] = v;
-          try { window.localStorage.setItem(k, v); } catch (e) { }
-        }
-      };
-
-      /* ================= SOUND ================= */
-      var soundOn = store.get('msb_sound') !== '0';
-      var audioCtx = null;
-      function beep(freq, dur, type, vol) {
-        if (!soundOn) return;
-        try {
-          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          var o = audioCtx.createOscillator();
-          var g = audioCtx.createGain();
-          o.type = type || 'sine';
-          o.frequency.value = freq;
-          g.gain.value = vol || 0.08;
-          o.connect(g); g.connect(audioCtx.destination);
-          o.start();
-          g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
-          o.stop(audioCtx.currentTime + dur);
-        } catch (e) { }
-      }
-      function sfxCorrect() { beep(660, .12, 'sine'); setTimeout(function () { beep(880, .18, 'sine'); }, 90); }
-      function sfxWrong() { beep(200, .28, 'square', .05); }
-      function sfxTick() { beep(1200, .05, 'sine', .04); }
-      function sfxFinish() { beep(523, .15); setTimeout(function () { beep(659, .15); }, 140); setTimeout(function () { beep(784, .3); }, 280); }
-
-      var soundBtn = document.getElementById('soundBtn');
-      function paintSoundBtn() { soundBtn.innerHTML = soundOn ? '&#128266;' : '&#128263;'; }
-      paintSoundBtn();
-      soundBtn.addEventListener('click', function () {
-        soundOn = !soundOn;
-        store.set('msb_sound', soundOn ? '1' : '0');
-        paintSoundBtn();
-      });
-
-      /* ================= PRACTICE TYPES ================= */
-      var TYPES = [
-        { key: 'addition', nm: 'Addition', hi: '\u091C\u094B\u0921\u093C', sym: '+', ac: '#3498db' },
-        { key: 'subtraction', nm: 'Subtraction', hi: '\u0918\u091F\u093E\u0935', sym: '\u2212', ac: '#e74c3c' },
-        { key: 'multiplication', nm: 'Multiplication', hi: '\u0917\u0941\u0923\u093E', sym: '\u00d7', ac: '#2ecc71' },
-        { key: 'division', nm: 'Division', hi: '\u092D\u093E\u0917', sym: '\u00f7', ac: '#9b59b6' },
-        { key: 'percentage', nm: 'Percentage', hi: '\u092A\u094D\u0930\u0924\u093F\u0936\u0924', sym: '%', ac: '#e67e22' },
-        { key: 'square', nm: 'Square', hi: '\u0935\u0930\u094D\u0917', sym: 'x\u00b2', ac: '#1abc9c' },
-        { key: 'sqrt', nm: 'Square Root', hi: '\u0935\u0930\u094D\u0917\u092E\u0942\u0932', sym: '\u221a', ac: '#3498db' },
-        { key: 'cube', nm: 'Cube', hi: '\u0918\u0928', sym: 'x\u00b3', ac: '#e74c3c' },
-        { key: 'cbrt', nm: 'Cube Root', hi: '\u0918\u0928\u092E\u0942\u0932', sym: '\u221b', ac: '#2ecc71' },
-        { key: 'exponent', nm: 'Exponent', hi: '\u0918\u093E\u0924\u093E\u0902\u0915', sym: 'x\u207F', ac: '#9b59b6' },
-        { key: 'mixed', nm: 'Mixed Practice', hi: '\u0938\u092D\u0940 \u092E\u093F\u0932\u093E\u0915\u0930', sym: '\u2211', ac: '#f5c842', wide: true }
-      ];
-
-      var gridEl = document.getElementById('practiceGrid');
-      TYPES.forEach(function (t) {
-        var b = document.createElement('button');
-        b.className = 'p-card' + (t.wide ? ' wide' : '');
-        b.style.setProperty('--ac', t.ac);
-        b.innerHTML = '<span class="sym">' + t.sym + '</span><span class="nm">' + t.nm + '</span><span class="hi">' + t.hi + '</span>';
-        b.addEventListener('click', function () { openSettings(t); });
-        gridEl.appendChild(b);
-      });
-
-      /* best score strip on home */
-      var bestStrip = document.getElementById('bestStrip');
-      function paintBestStrip() {
-        var raw = store.get('msb_best');
-        if (!raw) { bestStrip.classList.remove('show'); return; }
-        try {
-          var best = JSON.parse(raw);
-          var keys = Object.keys(best);
-          if (!keys.length) { bestStrip.classList.remove('show'); return; }
-          var top = keys.map(function (k) { return { k: k, p: best[k].pct }; })
-            .sort(function (a, b) { return b.p - a.p; })[0];
-          var t = TYPES.filter(function (x) { return x.key === top.k; })[0];
-          bestStrip.innerHTML = '&#127942; Your best: <b>' + top.p + '%</b> in ' + (t ? t.nm : top.k) + ' &mdash; beat it today!';
-          bestStrip.classList.add('show');
-        } catch (e) { bestStrip.classList.remove('show'); }
-      }
-      paintBestStrip();
-
-      /* ================= NAVIGATION ================= */
-      var topbar = document.getElementById('topbar');
-      var topbarTitle = document.getElementById('topbarTitle');
-      var backBtn = document.getElementById('backBtn');
-      var settingsOverlay = document.getElementById('settingsOverlay');
-      var resultOverlay = document.getElementById('resultOverlay');
-
-      function showScreen(id) {
-        document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
-        document.getElementById(id).classList.add('active');
-      }
-      function goHome() {
-        resetSession();
-        resultOverlay.classList.remove('active');
-        settingsOverlay.classList.remove('active');
-        topbar.classList.remove('show-back');
-        topbarTitle.innerHTML = 'Math <span class="accent">Speed Booster</span>';
-        paintBestStrip();
-        showScreen('screen-home');
-      }
-      backBtn.addEventListener('click', goHome);
-      settingsOverlay.addEventListener('click', function (e) { if (e.target === settingsOverlay) settingsOverlay.classList.remove('active'); });
-
-      /* ================= SETTINGS ================= */
-      var current = { type: TYPES[0], time: 20, level: 'beginner', digits: 2, inputType: 'keyboard', count: 10, marks: 1, neg: 0 };
-
-      function wirePills(containerId, stateKey, parseFn) {
-        var container = document.getElementById(containerId);
-        container.querySelectorAll('.pill').forEach(function (p) {
-          p.addEventListener('click', function () {
-            container.querySelectorAll('.pill').forEach(function (x) { x.classList.remove('sel'); });
-            p.classList.add('sel');
-            current[stateKey] = parseFn ? parseFn(p.dataset.val) : p.dataset.val;
-          });
-        });
-      }
-      wirePills('timeOptions', 'time', Number);
-      wirePills('levelOptions', 'level');
-      wirePills('digitOptions', 'digits', Number);
-      wirePills('inputTypeOptions', 'inputType');
-      wirePills('countOptions', 'count', Number);
-      wirePills('marksOptions', 'marks', Number);
-      wirePills('negOptions', 'neg', Number);
-
-      function openSettings(type) {
-        current.type = type;
-        document.getElementById('settingsTitle').textContent = type.nm + ' Practice';
-        var raw = store.get('msb_best'), sub = '';
-        try {
-          var best = raw ? JSON.parse(raw) : {};
-          if (best[type.key]) sub = 'Your best: ' + best[type.key].pct + '% (' + best[type.key].marks + ' marks)';
-        } catch (e) { }
-        document.getElementById('settingsSub').textContent = sub || 'First attempt \u2014 set your pattern and go!';
-        settingsOverlay.classList.add('active');
-      }
-
-      document.getElementById('setBtn').addEventListener('click', function () {
-        settingsOverlay.classList.remove('active');
-        topbar.classList.add('show-back');
-        topbarTitle.textContent = current.type.nm;
-        preparePracticeScreen();
-        showScreen('screen-practice');
-      });
-
-      /* ================= QUESTION GENERATION ================= */
-      function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-      function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
-
-      function digitRange(d) {
-        if (d === 2) return [10, 99];
-        if (d === 3) return [100, 999];
-        return [1000, 9999];
-      }
-      /* level scales the "hard side" operand / base numbers */
-      function levelIdx() { return current.level === 'beginner' ? 0 : (current.level === 'intermediate' ? 1 : 2); }
-
-      function genQuestion(typeKey) {
-        var L = levelIdx();
-        var digits = current.digits;
-        var range = digitRange(digits);
-        var a, b, text, answer;
-        var effectiveType = typeKey;
-        if (typeKey === 'mixed') {
-          effectiveType = pick(['addition', 'subtraction', 'multiplication', 'division', 'percentage', 'square', 'sqrt', 'cube', 'cbrt', 'exponent']);
-        }
-        switch (effectiveType) {
-          case 'addition':
-            a = randInt(range[0], range[1]); b = randInt(range[0], range[1]);
-            if (L === 2) { /* expert: 3 numbers */
-              var c = randInt(range[0], range[1]);
-              text = a + ' + ' + b + ' + ' + c + ' = ?'; answer = a + b + c; break;
-            }
-            text = a + ' + ' + b + ' = ?'; answer = a + b; break;
-
-          case 'subtraction':
-            a = randInt(range[0], range[1]); b = randInt(range[0], range[1]);
-            if (b > a) { var t1 = a; a = b; b = t1; }
-            if (L === 2 && Math.random() < 0.5) { var t2 = a; a = b; b = t2; } /* expert: negative answers possible */
-            text = a + ' \u2212 ' + b + ' = ?'; answer = a - b; break;
-
-          case 'multiplication':
-            var mulSmall = [[2, 9], [11, 25], [26, 99]][L];
-            a = randInt(range[0], range[1]); b = randInt(mulSmall[0], mulSmall[1]);
-            text = a + ' \u00d7 ' + b + ' = ?'; answer = a * b; break;
-
-          case 'division':
-            var divB = [[2, 9], [6, 15], [11, 25]][L];
-            var divQ = [[2, 12], [6, 40], [12, 99]][L];
-            b = randInt(divB[0], divB[1]);
-            var q = randInt(divQ[0], divQ[1]);
-            a = b * q;
-            text = a + ' \u00f7 ' + b + ' = ?'; answer = q; break;
-
-          case 'percentage':
-            var pctPool = [[5, 10, 20, 25, 50], [5, 10, 12.5, 15, 20, 25, 40, 50, 75], [2.5, 7.5, 12.5, 15, 17.5, 22.5, 33, 37.5, 62.5, 87.5]][L];
-            var pct = pick(pctPool);
-            a = randInt(range[0], range[1]);
-            if (L === 0) a = Math.round(a / 10) * 10 || range[0]; /* beginner: round numbers */
-            text = pct + '% of ' + a + ' = ?';
-            answer = Math.round((pct / 100) * a * 100) / 100; break;
-
-          case 'square':
-            var sqMax = [[2, 20], [15, 45], [35, 99]][L];
-            a = randInt(sqMax[0], sqMax[1]);
-            text = a + '\u00b2 = ?'; answer = a * a; break;
-
-          case 'sqrt':
-            var srMax = [[2, 15], [11, 30], [25, 60]][L];
-            a = randInt(srMax[0], srMax[1]);
-            text = '\u221a' + (a * a) + ' = ?'; answer = a; break;
-
-          case 'cube':
-            var cbMax = [[2, 10], [8, 15], [12, 25]][L];
-            a = randInt(cbMax[0], cbMax[1]);
-            text = a + '\u00b3 = ?'; answer = a * a * a; break;
-
-          case 'cbrt':
-            var crMax = [[2, 9], [6, 14], [10, 21]][L];
-            a = randInt(crMax[0], crMax[1]);
-            text = '\u221b' + (a * a * a) + ' = ?'; answer = a; break;
-
-          case 'exponent':
-            var exBase = [[2, 5], [2, 7], [2, 9]][L];
-            var exPow = [[2, 2], [2, 3], [3, 4]][L];
-            a = randInt(exBase[0], exBase[1]); b = randInt(exPow[0], exPow[1]);
-            text = a + '^' + b + ' = ?'; answer = Math.pow(a, b); break;
-
-          default:
-            a = randInt(range[0], range[1]); b = randInt(range[0], range[1]);
-            text = a + ' + ' + b + ' = ?'; answer = a + b;
-        }
-        return { text: text, answer: answer, options: null };
-      }
-
-      /* MCQ distractors: plausible near-miss options */
-      function genOptions(ans) {
-        var opts = [ans];
-        var isDec = ans % 1 !== 0;
-        var mag = Math.max(1, Math.abs(ans));
-        var tries = 0;
-        while (opts.length < 4 && tries < 60) {
-          tries++;
-          var d;
-          var mode = randInt(0, 3);
-          if (mode === 0) d = ans + pick([1, -1, 2, -2, 10, -10]);
-          else if (mode === 1) d = ans + pick([1, -1]) * Math.max(1, Math.round(mag * pick([0.05, 0.1, 0.02])));
-          else if (mode === 2 && !isDec && Math.abs(ans) >= 12) {
-            /* digit swap */
-            var s = String(Math.abs(ans)).split('');
-            var i = randInt(0, s.length - 2);
-            var tmp = s[i]; s[i] = s[i + 1]; s[i + 1] = tmp;
-            d = parseInt(s.join(''), 10) * (ans < 0 ? -1 : 1);
-          }
-          else d = ans + pick([3, -3, 5, -5, 100, -100]);
-          if (isDec) d = Math.round(d * 100) / 100;
-          if (d !== ans && opts.indexOf(d) === -1 && !isNaN(d)) opts.push(d);
-        }
-        while (opts.length < 4) opts.push(ans + opts.length * 7);
-        /* shuffle */
-        for (var i = opts.length - 1; i > 0; i--) {
-          var j = randInt(0, i);
-          var t = opts[i]; opts[i] = opts[j]; opts[j] = t;
-        }
-        return opts;
-      }
-
-      /* ================= PRACTICE SESSION ================= */
-      var session = null;
-
-      var marksVal = document.getElementById('marksVal');
-      var streakVal = document.getElementById('streakVal');
-      var timerArc = document.getElementById('timerArc');
-      var timerNum = document.getElementById('timerNum');
-      var progressBar = document.getElementById('progressBar');
-      var qCount = document.getElementById('qCount');
-      var qText = document.getElementById('qText');
-      var kbArea = document.getElementById('kbArea');
-      var mcqArea = document.getElementById('mcqArea');
-      var ansBox = document.getElementById('ansBox');
-      var feedback = document.getElementById('feedback');
-      var mcqFeedback = document.getElementById('mcqFeedback');
-      var mcqGrid = document.getElementById('mcqGrid');
-      var startWrap = document.getElementById('startWrap');
-      var startBtn = document.getElementById('startBtn');
-      var startHint = document.getElementById('startHint');
-      var countdownEl = document.getElementById('countdown');
-      var answerArea = document.getElementById('answerArea');
-      var ARC_LEN = 169.6;
-
-      function fmtNum(n) { return (n % 1 === 0) ? String(n) : String(Math.round(n * 100) / 100); }
-
-      function preparePracticeScreen() {
-        resetSession();
-        marksVal.textContent = '0';
-        streakVal.textContent = '0';
-        streakVal.classList.remove('streak-hot');
-        timerNum.textContent = '00';
-        timerNum.classList.remove('low');
-        timerArc.classList.remove('low');
-        timerArc.style.strokeDashoffset = 0;
-        progressBar.style.width = '0%';
-        qCount.textContent = 'Ready';
-        qText.innerHTML = '&nbsp;';
-        feedback.textContent = ''; feedback.className = 'feedback';
-        mcqFeedback.textContent = ''; mcqFeedback.className = 'feedback';
-        answerArea.style.display = 'none';
-        countdownEl.style.display = 'none';
-        startWrap.style.display = 'block';
-        var negTxt = current.neg > 0 ? ('&minus;' + current.neg + ' for each wrong answer') : 'no negative marking';
-        startHint.innerHTML =
-          '<b>' + current.count + ' questions</b> &middot; <b>' + current.time + ' sec</b> each &middot; ' +
-          current.level.charAt(0).toUpperCase() + current.level.slice(1) + ' level<br>' +
-          '+' + current.marks + ' per correct, ' + negTxt + '.';
-      }
-
-      function resetSession() {
-        if (session) {
-          if (session.timerId) clearInterval(session.timerId);
-          if (session.advanceId) clearTimeout(session.advanceId);
-          if (session.cdId) clearInterval(session.cdId);
-        }
-        session = null;
-      }
-
-      startBtn.addEventListener('click', function () {
-        startWrap.style.display = 'none';
-        session = {
-          index: 0, marks: 0, correct: 0, wrong: 0, skipped: 0,
-          streak: 0, bestStreak: 0,
-          currentAnswer: '', locked: false,
-          timerId: null, advanceId: null, cdId: null,
-          timeLeft: current.time, qStart: 0,
-          questions: [], review: []
-        };
-        for (var i = 0; i < current.count; i++) {
-          var q = genQuestion(current.type.key);
-          if (current.inputType === 'mcq') q.options = genOptions(q.answer);
-          session.questions.push(q);
-        }
-        /* 3-2-1 countdown */
-        var n = 3;
-        countdownEl.style.display = 'block';
-        countdownEl.textContent = n;
-        sfxTick();
-        session.cdId = setInterval(function () {
-          n--;
-          if (!session) { return; }
-          if (n <= 0) {
-            clearInterval(session.cdId);
-            countdownEl.style.display = 'none';
-            answerArea.style.display = 'block';
-            kbArea.style.display = current.inputType === 'keyboard' ? 'block' : 'none';
-            mcqArea.style.display = current.inputType === 'mcq' ? 'block' : 'none';
-            loadQuestion();
-          } else {
-            countdownEl.textContent = n;
-            sfxTick();
-          }
-        }, 700);
-      });
-
-      function loadQuestion() {
-        if (!session) return;
-        var q = session.questions[session.index];
-        session.currentAnswer = '';
-        session.locked = false;
-        session.timeLeft = current.time;
-        session.qStart = Date.now();
-
-        qCount.textContent = 'Question ' + (session.index + 1) + ' of ' + current.count;
-        progressBar.style.width = ((session.index) / current.count * 100) + '%';
-        qText.textContent = q.text;
-
-        feedback.textContent = ''; feedback.className = 'feedback';
-        mcqFeedback.textContent = ''; mcqFeedback.className = 'feedback';
-        paintAnswer();
-
-        if (current.inputType === 'mcq') {
-          mcqGrid.innerHTML = '';
-          q.options.forEach(function (opt) {
-            var b = document.createElement('button');
-            b.className = 'mcq-opt';
-            b.textContent = fmtNum(opt);
-            b.addEventListener('click', function () { submitMcq(opt, b); });
-            mcqGrid.appendChild(b);
-          });
-        }
-
-        timerNum.classList.remove('low');
-        timerArc.classList.remove('low');
-        timerArc.style.transition = 'none';
-        timerArc.style.strokeDashoffset = 0;
-        timerNum.textContent = String(session.timeLeft).padStart(2, '0');
-        /* force reflow so transition restarts cleanly */
-        void timerArc.getBoundingClientRect();
-        timerArc.style.transition = 'stroke-dashoffset 1s linear, stroke .3s';
-
-        if (session.timerId) clearInterval(session.timerId);
-        session.timerId = setInterval(function () {
-          if (!session) return;
-          session.timeLeft--;
-          var left = Math.max(session.timeLeft, 0);
-          timerNum.textContent = String(left).padStart(2, '0');
-          timerArc.style.strokeDashoffset = ARC_LEN * (1 - left / current.time);
-          if (left <= Math.min(5, Math.ceil(current.time * 0.25))) {
-            timerNum.classList.add('low');
-            timerArc.classList.add('low');
-            if (left > 0) sfxTick();
-          }
-          if (session.timeLeft <= 0) {
-            clearInterval(session.timerId);
-            finishQuestion(null, true);
-          }
-        }, 1000);
-      }
-
-      function paintAnswer() {
-        ansBox.className = 'ans-box';
-        if (session && session.currentAnswer !== '') {
-          ansBox.textContent = session.currentAnswer;
-        } else {
-          ansBox.innerHTML = '<span class="ph">Your answer</span>';
-        }
-      }
-
-      /* --- keyboard-mode input --- */
-      document.getElementById('keypad').addEventListener('click', function (e) {
-        var btn = e.target.closest('.key');
-        if (!btn || !session || session.locked) return;
-        handleKey(btn.dataset.k);
-      });
-      function handleKey(k) {
-        if (!session || session.locked) return;
-        if (k === 'del') session.currentAnswer = session.currentAnswer.slice(0, -1);
-        else if (k === 'clear') session.currentAnswer = '';
-        else if (k === 'submit') { submitTyped(); return; }
-        else if (k === '-') {
-          if (session.currentAnswer === '') session.currentAnswer = '-';
-        }
-        else if (k === '.') {
-          if (session.currentAnswer.indexOf('.') === -1) session.currentAnswer += '.';
-        }
-        else if (session.currentAnswer.replace('-', '').replace('.', '').length < 9) {
-          session.currentAnswer += k;
-        }
-        paintAnswer();
-      }
-      document.addEventListener('keydown', function (e) {
-        if (!session || session.locked || current.inputType !== 'keyboard') return;
-        if (!document.getElementById('screen-practice').classList.contains('active')) return;
-        if (startWrap.style.display !== 'none') return;
-        if (e.key >= '0' && e.key <= '9') { handleKey(e.key); e.preventDefault(); }
-        else if (e.key === '.') { handleKey('.'); e.preventDefault(); }
-        else if (e.key === '-') { handleKey('-'); e.preventDefault(); }
-        else if (e.key === 'Backspace') { handleKey('del'); e.preventDefault(); }
-        else if (e.key === 'Enter') { submitTyped(); e.preventDefault(); }
-      });
-
-      function submitTyped() {
-        if (!session || session.locked) return;
-        var q = session.questions[session.index];
-        if (session.currentAnswer === '' || session.currentAnswer === '-' || session.currentAnswer === '.') {
-          finishQuestion(null, false); /* treated as skipped */
-          return;
-        }
-        finishQuestion(parseFloat(session.currentAnswer), false);
-      }
-
-      function submitMcq(val, btnEl) {
-        if (!session || session.locked) return;
-        session.mcqBtn = btnEl;
-        finishQuestion(val, false);
-      }
-      document.getElementById('mcqSkip').addEventListener('click', function () {
-        if (!session || session.locked) return;
-        finishQuestion(null, false);
-      });
-
-      /* --- grading + feedback + auto-advance --- */
-      function finishQuestion(given, timedOut) {
-        if (!session || session.locked) return;
-        session.locked = true;
-        clearInterval(session.timerId);
-
-        var q = session.questions[session.index];
-        var timeTaken = Math.min(current.time, Math.round((Date.now() - session.qStart) / 1000));
-        var status, delay;
-
-        if (given === null || isNaN(given)) {
-          status = 'skip';
-          session.skipped++;
-          session.streak = 0;
-          var msg = timedOut ? '\u23F1 Time up! Answer: ' + fmtNum(q.answer) : 'Skipped \u2014 answer: ' + fmtNum(q.answer);
-          feedback.textContent = msg; feedback.className = 'feedback skip';
-          mcqFeedback.textContent = msg; mcqFeedback.className = 'feedback skip';
-          delay = 1600;
-        }
-        else if (Math.abs(given - q.answer) < 0.01) {
-          status = 'ok';
-          session.correct++;
-          session.streak++;
-          if (session.streak > session.bestStreak) session.bestStreak = session.streak;
-          session.marks += current.marks;
-          ansBox.classList.add('ok');
-          feedback.textContent = '\u2713 Correct!' + (session.streak >= 3 ? ('  \u{1F525} ' + session.streak + ' streak') : '');
-          feedback.className = 'feedback ok';
-          mcqFeedback.textContent = feedback.textContent;
-          mcqFeedback.className = 'feedback ok';
-          if (session.mcqBtn) session.mcqBtn.classList.add('ok');
-          sfxCorrect();
-          delay = 900;
-        }
-        else {
-          status = 'bad';
-          session.wrong++;
-          session.streak = 0;
-          session.marks -= current.neg * current.marks;
-          session.marks = Math.round(session.marks * 100) / 100;
-          ansBox.classList.add('bad');
-          var wmsg = '\u2717 Wrong \u2014 correct answer: ' + fmtNum(q.answer);
-          feedback.textContent = wmsg; feedback.className = 'feedback bad';
-          mcqFeedback.textContent = wmsg; mcqFeedback.className = 'feedback bad';
-          if (session.mcqBtn) {
-            session.mcqBtn.classList.add('bad');
-            /* highlight the correct option */
-            var opts = mcqGrid.querySelectorAll('.mcq-opt');
-            opts.forEach(function (o) { if (parseFloat(o.textContent) === q.answer) o.classList.add('ok'); });
-          }
-          sfxWrong();
-          delay = 1900;
-        }
-        if (current.inputType === 'mcq') {
-          mcqGrid.querySelectorAll('.mcq-opt').forEach(function (o) { o.disabled = true; });
-        }
-        session.mcqBtn = null;
-
-        session.review.push({
-          text: q.text, answer: q.answer,
-          given: (given === null || isNaN(given)) ? null : given,
-          status: status, time: timeTaken
-        });
-
-        marksVal.textContent = fmtNum(session.marks);
-        streakVal.textContent = session.streak;
-        streakVal.classList.toggle('streak-hot', session.streak >= 3);
-        progressBar.style.width = ((session.index + 1) / current.count * 100) + '%';
-
-        session.advanceId = setTimeout(function () {
-          if (!session) return;
-          if (session.index >= current.count - 1) {
-            showResult();
-          } else {
-            session.index++;
-            loadQuestion();
-          }
-        }, delay);
-      }
-
-      /* ================= RESULT ================= */
-      function showResult() {
-        sfxFinish();
-        var maxMarks = current.count * current.marks;
-        var pct = Math.max(0, Math.round((session.marks / maxMarks) * 100));
-        var attempted = session.correct + session.wrong;
-        var totalTime = session.review.reduce(function (s, r) { return s + r.time; }, 0);
-        var avg = attempted + session.skipped > 0 ? (totalTime / session.review.length).toFixed(1) : '0';
-
-        document.getElementById('resultHeading').textContent = current.type.nm + ' \u00b7 ' +
-          current.level.charAt(0).toUpperCase() + current.level.slice(1);
-        document.getElementById('resultPct').textContent = pct + '%';
-        document.getElementById('resultOf').textContent = fmtNum(session.marks) + ' / ' + maxMarks + ' marks';
-        document.getElementById('rTotal').textContent = attempted;
-        document.getElementById('rCorrect').textContent = session.correct;
-        document.getElementById('rWrong').textContent = session.wrong;
-        document.getElementById('rSkipped').textContent = session.skipped;
-        document.getElementById('rMarks').textContent = fmtNum(session.marks);
-        document.getElementById('avgTime').innerHTML =
-          'Avg time: <b>' + avg + 's</b> per question &middot; Best streak: <b>' + session.bestStreak + '</b>';
-
-        var arc = document.getElementById('scoreArc');
-        arc.style.strokeDashoffset = 351.9;
-        setTimeout(function () { arc.style.strokeDashoffset = 351.9 * (1 - Math.min(pct, 100) / 100); }, 80);
-
-        /* best score */
-        var newBestEl = document.getElementById('newBest');
-        newBestEl.classList.remove('show');
-        try {
-          var best = JSON.parse(store.get('msb_best') || '{}');
-          var prev = best[current.type.key];
-          if (!prev || pct > prev.pct) {
-            best[current.type.key] = { pct: pct, marks: fmtNum(session.marks) };
-            store.set('msb_best', JSON.stringify(best));
-            if (prev) newBestEl.classList.add('show');
-          }
-        } catch (e) { }
-
-        /* review list */
-        var list = document.getElementById('reviewList');
-        list.innerHTML = '';
-        session.review.forEach(function (r, i) {
-          var div = document.createElement('div');
-          div.className = 'rev-item ' + r.status;
-          var icon = r.status === 'ok' ? '\u2713' : (r.status === 'bad' ? '\u2717' : '\u2013');
-          var ua = r.given === null ? '\u2014' : fmtNum(r.given);
-          var caLine = r.status === 'ok' ? '' : '<span class="ca">Ans: <b>' + fmtNum(r.answer) + '</b></span>';
-          div.innerHTML =
-            '<span class="st">' + icon + '</span>' +
-            '<span class="qq">' + (i + 1) + '. ' + r.text.replace(' = ?', '') + '</span>' +
-            '<span class="aa"><span class="ua">' + ua + '</span>' + caLine + '</span>' +
-            '<span class="tt">' + r.time + 's</span>';
-          list.appendChild(div);
-        });
-
-        resultOverlay.classList.add('active');
-      }
-
-      document.getElementById('homeBtn').addEventListener('click', goHome);
-      document.getElementById('retryBtn').addEventListener('click', function () {
-        resultOverlay.classList.remove('active');
-        preparePracticeScreen();
-      });
-
-    })();
-  </script>
+  <script src="math-speed-booster.js?v=20261023logic1"></script>
 </body>
 
 </html>
