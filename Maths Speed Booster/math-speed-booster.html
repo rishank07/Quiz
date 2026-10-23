@@ -322,11 +322,55 @@
 
     .sheet-head {
       padding: 16px 16px 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       background: var(--surface);
       z-index: 5;
+    }
+
+    .sheet-heading {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .popup-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--surface2);
+      color: var(--text);
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .popup-close:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .popup-close:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    .result-head {
+      align-items: center;
+      padding: 8px 12px;
+    }
+
+    .result-head h2 {
+      flex: 1;
     }
 
     .sheet-head h2 {
@@ -1385,8 +1429,11 @@
     <div class="overlay" id="settingsOverlay">
       <div class="sheet">
         <div class="sheet-head">
-          <h2 id="settingsTitle">Practice Settings</h2>
-          <div class="sub" id="settingsSub"></div>
+          <div class="sheet-heading">
+            <h2 id="settingsTitle">Practice Settings</h2>
+            <div class="sub" id="settingsSub"></div>
+          </div>
+          <button class="popup-close" id="settingsClose" type="button" aria-label="Close practice settings" title="Close">&times;</button>
         </div>
 
         <div class="sheet-section">
@@ -1468,8 +1515,11 @@
     <!-- RESULT SHEET -->
     <div class="overlay" id="resultOverlay">
       <div class="result-sheet">
+        <div class="sheet-head result-head">
+          <h2>Result</h2>
+          <button class="popup-close" id="resultClose" type="button" aria-label="Close results" title="Close">&times;</button>
+        </div>
         <div class="result-top">
-          <div class="rt-label">Result</div>
           <h2 id="resultHeading">Practice</h2>
           <div class="score-ring-wrap">
             <svg width="130" height="130" viewBox="0 0 130 130" aria-hidden="true">
@@ -1510,7 +1560,7 @@
 
   </div>
 
-  <script src="math-speed-booster.js?v=20261023logic1"></script>
+  <script src="math-speed-booster.js?v=20261023close1"></script>
 </body>
 
 </html>

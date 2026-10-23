@@ -67,7 +67,7 @@
         b.className = 'p-card' + (t.wide ? ' wide' : '');
         b.style.setProperty('--ac', t.ac);
         b.innerHTML = '<span class="sym">' + t.sym + '</span><span class="nm">' + t.nm + '</span><span class="hi">' + t.hi + '</span>';
-        b.addEventListener('click', function () { openSettings(t); });
+        b.addEventListener('click', function () { openSettings(t, b); });
         gridEl.appendChild(b);
       });
 
@@ -114,6 +114,7 @@
       var backBtn = document.getElementById('backBtn');
       var settingsOverlay = document.getElementById('settingsOverlay');
       var resultOverlay = document.getElementById('resultOverlay');
+      var settingsTrigger = null;
 
       function showScreen(id) {
         document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
@@ -129,7 +130,22 @@
         showScreen('screen-home');
       }
       backBtn.addEventListener('click', goHome);
-      settingsOverlay.addEventListener('click', function (e) { if (e.target === settingsOverlay) settingsOverlay.classList.remove('active'); });
+      function closeSettings() {
+        settingsOverlay.classList.remove('active');
+        if (settingsTrigger) settingsTrigger.focus();
+      }
+      function closeResult() {
+        goHome();
+        if (settingsTrigger) settingsTrigger.focus();
+      }
+      document.getElementById('settingsClose').addEventListener('click', closeSettings);
+      document.getElementById('resultClose').addEventListener('click', closeResult);
+      settingsOverlay.addEventListener('click', function (e) { if (e.target === settingsOverlay) closeSettings(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        if (settingsOverlay.classList.contains('active')) closeSettings();
+        else if (resultOverlay.classList.contains('active')) closeResult();
+      });
 
       /* ================= SETTINGS ================= */
       var current = { type: TYPES[0], time: 20, level: 'beginner', digits: 2, inputType: 'keyboard', count: 10, marks: 1, neg: 0 };
@@ -153,8 +169,9 @@
       wirePills('marksOptions', 'marks', Number);
       wirePills('negOptions', 'neg', Number);
 
-      function openSettings(type) {
+      function openSettings(type, trigger) {
         current.type = type;
+        settingsTrigger = trigger || null;
         document.getElementById('settingsTitle').textContent = type.nm + ' Practice';
         paintSettings();
         settingsOverlay.classList.add('active');

@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261023mathlogic1";
+const CACHE_VERSION = "efp-pwa-20261023mathclose1";
 const QUIZ_SCORE_REVISION = "20261020opscore1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261020opscore1"></script>';
@@ -58,7 +58,7 @@ const APP_SHELL = [
   "/homepage-search-ui.js?v=20261007searchaudit1",
   "/homepage-fulltext-search.js?v=20261021staticgk1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
-  "/Maths%20Speed%20Booster/math-speed-booster.js?v=20261023logic1",
+  "/Maths%20Speed%20Booster/math-speed-booster.js?v=20261023close1",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
   "/Original%20Practice/index.html",
   "/Original%20Practice/all-chapters.html",
