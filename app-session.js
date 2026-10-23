@@ -829,6 +829,10 @@
   // Refresh/reload is intentionally allowed because quiz progress is saved.
   // In-page Back/Home controls still use the explicit ExamFusion quit dialog.
   function installQuizProgressWarning() {
+    // Speed Booster owns a disposable calculation session and its Back hierarchy.
+    // Its keypad must not arm the persistent-quiz confirmation/history guard.
+    if (normalizedPath(location.pathname).toLowerCase() ===
+        "/maths speed booster/math-speed-booster.html") return;
     var dirty = false;
     var allowNavigation = false;
     var MODAL_ID = "efp-quiz-exit-modal";
@@ -1479,4 +1483,3 @@
   };
   if (resumedSearchView) window.dispatchEvent(new CustomEvent("efp-app-search-resume"));
 })();
-

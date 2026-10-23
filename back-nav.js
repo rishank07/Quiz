@@ -73,6 +73,70 @@
   record("entry"); flush();
 })();
 
+/* Speed Booster has in-document settings/practice/results and no Quit prompt.
+   Own Back before search and legacy handlers so every surface climbs the same
+   visible hierarchy, including direct opens and recreated installed-app history. */
+(function () {
+  "use strict";
+  var path = location.pathname;
+  try { path = decodeURIComponent(path); } catch (_) {}
+  if (path.replace(/\/{2,}/g, "/").replace(/\/$/, "").toLowerCase() !==
+      "/maths speed booster/math-speed-booster.html") return;
+  var KEY = "efpMathsBackGuard";
+
+  function consume(event) {
+    if (!event) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+  function arm() {
+    if (history.state && history.state[KEY] && history.state.phase === "top") return;
+    var base = Object.assign({}, history.state || {});
+    // Retire same-page guards left by an earlier cached build.
+    delete base.efpQuizQuitGuard;
+    delete base.efpHomeSearchGuard;
+    delete base.efpSearchReturnGuard;
+    base[KEY] = true;
+    base.phase = "base";
+    var top = Object.assign({}, base, { phase: "top" });
+    try {
+      history.replaceState(base, "", location.href);
+      history.pushState(top, "", location.href);
+    } catch (_) {}
+  }
+  function back() {
+    if (typeof window.EFP_MATHS_SPEED_BOOSTER_BACK === "function" &&
+        window.EFP_MATHS_SPEED_BOOSTER_BACK()) {
+      arm();
+      return true;
+    }
+    // At the Booster menu the next parent is site Home (or its saved search).
+    if (window.EFP_BACK_NAV && typeof window.EFP_BACK_NAV.navigateQuizParent === "function" &&
+        window.EFP_BACK_NAV.navigateQuizParent()) return true;
+    if (window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
+    location.replace("/");
+    return true;
+  }
+  window.EFP_MATHS_BACK_NAV = { back: back };
+  window.addEventListener("click", function (event) {
+    if (event.button > 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    var control = event.target && event.target.closest && event.target.closest(
+      "#efp-app-back-button,#backBtn,[data-nav='back'],a.back-btn,button.back-btn,a[data-efp-back]"
+    );
+    if (!control || control.disabled || control.hasAttribute("download") || control.target === "_blank") return;
+    consume(event);
+    back();
+  }, true);
+  window.addEventListener("popstate", function (event) {
+    consume(event);
+    back();
+  }, true);
+  window.addEventListener("pageshow", arm);
+  document.addEventListener("resume", arm);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) arm(); });
+  arm();
+})();
+
 /* Search results return to the search that opened them, across every hub.
    Keep this in the shared navigation asset so cached/older content pages use
    the same rule without rewriting the question banks. */
@@ -223,6 +287,7 @@
     return !!(warning && warning.isQuizVisible && warning.isQuizVisible());
   }
   function armGuard() {
+    if (window.EFP_MATHS_BACK_NAV) return;
     if (!active || isQuiz()) return;
     if (history.state && history.state.efpSearchReturnGuard === "top") return;
     var base = Object.assign({}, history.state, {
@@ -1408,6 +1473,7 @@
   /* Every mapped document owns a system-Back boundary, regardless of its
      referrer. Search trips and the two SPA stacks retain their own guards. */
   function installGenericHomeSearchHistoryGuard() {
+    if (window.EFP_MATHS_BACK_NAV) return;
     if (window.EFP_SEARCH_RETURN && window.EFP_SEARCH_RETURN.isActive()) return;
     if (isCruxViewer() || isCruxTricksRoot() || isOriginalPracticePage()) return;
     var parentUrl = logicalParentUrl();
@@ -1686,3 +1752,4 @@ installCruxHomeSearchHistoryGuard();
   });
 
 })();
+

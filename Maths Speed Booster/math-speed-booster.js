@@ -138,6 +138,16 @@
         goHome();
         if (settingsTrigger) settingsTrigger.focus();
       }
+      window.EFP_MATHS_SPEED_BOOSTER_BACK = function () {
+        if (settingsOverlay.classList.contains('active')) { closeSettings(); return true; }
+        if (resultOverlay.classList.contains('active')) { closeResult(); return true; }
+        if (document.getElementById('screen-practice').classList.contains('active')) {
+          goHome();
+          if (settingsTrigger) settingsTrigger.focus();
+          return true;
+        }
+        return false;
+      };
       document.getElementById('settingsClose').addEventListener('click', closeSettings);
       document.getElementById('resultClose').addEventListener('click', closeResult);
       settingsOverlay.addEventListener('click', function (e) { if (e.target === settingsOverlay) closeSettings(); });
