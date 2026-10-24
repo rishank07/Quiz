@@ -48,6 +48,14 @@ assert.ok(!fs.existsSync(path.join(out,'functions'))&&!fs.existsSync(path.join(o
 assert.ok(!fs.existsSync(path.join(out,'AGENTS.md'))&&!fs.existsSync(path.join(out,'tools')));
 console.log('PASS Pages Free file limits and static-only output');
 
+for (const filename of ['.well-known/assetlinks.json', 'manifest.webmanifest']) {
+  const original = fs.readFileSync(path.join(root, filename));
+  const deployed = fs.readFileSync(path.join(out, filename));
+  assert.deepEqual(deployed, original, 'Preserve app association and manifest: ' + filename);
+  JSON.parse(deployed.toString('utf8'));
+}
+console.log('PASS Android website association and PWA manifest preserved');
+
 const mime={'.js':'application/javascript','.html':'text/html','.css':'text/css','.json':'application/json','.png':'image/png','.svg':'image/svg+xml','.pdf':'application/pdf','.bin':'application/octet-stream','.webmanifest':'application/manifest+json','.wasm':'application/wasm'};
 const pdfDir=process.env.EFP_PDFJS_TEST_DIR;
 const server=http.createServer((req,res)=>{
