@@ -149,7 +149,10 @@ def build(output):
         if not filename:
             continue
         relative = Path(filename)
-        if relative.parts[0] in PRIVATE_ROOTS or relative.name in PRIVATE_FILES or relative.parts[0].startswith("."):
+        # Android verifies the website through .well-known/assetlinks.json.
+        # Keep those public association files while excluding other dot roots.
+        hidden_root = relative.parts[0].startswith(".") and relative.parts[0] != ".well-known"
+        if relative.parts[0] in PRIVATE_ROOTS or relative.name in PRIVATE_FILES or hidden_root:
             continue
         source = ROOT / relative
         if not source.is_file() or source.is_symlink():
