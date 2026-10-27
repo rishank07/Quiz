@@ -240,6 +240,9 @@ def build(output):
                             lambda m: m[1] + m[2] + "-cf-" + revision + m[3], worker, count=1)
     if count != 1:
         raise ValueError("Service-worker cache version was not found")
+    worker, count = re.subn(r"const PAGES_ROUTES = false;", "const PAGES_ROUTES = true;", worker, count=1)
+    if count != 1:
+        raise ValueError("Service-worker Pages route configuration was not found")
     worker = worker.replace("const APP_SHELL = [", 'const APP_SHELL = [\n  "/cf-pdf-assets.js",\n  "/cf-open-pdf.js",\n  "/open-original-pdf.html",', 1)
     worker = worker.replace('if (url.pathname === "/owner-debug.js" ||',
                             'if (url.pathname === "/cf-pdf-assets.js" ||\n'

@@ -12,6 +12,10 @@ async function suite(compression,indexPath){
  async function request(revision){let responsePromise;handlers.fetch({request:new Request('https://examfusionprep.com'+indexPath+'?v='+revision),waitUntil:p=>pending.push(p),respondWith:p=>{responsePromise=p}});assert(responsePromise,'The fetch handler must intercept the index');const response=await responsePromise;const text=await response.text();await Promise.all(pending.splice(0));return text}
  assert.equal(await request('1'),plain);assert.equal(lastFetchCache,'no-cache','Index requests must revalidate instead of using the generic stale route');assert.equal(stored.size,1);const firstFetches=fetched;
  assert.equal(await request('1'),plain);assert.equal(fetched,firstFetches,'Warm unchanged revision must avoid download');
+ const saved=Array.from(stored.entries())[0];
+ const agedHeaders=new Headers(saved[1].headers);agedHeaders.set('x-efp-search-cached-at',String(Date.now()-86400000));
+ stored.set(saved[0],new Response(await saved[1].arrayBuffer(),{headers:agedHeaders}));
+ assert.equal(await request('1'),plain);assert.equal(fetched,firstFetches,'Same revision must remain reusable after five minutes');
  plain=plain.replace('BRICS','BRICS changed');assert.equal(await request('2'),plain);assert.equal(stored.size,1,'Changed versions must replace, not duplicate a large index');
  offline=true;assert.equal(await request('3'),plain,'Offline must return original script bytes from last cache');
  const response=Array.from(stored.values())[0],size=(await response.clone().arrayBuffer()).byteLength;

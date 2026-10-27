@@ -1,5 +1,7 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261027bihargk3";
+const CACHE_VERSION = "efp-pwa-20261027fastnav1";
+// The static Pages build enables direct extensionless network requests.
+const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261027bbfinish1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261027bbfinish1"></script>';
@@ -284,14 +286,16 @@ async function prepareNavigationResponse(response, injectDebug, url) {
   return served;
 }
 
-// A sleeping/resumed installed app may have usable cached content while a
-// network request stalls. Keep refreshing in the worker, but bound how long
-// navigation waits for that request. Exact revisions must beat old aliases.
-async function cachedNetworkFirst(event, request, cache, options) {
-  const cached = await cache.match(request) || await cache.match(request, { ignoreSearch: true });
+// Normal visits use this deployment's cached HTML immediately and refresh it
+// in the background. Explicit reloads still prefer the network, with a bounded
+// fallback. Versioned core assets need no network trip on each page opening.
+async function cachedNetworkFirst(event, request, cache, options, policy = {}) {
+  const key = policy.key || request;
+  const cached = await cache.match(key) || (!policy.exact && await cache.match(key, { ignoreSearch: true }));
+  if (cached && policy.preferCache && !policy.revalidate) return cached;
   const fresh = fetch(request, options).then((response) => {
     if (response && response.ok && (response.type === "basic" || response.type === "cors" || response.type === "default")) {
-      event.waitUntil(cache.put(request, response.clone()).catch(() => {}));
+      event.waitUntil(cache.put(key, response.clone()).catch(() => {}));
     }
     const temporaryFailure = response && (response.status >= 500 || response.status === 408 || response.status === 429);
     return cached && temporaryFailure ? cached : response;
@@ -301,6 +305,7 @@ async function cachedNetworkFirst(event, request, cache, options) {
   });
   if (!cached) return fresh;
   event.waitUntil(fresh.catch(() => {}));
+  if (policy.preferCache) return cached;
   let timer;
   try {
     return await Promise.race([fresh, new Promise(resolve => {
@@ -309,13 +314,33 @@ async function cachedNetworkFirst(event, request, cache, options) {
   } finally { clearTimeout(timer); }
 }
 
+function isExplicitReload(request) {
+  return request.cache === "reload" || request.cache === "no-cache" || request.cache === "no-store";
+}
+
+function navigationRequest(request) {
+  const url = new URL(request.url);
+  if (!PAGES_ROUTES || !url.pathname.endsWith(".html")) return request;
+  // Pages redirects every .html request. Fetch its final static route directly;
+  // the existing page bootstrap retains the public .html URL and search state.
+  url.pathname = url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+  return new Request(url.href, { headers: request.headers, credentials: request.credentials,
+    referrer: request.referrer, referrerPolicy: request.referrerPolicy });
+}
+
 async function networkFirst(event) {
   const request = event.request;
   const cache = await caches.open(CACHE_VERSION);
   const url = new URL(request.url);
   const injectDebug = await shouldInjectOwnerDebug(url);
   try {
-    const response = await cachedNetworkFirst(event, request, cache, { cache: "no-cache" });
+    const navigation = request.mode === "navigate" || request.destination === "document";
+    // Query parameters select client-side search/quiz state, not different HTML.
+    // Keep one raw document so a new search link can reuse an already read topic.
+    const key = navigation ? new Request(url.origin + url.pathname) : request;
+    const response = await cachedNetworkFirst(event, navigationRequest(request), cache, { cache: "no-cache" }, {
+      key, preferCache: navigation && !isExplicitReload(request), revalidate: true
+    });
     const served = await prepareNavigationResponse(response, injectDebug, url);
     return served;
   } catch (error) {
@@ -379,10 +404,10 @@ async function searchIndexAsset(event) {
   const request = event.request, url = new URL(request.url);
   const key = new Request(url.origin + url.pathname), cache = await caches.open(CACHE_VERSION);
   const cached = await cache.match(key), revision = url.search;
-  // Short freshness window avoids repeated downloads/import requests while
-  // typing. A changed revision bypasses it; offline still uses the last copy.
-  if (cached && cached.headers.get("x-efp-search-revision") === revision &&
-      Date.now() - Number(cached.headers.get("x-efp-search-cached-at")) < 300000) {
+  // Index revisions and deployment caches already identify content changes.
+  // An unchanged large index must not block search on a new download every
+  // five minutes. Changed revisions still refresh before being served.
+  if (cached && cached.headers.get("x-efp-search-revision") === revision) {
     const served = await readSearchIndex(cached);
     if (served) return served;
   }
@@ -407,7 +432,9 @@ async function freshCoreAsset(event, request = event.request) {
   if (current) request = new Request(new URL(current, self.location.origin).href, request);
   const cache = await caches.open(CACHE_VERSION);
   try {
-    return await cachedNetworkFirst(event, request, cache, { cache: "no-cache" });
+    return await cachedNetworkFirst(event, request, cache, { cache: "no-cache" }, {
+      exact: true, preferCache: !isExplicitReload(event.request)
+    });
   } catch (_) {
     const cached = await caches.match(request) || await caches.match(request, { ignoreSearch: true });
     return cached || new Response("", { status: 503, statusText: "Offline" });

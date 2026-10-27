@@ -90,9 +90,9 @@ async function workerChecks() {
     clearTimeout(id) {timers.delete(id);}
   });
   vm.runInContext(read('service-worker.js'), ctx);
-  async function request(url, fetcher, {slow = false, navigation = false} = {}) {
+  async function request(url, fetcher, {slow = false, navigation = false, reload = false} = {}) {
     ctx.__fetch = fetcher;
-    const pending = [], event = {request: new Request(origin + url), waitUntil(p) {pending.push(p);}, respondWith(p) {this.response = p;}};
+    const pending = [], event = {request: new Request(origin + url, reload ? {cache: 'reload'} : {}), waitUntil(p) {pending.push(p);}, respondWith(p) {this.response = p;}};
     if (navigation) Object.defineProperty(event.request, 'mode', {value: 'navigate'});
     handlers.fetch(event);
     for (let i = 0; i < 30; i++) await Promise.resolve();
@@ -105,20 +105,24 @@ async function workerChecks() {
   entries.set(origin + '/home-nav.js?v=20261027apprecovery1', new Response('CURRENT'));
   entries.set(origin + '/home-nav.js?v=old', new Response('OLD'));
   let finish, fetched;
-  const slow = await request('/home-nav.js?v=old', r => {fetched = r.url; return new Promise(resolve => {finish = resolve;});}, {slow: true});
+  const warm = await request('/home-nav.js?v=old', () => {throw Error('A warm core asset must not need a network request');});
+  assert.equal(await warm.response.text(), 'CURRENT');
+  assert.equal(timers.size, 0, 'normal warm loading must not wait for a fallback timer');
+  const slow = await request('/home-nav.js?v=old', r => {fetched = r.url; return new Promise(resolve => {finish = resolve;});}, {slow: true, reload: true});
   assert.equal(await slow.response.text(), 'CURRENT', 'old URLs must use current revision fallback');
   assert.equal(fetched, origin + '/home-nav.js?v=20261027apprecovery1');
   finish(new Response('FRESH')); await Promise.all(slow.pending);
   assert.equal(await (await cache.match(fetched)).text(), 'FRESH', 'late revalidation must finish');
-  const error = await request('/home-nav.js?v=old', async () => new Response('upstream error', {status: 503}));
+  const error = await request('/home-nav.js?v=old', async () => new Response('upstream error', {status: 503}), {reload: true});
   assert.equal(await error.response.text(), 'FRESH', 'transient 503 must retain working navigation');
-  const missing = await request('/home-nav.js?v=old', async () => new Response('Removed', {status: 404}));
+  const missing = await request('/home-nav.js?v=old', async () => new Response('Removed', {status: 404}), {reload: true});
   assert.equal(missing.response.status, 404, 'a deliberate removal must not be hidden by old content');
   entries.set(origin + '/search-logic.js?v=20261007searchaudit1', new Response('SEARCH\n/* efp-desktop-section-search-compat-v1 */\nOLD WRAPPER'));
-  const search = await request('/search-logic.js?v=old', () => new Promise(() => {}), {slow: true});
+  const search = await request('/search-logic.js?v=old', () => new Promise(() => {}));
   assert.equal(await search.response.text(), 'SEARCH', 'slow search bootstrap must use clean cached logic');
   entries.set(origin + '/support.html', new Response('<head></head><body>Saved page</body>', {headers: {'content-type': 'text/html'}}));
-  const nav = await request('/support.html', () => new Promise(resolve => {finish = resolve;}), {slow: true, navigation: true});
+  const nav = await request('/support.html', () => new Promise(resolve => {finish = resolve;}), {navigation: true});
+  assert.equal(timers.size, 0, 'cached pages must open without a network fallback timer');
   assert((await nav.response.text()).includes('Saved page'), 'cached pages must open when network stalls');
   finish(new Response('<head></head><body>Fresh page</body>', {headers: {'content-type': 'text/html'}}));
   await Promise.all(nav.pending);
