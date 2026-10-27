@@ -26,9 +26,9 @@ function createReader({mobile=false,responsive=false,lowMemory=false,idle=false,
  d.elementFromPoint=()=>d.querySelector('.efp-cont-page[data-page="'+d.getElementById('pageInput').value+'"]');
  w.IntersectionObserver=class{observe(){}disconnect(){}};
  w.HTMLCanvasElement.prototype.getContext=function(){return {canvas:this,drawImage(){},measureText(s){return {width:s.length*5}}}};
- const counts={},finished={},cancelled={},canvases=[],errors=[];let active=0,maxActive=0;
+ const counts={},finished={},cancelled={},cleaned={},canvases=[],errors=[];let active=0,maxActive=0;
  w.console.error=e=>errors.push(e);
- w.pdfjsLib={GlobalWorkerOptions:{},getDocument(){return {promise:Promise.resolve({numPages:40,getPage(n){return delay(n===20?120:0).then(()=>({getViewport({scale}){return {width:(landscape?800:600)*scale,height:(landscape?600:800)*scale,scale,transform:[scale,0,0,scale,0,0]}},getTextContent(){return Promise.resolve({items:[],styles:{}})},render({canvasContext}){
+ w.pdfjsLib={GlobalWorkerOptions:{},getDocument(){return {promise:Promise.resolve({numPages:40,getPage(n){return delay(n===20?120:0).then(()=>({getViewport({scale}){return {width:(landscape?800:600)*scale,height:(landscape?600:800)*scale,scale,transform:[scale,0,0,scale,0,0]}},cleanup(){cleaned[n]=(cleaned[n]||0)+1;return true},getTextContent(){return Promise.resolve({items:[],styles:{}})},render({canvasContext}){
    counts[n]=(counts[n]||0)+1;active++;maxActive=Math.max(maxActive,active);canvases.push(canvasContext.canvas);
    let complete=false,reject,timer;
    const promise=new Promise((resolve,r)=>{reject=r;timer=w.setTimeout(()=>{complete=true;active--;finished[n]=(finished[n]||0)+1;resolve()},n===slowPage?slowMs:20)});
@@ -40,7 +40,7 @@ function createReader({mobile=false,responsive=false,lowMemory=false,idle=false,
  run(read('search-logic.js'));run(read('Crux-Tricks/pdf-search.js'));run(read('Crux-Tricks/viewer-v2.js'));
  const current=()=>d.documentElement.classList.contains('efp-continuous-mobile-pdf')?d.querySelector('.efp-cont-page[data-page="'+d.getElementById('pageInput').value+'"] canvas'):d.getElementById('pdfCanvas');
  const jump=n=>{const input=d.getElementById('pageInput');input.value=String(n);input.dispatchEvent(new w.Event('change'))};
- return {dom,w,d,stage,counts,finished,cancelled,canvases,errors,scrolls,current,jump,get maxActive(){return maxActive}};
+ return {dom,w,d,stage,counts,finished,cancelled,cleaned,canvases,errors,scrolls,current,jump,get maxActive(){return maxActive}};
 }
 async function checkDesktopWindowResize(){
  const r=createReader({responsive:true}),{w,d}=r;
@@ -102,6 +102,24 @@ async function checkDesktopBudget(){
   console.log('PASS high-DPI desktop cache remains within 32 MB on low-memory devices');
  }finally{r.dom.window.close()}
 }
+async function checkDesktopBackgroundBudget(){
+ const r=createReader({lowMemory:true,pixelRatio:2});
+ try{
+  await until(()=>r.finished[1],'High-DPI selected page must paint');await delay(400);
+  assert.deepEqual(Object.keys(r.counts),['1'],'Do not paint neighbours that cannot fit beside the selected bitmap');
+  r.jump(9);await until(()=>r.current().dataset.page==='9','A distant target must remain interactive');await delay(400);
+  assert.deepEqual(Object.keys(r.counts).sort((a,b)=>a-b),['1','9'],'No unrequested high-DPI background scans');
+  assert(r.cleaned[1]>0,'Evicted desktop pages must release PDF.js decoded image resources');
+  assert.equal(r.maxActive,1);assert.equal(r.errors.length,0);
+  console.log('PASS desktop high-DPI scans skip unaffordable background painting and keep direct jumps usable');
+ }finally{r.dom.window.close()}
+ const roomy=createReader();
+ try{
+  await until(()=>roomy.finished[3],'Two affordable upcoming pages may warm');await delay(350);
+  assert.deepEqual(Object.keys(roomy.counts),['1','2','3'],'Desktop scan warmup stays limited to nearby useful pages');
+  console.log('PASS normal desktop scans warm only two nearby bitmaps');
+ }finally{roomy.dom.window.close()}
+}
 async function checkDesktop(){
  const r=createReader(),{w,d}=r;
  await until(()=>r.finished[3],'Neighbour pages must warm');
@@ -151,4 +169,4 @@ async function checkMobile({idle=false,lowMemory=false,landscape=false}={}){
  assert.equal(r.errors.length,0);r.dom.window.close();
  console.log('PASS mobile cache, priority, stale-jump guard, zoom, rotation, memory and BFCache',idle?'idle API':'timer fallback',lowMemory?'low memory':'default memory',landscape?'landscape PDF':'portrait PDF');
 }
-(async()=>{await checkDesktopWindowResize();await checkDesktopArrowWarmup();await checkDesktopBudget();await checkDesktop();await checkMobile();await checkMobile({idle:true,lowMemory:true});await checkMobile({landscape:true})})().catch(e=>{console.error(e);process.exit(1)});
+(async()=>{await checkDesktopWindowResize();await checkDesktopArrowWarmup();await checkDesktopBudget();await checkDesktopBackgroundBudget();await checkDesktop();await checkMobile();await checkMobile({idle:true,lowMemory:true});await checkMobile({landscape:true})})().catch(e=>{console.error(e);process.exit(1)});

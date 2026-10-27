@@ -832,8 +832,14 @@
 
   function clearSinglePageCache(){
     singleWarmGeneration++;
-    Object.keys(singlePageCache).forEach(function(k){releaseCanvas(singlePageCache[k].canvas)});
+    Object.keys(singlePageCache).forEach(function(k){releaseSinglePage(singlePageCache[k])});
     singlePageCache={};singlePageJobs={};singleCacheLayout='';
+  }
+  function releaseSinglePage(entry){
+    releaseCanvas(entry.canvas);
+    // The bitmap is independent of PDF.js's decoded images/operator lists.
+    // Release those too when its page leaves the desktop cache.
+    if(entry.pdfPage&&entry.pdfPage.cleanup){try{entry.pdfPage.cleanup()}catch(_){}}
   }
   function singleLayoutKey(){
     return [pdfStage.clientWidth,pdfStage.clientHeight,window.innerHeight,
@@ -848,15 +854,16 @@
       var key=keys[i],entry=singlePageCache[key];
       if(entry.canvas===pdfCanvas||Number(key)===page)continue;
       if(Math.abs(Number(key)-page)>SINGLE_KEEP_RADIUS||bytes>budget){
-        bytes-=entry.bytes;releaseCanvas(entry.canvas);delete singlePageCache[key];
+        bytes-=entry.bytes;releaseSinglePage(entry);delete singlePageCache[key];
       }
     }
   }
   function renderSingleBitmap(n,layout){
     if(singlePageCache[n])return Promise.resolve(singlePageCache[n].canvas);
     if(singlePageJobs[n])return singlePageJobs[n];
-    var loaded=pdfDoc;
+    var loaded=pdfDoc,cachedPage;
     var job=loaded.getPage(n).then(function(pg){
+      cachedPage=pg;
       return queuePagePaint(n,function(paint){
         if(paint.cancelled)return null;
         var base=pg.getViewport({scale:1});
@@ -876,6 +883,11 @@
         var ctx=c.getContext('2d',{alpha:false});
         if(!ctx){releaseCanvas(c);throw new Error('Canvas context unavailable')}
         try{paint.task=pg.render({canvasContext:ctx,viewport:vp})}catch(err){releaseCanvas(c);throw err}
+        if(isHandwrittenMaths&&!mobileReader)paint.task.onContinue=function(resume){
+          // Yield between PDF.js paint batches so clicks/typing can be handled
+          // while a large desktop scan is being drawn.
+          setTimeout(function(){if(!paint.cancelled&&!readerSuspended&&paint.epoch===pagePaintEpoch)resume()},0);
+        };
         renderTask=paint.task;
         return paint.task.promise.then(function(){
           if(renderTask===paint.task)renderTask=null;
@@ -888,7 +900,7 @@
     }).then(function(c){
       if(!c)return null;
       if(readerSuspended||continuous||loaded!==pdfDoc||layout!==singleCacheLayout){releaseCanvas(c);return null}
-      singlePageCache[n]={canvas:c,bytes:c.width*c.height*4};
+      singlePageCache[n]={canvas:c,bytes:c.width*c.height*4,pdfPage:cachedPage};
       trimSinglePageCache();
       return singlePageCache[n]?c:null;
     });
@@ -900,17 +912,33 @@
     var generation=++singleWarmGeneration,layout=singleCacheLayout,center=page;
     var queue=[center+navigationDirection,center-navigationDirection,center+2*navigationDirection,center-2*navigationDirection,
       center+3*navigationDirection,center+4*navigationDirection];
+    var gentle=isHandwrittenMaths&&!mobileReader;
+    if(gentle){
+      var selected=singlePageCache[center],capacity=selected?Math.floor(canvasCacheBudget()/Math.max(1,selected.bytes))-1:0;
+      // A high-DPI/zoomed scan can fill the bitmap budget by itself. Painting
+      // six neighbours and immediately evicting them wastes desktop paint work.
+      queue=queue.filter(function(n){return n>=1&&n<=pdfDoc.numPages}).slice(0,Math.max(0,Math.min(2,capacity)));
+    }
+    function schedule(){
+      if(gentle){
+        setTimeout(function(){
+          if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:800});else next();
+        },120);
+      }else if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:120});else setTimeout(next,16);
+    }
     function next(){
       if(generation!==singleWarmGeneration||readerSuspended||continuous||!pdfDoc||layout!==singleCacheLayout||!queue.length)return;
+      if(gentle){
+        if(document.hidden)return;
+        if(navigator.scheduling&&navigator.scheduling.isInputPending&&navigator.scheduling.isInputPending()){schedule();return}
+      }
       var n=queue.shift();
       if(n<1||n>pdfDoc.numPages){next();return}
       renderSingleBitmap(n,layout).catch(function(){}).then(function(){
-        if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:120});else setTimeout(next,16);
+        schedule();
       });
     }
-    // Start the immediate neighbour without waiting for an idle slot. Yield
-    // between subsequent bitmaps; the scheduler still permits only one paint.
-    next();
+    if(gentle)schedule();else next();
   }
   function showSingleBitmap(c,anchor){
     var oldHighlight=document.getElementById('efpSingleSearchLayer');if(oldHighlight)oldHighlight.remove();
