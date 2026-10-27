@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261028desktoprender1";
+const CACHE_VERSION = "efp-pwa-20261028desktopmode1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261027bbfinish1";
@@ -79,7 +79,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.js?v=20261004casefold1",
   "/Crux-Tricks/viewer.css",
   "/Crux-Tricks/pdf-search.js?v=20261004pdfmarks1",
-  "/Crux-Tricks/viewer-v2.js?v=20261028desktoprender1",
+  "/Crux-Tricks/viewer-v2.js?v=20261028desktopmode1",
 ];
 
 self.addEventListener("install", (event) => {

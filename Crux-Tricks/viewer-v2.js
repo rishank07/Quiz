@@ -27,6 +27,7 @@
   }
 
   var mobileReader=isCompactReader();
+  document.documentElement.classList.toggle('efp-single-desktop-pdf',!mobileReader);
   var isTrick=doc.kind==='tricks';
   var isBookCrux=doc.kind==='crux';
   var isEconomicsCrux=isBookCrux&&doc.subject==='Economics';
@@ -233,6 +234,13 @@
     var st=document.createElement('style');
     st.id='efp-pdf-v2-style';
     st.textContent=[
+      'html.efp-single-desktop-pdf,html.efp-single-desktop-pdf body{height:100%!important;overflow:hidden!important}',
+      'html.efp-single-desktop-pdf body{height:100dvh!important;display:flex!important;flex-direction:column!important}',
+      'html.efp-single-desktop-pdf .reader-head{flex:0 0 auto;position:relative!important;top:auto!important}',
+      'html.efp-single-desktop-pdf .reader-shell{flex:1 1 0;min-height:0;display:flex;flex-direction:column;margin:0 auto}',
+      'html.efp-single-desktop-pdf .toolbar,html.efp-single-desktop-pdf .doc-search{flex:0 0 auto;position:relative!important;top:auto!important}',
+      'html.efp-single-desktop-pdf .pdf-mode{flex:1 1 0;min-height:0;display:flex}',
+      'html.efp-single-desktop-pdf .pdf-stage{flex:1 1 auto;height:auto!important;min-height:0!important}',
       'html.dark.efp-book-crux-pdf #pdfCanvas{filter:invert(.95) hue-rotate(180deg) saturate(1.04) brightness(1.10) contrast(1.18)!important;background:#080d15!important}',
       'html.dark.efp-economics-crux-pdf #pdfCanvas{filter:invert(.965) hue-rotate(180deg) saturate(1.08) brightness(1.12) contrast(1.22)!important;background:#060b12!important}',
       'html.dark.efp-trick-pdf #pdfCanvas{filter:invert(.965) hue-rotate(180deg) saturate(1.18) brightness(1.12) contrast(1.22)!important;background:#070b12!important}',
@@ -740,6 +748,7 @@
   }
   function buildContinuous(firstPg){
     if(!pdfDoc)return;
+    document.documentElement.classList.remove('efp-single-desktop-pdf');
     cancelPagePaints();clearSinglePageCache();singleRenderGeneration++;continuousNavigationGeneration++;
     continuousLayoutGeneration++;
     continuousRenders={};
@@ -869,7 +878,7 @@
         var base=pg.getViewport({scale:1});
         var landscape=base.width>base.height*1.03;
         var availableW=Math.max(260,pdfStage.clientWidth-(mobileReader?4:18));
-        var visibleH=Math.max(220,window.innerHeight-pdfStage.getBoundingClientRect().top-(mobileReader?4:18));
+        var visibleH=Math.max(100,pdfStage.clientHeight-(mobileReader?4:18));
         var fit=availableW/base.width;
         if(!mobileReader&&landscape)fit=Math.min(fit,visibleH/base.height);
         var cssScale=fit*(autoFit?1:zoom);
@@ -958,6 +967,12 @@
     document.documentElement.classList.remove('efp-mobile-rotated-page');
     pdfStage.style.overflowY='auto';pdfStage.style.overflowX=mobileReader&&autoFit?'hidden':'auto';
     pdfLoading.hidden=true;pdfCanvas.hidden=false;pdfCanvas.style.display='';
+    // Follow the page actually displayed after manual navigation or maximize.
+    // A result jump has already selected its context and keeps highlight focus.
+    if(pdfContextVisible&&searchQuery&&pdfContextPage!==page){
+      pdfContextPage=page;activeSearchPage=pdfSearchHits.indexOf(page)>=0?page:0;
+      searchFocusPending=false;searchGeneration++;clearSearchHighlightLayers();notifySearchContext();
+    }
     markVisited();updateUrl();updateControls();trimSinglePageCache();
     if(anchor)restoreZoomAnchor(anchor);
     if(searchQuery&&page===activeSearchPage)renderSearchHighlights(page);
@@ -967,6 +982,7 @@
     if(!pdfDoc||readerSuspended)return Promise.resolve(false);
     var generation=++singleRenderGeneration,target=page;
     mobileReader=isCompactReader();
+    document.documentElement.classList.toggle('efp-single-desktop-pdf',!mobileReader);
     document.documentElement.classList.toggle('efp-compact-reader',mobileReader);
     pdfError.hidden=true;
     var layout=singleLayoutKey();
@@ -1030,7 +1046,11 @@
         });
       });
     }
-    if(next===page){updateControls();return Promise.resolve(false);}
+    if(next===page){
+      updateControls();
+      if(pdfDoc&&(pdfCanvas.hidden||pdfCanvas.width<=2||pdfCanvas.dataset.page!==String(page)||singleLayoutKey()!==singleCacheLayout))return renderSinglePage();
+      return Promise.resolve(false);
+    }
     page=next;
     // A cached target has no foreground paint to prioritize. Cancelling its
     // upcoming neighbour here repeatedly restarted heavy pages under arrows.
@@ -1357,11 +1377,14 @@
   }
   function keyboardTargetIsEditable(target){
     if(!target||!target.closest)return false;
-    return !!target.closest('input,textarea,select,button,a,[contenteditable=\"true\"],[role=\"textbox\"]');
+    return !!target.closest('input,textarea,select,[contenteditable=\"true\"],[role=\"textbox\"]');
   }
   function handleReaderKeyboard(e){
     if(e.defaultPrevented||e.ctrlKey||e.metaKey||e.altKey||keyboardTargetIsEditable(e.target))return;
     var key=e.key;
+    // Keep native Space activation for focused controls. Arrow/Page keys still
+    // turn PDF pages after a real click leaves focus on a result or toolbar.
+    if(key===' '&&e.target&&e.target.closest&&e.target.closest('button,a,[role=\"button\"]'))return;
     var max=pdfDoc?pdfDoc.numPages:doc.pages;
     if(key==='ArrowRight'||key==='PageDown'||(key===' '&&!e.shiftKey)){e.preventDefault();go(page+1,true);return;}
     if(key==='ArrowLeft'||key==='PageUp'||(key===' '&&e.shiftKey)){e.preventDefault();go(page-1,true);return;}

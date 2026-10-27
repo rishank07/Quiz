@@ -186,6 +186,36 @@ const server=http.createServer((req,res)=>{
         assert.equal(await page.locator('#pageInput').inputValue(),String(doc.pages));
         console.log('PASS existing reader and last-page deep link:',doc.id);
       }
+      // Use real pointer focus and keyboard events in the screenshot's flow.
+      // Programmatic button.click() does not focus the button and misses this.
+      await page.setViewportSize({width:1536,height:728});
+      await page.goto(origin+'/Crux-Tricks/viewer.html?id=ct0468&from=crux-index&page=215&efpWorkPreview=1');
+      const singleReady=n=>page.waitForFunction(n=>!document.documentElement.classList.contains('efp-continuous-mobile-pdf')&&document.getElementById('pdfCanvas').dataset.page===String(n),n);
+      await singleReady(215);
+      await page.locator('#docSearch').fill('triangle');
+      await page.locator('#docHits button').filter({hasText:/^Page 215\b/}).click();
+      await page.keyboard.press('ArrowRight');await singleReady(216);
+      assert.ok((await page.evaluate(()=>EFP_PDF_SEARCH_CONTEXT.getState().label)).startsWith('Page 216'));
+      await page.locator('#next').click();await singleReady(217);
+      await page.keyboard.press('ArrowLeft');await singleReady(216);
+      await page.locator('.efp-context-next').click();await singleReady(217);
+      assert.ok((await page.evaluate(()=>EFP_PDF_SEARCH_CONTEXT.getState().label)).startsWith('Page 217'));
+      const beforeBookmark=await page.locator('#bookmarkPage').evaluate(el=>el.classList.contains('bookmarked'));
+      await page.locator('#bookmarkPage').press('Space');
+      assert.equal(await page.locator('#bookmarkPage').evaluate(el=>el.classList.contains('bookmarked')),!beforeBookmark);
+      assert.equal(await page.locator('#pageInput').inputValue(),'217','Space must activate the focused control');
+      await page.locator('#docSearch').focus();await page.keyboard.press('ArrowLeft');
+      assert.equal(await page.locator('#pageInput').inputValue(),'217','Input editing must not turn the PDF page');
+      const frame=await page.evaluate(()=>({bottom:document.getElementById('pdfStage').getBoundingClientRect().bottom,height:innerHeight,overflow:document.scrollingElement.scrollHeight-innerHeight}));
+      assert.ok(frame.bottom<=frame.height+1&&frame.overflow<=1,'Full desktop frame must fit without a competing body scrollbar: '+JSON.stringify(frame));
+      for(let cycle=0;cycle<2;cycle++){
+        await page.setViewportSize({width:780,height:900});
+        await page.waitForFunction(()=>document.documentElement.classList.contains('efp-continuous-mobile-pdf')&&document.querySelector('.efp-cont-page[data-page="217"] canvas')?.width>2);
+        await page.setViewportSize({width:1536,height:728});await singleReady(217);
+        await page.locator('#next').click();await singleReady(218);
+        await page.keyboard.press('ArrowLeft');await singleReady(217);
+      }
+      console.log('PASS real desktop result/button focus, page shortcuts, synchronized search dock, fitted frame and repeated half/full mode transitions');
       await page.goto(origin+'/__test__');
       await page.addScriptTag({url:origin+'/__pdfjs/pdf.js'});await page.addScriptTag({url:origin+'/cf-pdf-assets.js'});
       await context.route('**/_cf-assets/**/*.bin',route=>route.fulfill({status:503,body:'Unavailable'}));

@@ -144,6 +144,28 @@ async function checkDesktop(){
  assert.equal(d.getElementById('pageInput').value,'10');assert.equal(r.errors.length,0);assert.equal(r.maxActive,1);
  r.dom.window.close();console.log('PASS desktop cache, fast jumps, zoom, bookmarks and BFCache cleanup');
 }
+async function checkFocusedDesktopControls(){
+ const r=createReader(),{w,d}=r;
+ try{
+  await until(()=>r.finished[1],'Reader must load before pointer/focus navigation');
+  const search=d.getElementById('docSearch');search.value='page 9';search.dispatchEvent(new w.Event('input',{bubbles:true}));
+  const hit=d.querySelector('#docHits button');assert(hit);hit.focus();hit.click();
+  await until(()=>r.current().dataset.page==='9','Search result must open its page');
+  hit.dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
+  await until(()=>r.current().dataset.page==='10','Arrow keys must work with focus left on the search result');
+  assert(w.EFP_PDF_SEARCH_CONTEXT.getState().label.startsWith('Page 10'),'Search dock must follow the displayed page');
+  const next=d.getElementById('next');next.focus();next.click();
+  await until(()=>r.current().dataset.page==='11','Toolbar Next must work');
+  next.dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowLeft',bubbles:true,cancelable:true}));
+  await until(()=>r.current().dataset.page==='10','Arrow keys must work after clicking toolbar controls');
+  assert.equal(w.EFP_PDF_SEARCH_CONTEXT.snapshot().page,10);
+  search.focus();const editing=new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true});search.dispatchEvent(editing);
+  assert.equal(editing.defaultPrevented,false,'Editing arrows keep their native input behaviour');assert.equal(d.getElementById('pageInput').value,'10');
+  const bookmark=d.getElementById('bookmarkPage');bookmark.focus();const space=new w.KeyboardEvent('keydown',{key:' ',bubbles:true,cancelable:true});bookmark.dispatchEvent(space);
+  assert.equal(space.defaultPrevented,false,'Space on a control keeps native button activation');assert.equal(d.getElementById('pageInput').value,'10');
+  console.log('PASS focused desktop results/buttons keep page shortcuts, input editing, native Space and synchronized search context');
+ }finally{r.dom.window.close()}
+}
 async function checkMobile({idle=false,lowMemory=false,landscape=false}={}){
  const r=createReader({mobile:true,idle,lowMemory,landscape}),{w,d}=r;
  await until(()=>r.finished[4],'Mobile neighbours must warm');
@@ -169,4 +191,4 @@ async function checkMobile({idle=false,lowMemory=false,landscape=false}={}){
  assert.equal(r.errors.length,0);r.dom.window.close();
  console.log('PASS mobile cache, priority, stale-jump guard, zoom, rotation, memory and BFCache',idle?'idle API':'timer fallback',lowMemory?'low memory':'default memory',landscape?'landscape PDF':'portrait PDF');
 }
-(async()=>{await checkDesktopWindowResize();await checkDesktopArrowWarmup();await checkDesktopBudget();await checkDesktopBackgroundBudget();await checkDesktop();await checkMobile();await checkMobile({idle:true,lowMemory:true});await checkMobile({landscape:true})})().catch(e=>{console.error(e);process.exit(1)});
+(async()=>{await checkDesktopWindowResize();await checkDesktopArrowWarmup();await checkDesktopBudget();await checkDesktopBackgroundBudget();await checkDesktop();await checkFocusedDesktopControls();await checkMobile();await checkMobile({idle:true,lowMemory:true});await checkMobile({landscape:true})})().catch(e=>{console.error(e);process.exit(1)});
