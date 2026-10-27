@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261027homesearch1";
+const CACHE_VERSION = "efp-pwa-20261028pdfsearch1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261027bbfinish1";
@@ -79,7 +79,7 @@ const APP_SHELL = [
   "/Crux-Tricks/crux-tricks.js?v=20261004casefold1",
   "/Crux-Tricks/viewer.css",
   "/Crux-Tricks/pdf-search.js?v=20261004pdfmarks1",
-  "/Crux-Tricks/viewer-v2.js?v=20261023pdfresize1",
+  "/Crux-Tricks/viewer-v2.js?v=20261028pdfsearch1",
 ];
 
 self.addEventListener("install", (event) => {
@@ -378,6 +378,24 @@ async function staleWhileRevalidate(event, allowOpaque) {
   return new Response("", { status: 503, statusText: "Offline" });
 }
 
+async function immutablePdfPart(event) {
+  // The path contains the bytes' hash. A previously read PDF range never needs
+  // a background download; a new PDF/build has a different URL automatically.
+  const request = event.request;
+  const cached = await matchCachedRequest(request);
+  if (cached) return cached;
+  try {
+    const response = await fetch(request);
+    if (response.status === 200 && (response.type === "basic" || response.type === "cors" || response.type === "default")) {
+      const copy = response.clone();
+      event.waitUntil(caches.open(CACHE_VERSION).then(cache => cache.put(request, copy)).catch(() => {}));
+    }
+    return response;
+  } catch (_) {
+    return new Response("", {status:503,statusText:"Offline"});
+  }
+}
+
 // Store one compressed copy of each large index, regardless of the cache
 // version strings used by older section shells. Content is lossless; workers
 // receive the original JavaScript bytes. Unsupported browsers keep plain data.
@@ -522,6 +540,11 @@ self.addEventListener("fetch", (event) => {
   // Revalidate this shared source before returning a cached copy as well.
   if (url.pathname === "/Original%20Practice/English_Grammar_Complete_Practice.html") {
     event.respondWith(networkFirst(event));
+    return;
+  }
+
+  if (/^\/_cf-assets\/[a-f0-9]{24}\/part-\d{4}\.bin$/.test(url.pathname)) {
+    event.respondWith(immutablePdfPart(event));
     return;
   }
 

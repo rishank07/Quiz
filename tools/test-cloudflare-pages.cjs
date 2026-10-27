@@ -38,6 +38,13 @@ for (const [source, record] of Object.entries(report.pdfs)) {
   for (const part of record.parts) { const data=fs.readFileSync(path.join(out,part));hash.update(data);bytes+=data.length; }
   assert.equal(bytes, record.length);
   assert.equal(hash.digest('hex'), sha(fs.readFileSync(path.join(root, source))));
+  if(record.viewer){
+    const view=Buffer.concat(record.viewer.parts.map(part=>fs.readFileSync(path.join(out,part))));
+    assert.equal(view.length,record.viewer.length);
+    assert.equal(sha(view),record.viewer.sha256);
+    assert.deepEqual(view.subarray(0,record.length),fs.readFileSync(path.join(root,source)), 'Viewer update must preserve every original byte');
+    assert.ok(view.length-record.length<200000,'Page-tree metadata must stay small');
+  }
   console.log('PASS byte-identical PDF:', record.filename);
 }
 function walk(p) { return fs.readdirSync(p,{withFileTypes:true}).flatMap(x=>x.isDirectory()?walk(path.join(p,x.name)):[path.join(p,x.name)]); }
@@ -131,19 +138,32 @@ const server=http.createServer((req,res)=>{
         await page.addScriptTag({url:origin+'/cf-pdf-assets.js'});
         const results=await page.evaluate(async source=>{
           pdfjsLib.GlobalWorkerOptions.workerSrc='/__pdfjs/pdf.worker.js';
+          const parts=new Set(),originalFetch=window.fetch;
+          window.fetch=function(url,options){if(String(url).endsWith('.bin'))parts.add(String(url));return originalFetch.call(this,url,options)};
           const task=EFP_CF_PDF.getDocument(pdfjsLib,{url:source});
-          const pdf=await task.promise, count=pdf.numPages, rendered=[];
+          const pdf=await task.promise, count=pdf.numPages, rendered=[],startupParts=parts.size;
           for(const number of [1,Math.ceil(count/2),count]){
             const p=await pdf.getPage(number),viewport=p.getViewport({scale:.25});
             const canvas=document.createElement('canvas');canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
             await p.render({canvasContext:canvas.getContext('2d'),viewport}).promise;
-            rendered.push({page:number,width:canvas.width,height:canvas.height});
+            rendered.push({page:number,width:canvas.width,height:canvas.height,pixels:canvas.toDataURL()});
           }
-          await pdf.destroy();return {count,rendered};
+          await pdf.destroy();
+          const original=await pdfjsLib.getDocument({url:'/__source__'+source}).promise;
+          for(const reference of rendered){
+            const p=await original.getPage(reference.page),viewport=p.getViewport({scale:.25});
+            const canvas=document.createElement('canvas');canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
+            await p.render({canvasContext:canvas.getContext('2d'),viewport}).promise;
+            if(canvas.toDataURL()!==reference.pixels)throw new Error('Viewer changed original pixels on page '+reference.page);
+            delete reference.pixels;
+          }
+          await original.destroy();window.fetch=originalFetch;return {count,rendered,startupParts};
         },source);
         assert.equal(results.count,doc.pages);
         assert.ok(results.rendered.every(p=>p.width>0&&p.height>0));
+        assert.ok(results.startupParts<=5,'Opening must not download the entire scanned book: '+results.startupParts+' parts');
         console.log('PASS real PDF.js static ranges:',asset.filename,results.count,'pages');
+        console.log('PASS original page pixels and bounded startup:',results.startupParts,'parts');
         await page.goto(origin+'/Crux-Tricks/viewer.html?id='+doc.id+'&page='+doc.pages);
         await page.waitForFunction(()=>document.getElementById('pdfLoading').hidden&&document.getElementById('pdfStage').querySelector('canvas')?.width>0,{},{timeout:60000});
         assert.equal(new URL(page.url()).pathname,'/Crux-Tricks/viewer.html');

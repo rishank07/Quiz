@@ -12,6 +12,7 @@
   }
   function reader(asset) {
     var cache = new Map(), pending = new Map(), controllers = new Set(), stopped = false;
+    var cacheLimit = root.navigator && Number(root.navigator.deviceMemory) <= 2 ? 4 : 16;
     function chunk(index) {
       if (stopped) return Promise.reject(new Error("PDF loading cancelled"));
       if (cache.has(index)) {
@@ -28,7 +29,7 @@
         if (buffer.byteLength !== expected) throw new Error("Incomplete PDF download");
         var bytes = new Uint8Array(buffer);
         cache.set(index, bytes);
-        while (cache.size > 4) cache.delete(cache.keys().next().value);
+        while (cache.size > cacheLimit) cache.delete(cache.keys().next().value);
         return bytes;
       }).finally(function () { pending.delete(index); controllers.delete(controller); });
       pending.set(index, job); return job;
@@ -37,16 +38,20 @@
       range: function (begin, end) {
         end = Math.min(end, asset.length);
         if (begin < 0 || begin >= end || end > asset.length) return Promise.reject(new Error("Invalid PDF range"));
-        var output = new Uint8Array(end - begin), chain = Promise.resolve();
+        var output = new Uint8Array(end - begin), jobs = [];
         var first = Math.floor(begin / asset.chunkSize), last = Math.floor((end - 1) / asset.chunkSize);
-        for (var i = first; i <= last; i++) (function (index) {
-          chain = chain.then(function () { return chunk(index); }).then(function (bytes) {
+        var next = first;
+        function readNext() {
+          if (next > last) return Promise.resolve();
+          var index = next++;
+          return chunk(index).then(function (bytes) {
             var start = index * asset.chunkSize;
             var lo = Math.max(begin, start), hi = Math.min(end, start + bytes.length);
             output.set(bytes.subarray(lo - start, hi - start), lo - begin);
-          });
-        })(i);
-        return chain.then(function () { return output; });
+          }).then(readNext);
+        }
+        for (var i = 0; i < Math.min(4, last - first + 1); i++) jobs.push(readNext());
+        return Promise.all(jobs).then(function () { return output; });
       },
       stop: function () {
         stopped = true; controllers.forEach(function (controller) { controller.abort(); });
@@ -57,6 +62,7 @@
   function getDocument(lib, options) {
     var asset = find(options.url);
     if (!asset) return lib.getDocument(options);
+    asset = asset.viewer || asset;
     var source = reader(asset), task, fail, cancelled = false;
     var failed = new Promise(function (_, reject) { fail = reject; });
     var transport = new lib.PDFDataRangeTransport(asset.length, new Uint8Array(0), false, asset.filename);
@@ -71,7 +77,7 @@
     };
     transport.abort = function () { cancelled = true; source.stop(); };
     var config = Object.assign({}, options, {
-      range: transport, length: asset.length, rangeChunkSize: 262144,
+      range: transport, length: asset.length, rangeChunkSize: asset.chunkSize,
       disableRange: false, disableStream: true, disableAutoFetch: true
     });
     delete config.url;

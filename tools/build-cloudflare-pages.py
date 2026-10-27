@@ -116,8 +116,110 @@ def build_pdf(relative, raw, output):
         parts.append("/" + target.as_posix())
     if check.hexdigest() != digest(raw):
         raise ValueError("PDF byte verification failed")
-    return {"parts": parts, "chunkSize": PDF_CHUNK, "length": len(raw),
-            "filename": relative.name, "sha256": digest(raw)}
+    asset = {"parts": parts, "chunkSize": PDF_CHUNK, "length": len(raw),
+             "filename": relative.name, "sha256": digest(raw)}
+    optimized = compact_pdf_page_tree(raw)
+    if optimized is not None:
+        # All image/content streams and original bytes stay untouched. Only the
+        # last part(s) change: an incremental PDF update puts page dictionaries
+        # together so PDF.js need not fetch every scanned page to check the last.
+        unchanged = len(raw) // PDF_CHUNK
+        viewer_parts = parts[:unchanged]
+        viewer_folder = Path("_cf-assets") / digest(optimized)[:24]
+        for number, begin in enumerate(range(unchanged * PDF_CHUNK, len(optimized), PDF_CHUNK), unchanged):
+            target = viewer_folder / f"part-{number:04d}.bin"
+            write(output / target, optimized[begin:begin + PDF_CHUNK])
+            viewer_parts.append("/" + target.as_posix())
+        asset["viewer"] = {"parts": viewer_parts, "chunkSize": PDF_CHUNK,
+                           "length": len(optimized), "filename": relative.name,
+                           "sha256": digest(optimized)}
+    return asset
+
+
+def compact_pdf_page_tree(raw):
+    """Append metadata for classic PDFs with a flat, uncompressed page tree.
+
+    A flat /Kids array makes PDF.js read every leaf before its first paint.
+    Reparenting identical page dictionaries into counted groups avoids that
+    scan. Unsupported/encrypted/incremental PDFs retain the original delivery.
+    No image, font, content stream, page order or inherited resource is changed.
+    """
+    end = re.search(rb"startxref\s+(\d+)\s+%%EOF\s*$", raw[-4096:])
+    if not end:
+        return None
+    previous = int(end[1])
+    table = re.match(rb"xref\s+0\s+(\d+)\s*\r?\n", raw[previous:])
+    if not table:
+        return None
+    size = int(table[1])
+    lines = raw[previous + table.end():].splitlines()
+    if len(lines) < size or any(not re.fullmatch(rb"\d{10} \d{5} [nf] ?", line) for line in lines[:size]):
+        return None
+    trailer = re.match(rb"\s*trailer\s*<<(.*?)>>\s*startxref", b"\n".join(lines[size:]), re.S)
+    if not trailer or re.search(rb"/(?:Encrypt|Prev|XRefStm)\b", trailer[1]):
+        return None
+    root = re.search(rb"/Root\s+(\d+)\s+0\s+R\b", trailer[1])
+    if not root:
+        return None
+
+    def object_body(number):
+        if number <= 0 or number >= size or not lines[number].endswith((b" n", b" n ")):
+            return None
+        offset = int(lines[number][:10])
+        obj = re.compile(str(number).encode() + rb"\s+0\s+obj\s*(<<.*?>>)\s*endobj", re.S).match(raw, offset)
+        return obj[1] if obj else None
+
+    catalog = object_body(int(root[1]))
+    pages_ref = re.search(rb"/Pages\s+(\d+)\s+0\s+R\b", catalog or b"")
+    if not pages_ref:
+        return None
+    pages_number = int(pages_ref[1])
+    pages_body = object_body(pages_number)
+    kids = re.search(rb"/Kids\s*\[([^\]]*)\]", pages_body or b"")
+    count = re.search(rb"/Count\s+(\d+)\b", pages_body or b"")
+    if not kids or not count:
+        return None
+    refs = re.findall(rb"(\d+)\s+0\s+R\b", kids[1])
+    if len(refs) < 32 or len(refs) != int(count[1]) or re.sub(rb"\d+\s+0\s+R\b|\s+", b"", kids[1]):
+        return None
+    leaves = []
+    parent = rb"/Parent\s+" + str(pages_number).encode() + rb"\s+0\s+R\b"
+    for ref in refs:
+        body = object_body(int(ref))
+        if not body or not re.search(rb"/Type\s*/Page\b", body) or len(re.findall(parent, body)) != 1:
+            return None
+        leaves.append((int(ref), body))
+
+    group_size = 16
+    groups = [leaves[i:i + group_size] for i in range(0, len(leaves), group_size)]
+    objects = []
+    for index, group in enumerate(groups):
+        number = size + index
+        replacement = b"/Parent " + str(number).encode() + b" 0 R"
+        objects.extend((ref, re.sub(parent, replacement, body)) for ref, body in group)
+        children = b" ".join(str(ref).encode() + b" 0 R" for ref, _ in group)
+        objects.append((number, b"<< /Type /Pages /Parent " + str(pages_number).encode() +
+                        b" 0 R /Count " + str(len(group)).encode() + b" /Kids [" + children + b"] >>"))
+    children = b" ".join(str(size + i).encode() + b" 0 R" for i in range(len(groups)))
+    objects.append((pages_number, pages_body[:kids.start()] + b"/Kids [" + children + b"]" + pages_body[kids.end():]))
+    suffix, offsets = bytearray(b"\n"), {}
+    for number, body in objects:
+        offsets[number] = len(raw) + len(suffix)
+        suffix.extend(str(number).encode() + b" 0 obj\n" + body + b"\nendobj\n")
+    xref = len(raw) + len(suffix)
+    suffix.extend(b"xref\n0 1\n0000000000 65535 f \n")
+    numbers = sorted(offsets)
+    while numbers:
+        batch = [numbers.pop(0)]
+        while numbers and numbers[0] == batch[-1] + 1:
+            batch.append(numbers.pop(0))
+        suffix.extend(f"{batch[0]} {len(batch)}\n".encode())
+        for number in batch:
+            suffix.extend(f"{offsets[number]:010d} 00000 n \n".encode())
+    updated = re.sub(rb"/Size\s+\d+\b", b"/Size " + str(size + len(groups)).encode(), trailer[1])
+    suffix.extend(b"trailer\n<<" + updated + b" /Prev " + str(previous).encode() +
+                  b" >>\nstartxref\n" + str(xref).encode() + b"\n%%EOF\n")
+    return raw + suffix
 
 
 def inject_route_compatibility(path, relative):

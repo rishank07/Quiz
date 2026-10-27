@@ -32,6 +32,7 @@
   var isEconomicsCrux=isBookCrux&&doc.subject==='Economics';
   var isAdvanceMaths=doc.id==='ct0468'||doc.sourceTitle==='Advance Maths Formula Book';
   var isHandwrittenMaths=doc.id==='ct0467'||doc.id==='ct0468';
+  var cloudflareRangePdf=!!(window.EFP_CF_PDF&&window.EFP_CF_PDF.find(doc.pdf));
   if(isTrick)document.documentElement.classList.add('efp-trick-pdf');
   if(isBookCrux)document.documentElement.classList.add('efp-book-crux-pdf');
   if(isEconomicsCrux)document.documentElement.classList.add('efp-economics-crux-pdf');
@@ -41,6 +42,7 @@
   var initialSearch=String(params.get('search')||'').trim();
   var pages=[];
   var pageAliases=[];
+  var normalizedMathsPages=[],normalizedMathsAliases=[];
   var searchIndexFallbackPending=false;
   var searchIndexFallbackRunning=false;
   var searchPlaceholder='Search in this PDF / खोजें…';
@@ -330,7 +332,7 @@
     return out;
   }
   function handwrittenPageScore(text,alias,q){
-    var terms=q.split(' ').filter(Boolean),a=normalizeSearchText(alias),body=normalizeSearchText(text),p=wholePhrasePosition(a,q),positions,span;
+    var terms=q.split(' ').filter(Boolean),a=alias,body=text,p=wholePhrasePosition(a,q),positions,span;
     if(p>=0)return p*.001;
     positions=wholeTermPositions(a,terms);if(positions){span=Math.max.apply(Math,positions)-Math.min.apply(Math,positions);return 5+span*.001}
     if(terms.length===1&&terms[0].length<4)return null;
@@ -490,7 +492,9 @@
     }
   }
   function prefetchBatch(start,end){
-    if(!pdfDoc||readerSuspended)return;
+    // Range-delivered scans already warm nearby bitmaps. Walking another 20
+    // page dictionaries competes with the selected search page's downloads.
+    if(!pdfDoc||readerSuspended||cloudflareRangePdf)return;
     start=Math.max(1,start|0);end=Math.min(pdfDoc.numPages,end|0);if(end<start)return;
     var key=start+'-'+end;if(batchPrefetchJobs[key])return;batchPrefetchJobs[key]=true;
     var n=start,loaded=pdfDoc,generation=pdfLoadGeneration;
@@ -620,11 +624,13 @@
     // picks the visible page first and runs only one paint at a time. Farther pages
     // are warmed serially during idle time so fast swipes stay smooth without
     // loading the whole PDF or spiking mobile memory.
-    renderContinuousPage(center,false);
-    if(center>1)renderContinuousPage(center-1,false);
-    if(center<pdfDoc.numPages)renderContinuousPage(center+1,false);
+    var current=renderContinuousPage(center,false);
+    if(!cloudflareRangePdf){
+      if(center>1)renderContinuousPage(center-1,false);
+      if(center<pdfDoc.numPages)renderContinuousPage(center+1,false);
+    }
 
-    var queue=[];
+    var queue=cloudflareRangePdf?[center+navigationDirection,center-navigationDirection]:[];
     for(var ahead=2;ahead<=PRE_RENDER_AHEAD;ahead++)queue.push(center+ahead);
     for(var behind=2;behind<=PRE_RENDER_BEHIND;behind++)queue.push(center-behind);
     var i=0;
@@ -637,7 +643,8 @@
         if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:160});else setTimeout(next,24);
       });
     }
-    if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:100});else setTimeout(next,16);
+    function schedule(){if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:100});else setTimeout(next,16)}
+    if(cloudflareRangePdf)Promise.resolve(current).then(schedule);else schedule();
   }
   function trimContinuous(center){
     if(!continuousRoot)return;
@@ -1104,7 +1111,7 @@
     }
     Promise.resolve().then(next).then(function(){
       if(readerSuspended||pdfDoc!==loaded)return;
-      pages=extracted;pageAliases=[];
+      setSearchPages(extracted,[]);
       searchIndexFallbackPending=false;
       docSearch.placeholder=pages.some(function(text){return text.trim()})?searchPlaceholder:'No searchable text in this PDF';
       runDocSearch();
@@ -1127,12 +1134,18 @@
     s.onload=function(){
       var indexed=window.EF_CRUX_DOC_PAGES;
       if(window.EF_CRUX_DOC_ID!==doc.id||!Array.isArray(indexed)||indexed.length!==doc.pages||!indexed.every(function(text){return typeof text==='string'&&text.trim()})){fallback();return}
-      pages=indexed;
-      pageAliases=Array.isArray(window.EF_CRUX_DOC_PAGE_ALIASES)?window.EF_CRUX_DOC_PAGE_ALIASES:[];
+      setSearchPages(indexed,window.EF_CRUX_DOC_PAGE_ALIASES);
       docSearch.disabled=false;docSearch.placeholder=searchPlaceholder;runDocSearch();
     };
     s.onerror=fallback;
     document.head.appendChild(s);
+  }
+  function setSearchPages(indexed,aliases){
+    pages=indexed;pageAliases=Array.isArray(aliases)?aliases:[];
+    if(isHandwrittenMaths){
+      normalizedMathsPages=pages.map(normalizeSearchText);
+      normalizedMathsAliases=pageAliases.map(normalizeSearchText);
+    }
   }
   function runDocSearch(){
     var q=normalizeSearchText(docSearch.value);docHits.innerHTML='';
@@ -1142,7 +1155,7 @@
     var hits=[],parsed=efRelevanceQuery(q);pdfSearchModes={};
     function collect(compact,fuzzy){
       for(var i=0;i<pages.length;i++){
-        if(isHandwrittenMaths){var score=handwrittenPageScore(pages[i],pageAliases[i]||'',q);if(score!==null)hits.push({page:i+1,score:score,matchType:'exact'})}
+        if(isHandwrittenMaths){var score=handwrittenPageScore(normalizedMathsPages[i],normalizedMathsAliases[i]||'',q);if(score!==null)hits.push({page:i+1,score:score,matchType:'exact'})}
         else {var match=efRelevanceScore(parsed,normalizeSearchText(pages[i]),normalizeSearchText(doc.title),normalizeSearchText(doc.breadcrumb),compact,fuzzy);if(match)hits.push({page:i+1,score:match.score,matchType:match.matchType})}
       }
     }
@@ -1430,7 +1443,7 @@
       if(!isCompactReader()){pdfContextVisible=false;notifySearchContext()}
       return;
     }
-    st=setTimeout(runDocSearch,120);
+    if(isHandwrittenMaths)runDocSearch();else st=setTimeout(runDocSearch,120);
   });
 
   function refitForViewport(){

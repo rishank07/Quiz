@@ -27,9 +27,14 @@ The current source includes two search indexes and two PDFs larger than the
   loads the same parts asynchronously. Splitting an index does not itself
   reduce the total search data or the browser's search work.
 - Large PDFs are divided into 1 MiB byte ranges, without recompressing or
-  rewriting the documents. PDF.js reads those ranges on demand. The full
+  changing the source documents. PDF.js reads those ranges on demand. Flat
+  scanned PDFs get a small, incremental page-tree update in the reader delivery
+  so PDF.js can locate a page without downloading every scan first. Original
+  bytes, images, content streams and page order are preserved. The full
   document, page numbers, reading progress, bookmarks, and search links keep
-  their existing IDs. The Open PDF action reconstructs the original bytes in
+  their existing IDs. Read ranges use a bounded memory cache, selected pages
+  load before background neighbours, and immutable PDF parts are reused offline
+  without background downloads. The Open PDF action reconstructs the original bytes in
   the browser. It needs memory for a complete PDF when opening the full original.
 - Small route compatibility scripts restore the existing `.html` addresses in
   browser history after Pages' automatic extension-less redirects, before
@@ -63,6 +68,7 @@ or post-push cache-purge workflow is needed for this Pages deployment.
 
 ```sh
 python3 tools/build-cloudflare-pages.py
+node tools/test-cloudflare-pdf-cache.cjs
 node tools/test-cloudflare-pages.cjs
 node tools/test-analytics-guard.cjs
 ```
@@ -72,6 +78,8 @@ and existing-reader tests, set `EFP_PDFJS_TEST_DIR` to a directory containing
 the official PDF.js v3.11.174 browser `pdf.js` and matching `pdf.worker.js`.
 The test checks all search content and exact PDF bytes, then exercises worker
 search, the no-Worker browser fallback, PDF range reads and reader deep links.
+PDF checks compare rendered pages with the originals and cap startup downloads
+to catch a return of the full-book scan before first paint.
 It blocks Google Analytics and Google Tag Manager before browser navigation.
 
 Pages' static requests are distinct from the Workers request allowance shown
