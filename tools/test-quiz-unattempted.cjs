@@ -82,15 +82,21 @@ function files(dir) { return fs.readdirSync(path.join(root,dir),{withFileTypes:t
   for (const file of files('Books/BlackBook/Files').filter(f=>f.endsWith('Quiz.html'))) {
     const p = make(file,read(file),true); await delay(p.w);
     const total = p.run('vocabData.length'), hosts = () => p.w.document.querySelectorAll('.efp-blackbook-counts,.efp-mobile-scorebar,.desktop-sticky-score');
+    const checkTotals = attempted => {
+      const values = p.w.document.querySelectorAll('.efp-blackbook-total-value');
+      assert.equal(values.length,2,'One total each in the mobile and desktop scorebar');
+      values.forEach(el=>assert.equal(el.textContent,attempted+'/'+total));
+    };
     assert.equal(hosts().length,3);hosts().forEach(h=>assert.equal(value(h),total));
+    checkTotals(0);
     const button = p.w.document.querySelector('.quiz-option'); assert(button);button.click();
-    await delay(p.w);hosts().forEach(h=>assert.equal(value(h),total-1));
-    p.w.EFP_BLACKBOOK_QUIZ.setScore(3,2);await delay(p.w);hosts().forEach(h=>assert.equal(value(h),total-5));
-    p.w.EFP_BLACKBOOK_QUIZ.setScore(0,0);await delay(p.w);hosts().forEach(h=>assert.equal(value(h),total));
+    await delay(p.w);hosts().forEach(h=>assert.equal(value(h),total-1));checkTotals(1);
+    p.w.EFP_BLACKBOOK_QUIZ.setScore(3,2);await delay(p.w);hosts().forEach(h=>assert.equal(value(h),total-5));checkTotals(5);
+    p.w.EFP_BLACKBOOK_QUIZ.setScore(0,0);await delay(p.w);hosts().forEach(h=>assert.equal(value(h),total));checkTotals(0);
     blackbook++;cases+=4;p.close();
   }
   assert.equal(blackbook,4);
-  console.log('PASS all 4 Blackbook quizzes: mobile/header/sticky scores, clicks, restored correct+wrong, reset');
+  console.log('PASS all 4 Blackbook quizzes: mobile/desktop attempted totals, header/sticky scores, clicks, restored correct+wrong, reset');
 
   for (const file of files('Current Affairs/Topic Names/Rapid Practice').filter(f=>f.endsWith('.html'))) {
     const source = read(file);if(!source.includes('id="sectionNav"'))continue;

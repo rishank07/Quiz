@@ -74,6 +74,21 @@
     host.classList.add("efp-counter-bar");
     addProgress(host, stats);
   }
+  function addBlackbookTotal(host, stats) {
+    var total = host.querySelector(":scope > .efp-blackbook-total");
+    if (!total) {
+      total = document.createElement("span");
+      total.className = "efp-blackbook-total";
+      total.innerHTML = '<span>Total:</span><strong class="efp-blackbook-total-value"></strong>';
+      host.insertBefore(total, host.firstChild);
+    }
+    var text = Math.min(stats.total, stats.attempted) + "/" + stats.total;
+    var value = total.querySelector(".efp-blackbook-total-value");
+    if (value.textContent !== text) value.textContent = text;
+    var correct = host.querySelector(".score-value,#mobile-score");
+    var label = correct && correct.previousElementSibling;
+    if (label && label.textContent !== "Correct:") label.textContent = "Correct:";
+  }
   function originalStats() {
     var spans = document.querySelectorAll("#app .px-2.py-1.rounded.bg-gray-100");
     for (var i = 0; i < spans.length; i++) {
@@ -114,6 +129,7 @@
           var top = correct.parentElement && correct.parentElement.parentElement;
           if (top) { top.classList.add("efp-blackbook-counts"); addCount(top, stats); }
           document.querySelectorAll(".efp-mobile-scorebar,.desktop-sticky-score").forEach(function (bar) {
+            addBlackbookTotal(bar, stats);
             addCount(bar, stats);
             if (bar.classList.contains("desktop-sticky-score")) {
               // Keep each label beside its live value when the desktop row spreads out.
@@ -144,7 +160,7 @@
     if (books && !document.querySelector(".score-bar,#alphabet-container")) return;
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/quiz-unattempted.css?v=20261027scoreborder1";
+    link.href = "/quiz-unattempted.css?v=20261027bbtotal1";
     document.head.appendChild(link);
     if (mixed) return;
     sync();
