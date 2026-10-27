@@ -13,6 +13,13 @@
   // Mixed Practice loads only shared mobile positioning, retaining native counters.
   if (!original && !mixed && !books && !rapid && !sets) return;
 
+  // Scope shared scorebar geometry to the requested quiz families. Blackbook
+  // and Original Practice Rapid Fire retain their own layouts.
+  if (original || mixed || rapid || sets ||
+      /^\/Books\/(?:Ghatnachakra Purvalokan|Lucent's Objective|Pinnacle GS)\//i.test(path)) {
+    document.documentElement.classList.add("efp-square-scorebars");
+  }
+
   function number(text) {
     var value = Number(String(text).replace(/,/g, "").trim());
     return Number.isInteger(value) && value >= 0 ? value : null;
@@ -137,7 +144,7 @@
     if (books && !document.querySelector(".score-bar,#alphabet-container")) return;
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/quiz-unattempted.css?v=20261026biharedge1";
+    link.href = "/quiz-unattempted.css?v=20261027square1";
     document.head.appendChild(link);
     if (mixed) return;
     sync();

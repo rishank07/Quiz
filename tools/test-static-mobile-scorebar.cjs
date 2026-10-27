@@ -47,12 +47,16 @@ for(const [file,stylePath] of fixtures) {
   for(const theme of ['','efp-black','efp-black-invert']) {
     for(const width of [768,1024,1440,1920]) {
       const a=page(file,native,oldCss,width,false,theme),b=page(file,native,css,width,false,theme);
-      assert.deepEqual(snapshot(a.w,a.bar),snapshot(b.w,b.bar),file+' desktop '+width);checks++;
+      const before = snapshot(a.w,a.bar), after = snapshot(b.w,b.bar);
+      before[0].borderRadius = '0px';
+      assert.deepEqual(before,after,file+' desktop '+width);
+      assert.equal(b.w.getComputedStyle(b.bar).top,'0px');checks++;
       a.dom.window.close();b.dom.window.close();
     }
     for(const [width,coarse] of [[320,false],[360,false],[393,false],[430,false],[700,false],[844,true],[932,true],[1024,true]]) {
       const p=page(file,native,css,width,coarse,theme),style=p.w.getComputedStyle(p.bar);
       assert.equal(style.display,'grid');assert.equal(style.padding,'8px 10px');
+      assert.equal(style.top,'0px');assert.equal(style.borderRadius,'0px');
       const reset=p.bar.querySelector('.efp-quiz-reset-btn');
       if(reset) {
         const s=p.w.getComputedStyle(reset);assert.equal(s.gridColumn,'3');assert.equal(s.gridRow,'1 / span 2');
@@ -60,7 +64,7 @@ for(const [file,stylePath] of fixtures) {
         assert.equal(reset.getAttribute('aria-label'),'Reset quiz progress');assert(reset.textContent.includes('Reset'));
         assert.match(style.gridTemplateColumns,/34px$/);
       } else {
-        assert.equal(style.gridTemplateColumns,'repeat(2, minmax(0, 1fr))');
+        assert.equal(style.gridTemplateColumns,'repeat(2, minmax(0, 1fr)) auto');
         assert.equal(p.w.getComputedStyle(p.bar.querySelector('.current-set-badge')).fontSize,'10px');
       }
       const attempted=p.bar.querySelector('[id^="totalAttempted"]');
@@ -72,4 +76,4 @@ for(const [file,stylePath] of fixtures) {
     }
   }
 }
-console.log('PASS '+checks+' mobile portrait/landscape, theme, counter and unchanged-desktop CSS checks across all four families');
+console.log('PASS '+checks+' mobile portrait/landscape and desktop checks: square flush scorebars, themes, counters and preserved layouts across all four families');

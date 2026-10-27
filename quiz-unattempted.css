@@ -1,5 +1,36 @@
 /* Add one statistic to the existing navbar; preserve its sticky behaviour. */
 .efp-counter-bar { min-width: 0; max-width: 100%; flex-wrap: wrap; }
+/* The requested quiz families use square, viewport-flush sticky scorebars on
+   desktop, mobile and installed apps. Keep native counter/button layouts. */
+html.efp-square-scorebars :is(
+  .score-bar, .set-score-bar,
+  #app > .max-w-3xl > .flex.items-center.justify-between.mb-3,
+  #quizView > .quiz-head,
+  .toolbar:has(#scoreTxt)
+) {
+  top: 0 !important;
+  border-radius: 0 !important;
+}
+/* CA's visible card sits inside the sticky wrapper. Both edges must be flush. */
+html.efp-square-scorebars .toolbar:has(#scoreTxt) {
+  padding-top: 0 !important;
+  background: var(--bg, #f6f2e9) !important;
+}
+html.efp-square-scorebars .toolbar:has(#scoreTxt) > :is(.barcard, .bar) {
+  border-radius: 0 !important;
+  background: var(--card, #fff) !important;
+}
+/* Opaque surfaces hide questions scrolling underneath. Light book/OP pages
+   keep their light colour before the site's existing dark-mode inversion. */
+html.efp-square-scorebars #app > .max-w-3xl > .flex.items-center.justify-between.mb-3 {
+  background: #f7f4ee !important;
+}
+html.efp-square-scorebars.efp-black #app > .max-w-3xl > .flex.items-center.justify-between.mb-3 {
+  background: #0d1726 !important;
+}
+html.efp-square-scorebars #quizView > .quiz-head {
+  background-color: #07101d;
+}
 /* Phone scorebars sit flush against the viewport when they stick. Include
    landscape phones without changing the desktop toolbar spacing. */
 @media (max-width: 700px), (hover: none) and (pointer: coarse) and (max-width: 1024px) {
