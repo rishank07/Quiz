@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261027bbfinish1";
+const CACHE_VERSION = "efp-pwa-20261027bihargk2";
 const QUIZ_SCORE_REVISION = "20261027bbfinish1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261027bbfinish1"></script>';
@@ -498,7 +498,10 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (/\/(?:search-snippets-[^/]+|search-index-main)\.js$/.test(url.pathname)) {
+  // Bihar's section index must refresh by revision too; serving an old alias
+  // here can show facts from before a content update on the first search.
+  if (/\/(?:search-snippets-[^/]+|search-index-main)\.js$/.test(url.pathname) ||
+      url.pathname === "/Bihar%20Special/Topic%20Names/search-index.js") {
     event.respondWith(searchIndexAsset(event));
     return;
   }
