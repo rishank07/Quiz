@@ -61,17 +61,7 @@
       var index = currentIndex(letters);
       if (index < 0) return;
       if (direction > 0 && index === letters.length - 1) {
-        var leave = function () {
-          if (window.EFP_APP_SESSION && typeof window.EFP_APP_SESSION.save === "function") window.EFP_APP_SESSION.save();
-          window.location.assign("/Books/BlackBook/BlackBook.html");
-        };
-        var warning = window.EFP_QUIZ_PROGRESS_WARNING;
-        if (warning && typeof warning.releaseBackGuard === "function") {
-          warning.releaseBackGuard(leave);
-        } else {
-          if (warning && typeof warning.disarm === "function") warning.disarm();
-          leave();
-        }
+        showSummary();
         return;
       }
       if (index + direction >= 0 && index + direction < letters.length) {
@@ -83,10 +73,54 @@
       }
     }
 
+    function showSummary() {
+      /* Finishing is an in-page review action. Keep the selected letter,
+       * saved answers and Back history intact, including installed apps. */
+      if (window.EFP_APP_SESSION && typeof window.EFP_APP_SESSION.save === "function") window.EFP_APP_SESSION.save();
+      var summary = document.getElementById("efp-bb-quiz-summary");
+      if (!summary) {
+        summary = document.createElement("div");
+        summary.id = "efp-bb-quiz-summary";
+        summary.className = "efp-bb-summary";
+        summary.setAttribute("role", "region");
+        summary.setAttribute("aria-labelledby", "efp-bb-summary-title");
+        summary.tabIndex = -1;
+        summary.innerHTML = '<h2 id="efp-bb-summary-title">Quiz Summary</h2>' +
+          '<p>Your progress is saved. You can continue reviewing any letter.</p>' +
+          '<dl><div><dt>Total Attempted</dt><dd data-stat="total"></dd></div>' +
+          '<div><dt>Correct</dt><dd data-stat="correct"></dd></div>' +
+          '<div><dt>Wrong</dt><dd data-stat="wrong"></dd></div>' +
+          '<div><dt>Not Attempted</dt><dd data-stat="remaining"></dd></div></dl>' +
+          '<button type="button">Review Quiz</button>';
+        summary.querySelector("button").addEventListener("click", function () {
+          summary.hidden = true;
+          var selected = document.querySelector("#alphabet-container button[data-letter].bg-blue-600");
+          if (selected) {
+            selected.focus({ preventScroll: true });
+            selected.click();
+          }
+        });
+        container.insertBefore(summary, nav);
+      }
+      var total = typeof vocabData !== "undefined" && Array.isArray(vocabData) ? vocabData.length : 0;
+      var correct = Math.max(0, Number(document.getElementById("total-score").textContent) || 0);
+      var wrong = Math.max(0, Number(document.getElementById("total-wrong").textContent) || 0);
+      var attempted = Math.min(total, correct + wrong);
+      summary.querySelector('[data-stat="total"]').textContent = attempted + "/" + total;
+      summary.querySelector('[data-stat="correct"]').textContent = correct;
+      summary.querySelector('[data-stat="wrong"]').textContent = wrong;
+      summary.querySelector('[data-stat="remaining"]').textContent = total - attempted;
+      summary.hidden = false;
+      summary.focus({ preventScroll: true });
+      summary.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
     if (!window.__efpBlackbookSectionNavInstalled) {
       window.__efpBlackbookSectionNavInstalled = true;
       var showSection = window.showSection;
       window.showSection = function () {
+        var summary = document.getElementById("efp-bb-quiz-summary");
+        if (summary) summary.hidden = true;
         var result = showSection.apply(this, arguments);
         update();
         return result;
@@ -145,6 +179,15 @@
       "font:700 14px/1.25 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;cursor:pointer;touch-action:manipulation}" +
       ".efp-bb-section-nav .efp-bb-next{background:#2563eb;border-color:#2563eb;color:#fff}" +
       ".efp-bb-section-nav button:disabled{opacity:.4;cursor:default}.efp-bb-section-nav button:focus-visible{outline:3px solid #f5b301;outline-offset:3px}" +
+      ".efp-bb-summary{margin:24px 0 0;padding:20px;border:1px solid #cbd5e1;border-radius:16px;background:#fff;color:#334155;scroll-margin-top:160px}" +
+      ".efp-bb-summary[hidden]{display:none}.efp-bb-summary h2{margin:0;font-size:22px;font-weight:800;color:#0f172a}" +
+      ".efp-bb-summary p{margin:8px 0 16px;font-size:14px;line-height:1.5}.efp-bb-summary dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 16px}" +
+      ".efp-bb-summary dl>div{min-width:0;padding:12px 8px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;text-align:center}" +
+      ".efp-bb-summary dt{font-size:12px;font-weight:600}.efp-bb-summary dd{margin:4px 0 0;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}" +
+      ".efp-bb-summary [data-stat=correct]{color:#2563eb}.efp-bb-summary [data-stat=wrong]{color:#dc2626}" +
+      ".efp-bb-summary button{min-height:44px;padding:10px 18px;border:1px solid #2563eb;border-radius:10px;background:#2563eb;color:#fff;font:700 14px/1.25 system-ui,sans-serif;cursor:pointer}" +
+      ".efp-bb-summary:focus-visible,.efp-bb-summary button:focus-visible{outline:3px solid #f5b301;outline-offset:3px}" +
+      "@media(min-width:640px){.efp-bb-summary dl{grid-template-columns:repeat(4,minmax(0,1fr))}}" +
       "html.efp-black .efp-bb-section-nav .efp-bb-previous,html.dark .efp-bb-section-nav .efp-bb-previous{background:#182231;border-color:#475569;color:#f1f5f9}" +
       ".efp-bb-bookmark-btn{flex:0 0 auto;border:1px solid #f2c14e;background:#fff9e8;color:#9a6a00;" +
       "border-radius:10px;padding:6px 9px;font:800 11px/1.15 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;" +
@@ -154,7 +197,7 @@
       ".efp-bb-bookmark-btn.is-bookmarked{background:#f5b301;border-color:#f5b301;color:#1f2937}" +
       "@media(max-width:639px){.sticky-nav{position:static!important;top:auto!important}.efp-mobile-scorebar{" +
       "position:sticky!important;top:0!important;z-index:60!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;" +
-      "gap:10px!important;align-items:center!important;transform:none!important;opacity:1!important;pointer-events:auto!important}" +
+      "gap:10px!important;align-items:stretch!important;transform:none!important;opacity:1!important;pointer-events:auto!important}" +
       ".efp-mobile-scorebar>div{min-width:0;white-space:nowrap}.efp-bb-question-head{display:grid!important;" +
       "grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:'q save' 'title title' 'meta meta';column-gap:12px!important;" +
       "row-gap:9px!important;align-items:start!important}.efp-bb-question-head>span:first-child{grid-area:q;justify-self:start;margin:0!important}" +
