@@ -43,6 +43,12 @@ const storage=w=>Object.fromEntries(Array.from({length:w.localStorage.length},(_
  assert.equal(p.w.localStorage.getItem('efp_bookmarks'),bookmark);
  p.run("goToQuiz('05. Pronouns');state.currentSection=MASTER['05. Pronouns'].findIndex(s=>s.questions.some(q=>q.id==='q80'));render()");
  assert(p.w.document.querySelector('#questions-container').textContent.includes('Myself is'));
+ p.run("goToQuiz('13. Articles');state.currentSection=0;render()");
+ const article=p.w.document.querySelectorAll('.grammar-explanation')[3];
+ assert(article.textContent.includes('The correct article choice is “a”'));
+ assert.equal(article.querySelector('b').textContent,'a');
+ p.run("goToQuiz('16. Narration')");
+ assert.equal(p.w.document.querySelectorAll('.sentence-box .target').length,0);
  p.w.localStorage.setItem('efp_black_mode','on');saved=storage(p.w);p.dom.window.close();
  p=make('Original Practice/English_Grammar_Complete_Practice.html',saved);
  p.run("goToQuiz('01. Basics');switchSection(2)");
@@ -53,9 +59,12 @@ const storage=w=>Object.fromEntries(Array.from({length:w.localStorage.length},(_
  const pool=await p.w.__grammarTest.buildPool('english');assert.equal(pool.length,2354);
  if(process.env.EFP_ENGLISH_BASELINE){
   const baseline=JSON.parse(fs.readFileSync(process.env.EFP_ENGLISH_BASELINE,'utf8'));
-  const ids=Object.values(baseline).flatMap(secs=>secs.flatMap(s=>s.questions.map(q=>p.w.__grammarTest.stable('english','English Grammar',p.w.__grammarTest.normalize(q)))));
+  const ids=Object.values(baseline).flatMap(secs=>secs.flatMap(s=>s.questions.map(q=>q.mixedPracticeId||p.w.__grammarTest.stable('english','English Grammar',p.w.__grammarTest.normalize(q)))));
   assert.deepEqual(Array.from(pool,q=>q.id),ids);
  }
+ const source=JSON.parse(read('Original Practice/English_Grammar_Complete_Practice.html').match(/<script id="master-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+ const originals=Object.values(source).flatMap(secs=>secs.flatMap(s=>s.questions));
+ pool.forEach((item,index)=>assert.equal(JSON.stringify(item.q),JSON.stringify(p.w.__grammarTest.normalize(originals[index]))));
  assert(pool.some(q=>q.chapter==='01. Basics'&&q.q.q.en.includes('She plays football.')));
  p.dom.window.close();
  console.log('PASS DOM runtime: hidden answers, selective English markup, correct score, section navigation, restored attempts/bookmarks, dark-mode loading and all 2,354 legacy Mixed Practice IDs.');

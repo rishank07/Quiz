@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261027apprecovery1";
+const CACHE_VERSION = "efp-pwa-20261027englishhighlights1";
 const QUIZ_SCORE_REVISION = "20261027square1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261027apprecovery1"></script>';
@@ -487,6 +487,13 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (request.mode === "navigate" || request.destination === "document") {
+    event.respondWith(networkFirst(event));
+    return;
+  }
+
+  // Rapid Fire reads the English HTML as data, outside document navigation.
+  // Revalidate this shared source before returning a cached copy as well.
+  if (url.pathname === "/Original%20Practice/English_Grammar_Complete_Practice.html") {
     event.respondWith(networkFirst(event));
     return;
   }

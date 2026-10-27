@@ -123,6 +123,20 @@ async function workerChecks() {
   finish(new Response('<head></head><body>Fresh page</body>', {headers: {'content-type': 'text/html'}}));
   await Promise.all(nav.pending);
   assert((await (await cache.match('/support.html')).text()).includes('Fresh page'), 'late page refresh must not be overwritten by the fallback');
+  // Rapid Fire fetches this HTML as data, so it must also revalidate before
+  // an earlier cached question bank can win. Offline still uses the fresh copy.
+  const englishPath = '/Original%20Practice/English_Grammar_Complete_Practice.html?v=20261027englishhighlights1';
+  entries.set(origin + englishPath, new Response('OLD ENGLISH'));
+  let englishOptions;
+  const english = await request(englishPath, async (r, options) => {
+    englishOptions = options;
+    return new Response('<head></head><body>NEW ENGLISH</body>', {headers: {'content-type': 'text/html'}});
+  });
+  assert.equal(englishOptions.cache, 'no-cache');
+  assert((await english.response.text()).includes('NEW ENGLISH'));
+  await Promise.all(english.pending);
+  const offlineEnglish = await request(englishPath, async () => {throw Error('offline');});
+  assert((await offlineEnglish.response.text()).includes('NEW ENGLISH'));
   console.log('PASS worker slow network, current revision, late refresh, 503 fallback and cached page navigation');
 }
 (async () => {await sessionChecks(); await workerChecks();})()

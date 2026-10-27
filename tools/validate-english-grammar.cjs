@@ -22,6 +22,19 @@ chapters.forEach((chapter, i) => {
     assert(!q.options.some(o => /^Option \d|timeing/.test(o)));
     assert(!/ban kar|meaning chahiye/.test(q.englishExplanation));
     assert(!/<script|onerror=|onclick=/.test(q.englishExplanation));
+    // Short answers must never highlight letters inside unrelated words
+    // (c[or]rect, T[he], [a]rticle); standalone examples need no yellow box.
+    for (const field of ['explanation', 'englishExplanation', 'rule']) {
+      assert(!/[\p{L}\p{N}]<(?:b|strong)>|<\/(?:b|strong)>[\p{L}\p{N}]/u.test(q[field]), chapter+'/'+q.id+'/'+field);
+      for (const match of q[field].matchAll(/<(?:b|strong)>(.*?)<\/(?:b|strong)>/g)) {
+        assert(match[1].trim() && match[1].split(/\s+/).length <= 9, chapter+'/'+q.id+'/'+field);
+      }
+    }
+    const targets = [...q.sentence.matchAll(/<span class=["']target["']>(.*?)<\/span>/g)];
+    const plain = v => v.replace(/<[^>]*>/g, '').trim().replace(/[.!?]+$/, '');
+    targets.forEach(m => assert.notEqual(plain(m[1]), plain(q.sentence), chapter+'/'+q.id+': standalone highlight'));
+    if (/highlighted/i.test(q.prompt)) assert(targets.length, chapter+'/'+q.id+': missing target');
+    if (/^(15|16)\./.test(chapter)) assert.equal(targets.length, 0, chapter+'/'+q.id);
   });
   total += questions.length;
 });
@@ -34,6 +47,11 @@ for (const [chapter, ids] of [[2,[58,59]],[6,[146,147,148,149]],[12,[1,2,3,4,5,6
   ids.forEach(id => assert(get(chapter,id).sentence.includes('>___</span>'), chapter+'/'+id));
 }
 assert.equal(answer(1,45), 'football');
+assert(get(1,1).sentence.includes("class='target'>read</span>"));
+assert(get(12,1).englishExplanation.includes('“<b>or</b>”'));
+assert(get(5,8).englishExplanation.includes('“<b>he</b>”'));
+assert(get(13,2).englishExplanation.includes('“<b>a</b>”'));
+assert(!get(16,1).sentence.includes('target'));
 assert.equal(answer(5,80), 'I am');
 assert(get(5,80).sentence.includes('>Myself is</span>'));
 assert(get(7,132).sentence.includes('his parents regretted <span class="target">his</span>'));
