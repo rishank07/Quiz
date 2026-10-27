@@ -322,6 +322,46 @@ function efRelevanceQuery(query) {
   var phrase = efNormalizeSearchText(query), terms = efSearchTerms(query);
   return { phrase: phrase, terms: terms, alternatives: terms.map(efSearchTermAlternatives) };
 }
+
+// Reject impossible snippets before the costly normalization/ranking passes.
+// This is only a candidate filter: exact scores and typo acceptance still come
+// from efRelevanceScore. Keep it conservative for Hindi digits, NFKC forms,
+// removed apostrophes, compact words and the scorer's bounded typo lengths.
+function efSearchCandidateFilter(parsed) {
+  var letters = "a-z0-9\\u0900-\\u097f";
+  var ignored = "[\\u200B-\\u200D\\u2060\\uFEFF'’‘`´\"]*";
+  function atom(character) {
+    return /[0-9]/.test(character)
+      ? "[" + character + "०१२३४५६७८९".charAt(Number(character)) + "]"
+      : efRegexEscape(character);
+  }
+  var choices = parsed.alternatives.map(function (alternatives) {
+    return alternatives.map(function (term) {
+      var characters = Array.from(term), maximum = efAllowedEditDistance(term);
+      var exact = characters.map(function (character) {
+        return character === " " ? "[^" + letters + "]+" : atom(character);
+      }).join(ignored);
+      var compact = characters.filter(function (character) { return character !== " "; })
+        .map(atom).join("[^" + letters + "]*");
+      var fuzzy = maximum ? new RegExp("(?:^|[^" + letters + "])" + atom(term.charAt(0)) +
+        "(?:" + ignored + "[" + letters + "]){" + Math.max(0, term.length - maximum - 1) +
+        "," + (term.length + maximum - 1) + "}" + ignored + "(?=$|[^" + letters + "])") : null;
+      return {term:term, exact:new RegExp(exact), compact:new RegExp(compact), fuzzy:fuzzy};
+    });
+  });
+  return function (raw, head, compact, fuzzy) {
+    var cheap = String(raw);
+    if (cheap.normalize) cheap = cheap.normalize("NFKC");
+    cheap = cheap.toLowerCase();
+    return choices.every(function (alternatives) {
+      return alternatives.some(function (choice) {
+        if (head.indexOf(choice.term) !== -1 || cheap.indexOf(choice.term) !== -1 || choice.exact.test(cheap)) return true;
+        if (compact && (choice.compact.test(head) || choice.compact.test(cheap))) return true;
+        return !!(fuzzy && choice.fuzzy && (choice.fuzzy.test(head) || choice.fuzzy.test(cheap)));
+      });
+    });
+  };
+}
 function efWholeSearchPosition(text, term) {
   var from=0,p;
   while((p=text.indexOf(term,from))>=0) {
@@ -442,10 +482,16 @@ function efSearchRecords(query, records, options) {
   var limit = options.limit || 40, fields = options.fields || ["title", "breadcrumb", "text"];
   var parsed = efRelevanceQuery(query);
   if (!parsed.terms.length || !records) return [];
+  var possibleMatch = efSearchCandidateFilter(parsed);
   function collect(compact, fuzzy) {
     var found = [];
     for (var i = 0; i < records.length; i++) {
-      var record = records[i], prepared = efPreparedRecordFields(record, fields);
+      var record = records[i];
+      var rawTitle = record.title || record.t || record[fields[0]] || "";
+      var rawBreadcrumb = record.breadcrumb || record.b || "";
+      var rawBody = record.text || record.x || fields.map(function (field) { return record[field] || ""; }).join(" ");
+      if (!possibleMatch(rawBody, efNormalizeSearchText(rawTitle + " " + rawBreadcrumb), compact, fuzzy)) continue;
+      var prepared = efPreparedRecordFields(record, fields);
       var title = efNormalizeSearchText(record.title || record.t || prepared[0].normalized);
       var body = efNormalizeSearchText(record.text || record.x || prepared.map(function(f){return f.normalized;}).join(" "));
       var breadcrumb = efNormalizeSearchText(record.breadcrumb || record.b || "");
@@ -785,6 +831,7 @@ function efFallbackSnippetSearchAsync(query, records, options) {
   var terms = parsed.terms;
   var phrase = parsed.phrase;
   if (!terms.length || !Array.isArray(records)) return Promise.resolve([]);
+  var possibleMatch = efSearchCandidateFilter(parsed);
 
   var prefix = options.sectionPrefix || null;
   var top = efTopSearchHits(options.limit || 40);
@@ -821,6 +868,7 @@ function efFallbackSnippetSearchAsync(query, records, options) {
             sequence++;
             continue;
           }
+          if (!possibleMatch(visible, title + " " + breadcrumb, compact, fuzzy)) { sequence++; continue; }
           var match = efRelevanceScore(parsed, efNormalizeSearchText(visible), title, breadcrumb, compact, fuzzy);
           if (!match) { sequence++; continue; }
           var score = match.score;

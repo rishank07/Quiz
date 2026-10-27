@@ -75,6 +75,10 @@
   var scheduled = false;
   var SEARCH_STATE_KEY = "efp_home_search_query_v1";
   var SEARCH_RESULTS_KEY = "efp_home_search_results_v1";
+  // Keep only a few completed, rendered searches. Returning to a recent term
+  // must not parse all 18 indexes again. No source indexes are retained here.
+  var recentResults = new Map(), recentResultBytes = 0;
+  var RECENT_RESULTS_BYTES = 524288, RECENT_RESULTS_COUNT = 3;
 
   function readSavedQuery() {
     try { return localStorage.getItem(SEARCH_STATE_KEY) || ""; }
@@ -92,32 +96,77 @@
     try { sessionStorage.removeItem(SEARCH_RESULTS_KEY); } catch (_) {}
   }
 
+  function resultSnapshot() {
+    if (currentQuery.length < 2) return null;
+    var rows = Array.prototype.slice.call(menuList.querySelectorAll("li[data-deepresult]"));
+    var html = rows.map(function (row) {
+      var copy = row.cloneNode(true);
+      copy.querySelectorAll(".link-text[data-original-html]").forEach(function (span) {
+        span.innerHTML = span.dataset.originalHtml;
+        delete span.dataset.originalHtml;
+      });
+      copy.querySelectorAll("a[style]").forEach(function (link) {
+        if (link.style.pointerEvents === "none") link.style.pointerEvents = "";
+        if (link.style.opacity === "0.7") link.style.opacity = "";
+      });
+      return copy.outerHTML;
+    }).join("");
+    return {
+      query: currentQuery,
+      complete: !isSearching && failedSources.size === 0,
+      html: html,
+      filter: activeFilter,
+      pages: extraPages,
+      scrollTop: menuList.scrollTop
+    };
+  }
+
   function saveResults() {
-    if (currentQuery.length < 2) return;
     try {
-      var rows = Array.prototype.slice.call(menuList.querySelectorAll("li[data-deepresult]"));
-      var html = rows.map(function (row) {
-        var copy = row.cloneNode(true);
-        copy.querySelectorAll(".link-text[data-original-html]").forEach(function (span) {
-          span.innerHTML = span.dataset.originalHtml;
-          delete span.dataset.originalHtml;
-        });
-        copy.querySelectorAll("a[style]").forEach(function (link) {
-          if (link.style.pointerEvents === "none") link.style.pointerEvents = "";
-          if (link.style.opacity === "0.7") link.style.opacity = "";
-        });
-        return copy.outerHTML;
-      }).join("");
-      sessionStorage.setItem(SEARCH_RESULTS_KEY, JSON.stringify({
-        query: currentQuery,
-        complete: !isSearching && failedSources.size === 0,
-        html: html,
-        filter: activeFilter,
-        pages: extraPages,
-        scrollTop: menuList.scrollTop
-      }));
+      var snapshot = resultSnapshot();
+      if (snapshot) sessionStorage.setItem(SEARCH_RESULTS_KEY, JSON.stringify(snapshot));
     } catch (_) { clearSavedResults(); }
   }
+
+  function rememberResults() {
+    if (isSearching || failedSources.size) return;
+    var snapshot = resultSnapshot();
+    if (!snapshot) return;
+    var bytes = snapshot.html.length * 2, key = normalized(snapshot.query);
+    if (bytes > RECENT_RESULTS_BYTES) return;
+    var old = recentResults.get(key);
+    if (old) {recentResultBytes -= old.bytes;recentResults.delete(key);}
+    recentResults.set(key, {snapshot:snapshot,bytes:bytes});recentResultBytes += bytes;
+    while (recentResultBytes > RECENT_RESULTS_BYTES || recentResults.size > RECENT_RESULTS_COUNT) {
+      var oldest = recentResults.keys().next().value;
+      recentResultBytes -= recentResults.get(oldest).bytes;recentResults.delete(oldest);
+    }
+  }
+
+  box.addEventListener("input", function (event) {
+    if (event.isComposing || event.detail && (event.detail.efpRestoredSearch || event.detail.efpRetrySearch)) return;
+    var query = box.value.trim(), key = normalized(query);
+    if (key === normalized(currentQuery)) return;
+    var cached = recentResults.get(key);
+    if (!cached) return;
+    recentResults.delete(key);recentResults.set(key,cached);
+    // The restored event cancels both outstanding pipelines through their
+    // existing handlers, and reuses the usual filters/status/Back integration.
+    event.stopImmediatePropagation();
+    menuList.querySelectorAll("li[data-deepresult]").forEach(function (row) {row.remove();});
+    menuList.insertAdjacentHTML("beforeend", cached.snapshot.html);
+    menuList.querySelectorAll("li[data-deepresult] a[href]").forEach(function (anchor) {
+      var url = new URL(anchor.href, document.baseURI);
+      url.searchParams.delete("efSearchReturn");url.searchParams.delete("efSearchRestore");
+      if (url.searchParams.has("efSearchQuery")) url.searchParams.set("efSearchQuery", query.slice(0,160));
+      anchor.href = url.href;
+    });
+    menuList.classList.toggle("has-deep-results", !!cached.snapshot.html);
+    box.dispatchEvent(new CustomEvent("input", {bubbles:true,
+      detail:{efpRestoredSearch:true,efpCachedSearch:true,filter:"all",pages:0}}));
+    menuList.scrollTop = 0;
+    saveResults();
+  }, true);
 
   function readSavedResults(query, allowPartial) {
     try {
@@ -458,6 +507,7 @@
     menuList.classList.remove("ef-search-loading");
     clearTimeout(completionTimer);
     reconcile();
+    rememberResults();
     setTimeout(function () {
       if (query !== currentQuery) return;
       var count = totalResultCount();
@@ -497,6 +547,7 @@
       menuList.classList.add("ef-smart-search-active");
       menuList.classList.remove("ef-search-loading");
       reconcile();
+      if (event.detail.efpCachedSearch) sendSearchAnalytics(query, totalResultCount());
       return;
     }
     isSearching = true;

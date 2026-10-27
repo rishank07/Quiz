@@ -13,8 +13,8 @@
   var noResults = document.getElementById("noResults");
   if (!box || !menuList) return;
 
-  var WORKER_URL = new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href;
-  var LOGIC_URL = new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href;
+  var WORKER_URL = new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href;
+  var LOGIC_URL = new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href;
 
   // Search the large indexes sequentially so a single query never makes
   // several 10–30 MB indexes parse at the same instant. Share the homepage
@@ -562,11 +562,11 @@
       clearOwnResults();
       return;
     }
-    // Root search renders its lightweight title results at ~180 ms. Starting
-    // this pass afterwards prevents the root renderer from clearing our rows.
+    // Title rendering preserves streamed content rows, so useful book/map
+    // results can start alongside the lightweight title search.
     timer = setTimeout(function () {
       runQuery(query, mySequence);
-    }, 420);
+    }, 220);
   });
 
   // BFCache/back navigation can retain generated result rows. They are stale

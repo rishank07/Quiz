@@ -117,7 +117,8 @@ async function workerChecks() {
   assert.equal(await error.response.text(), 'FRESH', 'transient 503 must retain working navigation');
   const missing = await request('/home-nav.js?v=old', async () => new Response('Removed', {status: 404}), {reload: true});
   assert.equal(missing.response.status, 404, 'a deliberate removal must not be hidden by old content');
-  entries.set(origin + '/search-logic.js?v=20261007searchaudit1', new Response('SEARCH\n/* efp-desktop-section-search-compat-v1 */\nOLD WRAPPER'));
+  const searchAsset = vm.runInContext('APP_SHELL.find(asset => asset.startsWith("/search-logic.js?"))', ctx);
+  entries.set(origin + searchAsset, new Response('SEARCH\n/* efp-desktop-section-search-compat-v1 */\nOLD WRAPPER'));
   const search = await request('/search-logic.js?v=old', () => new Promise(() => {}));
   assert.equal(await search.response.text(), 'SEARCH', 'slow search bootstrap must use clean cached logic');
   entries.set(origin + '/support.html', new Response('<head></head><body>Saved page</body>', {headers: {'content-type': 'text/html'}}));

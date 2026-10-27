@@ -2123,7 +2123,7 @@
       }
 
       function ensureDeepSearch() {
-        if (typeof SEARCH_INDEX !== "undefined" && typeof efSearchRank === "function") {
+        if (typeof SEARCH_INDEX !== "undefined" && typeof efSearchRank === "function" && typeof efSearchCandidateFilter === "function") {
           return Promise.resolve(true);
         }
         if (!deepSearchPromise) {
@@ -2131,11 +2131,11 @@
             loadScriptOnce("search-index-main.js?v=20261010asiangames1", function () {
               return typeof SEARCH_INDEX !== "undefined";
             }),
-            loadScriptOnce("search-logic.js?v=20261007searchaudit1", function () {
-              return typeof efSearchRank === "function";
+            loadScriptOnce("search-logic.js?v=20261027homesearch1", function () {
+              return typeof efSearchRank === "function" && typeof efSearchCandidateFilter === "function";
             })
           ]).then(function () {
-            return typeof SEARCH_INDEX !== "undefined" && typeof efSearchRank === "function";
+            return typeof SEARCH_INDEX !== "undefined" && typeof efSearchRank === "function" && typeof efSearchCandidateFilter === "function";
           }).catch(function () {
             deepSearchPromise = null;
             // Search assets are enhancement-only. The ten main cards remain usable.
@@ -2154,8 +2154,8 @@
         if (typeof efCreateSearchWorker !== "function") return [];
         originalPracticeSearchClients = [
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-original-practice.js?v=20261004searchaudit1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2164,8 +2164,8 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-economics-original-practice.js?v=20261004searchaudit1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2174,8 +2174,8 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-ecology-original-practice.js?v=20261004searchaudit1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2184,8 +2184,8 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-english-original-practice.js?v=20261027englishhighlights1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2194,8 +2194,8 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href,
             indexUrl: new URL("search-snippets-static-gk-original-practice.js?v=20261004searchaudit1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2305,8 +2305,8 @@
         if (typeof efCreateSearchWorker !== "function") return [];
         cruxTricksSearchClients = [
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-crux-tricks.js?v=20261002pdfsearch1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2315,8 +2315,8 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-economics-crux.js?v=20260908econcrux1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2325,8 +2325,8 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-original-geo-economics-tricks.js?v=20260915staticgktricks1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2335,8 +2335,8 @@
             limit: 24
           }),
           efCreateSearchWorker({
-            workerUrl: new URL("search-worker.js?v=20261007searchaudit1", document.baseURI).href,
-            logicUrl: new URL("search-logic.js?v=20261007searchaudit1", document.baseURI).href,
+            workerUrl: new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href,
+            logicUrl: new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href,
             indexUrl: new URL("Crux-Tricks/search-snippets-maths-ocr.js?v=20260923mathsstrict1", document.baseURI).href,
             mode: "snippet",
             workerOnly: true,
@@ -2471,9 +2471,12 @@
       box.addEventListener("focus", ensureDeepSearch, { once: true });
       box.addEventListener("pointerdown", ensureDeepSearch, { once: true });
 
-      function clearDeepResults() {
-        menuList.querySelectorAll("li[data-deepresult]").forEach(function (li) { li.remove(); });
-        menuList.classList.remove("has-deep-results");
+      function clearDeepResults(titlesOnly) {
+        menuList.querySelectorAll("li[data-deepresult]").forEach(function (li) {
+          if (titlesOnly && li.matches("[data-opfullresult],[data-ctfullresult],[data-bookfullresult]")) return;
+          li.remove();
+        });
+        if (!menuList.querySelector("li[data-deepresult]")) menuList.classList.remove("has-deep-results");
       }
 
       function matchesHomeCard(query, text) {
@@ -2491,7 +2494,7 @@
       }
 
       function renderDeepResults(q) {
-        clearDeepResults();
+        clearDeepResults(true);
         if (typeof SEARCH_INDEX === "undefined" || q.length < 2) return 0;
 
         // efSearchRank (search-logic.js) matches every WORD in the query anywhere in a
@@ -2500,6 +2503,7 @@
         // names only (no in-page content snippets here).
         const top = (typeof efSearchRank === "function") ? efSearchRank(q, { limit: 40 }) : [];
         if (top.length === 0) return 0;
+        const beforeFullText = menuList.querySelector("li[data-opfullresult],li[data-ctfullresult],li[data-bookfullresult]");
 
         const groupLi = document.createElement("li");
         groupLi.setAttribute("data-deepresult", "");
@@ -2507,7 +2511,7 @@
         groupTitle.className = "group-title";
         groupTitle.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Search Results (' + top.length + (top.length === 40 ? "+" : "") + ")";
         groupLi.appendChild(groupTitle);
-        menuList.appendChild(groupLi);
+        menuList.insertBefore(groupLi, beforeFullText);
 
         top.forEach(function (rec) {
           const li = document.createElement("li");
@@ -2531,7 +2535,7 @@
           a.appendChild(span);
           a.appendChild(chevron);
           li.appendChild(a);
-          menuList.appendChild(li);
+          menuList.insertBefore(li, beforeFullText);
         });
 
         menuList.classList.add("has-deep-results");
@@ -2656,8 +2660,8 @@
     .ef-op-search-snippet mark{background:#ffe28a;color:inherit;padding:0 1px;border-radius:2px}
   </style>
   <!-- ExamFusion homepage full-text bridge -->
-  <script src="./homepage-search-ui.js?v=20261007searchaudit1" defer></script>
-  <script src="./homepage-fulltext-search.js?v=20261025lucentgeo1" defer></script>
+  <script src="./homepage-search-ui.js?v=20261027homesearch1" defer></script>
+  <script src="./homepage-fulltext-search.js?v=20261027homesearch1" defer></script>
   <!-- ExamFusion landing counts: start -->
   <script id="efLandingCountsData" type="application/json">{"./Books/Ghatnachakra Purvalokan/SubjectName.html":{"total":20004,"unit":"Questions"},"./Books/Lucent's Objective/SubjectName.html":{"total":2579,"unit":"Questions"},"./Books/Pinnacle GS/PinnacleParts.html":{"total":7763,"unit":"Questions"},"./Books/BlackBook/BlackBook.html":{"total":7931,"unit":"Questions"},"./Bihar Special/Bihar Special.html":{"total":5036,"unit":"Facts"},"./Current Affairs/Topic Names.html":{"total":13175,"unit":"Questions"},"./Mind Maps/SubjectName.html":{"total":236,"unit":"Maps"},"./Original Practice/index.html":{"total":46414,"unit":"Questions"},"./PYQ/index.html":{"total":2278,"unit":"PYQs"},"./Crux-Tricks/index.html":{"total":591,"unit":"PDFs"}}</script>
   <style>

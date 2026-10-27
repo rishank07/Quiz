@@ -1,4 +1,4 @@
-/* ExamFusion Prep bounded relevance search (v10).
+/* ExamFusion Prep bounded relevance search (v11).
  *
  * IMPORTANT: Large Original Practice / Crux indexes must NOT be normalized or
  * warmed in full during worker startup. The previous implementation warmed
@@ -165,20 +165,7 @@
   function fastSnippetSearch(query) {
     var parsed = efRelevanceQuery(query);
     if (!parsed.terms.length || !Array.isArray(records)) return [];
-    // Compile normalization-aware retrieval patterns once per query, rather
-    // than normalizing every rejected snippet just because it has an apostrophe.
-    var ignored = "[\\u200B-\\u200D\\u2060\\uFEFF'’‘`´\"]*";
-    var candidates = parsed.alternatives.map(function(choices) {
-      return choices.map(function(term) {
-        var pattern = Array.from(term).map(function(ch) {
-          if (ch === " ") return "[^a-z0-9\\u0900-\\u097f]+";
-          if (/[a-z]/.test(ch)) return "[" + ch + String.fromCharCode(ch.charCodeAt(0) + 0xFEE0) + "]";
-          if (/[0-9]/.test(ch)) return "[" + ch + "०१२३४५६७८९".charAt(Number(ch)) + String.fromCharCode(ch.charCodeAt(0) + 0xFEE0) + "]";
-          return efRegexEscape(ch);
-        }).join(ignored);
-        return {term:term,pattern:new RegExp(pattern)};
-      });
-    });
+    var possibleMatch = efSearchCandidateFilter(parsed);
     var limit = config.limit || 40, top = efTopSearchHits(limit);
     var prefix = config.sectionPrefix || null;
     function scan(compact, fuzzy) {
@@ -198,20 +185,7 @@
             if (score === null) continue;
             match = {score: score, matchType: "exact"};
           } else {
-            // Cheap substring candidate retrieval precedes expensive Unicode
-            // normalization/ranking. No second full normalized index is stored.
-            var cheap = visible.toLowerCase(), possible = compact || fuzzy;
-            if (!possible) {
-              possible = candidates.every(function(choices) {
-                return choices.some(function(candidate) {
-                  return cheap.indexOf(candidate.term) >= 0 || head.indexOf(candidate.term) >= 0 || candidate.pattern.test(cheap);
-                });
-              });
-              // Rare compatibility ligatures/circled characters still use the
-              // complete NFKC path; ordinary quote-bearing records do not.
-              if (!possible && /[\u2100-\u214f\u2460-\u24ff\ufb00-\ufb06]/.test(visible)) possible = true;
-            }
-            if (!possible) continue;
+            if (!possibleMatch(visible, head, compact, fuzzy)) continue;
             match = efRelevanceScore(parsed, normalizeQuery(visible), title, breadcrumb, compact, fuzzy);
             if (!match) continue;
           }
@@ -251,7 +225,7 @@
     if (!config.indexUrl || !config.globalName) throw new Error("Incomplete search-worker configuration");
 
     // Shared scoring is small and does not warm/normalize any records.
-    importScripts(config.logicUrl || "/search-logic.js?v=20261004rank1");
+    importScripts(config.logicUrl || "/search-logic.js?v=20261027homesearch1");
     importScripts(config.indexUrl);
     // Polity audit overlay
     if (config.globalName === "EF_ORIGINAL_PRACTICE_SNIPPET_INDEX") {
