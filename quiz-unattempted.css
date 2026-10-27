@@ -17,6 +17,23 @@ html.efp-black-invert { --efp-scorebar-border: #7c510a; }
 }
 /* Give Blackbook's desktop score row breathing room above its new bottom edge. */
 .desktop-sticky-score { padding-bottom: .45rem; }
+/* Keep shared quiz Reset controls visible on every device, including the
+   Blackbook header. Mobile icon-only controls retain their compact sizing. */
+body .efp-quiz-reset-btn {
+  box-sizing: border-box;
+  border: 2px solid #d92d20 !important;
+  background: #fff1f2 !important; color: #b42318 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 2px 5px rgba(180,35,24,.18);
+}
+body .efp-quiz-reset-btn:hover { background: #ffe4e6 !important; }
+body .efp-quiz-reset-btn:focus-visible {
+  outline: 3px solid #d9a84e; outline-offset: 2px;
+}
+html.efp-black .efp-quiz-reset-btn {
+  background: #3a171d !important; color: #ffd4d4 !important;
+  border-color: #e87575 !important;
+}
 /* The requested quiz families use square, viewport-flush sticky scorebars on
    desktop, mobile and installed apps. Keep native counter/button layouts. */
 html.efp-square-scorebars :is(
@@ -243,19 +260,32 @@ html.efp-black .efp-op-counts > .efp-unattempted { background: #263445; color: #
 @media (max-width: 639px) {
   .efp-mobile-scorebar.efp-counter-bar {
     display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    align-items: center; gap: 5px !important; padding: 7px 10px !important;
+    align-items: stretch; gap: 6px !important; padding: 6px 8px !important;
   }
   .efp-mobile-scorebar.efp-counter-bar > .efp-blackbook-total,
   .efp-mobile-scorebar.efp-counter-bar > div:not(.efp-quiz-progress),
   .efp-mobile-scorebar.efp-counter-bar > .efp-unattempted {
     display: flex; flex-direction: row; align-items: center;
-    justify-content: space-between; min-width: 0;
-    gap: 4px !important; font-size: clamp(10px, 2.8vw, 12px) !important; line-height: 1.35;
+    justify-content: center; min-width: 0; min-height: 32px;
+    box-sizing: border-box; padding: 5px 6px;
+    border: 1px solid #dce3eb; border-radius: 4px;
+    background: #f1f5f9;
+    gap: 5px !important; font-size: clamp(10px, 2.8vw, 11px) !important; line-height: 1.25;
+    white-space: nowrap;
+  }
+  .efp-mobile-scorebar.efp-counter-bar > div:has(> #mobile-score) {
+    background: #eff6ff; border-color: #bfdbfe;
+  }
+  .efp-mobile-scorebar.efp-counter-bar > div:has(> #mobile-wrong) {
+    background: #fff1f2; border-color: #fecdd3;
+  }
+  .efp-mobile-scorebar.efp-counter-bar > .efp-unattempted {
+    background: #fff8e8; border-color: #ead9af;
   }
   .efp-mobile-scorebar.efp-counter-bar :is(
     .efp-blackbook-total-value, #mobile-score, #mobile-wrong, .efp-unattempted-value
   ) {
-    font-size: clamp(13px, 3.7vw, 16px) !important; font-weight: 700;
+    font-size: clamp(13px, 3.6vw, 15px) !important; font-weight: 800;
   }
   .efp-mobile-scorebar.efp-counter-bar > .efp-quiz-progress {
     flex-direction: row; gap: 7px !important;

@@ -5,7 +5,7 @@
   if (!document.getElementById("efp-quiz-unattempted-script")) {
     var countScript = document.createElement("script");
     countScript.id = "efp-quiz-unattempted-script";
-    countScript.src = "/quiz-unattempted.js?v=20261027bbtotal1";
+    countScript.src = "/quiz-unattempted.js?v=20261027bbcompact1";
     countScript.async = false;
     (document.head || document.documentElement).appendChild(countScript);
   }
@@ -779,9 +779,6 @@
       button.id = "efp-blackbook-reset";
       button.type = "button";
       button.className = "efp-quiz-reset-btn";
-      button.style.background = "rgba(255,255,255,.14)";
-      button.style.color = "#fff";
-      button.style.borderColor = "rgba(255,255,255,.35)";
       button.textContent = "↻ Reset";
       button.addEventListener("click", function () {
         if (!window.confirm("Reset progress for this quiz? Your bookmarks will stay saved.")) return;
