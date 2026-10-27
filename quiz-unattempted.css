@@ -1,5 +1,22 @@
 /* Add one statistic to the existing navbar; preserve its sticky behaviour. */
 .efp-counter-bar { min-width: 0; max-width: 100%; flex-wrap: wrap; }
+/* One thin outer frame for each quiz scorebar at every viewport size. Replace
+   existing edges rather than stacking outlines around the native borders. */
+html { --efp-scorebar-border: #b8863f; }
+html.efp-black, body.dark { --efp-scorebar-border: #d1a65f; }
+/* Legacy light quizzes are inverted by black-mode.js. This pre-filter shade
+   renders as the same lighter gold after invert(1) hue-rotate(180deg). */
+html.efp-black-invert { --efp-scorebar-border: #7c510a; }
+.score-bar, .set-score-bar,
+#app > .max-w-3xl > .flex.items-center.justify-between.mb-3,
+#quizView > .quiz-head,
+.toolbar:has(#scoreTxt) > :is(.barcard, .bar),
+.efp-mobile-scorebar, .desktop-sticky-score {
+  box-sizing: border-box;
+  border: 1px solid var(--efp-scorebar-border) !important;
+}
+/* Give Blackbook's desktop score row breathing room above its new bottom edge. */
+.desktop-sticky-score { padding-bottom: .45rem; }
 /* The requested quiz families use square, viewport-flush sticky scorebars on
    desktop, mobile and installed apps. Keep native counter/button layouts. */
 html.efp-square-scorebars :is(
