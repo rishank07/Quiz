@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261027scoreborder1";
+const CACHE_VERSION = "efp-pwa-20261027blackbooksolid1";
 const QUIZ_SCORE_REVISION = "20261027scoreborder1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261027scoreborder1"></script>';
@@ -35,7 +35,7 @@ const APP_SHELL = [
   "/black-mode.js?v=20261004scrollcanvas1",
   "/ca-question-deeplink.js?v=20261004context1",
   "/ca-move-top-v3.js?v=20261001navbuttons1",
-  "/blackbook-quiz-bookmarks.js?v=20261004context1",
+  "/blackbook-quiz-bookmarks.js?v=20261027blackbooksolid1",
   "/blackbook-topic-bookmarks.js",
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",

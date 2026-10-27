@@ -134,6 +134,11 @@
     var style = document.createElement("style");
     style.id = STYLE_ID;
     style.textContent =
+      /* Keep the existing light surface opaque before black-mode.js inverts
+       * these light quiz pages. The whole sticky header must cover questions. */
+      ".sticky-nav,.desktop-sticky-score,.efp-mobile-scorebar{background:#fff!important;opacity:1!important;" +
+      "backdrop-filter:none!important;-webkit-backdrop-filter:none!important}" +
+      ".efp-bb-filter-wrap{max-width:56rem;margin:0 auto;padding:0 .5rem .75rem}" +
       ".efp-bb-section-nav{display:flex;justify-content:space-between;gap:12px;margin:24px 0 0;padding-bottom:16px}" +
       ".efp-bb-section-nav[hidden]{display:none}.efp-bb-section-nav button{min-height:44px;min-width:104px;" +
       "padding:10px 16px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#334155;" +
@@ -266,7 +271,15 @@
     button.addEventListener("click", function () {
       setFilterActive(!filterActive, filterActive);
     });
-    nav.parentElement.insertBefore(button, nav.nextSibling);
+    // Bookmark filtering belongs to the scrolling controls, outside the
+    // sticky A-Z/score toolbar. The mobile scorebar still follows this row.
+    var sticky = nav.closest(".sticky-nav");
+    if (sticky && sticky.parentElement) {
+      var controls = document.createElement("div");
+      controls.className = "efp-bb-filter-wrap";
+      controls.appendChild(button);
+      sticky.parentElement.insertBefore(controls, sticky.nextSibling);
+    } else nav.parentElement.insertBefore(button, nav.nextSibling);
 
     var empty = document.createElement("div");
     empty.id = EMPTY_ID;
@@ -281,51 +294,6 @@
   }
 
 
-  function installDesktopFilterScrollBehavior() {
-    var sticky = document.querySelector(".sticky-nav");
-    var button = document.getElementById(FILTER_ID);
-    if (!sticky || !button || sticky.__efpDesktopBookmarkScroll) return;
-    sticky.__efpDesktopBookmarkScroll = true;
-
-    var naturalTop = 0;
-    var ticking = false;
-
-    function documentTop(el) {
-      var top = 0;
-      var node = el;
-      while (node) {
-        top += Number(node.offsetTop) || 0;
-        node = node.offsetParent;
-      }
-      return top;
-    }
-
-    function measure() {
-      naturalTop = documentTop(sticky);
-      sync();
-    }
-
-    function apply() {
-      ticking = false;
-      var desktop = window.innerWidth >= 640;
-      var y = window.pageYOffset || document.documentElement.scrollTop || 0;
-      var stuck = desktop && y >= Math.max(0, naturalTop - 1);
-
-      if (stuck) button.style.setProperty("display", "none", "important");
-      else button.style.removeProperty("display");
-    }
-
-    function sync() {
-      if (ticking) return;
-      ticking = true;
-      (window.requestAnimationFrame || function (fn) { return setTimeout(fn, 16); })(apply);
-    }
-
-    measure();
-    window.addEventListener("scroll", sync, { passive: true });
-    window.addEventListener("resize", measure, { passive: true });
-    window.addEventListener("load", measure, { once: true });
-  }
   function updateButton(button, active) {
     button.classList.toggle("is-bookmarked", !!active);
     button.textContent = active ? "★ Saved" : "☆ Save";
@@ -469,7 +437,6 @@
     ensureMobileScorebar();
     scan(document);
     installSectionNavigation();
-    installDesktopFilterScrollBehavior();
     if (targetSn()) {
       openTargetLetter();
       var tries = 0;
@@ -511,7 +478,6 @@
   window.addEventListener("pageshow", function () {
     scan(document);
     syncButtons();
-    installDesktopFilterScrollBehavior();
     if (targetSn()) {
       openTargetLetter();
       focusTarget();
