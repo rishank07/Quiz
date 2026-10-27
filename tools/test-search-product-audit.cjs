@@ -43,6 +43,8 @@ async function lifecycle(){
  let slowCallback;const native=p.w.setTimeout;p.w.setTimeout=(fn,ms,...args)=>ms===20000?(slowCallback=fn,0):native(fn,ms,...args);
  p.run(read('homepage-search-ui.js'));await delay(20);type(p,'Nitish');
  slowCallback();await delay(30);assert(p.w.document.getElementById('efSearchTools').classList.contains('is-searching'));assert(p.w.document.getElementById('efSearchStatus').textContent.includes('still running'));
+ assert(!/slow connection/i.test(p.w.document.getElementById('efSearchStatus').textContent),'Elapsed processing time must not diagnose the connection');
+ assert(p.w.document.querySelector('#efSearchTools > button').hidden,'A running search must not ask the user to restart before any source fails');
  phase(p,'fulltext-done');await delay(30);assert(p.w.document.getElementById('efSearchTools').classList.contains('is-searching'),'Fulltext completion cannot finish pending core indexes');
  p.w.dispatchEvent(new p.w.PageTransitionEvent('pageshow',{persisted:false}));await delay(20);assert(p.w.document.getElementById('efSearchTools').classList.contains('is-searching'));
  phase(p,'source-error');phase(p,'core-done');await delay(100);assert(!p.w.document.getElementById('efSearchTools').classList.contains('is-searching'));assert(!p.w.document.getElementById('noResults').classList.contains('show'),'A failed source is not a genuine zero result');assert(p.w.document.getElementById('efSearchStatus').textContent.includes('could not load'));

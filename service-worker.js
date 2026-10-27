@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261028pdfsearch1";
+const CACHE_VERSION = "efp-pwa-20261028searchstatus1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261027bbfinish1";
@@ -57,7 +57,7 @@ const APP_SHELL = [
   "/section-search-ui.js?v=20261007searchaudit1",
   "/search-worker.js?v=20261027homesearch1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
-  "/homepage-search-ui.js?v=20261027homesearch1",
+  "/homepage-search-ui.js?v=20261028searchstatus1",
   "/homepage-fulltext-search.js?v=20261027homesearch1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster.js?v=20261024mathback1",

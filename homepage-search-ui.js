@@ -392,7 +392,7 @@
       statusText.textContent = count
         ? count + " matches found · searching remaining hubs…"
         : "Searching questions, PDFs and study hubs…";
-      if (slowSearch) statusText.textContent += " Slow connection · search is still running.";
+      if (slowSearch) statusText.textContent += " Search is still running.";
     } else if (failedSources.size) {
       statusText.textContent = count + " matches found · some hubs could not load. Retry to complete search.";
     } else {
@@ -557,11 +557,12 @@
     statusText.textContent = "Searching questions, PDFs and study hubs…";
     noResults.classList.remove("show");
     updateFilterButtons({ all: 0, practice: 0, pyq: 0, current: 0, crux: 0, books: 0, mindmaps: 0 });
-    // A timer may explain a slow connection, but cannot declare unsearched
-    // sources empty. Completion requires both independent pipelines to finish.
+    // Elapsed search time does not measure connection speed. Downloads and
+    // text processing can both take time; only failed sources need a retry.
+    // Completion still requires both independent pipelines to finish.
     completionTimer = setTimeout(function () {
       if (normalized(query)!==normalized(currentQuery)||!isSearching) return;
-      slowSearch = true; retryButton.hidden = false; scheduleReconcile();
+      slowSearch = true; retryButton.hidden = failedSources.size === 0; scheduleReconcile();
     }, 20000);
     scheduleReconcile();
   });
