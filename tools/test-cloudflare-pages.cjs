@@ -14,6 +14,11 @@ const out = path.join(root, 'cloudflare-dist');
 const report = JSON.parse(fs.readFileSync(path.join(out, 'cloudflare-build-report.json')));
 const sha = data => crypto.createHash('sha256').update(data).digest('hex');
 const read = p => fs.readFileSync(p, 'utf8');
+const pdfRuntimeUrl='/cf-pdf-assets.js?v='+sha(fs.readFileSync(path.join(out,'cf-pdf-assets.js'))).slice(0,12);
+for(const filename of ['Crux-Tricks/viewer.html','open-original-pdf.html','service-worker.js']){
+  assert.ok(read(path.join(out,filename)).includes('"'+pdfRuntimeUrl+'"'),'Use the same current PDF runtime revision: '+filename);
+}
+console.log('PASS viewer, original download and installed shell bypass stale PDF runtime caches');
 function flattenHash(groups) {
   const hash = crypto.createHash('sha256');
   for (const group of groups) {

@@ -289,6 +289,8 @@ def build(output):
 
     runtime = "var EFP_CF_PDFS=" + compact(pdfs) + ";\n" + (ROOT / "cloudflare/pdf-assets.js").read_text()
     write(output / "cf-pdf-assets.js", runtime)
+    pdf_runtime_url = "/cf-pdf-assets.js?v=" + digest(runtime.encode())[:12]
+    pdf_runtime_tag = '<script src="' + pdf_runtime_url + '"></script>'
     viewer_path = output / "Crux-Tricks/viewer-v2.js"
     viewer = viewer_path.read_text()
     needle = "task=pdfjsLib.getDocument(options)"
@@ -301,7 +303,7 @@ def build(output):
     viewer_tag = re.search(r'<script\s+src="viewer-v2\.js[^\"]*"', html)
     if not viewer_tag:
         raise ValueError("PDF viewer script tag was not found")
-    html = html[:viewer_tag.start()] + '<script src="/cf-pdf-assets.js"></script>' + html[viewer_tag.start():]
+    html = html[:viewer_tag.start()] + pdf_runtime_tag + html[viewer_tag.start():]
     html_path.write_text(html)
 
     # Reuse the real early analytics exclusion guard on the generated page.
@@ -315,7 +317,7 @@ def build(output):
         'h1{font-size:22px;overflow-wrap:anywhere}progress{width:100%;height:18px}a{color:#1855c7}</style></head>'
         '<body><h1 id="title">Open PDF</h1><p id="status" role="status">Opening your PDF…</p>'
         '<progress id="progress" max="1" value="0"></progress><p><a id="download" hidden>Download PDF</a></p>'
-        '<script src="/cf-pdf-assets.js"></script><script src="/cf-open-pdf.js"></script></body></html>')
+        + pdf_runtime_tag + '<script src="/cf-open-pdf.js"></script></body></html>')
     write(output / "open-original-pdf.html", open_html)
     write(output / "cf-open-pdf.js", (ROOT / "cloudflare/open-pdf.js").read_text())
     if not (output / "404.html").exists():
@@ -345,7 +347,7 @@ def build(output):
     worker, count = re.subn(r"const PAGES_ROUTES = false;", "const PAGES_ROUTES = true;", worker, count=1)
     if count != 1:
         raise ValueError("Service-worker Pages route configuration was not found")
-    worker = worker.replace("const APP_SHELL = [", 'const APP_SHELL = [\n  "/cf-pdf-assets.js",\n  "/cf-open-pdf.js",\n  "/open-original-pdf.html",', 1)
+    worker = worker.replace("const APP_SHELL = [", 'const APP_SHELL = [\n  "' + pdf_runtime_url + '",\n  "/cf-open-pdf.js",\n  "/open-original-pdf.html",', 1)
     worker = worker.replace('if (url.pathname === "/owner-debug.js" ||',
                             'if (url.pathname === "/cf-pdf-assets.js" ||\n'
                             '      url.pathname === "/cf-open-pdf.js" ||\n'
