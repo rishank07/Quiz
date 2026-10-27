@@ -1,8 +1,8 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261027square1";
+const CACHE_VERSION = "efp-pwa-20261027apprecovery1";
 const QUIZ_SCORE_REVISION = "20261027square1";
 const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261027square1"></script>';
+const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261027apprecovery1"></script>';
 const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
@@ -39,8 +39,8 @@ const APP_SHELL = [
   "/blackbook-topic-bookmarks.js",
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
-  "/home-nav.js?v=20261004searchaudit1",
-  "/app-session.js?v=20261027square1",
+  "/home-nav.js?v=20261027apprecovery1",
+  "/app-session.js?v=20261027apprecovery1",
   "/back-parent-map.js",
   "/back-nav.js?v=20261024mathback1",
   "/search-context.js?v=20261007searchaudit1",
@@ -284,16 +284,39 @@ async function prepareNavigationResponse(response, injectDebug, url) {
   return served;
 }
 
-async function networkFirst(request) {
+// A sleeping/resumed installed app may have usable cached content while a
+// network request stalls. Keep refreshing in the worker, but bound how long
+// navigation waits for that request. Exact revisions must beat old aliases.
+async function cachedNetworkFirst(event, request, cache, options) {
+  const cached = await cache.match(request) || await cache.match(request, { ignoreSearch: true });
+  const fresh = fetch(request, options).then((response) => {
+    if (response && response.ok && (response.type === "basic" || response.type === "cors" || response.type === "default")) {
+      event.waitUntil(cache.put(request, response.clone()).catch(() => {}));
+    }
+    const temporaryFailure = response && (response.status >= 500 || response.status === 408 || response.status === 429);
+    return cached && temporaryFailure ? cached : response;
+  }).catch((error) => {
+    if (cached) return cached;
+    throw error;
+  });
+  if (!cached) return fresh;
+  event.waitUntil(fresh.catch(() => {}));
+  let timer;
+  try {
+    return await Promise.race([fresh, new Promise(resolve => {
+      timer = setTimeout(() => resolve(cached), 2500);
+    })]);
+  } finally { clearTimeout(timer); }
+}
+
+async function networkFirst(event) {
+  const request = event.request;
   const cache = await caches.open(CACHE_VERSION);
   const url = new URL(request.url);
   const injectDebug = await shouldInjectOwnerDebug(url);
   try {
-    const response = await fetch(request);
+    const response = await cachedNetworkFirst(event, request, cache, { cache: "no-cache" });
     const served = await prepareNavigationResponse(response, injectDebug, url);
-    if (served && served.ok && (served.type === "basic" || served.type === "default")) {
-      cache.put(request, served.clone());
-    }
     return served;
   } catch (error) {
     const cached = await matchCachedRequest(request);
@@ -376,14 +399,15 @@ async function searchIndexAsset(event) {
   }
 }
 
-async function freshCoreAsset(request) {
+async function freshCoreAsset(event, request = event.request) {
+  // Older installed documents still request old ?v= URLs. Use the shell's
+  // current revision online and for fallback instead of mixing navigation code.
+  const url = new URL(request.url);
+  const current = APP_SHELL.find(asset => new URL(asset, self.location.origin).pathname === url.pathname);
+  if (current) request = new Request(new URL(current, self.location.origin).href, request);
   const cache = await caches.open(CACHE_VERSION);
   try {
-    const response = await fetch(request, { cache: "no-store" });
-    if (response && response.ok && (response.type === "basic" || response.type === "cors")) {
-      await cache.put(request, response.clone());
-    }
-    return response;
+    return await cachedNetworkFirst(event, request, cache, { cache: "no-cache" });
   } catch (_) {
     const cached = await caches.match(request) || await caches.match(request, { ignoreSearch: true });
     return cached || new Response("", { status: 503, statusText: "Offline" });
@@ -399,18 +423,8 @@ async function stripLegacySearchWrapper(response) {
   return new Response(body, {status:response.status,statusText:response.statusText,headers});
 }
 
-async function freshSearchLogicAsset(request) {
-  const cache = await caches.open(CACHE_VERSION);
-  try {
-    const response = await fetch(request, { cache: "no-store" });
-    const served = await stripLegacySearchWrapper(response);
-    if (served && served.ok) await cache.put(request, served.clone());
-    return served;
-  } catch (_) {
-    const cached = await caches.match(request) || await caches.match(request, { ignoreSearch: true });
-    if (cached) return stripLegacySearchWrapper(cached);
-    return new Response("", { status: 503, statusText: "Offline" });
-  }
+async function freshSearchLogicAsset(event) {
+  return stripLegacySearchWrapper(await freshCoreAsset(event));
 }
 
 async function freshCurrentAffairsBookmarkAsset() {
@@ -473,7 +487,7 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (request.mode === "navigate" || request.destination === "document") {
-    event.respondWith(networkFirst(request));
+    event.respondWith(networkFirst(event));
     return;
   }
 
@@ -485,7 +499,7 @@ self.addEventListener("fetch", (event) => {
   // Retire the previous desktop-only fallback wrapper from cached responses.
   // Shared search now recovers consistently across browser/device layouts.
   if (url.pathname === "/search-logic.js") {
-    event.respondWith(freshSearchLogicAsset(request));
+    event.respondWith(freshSearchLogicAsset(event));
     return;
   }
 
@@ -494,7 +508,7 @@ self.addEventListener("fetch", (event) => {
   if (url.pathname === "/quiz-unattempted.js" || url.pathname === "/quiz-unattempted.css") {
     const current = new URL(request.url);
     current.searchParams.set("v", QUIZ_SCORE_REVISION);
-    event.respondWith(freshCoreAsset(new Request(current.href, request)));
+    event.respondWith(freshCoreAsset(event, new Request(current.href, request)));
     return;
   }
 
@@ -539,7 +553,7 @@ self.addEventListener("fetch", (event) => {
       url.pathname.startsWith("/Crux-Tricks/pages/") ||
       url.pathname === "/Crux-Tricks/pdf-search.js" ||
       url.pathname === "/Crux-Tricks/viewer-v2.js") {
-    event.respondWith(freshCoreAsset(request));
+    event.respondWith(freshCoreAsset(event));
     return;
   }
 

@@ -72,7 +72,8 @@
       if (/^android-app:\/\/com\.examfusionprep\.app(?:\/|$)/i.test(document.referrer || "")) return true;
     } catch (_) {}
     try {
-      if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
+      if (window.matchMedia && (window.matchMedia("(display-mode: standalone)").matches ||
+          window.matchMedia("(display-mode: window-controls-overlay)").matches)) return true;
       if (navigator.standalone === true || /; wv\)/i.test(navigator.userAgent || "")) return true;
     } catch (_) {}
     return false;
@@ -115,7 +116,8 @@
           sessionStorage.getItem(ANDROID_APP_CONTEXT_KEY) === "1") return true;
     } catch (_) {}
     try {
-      if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
+      if (window.matchMedia && (window.matchMedia("(display-mode: standalone)").matches ||
+          window.matchMedia("(display-mode: window-controls-overlay)").matches)) return true;
       if (navigator.standalone === true) return true;
     } catch (_) {}
     return false;
@@ -226,6 +228,7 @@
 
   function markIntentionalHome() {
     intentionalHome = true;
+    try { sessionStorage.removeItem(PENDING_KEY); } catch (_) {}
     try {
       localStorage.setItem(SESSION_KEY, JSON.stringify({
         url: "/",
@@ -954,8 +957,13 @@
         "#kbArea button",
         "#mcqArea button"
       ].join(","));
-      return !!(direct && !direct.disabled && !direct.closest(".answered") &&
-        !(direct.matches && direct.matches(":disabled")));
+      if (!direct || !isVisible(direct) || direct.disabled || direct.closest(".answered") ||
+          (direct.matches && direct.matches(":disabled"))) return false;
+      // Shared button styles may also occur on chapter/menu controls. Only
+      // an answer inside a question belongs to the active attempt.
+      if (direct.matches(".option-btn,.choice-btn,.answer-btn,[data-answer],[data-option]") &&
+          !direct.closest("[id^='opts-'],.question-box,.question-card,.qcard,.q-card,.quiz-item,.mcq-item,.question-item,#options,#quizView,.quiz-view,.quiz-container,.question-container")) return false;
+      return true;
     }
 
     function navigationTarget(target) {
@@ -1285,6 +1293,32 @@
       modal.classList.add("show");
       window.setTimeout(function () { try { stay.focus(); } catch (_) {} }, 0);
     }
+
+    // Home is a full-document destination. Do not pop a synthetic Back guard
+    // and replay this click through cached renderer handlers: a restored
+    // Windows history entry can swallow that pop or route the replay elsewhere.
+    window.addEventListener("click", function (event) {
+      if (event.button > 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      var home = event.target && event.target.closest &&
+        event.target.closest("#efp-home-button,.home-btn,[data-nav='home']");
+      if (!home || home.disabled || home.target === "_blank" || home.hasAttribute("download")) return;
+      if (home.href) {
+        try {
+          var destination = new URL(home.href, location.href);
+          if (destination.origin !== location.origin || !isHomePath(destination.pathname)) return;
+        } catch (_) { return; }
+      }
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      function goHome() {
+        disarm();
+        approveOneNavigation();
+        markIntentionalHome();
+        location.assign("/");
+      }
+      if (shouldWarn()) showExitModal(goHome);
+      else goHome();
+    }, true);
 
     // Original Practice's document handlers otherwise send every Back straight
     // to the site Home. Handle the click before them while preserving its SPA
