@@ -44,7 +44,7 @@
       id: "lucent",
       label: "Lucent's Objective",
       icon: "fa-book",
-      indexUrl: "search-snippets-lucent.js?v=20261025lucentgeo1",
+      indexUrl: "search-snippets-lucent.js?v=20261028lucentresume1",
       mode: "snippet",
       globalName: "EF_SNIPPET_INDEX",
       sectionPrefix: "./Books/Lucent%27s%20Objective/",
