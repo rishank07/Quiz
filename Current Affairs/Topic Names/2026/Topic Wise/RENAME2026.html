@@ -15,13 +15,80 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Q1WNRY8ECV');</script>
   <style>
-    :root{--bg:#08111f;--card:#111d31;--card2:#0b1526;--text:#e8eef8;--muted:#9fb0c8;--line:#263853;--blue:#63a7ff;--gold:#f9c74f;--green:#20c77a;--orange:#ff8b4d}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 10% 0,#16365a 0,transparent 35%),var(--bg);color:var(--text);font-family:"Segoe UI","Noto Sans Devanagari",Arial,sans-serif;overflow-x:hidden}.star-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}.star{position:absolute;background:#fff;border-radius:50%;opacity:0;animation:twinkle 2.5s ease-in-out infinite alternate}@keyframes twinkle{0%{opacity:0;transform:scale(.5);box-shadow:0 0 2px #ffffff1a}100%{opacity:1;transform:scale(1.2);box-shadow:0 0 8px #fffc}}
-    .container{position:relative;z-index:1;width:min(920px,calc(100% - 26px));margin:auto;padding:18px 0 70px}.hero{text-align:center;padding:28px 18px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#162a48,#0d192b);box-shadow:0 18px 45px #0005}.hero h1{margin:0;color:var(--gold);font-size:clamp(1.55rem,5vw,2.3rem)}.subtitle{margin:9px 0 0;color:var(--muted);line-height:1.55}
-    .question-box{position:relative;margin:18px 0;padding:22px;border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:16px;background:linear-gradient(145deg,var(--card),#0e192b);box-shadow:0 9px 28px #0003}.q-head{display:flex;align-items:center;gap:4px;margin-bottom:12px}.q-number{display:inline-flex;align-items:center;justify-content:center;min-width:46px;height:30px;padding:0 10px;border-radius:999px;background:#213758;color:#dceaff;font-weight:900;font-size:.82rem}.question-text{font-size:1.08rem;font-weight:800;line-height:1.55;color:#f7faff}.question-text .hi{display:block;margin-top:7px;color:#a9cfff;font-size:.98rem;font-weight:700}.options{list-style:none;margin:16px 0 18px;padding:0;display:grid;gap:9px}.option{padding:11px 13px;border:1px solid #2a405f;border-radius:10px;background:#17243a}.option .opt-en,.option .opt-hi{display:block;line-height:1.45}.option .opt-en{color:#c9ddfa;font-weight:650}.option .opt-hi{color:#f3d78a;font-size:.92rem;margin-top:3px}.option.correct-option{border-color:var(--green);background:#12392e}.option.correct-option .opt-en,.option.correct-option .opt-hi{color:#eafff5;font-weight:850}.explanation-box{padding:15px;border-radius:12px;background:var(--card2);border:1px solid var(--line)}.lang-section+ .lang-section{margin-top:13px;padding-top:13px;border-top:1px solid var(--line)}.lang-section h4{margin:0 0 8px;color:#77c6ff}.lang-section ul{margin:0;padding-left:21px}.lang-section li{margin:6px 0;line-height:1.55;color:#d7e0ed}.highlight-text{color:var(--gold);font-weight:900}
-    footer{text-align:center;margin-top:30px;padding:22px 12px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;line-height:1.7}
-    @media(max-width:640px){.container{width:min(100% - 16px,920px);padding-top:9px}.hero{padding:21px 13px;border-radius:16px}.question-box{padding:15px 13px;border-radius:13px}.question-text{font-size:1rem}.question-text .hi{font-size:.92rem}.option{padding:10px}.explanation-box{padding:12px}.lang-section li{font-size:.91rem}}
-  </style>
+      body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b101e; color: #e2e8f0; overflow-x: hidden; }
+.star-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.container { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; gap: 30px; }
+.star { position: absolute; background-color: white; border-radius: 50%; opacity: 0; animation: twinkle 2.5s ease-in-out infinite; }
+@keyframes twinkle { 0% { opacity: 0; transform: scale(0.5); box-shadow: 0 0 2px rgba(255,255,255,0.1); } 100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 8px rgba(255,255,255,0.8); } }
+
+header { text-align: center; padding: 20px 0; border-bottom: 2px solid #eab308; }
+header h1 { color: #facc15; margin: 0 0 10px 0; font-size: 1.8rem; letter-spacing: 1px; }
+header .subtitle { color: #94a3b8; font-size: 1rem; margin-bottom: 20px; }
+
+.question-card { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); border-left: 5px solid #3b82f6; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.question-text { font-size: 1.3rem; font-weight: bold; margin-bottom: 25px; color: #f8fafc; line-height: 1.5; }
+.question-text span { font-size: 1.05rem; color: #94a3b8; font-weight: normal; display: block; margin-top: 8px; }
+
+.options { list-style-type: none; padding: 0; margin-bottom: 25px; }
+.option { background-color: rgba(51,65,85,0.5); margin-bottom: 12px; padding: 15px 20px; border-radius: 8px; font-size: 1.1rem; border: 1px solid transparent; }
+
+.opt-en { display: block; color: #60a5fa; font-weight: 500; }
+.opt-hi { display: block; color: #fbbf24; font-size: 0.95rem; margin-top: 6px; }
+
+.correct-option { background-color: rgba(22,101,52,0.8); border: 1px solid #22c55e; }
+.correct-option .opt-en { color: #ffffff; font-weight: bold; }
+.correct-option .opt-hi { color: #d1fae5; font-weight: bold; }
+
+.explanation-box { background-color: rgba(15,23,42,0.6); border: 1px solid rgba(51,65,85,0.8); padding: 20px; border-radius: 12px; font-size: 0.95rem; line-height: 1.6; }
+.lang-section { margin-bottom: 25px; }
+.lang-section:last-child { margin-bottom: 0; }
+.lang-section h4 { margin: 0 0 15px 0; color: #38bdf8; border-bottom: 1px solid rgba(51,65,85,0.8); padding-bottom: 8px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+.lang-section ul { padding-left: 20px; margin: 0; color: #e2e8f0; }
+.lang-section li { margin-bottom: 8px; }
+.highlight-text { color: #fbbf24; font-weight: bold; }
+
+footer { text-align: center; padding: 20px; margin-top: 20px; color: #94a3b8; font-size: 1.05rem; }
+
+.oneliner-card { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); border-left: 5px solid #a855f7; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.oneliner-card h2 { color: #c084fc; font-size: 1.3rem; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(168,85,247,0.3); padding-bottom: 12px; }
+.oneliner-list { list-style: none; padding: 0; margin: 0; }
+.oneliner-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(51,65,85,0.5); }
+.oneliner-item:last-child { border-bottom: none; }
+
+.oneliner-q { flex: 1; line-height: 1.6; }
+.oneliner-a { background: rgba(234,179,8,0.15); border: 1px solid rgba(234,179,8,0.4); border-radius: 8px; padding: 10px 14px; min-width: fit-content; text-align: center; }
+
+.oneliner-q .en-text { color: #ffffff; font-size: 1.05rem; font-weight: 600; text-shadow: 0 0 3px rgba(255,255,255,0.4); display: block; }
+.oneliner-q .hi-text { color: #94a3b8; font-size: 0.9rem; font-weight: normal; display: block; margin-top: 4px; }
+
+.oneliner-a .en-ans { color: #fbbf24; font-size: 1rem; font-weight: bold; display: block; }
+.oneliner-a .hi-ans { color: #e2e8f0; font-size: 0.85rem; font-weight: 500; display: block; margin-top: 6px; }
+
+    
+/* ===== Responsive (Mobile) ===== */
+@media (max-width: 768px) {
+  .container { padding: 14px; gap: 20px; }
+  header h1 { font-size: 1.4rem; }
+  header .subtitle { font-size: 0.85rem; }
+  .question-card, .oneliner-card { padding: 18px; border-radius: 12px; }
+  .question-text { font-size: 1.08rem; }
+  .question-text span { font-size: 0.92rem; }
+  .option { padding: 12px 14px; font-size: 1rem; }
+  .explanation-box { padding: 14px; font-size: 0.9rem; }
+  .lang-section h4 { font-size: 1.05rem; }
+  .oneliner-item { flex-direction: column; align-items: stretch; gap: 8px; }
+  .oneliner-a { min-width: 0; text-align: left; }
+  .oneliner-card h2 { font-size: 1.1rem; }
+}
+
+@media (max-width: 420px) {
+  .container { padding: 10px; }
+  header h1 { font-size: 1.2rem; }
+  .question-card, .oneliner-card { padding: 14px; }
+  .question-text { font-size: 1rem; }
+  .option { font-size: 0.92rem; padding: 10px 12px; }
+}
+    </style>
   <script defer src="/home-nav.js?v=20260930movetop3"></script>
   <script defer src="/back-parent-map.js?v=20261030caback2"></script>
   <script defer src="/back-nav.js?v=20261007searchaudit1"></script>
@@ -32,57 +99,1207 @@
 <body>
 <div class="star-bg" id="star-bg" aria-hidden="true"></div>
 <div class="container">
-  <header class="hero">
-    <h1>Name Changes 2026 / नाम परिवर्तन</h1>
-    <p class="subtitle">Bilingual (English + हिंदी) · SSC | Railway | UPSC | BPSC</p>
-  </header>
+  <header>
+<h1>🎯 NAME CHANGES 2026 CURRENT AFFAIRS</h1>
+<p class="subtitle">Bilingual (English + हिंदी) · SSC | Railway | UPSC | BPSC</p>
+</header>
 
-  <main class="question-box question-card" id="q1"><div class="q-head"><span class="q-number">Q1</span></div><div class="question-text">In February 2026, the Union Cabinet approved a proposal to rename Kerala as what?<span class="hi" lang="hi">फरवरी 2026 में केंद्रीय मंत्रिमंडल ने केरल का नाम बदलकर क्या करने के प्रस्ताव को मंजूरी दी?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Malabar</span><span class="opt-hi" lang="hi">A) मालाबार</span></li><li class="option"><span class="opt-en">B) Travancore</span><span class="opt-hi" lang="hi">B) त्रावणकोर</span></li><li class="option"><span class="opt-en">C) Cheralam</span><span class="opt-hi" lang="hi">C) चेरलम</span></li><li class="option correct-option"><span class="opt-en">D) Keralam</span><span class="opt-hi" lang="hi">D) केरलम (सही उत्तर ✔)</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Keralam</span>.</li><li>The proposal was approved on 24 February 2026. A change in a state&#39;s name requires Parliament&#39;s law under Article 3; Cabinet approval is a step in that process.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">केरलम</span>।</li><li>24 फरवरी 2026 को प्रस्ताव को मंजूरी दी गई। राज्य का नाम अनुच्छेद 3 के तहत संसद के कानून से बदलता है; मंत्रिमंडल की मंजूरी इस प्रक्रिया का एक चरण है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q2"><div class="q-head"><span class="q-number">Q2</span></div><div class="question-text">Adampur Airport, renamed Sri Guru Ravidas Ji Airport in 2026, is in which state?<span class="hi" lang="hi">2026 में श्री गुरु रविदास जी हवाई अड्डा नाम दिया गया आदमपुर हवाई अड्डा किस राज्य में है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Haryana</span><span class="opt-hi" lang="hi">A) हरियाणा</span></li><li class="option correct-option"><span class="opt-en">B) Punjab</span><span class="opt-hi" lang="hi">B) पंजाब (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Rajasthan</span><span class="opt-hi" lang="hi">C) राजस्थान</span></li><li class="option"><span class="opt-en">D) Bihar</span><span class="opt-hi" lang="hi">D) बिहार</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Punjab</span>.</li><li>The new name honours Guru Ravidas, a saint of the Bhakti tradition.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">पंजाब</span>।</li><li>नया नाम भक्ति परंपरा के संत गुरु रविदास के सम्मान में है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q3"><div class="q-head"><span class="q-number">Q3</span></div><div class="question-text">What is the name of the new complex housing the Prime Minister&#39;s Office, inaugurated in February 2026?<span class="hi" lang="hi">फरवरी 2026 में उद्घाटित प्रधानमंत्री कार्यालय वाले नए परिसर का नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Lok Bhavan</span><span class="opt-hi" lang="hi">A) लोक भवन</span></li><li class="option"><span class="opt-en">B) Kartavya Bhavan</span><span class="opt-hi" lang="hi">B) कर्तव्य भवन</span></li><li class="option correct-option"><span class="opt-en">C) Seva Teerth</span><span class="opt-hi" lang="hi">C) सेवा तीर्थ (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) Swaraj Bhavan</span><span class="opt-hi" lang="hi">D) स्वराज भवन</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Seva Teerth</span>.</li><li>The complex houses the PMO, Cabinet Secretariat and National Security Council Secretariat. Kartavya Bhavans are separate new ministry buildings.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">सेवा तीर्थ</span>।</li><li>परिसर में प्रधानमंत्री कार्यालय, मंत्रिमंडल सचिवालय और राष्ट्रीय सुरक्षा परिषद सचिवालय हैं। कर्तव्य भवन अलग नए मंत्रालय भवन हैं।</li></ul></div></div></main>
-<main class="question-box question-card" id="q4"><div class="q-head"><span class="q-number">Q4</span></div><div class="question-text">The old North Block and South Block are to become part of which institution?<span class="hi" lang="hi">पुराने नॉर्थ ब्लॉक और साउथ ब्लॉक को किस संस्थान का भाग बनाया जाना है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) National Library</span><span class="opt-hi" lang="hi">A) राष्ट्रीय पुस्तकालय</span></li><li class="option correct-option"><span class="opt-en">B) Yuge Yugeen Bharat National Museum</span><span class="opt-hi" lang="hi">B) युगे युगीन भारत राष्ट्रीय संग्रहालय (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Parliament Museum</span><span class="opt-hi" lang="hi">C) संसद संग्रहालय</span></li><li class="option"><span class="opt-en">D) National Archives</span><span class="opt-hi" lang="hi">D) राष्ट्रीय अभिलेखागार</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Yuge Yugeen Bharat National Museum</span>.</li><li>The old blocks are intended for the museum. Government offices have shifted to Seva Teerth and Kartavya Bhavans.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">युगे युगीन भारत राष्ट्रीय संग्रहालय</span>।</li><li>पुराने ब्लॉक संग्रहालय का भाग बनाए जाने हैं। सरकारी कार्यालय सेवा तीर्थ और कर्तव्य भवन में स्थानांतरित हुए हैं।</li></ul></div></div></main>
-<main class="question-box question-card" id="q5"><div class="q-head"><span class="q-number">Q5</span></div><div class="question-text">Pakyong Airport, proposed to be named after Trilochan Pokhrel, is in which state?<span class="hi" lang="hi">त्रिलोचन पोखरेल के नाम पर नामकरण के लिए प्रस्तावित पाक्योंग हवाई अड्डा किस राज्य में है?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Sikkim</span><span class="opt-hi" lang="hi">A) सिक्किम (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Arunachal Pradesh</span><span class="opt-hi" lang="hi">B) अरुणाचल प्रदेश</span></li><li class="option"><span class="opt-en">C) Assam</span><span class="opt-hi" lang="hi">C) असम</span></li><li class="option"><span class="opt-en">D) Meghalaya</span><span class="opt-hi" lang="hi">D) मेघालय</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Sikkim</span>.</li><li>Chief Minister Prem Singh Tamang announced the proposed honour for freedom fighter Trilochan Pokhrel in February 2026.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">सिक्किम</span>।</li><li>मुख्यमंत्री प्रेम सिंह तमांग ने फरवरी 2026 में स्वतंत्रता सेनानी त्रिलोचन पोखरेल के सम्मान में नामकरण की घोषणा की।</li></ul></div></div></main>
-<main class="question-box question-card" id="q6"><div class="q-head"><span class="q-number">Q6</span></div><div class="question-text">Rajasthan announced which new name for Mount Abu in February 2026?<span class="hi" lang="hi">राजस्थान ने फरवरी 2026 में माउंट आबू के लिए किस नए नाम की घोषणा की?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Aburaj</span><span class="opt-hi" lang="hi">A) आबूराज (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Aravallipur</span><span class="opt-hi" lang="hi">B) अरावलीपुर</span></li><li class="option"><span class="opt-en">C) Shivraj</span><span class="opt-hi" lang="hi">C) शिवराज</span></li><li class="option"><span class="opt-en">D) Abunaga</span><span class="opt-hi" lang="hi">D) आबूनाग</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Aburaj</span>.</li><li>The announced name is also written Abu Raj. Kaman → Kamvan and Jahazpur → Yagyapur were announced alongside it.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">आबूराज</span>।</li><li>घोषित नाम आबू राज भी लिखा जाता है। साथ में कामां → कामवन और जहाजपुर → यज्ञपुर की घोषणा भी हुई।</li></ul></div></div></main>
-<main class="question-box question-card" id="q7"><div class="q-head"><span class="q-number">Q7</span></div><div class="question-text">Which wildlife sanctuary was designated Kerala&#39;s first butterfly sanctuary?<span class="hi" lang="hi">केरल का पहला तितली अभयारण्य किस वन्यजीव अभयारण्य को बनाया गया?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Wayanad Wildlife Sanctuary</span><span class="opt-hi" lang="hi">A) वायनाड वन्यजीव अभयारण्य</span></li><li class="option"><span class="opt-en">B) Periyar Wildlife Sanctuary</span><span class="opt-hi" lang="hi">B) पेरियार वन्यजीव अभयारण्य</span></li><li class="option correct-option"><span class="opt-en">C) Aralam Wildlife Sanctuary</span><span class="opt-hi" lang="hi">C) आरलम वन्यजीव अभयारण्य (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) Silent Valley National Park</span><span class="opt-hi" lang="hi">D) साइलेंट वैली राष्ट्रीय उद्यान</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Aralam Wildlife Sanctuary</span>.</li><li>Aralam is in Kannur district of Kerala, in the Western Ghats.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">आरलम वन्यजीव अभयारण्य</span>।</li><li>आरलम पश्चिमी घाट में केरल के कन्नूर जिले में स्थित है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q8"><div class="q-head"><span class="q-number">Q8</span></div><div class="question-text">Which Act was replaced by the Viksit Bharat–G RAM G Act, 2025?<span class="hi" lang="hi">विकसित भारत–जी राम जी अधिनियम, 2025 ने किस अधिनियम का स्थान लिया?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) MGNREGA, 2005</span><span class="opt-hi" lang="hi">A) मनरेगा, 2005 (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) National Food Security Act</span><span class="opt-hi" lang="hi">B) राष्ट्रीय खाद्य सुरक्षा अधिनियम</span></li><li class="option"><span class="opt-en">C) Right to Education Act</span><span class="opt-hi" lang="hi">C) शिक्षा का अधिकार अधिनियम</span></li><li class="option"><span class="opt-en">D) Forest Rights Act</span><span class="opt-hi" lang="hi">D) वन अधिकार अधिनियम</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">MGNREGA, 2005</span>.</li><li>The replacement took effect on 1 July 2026. This is replacement legislation, rather than merely a new name; the new guarantee is 125 days of wage employment per financial year.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">मनरेगा, 2005</span>।</li><li>प्रतिस्थापन 1 जुलाई 2026 से प्रभावी हुआ। यह केवल नाम परिवर्तन के बजाय नया कानून है; नई गारंटी प्रति वित्त वर्ष 125 दिन के मजदूरी रोजगार की है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q9"><div class="q-head"><span class="q-number">Q9</span></div><div class="question-text">Which railway station was renamed Ahilyanagar in honour of Ahilyabai Holkar?<span class="hi" lang="hi">अहिल्याबाई होलकर के सम्मान में किस रेलवे स्टेशन का नाम अहिल्यानगर रखा गया?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Indore</span><span class="opt-hi" lang="hi">A) इंदौर</span></li><li class="option"><span class="opt-en">B) Pune</span><span class="opt-hi" lang="hi">B) पुणे</span></li><li class="option correct-option"><span class="opt-en">C) Ahmednagar</span><span class="opt-hi" lang="hi">C) अहमदनगर (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) Nagpur</span><span class="opt-hi" lang="hi">D) नागपुर</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Ahmednagar</span>.</li><li>The station is in Maharashtra. The name honours the Maratha ruler Ahilyabai Holkar.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">अहमदनगर</span>।</li><li>स्टेशन महाराष्ट्र में है। नया नाम मराठा शासिका अहिल्याबाई होलकर के सम्मान में है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q10"><div class="q-head"><span class="q-number">Q10</span></div><div class="question-text">Which town in Shahjahanpur district was renamed Parashurampuri?<span class="hi" lang="hi">शाहजहाँपुर जिले के किस नगर का नाम परशुरामपुरी रखा गया?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Jalalabad</span><span class="opt-hi" lang="hi">A) जलालाबाद (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Kanpur</span><span class="opt-hi" lang="hi">B) कानपुर</span></li><li class="option"><span class="opt-en">C) Varanasi</span><span class="opt-hi" lang="hi">C) वाराणसी</span></li><li class="option"><span class="opt-en">D) Gwalior</span><span class="opt-hi" lang="hi">D) ग्वालियर</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Jalalabad</span>.</li><li>Jalalabad is in Shahjahanpur district, Uttar Pradesh.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">जलालाबाद</span>।</li><li>जलालाबाद उत्तर प्रदेश के शाहजहाँपुर जिले में है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q11"><div class="q-head"><span class="q-number">Q11</span></div><div class="question-text">Which university was renamed after former Prime Minister Dr Manmohan Singh?<span class="hi" lang="hi">पूर्व प्रधानमंत्री डॉ. मनमोहन सिंह के नाम पर किस विश्वविद्यालय का नाम रखा गया?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Bengaluru City University</span><span class="opt-hi" lang="hi">A) बेंगलुरु सिटी विश्वविद्यालय (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) University of Delhi</span><span class="opt-hi" lang="hi">B) दिल्ली विश्वविद्यालय</span></li><li class="option"><span class="opt-en">C) University of Mumbai</span><span class="opt-hi" lang="hi">C) मुंबई विश्वविद्यालय</span></li><li class="option"><span class="opt-en">D) University of Calcutta</span><span class="opt-hi" lang="hi">D) कलकत्ता विश्वविद्यालय</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Bengaluru City University</span>.</li><li>Its full new name is Dr Manmohan Singh Bengaluru City University, in Karnataka.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">बेंगलुरु सिटी विश्वविद्यालय</span>।</li><li>कर्नाटक में इसका पूरा नया नाम डॉ. मनमोहन सिंह बेंगलुरु सिटी विश्वविद्यालय है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q12"><div class="q-head"><span class="q-number">Q12</span></div><div class="question-text">Which state announced the renaming of Khuldabad as Ratnapur?<span class="hi" lang="hi">किस राज्य ने खुलदाबाद का नाम रत्नपुर करने की घोषणा की?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Maharashtra</span><span class="opt-hi" lang="hi">A) महाराष्ट्र (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Uttar Pradesh</span><span class="opt-hi" lang="hi">B) उत्तर प्रदेश</span></li><li class="option"><span class="opt-en">C) Madhya Pradesh</span><span class="opt-hi" lang="hi">C) मध्य प्रदेश</span></li><li class="option"><span class="opt-en">D) Rajasthan</span><span class="opt-hi" lang="hi">D) राजस्थान</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Maharashtra</span>.</li><li>Khuldabad is in Chhatrapati Sambhajinagar district; the announced new name is Ratnapur.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">महाराष्ट्र</span>।</li><li>खुलदाबाद छत्रपति संभाजीनगर जिले में है; घोषित नया नाम रत्नपुर है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q13"><div class="q-head"><span class="q-number">Q13</span></div><div class="question-text">What name was given to HAL&#39;s upgraded Hindustan Jet Trainer HJT-36?<span class="hi" lang="hi">एचएएल के उन्नत हिंदुस्तान जेट ट्रेनर एचजेटी-36 को क्या नाम दिया गया?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Garuda</span><span class="opt-hi" lang="hi">A) गरुड़</span></li><li class="option correct-option"><span class="opt-en">B) Yashas</span><span class="opt-hi" lang="hi">B) यशस् (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Vikrant</span><span class="opt-hi" lang="hi">C) विक्रांत</span></li><li class="option"><span class="opt-en">D) Tejas</span><span class="opt-hi" lang="hi">D) तेजस</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Yashas</span>.</li><li>HAL unveiled the upgraded trainer as Yashas at Aero India 2025.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">यशस्</span>।</li><li>एचएएल ने एयरो इंडिया 2025 में उन्नत ट्रेनर का यशस् नाम से अनावरण किया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q14"><div class="q-head"><span class="q-number">Q14</span></div><div class="question-text">What is the new name of Kolkata&#39;s Fort William?<span class="hi" lang="hi">कोलकाता के फोर्ट विलियम का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Shiv Durg</span><span class="opt-hi" lang="hi">A) शिव दुर्ग</span></li><li class="option correct-option"><span class="opt-en">B) Vijay Durg</span><span class="opt-hi" lang="hi">B) विजय दुर्ग (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Samrat Durg</span><span class="opt-hi" lang="hi">C) सम्राट दुर्ग</span></li><li class="option"><span class="opt-en">D) Veer Durg</span><span class="opt-hi" lang="hi">D) वीर दुर्ग</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Vijay Durg</span>.</li><li>The fort houses the Indian Army&#39;s Eastern Command headquarters in Kolkata, West Bengal.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">विजय दुर्ग</span>।</li><li>यह किला पश्चिम बंगाल के कोलकाता में भारतीय सेना की पूर्वी कमान का मुख्यालय है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q15"><div class="q-head"><span class="q-number">Q15</span></div><div class="question-text">Which lake in Ajmer was renamed Varun Sagar?<span class="hi" lang="hi">अजमेर की किस झील का नाम वरुण सागर रखा गया?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Ana Sagar</span><span class="opt-hi" lang="hi">A) आना सागर</span></li><li class="option"><span class="opt-en">B) Pichola Lake</span><span class="opt-hi" lang="hi">B) पिछोला झील</span></li><li class="option"><span class="opt-en">C) Sambhar Lake</span><span class="opt-hi" lang="hi">C) सांभर झील</span></li><li class="option correct-option"><span class="opt-en">D) Foy Sagar</span><span class="opt-hi" lang="hi">D) फॉय सागर (सही उत्तर ✔)</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Foy Sagar</span>.</li><li>Foy Sagar is in Ajmer, Rajasthan. King Edward Memorial Bhawan there was also renamed Maharishi Dayanand Vishrant Grih.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">फॉय सागर</span>।</li><li>फॉय सागर राजस्थान के अजमेर में है। वहाँ किंग एडवर्ड मेमोरियल भवन का नाम भी महर्षि दयानंद विश्रांत गृह रखा गया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q16"><div class="q-head"><span class="q-number">Q16</span></div><div class="question-text">What is the new name of Port Blair?<span class="hi" lang="hi">पोर्ट ब्लेयर का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Sri Rajendra Puram</span><span class="opt-hi" lang="hi">A) श्री राजेंद्र पुरम</span></li><li class="option correct-option"><span class="opt-en">B) Sri Vijaya Puram</span><span class="opt-hi" lang="hi">B) श्री विजय पुरम (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Sri Shivaji Puram</span><span class="opt-hi" lang="hi">C) श्री शिवाजी पुरम</span></li><li class="option"><span class="opt-en">D) Sri Bharat Puram</span><span class="opt-hi" lang="hi">D) श्री भारत पुरम</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Sri Vijaya Puram</span>.</li><li>The capital of the Andaman and Nicobar Islands was renamed in September 2024.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">श्री विजय पुरम</span>।</li><li>अंडमान और निकोबार द्वीपसमूह की राजधानी का नाम सितंबर 2024 में बदला गया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q17"><div class="q-head"><span class="q-number">Q17</span></div><div class="question-text">Maharashtra&#39;s proposal to rename Pune Airport honours which spiritual figure?<span class="hi" lang="hi">पुणे हवाई अड्डे के नामकरण का महाराष्ट्र का प्रस्ताव किस आध्यात्मिक व्यक्तित्व के सम्मान में है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Swami Vivekananda</span><span class="opt-hi" lang="hi">A) स्वामी विवेकानंद</span></li><li class="option"><span class="opt-en">B) Sri Aurobindo</span><span class="opt-hi" lang="hi">B) श्री अरविंद</span></li><li class="option correct-option"><span class="opt-en">C) Jagadguru Sant Tukaram Maharaj</span><span class="opt-hi" lang="hi">C) जगद्गुरु संत तुकाराम महाराज (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) Guru Nanak</span><span class="opt-hi" lang="hi">D) गुरु नानक</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Jagadguru Sant Tukaram Maharaj</span>.</li><li>The state approved the proposal in 2024. A state proposal is distinct from completion of the Union naming process.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">जगद्गुरु संत तुकाराम महाराज</span>।</li><li>राज्य ने 2024 में प्रस्ताव को मंजूरी दी। राज्य का प्रस्ताव केंद्रीय नामकरण प्रक्रिया के पूरा होने से अलग चरण है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q18"><div class="q-head"><span class="q-number">Q18</span></div><div class="question-text">Ahmednagar, renamed Ahilyanagar, is in which state?<span class="hi" lang="hi">अहिल्यानगर नाम दिया गया अहमदनगर किस राज्य में है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Gujarat</span><span class="opt-hi" lang="hi">A) गुजरात</span></li><li class="option correct-option"><span class="opt-en">B) Maharashtra</span><span class="opt-hi" lang="hi">B) महाराष्ट्र (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Uttar Pradesh</span><span class="opt-hi" lang="hi">C) उत्तर प्रदेश</span></li><li class="option"><span class="opt-en">D) Telangana</span><span class="opt-hi" lang="hi">D) तेलंगाना</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Maharashtra</span>.</li><li>The name honours Ahilyabai Holkar, an eighteenth-century Maratha ruler.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">महाराष्ट्र</span>।</li><li>यह नाम अठारहवीं सदी की मराठा शासिका अहिल्याबाई होलकर के सम्मान में है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q19"><div class="q-head"><span class="q-number">Q19</span></div><div class="question-text">Maharishi Valmiki International Airport, Ayodhya Dham, serves which city?<span class="hi" lang="hi">महर्षि वाल्मीकि अंतरराष्ट्रीय हवाई अड्डा, अयोध्या धाम, किस शहर में है?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Ayodhya</span><span class="opt-hi" lang="hi">A) अयोध्या (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Prayagraj</span><span class="opt-hi" lang="hi">B) प्रयागराज</span></li><li class="option"><span class="opt-en">C) Varanasi</span><span class="opt-hi" lang="hi">C) वाराणसी</span></li><li class="option"><span class="opt-en">D) Agra</span><span class="opt-hi" lang="hi">D) आगरा</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Ayodhya</span>.</li><li>The airport is in Ayodhya, Uttar Pradesh.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">अयोध्या</span>।</li><li>हवाई अड्डा उत्तर प्रदेश के अयोध्या में है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q20"><div class="q-head"><span class="q-number">Q20</span></div><div class="question-text">Aurangabad railway station&#39;s new name honours which historical personality?<span class="hi" lang="hi">औरंगाबाद रेलवे स्टेशन का नया नाम किस ऐतिहासिक व्यक्तित्व के सम्मान में है?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Chhatrapati Sambhaji Maharaj</span><span class="opt-hi" lang="hi">A) छत्रपति संभाजी महाराज (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Chhatrapati Shivaji Maharaj</span><span class="opt-hi" lang="hi">B) छत्रपति शिवाजी महाराज</span></li><li class="option"><span class="opt-en">C) Mahatma Gandhi</span><span class="opt-hi" lang="hi">C) महात्मा गांधी</span></li><li class="option"><span class="opt-en">D) Dr B. R. Ambedkar</span><span class="opt-hi" lang="hi">D) डॉ. बी. आर. आंबेडकर</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Chhatrapati Sambhaji Maharaj</span>.</li><li>Its new name is Chhatrapati Sambhajinagar railway station, Maharashtra.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">छत्रपति संभाजी महाराज</span>।</li><li>महाराष्ट्र में इसका नया नाम छत्रपति संभाजीनगर रेलवे स्टेशन है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q21"><div class="q-head"><span class="q-number">Q21</span></div><div class="question-text">The proposed name of Navi Mumbai International Airport honours which leader?<span class="hi" lang="hi">नवी मुंबई अंतरराष्ट्रीय हवाई अड्डे का प्रस्तावित नाम किस नेता के सम्मान में है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Balasaheb Thackeray</span><span class="opt-hi" lang="hi">A) बालासाहेब ठाकरे</span></li><li class="option"><span class="opt-en">B) Sardar Patel</span><span class="opt-hi" lang="hi">B) सरदार पटेल</span></li><li class="option correct-option"><span class="opt-en">C) D. B. Patil</span><span class="opt-hi" lang="hi">C) डी. बी. पाटिल (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) Jawaharlal Nehru</span><span class="opt-hi" lang="hi">D) जवाहरलाल नेहरू</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">D. B. Patil</span>.</li><li>The proposed name honours Loknete D. B. Patil. The airport is in Maharashtra.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">डी. बी. पाटिल</span>।</li><li>प्रस्तावित नाम लोकनेते डी. बी. पाटिल के सम्मान में है। हवाई अड्डा महाराष्ट्र में है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q22"><div class="q-head"><span class="q-number">Q22</span></div><div class="question-text">Mumbai&#39;s Carnac Bridge was renamed as what?<span class="hi" lang="hi">मुंबई के कर्नाक ब्रिज का नाम बदलकर क्या रखा गया?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Sindoor Bridge</span><span class="opt-hi" lang="hi">A) सिंदूर ब्रिज (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Azadi Bridge</span><span class="opt-hi" lang="hi">B) आज़ादी ब्रिज</span></li><li class="option"><span class="opt-en">C) Shivaji Bridge</span><span class="opt-hi" lang="hi">C) शिवाजी ब्रिज</span></li><li class="option"><span class="opt-en">D) Veer Bridge</span><span class="opt-hi" lang="hi">D) वीर ब्रिज</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Sindoor Bridge</span>.</li><li>Carnac Bridge is in Mumbai, Maharashtra.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">सिंदूर ब्रिज</span>।</li><li>कर्नाक ब्रिज महाराष्ट्र के मुंबई में स्थित है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q23"><div class="q-head"><span class="q-number">Q23</span></div><div class="question-text">What is the new name of Hoshangabad?<span class="hi" lang="hi">होशंगाबाद का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Sribhumi</span><span class="opt-hi" lang="hi">A) श्रीभूमि</span></li><li class="option"><span class="opt-en">B) Ishwarpur</span><span class="opt-hi" lang="hi">B) ईश्वरपुर</span></li><li class="option correct-option"><span class="opt-en">C) Narmadapuram</span><span class="opt-hi" lang="hi">C) नर्मदापुरम (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) Dharashiv</span><span class="opt-hi" lang="hi">D) धाराशिव</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Narmadapuram</span>.</li><li>Location: Madhya Pradesh.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">नर्मदापुरम</span>।</li><li>स्थान: मध्य प्रदेश।</li></ul></div></div></main>
-<main class="question-box question-card" id="q24"><div class="q-head"><span class="q-number">Q24</span></div><div class="question-text">What is the new name of Osmanabad?<span class="hi" lang="hi">उस्मानाबाद का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Kamvan</span><span class="opt-hi" lang="hi">A) कामवन</span></li><li class="option correct-option"><span class="opt-en">B) Dharashiv</span><span class="opt-hi" lang="hi">B) धाराशिव (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Ahilyanagar</span><span class="opt-hi" lang="hi">C) अहिल्यानगर</span></li><li class="option"><span class="opt-en">D) Ratnapur</span><span class="opt-hi" lang="hi">D) रत्नपुर</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Dharashiv</span>.</li><li>Location: Maharashtra.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">धाराशिव</span>।</li><li>स्थान: महाराष्ट्र।</li></ul></div></div></main>
-<main class="question-box question-card" id="q25"><div class="q-head"><span class="q-number">Q25</span></div><div class="question-text">What is the new name of Islampur in Sangli district?<span class="hi" lang="hi">सांगली जिले के इस्लामपुर का नया नाम क्या है?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Ishwarpur</span><span class="opt-hi" lang="hi">A) ईश्वरपुर (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Parashurampuri</span><span class="opt-hi" lang="hi">B) परशुरामपुरी</span></li><li class="option"><span class="opt-en">C) Yagyapur</span><span class="opt-hi" lang="hi">C) यज्ञपुर</span></li><li class="option"><span class="opt-en">D) Aburaj</span><span class="opt-hi" lang="hi">D) आबूराज</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Ishwarpur</span>.</li><li>Location: Maharashtra.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">ईश्वरपुर</span>।</li><li>स्थान: महाराष्ट्र।</li></ul></div></div></main>
-<main class="question-box question-card" id="q26"><div class="q-head"><span class="q-number">Q26</span></div><div class="question-text">What is the new name of Karimganj?<span class="hi" lang="hi">करीमगंज का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Kamvan</span><span class="opt-hi" lang="hi">A) कामवन</span></li><li class="option"><span class="opt-en">B) Prayagraj</span><span class="opt-hi" lang="hi">B) प्रयागराज</span></li><li class="option"><span class="opt-en">C) Dharashiv</span><span class="opt-hi" lang="hi">C) धाराशिव</span></li><li class="option correct-option"><span class="opt-en">D) Sribhumi</span><span class="opt-hi" lang="hi">D) श्रीभूमि (सही उत्तर ✔)</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Sribhumi</span>.</li><li>Location: Assam.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">श्रीभूमि</span>।</li><li>स्थान: असम।</li></ul></div></div></main>
-<main class="question-box question-card" id="q27"><div class="q-head"><span class="q-number">Q27</span></div><div class="question-text">What is the new name of Allahabad?<span class="hi" lang="hi">इलाहाबाद का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Parashurampuri</span><span class="opt-hi" lang="hi">A) परशुरामपुरी</span></li><li class="option"><span class="opt-en">B) Ahilyanagar</span><span class="opt-hi" lang="hi">B) अहिल्यानगर</span></li><li class="option correct-option"><span class="opt-en">C) Prayagraj</span><span class="opt-hi" lang="hi">C) प्रयागराज (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) Ayodhya</span><span class="opt-hi" lang="hi">D) अयोध्या</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Prayagraj</span>.</li><li>Location: Uttar Pradesh.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">प्रयागराज</span>।</li><li>स्थान: उत्तर प्रदेश।</li></ul></div></div></main>
-<main class="question-box question-card" id="q28"><div class="q-head"><span class="q-number">Q28</span></div><div class="question-text">What is the new name of Faizabad district?<span class="hi" lang="hi">फैज़ाबाद जिले का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Shahjahanpur district</span><span class="opt-hi" lang="hi">A) शाहजहाँपुर जिला</span></li><li class="option correct-option"><span class="opt-en">B) Ayodhya district</span><span class="opt-hi" lang="hi">B) अयोध्या जिला (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Prayagraj district</span><span class="opt-hi" lang="hi">C) प्रयागराज जिला</span></li><li class="option"><span class="opt-en">D) Varanasi district</span><span class="opt-hi" lang="hi">D) वाराणसी जिला</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Ayodhya district</span>.</li><li>Location: Uttar Pradesh.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">अयोध्या जिला</span>।</li><li>स्थान: उत्तर प्रदेश।</li></ul></div></div></main>
-<main class="question-box question-card" id="q29"><div class="q-head"><span class="q-number">Q29</span></div><div class="question-text">What is the new name of Mughalsarai Junction?<span class="hi" lang="hi">मुगलसराय जंक्शन का नया नाम क्या है?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Pandit Deen Dayal Upadhyaya Junction</span><span class="opt-hi" lang="hi">A) पंडित दीनदयाल उपाध्याय जंक्शन (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Chhatrapati Sambhajinagar</span><span class="opt-hi" lang="hi">B) छत्रपति संभाजीनगर</span></li><li class="option"><span class="opt-en">C) Ahilyanagar</span><span class="opt-hi" lang="hi">C) अहिल्यानगर</span></li><li class="option"><span class="opt-en">D) Ayodhya Dham Junction</span><span class="opt-hi" lang="hi">D) अयोध्या धाम जंक्शन</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Pandit Deen Dayal Upadhyaya Junction</span>.</li><li>Location: Uttar Pradesh.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">पंडित दीनदयाल उपाध्याय जंक्शन</span>।</li><li>स्थान: उत्तर प्रदेश।</li></ul></div></div></main>
-<main class="question-box question-card" id="q30"><div class="q-head"><span class="q-number">Q30</span></div><div class="question-text">What is the new name of Rajpath?<span class="hi" lang="hi">राजपथ का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Lok Kalyan Marg</span><span class="opt-hi" lang="hi">A) लोक कल्याण मार्ग</span></li><li class="option"><span class="opt-en">B) Janpath</span><span class="opt-hi" lang="hi">B) जनपथ</span></li><li class="option"><span class="opt-en">C) Seva Path</span><span class="opt-hi" lang="hi">C) सेवा पथ</span></li><li class="option correct-option"><span class="opt-en">D) Kartavya Path</span><span class="opt-hi" lang="hi">D) कर्तव्य पथ (सही उत्तर ✔)</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Kartavya Path</span>.</li><li>Location: New Delhi.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">कर्तव्य पथ</span>।</li><li>स्थान: नई दिल्ली।</li></ul></div></div></main>
-<main class="question-box question-card" id="q31"><div class="q-head"><span class="q-number">Q31</span></div><div class="question-text">The trophy unveiled for the 2025 FIDE World Cup honours which Indian chess legend?<span class="hi" lang="hi">2025 फिडे विश्व कप के लिए अनावरण की गई ट्रॉफी का नाम किस भारतीय शतरंज दिग्गज के सम्मान में रखा गया?</span></div><ul class="options"><li class="option"><span class="opt-en">A) R. Praggnanandhaa</span><span class="opt-hi" lang="hi">A) आर. प्रज्ञानानंद</span></li><li class="option"><span class="opt-en">B) Koneru Humpy</span><span class="opt-hi" lang="hi">B) कोनेरू हम्पी</span></li><li class="option correct-option"><span class="opt-en">C) Viswanathan Anand</span><span class="opt-hi" lang="hi">C) विश्वनाथन आनंद (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) D. Gukesh</span><span class="opt-hi" lang="hi">D) डी. गुकेश</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Viswanathan Anand</span>.</li><li>Anand is India&#39;s first Grandmaster and a five-time world champion.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">विश्वनाथन आनंद</span>।</li><li>आनंद भारत के पहले ग्रैंडमास्टर और पाँच बार के विश्व चैंपियन हैं।</li></ul></div></div></main>
-<main class="question-box question-card" id="q32"><div class="q-head"><span class="q-number">Q32</span></div><div class="question-text">The Rajiv Gandhi Khel Ratna Award was renamed as what?<span class="hi" lang="hi">राजीव गांधी खेल रत्न पुरस्कार का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Dhyan Chand Lifetime Award</span><span class="opt-hi" lang="hi">A) ध्यानचंद आजीवन पुरस्कार</span></li><li class="option correct-option"><span class="opt-en">B) Major Dhyan Chand Khel Ratna Award</span><span class="opt-hi" lang="hi">B) मेजर ध्यानचंद खेल रत्न पुरस्कार (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Arjuna Award</span><span class="opt-hi" lang="hi">C) अर्जुन पुरस्कार</span></li><li class="option"><span class="opt-en">D) Dronacharya Award</span><span class="opt-hi" lang="hi">D) द्रोणाचार्य पुरस्कार</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Major Dhyan Chand Khel Ratna Award</span>.</li><li>The award was renamed in 2021.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">मेजर ध्यानचंद खेल रत्न पुरस्कार</span>।</li><li>पुरस्कार का नाम 2021 में बदला गया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q33"><div class="q-head"><span class="q-number">Q33</span></div><div class="question-text">Indira Gandhi Matritva Sahyog Yojana was restructured into which scheme?<span class="hi" lang="hi">इंदिरा गांधी मातृत्व सहयोग योजना को पुनर्गठित कर कौन सी योजना बनाई गई?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Pradhan Mantri Matru Vandana Yojana</span><span class="opt-hi" lang="hi">A) प्रधानमंत्री मातृ वंदना योजना (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Janani Suraksha Yojana</span><span class="opt-hi" lang="hi">B) जननी सुरक्षा योजना</span></li><li class="option"><span class="opt-en">C) POSHAN Abhiyaan</span><span class="opt-hi" lang="hi">C) पोषण अभियान</span></li><li class="option"><span class="opt-en">D) Beti Bachao Beti Padhao</span><span class="opt-hi" lang="hi">D) बेटी बचाओ बेटी पढ़ाओ</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Pradhan Mantri Matru Vandana Yojana</span>.</li><li>PMMVY is the successor maternity-benefit scheme.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">प्रधानमंत्री मातृ वंदना योजना</span>।</li><li>पीएमएमवीवाई मातृत्व लाभ की उत्तरवर्ती योजना है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q34"><div class="q-head"><span class="q-number">Q34</span></div><div class="question-text">Nirmal Bharat Abhiyan was restructured into which programme?<span class="hi" lang="hi">निर्मल भारत अभियान को पुनर्गठित कर कौन सा कार्यक्रम बनाया गया?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Jal Jeevan Mission</span><span class="opt-hi" lang="hi">A) जल जीवन मिशन</span></li><li class="option"><span class="opt-en">B) AMRUT</span><span class="opt-hi" lang="hi">B) अमृत</span></li><li class="option"><span class="opt-en">C) Namami Gange</span><span class="opt-hi" lang="hi">C) नमामि गंगे</span></li><li class="option correct-option"><span class="opt-en">D) Swachh Bharat Mission</span><span class="opt-hi" lang="hi">D) स्वच्छ भारत मिशन (सही उत्तर ✔)</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Swachh Bharat Mission</span>.</li><li>Nirmal Bharat Abhiyan became Swachh Bharat Mission (Gramin) in 2014.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">स्वच्छ भारत मिशन</span>।</li><li>2014 में निर्मल भारत अभियान को पुनर्गठित कर स्वच्छ भारत मिशन (ग्रामीण) बनाया गया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q35"><div class="q-head"><span class="q-number">Q35</span></div><div class="question-text">National Urban Livelihoods Mission was renamed as what?<span class="hi" lang="hi">राष्ट्रीय शहरी आजीविका मिशन का नया नाम क्या रखा गया?</span></div><ul class="options"><li class="option"><span class="opt-en">A) DAY–NRLM</span><span class="opt-hi" lang="hi">A) दीनदयाल अंत्योदय योजना–राष्ट्रीय ग्रामीण आजीविका मिशन</span></li><li class="option"><span class="opt-en">B) Smart Cities Mission</span><span class="opt-hi" lang="hi">B) स्मार्ट सिटीज मिशन</span></li><li class="option correct-option"><span class="opt-en">C) Deendayal Antyodaya Yojana–NULM</span><span class="opt-hi" lang="hi">C) दीनदयाल अंत्योदय योजना–राष्ट्रीय शहरी आजीविका मिशन (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) PMAY–Urban</span><span class="opt-hi" lang="hi">D) प्रधानमंत्री आवास योजना–शहरी</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Deendayal Antyodaya Yojana–NULM</span>.</li><li>DAY–NULM is the urban livelihoods programme; NRLM concerns rural livelihoods.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">दीनदयाल अंत्योदय योजना–राष्ट्रीय शहरी आजीविका मिशन</span>।</li><li>डीएवाई–एनयूएलएम शहरी आजीविका कार्यक्रम है; एनआरएलएम ग्रामीण आजीविका से संबंधित है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q36"><div class="q-head"><span class="q-number">Q36</span></div><div class="question-text">Rajiv Gandhi Grameen Vidyutikaran Yojana was subsumed under which scheme?<span class="hi" lang="hi">राजीव गांधी ग्रामीण विद्युतीकरण योजना को किस योजना में समाहित किया गया?</span></div><ul class="options"><li class="option"><span class="opt-en">A) UDAY</span><span class="opt-hi" lang="hi">A) उदय</span></li><li class="option correct-option"><span class="opt-en">B) Deen Dayal Upadhyaya Gram Jyoti Yojana</span><span class="opt-hi" lang="hi">B) दीनदयाल उपाध्याय ग्राम ज्योति योजना (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Saubhagya</span><span class="opt-hi" lang="hi">C) सौभाग्य</span></li><li class="option"><span class="opt-en">D) PM-KUSUM</span><span class="opt-hi" lang="hi">D) पीएम-कुसुम</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Deen Dayal Upadhyaya Gram Jyoti Yojana</span>.</li><li>RGGVY was subsumed under DDUGJY, rather than simply renamed.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">दीनदयाल उपाध्याय ग्राम ज्योति योजना</span>।</li><li>आरजीजीवीवाई को केवल नया नाम देने के बजाय डीडीयूजीजेवाई में समाहित किया गया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q37"><div class="q-head"><span class="q-number">Q37</span></div><div class="question-text">Indira Awaas Yojana was restructured into which rural housing scheme?<span class="hi" lang="hi">इंदिरा आवास योजना को पुनर्गठित कर कौन सी ग्रामीण आवास योजना बनाई गई?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Pradhan Mantri Awaas Yojana–Gramin</span><span class="opt-hi" lang="hi">A) प्रधानमंत्री आवास योजना–ग्रामीण (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) PMAY–Urban</span><span class="opt-hi" lang="hi">B) प्रधानमंत्री आवास योजना–शहरी</span></li><li class="option"><span class="opt-en">C) DAY–NRLM</span><span class="opt-hi" lang="hi">C) दीनदयाल अंत्योदय योजना–राष्ट्रीय ग्रामीण आजीविका मिशन</span></li><li class="option"><span class="opt-en">D) PM Gram Sadak Yojana</span><span class="opt-hi" lang="hi">D) प्रधानमंत्री ग्राम सड़क योजना</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Pradhan Mantri Awaas Yojana–Gramin</span>.</li><li>The restructuring into PMAY-G took effect in 2016.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">प्रधानमंत्री आवास योजना–ग्रामीण</span>।</li><li>2016 से इंदिरा आवास योजना को पुनर्गठित कर पीएमएवाई-जी बनाया गया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q38"><div class="q-head"><span class="q-number">Q38</span></div><div class="question-text">National Optical Fibre Network was renamed as what?<span class="hi" lang="hi">राष्ट्रीय ऑप्टिकल फाइबर नेटवर्क का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Digital India</span><span class="opt-hi" lang="hi">A) डिजिटल इंडिया</span></li><li class="option"><span class="opt-en">B) Bharat Sanchar</span><span class="opt-hi" lang="hi">B) भारत संचार</span></li><li class="option"><span class="opt-en">C) PM-WANI</span><span class="opt-hi" lang="hi">C) पीएम-वाणी</span></li><li class="option correct-option"><span class="opt-en">D) BharatNet</span><span class="opt-hi" lang="hi">D) भारतनेट (सही उत्तर ✔)</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">BharatNet</span>.</li><li>NOFN was renamed BharatNet.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">भारतनेट</span>।</li><li>एनओएफएन का नया नाम भारतनेट रखा गया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q39"><div class="q-head"><span class="q-number">Q39</span></div><div class="question-text">Rajasthan announced which new name for Kaman in 2026?<span class="hi" lang="hi">राजस्थान ने 2026 में कामां के लिए किस नए नाम की घोषणा की?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Aburaj</span><span class="opt-hi" lang="hi">A) आबूराज</span></li><li class="option"><span class="opt-en">B) Ratnapur</span><span class="opt-hi" lang="hi">B) रत्नपुर</span></li><li class="option correct-option"><span class="opt-en">C) Kamvan</span><span class="opt-hi" lang="hi">C) कामवन (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) Yagyapur</span><span class="opt-hi" lang="hi">D) यज्ञपुर</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Kamvan</span>.</li><li>The announced mapping is Kaman → Kamvan.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">कामवन</span>।</li><li>घोषित नाम परिवर्तन कामां → कामवन है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q40"><div class="q-head"><span class="q-number">Q40</span></div><div class="question-text">Rajasthan announced which new name for Jahazpur in 2026?<span class="hi" lang="hi">राजस्थान ने 2026 में जहाजपुर के लिए किस नए नाम की घोषणा की?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Ishwarpur</span><span class="opt-hi" lang="hi">A) ईश्वरपुर</span></li><li class="option correct-option"><span class="opt-en">B) Yagyapur</span><span class="opt-hi" lang="hi">B) यज्ञपुर (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) Kamvan</span><span class="opt-hi" lang="hi">C) कामवन</span></li><li class="option"><span class="opt-en">D) Aburaj</span><span class="opt-hi" lang="hi">D) आबूराज</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Yagyapur</span>.</li><li>The announced mapping is Jahazpur → Yagyapur.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">यज्ञपुर</span>।</li><li>घोषित नाम परिवर्तन जहाजपुर → यज्ञपुर है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q41"><div class="q-head"><span class="q-number">Q41</span></div><div class="question-text">Ajmer&#39;s King Edward Memorial Bhawan was renamed as what?<span class="hi" lang="hi">अजमेर के किंग एडवर्ड मेमोरियल भवन का नया नाम क्या है?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Maharishi Dayanand Vishrant Grih</span><span class="opt-hi" lang="hi">A) महर्षि दयानंद विश्रांत गृह (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Lok Bhavan</span><span class="opt-hi" lang="hi">B) लोक भवन</span></li><li class="option"><span class="opt-en">C) Seva Teerth</span><span class="opt-hi" lang="hi">C) सेवा तीर्थ</span></li><li class="option"><span class="opt-en">D) Kartavya Bhavan</span><span class="opt-hi" lang="hi">D) कर्तव्य भवन</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Maharishi Dayanand Vishrant Grih</span>.</li><li>The building is in Ajmer, Rajasthan.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">महर्षि दयानंद विश्रांत गृह</span>।</li><li>यह भवन राजस्थान के अजमेर में है।</li></ul></div></div></main>
-<main class="question-box question-card" id="q42"><div class="q-head"><span class="q-number">Q42</span></div><div class="question-text">The Mughal Gardens at Rashtrapati Bhavan were renamed as what?<span class="hi" lang="hi">राष्ट्रपति भवन के मुगल गार्डन का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Bharat Udyan</span><span class="opt-hi" lang="hi">A) भारत उद्यान</span></li><li class="option"><span class="opt-en">B) Kartavya Udyan</span><span class="opt-hi" lang="hi">B) कर्तव्य उद्यान</span></li><li class="option"><span class="opt-en">C) Vijay Udyan</span><span class="opt-hi" lang="hi">C) विजय उद्यान</span></li><li class="option correct-option"><span class="opt-en">D) Amrit Udyan</span><span class="opt-hi" lang="hi">D) अमृत उद्यान (सही उत्तर ✔)</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Amrit Udyan</span>.</li><li>The gardens were given the new name in 2023.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">अमृत उद्यान</span>।</li><li>उद्यानों को 2023 में नया नाम दिया गया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q43"><div class="q-head"><span class="q-number">Q43</span></div><div class="question-text">What name was adopted for Raj Bhavans in the 2025 naming change?<span class="hi" lang="hi">2025 के नाम परिवर्तन में राजभवनों के लिए कौन सा नाम अपनाया गया?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Seva Teerth</span><span class="opt-hi" lang="hi">A) सेवा तीर्थ</span></li><li class="option"><span class="opt-en">B) Swaraj Bhavan</span><span class="opt-hi" lang="hi">B) स्वराज भवन</span></li><li class="option correct-option"><span class="opt-en">C) Lok Bhavan</span><span class="opt-hi" lang="hi">C) लोक भवन (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">D) Kartavya Bhavan</span><span class="opt-hi" lang="hi">D) कर्तव्य भवन</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Lok Bhavan</span>.</li><li>Lok Bhavan should be distinguished from Seva Teerth, the new PMO complex.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">लोक भवन</span>।</li><li>लोक भवन को नए प्रधानमंत्री कार्यालय परिसर सेवा तीर्थ से अलग याद रखें।</li></ul></div></div></main>
-<main class="question-box question-card" id="q44"><div class="q-head"><span class="q-number">Q44</span></div><div class="question-text">The Nehru Memorial Museum and Library was renamed as what?<span class="hi" lang="hi">नेहरू स्मारक संग्रहालय एवं पुस्तकालय का नया नाम क्या है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) National Archives of India</span><span class="opt-hi" lang="hi">A) भारत का राष्ट्रीय अभिलेखागार</span></li><li class="option correct-option"><span class="opt-en">B) Prime Ministers&#39; Museum and Library</span><span class="opt-hi" lang="hi">B) प्रधानमंत्री संग्रहालय एवं पुस्तकालय (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">C) National Leaders&#39; Museum</span><span class="opt-hi" lang="hi">C) राष्ट्रीय नेता संग्रहालय</span></li><li class="option"><span class="opt-en">D) Yuge Yugeen Bharat Museum</span><span class="opt-hi" lang="hi">D) युगे युगीन भारत संग्रहालय</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Prime Ministers&#39; Museum and Library</span>.</li><li>The institution was renamed in 2023.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">प्रधानमंत्री संग्रहालय एवं पुस्तकालय</span>।</li><li>संस्थान का नाम 2023 में बदला गया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q45"><div class="q-head"><span class="q-number">Q45</span></div><div class="question-text">What is the new name of Race Course Road in New Delhi?<span class="hi" lang="hi">नई दिल्ली के रेस कोर्स रोड का नया नाम क्या है?</span></div><ul class="options"><li class="option correct-option"><span class="opt-en">A) Lok Kalyan Marg</span><span class="opt-hi" lang="hi">A) लोक कल्याण मार्ग (सही उत्तर ✔)</span></li><li class="option"><span class="opt-en">B) Kartavya Path</span><span class="opt-hi" lang="hi">B) कर्तव्य पथ</span></li><li class="option"><span class="opt-en">C) Janpath</span><span class="opt-hi" lang="hi">C) जनपथ</span></li><li class="option"><span class="opt-en">D) Amrit Marg</span><span class="opt-hi" lang="hi">D) अमृत मार्ग</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Lok Kalyan Marg</span>.</li><li>Race Course Road was renamed in 2016.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">लोक कल्याण मार्ग</span>।</li><li>रेस कोर्स रोड का नाम 2016 में बदला गया।</li></ul></div></div></main>
-<main class="question-box question-card" id="q46"><div class="q-head"><span class="q-number">Q46</span></div><div class="question-text">Which Article empowers Parliament to alter a state&#39;s name?<span class="hi" lang="hi">कौन सा अनुच्छेद संसद को राज्य का नाम बदलने की शक्ति देता है?</span></div><ul class="options"><li class="option"><span class="opt-en">A) Article 1</span><span class="opt-hi" lang="hi">A) अनुच्छेद 1</span></li><li class="option"><span class="opt-en">B) Article 2</span><span class="opt-hi" lang="hi">B) अनुच्छेद 2</span></li><li class="option"><span class="opt-en">C) Article 4</span><span class="opt-hi" lang="hi">C) अनुच्छेद 4</span></li><li class="option correct-option"><span class="opt-en">D) Article 3</span><span class="opt-hi" lang="hi">D) अनुच्छेद 3 (सही उत्तर ✔)</span></li></ul><div class="explanation-box"><div class="lang-section"><h4>Explanation (English)</h4><ul><li>Answer: <span class="highlight-text">Article 3</span>.</li><li>Article 3 covers formation of states and alteration of their areas, boundaries or names.</li></ul></div><div class="lang-section" lang="hi"><h4>स्पष्टीकरण (हिंदी)</h4><ul><li>उत्तर: <span class="highlight-text">अनुच्छेद 3</span>।</li><li>अनुच्छेद 3 राज्यों के गठन तथा उनके क्षेत्र, सीमाओं या नाम में परिवर्तन से संबंधित है।</li></ul></div></div></main>
+  <!-- QUESTION 1 -->
+<main class="question-card" id="q1">
+<div class="question-text">Q1. In February 2026, the Union Cabinet approved a proposal to rename Kerala as what?<span lang="hi">फरवरी 2026 में केंद्रीय मंत्रिमंडल ने केरल का नाम बदलकर क्या करने के प्रस्ताव को मंजूरी दी?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Malabar</span><span class="opt-hi" lang="hi">A) मालाबार</span></li>
+<li class="option"><span class="opt-en">B) Travancore</span><span class="opt-hi" lang="hi">B) त्रावणकोर</span></li>
+<li class="option"><span class="opt-en">C) Cheralam</span><span class="opt-hi" lang="hi">C) चेरलम</span></li>
+<li class="option correct-option"><span class="opt-en">D) Keralam</span><span class="opt-hi" lang="hi">D) केरलम (सही उत्तर ✔)</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Proposed name of Kerala:</b> <span class="highlight-text">Keralam</span>.</li>
+<li>The proposal was approved on <span class="highlight-text">24 February 2026</span>. A change in a state&#x27;s name requires Parliament&#x27;s law under <span class="highlight-text">Article 3</span>; Cabinet approval is a step in that process.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>केरल का प्रस्तावित नया नाम:</b> <span class="highlight-text">केरलम</span>।</li>
+<li><span class="highlight-text">24 फरवरी 2026</span> को प्रस्ताव को मंजूरी दी गई। राज्य का नाम <span class="highlight-text">अनुच्छेद 3</span> के तहत संसद के कानून से बदलता है; मंत्रिमंडल की मंजूरी इस प्रक्रिया का एक चरण है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 2 -->
+<main class="question-card" id="q2">
+<div class="question-text">Q2. Adampur Airport, renamed Sri Guru Ravidas Ji Airport in 2026, is in which state?<span lang="hi">2026 में श्री गुरु रविदास जी हवाई अड्डा नाम दिया गया आदमपुर हवाई अड्डा किस राज्य में है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Haryana</span><span class="opt-hi" lang="hi">A) हरियाणा</span></li>
+<li class="option correct-option"><span class="opt-en">B) Punjab</span><span class="opt-hi" lang="hi">B) पंजाब (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Rajasthan</span><span class="opt-hi" lang="hi">C) राजस्थान</span></li>
+<li class="option"><span class="opt-en">D) Bihar</span><span class="opt-hi" lang="hi">D) बिहार</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Adampur Airport — state:</b> <span class="highlight-text">Punjab</span>.</li>
+<li>The new name honours <span class="highlight-text">Guru Ravidas</span>, a saint of the Bhakti tradition.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>आदमपुर हवाई अड्डा — राज्य:</b> <span class="highlight-text">पंजाब</span>।</li>
+<li>नया नाम भक्ति परंपरा के संत <span class="highlight-text">गुरु रविदास</span> के सम्मान में है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 3 -->
+<main class="question-card" id="q3">
+<div class="question-text">Q3. What is the name of the new complex housing the Prime Minister&#x27;s Office, inaugurated in February 2026?<span lang="hi">फरवरी 2026 में उद्घाटित प्रधानमंत्री कार्यालय वाले नए परिसर का नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Lok Bhavan</span><span class="opt-hi" lang="hi">A) लोक भवन</span></li>
+<li class="option"><span class="opt-en">B) Kartavya Bhavan</span><span class="opt-hi" lang="hi">B) कर्तव्य भवन</span></li>
+<li class="option correct-option"><span class="opt-en">C) Seva Teerth</span><span class="opt-hi" lang="hi">C) सेवा तीर्थ (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) Swaraj Bhavan</span><span class="opt-hi" lang="hi">D) स्वराज भवन</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>New PMO complex:</b> <span class="highlight-text">Seva Teerth</span>.</li>
+<li>The complex houses the PMO, Cabinet Secretariat and National Security Council Secretariat. <span class="highlight-text">Kartavya Bhavans</span> are separate new ministry buildings.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>नया प्रधानमंत्री कार्यालय परिसर:</b> <span class="highlight-text">सेवा तीर्थ</span>।</li>
+<li>परिसर में प्रधानमंत्री कार्यालय, मंत्रिमंडल सचिवालय और राष्ट्रीय सुरक्षा परिषद सचिवालय हैं। <span class="highlight-text">कर्तव्य भवन</span> अलग नए मंत्रालय भवन हैं।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 4 -->
+<main class="question-card" id="q4">
+<div class="question-text">Q4. The old North Block and South Block are to become part of which institution?<span lang="hi">पुराने नॉर्थ ब्लॉक और साउथ ब्लॉक को किस संस्थान का भाग बनाया जाना है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) National Library</span><span class="opt-hi" lang="hi">A) राष्ट्रीय पुस्तकालय</span></li>
+<li class="option correct-option"><span class="opt-en">B) Yuge Yugeen Bharat National Museum</span><span class="opt-hi" lang="hi">B) युगे युगीन भारत राष्ट्रीय संग्रहालय (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Parliament Museum</span><span class="opt-hi" lang="hi">C) संसद संग्रहालय</span></li>
+<li class="option"><span class="opt-en">D) National Archives</span><span class="opt-hi" lang="hi">D) राष्ट्रीय अभिलेखागार</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>North Block and South Block — planned museum:</b> <span class="highlight-text">Yuge Yugeen Bharat National Museum</span>.</li>
+<li>The old blocks are intended for the museum. Government offices have shifted to <span class="highlight-text">Seva Teerth</span> and <span class="highlight-text">Kartavya Bhavans</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>नॉर्थ ब्लॉक और साउथ ब्लॉक — प्रस्तावित संग्रहालय:</b> <span class="highlight-text">युगे युगीन भारत राष्ट्रीय संग्रहालय</span>।</li>
+<li>पुराने ब्लॉक संग्रहालय का भाग बनाए जाने हैं। सरकारी कार्यालय <span class="highlight-text">सेवा तीर्थ</span> और <span class="highlight-text">कर्तव्य भवन</span> में स्थानांतरित हुए हैं।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 5 -->
+<main class="question-card" id="q5">
+<div class="question-text">Q5. Pakyong Airport, proposed to be named after Trilochan Pokhrel, is in which state?<span lang="hi">त्रिलोचन पोखरेल के नाम पर नामकरण के लिए प्रस्तावित पाक्योंग हवाई अड्डा किस राज्य में है?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Sikkim</span><span class="opt-hi" lang="hi">A) सिक्किम (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Arunachal Pradesh</span><span class="opt-hi" lang="hi">B) अरुणाचल प्रदेश</span></li>
+<li class="option"><span class="opt-en">C) Assam</span><span class="opt-hi" lang="hi">C) असम</span></li>
+<li class="option"><span class="opt-en">D) Meghalaya</span><span class="opt-hi" lang="hi">D) मेघालय</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Pakyong Airport — state:</b> <span class="highlight-text">Sikkim</span>.</li>
+<li>Chief Minister <span class="highlight-text">Prem Singh Tamang</span> announced the proposed honour for freedom fighter <span class="highlight-text">Trilochan Pokhrel</span> in <span class="highlight-text">February 2026</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>पाक्योंग हवाई अड्डा — राज्य:</b> <span class="highlight-text">सिक्किम</span>।</li>
+<li>मुख्यमंत्री <span class="highlight-text">प्रेम सिंह तमांग</span> ने <span class="highlight-text">फरवरी 2026</span> में स्वतंत्रता सेनानी <span class="highlight-text">त्रिलोचन पोखरेल</span> के सम्मान में नामकरण की घोषणा की।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 6 -->
+<main class="question-card" id="q6">
+<div class="question-text">Q6. Rajasthan announced which new name for Mount Abu in February 2026?<span lang="hi">राजस्थान ने फरवरी 2026 में माउंट आबू के लिए किस नए नाम की घोषणा की?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Aburaj</span><span class="opt-hi" lang="hi">A) आबूराज (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Aravallipur</span><span class="opt-hi" lang="hi">B) अरावलीपुर</span></li>
+<li class="option"><span class="opt-en">C) Shivraj</span><span class="opt-hi" lang="hi">C) शिवराज</span></li>
+<li class="option"><span class="opt-en">D) Abunaga</span><span class="opt-hi" lang="hi">D) आबूनाग</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Mount Abu — announced new name:</b> <span class="highlight-text">Aburaj</span>.</li>
+<li>The announced name is also written <span class="highlight-text">Abu Raj</span>. Kaman → <span class="highlight-text">Kamvan</span> and Jahazpur → <span class="highlight-text">Yagyapur</span> were announced alongside it.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>माउंट आबू — घोषित नया नाम:</b> <span class="highlight-text">आबूराज</span>।</li>
+<li>घोषित नाम <span class="highlight-text">आबू राज</span> भी लिखा जाता है। साथ में कामां → <span class="highlight-text">कामवन</span> और जहाजपुर → <span class="highlight-text">यज्ञपुर</span> की घोषणा भी हुई।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 7 -->
+<main class="question-card" id="q7">
+<div class="question-text">Q7. Which wildlife sanctuary was designated Kerala&#x27;s first butterfly sanctuary?<span lang="hi">केरल का पहला तितली अभयारण्य किस वन्यजीव अभयारण्य को बनाया गया?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Wayanad Wildlife Sanctuary</span><span class="opt-hi" lang="hi">A) वायनाड वन्यजीव अभयारण्य</span></li>
+<li class="option"><span class="opt-en">B) Periyar Wildlife Sanctuary</span><span class="opt-hi" lang="hi">B) पेरियार वन्यजीव अभयारण्य</span></li>
+<li class="option correct-option"><span class="opt-en">C) Aralam Wildlife Sanctuary</span><span class="opt-hi" lang="hi">C) आरलम वन्यजीव अभयारण्य (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) Silent Valley National Park</span><span class="opt-hi" lang="hi">D) साइलेंट वैली राष्ट्रीय उद्यान</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Kerala’s first butterfly sanctuary:</b> <span class="highlight-text">Aralam Wildlife Sanctuary</span>.</li>
+<li>Aralam is in <span class="highlight-text">Kannur</span> district of Kerala, in the <span class="highlight-text">Western Ghats</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>केरल का पहला तितली अभयारण्य:</b> <span class="highlight-text">आरलम वन्यजीव अभयारण्य</span>।</li>
+<li>आरलम <span class="highlight-text">पश्चिमी घाट</span> में केरल के <span class="highlight-text">कन्नूर</span> जिले में स्थित है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 8 -->
+<main class="question-card" id="q8">
+<div class="question-text">Q8. Which Act was replaced by the Viksit Bharat–G RAM G Act, 2025?<span lang="hi">विकसित भारत–जी राम जी अधिनियम, 2025 ने किस अधिनियम का स्थान लिया?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) MGNREGA, 2005</span><span class="opt-hi" lang="hi">A) मनरेगा, 2005 (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) National Food Security Act</span><span class="opt-hi" lang="hi">B) राष्ट्रीय खाद्य सुरक्षा अधिनियम</span></li>
+<li class="option"><span class="opt-en">C) Right to Education Act</span><span class="opt-hi" lang="hi">C) शिक्षा का अधिकार अधिनियम</span></li>
+<li class="option"><span class="opt-en">D) Forest Rights Act</span><span class="opt-hi" lang="hi">D) वन अधिकार अधिनियम</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Act replaced by Viksit Bharat–G RAM G Act, 2025:</b> <span class="highlight-text">MGNREGA, 2005</span>.</li>
+<li>The replacement took effect on <span class="highlight-text">1 July 2026</span>. This is replacement legislation, rather than merely a new name; the new guarantee is <span class="highlight-text">125 days</span> of wage employment per financial year.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>विकसित भारत–जी राम जी अधिनियम, 2025 द्वारा प्रतिस्थापित अधिनियम:</b> <span class="highlight-text">मनरेगा, 2005</span>।</li>
+<li>प्रतिस्थापन <span class="highlight-text">1 जुलाई 2026</span> से प्रभावी हुआ। यह केवल नाम परिवर्तन के बजाय नया कानून है; नई गारंटी प्रति वित्त वर्ष <span class="highlight-text">125 दिन</span> के मजदूरी रोजगार की है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 9 -->
+<main class="question-card" id="q9">
+<div class="question-text">Q9. Which railway station was renamed Ahilyanagar in honour of Ahilyabai Holkar?<span lang="hi">अहिल्याबाई होलकर के सम्मान में किस रेलवे स्टेशन का नाम अहिल्यानगर रखा गया?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Indore</span><span class="opt-hi" lang="hi">A) इंदौर</span></li>
+<li class="option"><span class="opt-en">B) Pune</span><span class="opt-hi" lang="hi">B) पुणे</span></li>
+<li class="option correct-option"><span class="opt-en">C) Ahmednagar</span><span class="opt-hi" lang="hi">C) अहमदनगर (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) Nagpur</span><span class="opt-hi" lang="hi">D) नागपुर</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Ahilyanagar railway station — former name:</b> <span class="highlight-text">Ahmednagar</span>.</li>
+<li>The station is in <span class="highlight-text">Maharashtra</span>. The name honours the Maratha ruler <span class="highlight-text">Ahilyabai Holkar</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>अहिल्यानगर रेलवे स्टेशन — पुराना नाम:</b> <span class="highlight-text">अहमदनगर</span>।</li>
+<li>स्टेशन <span class="highlight-text">महाराष्ट्र</span> में है। नया नाम मराठा शासिका <span class="highlight-text">अहिल्याबाई होलकर</span> के सम्मान में है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 10 -->
+<main class="question-card" id="q10">
+<div class="question-text">Q10. Which town in Shahjahanpur district was renamed Parashurampuri?<span lang="hi">शाहजहाँपुर जिले के किस नगर का नाम परशुरामपुरी रखा गया?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Jalalabad</span><span class="opt-hi" lang="hi">A) जलालाबाद (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Kanpur</span><span class="opt-hi" lang="hi">B) कानपुर</span></li>
+<li class="option"><span class="opt-en">C) Varanasi</span><span class="opt-hi" lang="hi">C) वाराणसी</span></li>
+<li class="option"><span class="opt-en">D) Gwalior</span><span class="opt-hi" lang="hi">D) ग्वालियर</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Parashurampuri — former name:</b> <span class="highlight-text">Jalalabad</span>.</li>
+<li>Jalalabad is in <span class="highlight-text">Shahjahanpur</span> district, <span class="highlight-text">Uttar Pradesh</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>परशुरामपुरी — पुराना नाम:</b> <span class="highlight-text">जलालाबाद</span>।</li>
+<li>जलालाबाद <span class="highlight-text">उत्तर प्रदेश</span> के <span class="highlight-text">शाहजहाँपुर</span> जिले में है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 11 -->
+<main class="question-card" id="q11">
+<div class="question-text">Q11. Which university was renamed after former Prime Minister Dr Manmohan Singh?<span lang="hi">पूर्व प्रधानमंत्री डॉ. मनमोहन सिंह के नाम पर किस विश्वविद्यालय का नाम रखा गया?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Bengaluru City University</span><span class="opt-hi" lang="hi">A) बेंगलुरु सिटी विश्वविद्यालय (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) University of Delhi</span><span class="opt-hi" lang="hi">B) दिल्ली विश्वविद्यालय</span></li>
+<li class="option"><span class="opt-en">C) University of Mumbai</span><span class="opt-hi" lang="hi">C) मुंबई विश्वविद्यालय</span></li>
+<li class="option"><span class="opt-en">D) University of Calcutta</span><span class="opt-hi" lang="hi">D) कलकत्ता विश्वविद्यालय</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>University renamed after Dr Manmohan Singh:</b> <span class="highlight-text">Bengaluru City University</span>.</li>
+<li>Its full new name is <span class="highlight-text">Dr Manmohan Singh Bengaluru City University</span>, in <span class="highlight-text">Karnataka</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>डॉ. मनमोहन सिंह के नाम पर नामित विश्वविद्यालय:</b> <span class="highlight-text">बेंगलुरु सिटी विश्वविद्यालय</span>।</li>
+<li><span class="highlight-text">कर्नाटक</span> में इसका पूरा नया नाम <span class="highlight-text">डॉ. मनमोहन सिंह बेंगलुरु सिटी विश्वविद्यालय</span> है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 12 -->
+<main class="question-card" id="q12">
+<div class="question-text">Q12. Which state announced the renaming of Khuldabad as Ratnapur?<span lang="hi">किस राज्य ने खुलदाबाद का नाम रत्नपुर करने की घोषणा की?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Maharashtra</span><span class="opt-hi" lang="hi">A) महाराष्ट्र (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Uttar Pradesh</span><span class="opt-hi" lang="hi">B) उत्तर प्रदेश</span></li>
+<li class="option"><span class="opt-en">C) Madhya Pradesh</span><span class="opt-hi" lang="hi">C) मध्य प्रदेश</span></li>
+<li class="option"><span class="opt-en">D) Rajasthan</span><span class="opt-hi" lang="hi">D) राजस्थान</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Khuldabad (Ratnapur) — state:</b> <span class="highlight-text">Maharashtra</span>.</li>
+<li>Khuldabad is in <span class="highlight-text">Chhatrapati Sambhajinagar</span> district; the announced new name is <span class="highlight-text">Ratnapur</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>खुलदाबाद (रत्नपुर) — राज्य:</b> <span class="highlight-text">महाराष्ट्र</span>।</li>
+<li>खुलदाबाद <span class="highlight-text">छत्रपति संभाजीनगर</span> जिले में है; घोषित नया नाम <span class="highlight-text">रत्नपुर</span> है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 13 -->
+<main class="question-card" id="q13">
+<div class="question-text">Q13. What name was given to HAL&#x27;s upgraded Hindustan Jet Trainer HJT-36?<span lang="hi">एचएएल के उन्नत हिंदुस्तान जेट ट्रेनर एचजेटी-36 को क्या नाम दिया गया?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Garuda</span><span class="opt-hi" lang="hi">A) गरुड़</span></li>
+<li class="option correct-option"><span class="opt-en">B) Yashas</span><span class="opt-hi" lang="hi">B) यशस् (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Vikrant</span><span class="opt-hi" lang="hi">C) विक्रांत</span></li>
+<li class="option"><span class="opt-en">D) Tejas</span><span class="opt-hi" lang="hi">D) तेजस</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Upgraded HJT-36 trainer — new name:</b> <span class="highlight-text">Yashas</span>.</li>
+<li>HAL unveiled the upgraded trainer as <span class="highlight-text">Yashas</span> at <span class="highlight-text">Aero India 2025</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>उन्नत एचजेटी-36 ट्रेनर — नया नाम:</b> <span class="highlight-text">यशस्</span>।</li>
+<li>एचएएल ने <span class="highlight-text">एयरो इंडिया 2025</span> में उन्नत ट्रेनर का <span class="highlight-text">यशस्</span> नाम से अनावरण किया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 14 -->
+<main class="question-card" id="q14">
+<div class="question-text">Q14. What is the new name of Kolkata&#x27;s Fort William?<span lang="hi">कोलकाता के फोर्ट विलियम का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Shiv Durg</span><span class="opt-hi" lang="hi">A) शिव दुर्ग</span></li>
+<li class="option correct-option"><span class="opt-en">B) Vijay Durg</span><span class="opt-hi" lang="hi">B) विजय दुर्ग (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Samrat Durg</span><span class="opt-hi" lang="hi">C) सम्राट दुर्ग</span></li>
+<li class="option"><span class="opt-en">D) Veer Durg</span><span class="opt-hi" lang="hi">D) वीर दुर्ग</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Fort William — new name:</b> <span class="highlight-text">Vijay Durg</span>.</li>
+<li>The fort houses the Indian Army&#x27;s <span class="highlight-text">Eastern Command</span> headquarters in <span class="highlight-text">Kolkata</span>, <span class="highlight-text">West Bengal</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>फोर्ट विलियम — नया नाम:</b> <span class="highlight-text">विजय दुर्ग</span>।</li>
+<li>यह किला <span class="highlight-text">पश्चिम बंगाल</span> के <span class="highlight-text">कोलकाता</span> में भारतीय सेना की <span class="highlight-text">पूर्वी कमान</span> का मुख्यालय है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 15 -->
+<main class="question-card" id="q15">
+<div class="question-text">Q15. Which lake in Ajmer was renamed Varun Sagar?<span lang="hi">अजमेर की किस झील का नाम वरुण सागर रखा गया?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Ana Sagar</span><span class="opt-hi" lang="hi">A) आना सागर</span></li>
+<li class="option"><span class="opt-en">B) Pichola Lake</span><span class="opt-hi" lang="hi">B) पिछोला झील</span></li>
+<li class="option"><span class="opt-en">C) Sambhar Lake</span><span class="opt-hi" lang="hi">C) सांभर झील</span></li>
+<li class="option correct-option"><span class="opt-en">D) Foy Sagar</span><span class="opt-hi" lang="hi">D) फॉय सागर (सही उत्तर ✔)</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Varun Sagar — former name:</b> <span class="highlight-text">Foy Sagar</span>.</li>
+<li>Foy Sagar is in <span class="highlight-text">Ajmer</span>, <span class="highlight-text">Rajasthan</span>. King Edward Memorial Bhawan there was also renamed <span class="highlight-text">Maharishi Dayanand Vishrant Grih</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>वरुण सागर — पुराना नाम:</b> <span class="highlight-text">फॉय सागर</span>।</li>
+<li>फॉय सागर <span class="highlight-text">राजस्थान</span> के <span class="highlight-text">अजमेर</span> में है। वहाँ किंग एडवर्ड मेमोरियल भवन का नाम भी <span class="highlight-text">महर्षि दयानंद विश्रांत गृह</span> रखा गया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 16 -->
+<main class="question-card" id="q16">
+<div class="question-text">Q16. What is the new name of Port Blair?<span lang="hi">पोर्ट ब्लेयर का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Sri Rajendra Puram</span><span class="opt-hi" lang="hi">A) श्री राजेंद्र पुरम</span></li>
+<li class="option correct-option"><span class="opt-en">B) Sri Vijaya Puram</span><span class="opt-hi" lang="hi">B) श्री विजय पुरम (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Sri Shivaji Puram</span><span class="opt-hi" lang="hi">C) श्री शिवाजी पुरम</span></li>
+<li class="option"><span class="opt-en">D) Sri Bharat Puram</span><span class="opt-hi" lang="hi">D) श्री भारत पुरम</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Port Blair — new name:</b> <span class="highlight-text">Sri Vijaya Puram</span>.</li>
+<li>The capital of the Andaman and Nicobar Islands was renamed in <span class="highlight-text">September 2024</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>पोर्ट ब्लेयर — नया नाम:</b> <span class="highlight-text">श्री विजय पुरम</span>।</li>
+<li>अंडमान और निकोबार द्वीपसमूह की राजधानी का नाम <span class="highlight-text">सितंबर 2024</span> में बदला गया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 17 -->
+<main class="question-card" id="q17">
+<div class="question-text">Q17. Maharashtra&#x27;s proposal to rename Pune Airport honours which spiritual figure?<span lang="hi">पुणे हवाई अड्डे के नामकरण का महाराष्ट्र का प्रस्ताव किस आध्यात्मिक व्यक्तित्व के सम्मान में है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Swami Vivekananda</span><span class="opt-hi" lang="hi">A) स्वामी विवेकानंद</span></li>
+<li class="option"><span class="opt-en">B) Sri Aurobindo</span><span class="opt-hi" lang="hi">B) श्री अरविंद</span></li>
+<li class="option correct-option"><span class="opt-en">C) Jagadguru Sant Tukaram Maharaj</span><span class="opt-hi" lang="hi">C) जगद्गुरु संत तुकाराम महाराज (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) Guru Nanak</span><span class="opt-hi" lang="hi">D) गुरु नानक</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Pune Airport — proposed namesake:</b> <span class="highlight-text">Jagadguru Sant Tukaram Maharaj</span>.</li>
+<li>The state approved the proposal in <span class="highlight-text">2024</span>. A state proposal is distinct from completion of the Union naming process.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>पुणे हवाई अड्डा — प्रस्तावित नाम से सम्मानित संत:</b> <span class="highlight-text">जगद्गुरु संत तुकाराम महाराज</span>।</li>
+<li>राज्य ने <span class="highlight-text">2024</span> में प्रस्ताव को मंजूरी दी। राज्य का प्रस्ताव केंद्रीय नामकरण प्रक्रिया के पूरा होने से अलग चरण है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 18 -->
+<main class="question-card" id="q18">
+<div class="question-text">Q18. Ahmednagar, renamed Ahilyanagar, is in which state?<span lang="hi">अहिल्यानगर नाम दिया गया अहमदनगर किस राज्य में है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Gujarat</span><span class="opt-hi" lang="hi">A) गुजरात</span></li>
+<li class="option correct-option"><span class="opt-en">B) Maharashtra</span><span class="opt-hi" lang="hi">B) महाराष्ट्र (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Uttar Pradesh</span><span class="opt-hi" lang="hi">C) उत्तर प्रदेश</span></li>
+<li class="option"><span class="opt-en">D) Telangana</span><span class="opt-hi" lang="hi">D) तेलंगाना</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Ahmednagar (Ahilyanagar) — state:</b> <span class="highlight-text">Maharashtra</span>.</li>
+<li>The name honours <span class="highlight-text">Ahilyabai Holkar</span>, an eighteenth-century Maratha ruler.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>अहमदनगर (अहिल्यानगर) — राज्य:</b> <span class="highlight-text">महाराष्ट्र</span>।</li>
+<li>यह नाम अठारहवीं सदी की मराठा शासिका <span class="highlight-text">अहिल्याबाई होलकर</span> के सम्मान में है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 19 -->
+<main class="question-card" id="q19">
+<div class="question-text">Q19. Maharishi Valmiki International Airport, Ayodhya Dham, serves which city?<span lang="hi">महर्षि वाल्मीकि अंतरराष्ट्रीय हवाई अड्डा, अयोध्या धाम, किस शहर में है?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Ayodhya</span><span class="opt-hi" lang="hi">A) अयोध्या (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Prayagraj</span><span class="opt-hi" lang="hi">B) प्रयागराज</span></li>
+<li class="option"><span class="opt-en">C) Varanasi</span><span class="opt-hi" lang="hi">C) वाराणसी</span></li>
+<li class="option"><span class="opt-en">D) Agra</span><span class="opt-hi" lang="hi">D) आगरा</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Maharishi Valmiki International Airport — city:</b> <span class="highlight-text">Ayodhya</span>.</li>
+<li>The airport is in <span class="highlight-text">Ayodhya</span>, <span class="highlight-text">Uttar Pradesh</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>महर्षि वाल्मीकि अंतरराष्ट्रीय हवाई अड्डा — शहर:</b> <span class="highlight-text">अयोध्या</span>।</li>
+<li>हवाई अड्डा <span class="highlight-text">उत्तर प्रदेश</span> के <span class="highlight-text">अयोध्या</span> में है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 20 -->
+<main class="question-card" id="q20">
+<div class="question-text">Q20. Aurangabad railway station&#x27;s new name honours which historical personality?<span lang="hi">औरंगाबाद रेलवे स्टेशन का नया नाम किस ऐतिहासिक व्यक्तित्व के सम्मान में है?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Chhatrapati Sambhaji Maharaj</span><span class="opt-hi" lang="hi">A) छत्रपति संभाजी महाराज (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Chhatrapati Shivaji Maharaj</span><span class="opt-hi" lang="hi">B) छत्रपति शिवाजी महाराज</span></li>
+<li class="option"><span class="opt-en">C) Mahatma Gandhi</span><span class="opt-hi" lang="hi">C) महात्मा गांधी</span></li>
+<li class="option"><span class="opt-en">D) Dr B. R. Ambedkar</span><span class="opt-hi" lang="hi">D) डॉ. बी. आर. आंबेडकर</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Aurangabad railway station — namesake:</b> <span class="highlight-text">Chhatrapati Sambhaji Maharaj</span>.</li>
+<li>Its new name is <span class="highlight-text">Chhatrapati Sambhajinagar</span> railway station, <span class="highlight-text">Maharashtra</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>औरंगाबाद रेलवे स्टेशन — नए नाम से सम्मानित व्यक्तित्व:</b> <span class="highlight-text">छत्रपति संभाजी महाराज</span>।</li>
+<li><span class="highlight-text">महाराष्ट्र</span> में इसका नया नाम <span class="highlight-text">छत्रपति संभाजीनगर</span> रेलवे स्टेशन है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 21 -->
+<main class="question-card" id="q21">
+<div class="question-text">Q21. The proposed name of Navi Mumbai International Airport honours which leader?<span lang="hi">नवी मुंबई अंतरराष्ट्रीय हवाई अड्डे का प्रस्तावित नाम किस नेता के सम्मान में है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Balasaheb Thackeray</span><span class="opt-hi" lang="hi">A) बालासाहेब ठाकरे</span></li>
+<li class="option"><span class="opt-en">B) Sardar Patel</span><span class="opt-hi" lang="hi">B) सरदार पटेल</span></li>
+<li class="option correct-option"><span class="opt-en">C) D. B. Patil</span><span class="opt-hi" lang="hi">C) डी. बी. पाटिल (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) Jawaharlal Nehru</span><span class="opt-hi" lang="hi">D) जवाहरलाल नेहरू</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Navi Mumbai International Airport — proposed namesake:</b> <span class="highlight-text">D. B. Patil</span>.</li>
+<li>The proposed name honours Loknete <span class="highlight-text">D. B. Patil</span>. The airport is in <span class="highlight-text">Maharashtra</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>नवी मुंबई अंतरराष्ट्रीय हवाई अड्डा — प्रस्तावित नाम से सम्मानित नेता:</b> <span class="highlight-text">डी. बी. पाटिल</span>।</li>
+<li>प्रस्तावित नाम लोकनेते <span class="highlight-text">डी. बी. पाटिल</span> के सम्मान में है। हवाई अड्डा <span class="highlight-text">महाराष्ट्र</span> में है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 22 -->
+<main class="question-card" id="q22">
+<div class="question-text">Q22. Mumbai&#x27;s Carnac Bridge was renamed as what?<span lang="hi">मुंबई के कर्नाक ब्रिज का नाम बदलकर क्या रखा गया?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Sindoor Bridge</span><span class="opt-hi" lang="hi">A) सिंदूर ब्रिज (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Azadi Bridge</span><span class="opt-hi" lang="hi">B) आज़ादी ब्रिज</span></li>
+<li class="option"><span class="opt-en">C) Shivaji Bridge</span><span class="opt-hi" lang="hi">C) शिवाजी ब्रिज</span></li>
+<li class="option"><span class="opt-en">D) Veer Bridge</span><span class="opt-hi" lang="hi">D) वीर ब्रिज</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Carnac Bridge — new name:</b> <span class="highlight-text">Sindoor Bridge</span>.</li>
+<li>Carnac Bridge is in <span class="highlight-text">Mumbai</span>, <span class="highlight-text">Maharashtra</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>कर्नाक ब्रिज — नया नाम:</b> <span class="highlight-text">सिंदूर ब्रिज</span>।</li>
+<li>कर्नाक ब्रिज <span class="highlight-text">महाराष्ट्र</span> के <span class="highlight-text">मुंबई</span> में स्थित है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 23 -->
+<main class="question-card" id="q23">
+<div class="question-text">Q23. What is the new name of Hoshangabad?<span lang="hi">होशंगाबाद का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Sribhumi</span><span class="opt-hi" lang="hi">A) श्रीभूमि</span></li>
+<li class="option"><span class="opt-en">B) Ishwarpur</span><span class="opt-hi" lang="hi">B) ईश्वरपुर</span></li>
+<li class="option correct-option"><span class="opt-en">C) Narmadapuram</span><span class="opt-hi" lang="hi">C) नर्मदापुरम (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) Dharashiv</span><span class="opt-hi" lang="hi">D) धाराशिव</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Hoshangabad — new name:</b> <span class="highlight-text">Narmadapuram</span>.</li>
+<li>Location: <span class="highlight-text">Madhya Pradesh</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>होशंगाबाद — नया नाम:</b> <span class="highlight-text">नर्मदापुरम</span>।</li>
+<li>स्थान: <span class="highlight-text">मध्य प्रदेश</span>।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 24 -->
+<main class="question-card" id="q24">
+<div class="question-text">Q24. What is the new name of Osmanabad?<span lang="hi">उस्मानाबाद का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Kamvan</span><span class="opt-hi" lang="hi">A) कामवन</span></li>
+<li class="option correct-option"><span class="opt-en">B) Dharashiv</span><span class="opt-hi" lang="hi">B) धाराशिव (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Ahilyanagar</span><span class="opt-hi" lang="hi">C) अहिल्यानगर</span></li>
+<li class="option"><span class="opt-en">D) Ratnapur</span><span class="opt-hi" lang="hi">D) रत्नपुर</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Osmanabad — new name:</b> <span class="highlight-text">Dharashiv</span>.</li>
+<li>Location: <span class="highlight-text">Maharashtra</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>उस्मानाबाद — नया नाम:</b> <span class="highlight-text">धाराशिव</span>।</li>
+<li>स्थान: <span class="highlight-text">महाराष्ट्र</span>।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 25 -->
+<main class="question-card" id="q25">
+<div class="question-text">Q25. What is the new name of Islampur in Sangli district?<span lang="hi">सांगली जिले के इस्लामपुर का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Ishwarpur</span><span class="opt-hi" lang="hi">A) ईश्वरपुर (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Parashurampuri</span><span class="opt-hi" lang="hi">B) परशुरामपुरी</span></li>
+<li class="option"><span class="opt-en">C) Yagyapur</span><span class="opt-hi" lang="hi">C) यज्ञपुर</span></li>
+<li class="option"><span class="opt-en">D) Aburaj</span><span class="opt-hi" lang="hi">D) आबूराज</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Islampur, Sangli — new name:</b> <span class="highlight-text">Ishwarpur</span>.</li>
+<li>Location: <span class="highlight-text">Maharashtra</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>इस्लामपुर, सांगली — नया नाम:</b> <span class="highlight-text">ईश्वरपुर</span>।</li>
+<li>स्थान: <span class="highlight-text">महाराष्ट्र</span>।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 26 -->
+<main class="question-card" id="q26">
+<div class="question-text">Q26. What is the new name of Karimganj?<span lang="hi">करीमगंज का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Kamvan</span><span class="opt-hi" lang="hi">A) कामवन</span></li>
+<li class="option"><span class="opt-en">B) Prayagraj</span><span class="opt-hi" lang="hi">B) प्रयागराज</span></li>
+<li class="option"><span class="opt-en">C) Dharashiv</span><span class="opt-hi" lang="hi">C) धाराशिव</span></li>
+<li class="option correct-option"><span class="opt-en">D) Sribhumi</span><span class="opt-hi" lang="hi">D) श्रीभूमि (सही उत्तर ✔)</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Karimganj — new name:</b> <span class="highlight-text">Sribhumi</span>.</li>
+<li>Location: <span class="highlight-text">Assam</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>करीमगंज — नया नाम:</b> <span class="highlight-text">श्रीभूमि</span>।</li>
+<li>स्थान: <span class="highlight-text">असम</span>।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 27 -->
+<main class="question-card" id="q27">
+<div class="question-text">Q27. What is the new name of Allahabad?<span lang="hi">इलाहाबाद का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Parashurampuri</span><span class="opt-hi" lang="hi">A) परशुरामपुरी</span></li>
+<li class="option"><span class="opt-en">B) Ahilyanagar</span><span class="opt-hi" lang="hi">B) अहिल्यानगर</span></li>
+<li class="option correct-option"><span class="opt-en">C) Prayagraj</span><span class="opt-hi" lang="hi">C) प्रयागराज (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) Ayodhya</span><span class="opt-hi" lang="hi">D) अयोध्या</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Allahabad — new name:</b> <span class="highlight-text">Prayagraj</span>.</li>
+<li>Location: <span class="highlight-text">Uttar Pradesh</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>इलाहाबाद — नया नाम:</b> <span class="highlight-text">प्रयागराज</span>।</li>
+<li>स्थान: <span class="highlight-text">उत्तर प्रदेश</span>।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 28 -->
+<main class="question-card" id="q28">
+<div class="question-text">Q28. What is the new name of Faizabad district?<span lang="hi">फैज़ाबाद जिले का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Shahjahanpur district</span><span class="opt-hi" lang="hi">A) शाहजहाँपुर जिला</span></li>
+<li class="option correct-option"><span class="opt-en">B) Ayodhya district</span><span class="opt-hi" lang="hi">B) अयोध्या जिला (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Prayagraj district</span><span class="opt-hi" lang="hi">C) प्रयागराज जिला</span></li>
+<li class="option"><span class="opt-en">D) Varanasi district</span><span class="opt-hi" lang="hi">D) वाराणसी जिला</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Faizabad district — new name:</b> <span class="highlight-text">Ayodhya district</span>.</li>
+<li>Location: <span class="highlight-text">Uttar Pradesh</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>फैजाबाद जिला — नया नाम:</b> <span class="highlight-text">अयोध्या जिला</span>।</li>
+<li>स्थान: <span class="highlight-text">उत्तर प्रदेश</span>।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 29 -->
+<main class="question-card" id="q29">
+<div class="question-text">Q29. What is the new name of Mughalsarai Junction?<span lang="hi">मुगलसराय जंक्शन का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Pandit Deen Dayal Upadhyaya Junction</span><span class="opt-hi" lang="hi">A) पंडित दीनदयाल उपाध्याय जंक्शन (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Chhatrapati Sambhajinagar</span><span class="opt-hi" lang="hi">B) छत्रपति संभाजीनगर</span></li>
+<li class="option"><span class="opt-en">C) Ahilyanagar</span><span class="opt-hi" lang="hi">C) अहिल्यानगर</span></li>
+<li class="option"><span class="opt-en">D) Ayodhya Dham Junction</span><span class="opt-hi" lang="hi">D) अयोध्या धाम जंक्शन</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Mughalsarai Junction — new name:</b> <span class="highlight-text">Pandit Deen Dayal Upadhyaya Junction</span>.</li>
+<li>Location: <span class="highlight-text">Uttar Pradesh</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>मुगलसराय जंक्शन — नया नाम:</b> <span class="highlight-text">पंडित दीनदयाल उपाध्याय जंक्शन</span>।</li>
+<li>स्थान: <span class="highlight-text">उत्तर प्रदेश</span>।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 30 -->
+<main class="question-card" id="q30">
+<div class="question-text">Q30. What is the new name of Rajpath?<span lang="hi">राजपथ का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Lok Kalyan Marg</span><span class="opt-hi" lang="hi">A) लोक कल्याण मार्ग</span></li>
+<li class="option"><span class="opt-en">B) Janpath</span><span class="opt-hi" lang="hi">B) जनपथ</span></li>
+<li class="option"><span class="opt-en">C) Seva Path</span><span class="opt-hi" lang="hi">C) सेवा पथ</span></li>
+<li class="option correct-option"><span class="opt-en">D) Kartavya Path</span><span class="opt-hi" lang="hi">D) कर्तव्य पथ (सही उत्तर ✔)</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Rajpath — new name:</b> <span class="highlight-text">Kartavya Path</span>.</li>
+<li>Location: <span class="highlight-text">New Delhi</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>राजपथ — नया नाम:</b> <span class="highlight-text">कर्तव्य पथ</span>।</li>
+<li>स्थान: <span class="highlight-text">नई दिल्ली</span>।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 31 -->
+<main class="question-card" id="q31">
+<div class="question-text">Q31. The trophy unveiled for the 2025 FIDE World Cup honours which Indian chess legend?<span lang="hi">2025 फिडे विश्व कप के लिए अनावरण की गई ट्रॉफी का नाम किस भारतीय शतरंज दिग्गज के सम्मान में रखा गया?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) R. Praggnanandhaa</span><span class="opt-hi" lang="hi">A) आर. प्रज्ञानानंद</span></li>
+<li class="option"><span class="opt-en">B) Koneru Humpy</span><span class="opt-hi" lang="hi">B) कोनेरू हम्पी</span></li>
+<li class="option correct-option"><span class="opt-en">C) Viswanathan Anand</span><span class="opt-hi" lang="hi">C) विश्वनाथन आनंद (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) D. Gukesh</span><span class="opt-hi" lang="hi">D) डी. गुकेश</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>2025 FIDE World Cup trophy — honouree:</b> <span class="highlight-text">Viswanathan Anand</span>.</li>
+<li>Anand is India&#x27;s <span class="highlight-text">first Grandmaster</span> and a <span class="highlight-text">five-time world champion</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>2025 फिडे विश्व कप ट्रॉफी — सम्मानित खिलाड़ी:</b> <span class="highlight-text">विश्वनाथन आनंद</span>।</li>
+<li>आनंद भारत के <span class="highlight-text">पहले ग्रैंडमास्टर</span> और <span class="highlight-text">पाँच बार के विश्व चैंपियन</span> हैं।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 32 -->
+<main class="question-card" id="q32">
+<div class="question-text">Q32. The Rajiv Gandhi Khel Ratna Award was renamed as what?<span lang="hi">राजीव गांधी खेल रत्न पुरस्कार का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Dhyan Chand Lifetime Award</span><span class="opt-hi" lang="hi">A) ध्यानचंद आजीवन पुरस्कार</span></li>
+<li class="option correct-option"><span class="opt-en">B) Major Dhyan Chand Khel Ratna Award</span><span class="opt-hi" lang="hi">B) मेजर ध्यानचंद खेल रत्न पुरस्कार (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Arjuna Award</span><span class="opt-hi" lang="hi">C) अर्जुन पुरस्कार</span></li>
+<li class="option"><span class="opt-en">D) Dronacharya Award</span><span class="opt-hi" lang="hi">D) द्रोणाचार्य पुरस्कार</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Rajiv Gandhi Khel Ratna Award — new name:</b> <span class="highlight-text">Major Dhyan Chand Khel Ratna Award</span>.</li>
+<li>The award was renamed in <span class="highlight-text">2021</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>राजीव गांधी खेल रत्न पुरस्कार — नया नाम:</b> <span class="highlight-text">मेजर ध्यानचंद खेल रत्न पुरस्कार</span>।</li>
+<li>पुरस्कार का नाम <span class="highlight-text">2021</span> में बदला गया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 33 -->
+<main class="question-card" id="q33">
+<div class="question-text">Q33. Indira Gandhi Matritva Sahyog Yojana was restructured into which scheme?<span lang="hi">इंदिरा गांधी मातृत्व सहयोग योजना को पुनर्गठित कर कौन सी योजना बनाई गई?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Pradhan Mantri Matru Vandana Yojana</span><span class="opt-hi" lang="hi">A) प्रधानमंत्री मातृ वंदना योजना (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Janani Suraksha Yojana</span><span class="opt-hi" lang="hi">B) जननी सुरक्षा योजना</span></li>
+<li class="option"><span class="opt-en">C) POSHAN Abhiyaan</span><span class="opt-hi" lang="hi">C) पोषण अभियान</span></li>
+<li class="option"><span class="opt-en">D) Beti Bachao Beti Padhao</span><span class="opt-hi" lang="hi">D) बेटी बचाओ बेटी पढ़ाओ</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Indira Gandhi Matritva Sahyog Yojana — successor scheme:</b> <span class="highlight-text">Pradhan Mantri Matru Vandana Yojana</span>.</li>
+<li>PMMVY is the successor maternity-benefit scheme.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>इंदिरा गांधी मातृत्व सहयोग योजना — उत्तरवर्ती योजना:</b> <span class="highlight-text">प्रधानमंत्री मातृ वंदना योजना</span>।</li>
+<li>पीएमएमवीवाई मातृत्व लाभ की उत्तरवर्ती योजना है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 34 -->
+<main class="question-card" id="q34">
+<div class="question-text">Q34. Nirmal Bharat Abhiyan was restructured into which programme?<span lang="hi">निर्मल भारत अभियान को पुनर्गठित कर कौन सा कार्यक्रम बनाया गया?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Jal Jeevan Mission</span><span class="opt-hi" lang="hi">A) जल जीवन मिशन</span></li>
+<li class="option"><span class="opt-en">B) AMRUT</span><span class="opt-hi" lang="hi">B) अमृत</span></li>
+<li class="option"><span class="opt-en">C) Namami Gange</span><span class="opt-hi" lang="hi">C) नमामि गंगे</span></li>
+<li class="option correct-option"><span class="opt-en">D) Swachh Bharat Mission</span><span class="opt-hi" lang="hi">D) स्वच्छ भारत मिशन (सही उत्तर ✔)</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Nirmal Bharat Abhiyan — restructured programme:</b> <span class="highlight-text">Swachh Bharat Mission</span>.</li>
+<li>Nirmal Bharat Abhiyan became Swachh Bharat Mission (Gramin) in <span class="highlight-text">2014</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>निर्मल भारत अभियान — पुनर्गठित कार्यक्रम:</b> <span class="highlight-text">स्वच्छ भारत मिशन</span>।</li>
+<li><span class="highlight-text">2014</span> में निर्मल भारत अभियान को पुनर्गठित कर स्वच्छ भारत मिशन (ग्रामीण) बनाया गया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 35 -->
+<main class="question-card" id="q35">
+<div class="question-text">Q35. National Urban Livelihoods Mission was renamed as what?<span lang="hi">राष्ट्रीय शहरी आजीविका मिशन का नया नाम क्या रखा गया?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) DAY–NRLM</span><span class="opt-hi" lang="hi">A) दीनदयाल अंत्योदय योजना–राष्ट्रीय ग्रामीण आजीविका मिशन</span></li>
+<li class="option"><span class="opt-en">B) Smart Cities Mission</span><span class="opt-hi" lang="hi">B) स्मार्ट सिटीज मिशन</span></li>
+<li class="option correct-option"><span class="opt-en">C) Deendayal Antyodaya Yojana–NULM</span><span class="opt-hi" lang="hi">C) दीनदयाल अंत्योदय योजना–राष्ट्रीय शहरी आजीविका मिशन (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) PMAY–Urban</span><span class="opt-hi" lang="hi">D) प्रधानमंत्री आवास योजना–शहरी</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>National Urban Livelihoods Mission — new name:</b> <span class="highlight-text">Deendayal Antyodaya Yojana–NULM</span>.</li>
+<li><span class="highlight-text">DAY–NULM</span> is the urban livelihoods programme; <span class="highlight-text">NRLM</span> concerns rural livelihoods.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>राष्ट्रीय शहरी आजीविका मिशन — नया नाम:</b> <span class="highlight-text">दीनदयाल अंत्योदय योजना–राष्ट्रीय शहरी आजीविका मिशन</span>।</li>
+<li><span class="highlight-text">डीएवाई–एनयूएलएम</span> शहरी आजीविका कार्यक्रम है; <span class="highlight-text">एनआरएलएम</span> ग्रामीण आजीविका से संबंधित है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 36 -->
+<main class="question-card" id="q36">
+<div class="question-text">Q36. Rajiv Gandhi Grameen Vidyutikaran Yojana was subsumed under which scheme?<span lang="hi">राजीव गांधी ग्रामीण विद्युतीकरण योजना को किस योजना में समाहित किया गया?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) UDAY</span><span class="opt-hi" lang="hi">A) उदय</span></li>
+<li class="option correct-option"><span class="opt-en">B) Deen Dayal Upadhyaya Gram Jyoti Yojana</span><span class="opt-hi" lang="hi">B) दीनदयाल उपाध्याय ग्राम ज्योति योजना (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Saubhagya</span><span class="opt-hi" lang="hi">C) सौभाग्य</span></li>
+<li class="option"><span class="opt-en">D) PM-KUSUM</span><span class="opt-hi" lang="hi">D) पीएम-कुसुम</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Rajiv Gandhi Grameen Vidyutikaran Yojana — subsuming scheme:</b> <span class="highlight-text">Deen Dayal Upadhyaya Gram Jyoti Yojana</span>.</li>
+<li><span class="highlight-text">RGGVY</span> was subsumed under <span class="highlight-text">DDUGJY</span>, rather than simply renamed.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>राजीव गांधी ग्रामीण विद्युतीकरण योजना — समाहित करने वाली योजना:</b> <span class="highlight-text">दीनदयाल उपाध्याय ग्राम ज्योति योजना</span>।</li>
+<li><span class="highlight-text">आरजीजीवीवाई</span> को केवल नया नाम देने के बजाय <span class="highlight-text">डीडीयूजीजेवाई</span> में समाहित किया गया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 37 -->
+<main class="question-card" id="q37">
+<div class="question-text">Q37. Indira Awaas Yojana was restructured into which rural housing scheme?<span lang="hi">इंदिरा आवास योजना को पुनर्गठित कर कौन सी ग्रामीण आवास योजना बनाई गई?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Pradhan Mantri Awaas Yojana–Gramin</span><span class="opt-hi" lang="hi">A) प्रधानमंत्री आवास योजना–ग्रामीण (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) PMAY–Urban</span><span class="opt-hi" lang="hi">B) प्रधानमंत्री आवास योजना–शहरी</span></li>
+<li class="option"><span class="opt-en">C) DAY–NRLM</span><span class="opt-hi" lang="hi">C) दीनदयाल अंत्योदय योजना–राष्ट्रीय ग्रामीण आजीविका मिशन</span></li>
+<li class="option"><span class="opt-en">D) PM Gram Sadak Yojana</span><span class="opt-hi" lang="hi">D) प्रधानमंत्री ग्राम सड़क योजना</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Indira Awaas Yojana — restructured scheme:</b> <span class="highlight-text">Pradhan Mantri Awaas Yojana–Gramin</span>.</li>
+<li>The restructuring into PMAY-G took effect in <span class="highlight-text">2016</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>इंदिरा आवास योजना — पुनर्गठित योजना:</b> <span class="highlight-text">प्रधानमंत्री आवास योजना–ग्रामीण</span>।</li>
+<li><span class="highlight-text">2016</span> से इंदिरा आवास योजना को पुनर्गठित कर पीएमएवाई-जी बनाया गया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 38 -->
+<main class="question-card" id="q38">
+<div class="question-text">Q38. National Optical Fibre Network was renamed as what?<span lang="hi">राष्ट्रीय ऑप्टिकल फाइबर नेटवर्क का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Digital India</span><span class="opt-hi" lang="hi">A) डिजिटल इंडिया</span></li>
+<li class="option"><span class="opt-en">B) Bharat Sanchar</span><span class="opt-hi" lang="hi">B) भारत संचार</span></li>
+<li class="option"><span class="opt-en">C) PM-WANI</span><span class="opt-hi" lang="hi">C) पीएम-वाणी</span></li>
+<li class="option correct-option"><span class="opt-en">D) BharatNet</span><span class="opt-hi" lang="hi">D) भारतनेट (सही उत्तर ✔)</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>National Optical Fibre Network — new name:</b> <span class="highlight-text">BharatNet</span>.</li>
+<li>NOFN was renamed <span class="highlight-text">BharatNet</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>राष्ट्रीय ऑप्टिकल फाइबर नेटवर्क — नया नाम:</b> <span class="highlight-text">भारतनेट</span>।</li>
+<li>एनओएफएन का नया नाम <span class="highlight-text">भारतनेट</span> रखा गया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 39 -->
+<main class="question-card" id="q39">
+<div class="question-text">Q39. Rajasthan announced which new name for Kaman in 2026?<span lang="hi">राजस्थान ने 2026 में कामां के लिए किस नए नाम की घोषणा की?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Aburaj</span><span class="opt-hi" lang="hi">A) आबूराज</span></li>
+<li class="option"><span class="opt-en">B) Ratnapur</span><span class="opt-hi" lang="hi">B) रत्नपुर</span></li>
+<li class="option correct-option"><span class="opt-en">C) Kamvan</span><span class="opt-hi" lang="hi">C) कामवन (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) Yagyapur</span><span class="opt-hi" lang="hi">D) यज्ञपुर</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Kaman — announced new name:</b> <span class="highlight-text">Kamvan</span>.</li>
+<li>The announced mapping is Kaman → <span class="highlight-text">Kamvan</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>कामां — घोषित नया नाम:</b> <span class="highlight-text">कामवन</span>।</li>
+<li>घोषित नाम परिवर्तन कामां → <span class="highlight-text">कामवन</span> है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 40 -->
+<main class="question-card" id="q40">
+<div class="question-text">Q40. Rajasthan announced which new name for Jahazpur in 2026?<span lang="hi">राजस्थान ने 2026 में जहाजपुर के लिए किस नए नाम की घोषणा की?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Ishwarpur</span><span class="opt-hi" lang="hi">A) ईश्वरपुर</span></li>
+<li class="option correct-option"><span class="opt-en">B) Yagyapur</span><span class="opt-hi" lang="hi">B) यज्ञपुर (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) Kamvan</span><span class="opt-hi" lang="hi">C) कामवन</span></li>
+<li class="option"><span class="opt-en">D) Aburaj</span><span class="opt-hi" lang="hi">D) आबूराज</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Jahazpur — announced new name:</b> <span class="highlight-text">Yagyapur</span>.</li>
+<li>The announced mapping is Jahazpur → <span class="highlight-text">Yagyapur</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>जहाजपुर — घोषित नया नाम:</b> <span class="highlight-text">यज्ञपुर</span>।</li>
+<li>घोषित नाम परिवर्तन जहाजपुर → <span class="highlight-text">यज्ञपुर</span> है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 41 -->
+<main class="question-card" id="q41">
+<div class="question-text">Q41. Ajmer&#x27;s King Edward Memorial Bhawan was renamed as what?<span lang="hi">अजमेर के किंग एडवर्ड मेमोरियल भवन का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Maharishi Dayanand Vishrant Grih</span><span class="opt-hi" lang="hi">A) महर्षि दयानंद विश्रांत गृह (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Lok Bhavan</span><span class="opt-hi" lang="hi">B) लोक भवन</span></li>
+<li class="option"><span class="opt-en">C) Seva Teerth</span><span class="opt-hi" lang="hi">C) सेवा तीर्थ</span></li>
+<li class="option"><span class="opt-en">D) Kartavya Bhavan</span><span class="opt-hi" lang="hi">D) कर्तव्य भवन</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>King Edward Memorial Bhawan — new name:</b> <span class="highlight-text">Maharishi Dayanand Vishrant Grih</span>.</li>
+<li>The building is in <span class="highlight-text">Ajmer</span>, <span class="highlight-text">Rajasthan</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>किंग एडवर्ड मेमोरियल भवन — नया नाम:</b> <span class="highlight-text">महर्षि दयानंद विश्रांत गृह</span>।</li>
+<li>यह भवन <span class="highlight-text">राजस्थान</span> के <span class="highlight-text">अजमेर</span> में है।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 42 -->
+<main class="question-card" id="q42">
+<div class="question-text">Q42. The Mughal Gardens at Rashtrapati Bhavan were renamed as what?<span lang="hi">राष्ट्रपति भवन के मुगल गार्डन का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Bharat Udyan</span><span class="opt-hi" lang="hi">A) भारत उद्यान</span></li>
+<li class="option"><span class="opt-en">B) Kartavya Udyan</span><span class="opt-hi" lang="hi">B) कर्तव्य उद्यान</span></li>
+<li class="option"><span class="opt-en">C) Vijay Udyan</span><span class="opt-hi" lang="hi">C) विजय उद्यान</span></li>
+<li class="option correct-option"><span class="opt-en">D) Amrit Udyan</span><span class="opt-hi" lang="hi">D) अमृत उद्यान (सही उत्तर ✔)</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Mughal Gardens — new name:</b> <span class="highlight-text">Amrit Udyan</span>.</li>
+<li>The gardens were given the new name in <span class="highlight-text">2023</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>मुगल गार्डन — नया नाम:</b> <span class="highlight-text">अमृत उद्यान</span>।</li>
+<li>उद्यानों को <span class="highlight-text">2023</span> में नया नाम दिया गया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 43 -->
+<main class="question-card" id="q43">
+<div class="question-text">Q43. What name was adopted for Raj Bhavans in the 2025 naming change?<span lang="hi">2025 के नाम परिवर्तन में राजभवनों के लिए कौन सा नाम अपनाया गया?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Seva Teerth</span><span class="opt-hi" lang="hi">A) सेवा तीर्थ</span></li>
+<li class="option"><span class="opt-en">B) Swaraj Bhavan</span><span class="opt-hi" lang="hi">B) स्वराज भवन</span></li>
+<li class="option correct-option"><span class="opt-en">C) Lok Bhavan</span><span class="opt-hi" lang="hi">C) लोक भवन (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">D) Kartavya Bhavan</span><span class="opt-hi" lang="hi">D) कर्तव्य भवन</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Raj Bhavans — new name:</b> <span class="highlight-text">Lok Bhavan</span>.</li>
+<li>Lok Bhavan should be distinguished from <span class="highlight-text">Seva Teerth</span>, the new PMO complex.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>राजभवन — नया नाम:</b> <span class="highlight-text">लोक भवन</span>।</li>
+<li>लोक भवन को नए प्रधानमंत्री कार्यालय परिसर <span class="highlight-text">सेवा तीर्थ</span> से अलग याद रखें।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 44 -->
+<main class="question-card" id="q44">
+<div class="question-text">Q44. The Nehru Memorial Museum and Library was renamed as what?<span lang="hi">नेहरू स्मारक संग्रहालय एवं पुस्तकालय का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) National Archives of India</span><span class="opt-hi" lang="hi">A) भारत का राष्ट्रीय अभिलेखागार</span></li>
+<li class="option correct-option"><span class="opt-en">B) Prime Ministers&#x27; Museum and Library</span><span class="opt-hi" lang="hi">B) प्रधानमंत्री संग्रहालय एवं पुस्तकालय (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">C) National Leaders&#x27; Museum</span><span class="opt-hi" lang="hi">C) राष्ट्रीय नेता संग्रहालय</span></li>
+<li class="option"><span class="opt-en">D) Yuge Yugeen Bharat Museum</span><span class="opt-hi" lang="hi">D) युगे युगीन भारत संग्रहालय</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Nehru Memorial Museum and Library — new name:</b> <span class="highlight-text">Prime Ministers&#x27; Museum and Library</span>.</li>
+<li>The institution was renamed in <span class="highlight-text">2023</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>नेहरू स्मारक संग्रहालय एवं पुस्तकालय — नया नाम:</b> <span class="highlight-text">प्रधानमंत्री संग्रहालय एवं पुस्तकालय</span>।</li>
+<li>संस्थान का नाम <span class="highlight-text">2023</span> में बदला गया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 45 -->
+<main class="question-card" id="q45">
+<div class="question-text">Q45. What is the new name of Race Course Road in New Delhi?<span lang="hi">नई दिल्ली के रेस कोर्स रोड का नया नाम क्या है?</span></div>
+<ul class="options">
+<li class="option correct-option"><span class="opt-en">A) Lok Kalyan Marg</span><span class="opt-hi" lang="hi">A) लोक कल्याण मार्ग (सही उत्तर ✔)</span></li>
+<li class="option"><span class="opt-en">B) Kartavya Path</span><span class="opt-hi" lang="hi">B) कर्तव्य पथ</span></li>
+<li class="option"><span class="opt-en">C) Janpath</span><span class="opt-hi" lang="hi">C) जनपथ</span></li>
+<li class="option"><span class="opt-en">D) Amrit Marg</span><span class="opt-hi" lang="hi">D) अमृत मार्ग</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>Race Course Road — new name:</b> <span class="highlight-text">Lok Kalyan Marg</span>.</li>
+<li>Race Course Road was renamed in <span class="highlight-text">2016</span>.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>रेस कोर्स रोड — नया नाम:</b> <span class="highlight-text">लोक कल्याण मार्ग</span>।</li>
+<li>रेस कोर्स रोड का नाम <span class="highlight-text">2016</span> में बदला गया।</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- QUESTION 46 -->
+<main class="question-card" id="q46">
+<div class="question-text">Q46. Which Article empowers Parliament to alter a state&#x27;s name?<span lang="hi">कौन सा अनुच्छेद संसद को राज्य का नाम बदलने की शक्ति देता है?</span></div>
+<ul class="options">
+<li class="option"><span class="opt-en">A) Article 1</span><span class="opt-hi" lang="hi">A) अनुच्छेद 1</span></li>
+<li class="option"><span class="opt-en">B) Article 2</span><span class="opt-hi" lang="hi">B) अनुच्छेद 2</span></li>
+<li class="option"><span class="opt-en">C) Article 4</span><span class="opt-hi" lang="hi">C) अनुच्छेद 4</span></li>
+<li class="option correct-option"><span class="opt-en">D) Article 3</span><span class="opt-hi" lang="hi">D) अनुच्छेद 3 (सही उत्तर ✔)</span></li>
+</ul>
+<div class="explanation-box">
+<div class="lang-section" lang="en">
+<h4>📝 Explanation (English)</h4>
+<ul>
+<li><b>State name changes — constitutional provision:</b> <span class="highlight-text">Article 3</span>.</li>
+<li><span class="highlight-text">Article 3</span> covers formation of states and alteration of their areas, boundaries or names.</li>
+</ul>
+</div>
+<div class="lang-section" lang="hi">
+<h4>📝 स्पष्टीकरण (Hindi)</h4>
+<ul>
+<li><b>राज्य का नाम परिवर्तन — संवैधानिक प्रावधान:</b> <span class="highlight-text">अनुच्छेद 3</span>।</li>
+<li><span class="highlight-text">अनुच्छेद 3</span> राज्यों के गठन तथा उनके क्षेत्र, सीमाओं या नाम में परिवर्तन से संबंधित है।</li>
+</ul>
+</div>
+</div>
+</main>
 <footer>
     <div>© <span id="efpCopyrightYear"></span> ExamFusion Prep. All Rights Reserved.</div>
   </footer>
@@ -91,3 +1308,4 @@
 <script>function createStars(){const bg=document.getElementById('star-bg');if(!bg)return;for(let i=0;i<150;i++){const s=document.createElement('span');s.className='star';s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';const size=Math.random()*3;s.style.width=size+'px';s.style.height=size+'px';s.style.animationDuration=(Math.random()*3+2)+'s';s.style.animationDelay=(Math.random()*5)+'s';bg.appendChild(s)}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',createStars);else createStars();</script>
 </body>
 </html>
+

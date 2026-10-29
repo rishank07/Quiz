@@ -26,3 +26,14 @@ This is a standing user preference, explicitly requested on 2026-10-03.
   alone misses the first visit. Owner Debug OFF must not override preview mode.
 
 This is a standing user preference, explicitly requested on 2026-10-07.
+
+
+## Current Affairs format consistency
+
+- For monthly and topic-wise Current Affairs changes, reuse the corresponding established reading and rapid-practice templates. For topic-wise reading, match `Current Affairs/Topic Names/2026/Topic Wise/APPOINTMENT2026.html`: its header, subtitle, question cards, options, explanation headings, spacing and responsive CSS. Change the topic title only; do not invent a hero box, numbering chips, header counts or a new design.
+- Reading headers contain the topic/year/current-affairs title and the existing bilingual/exam subtitle only.
+- Explanations use meaningful subject/fact labels in bold followed by the fact, with matched English and Hindi bullet lists. Do not prepend repeated generic “Answer:”, “Answe” or “उत्तर:” bullets to every explanation. Preserve all relevant explanation facts and qualifiers.
+- Keep one ordered list of paired English/Hindi facts and generate both reading and quiz explanations from it. Match bullet counts, meaning, names, dates, numbers and emphasis. Highlight short answer-bearing facts only; keep labels, bullet markers and ordinary explanatory text in normal colours.
+- Keep question IDs, quiz section/index positions, storage keys, answer options and saved progress stable on formatting updates. Update the affected search text and cache version alongside the page. Verify reading/quiz parity and representative mobile/desktop views before pushing.
+
+This records the existing detailed Current Affairs prompt and the user's format correction on 2026-10-30.
