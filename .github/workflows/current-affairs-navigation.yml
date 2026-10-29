@@ -1,0 +1,43 @@
+name: Current Affairs Navigation
+on:
+  push:
+    branches: [master]
+    paths:
+      - "back-nav.js"
+      - "back-parent-map.js"
+      - "app-session.js"
+      - "home-nav.js"
+      - "Current Affairs/**/*.html"
+      - "tools/test-current-affairs-stale-map.cjs"
+      - ".github/workflows/current-affairs-navigation.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: current-affairs-navigation-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check-navigation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install isolated DOM test dependency
+        run: |
+          npm install --prefix "$RUNNER_TEMP/efp-navigation" jsdom@26.1.0 --ignore-scripts --no-audit --no-fund
+          echo "NODE_PATH=$RUNNER_TEMP/efp-navigation/node_modules" >> "$GITHUB_ENV"
+      - name: Validate navigation and service-worker syntax
+        run: |
+          node --check back-nav.js
+          node --check service-worker.js
+          node tools/test-current-affairs-parent-fallback.cjs
+          node tools/test-analytics-guard.cjs
+      - name: Check new quiz and stale-map recovery
+        run: node tools/test-current-affairs-stale-map.cjs
+      - name: Check shared navigation and search-return regressions
+        run: |
+          node tools/test-navigation-guard.cjs
+          node tools/test-app-home-search-return.cjs
+          node tools/test-app-search-resume.cjs
+          node tools/test-rapid-search-entry.cjs
+          node tools/test-current-affairs-back.cjs

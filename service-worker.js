@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261030rename1";
+const CACHE_VERSION = "efp-pwa-20261030caback2";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261027bbfinish1";
@@ -43,8 +43,8 @@ const APP_SHELL = [
   "/owner-debug.js",
   "/home-nav.js?v=20261027apprecovery1",
   "/app-session.js?v=20261027bbfinish1",
-  "/back-parent-map.js",
-  "/back-nav.js?v=20261024mathback1",
+  "/back-parent-map.js?v=20261030caback2",
+  "/back-nav.js?v=20261030caback2",
   "/search-context.js?v=20261007searchaudit1",
   "/search-context.css?v=20261004inlinecenter1",
   "/search-context-dock-v3.css?v=20261007searchaudit1",

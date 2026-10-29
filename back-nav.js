@@ -1030,10 +1030,24 @@
       return new URL("/Mind%20Maps/SubjectName.html?efMindMapReturn=1", window.location.origin);
     }
     var map = window.EFP_BACK_PARENT_MAP;
-    if (!map || typeof map !== "object") return null;
+    if (!map || typeof map !== "object") map = {};
 
     var current = normalizePath(window.location.pathname);
-    var parent = map[current];
+    // Cloudflare can expose extensionless routes before its URL bootstrap.
+    var canonical = /\.[^/]+$/.test(current) ? current : current + ".html";
+    var parent = map[current] || map[canonical];
+
+    // A newly published CA page can arrive before the browser's cached parent
+    // map. These two real hubs own the entire existing reading/quiz families;
+    // use that declared hierarchy instead of swallowing Back or guessing Home.
+    if (!parent) {
+      if (/^\/Current Affairs\/Topic Names\/Rapid Practice\/\d{4}\/(?:Month Wise|Topic Wise)\/[^/]+\.html$/i.test(canonical)) {
+        parent = "/Current Affairs/Topic Names/Rapid Practice.html";
+      } else if (/^\/Current Affairs\/Topic Names\/\d{4}\/(?:Month Wise|Topic Wise)\/[^/]+\.html$/i.test(canonical) ||
+                 canonical === "/Current Affairs/Topic Names/Rapid Practice.html") {
+        parent = "/Current Affairs/Topic Names.html";
+      }
+    }
     if (!parent) return null;
 
     try {
