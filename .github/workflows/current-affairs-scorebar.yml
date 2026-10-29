@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   render-scorebars:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
@@ -35,6 +35,7 @@ jobs:
         env:
           BASE_COMMIT: 2a3b69fba7c91db2d441f02d351216001d357814
         run: |
+          git fetch --no-tags --depth=1 origin "$BASE_COMMIT"
           git show "$BASE_COMMIT:rapid-practice-deeplink.js" > "$RUNNER_TEMP/efp-scorebar-before.js"
           EFP_TEST_RAPID_SCRIPT="$RUNNER_TEMP/efp-scorebar-before.js" node tools/test-current-affairs-scorebar.cjs --baseline
       - name: Render every Current Affairs quiz scorebar
