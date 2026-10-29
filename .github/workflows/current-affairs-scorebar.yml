@@ -1,0 +1,41 @@
+name: Current Affairs Mobile Scorebars
+on:
+  push:
+    branches: [master, fix/ca-mobile-scorebars-20261030]
+    paths:
+      - "rapid-practice-deeplink.js"
+      - "quiz-unattempted.css"
+      - "tools/test-current-affairs-scorebar.cjs"
+      - ".github/workflows/current-affairs-scorebar.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ca-mobile-scorebars-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  render-scorebars:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+      - name: Install isolated browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/efp-scorebars" playwright@1.56.1 --ignore-scripts --no-audit --no-fund
+          echo "NODE_PATH=$RUNNER_TEMP/efp-scorebars/node_modules" >> "$GITHUB_ENV"
+          "$RUNNER_TEMP/efp-scorebars/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Check shared script syntax
+        run: |
+          node --check rapid-practice-deeplink.js
+          node --check service-worker.js
+      - name: Reproduce the previous mobile border failure
+        if: github.ref_name == 'fix/ca-mobile-scorebars-20261030'
+        env:
+          BASE_COMMIT: 2a3b69fba7c91db2d441f02d351216001d357814
+        run: |
+          git show "$BASE_COMMIT:rapid-practice-deeplink.js" > "$RUNNER_TEMP/efp-scorebar-before.js"
+          EFP_TEST_RAPID_SCRIPT="$RUNNER_TEMP/efp-scorebar-before.js" node tools/test-current-affairs-scorebar.cjs --baseline
+      - name: Render every Current Affairs quiz scorebar
+        run: node tools/test-current-affairs-scorebar.cjs

@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261030renameformat1";
+const CACHE_VERSION = "efp-pwa-20261030cagold1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261027bbfinish1";
@@ -51,7 +51,7 @@ const APP_SHELL = [
   "/mindmap-deeplink.js?v=20261007searchaudit1",
   "/mindmap-reader.css?v=20261007searchaudit1",
   "/progress.js?v=20261001caback1",
-  "/rapid-practice-deeplink.js?v=20261004context1",
+  "/rapid-practice-deeplink.js?v=20261030cagold1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js?v=20261027homesearch1",
   "/section-search-ui.js?v=20261007searchaudit1",
