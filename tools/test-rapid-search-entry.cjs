@@ -11,7 +11,11 @@ async function page(early){
   w.HTMLElement.prototype.getClientRects=function(){for(let el=this;el;el=el.parentElement)if(w.getComputedStyle(el).display==='none')return [];return [{width:100,height:40}]};
   w.HTMLElement.prototype.scrollIntoView=function(){scrolls.push(this)};w.scrollTo=()=>{};w.scrollBy=()=>{const dock=w.document.querySelector("html>.efp-search-context");if(dock)scrolls.push(dock)};w.matchMedia=()=>({matches:false});
   const run=s=>vm.runInContext(s,dom.getInternalVMContext());
-  Array.from(w.document.scripts).forEach(s=>{if(!s.src&&!/json/i.test(s.type))run(s.textContent)});
+  Array.from(w.document.scripts).forEach(s=>{
+    if(!s.src&&!/json/i.test(s.type))run(s.textContent);
+    else if(s.src&&new URL(s.src).pathname==='/ca-explanations.js')run(read('ca-explanations.js'));
+  });
+  assert(w.document.querySelector('.efp-ca-fact-list li'),'Real shared explanations render before search-entry checks');
   if(early){
     run(read('search-context.js'));await delay(60);
     assert.equal(w.document.querySelectorAll('.efp-search-context,mark.efp-context-match').length,0,'Wait for requested Q31 instead of decorating saved section 1');
