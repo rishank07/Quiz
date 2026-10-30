@@ -82,7 +82,15 @@ jobs:
                   assert(worker.includes(asset.path), 'production canonical revision ' + asset.file);
                 });
                 assert(worker.includes(cacheVersion), 'production app cache version');
-                console.log('PASS production generic quiz frame assets and Android app cache revision');
+                const page = await fetch('https://examfusionprep.com/Original%20Practice/index.html?efpWorkPreview=1', {
+                  cache: 'no-store', signal: AbortSignal.timeout(10000)
+                });
+                assert(page.ok, 'production direct-style page');
+                const html = await page.text();
+                const styleAsset = assets.find(asset => asset.file === 'quiz-unattempted.css');
+                assert(html.includes('href="/quiz-unattempted.css?v=' + hash(styleAsset.expected).slice(0, 12) + '"'),
+                  'production HTML bypasses cached quiz loaders');
+                console.log('PASS production generic quiz frame assets, direct HTML delivery and Android app cache revision');
                 return;
               } catch (error) {
                 if (attempt === 30) throw error;
