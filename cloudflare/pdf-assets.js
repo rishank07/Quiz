@@ -10,6 +10,14 @@
       return EFP_CF_PDFS[decodeURIComponent(resolved.pathname)] || null;
     } catch (_) { return null; }
   }
+  function route(url) {
+    try {
+      var resolved = new URL(url, root.location.href);
+      if (resolved.origin !== root.location.origin) return null;
+      return typeof EFP_CF_PDF_ROUTES === "object" ?
+        EFP_CF_PDF_ROUTES[decodeURIComponent(resolved.pathname)] || null : null;
+    } catch (_) { return null; }
+  }
   function reader(asset) {
     var cache = new Map(), pending = new Map(), controllers = new Set(), stopped = false;
     var cacheLimit = root.navigator && Number(root.navigator.deviceMemory) <= 2 ? 4 : 16;
@@ -61,7 +69,10 @@
   }
   function getDocument(lib, options) {
     var asset = find(options.url);
-    if (!asset) return lib.getDocument(options);
+    if (!asset) {
+      var entry = route(options.url);
+      return lib.getDocument(entry && entry.raw ? Object.assign({}, options, {url: entry.raw}) : options);
+    }
     asset = asset.viewer || asset;
     var source = reader(asset), task, fail, cancelled = false;
     var failed = new Promise(function (_, reject) { fail = reject; });
@@ -87,12 +98,17 @@
   }
   function openUrl(url) {
     var resolved = new URL(url, root.location.href);
-    return "/open-original-pdf.html?file=" + encodeURIComponent(resolved.pathname) + resolved.hash;
+    return "/open-original-pdf.html?file=" + encodeURIComponent(resolved.pathname) + "&download=1" + resolved.hash;
   }
-  root.EFP_CF_PDF = {find: find, reader: reader, getDocument: getDocument, openUrl: openUrl};
+  root.EFP_CF_PDF = {find: find, route: route, reader: reader, getDocument: getDocument, openUrl: openUrl};
   if (root.document) root.document.addEventListener("click", function (event) {
     var anchor = event.target.closest && event.target.closest("a[href]");
-    if (!anchor || !find(anchor.href)) return;
-    anchor.href = openUrl(anchor.href); anchor.removeAttribute("download");
+    if (!anchor) return;
+    if (find(anchor.href)) {
+      anchor.href = openUrl(anchor.href); anchor.removeAttribute("download");
+    } else {
+      var entry = route(anchor.href);
+      if (entry && entry.raw) anchor.href = entry.raw + new URL(anchor.href).hash;
+    }
   }, true);
 })(typeof window !== "undefined" ? window : globalThis);

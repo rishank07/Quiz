@@ -75,6 +75,7 @@ const server=http.createServer((req,res)=>{
     const url=new URL(req.url,'http://localhost'), decoded=decodeURIComponent(url.pathname);
     if(decoded==='/__test__'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><title>Integration test</title>');return;}
     if(decoded.startsWith('/__pdfjs/')&&pdfDir){const p=path.join(pdfDir,path.basename(decoded));res.setHeader('Content-Type','application/javascript');fs.createReadStream(p).on('error',()=>{res.statusCode=404;res.end()}).pipe(res);return;}
+    if(report.pdfReaderRoutes?.[decoded]){res.writeHead(301,{Location:report.pdfReaderRoutes[decoded].reader});res.end();return;}
     if(report.pdfs[decoded]){res.writeHead(302,{Location:'/open-original-pdf.html?file='+encodeURIComponent(decoded)});res.end();return;}
     const source=decoded.startsWith('/__source__/');
     let rel=source?decoded.slice('/__source__/'.length):decoded;

@@ -15,7 +15,7 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, unquote, urljoin, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 LIMIT = 25 * 1024 * 1024
@@ -256,10 +256,31 @@ def inject_route_compatibility(path, relative, quiz_style_url=None):
     path.write_text(source, encoding="utf-8")
 
 
+
+def pdf_reader_routes():
+    """Keep indexed PDF addresses attached to their existing document IDs."""
+    name, append, documents = read_index((ROOT / "Crux-Tricks/crux-manifest.js").read_text(encoding="utf-8"))
+    if name != "EF_CRUX_DOCS" or append:
+        raise ValueError("Unsupported PDF document manifest")
+    routes = {}
+    for document in documents:
+        url = urlsplit(urljoin("https://examfusionprep.com/Crux-Tricks/", document["pdf"]))
+        if url.netloc != "examfusionprep.com":
+            continue
+        path = unquote(url.path)
+        reader = "/Crux-Tricks/viewer?id=" + quote(document["id"], safe="")
+        if path in routes and routes[path]["reader"] != reader:
+            raise ValueError("One PDF has multiple reader IDs: " + path)
+        routes[path] = {"reader": reader}
+    return routes
+
+
 def build(output):
     source_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT).decode().split("\0")
     indexes, pdfs, oversized = {}, {}, []
+    reader_routes = pdf_reader_routes()
+    published_pdf_paths = set()
     for filename in tracked:
         if not filename:
             continue
@@ -272,7 +293,19 @@ def build(output):
         source = ROOT / relative
         if not source.is_file() or source.is_symlink():
             raise ValueError(f"Missing or unsupported source: {filename}")
+        pdf_path = "/" + relative.as_posix()
+        is_reader_pdf = relative.suffix.lower() == ".pdf" and pdf_path in reader_routes
+        if is_reader_pdf:
+            published_pdf_paths.add(pdf_path)
         if source.stat().st_size <= LIMIT:
+            if is_reader_pdf:
+                # The indexed address redirects to HTML. PDF.js and the explicit
+                # Open PDF action fetch these byte-identical immutable assets.
+                raw = source.read_bytes()
+                raw_url = "/_cf-assets/" + digest(raw)[:24] + "/original.pdf"
+                write(output / raw_url.lstrip("/"), raw)
+                reader_routes[pdf_path]["raw"] = raw_url
+                continue
             target = output / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, target)
@@ -300,7 +333,12 @@ def build(output):
     logic += "\n" + (ROOT / "cloudflare/search-fallback.js").read_text()
     logic_path.write_text(logic)
 
-    runtime = "var EFP_CF_PDFS=" + compact(pdfs) + ";\n" + (ROOT / "cloudflare/pdf-assets.js").read_text()
+    missing_pdfs = set(reader_routes) - published_pdf_paths
+    if missing_pdfs:
+        raise ValueError("PDF manifest references missing files: " + repr(sorted(missing_pdfs)))
+    runtime = ("var EFP_CF_PDFS=" + compact(pdfs) + ";\n"
+               "var EFP_CF_PDF_ROUTES=" + compact(reader_routes) + ";\n" +
+               (ROOT / "cloudflare/pdf-assets.js").read_text())
     write(output / "cf-pdf-assets.js", runtime)
     pdf_runtime_url = "/cf-pdf-assets.js?v=" + digest(runtime.encode())[:12]
     pdf_runtime_tag = '<script src="' + pdf_runtime_url + '"></script>'
@@ -325,7 +363,7 @@ def build(output):
     if not guard:
         raise ValueError("Analytics exclusion guard was not found")
     open_html = ('<!doctype html><html lang="en"><head><meta charset="utf-8">' + guard.group() +
-        '<meta name="viewport" content="width=device-width,initial-scale=1"><title>Open PDF | ExamFusion Prep</title>'
+        '<meta name="viewport" content="width=device-width,initial-scale=1"><title>Open PDF | ExamFusion Prep</title><meta name="robots" content="noindex,follow">'
         '<style>body{font:17px/1.6 system-ui,sans-serif;max-width:40rem;margin:12vh auto;padding:24px;color:#172033}'
         'h1{font-size:22px;overflow-wrap:anywhere}progress{width:100%;height:18px}a{color:#1855c7}</style></head>'
         '<body><h1 id="title">Open PDF</h1><p id="status" role="status">Opening your PDF…</p>'
@@ -339,14 +377,21 @@ def build(output):
               '<p><a href="/">Go to ExamFusion Prep</a></p></body></html>')
 
     redirects = []
+    for path, route in sorted(reader_routes.items()):
+        redirects.append(quote(path, safe="/") + " " + route["reader"] + " 301")
     for path in pdfs:
-        redirects.append(quote(path, safe="/") + " /open-original-pdf.html?file=" + quote(path, safe="") + " 302")
+        if path not in reader_routes:
+            redirects.append(quote(path, safe="/") + " /open-original-pdf.html?file=" + quote(path, safe="") + " 302")
+    if len(redirects) > 2000 or any(len(line) > 1000 for line in redirects):
+        raise ValueError("PDF redirects exceed Cloudflare Pages static-rule limits")
     existing = output / "_redirects"
     write(existing, "\n".join(redirects) + "\n" + (existing.read_text() if existing.exists() else ""))
     headers = output / "_headers"
     write(headers, (headers.read_text() if headers.exists() else "") +
           "\n/service-worker.js\n  Cache-Control: no-cache\n"
-          "/_cf-assets/*\n  Cache-Control: public, max-age=31536000, immutable\n")
+          "/_cf-assets/*\n  Cache-Control: public, max-age=31536000, immutable\n"
+          "  X-Robots-Tag: noindex\n"
+          "/open-original-pdf\n  X-Robots-Tag: noindex\n")
     quiz_style_url = "/quiz-unattempted.css?v=" + digest((output / "quiz-unattempted.css").read_bytes())[:12]
     for path in list(output.rglob("*.html")):
         inject_route_compatibility(path, path.relative_to(output), quiz_style_url)
@@ -369,6 +414,7 @@ def build(output):
     worker_path.write_text(worker)
     report = {"sourceCommit": source_commit,
               "sourceOversized": oversized, "indexes": indexes, "pdfs": pdfs,
+              "pdfReaderRoutes": reader_routes,
               "pdfDelivery": "byte-identical static ranges; no recompression", "revision": revision}
     write(output / "cloudflare-build-report.json", json.dumps(report, indent=2, ensure_ascii=False))
     write(output / MARKER, "Generated by tools/build-cloudflare-pages.py\n")

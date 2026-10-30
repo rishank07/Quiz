@@ -1,6 +1,12 @@
 (function () {
   "use strict";
-  var url = new URLSearchParams(location.search).get("file");
+  var params = new URLSearchParams(location.search), url = params.get("file");
+  var entry = EFP_CF_PDF.route(url);
+  // Older indexed and shared opener links should enter the site reader too.
+  // Only the reader's explicit Open PDF button opts into the raw download.
+  if (entry && params.get("download") !== "1") {
+    location.replace(entry.reader + location.hash); return;
+  }
   var asset = EFP_CF_PDF.find(url), status = document.getElementById("status");
   var progress = document.getElementById("progress"), link = document.getElementById("download");
   if (!asset) { status.textContent = "This PDF could not be found."; return; }
