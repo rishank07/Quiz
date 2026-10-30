@@ -222,7 +222,7 @@ def compact_pdf_page_tree(raw):
     return raw + suffix
 
 
-def inject_route_compatibility(path, relative):
+def inject_route_compatibility(path, relative, quiz_style_url=None):
     # Pages removes .html from URLs. Restore the existing URL in history before
     # app scripts read it, so saved routes, back navigation and deep links agree.
     # This is a history update, not a network redirect.
@@ -240,6 +240,19 @@ def inject_route_compatibility(path, relative):
     else:
         # Some existing content documents omit an explicit head tag.
         source = script + source
+    if quiz_style_url:
+        # A direct content-versioned stylesheet also updates browsers whose
+        # cached page loaders still request an older quiz asset URL.
+        link = '<link id="efp-quiz-score-style" rel="stylesheet" href="' + quiz_style_url + '">'
+        current = re.search(r'<link\b(?=[^>]*\bid=["\']efp-quiz-score-style["\'])[^>]*>', source, re.I)
+        if current:
+            source = source[:current.start()] + link + source[current.end():]
+        else:
+            closing = re.search(r'</head\s*>', source, re.I)
+            if closing:
+                source = source[:closing.start()] + link + source[closing.start():]
+            else:
+                source = link + source
     path.write_text(source, encoding="utf-8")
 
 
@@ -334,8 +347,9 @@ def build(output):
     write(headers, (headers.read_text() if headers.exists() else "") +
           "\n/service-worker.js\n  Cache-Control: no-cache\n"
           "/_cf-assets/*\n  Cache-Control: public, max-age=31536000, immutable\n")
+    quiz_style_url = "/quiz-unattempted.css?v=" + digest((output / "quiz-unattempted.css").read_bytes())[:12]
     for path in list(output.rglob("*.html")):
-        inject_route_compatibility(path, path.relative_to(output))
+        inject_route_compatibility(path, path.relative_to(output), quiz_style_url)
 
     revision = digest(runtime.encode() + logic.encode() + viewer.encode() + source_commit.encode())[:12]
     worker_path = output / "service-worker.js"

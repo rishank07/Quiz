@@ -8,6 +8,8 @@ on:
       - "quiz-unattempted.js"
       - "service-worker.js"
       - "tools/test-quiz-golden-frame.cjs"
+      - "tools/build-cloudflare-pages.py"
+      - "tools/test-quiz-frame-delivery.py"
       - "tools/test-current-affairs-scorebar.cjs"
       - ".github/workflows/current-affairs-scorebar.yml"
   workflow_dispatch:
@@ -43,6 +45,8 @@ jobs:
           EFP_TEST_RAPID_SCRIPT="$RUNNER_TEMP/efp-scorebar-before.js" node tools/test-current-affairs-scorebar.cjs --baseline
       - name: Render every Current Affairs quiz scorebar
         run: node tools/test-current-affairs-scorebar.cjs
+      - name: Check direct stylesheet delivery
+        run: python3 tools/test-quiz-frame-delivery.py
       - name: Render shared frames across all quiz families
         run: node tools/test-quiz-golden-frame.cjs
       - name: Confirm the shared quiz frames and app cache reach production
