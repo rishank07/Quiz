@@ -55,8 +55,9 @@ jobs:
           const crypto = require('node:crypto');
           const localWorker = fs.readFileSync('service-worker.js', 'utf8');
           const files = ['rapid-practice-deeplink.js', 'quiz-unattempted.js', 'quiz-unattempted.css'];
+          const shellPaths = [...localWorker.matchAll(/"(\/[^"]+\?v=[^"]+)"/g)].map(match => match[1]);
           const assets = files.map(file => ({
-            file, path: localWorker.match(new RegExp('"(/' + file.replaceAll('.', '\\\\.') + '\\\\?v=[^"]+)"'))[1],
+            file, path: shellPaths.find(value => value.startsWith('/' + file + '?v=')),
             expected: fs.readFileSync(file, 'utf8')
           }));
           const cacheVersion = localWorker.match(/const CACHE_VERSION = "([^"]+)"/)[1];
