@@ -1,0 +1,76 @@
+name: Publish audited topic metadata
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - tools/update-page-metadata.py
+      - .github/workflows/topic-metadata.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: topic-metadata-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: master
+          fetch-depth: 0
+      - name: Apply metadata and verify study content is preserved
+        run: |
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          import re
+          import subprocess
+          spec = importlib.util.spec_from_file_location('metadata', 'tools/update-page-metadata.py')
+          metadata = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(metadata)
+          paths = [Path(p) for p in subprocess.check_output(['git', 'ls-files', '-z', '*.html']).decode().split('\0') if p]
+          before = {p: p.read_bytes() for p in paths}
+          subprocess.run(['python', 'tools/update-page-metadata.py'], check=True)
+          changed = 0
+          for path, raw in before.items():
+              updated = path.read_bytes()
+              if raw == updated:
+                  continue
+              old, new = raw.decode('utf-8-sig'), updated.decode('utf-8-sig')
+              a, b = metadata.HEAD.search(old), metadata.HEAD.search(new)
+              assert old[:a.start(2)] == new[:b.start(2)], path
+              assert old[a.end(2):] == new[b.end(2):], path
+              for tag in ['script', 'style']:
+                  pattern = rf'<{tag}\b[^>]*>.*?</{tag}>'
+                  assert re.findall(pattern, a[2], re.I | re.S) == re.findall(pattern, b[2], re.I | re.S), path
+              changed += 1
+          if changed:
+              worker = Path('service-worker.js')
+              code = worker.read_text()
+              code, count = re.subn(r'const CACHE_VERSION = "[^"]+";', 'const CACHE_VERSION = "efp-pwa-20261030metadata1";', code, count=1)
+              assert count == 1
+              worker.write_text(code)
+          print(f'PASS: metadata updated on {changed} pages; study content, scripts and styles preserved')
+          PY
+          python tools/install-analytics-guard.py
+          python tools/update-page-metadata.py --check
+          node tools/test-analytics-guard.cjs
+          node --check service-worker.js
+          git diff --check
+      - name: Commit checked metadata
+        run: |
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.html' service-worker.js
+          git commit -m "Improve topic titles descriptions canonical URLs and share previews"
+          git pull --rebase origin master
+          git push origin HEAD:master
