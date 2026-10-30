@@ -7,6 +7,7 @@
   function ensureScoreStyle() {
     var link = document.getElementById("efp-quiz-score-style") ||
       document.querySelector('link[href*="/quiz-unattempted.css"]');
+    if (link && link.hasAttribute("data-efp-current-quiz-frame")) return;
     if (!link) {
       link = document.createElement("link");
       link.id = "efp-quiz-score-style";

@@ -72,6 +72,14 @@ const fixtures=books.map(([label,file])=>({label,file,style:nativeCss(file),
    await page.addScriptTag({content:feature});await page.addScriptTag({content:feature});
    assert.equal(await page.locator('link[href*="/quiz-unattempted.css"]').count(),1,'one shared stylesheet on dynamic quiz pages');
    assert.equal(await page.evaluate(()=>!!window.EFP_QUIZ_UNATTEMPTED),false,'no counter observers on landing pages');
+   await page.goto('https://fixture.invalid/Original%20Practice/index.html?efpWorkPreview=1');
+   await page.evaluate(()=>{
+    const link=document.createElement('link');link.id='efp-quiz-score-style';link.rel='stylesheet';
+    link.href='/quiz-unattempted.css?v=abc123def456';link.setAttribute('data-efp-current-quiz-frame','');
+    document.head.appendChild(link);
+   });
+   await page.addScriptTag({content:feature});
+   assert((await page.locator('#efp-quiz-score-style').getAttribute('href')).endsWith('abc123def456'),'retain the build content version');
    for(const fixture of fixtures)for(const dark of [false,true]){
     await page.goto('https://fixture.invalid/'+fixture.file.split('/').map(encodeURIComponent).join('/')+'?efpWorkPreview=1');
     const blackbook=!!fixture.mobile;

@@ -243,7 +243,7 @@ def inject_route_compatibility(path, relative, quiz_style_url=None):
     if quiz_style_url:
         # A direct content-versioned stylesheet also updates browsers whose
         # cached page loaders still request an older quiz asset URL.
-        link = '<link id="efp-quiz-score-style" rel="stylesheet" href="' + quiz_style_url + '">'
+        link = '<link id="efp-quiz-score-style" data-efp-current-quiz-frame rel="stylesheet" href="' + quiz_style_url + '">'
         current = re.search(r'<link\b(?=[^>]*\bid=["\']efp-quiz-score-style["\'])[^>]*>', source, re.I)
         if current:
             source = source[:current.start()] + link + source[current.end():]

@@ -22,6 +22,7 @@ with tempfile.TemporaryDirectory() as folder:
         build.inject_route_compatibility(target, Path("Books/quiz.html"), style_url)
         rendered = target.read_text(encoding="utf-8")
         assert rendered.count('id="efp-quiz-score-style"') == 1
+        assert 'data-efp-current-quiz-frame' in rendered
         assert 'href="' + style_url + '"' in rendered
         assert "QUIZ_CONTENT" in rendered
         assert "?v=OLD" not in rendered
