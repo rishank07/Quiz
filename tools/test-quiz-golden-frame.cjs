@@ -95,7 +95,7 @@ const fixtures=books.map(([label,file])=>({label,file,style:nativeCss(file),
     // Reproduce a legacy page's later unlayered !important frame override.
     await page.addStyleTag({content:'#frame-under-test{border-color:#fff!important;outline:none!important}'});
     await page.evaluate(()=>document.fonts.ready);
-    await page.evaluate(()=>scrollTo(0,800));
+    await page.evaluate(()=>scrollTo({top:800,behavior:'instant'}));
     await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
     const state=await page.evaluate(()=>{
      const e=document.getElementById('frame-under-test'),r=e.getBoundingClientRect(),s=getComputedStyle(e);
