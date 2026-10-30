@@ -43,7 +43,9 @@ const sizes=baseline?[[393,852]]:[[320,740],[393,852],[650,900],[651,900],[844,3
     await page.addScriptTag({content:feature});
     await page.addStyleTag({content:css});
     await page.waitForSelector('#scoreTxt .efp-unattempted-value');
-    await page.evaluate(()=>window.scrollTo(0,800));await page.waitForTimeout(20);
+    await page.evaluate(()=>document.fonts.ready);
+    await page.evaluate(()=>window.scrollTo(0,800));
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     const state=await page.evaluate(()=>{
       const card=document.querySelector('.toolbar > .barcard,.toolbar > .bar');
       const frame=card.getBoundingClientRect().width?card:card.querySelector('.row:first-child');
