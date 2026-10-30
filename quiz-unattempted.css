@@ -295,3 +295,29 @@ html.efp-black .efp-op-counts > .efp-unattempted { background: #263445; color: #
     flex-direction: row; gap: 7px !important;
   }
 }
+
+/* Keep the day-mode frame inside the painted score surface. A viewport-edge
+   border can be clipped by browser/app chrome during sticky scrolling. The
+   inset outline survives that edge clipping without moving the toolbar or
+   adding a gap. A layer keeps legacy per-page !important borders from winning. */
+@layer efp-quiz-frame {
+  html:not(.dark):not(.efp-black):not(.efp-black-invert) body:not(.dark) :is(
+    .score-bar, .set-score-bar,
+    #app > .max-w-3xl > .flex.items-center.justify-between.mb-3,
+    #quizView > .quiz-head,
+    .toolbar:has(#scoreTxt) > :is(.barcard, .bar),
+    .efp-mobile-scorebar, .desktop-sticky-score
+  ) {
+    border-color: transparent !important;
+    outline: 1px solid var(--efp-scorebar-border, #b8863f) !important;
+    outline-offset: -3px !important;
+  }
+  /* CA phones paint the row; the outer toolbar/card use display:contents. */
+  @media (max-width: 650px) {
+    html:not(.dark):not(.efp-black):not(.efp-black-invert) body:not(.dark) .toolbar > :is(.barcard, .bar) > .row:first-child:has(#scoreTxt) {
+      border-color: transparent !important;
+      outline: 1px solid var(--efp-scorebar-border, #b8863f) !important;
+      outline-offset: -3px !important;
+    }
+  }
+}

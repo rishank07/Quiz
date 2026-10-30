@@ -26,11 +26,6 @@
        * display:contents lets the score row use the page as its sticky
        * container while the remaining controls scroll away normally, matching
        * the compact Original Practice score-card behaviour. */
-      /* Keep a light-mode top stroke inside the frame too: Android/Chrome can
-       * clip the outermost pixel while a sticky bar meets the viewport edge. */
-      "@media(min-width:651px){" +
-      "body:not(.dark) .toolbar>.barcard,body:not(.dark) .toolbar>.bar{" +
-      "box-shadow:inset 0 1px 0 var(--efp-scorebar-border,#b8863f),0 4px 14px #0000000b}}" +
       "@media(max-width:650px){" +
       ".toolbar{position:static!important;top:auto!important;z-index:auto!important;display:contents!important;" +
       "padding:0!important;margin:0!important;background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
@@ -39,7 +34,7 @@
       "position:sticky;top:0;z-index:130;margin:0 0 8px!important;padding:7px 8px;gap:4px;" +
       "display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:nowrap!important;" +
       "background:var(--card,#fff);border:1px solid var(--efp-scorebar-border,#b8863f);border-radius:0;" +
-      "box-shadow:inset 0 1px 0 var(--efp-scorebar-border,#b8863f),0 3px 14px rgba(26,31,46,.10);-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
+      "box-shadow:0 3px 14px rgba(26,31,46,.10);-webkit-backdrop-filter:none!important;backdrop-filter:none!important}" +
       ".toolbar>.barcard>.row:first-child .pct,.toolbar>.bar>.row:first-child .pct{display:none!important}" +
       ".efp-rp-score-badges{display:none!important}" +
       ".toolbar>.barcard>.row:first-child .progress,.toolbar>.bar>.row:first-child .progress{" +

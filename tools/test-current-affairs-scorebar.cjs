@@ -51,7 +51,7 @@ const sizes=baseline?[[393,852]]:[[320,740],[393,852],[650,900],[651,900],[844,3
       const frame=card.getBoundingClientRect().width?card:card.querySelector('.row:first-child');
       const s=getComputedStyle(frame),r=frame.getBoundingClientRect();
       const chips=[...document.querySelectorAll('#scoreTxt .ef-native-score-chip')];
-      return{radius:s.borderRadius,border:s.borderColor,widths:[s.borderTopWidth,s.borderRightWidth,s.borderBottomWidth,s.borderLeftWidth],
+      return{radius:s.borderRadius,border:s.outlineStyle==='solid'?s.outlineColor:s.borderColor,widths:[s.borderTopWidth,s.borderRightWidth,s.borderBottomWidth,s.borderLeftWidth],
         background:s.backgroundColor,top:Math.round(r.top),width:r.width,height:r.height,overflow:document.documentElement.scrollWidth>innerWidth,
         remaining:document.querySelector('.efp-unattempted-value').textContent,chipWidths:chips.map(e=>Math.round(e.getBoundingClientRect().width))};
     });
@@ -66,14 +66,14 @@ const sizes=baseline?[[393,852]]:[[320,740],[393,852],[650,900],[651,900],[844,3
       if(!dark){
         // Inspect the rendered inner edge, not just computed border styles.
         // It stays gold even when scrolling clips the outermost viewport pixel.
-        const png=await page.screenshot({clip:{x:0,y:0,width,height:3},scale:'css'});
+        const png=await page.screenshot({clip:{x:0,y:0,width,height:4},scale:'css'});
         const pixel=await page.evaluate(async data=>{
           const img=new Image();img.src=data;await img.decode();
           const canvas=document.createElement('canvas');canvas.width=img.width;canvas.height=img.height;
           const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0);
-          return [...ctx.getImageData(Math.floor(img.width/2),1,1,1).data];
+          return [...ctx.getImageData(Math.floor(img.width/2),2,1,1).data];
         },'data:image/png;base64,'+png.toString('base64'));
-        assert(pixel.slice(0,3).every((v,i)=>Math.abs(v-[184,134,63][i])<=8),label+' painted inset top edge: '+pixel);
+        assert(pixel.slice(0,3).every((v,i)=>Math.abs(v-[184,134,63][i])<=8),label+' painted protected top edge: '+pixel);
       }
       assert.equal(state.remaining,'996',label+' remaining count');assert.equal(state.chipWidths.length,4,label+' counters');
       if(width<=650)assert(Math.max(...state.chipWidths)-Math.min(...state.chipWidths)<=1,label+' equal counter boxes');

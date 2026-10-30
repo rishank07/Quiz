@@ -2,6 +2,21 @@
    Native counters remain the source of truth; this feature never saves answers. */
 (function () {
   "use strict";
+  // Every quiz surface uses the same frame, including dynamically rendered
+  // quiz screens on index pages. Counter enhancements keep their own scope.
+  function ensureScoreStyle() {
+    var link = document.getElementById("efp-quiz-score-style") ||
+      document.querySelector('link[href*="/quiz-unattempted.css"]');
+    if (!link) {
+      link = document.createElement("link");
+      link.id = "efp-quiz-score-style";
+      link.rel = "stylesheet";
+      (document.head || document.documentElement).appendChild(link);
+    }
+    var href = "/quiz-unattempted.css?v=20261030alledges1";
+    if (link.getAttribute("href") !== href) link.setAttribute("href", href);
+  }
+  ensureScoreStyle();
   if (window.EFP_QUIZ_UNATTEMPTED) return;
   var path;
   try { path = decodeURIComponent(location.pathname); } catch (_) { path = location.pathname; }
@@ -158,10 +173,6 @@
   function start() {
     // Vocabulary/reading pages in Books have no quiz counter and need no observer.
     if (books && !document.querySelector(".score-bar,#alphabet-container")) return;
-    var link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/quiz-unattempted.css?v=20261027bbfinish1";
-    document.head.appendChild(link);
     if (mixed) return;
     sync();
     new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, characterData: true });
