@@ -182,11 +182,12 @@ def content_metadata(path, title, description):
             return (f'{topic} Mind Maps & Revision Notes | {BRAND}',
                     f'Explore {topic.lower() if topic == "Subject-wise" else topic} mind maps and chapter-wise visual revision notes. Choose a topic for competitive-exam preparation on ExamFusion Prep.')
         topic = clean_topic(title)
+        topic = re.sub(r'\s*\|\s*Revision$', '', topic, flags=re.I)
         topic = re.sub(r'\s*[|–—-]?\s*(?:Revision )?Mind Map\s*$', '', topic, flags=re.I)
         topic = re.sub(r'^(?:(?:World )?Geography|Economics|Viral Maths)?\s*[-–—:]?\s*Ch\s*\d+\s*[-–—:]\s*', '', topic, flags=re.I)
         topic = re.sub(r'\s*[-–—]\s*Ch\s*\d+\s*$', '', topic, flags=re.I).strip(' |–—:-')
         title = f'{topic} Mind Map | {BRAND}'
-        poor = not description or any(x in description for x in ['exam prep — ExamFusionPrep', 'exam preparation — ExamFusionPrep', ': 📗', ': 🔢'])
+        poor = not description or any(x in description for x in ['exam prep — ExamFusionPrep', 'exam preparation — ExamFusionPrep', ': 📗', ': 🔢', '| Revision'])
         if poor:
             description = f'Revise {topic} with a visual {subject} mind map. Explore organised notes and key facts for competitive-exam revision on ExamFusion Prep.'
         return title, description.replace('ExamFusionPrep', BRAND)
