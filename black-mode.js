@@ -184,6 +184,10 @@
       "max-width:none!important;box-sizing:border-box!important;" +
       "margin-inline:auto!important;" +
       "}" +
+      /* Books quiz rails also leave a visible gap beyond the Home pill's shadow. */
+      "html." + WIDE_QUIZ_CLASS + ".efp-books-quiz body>.container{" +
+      "width:calc(100vw - clamp(18rem,16vw,19rem))!important;" +
+      "}" +
       "}" +
       /* A visible in-app Back control is required because the packaged PWA
          window does not provide normal browser navigation controls. The
@@ -545,6 +549,9 @@
   }
 
   function markWideDesktopQuizLayout() {
+    var path = normalizePath(window.location.pathname).toLowerCase();
+    document.documentElement.classList.toggle("efp-books-quiz",
+      path.indexOf("/books/") !== -1 && path.indexOf("/books/blackbook/") === -1 && isRealQuizPage());
     document.documentElement.classList.toggle(
       WIDE_QUIZ_CLASS,
       shouldUseWideDesktopQuizLayout()
