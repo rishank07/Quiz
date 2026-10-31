@@ -184,9 +184,18 @@
       "max-width:none!important;box-sizing:border-box!important;" +
       "margin-inline:auto!important;" +
       "}" +
-      /* Books quiz rails also leave a visible gap beyond the Home pill's shadow. */
-      "html." + WIDE_QUIZ_CLASS + ".efp-books-quiz body>.container{" +
+      /* Match Books' Home-pill clearance on Bihar 60 Sets and Original Practice.
+         Keep this inside the desktop media query; mobile rails stay unchanged. */
+      "html." + WIDE_QUIZ_CLASS + ".efp-quiz-home-gap body>.container," +
+      "html.efp-original-practice-quiz #app>:is(.max-w-5xl,.max-w-4xl,.max-w-3xl)," +
+      "html.efp-original-practice-quiz .efp-op-topbar," +
+      "html.efp-original-practice-quiz .efp-op-original-note," +
+      "html.efp-original-practice-quiz body>.wrap:has(#quizView){" +
       "width:calc(100vw - clamp(18rem,16vw,19rem))!important;" +
+      "}" +
+      /* The Original Practice sticky row otherwise bleeds 10px into each rail. */
+      "html.efp-original-practice-quiz #app>.max-w-3xl>.flex.items-center.justify-between.mb-3{" +
+      "margin-left:0!important;margin-right:0!important;" +
       "}" +
       "}" +
       /* A visible in-app Back control is required because the packaged PWA
@@ -550,8 +559,16 @@
 
   function markWideDesktopQuizLayout() {
     var path = normalizePath(window.location.pathname).toLowerCase();
-    document.documentElement.classList.toggle("efp-books-quiz",
-      path.indexOf("/books/") !== -1 && path.indexOf("/books/blackbook/") === -1 && isRealQuizPage());
+    var isBooksQuiz = path.indexOf("/books/") !== -1 &&
+      path.indexOf("/books/blackbook/") === -1 && isRealQuizPage();
+    var isBiharSixtySets = path.endsWith(
+      "/bihar special/topic names/bihar objective gk - 60 sets.html"
+    );
+    var isOriginalPracticeQuiz = /\/original practice\/[^/]+_practice\.html$/.test(path);
+    document.documentElement.classList.toggle("efp-books-quiz", isBooksQuiz);
+    document.documentElement.classList.toggle("efp-original-practice-quiz", isOriginalPracticeQuiz);
+    document.documentElement.classList.toggle("efp-quiz-home-gap",
+      isBooksQuiz || isBiharSixtySets || isOriginalPracticeQuiz);
     document.documentElement.classList.toggle(
       WIDE_QUIZ_CLASS,
       shouldUseWideDesktopQuizLayout()

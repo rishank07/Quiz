@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261031caexplanations1";
+const CACHE_VERSION = "efp-pwa-20261031quizhomegap1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261030alledges1";
@@ -36,7 +36,7 @@ const APP_SHELL = [
   "/pwa-icons/icon-192.png",
   "/pwa-icons/icon-512.png",
   "/pwa-icons/maskable-icon-512.png",
-  "/black-mode.js?v=20261030bookhome1",
+  "/black-mode.js?v=20261031quizhomegap1",
   "/ca-question-deeplink.js?v=20261004context1",
   "/ca-move-top-v3.js?v=20261001navbuttons1",
   "/blackbook-quiz-bookmarks.js?v=20261027bbfinish1",
