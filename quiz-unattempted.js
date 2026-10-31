@@ -14,7 +14,7 @@
       link.rel = "stylesheet";
       (document.head || document.documentElement).appendChild(link);
     }
-    var href = "/quiz-unattempted.css?v=20261030alledges1";
+    var href = "/quiz-unattempted.css?v=20261031bbmobileframe1";
     if (link.getAttribute("href") !== href) link.setAttribute("href", href);
   }
   ensureScoreStyle();

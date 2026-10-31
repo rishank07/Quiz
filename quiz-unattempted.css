@@ -260,6 +260,8 @@ html.efp-black .efp-op-counts > .efp-unattempted { background: #263445; color: #
 @media (max-width: 639px) {
   .efp-mobile-scorebar.efp-counter-bar {
     display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    /* Keep both golden side edges clear of mobile viewport/app clipping. */
+    width: calc(100% - 12px); margin-inline: 6px;
     /* Override the bookmark script's legacy !important centering. Equal
        fractional rows keep the native divs and added spans the same size. */
     grid-template-rows: repeat(2, minmax(36px, 1fr)) 12px;
