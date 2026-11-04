@@ -450,7 +450,7 @@
  */
 (function () {
   'use strict';
-  var REVISION = '20261104-context1';
+  var REVISION = '20261104-context1', CURATED_REVISION = '20261104-curated3';
   var normalCache=new Map(),identityCache=new Map();
   var normalize = function (s) { s=String(s||'');if(normalCache.has(s))return normalCache.get(s);var n=s.toLowerCase().normalize('NFKC').replace(/&(?:amp;)?/g,' and ').replace(/[^a-z0-9\u0900-\u097f]+/g,' ').trim();normalCache.set(s,n);return n; };
   var dictionaries = {
@@ -636,8 +636,9 @@
     };
     var best='',score=0;Object.keys(rules).forEach(function(k){var hits=s.match(new RegExp(rules[k].source,'g'))||[];if(hits.length>score){best=k;score=hits.length;}});return best;
   }
-  function compile(sections) {
-    var rows=[],pool=[],plans=new Map(),report={questions:0,authored:0,generated:0,repaired:0,alreadyRelated:0,unresolved:[]};
+  function compile(sections, curated) {
+    curated=curated||{};
+    var rows=[],pool=[],plans=new Map(),report={questions:0,authored:0,generated:0,repaired:0,alreadyRelated:0,curated:0,unresolved:[]};
     sections.forEach(function(s,si){s.questions.forEach(function(q,qi){
       var l=label(q),k=kind(q,l),main=/\bmain (?:mcq|current affairs)/i.test(s.title.en);
       var r={q:q,id:si+'-'+qi,label:group(l),kind:k,main:main,subject:subject(q,l),tokens:tokens(q.q.en+' '+l),answerTokens:tokens(q.a.en)};
@@ -649,7 +650,19 @@
     });});
     rows.forEach(function(r){
       if(r.main)return;report.generated++;
-      var q=r.q,ci=q.o.findIndex(function(o){return o.en===q.a.en;});if(ci<0)return;
+      var q=r.q,ci=q.o.findIndex(function(o){return o.en===q.a.en;});
+      var explicit=curated[r.id];
+      if(explicit&&(JSON.stringify(explicit.source.q)!==JSON.stringify(q.q)||JSON.stringify(explicit.source.a)!==JSON.stringify(q.a)))throw new Error('Stale CA options: '+r.id);
+      if(ci<0)return;
+      if(explicit){
+        var correct=explicit.a||q.a, alternatives=explicit.choices;
+        if(!Array.isArray(alternatives)||alternatives.length!==3)throw new Error('Invalid CA options: '+r.id);
+        var checked=[correct];alternatives.forEach(function(o){if(!o.en||!o.hi||checked.some(function(p){return same(p,o);}))throw new Error('Duplicate CA choice: '+r.id);checked.push(o);});
+        var next=0,options=q.o.map(function(o,i){return i===ci?correct:alternatives[next++];});
+        plans.set(r.id,{q:q,options:options,question:explicit.q||q.q,answer:correct,revision:CURATED_REVISION,original:{o:q.o,q:q.q,a:q.a}});
+        report.repaired++;report.curated++;return;
+      }
+
       var candidates=[];
       var forbidden=rows.filter(function(x){return x!==r&&q.exp_ref&&x.q.exp_ref===q.exp_ref;}).map(function(x){return x.q.a;});
       function add(o,score){if(o&&o.en&&o.hi)candidates.push({o:o,score:score});}
@@ -682,29 +695,38 @@
       // simply because another compatible candidate happens to score higher.
       var coherent=/^(?:date|year|rank|money|percent|number:|country$|state$|city$|sport$|language$|status$)/.test(r.kind)&&q.o.every(function(o,i){return i===ci||(!same(o,q.a)&&kind({q:{en:''},a:o},'')===r.kind);})&&q.o.every(function(o,i){return !q.o.slice(0,i).some(function(p){return same(o,p);});});
       if(coherent||JSON.stringify(options)===JSON.stringify(q.o)){report.alreadyRelated++;return;}
-      plans.set(r.id,{q:q,options:options});report.repaired++;
+      plans.set(r.id,{q:q,options:options,revision:REVISION,original:{o:q.o,q:q.q,a:q.a}});report.repaired++;
     });
+    var previousPlans=null;
+    function previousOptions(id) {
+      if(!previousPlans){
+        var originalSections=sections.map(function(section,si){return {title:section.title,questions:section.questions.map(function(q,qi){var plan=plans.get(si+'-'+qi);return plan?Object.assign({},q,{o:plan.original.o,q:plan.original.q,a:plan.original.a}):q;})};});
+        previousPlans=compile(originalSections).plans;
+      }
+      var previous=previousPlans.get(id);return previous&&previous.options;
+    }
     return {report:report,plans:plans,apply:function(state){
       plans.forEach(function(p,id){
         // Old submitted answers remain reviewable exactly as submitted. New
         // attempts carry the option revision in the existing progress record.
-        if(state&&state.answers&&state.answers[id]!==undefined&&(!state.caOptionRevision||state.caOptionRevision[id]!==REVISION))return;
-        p.q.o=p.options;
+        if(state&&state.answers&&state.answers[id]!==undefined&&(!state.caOptionRevision||state.caOptionRevision[id]!==p.revision)){p.q.o=state.caOptionRevision&&state.caOptionRevision[id]===REVISION?(previousOptions(id)||p.original.o):p.original.o;p.q.q=p.original.q;p.q.a=p.original.a;return;}
+        p.q.o=p.options;if(p.question)p.q.q=p.question;if(p.answer)p.q.a=p.answer;
       });
     }};
   }
-  var api={compile:compile,kind:kind,label:label,same:same,revision:REVISION};
+  var api={compile:compile,kind:kind,label:label,same:same,revision:REVISION,curatedRevision:CURATED_REVISION};
   window.EFP_CA_OPTIONS=api;
   function install(){
     if(api.installed)return;
     var sections;try{sections=typeof SECTIONS!=='undefined'?SECTIONS:null;}catch(_){return;}
     if(!Array.isArray(sections)||typeof window.renderQuestions!=='function')return;
-    var engine=compile(sections);api.installed=true;api.report=engine.report;
+    var curated={};var curatedNode=document.getElementById&&document.getElementById('efp-ca-curated-options');if(curatedNode)curated=JSON.parse(curatedNode.textContent);
+    var engine=compile(sections,curated);api.installed=true;api.report=engine.report;
     var originalRender=window.renderQuestions,originalPick=window.pick;
     window.renderQuestions=function(){try{engine.apply(typeof saved!=='undefined'?saved:null);}catch(_){}return originalRender.apply(this,arguments);};
     if(typeof originalPick==='function')window.pick=function(qi,oi){
       var id=String(current)+'-'+qi;
-      if(engine.plans.has(id)&&saved.answers[id]===undefined){saved.caOptionRevision=saved.caOptionRevision||{};saved.caOptionRevision[id]=REVISION;}
+      if(engine.plans.has(id)&&saved.answers[id]===undefined){saved.caOptionRevision=saved.caOptionRevision||{};saved.caOptionRevision[id]=engine.plans.get(id).revision;}
       return originalPick.apply(this,arguments);
     };
     window.renderQuestions();

@@ -222,7 +222,7 @@ def compact_pdf_page_tree(raw):
     return raw + suffix
 
 
-def inject_route_compatibility(path, relative, quiz_style_url=None, rapid_script_url=None):
+def inject_route_compatibility(path, relative, quiz_style_url=None, rapid_script_url=None, curated=None):
     # Pages removes .html from URLs. Restore the existing URL in history before
     # app scripts read it, so saved routes, back navigation and deep links agree.
     # This is a history update, not a network redirect.
@@ -258,6 +258,28 @@ def inject_route_compatibility(path, relative, quiz_style_url=None, rapid_script
         # A content-addressed URL also bypasses old HTTP/CDN script copies.
         source = re.sub(r"(?<=src=[\"'])(?:[^\"']*/)?rapid-practice-deeplink\.js(?:\?[^\"']*)?(?=[\"'])",
                         lambda _: rapid_script_url, source)
+    if curated is not None:
+        # Keep the authored master-data immutable. Each quiz receives only its
+        # own fixed options before DOMContentLoaded, without an extra request.
+        match = re.search(r'<script[^>]*id=["\']master-data["\'][^>]*>([\s\S]*?)</script>', source)
+        if not match:
+            raise ValueError("Missing CA master-data: " + relative.as_posix())
+        data = json.loads(match[1])
+        def sections(value):
+            if isinstance(value, list):
+                return value
+            return [section for child in value.values() for section in sections(child)]
+        cards = {f"{si}-{qi}": q for si, section in enumerate(sections(data)) for qi, q in enumerate(section["questions"])}
+        for key, entry in curated.items():
+            card = cards.get(key)
+            if card is None or entry["source"] != {"q": card["q"], "a": card["a"]}:
+                raise ValueError("Stale CA curation: " + relative.as_posix() + " " + key)
+        payload = compact(curated).replace("<", "\\u003c")
+        tag = '<script type="application/json" id="efp-ca-curated-options">' + payload + '</script>'
+        source = re.sub(r'<script\b[^>]*\bid=[\"\']efp-ca-curated-options[\"\'][^>]*>[\s\S]*?</script>', '', source)
+        source = source.replace('</body>', tag + '</body>', 1)
+        if tag not in source:
+            raise ValueError("Cannot inject CA curation: " + relative.as_posix())
     path.write_text(source, encoding="utf-8")
 
 
@@ -401,8 +423,16 @@ def build(output):
     rapid_runtime = (output / "rapid-practice-deeplink.js").read_bytes()
     rapid_script_url = "/_cf-assets/rapid-practice-" + digest(rapid_runtime)[:16] + ".js"
     write(output / rapid_script_url.lstrip("/"), rapid_runtime)
+    curated_catalog = json.loads((ROOT / "tools/data/ca-curated-options-20261104.json").read_text())
+    delivered = set()
     for path in list(output.rglob("*.html")):
-        inject_route_compatibility(path, path.relative_to(output), quiz_style_url, rapid_script_url)
+        relative = path.relative_to(output)
+        curated = curated_catalog.get(relative.as_posix())
+        inject_route_compatibility(path, relative, quiz_style_url, rapid_script_url, curated)
+        if curated is not None:
+            delivered.add(relative.as_posix())
+    if delivered != set(curated_catalog):
+        raise ValueError("Undelivered CA option data")
 
     revision = digest(runtime.encode() + logic.encode() + viewer.encode() + source_commit.encode())[:12]
     worker_path = output / "service-worker.js"

@@ -1,0 +1,38 @@
+EXAMFUSION CURRENT AFFAIRS OPTIONS FIX — 04 NOVEMBER 2026
+
+UPLOAD
+1. Extract this ZIP.
+2. Copy all folders and files into your EXISTING Quiz repository folder.
+3. Merge folders and replace the matching files. Do not delete other files.
+4. Commit and push normally. Keep tools/data and the build script together.
+5. Wait for Cloudflare's normal build/deployment, then reopen the quiz.
+
+The ZIP has the existing repository folder structure; no extra Quiz folder.
+This final batch has NOT been pushed by this conversation.
+Baseline GitHub master: b60859d3c08cc10516497b1f446c1d0a4e651eaa.
+
+CHANGES
+44 monthly/topic quiz pages, 9,606 questions.
+2,388 question-specific bilingual option sets (includes 316 additional reviews).
+The category-matching runtime remains for other generated drills.
+Original master-data JSON is byte-for-byte identical to the baseline in all
+44 pages. Authored reading MCQs, question counts, IDs, option slots, storage
+keys and explanations remain unchanged. 13 incomplete generated drills have
+explicit question/answer clarification overlays for new attempts.
+Existing submitted attempts retain the layout used when answered, including
+attempts saved under the first options fix. Bookmarks and progress persist.
+Cache version and direct script URLs are updated.
+Fixed options are embedded per page; no additional data request is required.
+
+VALIDATED
+44-quiz option/answer/duplicate/determinism checks; legacy and first-pass saved
+attempts; revision marking and reload; direct HTML payload delivery; Cloudflare
+injection and content-addressed runtime routing; analytics exclusion guards;
+byte-for-byte source master-data comparison; git diff whitespace check.
+Browser visual QA and full-site deployment were not completed in this run.
+This is an options-quality update, not a fresh factual audit of all source news.
+
+OPTIONAL LOCAL CHECKS (from Quiz)
+node tools/test-ca-relatable-options.cjs
+python3 tools/test-quiz-frame-delivery.py
+node tools/test-analytics-guard.cjs

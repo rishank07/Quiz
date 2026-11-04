@@ -1,6 +1,7 @@
 """Check score-frame delivery without building or changing the real site."""
 import importlib.util
 import re
+import json
 import tempfile
 from pathlib import Path
 
@@ -42,15 +43,19 @@ with tempfile.TemporaryDirectory() as folder:
         assert rendered.index(guard) < rendered.index(runtime_url)
     quizzes = list((ROOT / "Current Affairs/Topic Names/Rapid Practice").rglob("*.html"))
     assert len(quizzes) == 44
+    catalog = json.loads((ROOT / "tools/data/ca-curated-options-20261104.json").read_text())
     for quiz in quizzes:
         original = quiz.read_text()
         target = Path(folder) / "catalog-quiz.html"
         target.write_text(original)
-        build.inject_route_compatibility(target, quiz.relative_to(ROOT), style_url, runtime_url)
+        build.inject_route_compatibility(target, quiz.relative_to(ROOT), style_url, runtime_url, catalog[quiz.relative_to(ROOT).as_posix()])
         rendered = target.read_text()
         assert rendered.count('src="' + runtime_url + '"') == 1, str(quiz)
         master = r'<script[^>]*id=["\']master-data["\'][^>]*>([\s\S]*?)</script>'
         assert re.search(master, original)[1] == re.search(master, rendered)[1], str(quiz)
+        inserted = re.search(r'<script type="application/json" id="efp-ca-curated-options">(.*?)</script>', rendered, re.S)
+        assert inserted and json.loads(inserted[1]) == catalog[quiz.relative_to(ROOT).as_posix()]
+        assert rendered.index('efp-ca-curated-options') < rendered.index('</body>')
     # Actual built source shapes, with question/data bodies left untouched.
     samples = [
         "Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/Name_Changes_2026_Current_Affairs_Rapid_Practice.html",
