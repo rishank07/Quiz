@@ -222,7 +222,7 @@ def compact_pdf_page_tree(raw):
     return raw + suffix
 
 
-def inject_route_compatibility(path, relative, quiz_style_url=None):
+def inject_route_compatibility(path, relative, quiz_style_url=None, rapid_script_url=None):
     # Pages removes .html from URLs. Restore the existing URL in history before
     # app scripts read it, so saved routes, back navigation and deep links agree.
     # This is a history update, not a network redirect.
@@ -253,6 +253,11 @@ def inject_route_compatibility(path, relative, quiz_style_url=None):
                 source = source[:closing.start()] + link + source[closing.start():]
             else:
                 source = link + source
+    if rapid_script_url:
+        # Direct quiz visits may have no controlling service worker yet.
+        # A content-addressed URL also bypasses old HTTP/CDN script copies.
+        source = re.sub(r"(?<=src=[\"'])(?:[^\"']*/)?rapid-practice-deeplink\.js(?:\?[^\"']*)?(?=[\"'])",
+                        lambda _: rapid_script_url, source)
     path.write_text(source, encoding="utf-8")
 
 
@@ -393,8 +398,11 @@ def build(output):
           "  X-Robots-Tag: noindex\n"
           "/open-original-pdf\n  X-Robots-Tag: noindex\n")
     quiz_style_url = "/quiz-unattempted.css?v=" + digest((output / "quiz-unattempted.css").read_bytes())[:12]
+    rapid_runtime = (output / "rapid-practice-deeplink.js").read_bytes()
+    rapid_script_url = "/_cf-assets/rapid-practice-" + digest(rapid_runtime)[:16] + ".js"
+    write(output / rapid_script_url.lstrip("/"), rapid_runtime)
     for path in list(output.rglob("*.html")):
-        inject_route_compatibility(path, path.relative_to(output), quiz_style_url)
+        inject_route_compatibility(path, path.relative_to(output), quiz_style_url, rapid_script_url)
 
     revision = digest(runtime.encode() + logic.encode() + viewer.encode() + source_commit.encode())[:12]
     worker_path = output / "service-worker.js"

@@ -29,6 +29,28 @@ with tempfile.TemporaryDirectory() as folder:
         if guard in original:
             assert rendered.index(guard) < rendered.index('id="efp-quiz-score-style"')
         assert 'id="efp-pages-route"' in rendered
+    # All cached URL shapes point to one content-addressed runtime. Matching
+    # text in question data must never be rewritten as though it were a tag.
+    runtime_url = "/_cf-assets/rapid-practice-0123456789abcdef.js"
+    for old_url in ["/rapid-practice-deeplink.js?v=OLD", "../../../../../rapid-practice-deeplink.js?v=OLD", "/rapid-practice-deeplink.js"]:
+        target = Path(folder) / "runtime.html"
+        target.write_text('<html><head>' + guard + '<script src="' + old_url + '"></script></head><body>QUIZ_CONTENT</body></html>')
+        build.inject_route_compatibility(target, Path("Current Affairs/quiz.html"), style_url, runtime_url)
+        rendered = target.read_text()
+        assert 'src="' + runtime_url + '"' in rendered
+        assert old_url not in rendered and "QUIZ_CONTENT" in rendered
+        assert rendered.index(guard) < rendered.index(runtime_url)
+    quizzes = list((ROOT / "Current Affairs/Topic Names/Rapid Practice").rglob("*.html"))
+    assert len(quizzes) == 44
+    for quiz in quizzes:
+        original = quiz.read_text()
+        target = Path(folder) / "catalog-quiz.html"
+        target.write_text(original)
+        build.inject_route_compatibility(target, quiz.relative_to(ROOT), style_url, runtime_url)
+        rendered = target.read_text()
+        assert rendered.count('src="' + runtime_url + '"') == 1, str(quiz)
+        master = r'<script[^>]*id=["\']master-data["\'][^>]*>([\s\S]*?)</script>'
+        assert re.search(master, original)[1] == re.search(master, rendered)[1], str(quiz)
     # Actual built source shapes, with question/data bodies left untouched.
     samples = [
         "Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/Name_Changes_2026_Current_Affairs_Rapid_Practice.html",
