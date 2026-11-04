@@ -449,8 +449,9 @@
  * Kept in the existing shared asset so cached quiz HTML needs no migration.
  */
 (function () {
+ function createEngine(enhanced) {
   'use strict';
-  var REVISION = '20261104-context1', CURATED_REVISION = '20261104-curated3';
+  var REVISION = enhanced?'20261104-context4':'20261104-context1', CURATED_REVISION = enhanced?'20261104-curated4':'20261104-curated3';
   var normalCache=new Map(),identityCache=new Map();
   var normalize = function (s) { s=String(s||'');if(normalCache.has(s))return normalCache.get(s);var n=s.toLowerCase().normalize('NFKC').replace(/&(?:amp;)?/g,' and ').replace(/[^a-z0-9\u0900-\u097f]+/g,' ').trim();normalCache.set(s,n);return n; };
   var dictionaries = {
@@ -496,6 +497,60 @@
   Object.keys(dictionaries).forEach(function (key) {
     dictionaries[key] = dictionaries[key].split(';').map(function (row) { var v = row.split('|'); return {en:v[0], hi:v[1]}; });
   });
+  if(enhanced){
+    dictionaries.country=dictionaries.country.concat('Hong Kong|हांगकांग;Chinese Taipei|चीनी ताइपे;Taiwan|ताइवान;England|इंग्लैंड;Scotland|स्कॉटलैंड;Wales|वेल्स;West Indies|वेस्ट इंडीज;North Korea|उत्तर कोरिया;Mongolia|मंगोलिया;Belarus|बेलारूस;Croatia|क्रोएशिया;Serbia|सर्बिया;Ecuador|इक्वाडोर;Bahrain|बहरीन;Kuwait|कुवैत;Oman|ओमान;Jamaica|जमैका;Botswana|बोत्सवाना;Tunisia|ट्यूनीशिया;Algeria|अल्जीरिया;Morocco|मोरक्को;Czech Republic|चेक गणराज्य'.split(';').map(function(x){var a=x.split('|');return {en:a[0],hi:a[1]};}));
+    var sportsBanks={
+      'cricket:female':'Smriti Mandhana|स्मृति मंधाना;Harmanpreet Kaur|हरमनप्रीत कौर;Deepti Sharma|दीप्ति शर्मा;Ellyse Perry|एलिस पेरी;Sophie Ecclestone|सोफी एक्लेस्टोन;Marizanne Kapp|मरिजान काप',
+      'cricket:male':'Virat Kohli|विराट कोहली;Rohit Sharma|रोहित शर्मा;Jasprit Bumrah|जसप्रीत बुमराह;Rashid Khan|राशिद खान;Ravindra Jadeja|रवींद्र जडेजा',
+      'badminton:female':'P. V. Sindhu|पी. वी. सिंधु;Saina Nehwal|साइना नेहवाल;Akane Yamaguchi|अकाने यामागुची;An Se-young|आन से-यंग;Chen Yufei|चेन युफेई',
+      'badminton:male':'Lakshya Sen|लक्ष्य सेन;Kidambi Srikanth|किदांबी श्रीकांत;H. S. Prannoy|एच. एस. प्रणय;Viktor Axelsen|विक्टर एक्सेलसन;Shi Yuqi|शी युकी',
+      'tennis:female':'Aryna Sabalenka|आर्यना सबालेंका;Iga Swiatek|इगा स्वियातेक;Coco Gauff|कोको गॉफ;Elena Rybakina|एलेना रिबाकिना',
+      'tennis:male':'Jannik Sinner|यानिक सिनर;Carlos Alcaraz|कार्लोस अल्काराज;Novak Djokovic|नोवाक जोकोविच;Daniil Medvedev|दानिल मेदवेदेव',
+      'chess:female':'Koneru Humpy|कोनेरू हम्पी;Harika Dronavalli|हरिका द्रोणवल्ली;Divya Deshmukh|दिव्या देशमुख;Ju Wenjun|जू वेनजुन;Lei Tingjie|लेई तिंगजी',
+      'chess:male':'D. Gukesh|डी. गुकेश;R. Praggnanandhaa|आर. प्रज्ञानानंद;Arjun Erigaisi|अर्जुन एरिगैसी;Magnus Carlsen|मैग्नस कार्लसन;Fabiano Caruana|फैबियानो कारुआना;Wei Yi|वेई यी',
+      'football:male':'Lionel Messi|लियोनेल मेसी;Kylian Mbappe|किलियन एम्बाप्पे;Erling Haaland|एर्लिंग हालांड;Jude Bellingham|जूड बेलिंगहम',
+      'football:female':'Aitana Bonmati|ऐताना बोनमती;Alexia Putellas|एलेक्सिया पुतेयास;Sam Kerr|सैम केर;Sophia Smith|सोफिया स्मिथ',
+      'hockey:male':'Harmanpreet Singh|हरमनप्रीत सिंह;Mandeep Singh|मनदीप सिंह;Alexander Hendrickx|अलेक्जेंडर हेंड्रिक्स;Blake Govers|ब्लेक गोवर्स',
+      'hockey:female':'Savita Punia|सविता पूनिया;Salima Tete|सलीमा टेटे;Yibbi Jansen|यिब्बी जानसेन;Frederique Matla|फ्रेडरिक मातला',
+      'squash:male':'Mostafa Asal|मुस्तफा असल;Ali Farag|अली फराग;Paul Coll|पॉल कॉल;Diego Elias|डिएगो एलियास',
+      'squash:female':'Anahat Singh|अनाहत सिंह;Joshna Chinappa|जोशना चिनप्पा;Dipika Pallikal|दीपिका पल्लीकल;Nour El Sherbini|नूर एल शेरबिनी',
+      'racing:male':'Lando Norris|लैंडो नॉरिस;Max Verstappen|मैक्स वेरस्टैपेन;Lewis Hamilton|लुईस हैमिल्टन;Charles Leclerc|चार्ल्स लेक्लर्क'
+    };
+    Object.keys(sportsBanks).forEach(function(k){dictionaries['person:specific:'+k]=sportsBanks[k].split(';').map(function(x){var a=x.split('|');return {en:a[0],hi:a[1]};});});
+  }
+  function sportsIdentity(q,l){
+    if(!enhanced)return '';
+    var a=q.a.en, head=a.split(/[(—–|]/)[0].trim().replace(/[.।]+$/,''), context=l+' '+q.q.en;
+    if(head.split(/\s+/).length>6||/\d|\b(?:became|first|highest|youngest|oldest|won|winner|medals?|total|gold|silver|bronze|team|club|state|from|only|to|the|of|and|is|are|was|were|has|for|in|by)\b/i.test(head))return '';
+    if(exactKind({en:head}))return '';
+    var sport='';[['badminton',/badminton|bwf|thomas cup|uber cup/i],['cricket',/cricket|wicket|batsman|batter|ipl|ranji|bcci/i],['chess',/chess|grandmaster|\bgm\b|fide/i],['football',/football|fifa|golden boot|golden glove|durand|soccer/i],['hockey',/hockey|fih/i],['squash',/squash|wsf/i],['tennis',/tennis|wimbledon|roland garros|australian open|french open|us open/i],['racing',/formula|grand prix|\bf1\b|racing/i]].some(function(x){if(x[1].test(context)){sport=x[0];return true;}return false;});
+    if(!sport||!/who|player|captain|coach|singles|doubles|champion|runner|title|scorer|wicket|grandmaster|\bgm\b|surpassed|defeated/i.test(context))return '';
+    if(/which (?:team|country)|club|franchise/i.test(q.q.en)&&!/player|captain|coach|scorer|surpassed|singles|doubles|goalkeeper|grandmaster|\bgm\b/i.test(l))return '';
+    var gender=/women|female|girls/i.test(l)?'female':/\bmen|male|boys/i.test(l)?'male':/women|female|girls/i.test(q.q.en)?'female':'male';
+    return 'person:specific:'+sport+':'+gender;
+  }
+  function reviewedAlternatives(a){
+    if(!enhanced)return [];
+    var known={
+      'UNCCD COP17 (Mongolia)':'UNCCD COP16, Saudi Arabia|यूएनसीसीडी कॉप16, सऊदी अरब;UNFCCC COP30, Brazil|यूएनएफसीसीसी कॉप30, ब्राजील;CBD COP16, Colombia|सीबीडी कॉप16, कोलंबिया',
+      "Part of ISRO's PSLV-C62 Mission":"Part of ISRO's PSLV-C58 Mission|इसरो के पीएसएलवी-सी58 मिशन का हिस्सा;Part of ISRO's PSLV-C60 Mission|इसरो के पीएसएलवी-सी60 मिशन का हिस्सा;Part of ISRO's GSLV-F16 Mission|इसरो के जीएसएलवी-एफ16 मिशन का हिस्सा",
+      'Playing for Mumbai Indians (WPL)':'Playing for Delhi Capitals (WPL)|दिल्ली कैपिटल्स (डब्ल्यूपीएल) के लिए खेलना;Playing for Royal Challengers Bengaluru (WPL)|रॉयल चैलेंजर्स बेंगलुरु (डब्ल्यूपीएल) के लिए खेलना;Playing for UP Warriorz (WPL)|यूपी वॉरियर्ज (डब्ल्यूपीएल) के लिए खेलना',
+      'Space weather Observations at L1 to Advance Readiness — Satellite':'Solar Observation Laboratory for Atmospheric Research|सोलर ऑब्जर्वेशन लेबोरेटरी फॉर एटमॉस्फेरिक रिसर्च;Space Observatory for Lunar Analysis and Radiation|स्पेस ऑब्जर्वेटरी फॉर लूनर एनालिसिस एंड रेडिएशन;Solar-Orbit Laboratory for Advanced Reconnaissance|सोलर ऑर्बिट लेबोरेटरी फॉर एडवांस्ड रिकॉनिसेंस',
+      'Flex-Fuel Vehicles (FFVs) — using Petrol or E20, E85':'Battery-electric vehicles using only rechargeable batteries|केवल रिचार्जेबल बैटरी वाले बैटरी इलेक्ट्रिक वाहन;Hydrogen fuel-cell vehicles using compressed hydrogen|संपीडित हाइड्रोजन वाले हाइड्रोजन फ्यूल सेल वाहन;Diesel-only vehicles using conventional diesel engines|पारंपरिक डीजल इंजन वाले केवल डीजल वाहन',
+      'Tata Advanced Systems and Airbus established the H125 Final Assembly Line at Vemagal, Karnataka.':'Tata Advanced Systems and Airbus established an H145 assembly line at Vemagal|टाटा एडवांस्ड सिस्टम्स और एयरबस ने वेमगल में एच145 असेंबली लाइन स्थापित की;Tata Advanced Systems and Airbus established an H160 assembly line at Vemagal|टाटा एडवांस्ड सिस्टम्स और एयरबस ने वेमगल में एच160 असेंबली लाइन स्थापित की;Tata Advanced Systems and Airbus established an H175 assembly line at Vemagal|टाटा एडवांस्ड सिस्टम्स और एयरबस ने वेमगल में एच175 असेंबली लाइन स्थापित की',
+      'A greenhouse gas — heats up the atmosphere far more than CO2.':'A gas that primarily causes stratospheric ozone formation|मुख्यतः समतापमंडलीय ओजोन निर्माण करने वाली गैस;A gas with no significant role in radiative warming|विकिरणीय तापन में उल्लेखनीय भूमिका रहित गैस;A gas that cools the atmosphere by directly absorbing all sunlight|समस्त सूर्यप्रकाश सीधे अवशोषित कर वायुमंडल ठंडा करने वाली गैस',
+      'Emits Methane Gas (CH4).':'Emits nitrous oxide (N2O)|नाइट्रस ऑक्साइड (एन2ओ) छोड़ते हैं;Emits ammonia (NH3)|अमोनिया (एनएच3) छोड़ते हैं;Emits sulphur dioxide (SO2)|सल्फर डाइऑक्साइड (एसओ2) छोड़ते हैं',
+      'Germanwatch — During COP30 Summit':'Climate Action Network — during COP30|क्लाइमेट एक्शन नेटवर्क — कॉप30 के दौरान;United Nations Environment Programme — during COP30|संयुक्त राष्ट्र पर्यावरण कार्यक्रम — कॉप30 के दौरान;World Resources Institute — during COP30|विश्व संसाधन संस्थान — कॉप30 के दौरान',
+      'CRISPR-Cas9 genome-editing technology.':'Conventional selective cross-breeding|पारंपरिक चयनात्मक संकरण;Induced mutation using gamma radiation|गामा विकिरण से प्रेरित उत्परिवर्तन;Marker-assisted selection without genome editing|जीनोम संपादन बिना मार्कर सहायतित चयन',
+      'Related To Swine Flu. H5N1 Virus: Related To Bird Flu.':'H1N1 is related to bird flu, while H5N1 is related to swine flu|एच1एन1 बर्ड फ्लू तथा एच5एन1 स्वाइन फ्लू से संबंधित है;H1N1 is related to dengue, while H5N1 is related to chikungunya|एच1एन1 डेंगू तथा एच5एन1 चिकनगुनिया से संबंधित है;H1N1 is related to measles, while H5N1 is related to mumps|एच1एन1 खसरा तथा एच5एन1 गलसुआ से संबंधित है',
+      'UNFF20':'UNFF19|यूएनएफएफ19;UNFF18|यूएनएफएफ18;UNFF21|यूएनएफएफ21'
+    };
+    return known[a.en]?known[a.en].split(';').map(function(x){var p=x.split('|');return {en:p[0],hi:p[1]};}):[];
+  }
+  function formatVariants(a){
+    if(!enhanced||!/T20\s*International/i.test(a.en)||!/टी\s*20\s*अंतरराष्ट्रीय/.test(a.hi))return [];
+    return [['One Day International cricket','वनडे अंतरराष्ट्रीय क्रिकेट'],['Test cricket','टेस्ट क्रिकेट'],['domestic T20 cricket','घरेलू टी20 क्रिकेट']].map(function(pair){return {en:a.en.replace(/T20\s*International(?:s)?(?:\s+cricket)?/i,pair[0]),hi:a.hi.replace(/टी\s*20\s*अंतरराष्ट्रीय(?:\s+क्रिकेट)?/g,pair[1])};});
+  }
   var aliases = {usa:'united states',us:'united states',uk:'united kingdom',uae:'united arab emirates',bharat:'india',holland:'netherlands',turkiye:'turkey',delhi:'new delhi',bangalore:'bengaluru',orissa:'odisha',burma:'myanmar',peking:'beijing'};
   function identity(s) {
     if(identityCache.has(s))return identityCache.get(s);
@@ -524,7 +579,7 @@
   }
   var months=/\b(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)\b/i;
   var exactKinds=new Map();Object.keys(dictionaries).forEach(function(k){dictionaries[k].forEach(function(p){if(!exactKinds.has(identity(p.en)))exactKinds.set(identity(p.en),k);});});
-  function exactKind(a) {return exactKinds.get(identity(a.en))||'';}
+  function exactKind(a) {var n=identity(a.en);if(enhanced)n=n.replace(/\s*[.,।]+$/,'');return exactKinds.get(n)||'';}
   function kind(q,l) {
     var a=q.a.en, n=normalize(a), words=n.split(' ').length, hint=l&&!/^(?:answer|fact|verified fact|related fact|key fact)$/.test(l)?l:q.q.en;
     var namedPerson=words<=9&&!/\b(?:appointed|reappointed|newly|released|launched|first|highest|medals|received|formed|established|organised|organized|to|for|by|of|is|are|was|were|has|have|will|won)\b/i.test(a);
@@ -536,6 +591,7 @@
     if(/^\s*[\d,.]+\s*(?:[a-z²³/%–-]+\s*)?[.।]?\s*$/i.test(a))return 'number:'+normalize(a.replace(/[\d,.]+/g,''));
     var exact=exactKind(q.a);if(exact){if(exact==='person')return 'person:leader';if(exact==='organization'){if(/DRDO|ISRO|NASA|CSIR|ICAR/i.test(a))return 'organization:research';if(/RBI|SEBI|IMF|Bank/i.test(a))return 'organization:finance';}return exact;}
     if(/^(?:prime minister|president|union minister|chief minister|dr[. ]|justice|shri )/i.test(a)&&words<=12)return 'person:official';
+    if(enhanced){var specific=sportsIdentity(q,l);if(specific)return specific;}
     if(/^ministry$|^mo |ministry of/i.test(hint)||/^Mo(?: |\.)/i.test(a))return 'ministry';
     if(/political party|^party$/.test(hint))return 'party';
     if(/\briver\b/i.test(a)&&words<=15)return 'river';
@@ -595,6 +651,7 @@
     // Change the amount rather than a financial year's date, when present.
     hits.sort(function(x,y){return ((+x[0]>=1900&&+x[0]<=2100)?1:0)-((+y[0]>=1900&&+y[0]<=2100)?1:0);});
     for(var h of hits){
+      if(enhanced&&/[A-Za-z]/.test(a.en.charAt(h.index-1)))continue;
       if(!a.hi.includes(h[0]))continue;
       var value=Number(h[0].replace(/,/g,''));if(!Number.isFinite(value))continue;
       var isDate=months.test(a.en),isYear=value>=1500&&value<=2100&&/^\d{4}$/.test(h[0]);
@@ -652,6 +709,18 @@
       if(r.main)return;report.generated++;
       var q=r.q,ci=q.o.findIndex(function(o){return o.en===q.a.en;});
       var explicit=curated[r.id];
+      if(enhanced){
+        var parent=rows.find(function(x){return x.main&&q.exp_ref&&x.q.exp_ref===q.exp_ref;});
+        var donor=parent&&parent.q.o.some(function(o){return same(o,q.a);})?parent.q.o.filter(function(o){return !same(o,q.a);}):[];
+        var format=formatVariants(q.a), safety=reviewedAlternatives(q.a);
+        if(safety.length!==3&&donor.length===3)safety=donor;
+        else if(format.length===3)safety=format;
+        else if(explicit&&r.kind.indexOf('person:specific:')===0){
+          var name=q.a.en.split(/[(—–|]/)[0].trim();
+          if(explicit.choices.every(function(o){return o.en.indexOf(name)===0;}))safety=(dictionaries[r.kind]||[]).filter(function(o){return !same(o,q.a);}).slice(0,3);
+        }
+        if(safety.length===3)explicit=Object.assign({},explicit||{source:{q:q.q,a:q.a}},{choices:safety});
+      }
       if(explicit&&(JSON.stringify(explicit.source.q)!==JSON.stringify(q.q)||JSON.stringify(explicit.source.a)!==JSON.stringify(q.a)))throw new Error('Stale CA options: '+r.id);
       if(ci<0)return;
       if(explicit){
@@ -660,7 +729,7 @@
         var checked=[correct];alternatives.forEach(function(o){if(!o.en||!o.hi||checked.some(function(p){return same(p,o);}))throw new Error('Duplicate CA choice: '+r.id);checked.push(o);});
         var next=0,options=q.o.map(function(o,i){return i===ci?correct:alternatives[next++];});
         plans.set(r.id,{q:q,options:options,question:explicit.q||q.q,answer:correct,revision:CURATED_REVISION,original:{o:q.o,q:q.q,a:q.a}});
-        report.repaired++;report.curated++;return;
+        report.repaired++;if(curated[r.id])report.curated++;return;
       }
 
       var candidates=[];
@@ -697,7 +766,12 @@
       if(coherent||JSON.stringify(options)===JSON.stringify(q.o)){report.alreadyRelated++;return;}
       plans.set(r.id,{q:q,options:options,revision:REVISION,original:{o:q.o,q:q.q,a:q.a}});report.repaired++;
     });
-    var previousPlans=null;
+    var previousPlans=null, previousSections=null, previousState=null;
+    function originalSections(){return sections.map(function(section,si){return {title:section.title,questions:section.questions.map(function(q,qi){var plan=plans.get(si+'-'+qi);return plan?Object.assign({},q,{o:plan.original.o,q:plan.original.q,a:plan.original.a}):q;})};});}
+    function legacyQuestion(id,state){
+      if(previousState!==state){previousSections=originalSections();window.EFP_CA_OPTIONS_LEGACY.compile(previousSections,curated).apply(state);previousState=state;}
+      var index=id.split('-').map(Number);return previousSections[index[0]].questions[index[1]];
+    }
     function previousOptions(id) {
       if(!previousPlans){
         var originalSections=sections.map(function(section,si){return {title:section.title,questions:section.questions.map(function(q,qi){var plan=plans.get(si+'-'+qi);return plan?Object.assign({},q,{o:plan.original.o,q:plan.original.q,a:plan.original.a}):q;})};});
@@ -707,6 +781,7 @@
     }
     return {report:report,plans:plans,apply:function(state){
       plans.forEach(function(p,id){
+        if(enhanced&&state&&state.answers&&state.answers[id]!==undefined&&state.caOptionRevision&&/^(?:20261104-context1|20261104-curated3)$/.test(state.caOptionRevision[id])){var previous=legacyQuestion(id,state);p.q.o=previous.o;p.q.q=previous.q;p.q.a=previous.a;return;}
         // Old submitted answers remain reviewable exactly as submitted. New
         // attempts carry the option revision in the existing progress record.
         if(state&&state.answers&&state.answers[id]!==undefined&&(!state.caOptionRevision||state.caOptionRevision[id]!==p.revision)){p.q.o=state.caOptionRevision&&state.caOptionRevision[id]===REVISION?(previousOptions(id)||p.original.o):p.original.o;p.q.q=p.original.q;p.q.a=p.original.a;return;}
@@ -715,6 +790,7 @@
     }};
   }
   var api={compile:compile,kind:kind,label:label,same:same,revision:REVISION,curatedRevision:CURATED_REVISION};
+  if(!enhanced){window.EFP_CA_OPTIONS_LEGACY=api;return;}
   window.EFP_CA_OPTIONS=api;
   function install(){
     if(api.installed)return;
@@ -732,5 +808,7 @@
     window.renderQuestions();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+ }
+ createEngine(false);createEngine(true);
 })();
 /* EFP_CA_RELATABLE_OPTIONS_END */

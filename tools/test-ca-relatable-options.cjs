@@ -32,6 +32,11 @@ for(const [file,overrides] of Object.entries(catalog)){
  for(const id of Object.keys(overrides)){oldAnswers[id]=0;oldRevisions[id]=api.revision;}
  upgradeEngine.apply({answers:oldAnswers,caOptionRevision:oldRevisions});
  for(const id of Object.keys(overrides)){const [si,qi]=id.split('-').map(Number);assert.deepEqual(upgraded[si].questions[qi],firstPass[si].questions[qi],'preserve first-pass submitted layout '+file+' '+id);}
+ // The live context1/curated3 attempts keep their precise submitted layout.
+ const published=clone(original),publishedEngine=context.window.EFP_CA_OPTIONS_LEGACY.compile(published,overrides),publishedAnswers={},publishedRevisions={};
+ publishedEngine.apply({answers:{}});publishedEngine.plans.forEach((p,id)=>{publishedAnswers[id]=0;publishedRevisions[id]=p.revision;});
+ const restoredPublished=clone(original);api.compile(restoredPublished,overrides).apply({answers:publishedAnswers,caOptionRevision:publishedRevisions});
+ for(const id of Object.keys(publishedAnswers)){const [si,qi]=id.split('-').map(Number);assert.deepEqual(restoredPublished[si].questions[qi],published[si].questions[qi],'preserve live submitted layout '+file+' '+id);}
  const legacy=clone(original),legacyEngine=api.compile(legacy,overrides),answers={};legacyEngine.plans.forEach((_,id)=>answers[id]=0);
  const state={answers,bookmarks:{'0-0':true},section:0,dark:false},snapshot=clone(state);legacyEngine.apply(state);assert.deepEqual(legacy,original,'legacy submitted cards retain original options');assert.deepEqual(state,snapshot,'saved progress unchanged');
  state.answers={};legacyEngine.apply(state);assert.deepEqual(legacy,current,'reset enables fixed options');
@@ -45,6 +50,15 @@ for(const overrides of Object.values(catalog))for(const e of Object.values(overr
  if(/^Smriti Mandhana/.test(e.source.a.en))assert(e.choices.every(o=>!/Sindhu|Nehwal|Mirza/.test(o.en)),'women cricketers need cricket distractors');
  if(/^IIM Ahmedabad/.test(e.source.a.en))assert.deepEqual(e.choices.map(o=>o.en),['IIM Bangalore','IIM Calcutta','IIM Lucknow']);
 }
+// Regressions found in real rendered sports questions after the first upload.
+const sportsFile=Object.keys(catalog).find(f=>f.endsWith('/Sports_2026_Current_Affairs_Rapid_Practice.html'));
+const sportsSource=JSON.parse(fs.readFileSync(path.join(root,sportsFile),'utf8').match(/id="master-data"[^>]*>([\s\S]*?)<\/script>/)[1]);
+const sports=sections(sportsSource);api.compile(sports,catalog[sportsFile]).apply({answers:{}});
+const choices=id=>{const [si,qi]=id.split('-').map(Number);return sports[si].questions[qi].o.map(o=>o.en);};
+assert(choices('9-8').every(o=>!/T(?:15|25|30)\b/.test(o)),'do not mutate the T20 format code');
+for(const id of ['9-6','9-26'])assert(choices(id).every(o=>!/Capitals|Maamma|Gukesh|Ding|Kashi/.test(o)),'national teams only');
+assert(choices('9-11').every(o=>!/medals?|Karnataka|Gold/.test(o)),'chess players only');
+assert(choices('9-22').filter(o=>/^Ilamparthi/.test(o)).length===1,'replace whole players instead of their home state');
 // First-pass attempts retain their existing context1 option layout.
 const old=clone(legacyFixture.original),oldEngine=api.compile(old),oldId=legacyFixture.si+'-'+legacyFixture.qi;oldEngine.apply({answers:{[oldId]:0},caOptionRevision:{[oldId]:api.revision}});assert.deepEqual(old[legacyFixture.si].questions[legacyFixture.qi].o,oldEngine.plans.get(oldId).options);
 // DOM installation, pick, save, reload and backwards navigation for curated2.
