@@ -53,7 +53,7 @@ const APP_SHELL = [
   "/mindmap-deeplink.js?v=20261007searchaudit1",
   "/mindmap-reader.css?v=20261007searchaudit1",
   "/progress.js?v=20261001caback1",
-  "/rapid-practice-deeplink.js?v=20261030alledges1",
+  "/rapid-practice-deeplink.js?v=20261104context1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js?v=20261027homesearch1",
   "/section-search-ui.js?v=20261007searchaudit1",
@@ -490,7 +490,7 @@ async function freshCurrentAffairsBookmarkAsset() {
 }
 
 async function freshRapidPracticeAsset() {
-  const currentAsset = "/rapid-practice-deeplink.js?v=20261004context1";
+  const currentAsset = "/rapid-practice-deeplink.js?v=20261104context1";
   const cache = await caches.open(CACHE_VERSION);
   try {
     const response = await fetch(currentAsset, { cache: "no-store" });
