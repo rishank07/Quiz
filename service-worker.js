@@ -580,6 +580,12 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Atlas assets refresh on first use and retain the last good offline copy.
+  if (url.pathname.startsWith("/Mapping/assets/")) {
+    event.respondWith(freshCoreAsset(event));
+    return;
+  }
+
   // Bihar's section index must refresh by revision too; serving an old alias
   // here can show facts from before a content update on the first search.
   if (/\/(?:search-snippets-[^/]+|search-index-main)\.js$/.test(url.pathname) ||
