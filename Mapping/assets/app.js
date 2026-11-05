@@ -12,7 +12,7 @@
   const topicColours={rivers:'#0879ae',minerals:'#9651b2',mountains:'#a56322',water:'#087e8b',parks:'#318144',ports:'#b14f7b',state:'#6764b5',seas:'#2776bb',worldphysical:'#8d6a21',worldresources:'#93539f',worldpolitical:'#506bb2'};
   let state = {region:'India', topic:'rivers', mode:'learn', selected:'ganga', search:'', continent:'', country:'', names:true, stateNames:true, savedOnly:false};
   let session = null, view = {x:66,y:-39,w:34,h:35}, drag = null, dragged = false, toastTimer, storageWarning = false;
-  document.documentElement.dataset.theme = saved.theme;
+  // The homepage theme preference is applied by site-theme.js.
 
   function validateSaved(input) {
     if (!input || input.version !== 1 || !Array.isArray(input.bookmarks) || !input.answers || typeof input.answers !== 'object' || Array.isArray(input.answers)) throw Error('This is not a mapping progress backup.');
@@ -103,7 +103,7 @@
     document.querySelectorAll('#regionTabs [data-region],#topicList [data-topic]').forEach(b=>b.setAttribute('aria-pressed',b.classList.contains('active')));
     $('placeSearch').disabled=state.mode!=='learn'; $('randomBtn').disabled=state.mode!=='learn';
     $('placeSearch').placeholder=state.mode==='learn'?'Search a place · नदी, खदान, झील…':'Place search returns in Learn mode';
-    $('clearSearch').hidden=!state.search; $('themeBtn').textContent=saved.theme==='dark'?'☀':'☾';
+    $('clearSearch').hidden=!state.search;
     $('mapHint').textContent=state.mode==='locate'&&activeQ()&&session.answered===null?'Tap a numbered marker to choose your answer.':unrevealed?'Answer first. The relevant places appear after checking.':'Tap a marker to explore. Drag the map or use + / −.';
     const lq=activeQ();$('mobilePrompt').hidden=state.mode!=='locate'||!lq||session.complete;
     $('mobilePrompt').innerHTML=lq?`<b>${esc(lq.en)}<\/b><span>${esc(lq.hi)}<\/span>`:'';
@@ -403,7 +403,6 @@
   $('resetSessionBtn').onclick=resetSession;
   $('resetDataInlineBtn').onclick=resetProgress;
   $('sourcesBtn').onclick=()=>{renderSources();$('sourceDialog').showModal();};$('sourceSearch').oninput=renderSources;
-  $('themeBtn').onclick=()=>{saved.theme=saved.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=saved.theme;persist();renderControls();renderMap();};
   $('settingsBtn').onclick=progressDialog;
   $('namesToggle').onchange=e=>{state.names=e.target.checked;renderMap();};
   $('stateNamesToggle').onchange=e=>{state.stateNames=e.target.checked;renderMap();};
@@ -449,7 +448,7 @@
   window.addEventListener('hashchange',()=>{if(location.hash&&!location.hash.includes('='))return;readHash();$('placeSearch').value='';session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();});
   STATE_STUDY?.init({selectRegion:changeRegion,focusFeature(id){const f=F.get(id);if(!f||!regionFeatures().some(x=>x.id===id))return;state.topic=f.topic;state.savedOnly=false;state.search='';$('placeSearch').value='';selectFeature(id);focusSelected();}});
   readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();
-  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261105states1',{scope:'./'}).catch(()=>{});
+  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261106navtheme1',{scope:'./'}).catch(()=>{});
 })();
 
 
