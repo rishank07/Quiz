@@ -336,9 +336,10 @@
         const x=(st.label[0]-left)/unit,y=(-st.label[1]-top)/unit;
         if(x<20||x>width-20||y<25||y>height-55)continue;
         const regional=state.region==='Bihar'||state.region==='UP';if(regional&&st.name!==({UP:'Uttar Pradesh'}[state.region]||state.region))continue;
-        const w=st.name.length*6.1,b={x:x-w/2,y:y-7,w,h:15};
+        const stateFont=width<650?13:15;
+        const w=st.name.length*stateFont*.61,b={x:x-w/2,y:y-stateFont*.8,w,h:stateFont+4};
         if(boxes.some(box=>overlaps(b,box)))continue;
-        const t=makeSvg('text',{x:st.label[0],y:-st.label[1],'font-size':10*unit,'text-anchor':'middle',class:'state-name'});t.textContent=st.name;stateLabels.append(t);boxes.push(b);
+        const t=makeSvg('text',{x:st.label[0],y:-st.label[1],'font-size':stateFont*unit,'text-anchor':'middle',class:'state-name'});t.textContent=st.name;stateLabels.append(t);boxes.push(b);
       }
     }
     $('labelStatus').textContent=unrevealed?'Answer labels hidden':state.names&&!isLocate?`${shown} / ${visible.length} visible feature names${shown<visible.length?' · Zoom in for more':''}`:'Feature names hidden';
@@ -431,6 +432,6 @@
   window.addEventListener('popstate',()=>{readHash();session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();});
   window.addEventListener('hashchange',()=>{readHash();$('placeSearch').value='';session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();});
   readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();
-  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261105atlas2',{scope:'./'}).catch(()=>{});
+  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261105atlas3',{scope:'./'}).catch(()=>{});
 })();
 
