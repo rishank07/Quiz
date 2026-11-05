@@ -73,7 +73,7 @@
   }
   let api=null,renderedRegion='',root=null;
   function setDirectory(open){const directory=document.getElementById('stateDirectory'),button=document.getElementById('allStatesBtn');directory.hidden=!open;button.setAttribute('aria-expanded',String(open));if(open)document.getElementById('stateDirectorySearch').focus();}
-  function select(id){setDirectory(false);api.selectRegion(id,{learn:true});document.getElementById('stateStudy').scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('stateNotesTitle').focus({preventScroll:true});}
+  function select(id){setDirectory(false);api.selectRegion(id,{learn:true});document.getElementById('stateNotesTitle').focus({preventScroll:true});document.getElementById('stateStudy').scrollIntoView({behavior:'instant',block:'start'});}
   function filterDirectory(value){const term=value.trim().toLocaleLowerCase();let count=0;for(const button of document.querySelectorAll('#stateDirectoryGrid [data-state-choice]')){const match=button.textContent.toLocaleLowerCase().includes(term)||button.dataset.search.includes(term);button.hidden=!match;if(match)count++;}document.getElementById('stateDirectoryStatus').textContent=`${count} of 36 states & UTs`;}
   function filterNotes(value){const term=value.trim().toLocaleLowerCase();let found=0;for(const section of root.querySelectorAll('.state-note-section')){let matches=0;for(const row of section.querySelectorAll('.state-note-row')){row.hidden=!!term&&!row.textContent.toLocaleLowerCase().includes(term);if(!row.hidden)matches++;}section.hidden=!!term&&!matches;if(!section.hidden){found++;if(term)section.open=true;}}document.getElementById('stateNotesEmpty').hidden=found>0;}
   function init(callbacks){

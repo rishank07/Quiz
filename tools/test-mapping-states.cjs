@@ -30,7 +30,7 @@ for(const p of N.profiles){
  assert(!/<mark>[^<]*[.!?] ?<\/mark>/.test(staticHtml),'No whole-sentence highlighting');
 }
 const index=fs.readFileSync(path.join(root,'Mapping/index.html'),'utf8'),sw=fs.readFileSync(path.join(root,'Mapping/sw.js'),'utf8');
-for(const file of ['state-notes.js','state-study.js','state-study.css'])assert(index.includes(file+'?v=20261105states1')&&sw.includes(file+'?v=20261105states1'));
+for(const file of ['state-notes.js','state-study.js','state-study.css']){const ref=index.match(new RegExp('assets/'+file.replaceAll('.','\\.')+'\\?v=[^"\\s]+'));assert(ref&&sw.includes(ref[0]),file+' cache revision matches the page');}
 assert(index.indexOf('state-study.js')<index.indexOf('assets/app.js'));
 assert(!index.includes('javascript:'));
 assert.equal(notes,667);assert(mapLinks>50);

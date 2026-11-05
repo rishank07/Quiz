@@ -1,6 +1,6 @@
 /* Scoped offline cache for the interactive atlas. */
-const VERSION='efp-map-atlas-20261106-navtheme1';
-const ASSETS=['./','assets/site-theme.js?v=20261106navtheme1','assets/style.css?v=20261105atlas1','assets/atlas.css?v=20261106navtheme1','assets/data.js?v=20261105atlas1','assets/states.js?v=20261105atlas1','assets/rivers.js?v=20261105atlas1','assets/state-notes.js?v=20261105states1','assets/state-study.js?v=20261105states1','assets/state-study.css?v=20261105states1','assets/app.js?v=20261106navtheme1'];
+const VERSION='efp-map-atlas-20261106-mapnav2';
+const ASSETS=['./','assets/map-navigation.js?v=20261106mapnav2','assets/site-theme.js?v=20261106navtheme1','assets/style.css?v=20261105atlas1','assets/atlas.css?v=20261106mapnav2','assets/data.js?v=20261105atlas1','assets/states.js?v=20261105atlas1','assets/rivers.js?v=20261105atlas1','assets/state-notes.js?v=20261105states1','assets/state-study.js?v=20261106mapnav2','assets/state-study.css?v=20261105states1','assets/app.js?v=20261106mapnav2'];
 self.addEventListener('install',e=>{e.waitUntil((async()=>{const cache=await caches.open(VERSION);await cache.addAll(ASSETS.map(p=>new Request(new URL(p,self.registration.scope),{cache:'reload'})));await self.skipWaiting();})());});
 self.addEventListener('activate',e=>{e.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('efp-map-atlas-')&&key!==VERSION)await caches.delete(key);await self.clients.claim();})());});
 self.addEventListener('fetch',e=>{
@@ -16,4 +16,3 @@ self.addEventListener('fetch',e=>{
   e.respondWith((async()=>{const cache=await caches.open(VERSION);try{const res=await fetch(req);if(res.ok)await cache.put(req,res.clone());return res;}catch{return (await cache.match(req))||new Response('',{status:200,headers:{'Content-Type':'text/javascript'}});}})());
  }
 });
-

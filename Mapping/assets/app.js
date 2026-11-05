@@ -55,7 +55,7 @@
     const p=new URLSearchParams({region:state.region, topic:state.topic, mode:state.mode});
     if(state.selected) p.set('place',state.selected);
     if(state.continent) p.set('continent',state.continent); if(state.country) p.set('country',state.country);
-    const h='#'+p.toString(); if(location.hash!==h) history[push?'pushState':'replaceState'](null,'',h);
+    const h='#'+p.toString(); if(location.hash!==h) history[push&&!expanded?'pushState':'replaceState'](history.state,'',h);
   }
   function readHash() {
     Object.assign(state,{region:'India',topic:'rivers',mode:'learn',selected:'',continent:'',country:'',savedOnly:false,search:''});
@@ -357,13 +357,41 @@
 
   function selectFeature(id,push=true){if(!F.has(id))return;state.selected=id;state.mode='learn';session=null;refresh(push);}
   function focusSelected(){const f=F.get(state.selected);if(!f)return;setView({x:f.lon-4,y:-f.lat-4,w:8,h:8});}
-  let expanded=false,priorOverflow='';
-  function expandMap(on){
+  let expanded=false,priorOverflow='',closingExpansion=false,afterExpansion=null;
+  function applyExpansion(on){
+    if(on===expanded)return;
     expanded=on;$('mapWrap').classList.toggle('expanded',on);$('fullMap').setAttribute('aria-pressed',on);
     $('fullMap').textContent=on?'Collapse map':'Expand map';
-    if(on){priorOverflow=document.body.style.overflow;document.body.style.overflow='hidden';$('closeMap').focus();}
-    else{document.body.style.overflow=priorOverflow;$('fullMap').focus();}
+    if(on){priorOverflow=document.body.style.overflow;document.body.style.overflow='hidden';$('closeMap').focus({preventScroll:true});}
+    else{document.body.style.overflow=priorOverflow;$('fullMap').focus({preventScroll:true});}
     requestAnimationFrame(renderMap);
+  }
+  function closeExpansion(after=null){
+    if(closingExpansion){if(after)afterExpansion=after;return true;}
+    if(!expanded){after?.();return false;}
+    applyExpansion(false);
+    if(history.state?.efpMappingExpanded){closingExpansion=true;afterExpansion=after;history.back();}
+    else after?.();
+    return true;
+  }
+  function expandMap(on){
+    if(!on)return closeExpansion();
+    if(expanded||closingExpansion)return;
+    history.pushState({...history.state,efpMappingExpanded:true},'',location.href);applyExpansion(true);
+  }
+  window.EFP_MAPPING_OVERLAY={
+    back:()=>closeExpansion(),
+    pop(){
+      if(closingExpansion){closingExpansion=false;updateHash();const after=afterExpansion;afterExpansion=null;after?.();return true;}
+      if(expanded){applyExpansion(false);updateHash();return true;}
+      if(history.state?.efpMappingExpanded){applyExpansion(true);return true;}
+      return false;
+    }
+  };
+  function openStateNotes(id){
+    const focus=document.activeElement;if(focus&&$('map').contains(focus))focus.blur();
+    const open=()=>{changeRegion(id,{learn:true});requestAnimationFrame(()=>{$('stateNotesTitle')?.focus({preventScroll:true});$('stateStudy').scrollIntoView({behavior:'instant',block:'start'});});};
+    if(expanded||closingExpansion)closeExpansion(open);else open();
   }
   function selectCountry(id){if(state.region!=='World'||dragged)return;const c=D.countries.find(c=>c.id===id);if(!c)return;state.country=id;state.continent=c.continent;state.topic='all';state.savedOnly=false;state.search='';$('placeSearch').value='';session=null;state.mode='learn';setDefaultView();refresh(true);}
   function zoom(factor){const w=Math.min(420,Math.max(2,view.w*factor)),h=view.h*w/view.w;setView({x:view.x+(view.w-w)/2,y:view.y+(view.h-h)/2,w,h});}
@@ -425,7 +453,7 @@
   $('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify({...saved,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ExamFusion_Mapping_Progress.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Progress backup downloaded.');};
   $('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>5e6)throw Error('Backup is too large.');const incoming=validateSaved(JSON.parse(await file.text()));saved.bookmarks=[...new Set([...saved.bookmarks,...incoming.bookmarks])];for(const [id,a]of Object.entries(incoming.answers)){if(!saved.answers[id]||a.at>=saved.answers[id].at)saved.answers[id]=a;}persist();refresh();$('settingsDialog').close();toast('Progress restored and merged.');}catch(err){toast(err.message||'Could not read this backup.');}finally{e.target.value='';}};
   $('resetProgressBtn').onclick=resetProgress;
-  $('map').addEventListener('click',e=>{if(dragged){dragged=false;return;}const marker=e.target.closest('[data-marker]');if(marker){const id=marker.dataset.marker,q=activeQ();if(q?.type==='locate'&&state.mode!=='learn'&&session.answered===null)answer(q.candidates.indexOf(id));else if(state.mode==='learn')selectFeature(id);return;}const stateShape=e.target.closest('[data-state-region]');if(stateShape&&state.mode==='learn'){changeRegion(stateShape.dataset.stateRegion,{learn:true});$('stateStudy').scrollIntoView({behavior:'smooth',block:'start'});return;}const country=e.target.closest('[data-country]');if(country)selectCountry(country.dataset.country);});
+  $('map').addEventListener('click',e=>{if(dragged){dragged=false;return;}const marker=e.target.closest('[data-marker]');if(marker){const id=marker.dataset.marker,q=activeQ();if(q?.type==='locate'&&state.mode!=='learn'&&session.answered===null)answer(q.candidates.indexOf(id));else if(state.mode==='learn')selectFeature(id);return;}const stateShape=e.target.closest('[data-state-region]');if(stateShape&&state.mode==='learn'){openStateNotes(stateShape.dataset.stateRegion);return;}const country=e.target.closest('[data-country]');if(country)selectCountry(country.dataset.country);});
   $('map').addEventListener('keydown',e=>{const marker=e.target.closest('[data-marker],[data-state-region]');if(marker&&(e.key==='Enter'||e.key===' ')){e.preventDefault();marker.dispatchEvent(new MouseEvent('click',{bubbles:true}));}});
   $('map').addEventListener('pointerover',e=>{const m=e.target.closest('[data-marker]');if(!m||state.mode!=='learn')return;const f=F.get(m.dataset.marker);$('mapTooltip').textContent=f.name+' · '+f.hi;$('mapTooltip').hidden=false;});
   $('map').addEventListener('pointerout',e=>{if(e.target.closest('[data-marker]'))$('mapTooltip').hidden=true;});
@@ -448,7 +476,6 @@
   window.addEventListener('hashchange',()=>{if(location.hash&&!location.hash.includes('='))return;readHash();$('placeSearch').value='';session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();});
   STATE_STUDY?.init({selectRegion:changeRegion,focusFeature(id){const f=F.get(id);if(!f||!regionFeatures().some(x=>x.id===id))return;state.topic=f.topic;state.savedOnly=false;state.search='';$('placeSearch').value='';selectFeature(id);focusSelected();}});
   readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();
-  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261106navtheme1',{scope:'./'}).catch(()=>{});
+  if(history.state?.efpMappingExpanded)applyExpansion(true);
+  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261106mapnav2',{scope:'./'}).catch(()=>{});
 })();
-
-
