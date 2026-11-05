@@ -8,7 +8,7 @@
   const blank = () => ({version:1, bookmarks:[], answers:{}, theme:'light'});
   let saved;
   try { saved = validateSaved(JSON.parse(localStorage.getItem(KEY)) || blank()); } catch { saved = blank(); }
-  const STATES = window.MAPPING_STATES || [];
+  const STATES = window.MAPPING_STATES || [], STATE_STUDY = window.MappingStateStudy;
   const topicColours={rivers:'#0879ae',minerals:'#9651b2',mountains:'#a56322',water:'#087e8b',parks:'#318144',ports:'#b14f7b',state:'#6764b5',seas:'#2776bb',worldphysical:'#8d6a21',worldresources:'#93539f',worldpolitical:'#506bb2'};
   let state = {region:'India', topic:'rivers', mode:'learn', selected:'ganga', search:'', continent:'', country:'', names:true, stateNames:true, savedOnly:false};
   let session = null, view = {x:66,y:-39,w:34,h:35}, drag = null, dragged = false, toastTimer, storageWarning = false;
@@ -36,8 +36,7 @@
   const upIDs = new Set(['ganga','yamuna','gomati','ghaghara','son','lucknow','prayagraj','varanasi','sarnath','dudhwa','agra']);
   function regionFeatures() {
     let a=D.features.filter(f=>state.region==='World'?f.region==='World':f.region==='India');
-    if(state.region==='Bihar') a=a.filter(f=>biharIDs.has(f.id)||f.area.includes('Bihar'));
-    if(state.region==='UP') a=a.filter(f=>upIDs.has(f.id)||f.area.includes('Uttar Pradesh'));
+    if(STATE_STUDY?.profiles.has(state.region)) a=STATE_STUDY.featuresFor(state.region);
     if(state.region==='World' && state.continent) { const cs=D.countries.filter(c=>c.continent===state.continent); a=a.filter(f=>f.continents?.includes(state.continent)||f.area.includes(state.continent)||cs.some(c=>insideCountry(f,c))); }
     if(state.country) { const c=D.countries.find(c=>c.id===state.country); if(c){const alias={USA:'United States',TUR:'Türkiye',GBR:'United Kingdom',COD:'Democratic Republic of the Congo'}[c.id]||c.name;a=a.filter(f=>insideCountry(f,c)||f.area.toLocaleLowerCase().includes(alias.toLocaleLowerCase()));} }
     return a;
@@ -61,7 +60,9 @@
   function readHash() {
     Object.assign(state,{region:'India',topic:'rivers',mode:'learn',selected:'',continent:'',country:'',savedOnly:false,search:''});
     const p=new URLSearchParams(location.hash.slice(1));
-    if(['India','World','Bihar','UP'].includes(p.get('region'))) state.region=p.get('region');
+    const region=p.get('region')||new URLSearchParams(location.search).get('state');
+    if(['India','World'].includes(region))state.region=region;
+    else if(STATE_STUDY?.resolveRegion(region)){state.region=STATE_STUDY.resolveRegion(region);state.topic='all';state.selected=STATE_STUDY.profiles.get(state.region).capitalId;}
     if(D.topics.some(t=>t.id===p.get('topic')))state.topic=p.get('topic');
     if(['learn','locate','practice','pyq','mistakes'].includes(p.get('mode')))state.mode=p.get('mode');
     if(F.has(p.get('place')))state.selected=p.get('place');
@@ -72,7 +73,7 @@
   function refresh(push=false) {
     const features=filteredFeatures();
     if(state.mode==='learn' && !features.some(f=>f.id===state.selected)) state.selected=features[0]?.id||'';
-    renderTopics();renderControls();renderPlaceList();renderDetail();renderMap();renderStats();updateHash(push);
+    renderTopics();renderControls();renderPlaceList();renderDetail();renderMap();renderStats();STATE_STUDY?.render(state);updateHash(push);
   }
   function renderStats() {
     $('placeCount').textContent=D.features.length; $('questionCount').textContent=D.questions.length;
@@ -91,7 +92,7 @@
     $('countrySelect').value=state.country;
     const c=D.countries.find(c=>c.id===state.country);
     $('mapTitle').textContent=state.savedOnly?'Saved places':topicName(state.topic);
-    $('mapSubtitle').textContent=`${c?.name||state.continent||({UP:'Uttar Pradesh'}[state.region]||state.region)} · ${filteredFeatures().length} study places`;
+    $('mapSubtitle').textContent=`${c?.name||state.continent||(STATE_STUDY?.profiles.get(state.region)?.name||state.region)} · ${filteredFeatures().length} study places`;
     const unrevealed=state.mode!=='learn'&&activeQ()&&session.answered===null;
     $('namesToggle').checked=state.names&&!unrevealed; $('namesToggle').disabled=!!unrevealed;
     $('stateNamesToggle').checked=state.stateNames&&!unrevealed&&state.region!=='World';
@@ -120,7 +121,7 @@
   }
   function sourceButton(source) {
     if(!source)return '<span>Editorial study note.<\/span>';
-    const s=SOURCE.get(source.id);return s?`<span>${esc(s.filename.replace(/_/g,' '))} · source page ${Number(source.page)||1}<\/span>`:'';
+    const s=SOURCE.get(source.id);if(s?.url)return `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.filename)} ↗</a>`;return s?`<span>${esc(s.filename.replace(/_/g,' '))} · source page ${Number(source.page)||1}<\/span>`:'';
   }
   function emptyDetail(title,text,action='All topics') {
     return `<div class="empty-state"><div class="empty-symbol">◎<\/div><h3>${esc(title)}<\/h3><p>${esc(text)}<\/p><button class="primary" data-action="expand">${esc(action)}<\/button><\/div>`;
@@ -145,7 +146,7 @@
     const candidates=shuffle([f,...alternatives]);
     return {id:'locate-'+f.id,type:'locate',topic:f.topic,region:f.region,featureIds:[f.id],en:`Find ${f.name} on the map.`,hi:`मानचित्र पर ${f.hi} पहचानें।`,options:candidates.map((_,i)=>({en:`Marker ${i+1}`,hi:`चिह्न ${i+1}`})),answer:candidates.findIndex(x=>x.id===f.id),candidates:candidates.map(x=>x.id),explanation:f.fact,explanationHi:f.factHi,source:f.source,verification:'Original location practice. Markers are approximate.'};
   }
-  function beginSession(mode,target=null,keepOrder=false) {
+  function beginSession(mode,target=null,keepOrder=false,push=true) {
     state.mode=mode;state.search='';$('placeSearch').value='';
     const fs=filteredFeatures(false),ids=new Set(fs.map(f=>f.id));let items=[];
     if(mode==='locate')items=fs.filter(f=>!target||f.id===target).map(makeLocate);
@@ -153,7 +154,7 @@
     else if(mode==='mistakes')items=mistakeIDs().map(id=>Q.get(id)||(F.has(id.slice(7))?makeLocate(F.get(id.slice(7))):null)).filter(q=>q&&q.featureIds.some(id=>ids.has(id)));
     if(!keepOrder)items=shuffle(items);
     const available=items.length;const limit=Number($('sessionSize').value)||available;session={available,items:items.slice(0,limit),index:0,answered:null,responses:Array(Math.min(items.length,limit||items.length)).fill(null),correct:0,wrong:0,skipped:0,complete:false,target};
-    setDefaultView();refresh(true);
+    setDefaultView();refresh(push);
     if(mode==='locate')fitQuestion();
     if(innerWidth<=650)(mode==='locate'?$('mobilePrompt'):$('detailPanel')).scrollIntoView({behavior:'smooth',block:'start'});
   }
@@ -230,8 +231,8 @@
   function setView(v){view=v;$('map').setAttribute('viewBox',`${v.x} ${v.y} ${v.w} ${v.h}`);renderMap();}
   function boundsView(coords,padding=.1){if(!coords.length)return;let xs=coords.map(p=>p[0]),ys=coords.map(p=>-p[1]);let x=Math.min(...xs),y=Math.min(...ys),w=Math.max(...xs)-x,h=Math.max(...ys)-y;w=Math.max(w,3);h=Math.max(h,3);setView({x:x-w*padding,y:y-h*padding,w:w*(1+2*padding),h:h*(1+2*padding)});}
   function setDefaultView(){
-    if(state.region==='Bihar'){view={x:82.8,y:-27.8,w:6.2,h:4.8};}
-    else if(state.region==='UP'){view={x:76.5,y:-30.8,w:9.2,h:7.6};}
+    const profile=STATE_STUDY?.profiles.get(state.region),st=profile&&STATES.find(s=>s.name===profile.name);
+    if(st){const points=countryCoords(st.geometry),xs=points.map(p=>p[0]),ys=points.map(p=>-p[1]);const w=Math.max(1.8,Math.max(...xs)-Math.min(...xs)),h=Math.max(1.8,Math.max(...ys)-Math.min(...ys));const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;view={x:cx-w*.62,y:cy-h*.62,w:w*1.24,h:h*1.24};}
     else if(state.region==='World'){view={x:-180,y:-82,w:360,h:145};
       const cs=state.country?D.countries.filter(c=>c.id===state.country):state.continent?D.countries.filter(c=>c.continent===state.continent):[];
       if(cs.length){let points=cs.flatMap(c=>countryCoords(c.geometry));if(state.continent==='Asia')points=points.filter(p=>p[0]>20);if(state.continent==='Oceania')points=points.filter(p=>p[0]>100);if(points.length){const xs=points.map(p=>p[0]),ys=points.map(p=>-p[1]);const w=Math.max(5,Math.max(...xs)-Math.min(...xs)),h=Math.max(5,Math.max(...ys)-Math.min(...ys));view={x:Math.min(...xs)-w*.08,y:Math.min(...ys)-h*.08,w:w*1.16,h:h*1.16};}}
@@ -248,7 +249,7 @@
     const selected=new Set(activeFeatureIDs()),a=filteredFeatures(),q=activeQ();
     const unrevealed=!!(state.mode!=='learn'&&q&&session.answered===null),indiaOnly=state.region!=='World';
     const {unit,width,height,left,top}=mapMetrics();
-    const baseKey=state.region+'|'+state.country+'|'+unrevealed;
+    const baseKey=state.region+'|'+state.country+'|'+state.mode+'|'+unrevealed;
     if(baseMapKey!==baseKey){
       baseMapKey=baseKey;
       const defs=$('mapDefs');defs.replaceChildren();
@@ -264,9 +265,11 @@
       const states=$('stateLayer');states.replaceChildren();
       states.setAttribute('clip-path','url(#indiaClip)');
       if(indiaOnly)for(const st of STATES){
-        const regional=state.region==='Bihar'||state.region==='UP';
-        const focus=st.name===({UP:'Uttar Pradesh'}[state.region]||state.region);
+        const regional=STATE_STUDY?.profiles.has(state.region);
+        const focus=st.name===STATE_STUDY?.profiles.get(state.region)?.name;
         const p=makeSvg('path',{d:geometryPath(st.geometry),class:`state-boundary state-colour-${st.color}${regional&&!focus?' muted-state':''}${focus?' focused-state':''}`});
+        const profile=[...(STATE_STUDY?.profiles.values()||[])].find(profile=>profile.name===st.name);
+        if(profile&&!unrevealed&&state.mode==='learn'){p.dataset.stateRegion=profile.id;p.setAttribute('role','button');p.setAttribute('tabindex','0');p.setAttribute('aria-label','Open '+st.name+' geography notes');}
         if(!unrevealed){const t=makeSvg('title');t.textContent=st.name;p.append(t);}states.append(p);
       }
       // Redraw the official national outline above the state fills.
@@ -335,7 +338,7 @@
       for(const st of STATES){
         const x=(st.label[0]-left)/unit,y=(-st.label[1]-top)/unit;
         if(x<20||x>width-20||y<25||y>height-55)continue;
-        const regional=state.region==='Bihar'||state.region==='UP';if(regional&&st.name!==({UP:'Uttar Pradesh'}[state.region]||state.region))continue;
+        const regional=STATE_STUDY?.profiles.has(state.region);if(regional&&st.name!==STATE_STUDY.profiles.get(state.region).name)continue;
         const stateFont=width<650?13:15,w=st.name.length*stateFont*.61;
         let labelBox=null,labelX=x,labelY=y;
         for(const [dx,dy] of [[0,0],[0,-stateFont*1.5],[0,stateFont*1.5],[-stateFont*2,0],[stateFont*2,0],[0,-stateFont*3],[0,stateFont*3]]){
@@ -368,9 +371,15 @@
   function openNotes(){const original=D.questions.filter(q=>q.type==='original').length,pyq=D.questions.filter(q=>q.type==='pyq').length,compiled=D.questions.filter(q=>q.type==='source').length;$('reviewNotes').innerHTML=`<p><strong>${D.features.length} mapped study places<\/strong> · ${original} original questions · ${pyq} source-cited PYQs${compiled?' · '+compiled+' other source questions':''}.<\/p><ul><li>The supplied PDFs were used as references. This package contains the interactive map, questions and explanations.<\/li><li>Source names and page numbers are retained for review. Original PDF files are not bundled.<\/li><li>Question provenance is shown per item. A source-cited PYQ label is not a claim of official answer-key verification.<\/li><li>Study markers are approximate. Dashed river paths are schematic.<\/li><li>Core maps and questions work offline. Google Earth and external references need the internet.<\/li><\/ul>${D.meta.sources.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)} ↗<\/a>`).join('')}`;$('notesDialog').showModal();}
   function progressDialog(){const total=Object.keys(saved.answers).length,correct=Object.values(saved.answers).filter(a=>a.correct).length;$('progressStats').innerHTML=`<div><strong>${total}<\/strong>questions attempted<\/div><div><strong>${correct}<\/strong>latest correct<\/div><div><strong>${saved.bookmarks.length}<\/strong>bookmarks<\/div>`;$('settingsDialog').showModal();}
 
+  function changeRegion(region,{learn=false}={}){
+    if(!['India','World'].includes(region)&&!STATE_STUDY?.profiles.has(region))return;
+    state.region=region;state.topic=STATE_STUDY?.profiles.has(region)?'all':region==='World'?'seas':'rivers';
+    state.selected=STATE_STUDY?.profiles.get(region)?.capitalId||'';state.continent='';state.country='';state.search='';state.savedOnly=false;$('placeSearch').value='';session=null;
+    if(learn)state.mode='learn';setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh(true);
+  }
   document.addEventListener('click',e=>{
     const b=e.target.closest('button,a');if(!b)return;
-    if(b.dataset.region){state.region=b.dataset.region;state.topic=state.region==='World'?'seas':'rivers';state.continent='';state.country='';state.search='';state.savedOnly=false;$('placeSearch').value='';setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh(true);}
+    if(b.dataset.region)changeRegion(b.dataset.region,{learn:true});
     if(b.dataset.topic){state.topic=b.dataset.topic;state.savedOnly=false;state.search='';$('placeSearch').value='';if(state.mode!=='learn')beginSession(state.mode);else refresh(true);}
     if(b.dataset.mode){state.savedOnly=false;if(b.dataset.mode==='learn'){state.mode='learn';session=null;refresh(true);}else beginSession(b.dataset.mode);}
     if(b.dataset.place)selectFeature(b.dataset.place);
@@ -389,6 +398,7 @@
     if(action==='previous')previous();if(action==='next')next();if(action==='skip')next(true);
     if(action==='show-map'){const q=activeQ();if(q){boundsView(q.featureIds.map(id=>[F.get(id).lon,F.get(id).lat]),.4);$('mapWrap').scrollIntoView({behavior:'smooth',block:'center'});}}
   });
+  $('backToStateNotes').onclick=e=>{e.preventDefault();$('stateStudy').scrollIntoView({behavior:'smooth',block:'start'});};
   $('sessionSize').onchange=()=>{if(state.mode!=='learn')beginSession(state.mode);};
   $('resetSessionBtn').onclick=resetSession;
   $('resetDataInlineBtn').onclick=resetProgress;
@@ -416,8 +426,8 @@
   $('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify({...saved,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ExamFusion_Mapping_Progress.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Progress backup downloaded.');};
   $('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>5e6)throw Error('Backup is too large.');const incoming=validateSaved(JSON.parse(await file.text()));saved.bookmarks=[...new Set([...saved.bookmarks,...incoming.bookmarks])];for(const [id,a]of Object.entries(incoming.answers)){if(!saved.answers[id]||a.at>=saved.answers[id].at)saved.answers[id]=a;}persist();refresh();$('settingsDialog').close();toast('Progress restored and merged.');}catch(err){toast(err.message||'Could not read this backup.');}finally{e.target.value='';}};
   $('resetProgressBtn').onclick=resetProgress;
-  $('map').addEventListener('click',e=>{if(dragged){dragged=false;return;}const marker=e.target.closest('[data-marker]');if(marker){const id=marker.dataset.marker,q=activeQ();if(q?.type==='locate'&&state.mode!=='learn'&&session.answered===null)answer(q.candidates.indexOf(id));else if(state.mode==='learn')selectFeature(id);return;}const country=e.target.closest('[data-country]');if(country)selectCountry(country.dataset.country);});
-  $('map').addEventListener('keydown',e=>{const marker=e.target.closest('[data-marker]');if(marker&&(e.key==='Enter'||e.key===' ')){e.preventDefault();marker.dispatchEvent(new MouseEvent('click',{bubbles:true}));}});
+  $('map').addEventListener('click',e=>{if(dragged){dragged=false;return;}const marker=e.target.closest('[data-marker]');if(marker){const id=marker.dataset.marker,q=activeQ();if(q?.type==='locate'&&state.mode!=='learn'&&session.answered===null)answer(q.candidates.indexOf(id));else if(state.mode==='learn')selectFeature(id);return;}const stateShape=e.target.closest('[data-state-region]');if(stateShape&&state.mode==='learn'){changeRegion(stateShape.dataset.stateRegion,{learn:true});$('stateStudy').scrollIntoView({behavior:'smooth',block:'start'});return;}const country=e.target.closest('[data-country]');if(country)selectCountry(country.dataset.country);});
+  $('map').addEventListener('keydown',e=>{const marker=e.target.closest('[data-marker],[data-state-region]');if(marker&&(e.key==='Enter'||e.key===' ')){e.preventDefault();marker.dispatchEvent(new MouseEvent('click',{bubbles:true}));}});
   $('map').addEventListener('pointerover',e=>{const m=e.target.closest('[data-marker]');if(!m||state.mode!=='learn')return;const f=F.get(m.dataset.marker);$('mapTooltip').textContent=f.name+' · '+f.hi;$('mapTooltip').hidden=false;});
   $('map').addEventListener('pointerout',e=>{if(e.target.closest('[data-marker]'))$('mapTooltip').hidden=true;});
   const pointers=new Map();let pinch=null,panFrame=0;
@@ -435,9 +445,11 @@
   let resizeFrame=0;function resizeMap(){cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(renderMap);}
   window.addEventListener('resize',resizeMap);
   if('ResizeObserver' in window)new ResizeObserver(resizeMap).observe($('mapWrap'));
-  window.addEventListener('popstate',()=>{readHash();session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();});
-  window.addEventListener('hashchange',()=>{readHash();$('placeSearch').value='';session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();});
-  readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();
-  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261105atlas4',{scope:'./'}).catch(()=>{});
+  window.addEventListener('popstate',()=>{readHash();session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();});
+  window.addEventListener('hashchange',()=>{if(location.hash&&!location.hash.includes('='))return;readHash();$('placeSearch').value='';session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();});
+  STATE_STUDY?.init({selectRegion:changeRegion,focusFeature(id){const f=F.get(id);if(!f||!regionFeatures().some(x=>x.id===id))return;state.topic=f.topic;state.savedOnly=false;state.search='';$('placeSearch').value='';selectFeature(id);focusSelected();}});
+  readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();
+  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261105states1',{scope:'./'}).catch(()=>{});
 })();
+
 
