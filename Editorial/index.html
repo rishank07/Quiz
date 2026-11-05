@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070a13">
+  <meta name="description" content="ExamFusion Prep Editorial English: daily editorial PDF reading links and exam-focused English practice resources.">
+  <link rel="canonical" href="https://examfusionprep.com/Editorial/">
+  <title>Editorial English | ExamFusion Prep</title>
+  <style>
+    :root{color-scheme:dark;--bg:#070a13;--panel:#11192b;--gold:#e2c879;--ink:#f8f4e9;--muted:#b5bed0;--line:rgba(226,200,121,.23)}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(ellipse 900px 450px at 10% 0%,#1b233b 0%,transparent 73%),var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI","Noto Sans Devanagari",sans-serif;min-height:100vh}
+    a{color:inherit}
+    .wrap{width:min(960px,calc(100% - 30px));margin:0 auto}
+    header{border-bottom:1px solid var(--line);background:rgba(7,10,19,.86)}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:70px;flex-wrap:wrap;padding:13px 0}
+    .brand{font-size:19px;font-weight:800;text-decoration:none;letter-spacing:.01em}
+    .brand span{color:var(--gold)}
+    nav{display:flex;gap:8px;flex-wrap:wrap}
+    nav a{font-size:13px;font-weight:700;text-decoration:none;padding:7px 11px;border-radius:9px;border:1px solid var(--line);color:var(--muted)}
+    nav a:hover,nav a:focus-visible{color:var(--ink);border-color:var(--gold)}
+    main{padding:35px 0 65px}
+    .eyebrow{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:800}
+    h1{font-size:clamp(30px,5vw,48px);letter-spacing:-.035em;line-height:1.14;margin:11px 0 9px}
+    .hi{color:var(--gold);font-size:16px;margin:0 0 12px;font-weight:650}
+    .lede{color:var(--muted);max-width:690px;margin:0 0 28px}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:24px 0 18px}
+    input{width:min(100%,410px);flex:1;min-width:180px;background:#0c1425;color:var(--ink);border:1px solid var(--line);padding:12px 14px;border-radius:12px;font:inherit}
+    input::placeholder{color:#a4afbe}
+    input:focus-visible,.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+    .count{color:var(--muted);font-size:14px}
+    .grid{display:grid;gap:13px}
+    .entry,.empty,.error{background:rgba(17,25,43,.9);border:1px solid var(--line);border-radius:17px;padding:20px}
+    .entry{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    .metadata{font-size:12px;color:var(--gold);font-weight:750;letter-spacing:.02em}
+    .entry h2{font-size:19px;line-height:1.35;margin:7px 0 3px}
+    .entry p{color:var(--muted);font-size:13px;margin:0}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;color:#171609;background:var(--gold);font-weight:800;padding:10px 15px;border-radius:10px;font-size:14px;white-space:nowrap}
+    .btn:hover{filter:brightness(1.07)}
+    .empty{padding:32px 20px;text-align:center}
+    .empty h2{font-size:20px;margin:0 0 7px}
+    .empty p{color:var(--muted);margin:0}
+    .folder{display:none;margin:14px 0 2px}
+    .folder a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+    footer{color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding:23px 0 35px}
+    @media(max-width:550px){.top{align-items:flex-start}.entry .btn{width:100%}.toolbar input{min-width:100%}main{padding-top:25px}}
+  </style>
+</head>
+<body>
+  <header><div class="wrap top">
+    <a class="brand" href="/">Exam<span>Fusion</span> Prep</a>
+    <nav aria-label="Section navigation">
+      <a href="/">⌂ Home</a><a href="/Mapping/">🗺 Map Practice</a>
+    </nav>
+  </div></header>
+  <main class="wrap">
+    <div class="eyebrow">Reading &amp; English Improvement</div>
+    <h1>Editorial English</h1>
+    <p class="hi" lang="hi">एडिटोरियल रीडिंग और इंग्लिश प्रैक्टिस</p>
+    <p class="lede">Find editorial study PDFs, build vocabulary, and improve reading comprehension for competitive exams. PDF links open in Google Drive; no PDFs are stored on this website.</p>
+    <div class="folder" id="folder">📁 <a id="folderLink" href="#" target="_blank" rel="noopener noreferrer">Open Editorial Drive Folder</a></div>
+    <div class="toolbar">
+      <input id="search" type="search" autocomplete="off" placeholder="Search by title, date or newspaper" aria-label="Search editorial PDFs">
+      <span class="count" id="count" aria-live="polite">Loading editorials…</span>
+    </div>
+    <section id="list" class="grid" aria-label="Editorial PDF links">
+      <div class="empty">Loading PDF links…</div>
+    </section>
+  </main>
+  <footer><div class="wrap">© ExamFusion Prep · Editorial links open on Google Drive. Read or share documents only with appropriate permissions.</div></footer>
+  <script>
+    (function(){
+      "use strict";
+      var list=document.getElementById("list"), count=document.getElementById("count"), search=document.getElementById("search");
+      var items=[];
+      function driveUrl(value){
+        try{
+          var u=new URL(value);
+          return u.protocol==="https:" && (u.hostname==="drive.google.com" || u.hostname==="docs.google.com") ? u.href : null;
+        }catch(_){return null;}
+      }
+      function clear(){while(list.firstChild)list.removeChild(list.firstChild);}
+      function empty(title,message){
+        clear();var box=document.createElement("div");box.className="empty";
+        var h=document.createElement("h2");h.textContent=title;
+        var p=document.createElement("p");p.textContent=message;
+        box.append(h,p);list.append(box);
+      }
+      function render(){
+        var q=search.value.trim().toLocaleLowerCase();
+        var shown=items.filter(function(it){return [it.date,it.title,it.source].join(" ").toLocaleLowerCase().includes(q);});
+        count.textContent=shown.length+" editorial PDF"+(shown.length===1?"":"s");
+        if(!shown.length){
+          empty(q?"No matching editorials":"Editorial PDFs will appear here soon",q?"Try a different title, date or newspaper.":"New Google Drive PDF links will be added here.");
+          return;
+        }
+        clear();
+        shown.forEach(function(it){
+          var article=document.createElement("article");article.className="entry";
+          var details=document.createElement("div");
+          var meta=document.createElement("div");meta.className="metadata";meta.textContent=[it.date,it.source].filter(Boolean).join("  ·  ");
+          var heading=document.createElement("h2");heading.textContent=it.title;
+          var hint=document.createElement("p");hint.textContent="PDF on Google Drive";
+          details.append(meta,heading,hint);
+          var link=document.createElement("a");link.className="btn";link.href=it.url;link.target="_blank";link.rel="noopener noreferrer";link.textContent="Open PDF ↗";link.setAttribute("aria-label","Open "+it.title+" PDF in Google Drive");
+          article.append(details,link);list.append(article);
+        });
+      }
+      search.addEventListener("input",render);
+      fetch("./links.json",{cache:"no-store"}).then(function(res){
+        if(!res.ok)throw new Error("Unable to fetch links");
+        return res.json();
+      }).then(function(data){
+        var folderUrl=driveUrl(data.folderUrl);
+        if(folderUrl){
+          document.getElementById("folderLink").href=folderUrl;
+          document.getElementById("folder").style.display="block";
+        }
+        items=(Array.isArray(data.entries)?data.entries:[]).filter(function(it){
+          return it && typeof it.title==="string" && driveUrl(it.url);
+        }).map(function(it){
+          return {date:String(it.date||""),source:String(it.source||""),title:it.title,url:driveUrl(it.url)};
+        }).sort(function(a,b){return b.date.localeCompare(a.date)});
+        render();
+      }).catch(function(){
+        count.textContent="Unable to load editorial links";
+        empty("Editorial links temporarily unavailable","Please refresh the page or try again.");
+      });
+    })();
+  </script>
+</body>
+</html>
