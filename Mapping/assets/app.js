@@ -336,10 +336,16 @@
         const x=(st.label[0]-left)/unit,y=(-st.label[1]-top)/unit;
         if(x<20||x>width-20||y<25||y>height-55)continue;
         const regional=state.region==='Bihar'||state.region==='UP';if(regional&&st.name!==({UP:'Uttar Pradesh'}[state.region]||state.region))continue;
-        const stateFont=width<650?13:15;
-        const w=st.name.length*stateFont*.61,b={x:x-w/2,y:y-stateFont*.8,w,h:stateFont+4};
-        if(boxes.some(box=>overlaps(b,box)))continue;
-        const t=makeSvg('text',{x:st.label[0],y:-st.label[1],'font-size':stateFont*unit,'text-anchor':'middle',class:'state-name'});t.textContent=st.name;stateLabels.append(t);boxes.push(b);
+        const stateFont=width<650?13:15,w=st.name.length*stateFont*.61;
+        let labelBox=null,labelX=x,labelY=y;
+        for(const [dx,dy] of [[0,0],[0,-stateFont*1.5],[0,stateFont*1.5],[-stateFont*2,0],[stateFont*2,0],[0,-stateFont*3],[0,stateFont*3]]){
+          const cx=x+dx,cy=y+dy,b={x:cx-w/2,y:cy-stateFont*.8,w,h:stateFont+4};
+          if(b.x<7||b.x+b.w>width-10||b.y<12||b.y+b.h>height-44||boxes.some(box=>overlaps(b,box)))continue;
+          if((dx||dy)&&!insideCountry({lon:left+cx*unit,lat:-(top+cy*unit)},st))continue;
+          labelBox=b;labelX=cx;labelY=cy;break;
+        }
+        if(!labelBox)continue;
+        const t=makeSvg('text',{x:left+labelX*unit,y:top+labelY*unit,'font-size':stateFont*unit,'text-anchor':'middle',class:'state-name'});t.textContent=st.name;stateLabels.append(t);boxes.push(labelBox);
       }
     }
     $('labelStatus').textContent=unrevealed?'Answer labels hidden':state.names&&!isLocate?`${shown} / ${visible.length} visible feature names${shown<visible.length?' · Zoom in for more':''}`:'Feature names hidden';
@@ -432,6 +438,6 @@
   window.addEventListener('popstate',()=>{readHash();session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();});
   window.addEventListener('hashchange',()=>{readHash();$('placeSearch').value='';session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();});
   readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();
-  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261105atlas3',{scope:'./'}).catch(()=>{});
+  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261105atlas4',{scope:'./'}).catch(()=>{});
 })();
 
