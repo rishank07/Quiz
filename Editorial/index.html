@@ -110,6 +110,21 @@
           article.append(details,link);list.append(article);
         });
       }
+      // Installed Android/Windows PWAs and browsers can keep an older worker.
+      // Check on editorial entry and reload once when a newer worker takes
+      // control so its network-first dated JSON policy applies immediately.
+      if ("serviceWorker" in navigator && window.isSecureContext) {
+        var hadController=!!navigator.serviceWorker.controller, reloadedForUpdate=false;
+        navigator.serviceWorker.addEventListener("controllerchange",function(){
+          if (!hadController) { hadController=true; return; }
+          if (reloadedForUpdate) return;
+          reloadedForUpdate=true;
+          window.location.reload();
+        });
+        navigator.serviceWorker.getRegistration("/").then(function(reg){
+          if (reg) return reg.update();
+        }).catch(function(){});
+      }
       search.addEventListener("input",render);
       fetch("./links.json",{cache:"no-store"}).then(function(res){
         if(!res.ok)throw new Error("Unable to fetch links");
