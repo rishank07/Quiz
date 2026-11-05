@@ -431,6 +431,6 @@
   window.addEventListener('popstate',()=>{readHash();session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();});
   window.addEventListener('hashchange',()=>{readHash();$('placeSearch').value='';session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();});
   readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh();
-  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261105atlas1',{scope:'./'}).catch(()=>{});
+  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261105atlas2',{scope:'./'}).catch(()=>{});
 })();
 

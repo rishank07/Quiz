@@ -1,6 +1,6 @@
 /* Scoped offline cache for the interactive atlas. */
-const VERSION='efp-map-atlas-20261105-1';
-const ASSETS=['./','assets/style.css?v=20261105atlas1','assets/atlas.css?v=20261105atlas1','assets/data.js?v=20261105atlas1','assets/states.js?v=20261105atlas1','assets/rivers.js?v=20261105atlas1','assets/app.js?v=20261105atlas1'];
+const VERSION='efp-map-atlas-20261105-2';
+const ASSETS=['./','assets/style.css?v=20261105atlas1','assets/atlas.css?v=20261105atlas2','assets/data.js?v=20261105atlas1','assets/states.js?v=20261105atlas1','assets/rivers.js?v=20261105atlas1','assets/app.js?v=20261105atlas2'];
 self.addEventListener('install',e=>{e.waitUntil((async()=>{const cache=await caches.open(VERSION);await cache.addAll(ASSETS.map(p=>new Request(new URL(p,self.registration.scope),{cache:'reload'})));await self.skipWaiting();})());});
 self.addEventListener('activate',e=>{e.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('efp-map-atlas-')&&key!==VERSION)await caches.delete(key);await self.clients.claim();})());});
 self.addEventListener('fetch',e=>{
