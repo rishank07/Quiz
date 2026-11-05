@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261104caoptions4";
+const CACHE_VERSION = "efp-pwa-20261105editorial1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261031bbmobileframe1";
@@ -24,6 +24,8 @@ const APP_SHELL = [
   "/",
   "/index.html",
   "/offline.html",
+  "/Editorial/",
+  "/Editorial/links.json",
   "/manifest.webmanifest",
   "/privacy-policy.html",
   "/support.html",
@@ -380,6 +382,29 @@ async function staleWhileRevalidate(event, allowOpaque) {
   return new Response("", { status: 503, statusText: "Offline" });
 }
 
+// Editorial links are updated independently of the PWA shell. Older workers
+// returned their cached JSON first even when the page requested no-store.
+// Always fetch the current dated list online; retain a last-known-good copy
+// for offline readers without clearing quiz progress or bookmarks.
+async function editorialLinksNetworkFirst(event) {
+  const request = event.request;
+  const key = new Request(new URL("/Editorial/links.json", self.location.origin));
+  const cache = await caches.open(CACHE_VERSION);
+  const cached = await cache.match(key) || await caches.match(key, { ignoreSearch: true });
+  try {
+    const response = await fetch(request, { cache: "no-store" });
+    if (response && response.ok && (response.type === "basic" || response.type === "cors" || response.type === "default")) {
+      event.waitUntil(cache.put(key, response.clone()).catch(() => {}));
+      return response;
+    }
+    // Avoid replacing a valid editorial list with a transient 5xx/429.
+    if (cached && response && (response.status >= 500 || response.status === 408 || response.status === 429)) return cached;
+    return response;
+  } catch (_) {
+    return cached || new Response("{}", { status: 503, statusText: "Offline" });
+  }
+}
+
 async function immutablePdfPart(event) {
   // The path contains the bytes' hash. A previously read PDF range never needs
   // a background download; a new PDF/build has a different URL automatically.
@@ -530,6 +555,11 @@ self.addEventListener("fetch", (event) => {
       )) {
       event.respondWith(staleWhileRevalidate(event, true));
     }
+    return;
+  }
+
+  if (url.pathname === "/Editorial/links.json") {
+    event.respondWith(editorialLinksNetworkFirst(event));
     return;
   }
 
