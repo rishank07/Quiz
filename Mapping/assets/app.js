@@ -420,7 +420,7 @@
   };
   function openStateNotes(id){
     const focus=document.activeElement;if(focus&&$('map').contains(focus))focus.blur();
-    const open=()=>{changeRegion(id,{learn:true});requestAnimationFrame(()=>{$('stateNotesTitle')?.focus({preventScroll:true});$('stateStudy').scrollIntoView({behavior:'instant',block:'start'});});};
+    const open=()=>changeRegion(id,{learn:true});
     if(expanded||closingExpansion)closeExpansion(open);else open();
   }
   function selectCountry(id){if(state.region!=='World'||dragged)return;const c=D.countries.find(c=>c.id===id);if(!c)return;state.country=id;state.continent=c.continent;state.topic='all';state.savedOnly=false;state.search='';$('placeSearch').value='';session=null;state.mode='learn';setDefaultView();refresh(true);}
@@ -434,6 +434,7 @@
     state.region=region;state.topic=STATE_STUDY?.profiles.has(region)?'all':region==='World'?'seas':'rivers';
     state.selected=STATE_STUDY?.profiles.get(region)?.capitalId||'';state.continent='';state.country='';state.search='';state.savedOnly=false;$('placeSearch').value='';session=null;
     if(learn)state.mode='learn';setDefaultView();if(state.mode!=='learn')beginSession(state.mode);else refresh(true);
+    if(learn){$('map').focus({preventScroll:true});$('mapWrap').scrollIntoView({behavior:'instant',block:'start'});}
   }
   document.addEventListener('click',e=>{
     const b=e.target.closest('button,a');if(!b)return;
@@ -509,6 +510,7 @@
   STATE_STUDY?.init({selectRegion:changeRegion,focusFeature(id){const f=F.get(id);if(!f||!regionFeatures().some(x=>x.id===id))return;state.topic=f.topic;state.savedOnly=false;state.search='';$('placeSearch').value='';selectFeature(id);focusSelected();}});
   readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();
   if(history.state?.efpMappingExpanded)applyExpansion(true);
-  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261106questionlayout1',{scope:'./'}).catch(()=>{});
+  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261106statemapfirst1',{scope:'./'}).catch(()=>{});
 })();
+
 
