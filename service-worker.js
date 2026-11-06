@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261106editorial05a";
+const CACHE_VERSION = "efp-pwa-20261106questionlayout1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261031bbmobileframe1";
@@ -672,4 +672,5 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(staleWhileRevalidate(event, false));
 });
+
 

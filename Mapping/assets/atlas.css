@@ -28,3 +28,26 @@ html{scroll-padding-top:76px}.topbar{height:auto;min-height:132px;padding:76px m
 
 /* Feature geography: bilingual reading cards and source/mouth map callouts. */
 .geography-study{margin:20px 0;padding:18px;background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--river-colour);break-inside:avoid;min-width:0}.geography-study h3{margin:0 0 14px;font-size:17px}.geography-study h3 small,.geography-study h4 small{display:block;font-size:13px;font-weight:500;margin-top:4px}.geography-study dl{margin:0}.geography-row{padding:12px 0;border-top:1px solid var(--line);break-inside:avoid}.geography-row dt{font-size:12px;font-weight:750;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}.geography-row dt small{display:block;font-size:12px;text-transform:none;letter-spacing:0;margin-top:2px}.geography-row dd{margin:7px 0 0;font-size:14px;line-height:1.75;overflow-wrap:anywhere}.geography-row dd small{display:block;font-size:14px;margin-top:5px;color:var(--muted)}.geography-study h4{font-size:13px;margin:16px 0 10px}.study-related-list{display:flex;gap:8px;flex-wrap:wrap}.study-related{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:6px;padding:8px 12px;font:inherit;font-size:12px;cursor:pointer;text-align:left;min-height:44px}.study-related small{display:block;margin-top:3px}.study-related:hover,.study-related:focus-visible{border-color:var(--selected);outline:2px solid var(--selected);outline-offset:1px}.study-course{margin-top:16px;max-width:100%;white-space:normal;text-align:left;line-height:1.6}.study-caption{font-size:11px;line-height:1.7;color:var(--muted);margin:10px 0 0}.study-endpoint{--feature-colour:#0f8660;pointer-events:none}.study-endpoint.mouth{--feature-colour:#a35016}.study-endpoint circle{fill:var(--feature-colour);stroke:var(--paper);stroke-width:1.5;vector-effect:non-scaling-stroke}.study-endpoint rect{fill:var(--label-bg);stroke:var(--feature-colour);stroke-width:1;vector-effect:non-scaling-stroke}.study-endpoint text{fill:var(--label-ink);font-weight:650;font-family:var(--font)}.study-endpoint .label-leader{stroke:var(--feature-colour)}@media(max-width:650px){.geography-study{padding:14px;margin:16px 0}.geography-study h3{font-size:16px}.geography-row dd,.geography-row dd small{font-size:13px}.study-related{flex:1 1 125px}}
+
+/* Keep each question next to its map in every practice mode. */
+body:not([data-mode=learn]) .mobile-prompt{display:none!important}
+body:not([data-mode=learn]) .search-row,body:not([data-mode=learn]) .place-list{display:none}
+body:not([data-mode=learn]) .detail-panel{order:5;columns:1;min-width:0;max-width:none;align-self:stretch;scroll-margin-top:88px}
+body:not([data-mode=learn]) .map-caption{order:6}
+body:not([data-mode=learn]) .topic-rail{order:7}
+@media(min-width:1001px){
+ body:not([data-mode=learn]) .workspace{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(340px,.8fr);align-items:start}
+ body:not([data-mode=learn]) .mode-tabs{grid-column:1/-1;grid-row:1}
+ body:not([data-mode=learn]) .session-controls{grid-column:1/-1;grid-row:2}
+ body:not([data-mode=learn]) .map-heading{grid-column:1/-1;grid-row:3}
+ body:not([data-mode=learn]) .map-wrap{grid-column:1;grid-row:4;height:clamp(440px,68svh,800px);min-height:0;margin-right:0}
+ body:not([data-mode=learn]) .detail-panel{grid-column:2;grid-row:4/6;width:100%;border-top:0;border-left:1px solid var(--line);max-height:calc(clamp(440px,68svh,800px) + 70px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:18px 20px}
+ body:not([data-mode=learn]) .map-caption{grid-column:1;grid-row:5;min-width:0;width:auto}
+ body:not([data-mode=learn]) .topic-rail{grid-column:1/-1;grid-row:6}
+}
+@media(max-width:1000px){
+ body:not([data-mode=learn]) .map-wrap{height:clamp(280px,48svh,440px);min-height:280px}
+ body:not([data-mode=learn]) .detail-panel{width:100%;margin:0;border-left:0;border-top:1px solid var(--line);max-height:none;overflow:visible;padding:16px 14px}
+ body:not([data-mode=learn]) .detail-panel .option-list{display:grid;grid-template-columns:1fr}
+}
+body:not([data-mode=learn]) .map-wrap.expanded{height:100dvh;min-height:0;margin:0}

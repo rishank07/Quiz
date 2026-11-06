@@ -167,7 +167,8 @@
     const available=items.length;const limit=Number($('sessionSize').value)||available;session={available,items:items.slice(0,limit),index:0,answered:null,responses:Array(Math.min(items.length,limit||items.length)).fill(null),correct:0,wrong:0,skipped:0,complete:false,target};
     setDefaultView();refresh(push);
     if(mode==='locate')fitQuestion();
-    if(innerWidth<=650)(mode==='locate'?$('mobilePrompt'):$('detailPanel')).scrollIntoView({behavior:'smooth',block:'start'});
+    $('detailPanel').scrollTop=0;
+    $('mapWrap').scrollIntoView({behavior:'smooth',block:'start'});
   }
   function renderQuestion() {
     const el=$('detailPanel');
@@ -197,6 +198,7 @@
     const record=session.responses[index];
     session.answered=record&&!record.skipped?record.answer:null;
     renderDetail();renderControls();renderMap();
+    $('detailPanel').scrollTop=0;
     if(state.mode==='locate')fitQuestion();
   }
   function answer(i) {
@@ -507,6 +509,6 @@
   STATE_STUDY?.init({selectRegion:changeRegion,focusFeature(id){const f=F.get(id);if(!f||!regionFeatures().some(x=>x.id===id))return;state.topic=f.topic;state.savedOnly=false;state.search='';$('placeSearch').value='';selectFeature(id);focusSelected();}});
   readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();
   if(history.state?.efpMappingExpanded)applyExpansion(true);
-  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261106geography2',{scope:'./'}).catch(()=>{});
+  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261106questionlayout1',{scope:'./'}).catch(()=>{});
 })();
 

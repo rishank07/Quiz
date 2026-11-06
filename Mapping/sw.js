@@ -1,6 +1,6 @@
 /* Scoped offline cache for the interactive atlas. */
-const VERSION='efp-map-atlas-20261106-geography2';
-const ASSETS=['./','assets/map-navigation.js?v=20261106mapnav2','assets/site-theme.js?v=20261106navtheme1','assets/style.css?v=20261105atlas1','assets/atlas.css?v=20261106geography2','assets/data.js?v=20261105atlas1','assets/states.js?v=20261105atlas1','assets/rivers.js?v=20261105atlas1','assets/state-notes.js?v=20261105states1','assets/state-study.js?v=20261106mapnav2','assets/state-study.css?v=20261105states1','assets/feature-study.js?v=20261106geography2','assets/app.js?v=20261106geography2'];
+const VERSION='efp-map-atlas-20261106-questionlayout1';
+const ASSETS=['./','assets/map-navigation.js?v=20261106mapnav2','assets/site-theme.js?v=20261106navtheme1','assets/style.css?v=20261105atlas1','assets/atlas.css?v=20261106questionlayout1','assets/data.js?v=20261105atlas1','assets/states.js?v=20261105atlas1','assets/rivers.js?v=20261105atlas1','assets/state-notes.js?v=20261105states1','assets/state-study.js?v=20261106mapnav2','assets/state-study.css?v=20261105states1','assets/feature-study.js?v=20261106questionlayout1','assets/app.js?v=20261106questionlayout1'];
 self.addEventListener('install',e=>{e.waitUntil((async()=>{const cache=await caches.open(VERSION);await cache.addAll(ASSETS.map(p=>new Request(new URL(p,self.registration.scope),{cache:'reload'})));await self.skipWaiting();})());});
 self.addEventListener('activate',e=>{e.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('efp-map-atlas-')&&key!==VERSION)await caches.delete(key);await self.clients.claim();})());});
 self.addEventListener('fetch',e=>{
