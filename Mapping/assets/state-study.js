@@ -56,7 +56,7 @@
   }
   function sectionRows(p,id){return id==='ramsar'?p.ramsar:p.sections[id]||[];}
   function rowHtml(p,row,category,interactive){
-    const maps=interactive?relatedFeatures(p,row,category):[];
+    const maps=interactive?(row.featureId?D.features.filter(f=>f.id===row.featureId):relatedFeatures(p,row,category)):[];
     return `<article class="state-note-row"><h4>${esc(row.name)}<span lang="hi">${esc(row.hi)}</span></h4>${row.fact?`<p>${esc(row.fact)}</p><p class="state-note-hi" lang="hi">${esc(row.factHi)}</p>`:''}${maps.length?`<div class="note-map-links">${maps.map(f=>`<button type="button" data-note-place="${esc(f.id)}">Locate ${esc(f.name)} <span aria-hidden="true">↗</span></button>`).join('')}</div>`:''}</article>`;
   }
   function profileHtml(p,interactive=true){
@@ -68,8 +68,8 @@
     ${interactive?`<div class="state-reading-tools"><label class="state-notes-search">Search these notes <input id="stateNotesSearch" type="search" placeholder="River, mineral, park · नदी, खनिज…" aria-label="Search ${esc(p.name)} notes"></label><div><button type="button" class="quiet small" data-notes-open="true">Expand all</button><button type="button" class="quiet small" data-notes-open="false">Collapse all</button><button type="button" class="quiet small" data-state-map="${esc(p.id)}">Explore state map ↑</button></div></div><p id="stateNotesEmpty" class="empty-inline" role="status" hidden>No matching notes. Try a place name or clear the search.</p>`:''}
     <div class="state-notes-grid">${N.categories.map(c=>{
       const entries=sectionRows(p,c.id),s=source[c.source];
-      return `<details class="state-note-section" id="state-note-${c.id}" style="--note-accent:${c.colour}" open><summary><span aria-hidden="true">${c.icon}</span><span>${c.en}<small lang="hi">${c.hi}</small></span><em>${entries.length}</em></summary><div class="state-note-content">${c.id==='ramsar'?`<p class="state-note-date">Official list dated 25 October 2026 · ${entries.length} ${entries.length===1?'site':'sites'} listed for this ${p.ut?'UT':'state'}.</p>${!entries.length?'<p>No Ramsar site is listed for this state / UT in this dated reference.</p><p lang="hi" class="state-note-hi">इस दिनांकित आधिकारिक सूची में इस राज्य / केंद्रशासित प्रदेश का कोई रामसर स्थल नहीं है।</p>':''}`:''}${entries.map(row=>rowHtml(p,row,c.id,interactive)).join('')}<p class="state-section-source"><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)} ↗</a>${c.id==='parks'&&p.id==='assam'?` · <a href="${esc(source.assam.url)}" target="_blank" rel="noopener">Assam Economic Survey ↗</a>`:''}</p></div></details>`;
-    }).join('')}</div><div class="state-study-footer"><p>Selected exam-relevant notes · reviewed 5 November 2026. Ramsar designations, national parks, sanctuaries and tiger reserves are different categories.</p>${interactive?`<a href="/Mapping/states/${slug(p)}/">Open reading page / share these notes ↗</a>`:'<a href="/Mapping/">Back to the interactive atlas ↗</a>'}</div>`;
+      return `<details class="state-note-section" id="state-note-${c.id}" style="--note-accent:${c.colour}" open><summary><span aria-hidden="true">${c.icon}</span><span>${c.en}<small lang="hi">${c.hi}</small></span><em>${entries.length}</em></summary><div class="state-note-content">${c.id==='ramsar'?`<p class="state-note-date">Official list dated 25 October 2026; RSIS details reviewed 7 November 2026 · ${entries.length} ${entries.length===1?'site':'sites'} listed for this ${p.ut?'UT':'state'}.</p>${!entries.length?'<p>No Ramsar site is listed for this state / UT in this dated reference.</p><p lang="hi" class="state-note-hi">इस दिनांकित आधिकारिक सूची में इस राज्य / केंद्रशासित प्रदेश का कोई रामसर स्थल नहीं है।</p>':''}`:''}${entries.map(row=>rowHtml(p,row,c.id,interactive)).join('')}<p class="state-section-source"><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)} ↗</a>${c.id==='parks'&&p.id==='assam'?` · <a href="${esc(source.assam.url)}" target="_blank" rel="noopener">Assam Economic Survey ↗</a>`:''}</p></div></details>`;
+    }).join('')}</div><div class="state-study-footer"><p>Selected exam-relevant notes · reviewed 7 November 2026. Ramsar designations, national parks, sanctuaries and tiger reserves are different categories.</p>${interactive?`<a href="/Mapping/states/${slug(p)}/">Open reading page / share these notes ↗</a>`:'<a href="/Mapping/">Back to the interactive atlas ↗</a>'}</div>`;
   }
   let api=null,renderedRegion='',root=null;
   function setDirectory(open){const directory=document.getElementById('stateDirectory'),button=document.getElementById('allStatesBtn');directory.hidden=!open;button.setAttribute('aria-expanded',String(open));if(open)document.getElementById('stateDirectorySearch').focus();}
@@ -110,4 +110,5 @@
   }
   window.MappingStateStudy={init,render,profiles,featuresFor,memberships,profileHtml,slug,esc,resolveRegion:value=>profiles.has(value)?value:N.profiles.find(p=>p.name===value)?.id||null};
 })();
+
 

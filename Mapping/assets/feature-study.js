@@ -126,7 +126,7 @@
   // The original river overlays used unprefixed IDs, so these two paths were never selectable.
   for(const r of D.rivers)if(aliases[r.id])r.id=aliases[r.id];
   for(const f of D.features){
-    f.study={kind:kind[f.topic]||['Place','स्थान'],river:rivers[f.id]||null,mountain:mountains[f.id]||null};
+    f.study={kind:kind[f.topic]||['Place','स्थान'],river:rivers[f.id]||null,mountain:f.mountainStudy||mountains[f.id]||null};
     if(f.study.river)f.study.kind=['River / drainage system','नदी / अपवाह तंत्र'];
   }
   // Only add schematic courses with curated intermediate waypoints; a source and mouth do not define a river's shape.
@@ -158,6 +158,7 @@
       return {feature:g,distance:Math.round(distance),direction:dirs[Math.round(bearing/45)%8]};
     }).filter(g=>g.distance>3&&g.distance<(f.region==='India'?350:1800)).sort((a,b)=>a.distance-b.distance).slice(0,4);
   }
-  function searchText(f){const r=f.study?.river,m=f.study?.mountain;return [f.name,f.hi,f.area,f.areaHi,f.fact,f.factHi,...(r?[r.origin.en,r.origin.hi,r.route.en,r.route.hi,r.mouth.en,r.mouth.hi,r.connections.en,r.connections.hi]:[]),...(m?[m.setting.en,m.setting.hi,m.connections.en,m.connections.hi]:[])].join(' ');}
+  function searchText(f){const r=f.study?.river,m=f.study?.mountain;return [f.name,f.hi,f.area,f.areaHi,f.fact,f.factHi,f.placeDetails?.district,f.placeDetails?.milestone,f.ramsar?.rsis,f.ramsar?.designation,f.ramsar?.milestone,...(r?[r.origin.en,r.origin.hi,r.route.en,r.route.hi,r.mouth.en,r.mouth.hi,r.connections.en,r.connections.hi]:[]),...(m?[m.setting.en,m.setting.hi,m.connections.en,m.connections.hi]:[])].join(' ');}
   window.MappingFeatureStudy={rivers,related,nearby,contextPoints,searchText};
 })();
+

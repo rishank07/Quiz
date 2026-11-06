@@ -10,7 +10,7 @@
   let saved;
   try { saved = validateSaved(JSON.parse(localStorage.getItem(KEY)) || blank()); } catch { saved = blank(); }
   const STATES = window.MAPPING_STATES || [], STATE_STUDY = window.MappingStateStudy;
-  const topicColours={rivers:'#0879ae',minerals:'#9651b2',mountains:'#a56322',water:'#087e8b',parks:'#318144',ports:'#b14f7b',state:'#6764b5',seas:'#2776bb',worldphysical:'#8d6a21',worldresources:'#93539f',worldpolitical:'#506bb2'};
+  const topicColours={ramsar:'#087e8b',rivers:'#0879ae',minerals:'#9651b2',mountains:'#a56322',water:'#087e8b',parks:'#318144',ports:'#b14f7b',state:'#6764b5',seas:'#2776bb',worldphysical:'#8d6a21',worldresources:'#93539f',worldpolitical:'#506bb2'};
   let state = {region:'India', topic:'rivers', mode:'learn', selected:'ganga', search:'', continent:'', country:'', names:true, stateNames:true, savedOnly:false};
   let session = null, view = {x:66,y:-39,w:34,h:35}, drag = null, dragged = false, toastTimer, storageWarning = false;
   // The homepage theme preference is applied by site-theme.js.
@@ -42,9 +42,10 @@
     if(state.country) { const c=D.countries.find(c=>c.id===state.country); if(c){const alias={USA:'United States',TUR:'Türkiye',GBR:'United Kingdom',COD:'Democratic Republic of the Congo'}[c.id]||c.name;a=a.filter(f=>insideCountry(f,c)||f.area.toLocaleLowerCase().includes(alias.toLocaleLowerCase()));} }
     return a;
   }
+  const matchesTopic=(f,topic)=>topic==='all'||(topic==='ramsar'?!!f.ramsar:f.topic===topic);
   function filteredFeatures(includeSearch=true) {
     let a=regionFeatures();
-    if(state.topic!=='all') a=a.filter(f=>f.topic===state.topic);
+    if(state.topic!=='all') a=a.filter(f=>matchesTopic(f,state.topic));
     if(state.savedOnly) a=a.filter(f=>saved.bookmarks.includes(f.id));
     if(includeSearch && state.search.trim()) { const s=state.search.trim().toLocaleLowerCase(); a=a.filter(f=>(STUDY?.searchText(f)||(f.name+' '+f.hi+' '+f.area+' '+f.areaHi+' '+f.fact+' '+f.factHi)).toLocaleLowerCase().includes(s)); }
     return a;
@@ -100,7 +101,7 @@
     $('stateNamesToggle').disabled=!!unrevealed||state.region==='World';
     $('focusPlace').disabled=unrevealed||!F.has(state.selected)||state.mode!=='learn';
     $('islandShortcuts').hidden=state.region!=='India'||state.mode!=='learn';
-    $('featureLegend').innerHTML=D.topics.filter(t=>t.id!=='all'&&(state.topic==='all'||t.id===state.topic)&&regionFeatures().some(f=>f.topic===t.id)).map(t=>`<span><i style="background:${topicColours[t.id]}"></i>${esc(t.en)}</span>`).join('')+'<span><i class="selected-key"></i>Selected place</span><span><i class="solid-key"></i>River course</span><span><i class="dashed-key"></i>Approximate course</span>';
+    $('featureLegend').innerHTML=D.topics.filter(t=>t.id!=='all'&&(state.topic==='all'||t.id===state.topic)&&regionFeatures().some(f=>matchesTopic(f,t.id))).map(t=>`<span><i style="background:${topicColours[t.id]}"></i>${esc(t.en)}</span>`).join('')+'<span><i class="source-key"></i>Source / उद्गम</span><span><i class="mouth-key"></i>Mouth / संगम</span><span><i class="selected-key"></i>Selected place</span><span><i class="solid-key"></i>River course</span><span><i class="dashed-key"></i>Approximate course</span>';
     document.querySelectorAll('#regionTabs [data-region],#topicList [data-topic]').forEach(b=>b.setAttribute('aria-pressed',b.classList.contains('active')));
     $('placeSearch').disabled=state.mode!=='learn'; $('randomBtn').disabled=state.mode!=='learn';
     $('placeSearch').placeholder=state.mode==='learn'?'Search a place · नदी, खदान, झील…':'Place search returns in Learn mode';
@@ -111,9 +112,9 @@
   }
   function renderTopics() {
     const regional=regionFeatures();
-    const topics=D.topics.filter(t=>t.id==='all'||regional.some(f=>f.topic===t.id));
+    const topics=D.topics.filter(t=>t.id==='all'||regional.some(f=>matchesTopic(f,t.id)));
     $('topicCount').textContent=topics.length-1;
-    $('topicList').innerHTML=topics.map(t=>`<button class="topic-button ${state.topic===t.id?'active':''}" data-topic="${t.id}"><span class="topic-icon" aria-hidden="true">${t.icon}<\/span><span><b>${esc(t.en)}<\/b><small>${esc(t.hi)}<\/small><\/span><span class="topic-num">${t.id==='all'?regional.length:regional.filter(f=>f.topic===t.id).length}<\/span><\/button>`).join('');
+    $('topicList').innerHTML=topics.map(t=>`<button class="topic-button ${state.topic===t.id?'active':''}" data-topic="${t.id}"><span class="topic-icon" aria-hidden="true">${t.icon}<\/span><span><b>${esc(t.en)}<\/b><small>${esc(t.hi)}<\/small><\/span><span class="topic-num">${t.id==='all'?regional.length:regional.filter(f=>matchesTopic(f,t.id)).length}<\/span><\/button>`).join('');
   }
   function renderPlaceList() {
     if(state.mode!=='learn') { $('placeList').innerHTML='<span class="empty-inline">Question explanations connect back to the map. Explore all places in Learn mode.<\/span>';return; }
@@ -130,12 +131,23 @@
   function featureStudy(f){
     const r=f.study?.river,m=f.study?.mountain;
     const row=(en,hi,v)=>v?'<div class="geography-row"><dt>'+esc(en)+'<small lang="hi">'+esc(hi)+'</small></dt><dd>'+esc(v.en)+(v.hi?'<small lang="hi">'+esc(v.hi)+'</small>':'')+'</dd></div>':'';
-    const rows=r?row('Source / headwaters','उद्गम / स्रोत',r.origin)+row('Course / regions','प्रवाह मार्ग / क्षेत्र',r.route)+row('Mouth / confluence','मुहाना / संगम',r.mouth)+row('Tributaries & landmarks','सहायक नदियाँ और प्रमुख स्थल',r.connections):m?row('Range / setting','श्रेणी / स्थिति',m.setting)+row('Surrounding geography','आस-पास का भूगोल',m.connections):row('Location','स्थिति',{en:f.area,hi:f.areaHi})+row('Geography connection','भौगोलिक संबंध',{en:f.fact,hi:f.factHi});
+    let rows=r?row('Source / headwaters','उद्गम / स्रोत',r.origin)+row('Course / regions','प्रवाह मार्ग / क्षेत्र',r.route)+row('Mouth / confluence','मुहाना / संगम',r.mouth)+row('Tributaries & landmarks','सहायक नदियाँ और प्रमुख स्थल',r.connections):m?row('Range / setting','श्रेणी / स्थिति',m.setting)+row('Surrounding geography','आस-पास का भूगोल',m.connections):row('Location','स्थिति',{en:f.area,hi:f.areaHi})+row('Geography connection','भौगोलिक संबंध',{en:f.fact,hi:f.factHi});
+    const details=f.placeDetails,wetland=f.ramsar;
+    if(details?.district)rows+=row('District / region','जिला / क्षेत्र',{en:details.district});
+    if(wetland){
+      rows+=row('Ramsar designation date','रामसर नामांकन तिथि',{en:wetland.designation});
+      rows+=row('Global RSIS site number','वैश्विक RSIS स्थल संख्या',{en:String(wetland.rsis),hi:'यह वैश्विक पहचान संख्या है; भारत में जुड़ने का क्रम अलग है।'});
+      rows+=row('Area in the official summary','आधिकारिक सारांश में क्षेत्रफल',{en:wetland.areaHa.toLocaleString('en-IN')+' ha'});
+      if(wetland.milestone)rows+=row('India addition milestone','भारत में जुड़ने का क्रम',{en:wetland.milestone+'; announced '+wetland.announced,hi:wetland.milestoneHi});
+    }
+    if(details?.milestone)rows+=row('Recorded milestone','दर्ज क्रम / विशेष तथ्य',{en:details.milestone});
+    const reviewSource=wetland?'rsis-atlas-review':details?.reference;
+    const reference=reviewSource?'<p class="study-caption">'+sourceButton({id:reviewSource})+'</p>':'';
     const related=STUDY?.related(f)||[];
     const links=related.map(g=>'<button type="button" class="study-related" data-study-place="'+esc(g.id)+'">'+esc(g.name)+'<small lang="hi">'+esc(g.hi)+'</small></button>').join('');
     const neighbours=(STUDY?.nearby(f)||[]).filter(n=>!related.some(g=>g.id===n.feature.id));
     const nearbyHtml=neighbours.length?'<h4>Nearby mapped places <small lang="hi">आस-पास के चिह्नित स्थल</small></h4><div class="study-related-list">'+neighbours.map(n=>'<button type="button" class="study-related" data-study-place="'+esc(n.feature.id)+'">'+esc(n.feature.name)+'<small lang="hi">'+esc(n.feature.hi)+'</small><small>~'+n.distance+' km · '+n.direction+'</small></button>').join('')+'</div><p class="study-caption">Approximate distance and direction between study markers.<br><span lang="hi">चिह्नित बिंदुओं के बीच अनुमानित दूरी और दिशा।</span></p>':'';
-    return '<section class="geography-study" aria-label="Geography study details"><h3>Read the geography <small lang="hi">भूगोल समझें</small></h3><dl>'+rows+'</dl>'+(links?'<h4>Connected places <small lang="hi">जुड़े हुए स्थल</small></h4><div class="study-related-list">'+links+'</div>':'')+nearbyHtml+(r?'<button class="quiet study-course" type="button" data-action="study-course">Show source to mouth on map · उद्गम से मुहाने तक देखें</button><p class="study-caption">Source and mouth markers are approximate. Dashed lines show schematic courses; arrows indicate downstream order.<br><span lang="hi">उद्गम और मुहाने के चिह्न अनुमानित हैं। टूटी रेखाएँ सांकेतिक मार्ग और तीर प्रवाह का क्रम दिखाते हैं।</span></p>':'')+'</section>';
+    return '<section class="geography-study" aria-label="Geography study details"><h3>Read the geography <small lang="hi">भूगोल समझें</small></h3><dl>'+rows+'</dl>'+reference+(links?'<h4>Connected places <small lang="hi">जुड़े हुए स्थल</small></h4><div class="study-related-list">'+links+'</div>':'')+nearbyHtml+(r?'<button class="quiet study-course" type="button" data-action="study-course">Show source to mouth on map · उद्गम से मुहाने तक देखें</button><p class="study-caption">Source and mouth markers are approximate. Dashed lines show schematic courses; arrows indicate downstream order.<br><span lang="hi">उद्गम और मुहाने के चिह्न अनुमानित हैं। टूटी रेखाएँ सांकेतिक मार्ग और तीर प्रवाह का क्रम दिखाते हैं।</span></p>':'')+'</section>';
   }
   function renderDetail() {
     const el=$('detailPanel');
@@ -161,7 +173,7 @@
     state.mode=mode;state.search='';$('placeSearch').value='';
     const fs=filteredFeatures(false),ids=new Set(fs.map(f=>f.id));let items=[];
     if(mode==='locate')items=fs.filter(f=>!target||f.id===target).map(makeLocate);
-    else if(mode==='practice'||mode==='pyq')items=D.questions.filter(q=>(mode==='pyq'?q.type==='pyq':q.type!=='pyq')&&(state.topic==='all'||q.topic===state.topic)&&q.featureIds.some(id=>ids.has(id))&&(!target||q.featureIds.includes(target)));
+    else if(mode==='practice'||mode==='pyq')items=D.questions.filter(q=>(mode==='pyq'?q.type==='pyq':q.type!=='pyq')&&(state.topic==='all'||q.topic===state.topic||state.topic==='ramsar'&&q.featureIds.some(id=>F.get(id)?.ramsar))&&q.featureIds.some(id=>ids.has(id))&&(!target||q.featureIds.includes(target)));
     else if(mode==='mistakes')items=mistakeIDs().map(id=>Q.get(id)||(F.has(id.slice(7))?makeLocate(F.get(id.slice(7))):null)).filter(q=>q&&q.featureIds.some(id=>ids.has(id)));
     if(!keepOrder)items=shuffle(items);
     const available=items.length;const limit=Number($('sessionSize').value)||available;session={available,items:items.slice(0,limit),index:0,answered:null,responses:Array(Math.min(items.length,limit||items.length)).fill(null),correct:0,wrong:0,skipped:0,complete:false,target};
@@ -325,20 +337,51 @@
       if(priority){const b={x:Math.max(8,Math.min(width-w-10,x+12)),y:Math.max(14,Math.min(height-h-45,y-10)),w,h};boxes.push(b);return b;}
       return null;
     }
-    // Source and mouth callouts share the collision grid with feature labels.
-    if(state.mode==='learn'&&state.names&&F.has(state.selected)){
-      const focused=F.get(state.selected),r=focused.study?.river;
-      for(const point of STUDY?.contextPoints(focused)||[]){
-        const [lon,lat]=point.coord,x=(lon-left)/unit,y=(-lat-top)/unit;
-        if(x<0||x>width||y<0||y>height)continue;
-        const en=point.id==='source'?'Source':'Mouth / confluence',hi=point.id==='source'?'उद्गम':'मुहाना / संगम';
-        const raw=point.en.split(/[;,]/)[0],short=raw.length>28?raw.slice(0,27)+'…':raw;
-        const w=Math.min(width-28,Math.max(125,short.length*6.8+12));
-        const b=labelPosition(x,y,w,39);const g=makeSvg('g',{class:'study-endpoint '+point.id,role:'img','aria-label':en+': '+point.en+'; '+point.hi});
-        const title=makeSvg('title');title.textContent=en+': '+point.en+' — '+point.hi;g.append(title);
-        g.append(makeSvg('circle',{cx:lon,cy:-lat,r:5*unit}));
-        if(b){g.append(makeSvg('path',{d:'M'+lon+','+(-lat)+'L'+(left+b.x*unit)+','+(top+(b.y+20)*unit),class:'label-leader'}));g.append(makeSvg('rect',{x:left+b.x*unit,y:top+b.y*unit,width:b.w*unit,height:b.h*unit,rx:3*unit}));for(const [line,offset,size]of [[en+' · '+hi,14,10.5],[short,30,12]]){const t=makeSvg('text',{x:left+(b.x+5)*unit,y:top+(b.y+offset)*unit,'font-size':size*unit});t.textContent=line;g.append(t);}}
-        labels.push(g);
+    function wrapLabel(value,maxChars){
+      const lines=[];let line='';for(const word of String(value).split(/\s+/)){if(line&&(line+' '+word).length>maxChars){lines.push(line);line=word;}else line=line?line+' '+word:word;}if(line)lines.push(line);return lines;
+    }
+    if(indiaOnly&&state.stateNames&&!unrevealed){
+      for(const st of STATES){
+        const x=(st.label[0]-left)/unit,y=(-st.label[1]-top)/unit;
+        if(x<20||x>width-20||y<25||y>height-55)continue;
+        const regional=STATE_STUDY?.profiles.has(state.region);if(regional&&st.name!==STATE_STUDY.profiles.get(state.region).name)continue;
+        const stateFont=width<650?17:19;
+        const lines=wrapLabel(st.name,Math.max(10,Math.floor(Math.min(width*.5,210)/(stateFont*.57))));
+        const w=Math.max(...lines.map(line=>line.length))*stateFont*.59,h=lines.length*(stateFont+3);
+        let labelBox=null,labelX=x,labelY=y;
+        for(const [dx,dy] of [[0,0],[0,-h],[0,h],[-stateFont*2,0],[stateFont*2,0],[0,-h*2],[0,h*2]]){
+          const cx=x+dx,cy=y+dy,b={x:cx-w/2,y:cy-stateFont*.8,w,h};
+          if(b.x<7||b.x+b.w>width-10||b.y<12||b.y+b.h>height-44||boxes.some(box=>overlaps(b,box)))continue;
+          if((dx||dy)&&!insideCountry({lon:left+cx*unit,lat:-(top+cy*unit)},st))continue;
+          labelBox=b;labelX=cx;labelY=cy;break;
+        }
+        if(!labelBox)continue;
+        const g=makeSvg('g',{class:'state-name-group'});
+        for(const [i,line]of lines.entries()){const t=makeSvg('text',{x:left+labelX*unit,y:top+(labelY+i*(stateFont+3))*unit,'font-size':stateFont*unit,'text-anchor':'middle',class:'state-name','stroke-width':3.5*unit});t.textContent=line;g.append(t);}
+        stateLabels.append(g);boxes.push(labelBox);
+      }
+    }
+    // Reserve source/end callouts and use different symbols for every visible river.
+    if(!unrevealed&&!isLocate&&state.names){
+      for(const river of [...new Map([...a,...[...selected].map(id=>F.get(id)).filter(Boolean)].filter(f=>f.study?.river).map(f=>[f.id,f])).values()]){
+        for(const point of STUDY?.contextPoints(river)||[]){
+          const [lon,lat]=point.coord,x=(lon-left)/unit,y=(-lat-top)/unit;
+          if(x<0||x>width||y<0||y>height)continue;
+          const focused=selected.has(river.id),source=point.id==='source',en=source?'Source':'Mouth / confluence',hi=source?'उद्गम':'मुहाना / संगम';
+          const g=makeSvg('g',{class:'study-endpoint '+point.id+(focused?' focused':''),'data-marker':river.id,role:'button',tabindex:0,'aria-label':river.name+' '+en+': '+point.en+'; '+point.hi});
+          const title=makeSvg('title');title.textContent=river.name+' — '+en+': '+point.en+' — '+point.hi;g.append(title);
+          g.append(makeSvg('circle',{cx:lon,cy:-lat,r:14*unit,class:'touch-target'}));
+          const radius=(focused?7:5)*unit;
+          const path=source?`M${lon},${-lat-radius}L${lon+radius},${-lat+radius}L${lon-radius},${-lat+radius}Z`:`M${lon},${-lat-radius}L${lon+radius},${-lat}L${lon},${-lat+radius}L${lon-radius},${-lat}Z`;
+          g.append(makeSvg('path',{d:path,class:'endpoint-symbol'}));
+          if(focused){
+            const short=point.en.split(/[;,]/)[0],font=width<480?14:15,maxWidth=Math.min(width-28,290),lines=wrapLabel(short,Math.floor((maxWidth-14)/(font*.56)));
+            const w=Math.min(maxWidth,Math.max(155,...lines.map(line=>line.length*font*.56+14))),h=23+lines.length*(font+3);
+            const b=labelPosition(x,y,w,h);
+            if(b){g.append(makeSvg('path',{d:`M${lon},${-lat}L${left+b.x*unit},${top+(b.y+h/2)*unit}`,class:'label-leader'}));g.append(makeSvg('rect',{x:left+b.x*unit,y:top+b.y*unit,width:w*unit,height:h*unit,rx:3*unit}));for(const [i,line]of [en+' · '+hi,...lines].entries()){const t=makeSvg('text',{x:left+(b.x+6)*unit,y:top+(b.y+16+i*(font+3))*unit,'font-size':(i===0?12:font)*unit});t.textContent=line;g.append(t);}}
+          }
+          labels.push(g);
+        }
       }
     }
     let shown=0;
@@ -353,34 +396,24 @@
       else g.append(makeSvg('circle',{r:2.5*unit,class:'dot'}));
       markers.push(g);
       if(!unrevealed&&!isLocate&&state.names){
-        const p={x:(f.lon-left)/unit,y:(-f.lat-top)/unit},font=width<480?12.5:14;
-        const lw=Math.min(width-28,Math.max(30,f.name.length*font*.58,isSelected?f.hi.length*font*.65:0)+12),lh=isSelected?40:23;
+        const p={x:(f.lon-left)/unit,y:(-f.lat-top)/unit},font=width<480?15:16;
+        const maxWidth=Math.min(width-28,width<480?255:340),chars=Math.floor((maxWidth-14)/(font*.57));
+        const nameLines=wrapLabel(f.name,chars),lines=nameLines.map(text=>({text,size:font}));
+        if(isSelected)for(const text of wrapLabel(f.hi,chars))lines.push({text,size:14,lang:'hi'});
+        if(f.mapBadge)lines.push({text:f.mapBadge,size:13});
+        if(isSelected&&f.ramsar)lines.push({text:'RSIS '+f.ramsar.rsis+' · '+f.ramsar.designation,size:12});
+        if(isSelected&&f.placeDetails?.district)for(const text of wrapLabel('District: '+f.placeDetails.district,Math.floor((maxWidth-14)/7)))lines.push({text,size:12});
+        const lw=Math.min(maxWidth,Math.max(40,...lines.map(line=>line.text.length*line.size*.57))+14),lh=8+lines.reduce((sum,line)=>sum+line.size+4,0);
         const b=labelPosition(p.x,p.y,lw,lh,isSelected);if(!b)continue;shown++;
         const label=makeSvg('g',{class:'feature-label'+(isSelected?' selected':''),'data-marker':f.id,style:`--feature-colour:${topicColours[f.topic]||'#6e64ae'}`});
         const anchorX=b.x>p.x?b.x:b.x+b.w,anchorY=Math.max(b.y+3,Math.min(b.y+b.h-3,p.y));
         label.append(makeSvg('path',{d:`M${f.lon},${-f.lat}L${left+anchorX*unit},${top+anchorY*unit}`,class:'label-leader'}));
         label.append(makeSvg('rect',{x:left+b.x*unit,y:top+b.y*unit,width:b.w*unit,height:b.h*unit,rx:3*unit}));
-        const t=makeSvg('text',{x:left+(b.x+5)*unit,y:top+(b.y+14)*unit,'font-size':font*unit});t.textContent=f.name;label.append(t);if(isSelected){const hi=makeSvg('text',{x:left+(b.x+5)*unit,y:top+(b.y+31)*unit,'font-size':12*unit,lang:'hi'});hi.textContent=f.hi;label.append(hi);}const title=makeSvg('title');title.textContent=f.name+' — '+f.hi;label.append(title);labels.push(label);
+        let textY=b.y+4;for(const line of lines){textY+=line.size;const t=makeSvg('text',{x:left+(b.x+6)*unit,y:top+textY*unit,'font-size':line.size*unit,...(line.lang?{lang:line.lang}:{})});t.textContent=line.text;label.append(t);textY+=4;}
+        const title=makeSvg('title');title.textContent=f.name+' — '+f.hi;label.append(title);labels.push(label);
       }
     }
     for(const g of markers)markerLayer.append(g);for(const g of labels)markerLayer.append(g);
-    if(indiaOnly&&state.stateNames&&!unrevealed){
-      for(const st of STATES){
-        const x=(st.label[0]-left)/unit,y=(-st.label[1]-top)/unit;
-        if(x<20||x>width-20||y<25||y>height-55)continue;
-        const regional=STATE_STUDY?.profiles.has(state.region);if(regional&&st.name!==STATE_STUDY.profiles.get(state.region).name)continue;
-        const stateFont=width<650?13:15,w=st.name.length*stateFont*.61;
-        let labelBox=null,labelX=x,labelY=y;
-        for(const [dx,dy] of [[0,0],[0,-stateFont*1.5],[0,stateFont*1.5],[-stateFont*2,0],[stateFont*2,0],[0,-stateFont*3],[0,stateFont*3]]){
-          const cx=x+dx,cy=y+dy,b={x:cx-w/2,y:cy-stateFont*.8,w,h:stateFont+4};
-          if(b.x<7||b.x+b.w>width-10||b.y<12||b.y+b.h>height-44||boxes.some(box=>overlaps(b,box)))continue;
-          if((dx||dy)&&!insideCountry({lon:left+cx*unit,lat:-(top+cy*unit)},st))continue;
-          labelBox=b;labelX=cx;labelY=cy;break;
-        }
-        if(!labelBox)continue;
-        const t=makeSvg('text',{x:left+labelX*unit,y:top+labelY*unit,'font-size':stateFont*unit,'text-anchor':'middle',class:'state-name'});t.textContent=st.name;stateLabels.append(t);boxes.push(labelBox);
-      }
-    }
     $('labelStatus').textContent=unrevealed?'Answer labels hidden':state.names&&!isLocate?`${shown} / ${visible.length} visible feature names${shown<visible.length?' · Zoom in for more':''}`:'Feature names hidden';
     $('mapTooltip').hidden=true;
   }
@@ -510,7 +543,8 @@
   STATE_STUDY?.init({selectRegion:changeRegion,focusFeature(id){const f=F.get(id);if(!f||!regionFeatures().some(x=>x.id===id))return;state.topic=f.topic;state.savedOnly=false;state.search='';$('placeSearch').value='';selectFeature(id);focusSelected();}});
   readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();
   if(history.state?.efpMappingExpanded)applyExpansion(true);
-  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261106statemapfirst1',{scope:'./'}).catch(()=>{});
+  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261107atlasreview1',{scope:'./'}).catch(()=>{});
 })();
+
 
 
