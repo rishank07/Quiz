@@ -3,6 +3,7 @@
   'use strict';
   const D = window.MAPPING_DATA, $ = id => document.getElementById(id), NS = 'http://www.w3.org/2000/svg';
   const F = new Map(D.features.map(f => [f.id, f])), Q = new Map(D.questions.map(q => [q.id, q]));
+  const STUDY=window.MappingFeatureStudy;
   const SOURCE = new Map(D.sources.map(s => [s.id, s])), KEY = 'examfusion.mapping.v1';
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const blank = () => ({version:1, bookmarks:[], answers:{}, theme:'light'});
@@ -45,7 +46,7 @@
     let a=regionFeatures();
     if(state.topic!=='all') a=a.filter(f=>f.topic===state.topic);
     if(state.savedOnly) a=a.filter(f=>saved.bookmarks.includes(f.id));
-    if(includeSearch && state.search.trim()) { const s=state.search.trim().toLocaleLowerCase(); a=a.filter(f=>(f.name+' '+f.hi+' '+f.area+' '+f.areaHi+' '+f.fact+' '+f.factHi).toLocaleLowerCase().includes(s)); }
+    if(includeSearch && state.search.trim()) { const s=state.search.trim().toLocaleLowerCase(); a=a.filter(f=>(STUDY?.searchText(f)||(f.name+' '+f.hi+' '+f.area+' '+f.areaHi+' '+f.fact+' '+f.factHi)).toLocaleLowerCase().includes(s)); }
     return a;
   }
   function mistakeIDs() { return Object.keys(saved.answers).filter(id=>!saved.answers[id].correct); }
@@ -126,6 +127,16 @@
   function emptyDetail(title,text,action='All topics') {
     return `<div class="empty-state"><div class="empty-symbol">◎<\/div><h3>${esc(title)}<\/h3><p>${esc(text)}<\/p><button class="primary" data-action="expand">${esc(action)}<\/button><\/div>`;
   }
+  function featureStudy(f){
+    const r=f.study?.river,m=f.study?.mountain;
+    const row=(en,hi,v)=>v?'<div class="geography-row"><dt>'+esc(en)+'<small lang="hi">'+esc(hi)+'</small></dt><dd>'+esc(v.en)+(v.hi?'<small lang="hi">'+esc(v.hi)+'</small>':'')+'</dd></div>':'';
+    const rows=r?row('Source / headwaters','उद्गम / स्रोत',r.origin)+row('Course / regions','प्रवाह मार्ग / क्षेत्र',r.route)+row('Mouth / confluence','मुहाना / संगम',r.mouth)+row('Tributaries & landmarks','सहायक नदियाँ और प्रमुख स्थल',r.connections):m?row('Range / setting','श्रेणी / स्थिति',m.setting)+row('Surrounding geography','आस-पास का भूगोल',m.connections):row('Location','स्थिति',{en:f.area,hi:f.areaHi})+row('Geography connection','भौगोलिक संबंध',{en:f.fact,hi:f.factHi});
+    const related=STUDY?.related(f)||[];
+    const links=related.map(g=>'<button type="button" class="study-related" data-study-place="'+esc(g.id)+'">'+esc(g.name)+'<small lang="hi">'+esc(g.hi)+'</small></button>').join('');
+    const neighbours=(STUDY?.nearby(f)||[]).filter(n=>!related.some(g=>g.id===n.feature.id));
+    const nearbyHtml=neighbours.length?'<h4>Nearby mapped places <small lang="hi">आस-पास के चिह्नित स्थल</small></h4><div class="study-related-list">'+neighbours.map(n=>'<button type="button" class="study-related" data-study-place="'+esc(n.feature.id)+'">'+esc(n.feature.name)+'<small lang="hi">'+esc(n.feature.hi)+'</small><small>~'+n.distance+' km · '+n.direction+'</small></button>').join('')+'</div><p class="study-caption">Approximate distance and direction between study markers.<br><span lang="hi">चिह्नित बिंदुओं के बीच अनुमानित दूरी और दिशा।</span></p>':'';
+    return '<section class="geography-study" aria-label="Geography study details"><h3>Read the geography <small lang="hi">भूगोल समझें</small></h3><dl>'+rows+'</dl>'+(links?'<h4>Connected places <small lang="hi">जुड़े हुए स्थल</small></h4><div class="study-related-list">'+links+'</div>':'')+nearbyHtml+(r?'<button class="quiet study-course" type="button" data-action="study-course">Show source to mouth on map · उद्गम से मुहाने तक देखें</button><p class="study-caption">Source and mouth markers are approximate. Dashed lines show schematic courses; arrows indicate downstream order.<br><span lang="hi">उद्गम और मुहाने के चिह्न अनुमानित हैं। टूटी रेखाएँ सांकेतिक मार्ग और तीर प्रवाह का क्रम दिखाते हैं।</span></p>':'')+'</section>';
+  }
   function renderDetail() {
     const el=$('detailPanel');
     if(state.mode!=='learn'){renderQuestion();return;}
@@ -135,7 +146,7 @@
       el.innerHTML=c?`<div class="detail-eyebrow">COUNTRY EXPLORER<\/div><h2 class="detail-title">${esc(c.name)}<\/h2><div class="place-meta"><span class="pill">${esc(c.continent)}<\/span><\/div><p class="muted">This country is on the base map. No curated study places match the current filters.<\/p><button class="primary" data-action="expand">Show all topics<\/button>`:emptyDetail('Explore a little wider','No study places match this selection. Try another topic, clear the search or leave the saved-only view.'); return;
     }
     const pyqs=D.questions.filter(q=>q.type==='pyq'&&q.featureIds.includes(f.id));
-    el.innerHTML=`<div class="detail-eyebrow"><span>PLACE IN FOCUS<\/span><button class="bookmark" data-bookmark="${f.id}" aria-label="${saved.bookmarks.includes(f.id)?'Remove bookmark':'Bookmark place'}" aria-pressed="${saved.bookmarks.includes(f.id)}">${saved.bookmarks.includes(f.id)?'★':'☆'}<\/button><\/div><h2 class="detail-title">${esc(f.name)}<\/h2><p class="detail-hindi">${esc(f.hi)}<\/p><div class="place-meta"><span class="pill">${esc(f.area)}<\/span><span class="pill gold">${esc(topicName(f.topic))}<\/span><\/div><div class="mini-label">EXAM CONNECTION<\/div><div class="fact-block"><p>${esc(f.fact)}<\/p><p class="hindi">${esc(f.factHi)}<\/p><\/div><div class="connection-card"><div class="mini-label">MAKE IT STICK<\/div><p>First read the name. Hide the labels. Then find it on the map again.<\/p><p class="muted">पहले नाम देखो, फिर बिना नाम के स्थान पहचानो।<\/p><\/div><div class="detail-actions"><button class="primary" data-action="locate-place">Find this place →<\/button><button class="secondary" data-action="practice-place">Practise related questions<\/button>${pyqs.length?`<button class="quiet" data-action="pyq-place">${pyqs.length} related PYQ${pyqs.length>1?'s':''} ↗<\/button>`:''}<a class="quiet" href="https://earth.google.com/web/search/${encodeURIComponent(f.lat+','+f.lon)}" target="_blank" rel="noopener">Open terrain in Google Earth ↗<\/a><\/div><div class="coordinates">${Math.abs(f.lat).toFixed(2)}° ${f.lat<0?'S':'N'} · ${Math.abs(f.lon).toFixed(2)}° ${f.lon<0?'W':'E'}<br>Approximate study marker<\/div><div class="detail-source">SOURCE REFERENCE${sourceButton(f.source)}<\/div>`;
+    el.innerHTML=`<div class="detail-eyebrow"><span>PLACE IN FOCUS<\/span><button class="bookmark" data-bookmark="${f.id}" aria-label="${saved.bookmarks.includes(f.id)?'Remove bookmark':'Bookmark place'}" aria-pressed="${saved.bookmarks.includes(f.id)}">${saved.bookmarks.includes(f.id)?'★':'☆'}<\/button><\/div><h2 class="detail-title">${esc(f.name)}<\/h2><p class="detail-hindi">${esc(f.hi)}<\/p><div class="place-meta"><span class="pill">${esc(f.area)}<\/span><span class="pill gold">${esc(topicName(f.topic))}<\/span><\/div><div class="mini-label">EXAM CONNECTION<\/div><div class="fact-block"><p>${esc(f.fact)}<\/p><p class="hindi">${esc(f.factHi)}<\/p><\/div>${featureStudy(f)}<div class="connection-card"><div class="mini-label">MAKE IT STICK<\/div><p>First read the name. Hide the labels. Then find it on the map again.<\/p><p class="muted">पहले नाम देखो, फिर बिना नाम के स्थान पहचानो।<\/p><\/div><div class="detail-actions"><button class="primary" data-action="locate-place">Find this place →<\/button><button class="secondary" data-action="practice-place">Practise related questions<\/button>${pyqs.length?`<button class="quiet" data-action="pyq-place">${pyqs.length} related PYQ${pyqs.length>1?'s':''} ↗<\/button>`:''}<a class="quiet" href="https://earth.google.com/web/search/${encodeURIComponent(f.lat+','+f.lon)}" target="_blank" rel="noopener">Open terrain in Google Earth ↗<\/a><\/div><div class="coordinates">${Math.abs(f.lat).toFixed(2)}° ${f.lat<0?'S':'N'} · ${Math.abs(f.lon).toFixed(2)}° ${f.lon<0?'W':'E'}<br>Approximate study marker<\/div><div class="detail-source">SOURCE REFERENCE${sourceButton(f.source)}<\/div>`;
   }
   function makeLocate(f) {
     let pool=filteredFeatures(false).filter(x=>x.id!==f.id && Math.hypot(x.lat-f.lat,x.lon-f.lon)>.7);
@@ -293,7 +304,8 @@
     const markerLayer=$('markerLayer');markerLayer.replaceChildren();
     const stateLabels=$('stateLabelLayer');stateLabels.replaceChildren();
     const isLocate=!!(q?.type==='locate'&&state.mode!=='learn'&&!session.complete);
-    let visible=isLocate?q.candidates.map(id=>F.get(id)):unrevealed?[]:[...new Map([...a,...[...selected].map(id=>F.get(id)).filter(Boolean)].map(f=>[f.id,f])).values()];
+    const related=state.mode==='learn'&&state.names&&F.has(state.selected)?(STUDY?.related(F.get(state.selected))||[]).slice(0,5):[];
+    let visible=isLocate?q.candidates.map(id=>F.get(id)):unrevealed?[]:[...new Map([...a,...related,...[...selected].map(id=>F.get(id)).filter(Boolean)].map(f=>[f.id,f])).values()];
     visible=visible.filter(Boolean).filter(f=>f.lon>=left-unit*20&&f.lon<=left+(width+20)*unit&&-f.lat>=top-unit*20&&-f.lat<=top+(height+20)*unit);
     // Place the selected label first and reserve its box before other labels.
     visible.sort((a,b)=>Number(selected.has(b.id))-Number(selected.has(a.id))||a.lat-b.lat);
@@ -311,6 +323,22 @@
       if(priority){const b={x:Math.max(8,Math.min(width-w-10,x+12)),y:Math.max(14,Math.min(height-h-45,y-10)),w,h};boxes.push(b);return b;}
       return null;
     }
+    // Source and mouth callouts share the collision grid with feature labels.
+    if(state.mode==='learn'&&state.names&&F.has(state.selected)){
+      const focused=F.get(state.selected),r=focused.study?.river;
+      for(const point of STUDY?.contextPoints(focused)||[]){
+        const [lon,lat]=point.coord,x=(lon-left)/unit,y=(-lat-top)/unit;
+        if(x<0||x>width||y<0||y>height)continue;
+        const en=point.id==='source'?'Source':'Mouth / confluence',hi=point.id==='source'?'उद्गम':'मुहाना / संगम';
+        const raw=point.en.split(/[;,]/)[0],short=raw.length>28?raw.slice(0,27)+'…':raw;
+        const w=Math.min(width-28,Math.max(125,short.length*6.8+12));
+        const b=labelPosition(x,y,w,39);const g=makeSvg('g',{class:'study-endpoint '+point.id,role:'img','aria-label':en+': '+point.en+'; '+point.hi});
+        const title=makeSvg('title');title.textContent=en+': '+point.en+' — '+point.hi;g.append(title);
+        g.append(makeSvg('circle',{cx:lon,cy:-lat,r:5*unit}));
+        if(b){g.append(makeSvg('path',{d:'M'+lon+','+(-lat)+'L'+(left+b.x*unit)+','+(top+(b.y+20)*unit),class:'label-leader'}));g.append(makeSvg('rect',{x:left+b.x*unit,y:top+b.y*unit,width:b.w*unit,height:b.h*unit,rx:3*unit}));for(const [line,offset,size]of [[en+' · '+hi,14,10.5],[short,30,12]]){const t=makeSvg('text',{x:left+(b.x+5)*unit,y:top+(b.y+offset)*unit,'font-size':size*unit});t.textContent=line;g.append(t);}}
+        labels.push(g);
+      }
+    }
     let shown=0;
     for(const f of visible){
       const index=q?.candidates?.indexOf(f.id),isSelected=selected.has(f.id);
@@ -323,14 +351,14 @@
       else g.append(makeSvg('circle',{r:2.5*unit,class:'dot'}));
       markers.push(g);
       if(!unrevealed&&!isLocate&&state.names){
-        const p={x:(f.lon-left)/unit,y:(-f.lat-top)/unit},font=width<480?11.5:12.5;
-        const lw=Math.max(30,f.name.length*font*.58)+10,lh=20;
+        const p={x:(f.lon-left)/unit,y:(-f.lat-top)/unit},font=width<480?12.5:14;
+        const lw=Math.min(width-28,Math.max(30,f.name.length*font*.58,isSelected?f.hi.length*font*.65:0)+12),lh=isSelected?40:23;
         const b=labelPosition(p.x,p.y,lw,lh,isSelected);if(!b)continue;shown++;
         const label=makeSvg('g',{class:'feature-label'+(isSelected?' selected':''),'data-marker':f.id,style:`--feature-colour:${topicColours[f.topic]||'#6e64ae'}`});
         const anchorX=b.x>p.x?b.x:b.x+b.w,anchorY=Math.max(b.y+3,Math.min(b.y+b.h-3,p.y));
         label.append(makeSvg('path',{d:`M${f.lon},${-f.lat}L${left+anchorX*unit},${top+anchorY*unit}`,class:'label-leader'}));
         label.append(makeSvg('rect',{x:left+b.x*unit,y:top+b.y*unit,width:b.w*unit,height:b.h*unit,rx:3*unit}));
-        const t=makeSvg('text',{x:left+(b.x+5)*unit,y:top+(b.y+14)*unit,'font-size':font*unit});t.textContent=f.name;label.append(t);labels.push(label);
+        const t=makeSvg('text',{x:left+(b.x+5)*unit,y:top+(b.y+14)*unit,'font-size':font*unit});t.textContent=f.name;label.append(t);if(isSelected){const hi=makeSvg('text',{x:left+(b.x+5)*unit,y:top+(b.y+31)*unit,'font-size':12*unit,lang:'hi'});hi.textContent=f.hi;label.append(hi);}const title=makeSvg('title');title.textContent=f.name+' — '+f.hi;label.append(title);labels.push(label);
       }
     }
     for(const g of markers)markerLayer.append(g);for(const g of labels)markerLayer.append(g);
@@ -355,8 +383,8 @@
     $('mapTooltip').hidden=true;
   }
 
-  function selectFeature(id,push=true){if(!F.has(id))return;state.selected=id;state.mode='learn';session=null;refresh(push);}
-  function focusSelected(){const f=F.get(state.selected);if(!f)return;setView({x:f.lon-4,y:-f.lat-4,w:8,h:8});}
+  function selectFeature(id,push=true){const f=F.get(id);if(!f)return;if(!regionFeatures().some(g=>g.id===id)){state.region=f.region;state.country='';state.continent='';}if(!filteredFeatures().some(g=>g.id===id)){state.topic=f.topic;state.search='';state.savedOnly=false;$('placeSearch').value='';}state.selected=id;state.mode='learn';session=null;refresh(push);}
+  function focusSelected(){const f=F.get(state.selected);if(!f)return;const r=f.study?.river;if(r){const paths=D.rivers.filter(g=>g.id===f.id).flatMap(g=>g.geometry.type==='LineString'?g.geometry.coordinates:g.geometry.coordinates.flat());boundsView([r.start,r.end,...paths,[f.lon,f.lat]],.18);}else setView({x:f.lon-4,y:-f.lat-4,w:8,h:8});}
   let expanded=false,priorOverflow='',closingExpansion=false,afterExpansion=null;
   function applyExpansion(on){
     if(on===expanded)return;
@@ -411,10 +439,12 @@
     if(b.dataset.topic){state.topic=b.dataset.topic;state.savedOnly=false;state.search='';$('placeSearch').value='';if(state.mode!=='learn')beginSession(state.mode);else refresh(true);}
     if(b.dataset.mode){state.savedOnly=false;if(b.dataset.mode==='learn'){state.mode='learn';session=null;refresh(true);}else beginSession(b.dataset.mode);}
     if(b.dataset.place)selectFeature(b.dataset.place);
+    if(b.dataset.studyPlace){const f=F.get(b.dataset.studyPlace);if(f){state.topic='all';state.search='';state.savedOnly=false;$('placeSearch').value='';selectFeature(f.id);focusSelected();$('mapWrap').scrollIntoView({behavior:'smooth',block:'center'});}}
     if(b.dataset.bookmark){const id=b.dataset.bookmark;saved.bookmarks=saved.bookmarks.includes(id)?saved.bookmarks.filter(x=>x!==id):[...saved.bookmarks,id];persist();refresh();}
     if(b.dataset.answer!==undefined)answer(Number(b.dataset.answer));
     if(b.dataset.close){$(b.dataset.close).close();}
     const action=b.dataset.action;if(!action)return;
+    if(action==='study-course'){focusSelected();$('mapWrap').scrollIntoView({behavior:'smooth',block:'center'});}
     if(action==='locate-place')beginSession('locate',state.selected);
     if(action==='practice-place')beginSession('practice',state.selected);
     if(action==='pyq-place')beginSession('pyq',state.selected);
@@ -477,5 +507,6 @@
   STATE_STUDY?.init({selectRegion:changeRegion,focusFeature(id){const f=F.get(id);if(!f||!regionFeatures().some(x=>x.id===id))return;state.topic=f.topic;state.savedOnly=false;state.search='';$('placeSearch').value='';selectFeature(id);focusSelected();}});
   readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();
   if(history.state?.efpMappingExpanded)applyExpansion(true);
-  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261106mapnav2',{scope:'./'}).catch(()=>{});
+  if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol))navigator.serviceWorker.register('sw.js?v=20261106geography1',{scope:'./'}).catch(()=>{});
 })();
+
