@@ -1,7 +1,9 @@
 (function(){
 "use strict";
 var PAGE_FILE=decodeURIComponent((location.pathname.split("/").pop()||"").toLowerCase());
+if(PAGE_FILE==="computer_complete_practice")PAGE_FILE+=".html";
 var CONFIGS={
+ "computer_complete_practice.html":{slug:"computer",label:"Computer"},
  "history_complete_practice.html":{slug:"history",label:"History"},
  "polity_complete_practice.html":{slug:"polity",label:"Polity"},
  "science_complete_practice.html":{slug:"science",label:"Science"},
@@ -105,8 +107,8 @@ clearLegacyPersistedAnswers();
 function attemptStorageKey(){
  return ATTEMPT_PREFIX+encodeURIComponent(CFG.slug)+":"+encodeURIComponent(String(state.subject||""))+":"+encodeURIComponent(String(state.chapterName||""));
 }
-function attemptSignature(){
- return (state.quizData||[]).map(function(sec){
+function attemptSignature(sections){
+ return (sections||state.quizData||[]).map(function(sec){
   var qs=sec.questions||[];
   var first=qs[0]&&qs[0].q&&qs[0].q.en||"",last=qs[qs.length-1]&&qs[qs.length-1].q&&qs[qs.length-1].q.en||"";
   return qs.length+":"+first.slice(0,72)+":"+last.slice(0,72);
@@ -355,7 +357,7 @@ var opFullSearchClient=null;
 function getOpFullSearchClient(){
  if(opFullSearchClient)return opFullSearchClient;
  if(typeof efCreateSearchWorker!=="function")return null;
- var specialIndex=CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20260912ecology1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261102biologyexp1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
+ var specialIndex=CFG.slug==="computer"?{file:"../search-snippets-computer-original-practice.js?v=20261109computersearch1",global:"EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20260912ecology1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261102biologyexp1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
  opFullSearchClient=efCreateSearchWorker({
   workerUrl:new URL("../search-worker.js?v=20261007searchaudit1",document.baseURI).href,
   logicUrl:new URL("../search-logic.js?v=20261007searchaudit1",document.baseURI).href,
@@ -500,5 +502,38 @@ window.EFP_HTML_SEARCH_PAGE={
   state.currentSection=record.section;syncUrl("quiz",false);render();saveAppAttempt();
  }
 };
+function migrateComputerProgress(){
+ if(CFG.slug!=="computer")return;
+ try{
+  var migrationKey="efp_computer_shared_progress_migrated_v1";
+  if(localStorage.getItem(migrationKey))return;
+  var bookmarks=getBookmarks(),visited=getVisited(),changed=false;
+  var previousBookmarks=safeParse(localStorage.getItem("efp_computer_complete_bookmarks_v1"),{});
+  var lastChapter=localStorage.getItem("efp_computer_complete_last_chapter_v1");
+  Object.entries(MASTER.Computer).forEach(function(entry){
+   var chapter=entry[0],sections=entry[1],code=String(parseInt(chapter,10)).padStart(2,"0");
+   var previous=safeParse(localStorage.getItem("efp_computer_ch"+code+"_quiz_progress_v1"),null);
+   var attemptKey=ATTEMPT_PREFIX+"computer:Computer:"+enc(chapter);
+   if(previous&&previous.version===1&&!localStorage.getItem(attemptKey)){
+    localStorage.setItem(attemptKey,JSON.stringify({
+     path:location.pathname,subject:"Computer",chapter:chapter,signature:attemptSignature(sections),
+     answers:previous.answers,orders:previous.orders,section:previous.section,ts:Date.now()
+    }));
+   }
+   if(previous||lastChapter===JSON.stringify(chapter))visited.push(token("Computer",chapter));
+   sections.forEach(function(section,si){
+    section.questions.forEach(function(q,qi){
+     if(!previousBookmarks[code+":"+q.num])return;
+     bookmarks[pagePrefix()+"Computer|"+enc(chapter)+"|"+si+"|"+qi]=true;
+     changed=true;
+    });
+   });
+  });
+  if(visited.length)localStorage.setItem(PROGRESS_KEY,JSON.stringify(unique(visited)));
+  if(changed)localStorage.setItem(BOOKMARK_KEY,JSON.stringify(bookmarks));
+  localStorage.setItem(migrationKey,"1");
+ }catch(e){}
+}
+migrateComputerProgress();
 applyDeepLink();restoreAppAttempt(true);syncUrl(state.screen||"home",false);render();
 })();
