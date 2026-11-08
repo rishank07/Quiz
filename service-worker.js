@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261109computersearch1";
+const CACHE_VERSION = "efp-pwa-20261109computerrefresh1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261031bbmobileframe1";
@@ -450,7 +450,11 @@ async function networkFirst(event) {
       { cache: "no-cache" },
       {
         key,
-        preferCache: navigation && !isExplicitReload(request),
+        // Computer chapter labels should update on ordinary navigation.
+        preferCache:
+          navigation &&
+          !isExplicitReload(request) &&
+          !/^\/Original%20Practice\/Computer_Complete_Practice(?:\.html)?$/.test(url.pathname),
         revalidate: true,
       },
     );
