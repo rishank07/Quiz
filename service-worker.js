@@ -3,16 +3,18 @@ const CACHE_VERSION = "efp-pwa-20261109computersearch1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261031bbmobileframe1";
-const OWNER_DEBUG_SCRIPT = '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
-const APP_SESSION_SCRIPT = '<script defer id="efp-app-session-script" src="/app-session.js?v=20261027bbfinish1"></script>';
-const CA_TOP_SCRIPT = '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
+const OWNER_DEBUG_SCRIPT =
+  '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
+const APP_SESSION_SCRIPT =
+  '<script defer id="efp-app-session-script" src="/app-session.js?v=20261027bbfinish1"></script>';
+const CA_TOP_SCRIPT =
+  '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
 const OWNER_STATE_REQUEST = "/__efp_owner_debug_state__";
 let ownerDebugState = null;
 
-
-
-const DESKTOP_SEARCH_ENTRY_BOOTSTRAP = '<script id="efp-desktop-search-entry-bootstrap">(function(){var ua=String(navigator.userAgent||"");var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);if(mobile)return;if(window.EFP_SEARCH_CONTEXT||document.getElementById("efp-shared-search-context"))return;var s=document.createElement("script");s.id="efp-shared-search-context";s.src="/search-context.js?v=20261007searchaudit1";s.defer=true;document.head.appendChild(s)})();</script>';
+const DESKTOP_SEARCH_ENTRY_BOOTSTRAP =
+  '<script id="efp-desktop-search-entry-bootstrap">(function(){var ua=String(navigator.userAgent||"");var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);if(mobile)return;if(window.EFP_SEARCH_CONTEXT||document.getElementById("efp-shared-search-context"))return;var s=document.createElement("script");s.id="efp-shared-search-context";s.src="/search-context.js?v=20261007searchaudit1";s.defer=true;document.head.appendChild(s)})();</script>';
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
@@ -88,20 +90,27 @@ const APP_SHELL = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_VERSION)
+    caches
+      .open(CACHE_VERSION)
       .then((cache) => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
+      .then(() => self.skipWaiting()),
   );
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(
-        keys.filter((key) => key.startsWith("efp-pwa-") && key !== CACHE_VERSION)
-          .map((key) => caches.delete(key))
-      ))
-      .then(() => self.clients.claim())
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter(
+              (key) => key.startsWith("efp-pwa-") && key !== CACHE_VERSION,
+            )
+            .map((key) => caches.delete(key)),
+        ),
+      )
+      .then(() => self.clients.claim()),
   );
 });
 
@@ -121,9 +130,12 @@ async function setOwnerDebugState(enabled) {
   ownerDebugState = !!enabled;
   const cache = await caches.open(OWNER_STATE_CACHE);
   if (enabled) {
-    await cache.put(OWNER_STATE_REQUEST, new Response("on", {
-      headers: { "content-type": "text/plain" }
-    }));
+    await cache.put(
+      OWNER_STATE_REQUEST,
+      new Response("on", {
+        headers: { "content-type": "text/plain" },
+      }),
+    );
   } else {
     await cache.delete(OWNER_STATE_REQUEST);
   }
@@ -135,11 +147,13 @@ self.addEventListener("message", (event) => {
   event.waitUntil(
     setOwnerDebugState(!!data.enabled)
       .then(() => {
-        if (event.ports && event.ports[0]) event.ports[0].postMessage({ ok: true });
+        if (event.ports && event.ports[0])
+          event.ports[0].postMessage({ ok: true });
       })
       .catch(() => {
-        if (event.ports && event.ports[0]) event.ports[0].postMessage({ ok: false });
-      })
+        if (event.ports && event.ports[0])
+          event.ports[0].postMessage({ ok: false });
+      }),
   );
 });
 
@@ -147,7 +161,10 @@ async function matchCachedRequest(request) {
   // App-shell files are pre-cached without cache-busting query strings while
   // pages commonly request them as file.js?v=... . ignoreSearch makes the
   // pre-cached shell usable on the very first offline launch after install.
-  return (await caches.match(request)) || caches.match(request, { ignoreSearch: true });
+  return (
+    (await caches.match(request)) ||
+    caches.match(request, { ignoreSearch: true })
+  );
 }
 
 function isHomeUrl(url) {
@@ -176,7 +193,8 @@ function rebuiltHtmlResponse(response, html) {
 // of this site predates that viewport key, so normalize every HTML navigation
 // centrally instead of editing hundreds of chapter files one by one.
 function ensureEdgeToEdgeViewport(html) {
-  const viewportPattern = /<meta\b[^>]*\bname\s*=\s*(?:"viewport"|'viewport'|viewport)[^>]*>/i;
+  const viewportPattern =
+    /<meta\b[^>]*\bname\s*=\s*(?:"viewport"|'viewport'|viewport)[^>]*>/i;
   const match = html.match(viewportPattern);
 
   if (!match) {
@@ -184,7 +202,8 @@ function ensureEdgeToEdgeViewport(html) {
     if (!headMatch) return html;
     return html.replace(
       headMatch[0],
-      headMatch[0] + '\n  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
+      headMatch[0] +
+        '\n  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
     );
   }
 
@@ -195,14 +214,14 @@ function ensureEdgeToEdgeViewport(html) {
   if (!contentMatch) {
     const nextTag = tag.replace(
       /\s*\/?>$/,
-      ' content="width=device-width, initial-scale=1, viewport-fit=cover">'
+      ' content="width=device-width, initial-scale=1, viewport-fit=cover">',
     );
     return html.replace(tag, nextTag);
   }
 
   const nextTag = tag.replace(contentPattern, (whole, quote, content) => {
     let next = content
-      .replace(/(^|,)\s*viewport-fit\s*=\s*[^,\s]+/ig, "$1")
+      .replace(/(^|,)\s*viewport-fit\s*=\s*[^,\s]+/gi, "$1")
       .replace(/^\s*,\s*|\s*,\s*$/g, "")
       .replace(/,\s*,+/g, ",")
       .trim();
@@ -216,69 +235,121 @@ function ensureEdgeToEdgeViewport(html) {
 }
 
 async function injectEdgeToEdge(response) {
-  if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
+  if (
+    !response ||
+    !response.ok ||
+    (response.type !== "basic" && response.type !== "default")
+  )
+    return response;
   const contentType = response.headers.get("content-type") || "";
   if (!contentType.toLowerCase().includes("text/html")) return response;
 
   const html = await response.text();
   let updated = ensureEdgeToEdgeViewport(html);
-  if (!/<script\b[^>]*\bsrc\s*=\s*["'][^"']*\bblack-mode\.js(?:[?"'])/i.test(updated)) {
-    updated = updated.replace(/<head(?:\s[^>]*)?>/i, (head) => head + '\n  <script defer data-efp-scroll-only src="/black-mode.js?v=20261004scrollcanvas1"></script>');
+  if (
+    !/<script\b[^>]*\bsrc\s*=\s*["'][^"']*\bblack-mode\.js(?:[?"'])/i.test(
+      updated,
+    )
+  ) {
+    updated = updated.replace(
+      /<head(?:\s[^>]*)?>/i,
+      (head) =>
+        head +
+        '\n  <script defer data-efp-scroll-only src="/black-mode.js?v=20261004scrollcanvas1"></script>',
+    );
   }
   // Some quiz pages do not load the shared Home navigation script. Install
   // session tracking for every app navigation, without adding it twice.
   if (!/id=["']efp-app-session-script["']/i.test(updated)) {
-    updated = updated.replace(/<head(?:\s[^>]*)?>/i, (head) => head + "\n  " + APP_SESSION_SCRIPT);
+    updated = updated.replace(
+      /<head(?:\s[^>]*)?>/i,
+      (head) => head + "\n  " + APP_SESSION_SCRIPT,
+    );
   }
   return rebuiltHtmlResponse(response, updated);
 }
 
 async function injectCurrentAffairsMoveTop(response, url) {
-  if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
+  if (
+    !response ||
+    !response.ok ||
+    (response.type !== "basic" && response.type !== "default")
+  )
+    return response;
   const contentType = response.headers.get("content-type") || "";
   if (!contentType.toLowerCase().includes("text/html")) return response;
 
   let pathname = "";
-  try { pathname = decodeURIComponent(url.pathname || ""); } catch (_) { pathname = url.pathname || ""; }
+  try {
+    pathname = decodeURIComponent(url.pathname || "");
+  } catch (_) {
+    pathname = url.pathname || "";
+  }
   if (!pathname.startsWith("/Current Affairs/")) return response;
 
   let html = await response.text();
-  html = html.replace(/<script\b[^>]*\bsrc=["'][^"']*\/ca-move-top(?:-v3)?\.js[^"']*["'][^>]*><\/script>\s*/ig, "");
+  html = html.replace(
+    /<script\b[^>]*\bsrc=["'][^"']*\/ca-move-top(?:-v3)?\.js[^"']*["'][^>]*><\/script>\s*/gi,
+    "",
+  );
   if (/<\/head>/i.test(html)) {
     html = html.replace(/<\/head>/i, "  " + CA_TOP_SCRIPT + "\n</head>");
   } else {
     const headMatch = html.match(/<head(?:\s[^>]*)?>/i);
-    if (headMatch) html = html.replace(headMatch[0], headMatch[0] + "\n  " + CA_TOP_SCRIPT);
+    if (headMatch)
+      html = html.replace(headMatch[0], headMatch[0] + "\n  " + CA_TOP_SCRIPT);
   }
   return rebuiltHtmlResponse(response, html);
 }
 
 async function injectDesktopSearchEntry(response, url) {
-  if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
+  if (
+    !response ||
+    !response.ok ||
+    (response.type !== "basic" && response.type !== "default")
+  )
+    return response;
   const contentType = response.headers.get("content-type") || "";
   if (!contentType.toLowerCase().includes("text/html")) return response;
-  if (!url.searchParams.has("efSearchQuery") && !url.searchParams.has("efSearchReturn")) return response;
+  if (
+    !url.searchParams.has("efSearchQuery") &&
+    !url.searchParams.has("efSearchReturn")
+  )
+    return response;
 
   let html = await response.text();
   if (!html.includes("efp-desktop-search-entry-bootstrap")) {
     const headMatch = html.match(/<head(?:\s[^>]*)?>/i);
-    if (headMatch) html = html.replace(headMatch[0], headMatch[0] + "\n  " + DESKTOP_SEARCH_ENTRY_BOOTSTRAP);
+    if (headMatch)
+      html = html.replace(
+        headMatch[0],
+        headMatch[0] + "\n  " + DESKTOP_SEARCH_ENTRY_BOOTSTRAP,
+      );
   }
   return rebuiltHtmlResponse(response, html);
 }
 
 async function injectOwnerDebug(response) {
-  if (!response || !response.ok || (response.type !== "basic" && response.type !== "default")) return response;
+  if (
+    !response ||
+    !response.ok ||
+    (response.type !== "basic" && response.type !== "default")
+  )
+    return response;
   const contentType = response.headers.get("content-type") || "";
   if (!contentType.toLowerCase().includes("text/html")) return response;
 
   const html = await response.text();
-  if (html.includes("owner-debug.js")) return rebuiltHtmlResponse(response, html);
+  if (html.includes("owner-debug.js"))
+    return rebuiltHtmlResponse(response, html);
 
   const headMatch = html.match(/<head(?:\s[^>]*)?>/i);
   if (!headMatch) return rebuiltHtmlResponse(response, html);
 
-  const rewritten = html.replace(headMatch[0], headMatch[0] + "\n  " + OWNER_DEBUG_SCRIPT);
+  const rewritten = html.replace(
+    headMatch[0],
+    headMatch[0] + "\n  " + OWNER_DEBUG_SCRIPT,
+  );
   return rebuiltHtmlResponse(response, rewritten);
 }
 
@@ -295,31 +366,54 @@ async function prepareNavigationResponse(response, injectDebug, url) {
 // fallback. Versioned core assets need no network trip on each page opening.
 async function cachedNetworkFirst(event, request, cache, options, policy = {}) {
   const key = policy.key || request;
-  const cached = await cache.match(key) || (!policy.exact && await cache.match(key, { ignoreSearch: true }));
+  const cached =
+    (await cache.match(key)) ||
+    (!policy.exact && (await cache.match(key, { ignoreSearch: true })));
   if (cached && policy.preferCache && !policy.revalidate) return cached;
-  const fresh = fetch(request, options).then((response) => {
-    if (response && response.ok && (response.type === "basic" || response.type === "cors" || response.type === "default")) {
-      event.waitUntil(cache.put(key, response.clone()).catch(() => {}));
-    }
-    const temporaryFailure = response && (response.status >= 500 || response.status === 408 || response.status === 429);
-    return cached && temporaryFailure ? cached : response;
-  }).catch((error) => {
-    if (cached) return cached;
-    throw error;
-  });
+  const fresh = fetch(request, options)
+    .then((response) => {
+      if (
+        response &&
+        response.ok &&
+        (response.type === "basic" ||
+          response.type === "cors" ||
+          response.type === "default")
+      ) {
+        event.waitUntil(cache.put(key, response.clone()).catch(() => {}));
+      }
+      const temporaryFailure =
+        response &&
+        (response.status >= 500 ||
+          response.status === 408 ||
+          response.status === 429);
+      return cached && temporaryFailure ? cached : response;
+    })
+    .catch((error) => {
+      if (cached) return cached;
+      throw error;
+    });
   if (!cached) return fresh;
   event.waitUntil(fresh.catch(() => {}));
   if (policy.preferCache) return cached;
   let timer;
   try {
-    return await Promise.race([fresh, new Promise(resolve => {
-      timer = setTimeout(() => resolve(cached), 2500);
-    })]);
-  } finally { clearTimeout(timer); }
+    return await Promise.race([
+      fresh,
+      new Promise((resolve) => {
+        timer = setTimeout(() => resolve(cached), 2500);
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function isExplicitReload(request) {
-  return request.cache === "reload" || request.cache === "no-cache" || request.cache === "no-store";
+  return (
+    request.cache === "reload" ||
+    request.cache === "no-cache" ||
+    request.cache === "no-store"
+  );
 }
 
 function navigationRequest(request) {
@@ -327,9 +421,15 @@ function navigationRequest(request) {
   if (!PAGES_ROUTES || !url.pathname.endsWith(".html")) return request;
   // Pages redirects every .html request. Fetch its final static route directly;
   // the existing page bootstrap retains the public .html URL and search state.
-  url.pathname = url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
-  return new Request(url.href, { headers: request.headers, credentials: request.credentials,
-    referrer: request.referrer, referrerPolicy: request.referrerPolicy });
+  url.pathname = url.pathname
+    .replace(/\/index\.html$/, "/")
+    .replace(/\.html$/, "");
+  return new Request(url.href, {
+    headers: request.headers,
+    credentials: request.credentials,
+    referrer: request.referrer,
+    referrerPolicy: request.referrerPolicy,
+  });
 }
 
 async function networkFirst(event) {
@@ -338,13 +438,22 @@ async function networkFirst(event) {
   const url = new URL(request.url);
   const injectDebug = await shouldInjectOwnerDebug(url);
   try {
-    const navigation = request.mode === "navigate" || request.destination === "document";
+    const navigation =
+      request.mode === "navigate" || request.destination === "document";
     // Query parameters select client-side search/quiz state, not different HTML.
     // Keep one raw document so a new search link can reuse an already read topic.
     const key = navigation ? new Request(url.origin + url.pathname) : request;
-    const response = await cachedNetworkFirst(event, navigationRequest(request), cache, { cache: "no-cache" }, {
-      key, preferCache: navigation && !isExplicitReload(request), revalidate: true
-    });
+    const response = await cachedNetworkFirst(
+      event,
+      navigationRequest(request),
+      cache,
+      { cache: "no-cache" },
+      {
+        key,
+        preferCache: navigation && !isExplicitReload(request),
+        revalidate: true,
+      },
+    );
     const served = await prepareNavigationResponse(response, injectDebug, url);
     return served;
   } catch (error) {
@@ -362,7 +471,10 @@ async function staleWhileRevalidate(event, allowOpaque) {
   const cached = await matchCachedRequest(request);
   const fresh = fetch(request)
     .then((response) => {
-      const cacheable = (response.ok && (response.type === "basic" || response.type === "cors")) || (allowOpaque && response.type === "opaque");
+      const cacheable =
+        (response.ok &&
+          (response.type === "basic" || response.type === "cors")) ||
+        (allowOpaque && response.type === "opaque");
       if (cacheable) cache.put(request, response.clone());
       return response;
     })
@@ -388,17 +500,34 @@ async function staleWhileRevalidate(event, allowOpaque) {
 // for offline readers without clearing quiz progress or bookmarks.
 async function editorialLinksNetworkFirst(event) {
   const request = event.request;
-  const key = new Request(new URL("/Editorial/links.json", self.location.origin));
+  const key = new Request(
+    new URL("/Editorial/links.json", self.location.origin),
+  );
   const cache = await caches.open(CACHE_VERSION);
-  const cached = await cache.match(key) || await caches.match(key, { ignoreSearch: true });
+  const cached =
+    (await cache.match(key)) ||
+    (await caches.match(key, { ignoreSearch: true }));
   try {
     const response = await fetch(request, { cache: "no-store" });
-    if (response && response.ok && (response.type === "basic" || response.type === "cors" || response.type === "default")) {
+    if (
+      response &&
+      response.ok &&
+      (response.type === "basic" ||
+        response.type === "cors" ||
+        response.type === "default")
+    ) {
       event.waitUntil(cache.put(key, response.clone()).catch(() => {}));
       return response;
     }
     // Avoid replacing a valid editorial list with a transient 5xx/429.
-    if (cached && response && (response.status >= 500 || response.status === 408 || response.status === 429)) return cached;
+    if (
+      cached &&
+      response &&
+      (response.status >= 500 ||
+        response.status === 408 ||
+        response.status === 429)
+    )
+      return cached;
     return response;
   } catch (_) {
     return cached || new Response("{}", { status: 503, statusText: "Offline" });
@@ -413,13 +542,23 @@ async function immutablePdfPart(event) {
   if (cached) return cached;
   try {
     const response = await fetch(request);
-    if (response.status === 200 && (response.type === "basic" || response.type === "cors" || response.type === "default")) {
+    if (
+      response.status === 200 &&
+      (response.type === "basic" ||
+        response.type === "cors" ||
+        response.type === "default")
+    ) {
       const copy = response.clone();
-      event.waitUntil(caches.open(CACHE_VERSION).then(cache => cache.put(request, copy)).catch(() => {}));
+      event.waitUntil(
+        caches
+          .open(CACHE_VERSION)
+          .then((cache) => cache.put(request, copy))
+          .catch(() => {}),
+      );
     }
     return response;
   } catch (_) {
-    return new Response("", {status:503,statusText:"Offline"});
+    return new Response("", { status: 503, statusText: "Offline" });
   }
 }
 
@@ -427,28 +566,40 @@ async function immutablePdfPart(event) {
 // version strings used by older section shells. Content is lossless; workers
 // receive the original JavaScript bytes. Unsupported browsers keep plain data.
 async function readSearchIndex(response) {
-  if (!response || response.headers.get("x-efp-search-compression") !== "gzip") return response;
+  if (!response || response.headers.get("x-efp-search-compression") !== "gzip")
+    return response;
   if (typeof DecompressionStream !== "function") return null;
   const headers = new Headers(response.headers);
-  headers.delete("x-efp-search-compression");headers.delete("content-length");
-  return new Response(response.body.pipeThrough(new DecompressionStream("gzip")), {status: 200, headers});
+  headers.delete("x-efp-search-compression");
+  headers.delete("content-length");
+  return new Response(
+    response.body.pipeThrough(new DecompressionStream("gzip")),
+    { status: 200, headers },
+  );
 }
 async function storeSearchIndex(cache, key, response, revision) {
   const headers = new Headers(response.headers);
-  headers.delete("content-length");headers.delete("content-encoding");
+  headers.delete("content-length");
+  headers.delete("content-encoding");
   headers.set("x-efp-search-revision", revision);
   headers.set("x-efp-search-cached-at", String(Date.now()));
   let body = response.body;
-  if (typeof CompressionStream === "function" && typeof DecompressionStream === "function") {
+  if (
+    typeof CompressionStream === "function" &&
+    typeof DecompressionStream === "function"
+  ) {
     body = body.pipeThrough(new CompressionStream("gzip"));
     headers.set("x-efp-search-compression", "gzip");
   }
-  await cache.put(key, new Response(body, {status:200,headers}));
+  await cache.put(key, new Response(body, { status: 200, headers }));
 }
 async function searchIndexAsset(event) {
-  const request = event.request, url = new URL(request.url);
-  const key = new Request(url.origin + url.pathname), cache = await caches.open(CACHE_VERSION);
-  const cached = await cache.match(key), revision = url.search;
+  const request = event.request,
+    url = new URL(request.url);
+  const key = new Request(url.origin + url.pathname),
+    cache = await caches.open(CACHE_VERSION);
+  const cached = await cache.match(key),
+    revision = url.search;
   // Index revisions and deployment caches already identify content changes.
   // An unchanged large index must not block search on a new download every
   // five minutes. Changed revisions still refresh before being served.
@@ -457,15 +608,27 @@ async function searchIndexAsset(event) {
     if (served) return served;
   }
   try {
-    const response = await fetch(request, {cache:"no-cache"});
-    if (response.ok && (response.type === "basic" || response.type === "cors" || response.type === "default")) {
-      event.waitUntil(storeSearchIndex(cache,key,response.clone(),revision).catch(() => {}));
+    const response = await fetch(request, { cache: "no-cache" });
+    if (
+      response.ok &&
+      (response.type === "basic" ||
+        response.type === "cors" ||
+        response.type === "default")
+    ) {
+      event.waitUntil(
+        storeSearchIndex(cache, key, response.clone(), revision).catch(
+          () => {},
+        ),
+      );
       return response;
     }
     const fallback = await readSearchIndex(cached);
     return fallback || response;
   } catch (_) {
-    return (await readSearchIndex(cached)) || new Response("", {status:503,statusText:"Offline"});
+    return (
+      (await readSearchIndex(cached)) ||
+      new Response("", { status: 503, statusText: "Offline" })
+    );
   }
 }
 
@@ -473,26 +636,51 @@ async function freshCoreAsset(event, request = event.request) {
   // Older installed documents still request old ?v= URLs. Use the shell's
   // current revision online and for fallback instead of mixing navigation code.
   const url = new URL(request.url);
-  const current = APP_SHELL.find(asset => new URL(asset, self.location.origin).pathname === url.pathname);
-  if (current) request = new Request(new URL(current, self.location.origin).href, request);
+  const current = APP_SHELL.find(
+    (asset) => new URL(asset, self.location.origin).pathname === url.pathname,
+  );
+  if (current)
+    request = new Request(new URL(current, self.location.origin).href, request);
   const cache = await caches.open(CACHE_VERSION);
   try {
-    return await cachedNetworkFirst(event, request, cache, { cache: "no-cache" }, {
-      exact: true, preferCache: !isExplicitReload(event.request)
-    });
+    return await cachedNetworkFirst(
+      event,
+      request,
+      cache,
+      { cache: "no-cache" },
+      {
+        exact: true,
+        preferCache: !isExplicitReload(event.request),
+      },
+    );
   } catch (_) {
-    const cached = await caches.match(request) || await caches.match(request, { ignoreSearch: true });
+    const cached =
+      (await caches.match(request)) ||
+      (await caches.match(request, { ignoreSearch: true }));
     return cached || new Response("", { status: 503, statusText: "Offline" });
   }
 }
 
 async function stripLegacySearchWrapper(response) {
-  if (!response || !response.ok || (response.type !== "basic" && response.type !== "cors" && response.type !== "default")) return response;
+  if (
+    !response ||
+    !response.ok ||
+    (response.type !== "basic" &&
+      response.type !== "cors" &&
+      response.type !== "default")
+  )
+    return response;
   const text = await response.text();
   const headers = new Headers(response.headers);
-  headers.delete("content-length");headers.delete("content-encoding");headers.delete("etag");
+  headers.delete("content-length");
+  headers.delete("content-encoding");
+  headers.delete("etag");
   const body = text.split("\n/* efp-desktop-section-search-compat-v1 */")[0];
-  return new Response(body, {status:response.status,statusText:response.statusText,headers});
+  return new Response(body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
 }
 
 async function freshSearchLogicAsset(event) {
@@ -504,12 +692,18 @@ async function freshCurrentAffairsBookmarkAsset() {
   const cache = await caches.open(CACHE_VERSION);
   try {
     const response = await fetch(currentAsset, { cache: "no-store" });
-    if (response && response.ok && (response.type === "basic" || response.type === "cors")) {
+    if (
+      response &&
+      response.ok &&
+      (response.type === "basic" || response.type === "cors")
+    ) {
       await cache.put(currentAsset, response.clone());
     }
     return response;
   } catch (_) {
-    const cached = await caches.match(currentAsset) || await caches.match("/ca-question-deeplink.js");
+    const cached =
+      (await caches.match(currentAsset)) ||
+      (await caches.match("/ca-question-deeplink.js"));
     return cached || new Response("", { status: 503, statusText: "Offline" });
   }
 }
@@ -519,12 +713,18 @@ async function freshRapidPracticeAsset() {
   const cache = await caches.open(CACHE_VERSION);
   try {
     const response = await fetch(currentAsset, { cache: "no-store" });
-    if (response && response.ok && (response.type === "basic" || response.type === "cors")) {
+    if (
+      response &&
+      response.ok &&
+      (response.type === "basic" || response.type === "cors")
+    ) {
       await cache.put(currentAsset, response.clone());
     }
     return response;
   } catch (_) {
-    const cached = await caches.match(currentAsset) || await caches.match("/rapid-practice-deeplink.js");
+    const cached =
+      (await caches.match(currentAsset)) ||
+      (await caches.match("/rapid-practice-deeplink.js"));
     return cached || new Response("", { status: 503, statusText: "Offline" });
   }
 }
@@ -548,11 +748,12 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) {
     // Cache the PDF.js runtime after its first successful use so the installed
     // PWA does not need to redownload the renderer every time.
-    if (url.origin === "https://cdn.jsdelivr.net" && (
-        url.pathname.includes("/pdfjs-dist@3.11.174/") ||
+    if (
+      url.origin === "https://cdn.jsdelivr.net" &&
+      (url.pathname.includes("/pdfjs-dist@3.11.174/") ||
         url.pathname.includes("/chess.js@1.4.0/") ||
-        url.pathname.includes("/cm-chessboard@8.14.0/")
-      )) {
+        url.pathname.includes("/cm-chessboard@8.14.0/"))
+    ) {
       event.respondWith(staleWhileRevalidate(event, true));
     }
     return;
@@ -570,7 +771,10 @@ self.addEventListener("fetch", (event) => {
 
   // Rapid Fire reads the English HTML as data, outside document navigation.
   // Revalidate this shared source before returning a cached copy as well.
-  if (url.pathname === "/Original%20Practice/English_Grammar_Complete_Practice.html") {
+  if (
+    url.pathname ===
+    "/Original%20Practice/English_Grammar_Complete_Practice.html"
+  ) {
     event.respondWith(networkFirst(event));
     return;
   }
@@ -588,8 +792,10 @@ self.addEventListener("fetch", (event) => {
 
   // Bihar's section index must refresh by revision too; serving an old alias
   // here can show facts from before a content update on the first search.
-  if (/\/(?:search-snippets-[^/]+|search-index-main)\.js$/.test(url.pathname) ||
-      url.pathname === "/Bihar%20Special/Topic%20Names/search-index.js") {
+  if (
+    /\/(?:search-snippets-[^/]+|search-index-main)\.js$/.test(url.pathname) ||
+    url.pathname === "/Bihar%20Special/Topic%20Names/search-index.js"
+  ) {
     event.respondWith(searchIndexAsset(event));
     return;
   }
@@ -603,54 +809,63 @@ self.addEventListener("fetch", (event) => {
 
   // Old page/session loaders can still request a previous scorecard version.
   // Fetch the current revision even when the document has an older asset URL.
-  if (url.pathname === "/quiz-unattempted.js" || url.pathname === "/quiz-unattempted.css") {
+  if (
+    url.pathname === "/quiz-unattempted.js" ||
+    url.pathname === "/quiz-unattempted.css"
+  ) {
     const current = new URL(request.url);
     current.searchParams.set("v", QUIZ_SCORE_REVISION);
-    event.respondWith(freshCoreAsset(event, new Request(current.href, request)));
+    event.respondWith(
+      freshCoreAsset(event, new Request(current.href, request)),
+    );
     return;
   }
 
   // Navigation chrome and Original Practice shared assets change often;
   // never let an old app-shell copy win on a normal refresh.
-  if (url.pathname === "/owner-debug.js" ||
-      url.pathname === "/home-nav.js" ||
-      url.pathname === "/black-mode.js" ||
-      url.pathname === "/ca-move-top-v3.js" ||
-      url.pathname === "/ca-move-top.js" ||
-      url.pathname === "/app-session.js" ||
-      url.pathname === "/back-nav.js" ||
-      url.pathname === "/search-context.js" ||
-      url.pathname === "/search-context.css" ||
-      url.pathname === "/search-context-dock-v3.css" ||
-      url.pathname === "/back-parent-map.js" ||
-      url.pathname === "/question-deeplink.js" ||
-      url.pathname === "/quiz-continuity.js" ||
-      url.pathname === "/rapid-practice-deeplink.js" ||
-      url.pathname === "/bihar-objective-gk-deeplink.js" ||
-      url.pathname === "/mindmap-deeplink.js" ||
-      url.pathname === "/mindmap-reader.css" ||
-      url.pathname === "/progress.js" ||
-      url.pathname === "/search-worker.js" ||
-      url.pathname === "/section-search-ui.js" ||
-      url.pathname === "/homepage-search-ui.js" ||
-      url.pathname === "/homepage-fulltext-search.js" ||
-      url.pathname === "/Current%20Affairs/Topic%20Names/rapid-search-enhancer.js" ||
-      url.pathname === "/search-snippets-current-affairs.js" ||
-      url.pathname === "/blackbook-quiz-bookmarks.js" ||
-      url.pathname === "/blackbook-topic-bookmarks.js" ||
-      url.pathname === "/Current%20Affairs/Topic%20Names/brics-search-index.js" ||
-      url.pathname === "/Current%20Affairs/Topic%20Names/Rapid%20Practice/2026/Topic%20Wise/rapid-runtime.js" ||
-      url.pathname === "/bihar-topic-bookmarks.js" ||
-      url.pathname === "/pdf-mobile-rotate.js" ||
-      url.pathname === "/Original%20Practice/original-practice.css" ||
-      url.pathname === "/Original%20Practice/original-practice.js" ||
-      url.pathname === "/Original%20Practice/english-practice.js" ||
-      url.pathname === "/Crux-Tricks/crux-search-route.js" ||
-      url.pathname === "/Crux-Tricks/crux-tricks.js" ||
-      url.pathname === "/Crux-Tricks/search-snippets-crux-tricks.js" ||
-      url.pathname.startsWith("/Crux-Tricks/pages/") ||
-      url.pathname === "/Crux-Tricks/pdf-search.js" ||
-      url.pathname === "/Crux-Tricks/viewer-v2.js") {
+  if (
+    url.pathname === "/owner-debug.js" ||
+    url.pathname === "/home-nav.js" ||
+    url.pathname === "/black-mode.js" ||
+    url.pathname === "/ca-move-top-v3.js" ||
+    url.pathname === "/ca-move-top.js" ||
+    url.pathname === "/app-session.js" ||
+    url.pathname === "/back-nav.js" ||
+    url.pathname === "/search-context.js" ||
+    url.pathname === "/search-context.css" ||
+    url.pathname === "/search-context-dock-v3.css" ||
+    url.pathname === "/back-parent-map.js" ||
+    url.pathname === "/question-deeplink.js" ||
+    url.pathname === "/quiz-continuity.js" ||
+    url.pathname === "/rapid-practice-deeplink.js" ||
+    url.pathname === "/bihar-objective-gk-deeplink.js" ||
+    url.pathname === "/mindmap-deeplink.js" ||
+    url.pathname === "/mindmap-reader.css" ||
+    url.pathname === "/progress.js" ||
+    url.pathname === "/search-worker.js" ||
+    url.pathname === "/section-search-ui.js" ||
+    url.pathname === "/homepage-search-ui.js" ||
+    url.pathname === "/homepage-fulltext-search.js" ||
+    url.pathname ===
+      "/Current%20Affairs/Topic%20Names/rapid-search-enhancer.js" ||
+    url.pathname === "/search-snippets-current-affairs.js" ||
+    url.pathname === "/blackbook-quiz-bookmarks.js" ||
+    url.pathname === "/blackbook-topic-bookmarks.js" ||
+    url.pathname === "/Current%20Affairs/Topic%20Names/brics-search-index.js" ||
+    url.pathname ===
+      "/Current%20Affairs/Topic%20Names/Rapid%20Practice/2026/Topic%20Wise/rapid-runtime.js" ||
+    url.pathname === "/bihar-topic-bookmarks.js" ||
+    url.pathname === "/pdf-mobile-rotate.js" ||
+    url.pathname === "/Original%20Practice/original-practice.css" ||
+    url.pathname === "/Original%20Practice/original-practice.js" ||
+    url.pathname === "/Original%20Practice/english-practice.js" ||
+    url.pathname === "/Crux-Tricks/crux-search-route.js" ||
+    url.pathname === "/Crux-Tricks/crux-tricks.js" ||
+    url.pathname === "/Crux-Tricks/search-snippets-crux-tricks.js" ||
+    url.pathname.startsWith("/Crux-Tricks/pages/") ||
+    url.pathname === "/Crux-Tricks/pdf-search.js" ||
+    url.pathname === "/Crux-Tricks/viewer-v2.js"
+  ) {
     event.respondWith(freshCoreAsset(event));
     return;
   }
@@ -672,7 +887,3 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(staleWhileRevalidate(event, false));
 });
-
-
-
-
