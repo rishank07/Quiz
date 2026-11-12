@@ -234,6 +234,16 @@
     // End Polity audit overlay
     records = self[config.globalName];
     if (!Array.isArray(records)) throw new Error("Search index was not available: " + config.globalName);
+    if (config.globalName === "EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX") {
+      try {
+        importScripts(new URL("./search-snippets-computer-chapter-01.js?v=20261112computerch01", config.indexUrl).href);
+        var chapterOne = self.EF_COMPUTER_CHAPTER_01_SNIPPETS;
+        if (Array.isArray(chapterOne)) {
+          var revisedByFile = new Map(chapterOne.map(function (row) { return [row.f, row]; }));
+          records = records.map(function (row) { return revisedByFile.get(row.f) || row; });
+        }
+      } catch (_) { /* The existing index still works on an offline first visit. */ }
+    }
     if (config.extraIndex) {
       try {
         importScripts(config.extraIndex.url);
