@@ -69,6 +69,7 @@
     @media(max-width:850px){
       .q-meta{display:grid;grid-template-columns:max-content minmax(0,1fr) auto;gap:8px 6px;align-items:center}
       .q-meta .tags{display:contents}
+    .pyq-exam{margin:0 0 10px;font-size:.82rem;line-height:1.45;overflow-wrap:anywhere}
       .q-meta .tag{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
       .q-meta #subjectTag{grid-column:1;grid-row:1;max-width:min(42vw,170px)}
       .q-meta #sourceTag{grid-column:2;grid-row:1;justify-self:start}
@@ -457,6 +458,7 @@
       <div class="question-number" id="questionNumber"></div>
       <div class="q-en" id="questionEn"></div>
       <div class="q-hi" id="questionHi"></div>
+      <div class="pyq-exam" id="questionExam" hidden></div>
       <div id="questionVisual" hidden></div>
       <div class="options" id="options"></div>
       <div class="answer-box" id="answerBox"><div class="answer-line" id="answerLine"></div><div class="correct-answer" id="correctAnswer"></div><div class="explanation" id="explanation"></div></div>
@@ -521,7 +523,7 @@
   var HISTORY_VIEW_KEY='efpMixedPracticeView';
   var MAX_RECENT_SETS=20;
   var MAX_QUESTIONS=500;
-  var FILES={history:'History_Complete_Practice.html',polity:'Polity_Complete_Practice.html',science:'Science_Complete_Practice.html',geography:'Geography_Complete_Practice.html',economics:'Economics_Complete_Practice.html',ecology:'Environment_Ecology_Complete_Practice.html',english:'English_Grammar_Complete_Practice.html',staticgk:'Static_GK_Complete_Practice.html'};
+  var FILES={history:'History_Complete_Practice.html',polity:'Polity_Complete_Practice.html',science:'Science_Complete_Practice.html',geography:'Geography_Complete_Practice.html',economics:'Economics_Complete_Practice.html',ecology:'Environment_Ecology_Complete_Practice.html',english:'English_Grammar_Complete_Practice.html',staticgk:'Static_GK_Complete_Practice.html','computer-pyqs':'Computer_PYQs.html?v=20261113computerpyqs2'};
   var POOLS={
     history:{key:'history',label:'History',hi:'इतिहास',count:5440,file:'history',groups:['Ancient History','Medieval History','Modern History'],domain:'history',kind:'major',icon:'🏛️'},
     polity:{key:'polity',label:'Polity',hi:'राजव्यवस्था',count:4052,file:'polity',groups:['Indian Polity'],domain:'polity',kind:'major',icon:'⚖️'},
@@ -531,6 +533,7 @@
     ecology:{key:'ecology',label:'Environment & Ecology',hi:'पर्यावरण एवं पारिस्थितिकी',count:527,file:'ecology',groups:['Environment & Ecology'],domain:'ecology',kind:'major',icon:'🌿'},
     english:{key:'english',label:'English Grammar',hi:'अंग्रेज़ी व्याकरण',count:2354,file:'english',groups:['English Grammar'],domain:'english',kind:'major',icon:'🔤',schema:'english'},
     computer:{key:'computer',label:'Computer',hi:'कंप्यूटर',count:2076,file:'computer',groups:['Computer'],domain:'computer',kind:'major',icon:'💻'},
+    computerPyqs:{key:'computerPyqs',label:'Computer PYQs',hi:'कंप्यूटर के पिछले वर्षों के प्रश्न',count:3243,file:'computer-pyqs',groups:['Computer PYQs'],domain:'computer-pyqs',kind:'specific',icon:'💻'},
     staticgk:{key:'staticgk',label:'Static GK',hi:'सामान्य ज्ञान',count:2642,file:'staticgk',groups:['Static GK'],domain:'staticgk',kind:'major',icon:'🎯'},
     ancient:{key:'ancient',label:'Ancient History',hi:'प्राचीन इतिहास',count:2216,file:'history',groups:['Ancient History'],domain:'history',kind:'specific',icon:'🏺'},
     medieval:{key:'medieval',label:'Medieval History',hi:'मध्यकालीन इतिहास',count:1480,file:'history',groups:['Medieval History'],domain:'history',kind:'specific',icon:'🏰'},
@@ -542,10 +545,11 @@
     worldGeo:{key:'worldGeo',label:'World Geography',hi:'विश्व भूगोल',count:10081,file:'geography',groups:['World Geography'],domain:'geography',kind:'specific',icon:'🌐'}
   };
   var MAJOR=['history','polity','science','geography','economics','ecology','english','staticgk','computer'];
-  var SPECIFIC=['ancient','medieval','modern','physics','chemistry','biology','indianGeo','worldGeo'];
+  var SPECIFIC=['ancient','medieval','modern','physics','chemistry','biology','indianGeo','worldGeo','computerPyqs'];
   var DOMAIN_CHILDREN={history:['ancient','medieval','modern'],science:['physics','chemistry','biology'],geography:['indianGeo','worldGeo']};
   var SURPRISE_DOMAINS=['history','polity','science','geography','economics','ecology','english','staticgk','computer'];
-  var SURPRISE_VARIANTS={history:['history','ancient','medieval','modern'],science:['science','physics','chemistry','biology'],geography:['geography','indianGeo','worldGeo']};
+  var SURPRISE_VARIANTS={history:['history','ancient','medieval','modern'],science:['science','physics','chemistry','biology'],geography:['geography','indianGeo','worldGeo'],computer:['computer','computerPyqs']};
+  var computerPyqChapters={"1. Introduction of Computer":"कंप्यूटर का परिचय","2. Development of Computer":"कंप्यूटर का विकास","3. Input & Output":"इनपुट और आउटपुट","4. Memory":"मेमोरी","5. Software":"सॉफ्टवेयर","6. Data Communications":"डेटा संचार","7. Internet & Technology":"इंटरनेट और प्रौद्योगिकी","8. Microsoft Office":"माइक्रोसॉफ्ट ऑफिस"};
   var TAB_ID=getTabId(),tabChannel=null,tabPageToken='page-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);
   var fileCache={},poolCache={},currentQuestions=[],currentIndex=0,state=null,pendingSelections={},bookmarks=loadBookmarks(),bookmarkMeta=loadBookmarkMeta(),savedMode=false,savedReturn=null,historyReviewMode=false,historyExitPending=false,storageWarningShown=false; /* efp-mixed-saved-view-v3 */
   function $(id){return document.getElementById(id)}
@@ -814,7 +818,14 @@
           var chapter=entry[0],sections=entry[1];if(!Array.isArray(sections))return;
           sections.forEach(function(section,si){
             var sectionTitle=(section&&section.title)||{},qs=(section&&section.questions)||[];
-            qs.forEach(function(q,qi){var displayQ=standaloneMixedQuestion(p.file,chapter,si,qi,q),id=p.file==='computer'?'qv3|computer|'+parseInt(chapter,10)+'|'+q.num:stableQuestionId(p.file,groupName,q);list.push({id:id,legacyId:questionId(p.file,groupName,ci,si,qi),poolKey:key,poolLabel:p.label,source:groupName,chapter:p.file==='computer'?chapter+' / '+EFPComputerBank.chapterHindi[chapter]:chapter,sectionEn:sectionTitle.en||'',sectionHi:sectionTitle.hi||'',q:displayQ})})
+            qs.forEach(function(q,qi){
+              var isPyq=p.file==='computer-pyqs';
+              if(isPyq&&!q.correct.length)return;
+              var displayQ=standaloneMixedQuestion(p.file,chapter,si,qi,q);
+              var id=p.file==='computer'||isPyq?'qv3|'+p.file+'|'+parseInt(chapter,10)+'|'+q.num:stableQuestionId(p.file,groupName,q);
+              var chapterHi=isPyq?computerPyqChapters[chapter]:p.file==='computer'?EFPComputerBank.chapterHindi[chapter]:'';
+              list.push({id:id,legacyId:questionId(p.file,groupName,ci,si,qi),poolKey:key,poolLabel:p.label,source:groupName,chapter:chapterHi?chapter+' / '+chapterHi:chapter,sectionEn:sectionTitle.en||'',sectionHi:sectionTitle.hi||'',q:displayQ});
+            })
           })
         })
       })
@@ -823,8 +834,8 @@
   }
   function randomSample(list,n,used){var copy=list.slice(),out=[];for(var i=copy.length-1;i>0;i--){var j=randomInt(i+1),t=copy[i];copy[i]=copy[j];copy[j]=t}for(var x=0;x<copy.length&&out.length<n;x++){if(!used.has(copy[x].id)){used.add(copy[x].id);out.push(copy[x])}}return out}
   function shuffle(list){for(var i=list.length-1;i>0;i--){var j=randomInt(i+1),t=list[i];list[i]=list[j];list[j]=t}return list}
-  function rawCorrectIndex(q){var opts=(q.o||[]),ans=q.a||{};for(var i=0;i<opts.length;i++){if(sameText(opts[i].en,ans.en))return i}for(var j=0;j<opts.length;j++){if(sameText(opts[j].hi,ans.hi))return j}return -1}
-  function shuffledOptionOrder(q,target){var opts=q.o||[],order=opts.map(function(_,i){return i});shuffle(order);var rawCorrect=rawCorrectIndex(q);if(rawCorrect>=0&&order.length){target=Math.max(0,Number(target)||0)%order.length;var current=order.indexOf(rawCorrect),tmp=order[target];order[target]=rawCorrect;order[current]=tmp}return order}
+  function rawCorrectIndex(q){if(Array.isArray(q.correct))return q.correct[0]??-1;var opts=(q.o||[]),ans=q.a||{};for(var i=0;i<opts.length;i++){if(sameText(opts[i].en,ans.en))return i}for(var j=0;j<opts.length;j++){if(sameText(opts[j].hi,ans.hi))return j}return -1}
+  function shuffledOptionOrder(q,target){var opts=q.o||[],order=opts.map(function(_,i){return i});if(Array.isArray(q.correct))return order;shuffle(order);var rawCorrect=rawCorrectIndex(q);if(rawCorrect>=0&&order.length){target=Math.max(0,Number(target)||0)%order.length;var current=order.indexOf(rawCorrect),tmp=order[target];order[target]=rawCorrect;order[current]=tmp}return order}
   function buildOptionOrders(items){var orders={},offset=randomInt(4);items.forEach(function(item,i){var count=((item.q||{}).o||[]).length;orders[item.id]=shuffledOptionOrder(item.q||{},count?(i+offset)%count:0)});return orders}
   function validOptionOrder(order,count){if(!Array.isArray(order)||order.length!==count)return false;var seen=new Set(order);if(seen.size!==count)return false;for(var i=0;i<count;i++){if(!seen.has(i))return false}return true}
   function ensureOptionOrders(items){if(!state)return;if(!state.optionOrders||typeof state.optionOrders!=='object')state.optionOrders={};var missing=[],positions={};items.forEach(function(item,i){positions[item.id]=i;var count=((item.q||{}).o||[]).length;if(!validOptionOrder(state.optionOrders[item.id],count))missing.push(item)});if(!missing.length)return;var offset=randomInt(4);missing.forEach(function(item){var count=((item.q||{}).o||[]).length;state.optionOrders[item.id]=shuffledOptionOrder(item.q||{},count?(positions[item.id]+offset)%count:0)})}
@@ -924,7 +935,9 @@
     setSavedQuestionsLoading(true);
     try{
       var hasComputer=Array.from(bookmarks).some(function(id){return /^qv3\|computer\|/.test(id)});
-      var pools=await Promise.all(MAJOR.filter(function(key){return key!=='computer'||hasComputer}).map(buildPool)),map=new Map();
+      var poolKeys=MAJOR.filter(function(key){return key!=='computer'||hasComputer});
+      if(Array.from(bookmarks).some(function(id){return /^qv3\|computer-pyqs\|/.test(id)}))poolKeys.push('computerPyqs');
+      var pools=await Promise.all(poolKeys.map(buildPool)),map=new Map();
       pools.forEach(function(list){list.forEach(function(q){if(!map.has(q.id))map.set(q.id,q);if(q.legacyId&&!map.has(q.legacyId))map.set(q.legacyId,q)})});
       var savedItems=Array.from(bookmarks).map(function(id){return map.get(id)}).filter(Boolean);
       if(!savedItems.length){alert('Saved questions could not be found in the current question bank.');return}
@@ -966,13 +979,25 @@
   $('newSetBtn').onclick=function(){if(savedMode){closeSavedQuestions();return}if(state){archiveCurrentSet();generateSet(state.selectedKeys,state.total||currentQuestions.length)}};
   function currentAnswer(){if(!state||!currentQuestions[currentIndex])return null;var a=state.answers[currentQuestions[currentIndex].id]||null;return a&&a.checked?a:null}
   function currentPendingSelection(){var item=currentQuestions[currentIndex];if(!item)return null;var v=pendingSelections[item.id];return Number.isInteger(Number(v))?Number(v):null}
-  function correctIndex(item){var opts=displayedOptions(item),ans=(item.q||{}).a||{};for(var i=0;i<opts.length;i++){if(sameText(opts[i].en,ans.en))return i}for(var j=0;j<opts.length;j++){if(sameText(opts[j].hi,ans.hi))return j}return -1}
+  function correctIndexes(item){
+    var q=item.q||{},options=displayedOptions(item);
+    if(Array.isArray(q.correct))return q.correct.map(function(index){return options.indexOf(q.o[index])});
+    var ans=q.a||{};
+    var index=options.findIndex(function(option){return sameText(option.en,ans.en)});
+    if(index<0)index=options.findIndex(function(option){return sameText(option.hi,ans.hi)});
+    return index<0?[]:[index];
+  }
+  function examDetails(q){
+    if(!q.exam)return '';
+    var en=escapeHtml(q.exam.en),hi=escapeHtml(q.exam.hi);
+    return '<span>Exam / परीक्षा · '+en+'</span>'+(en!==hi?'<br><span lang="hi">'+hi+'</span>':'');
+  }
   function answerStats(){var attempted=0,correct=0,wrong=0;if(state&&state.answers)Object.keys(state.answers).forEach(function(id){var a=state.answers[id];if(a&&a.checked){attempted++;if(a.correct)correct++;else wrong++}});return {attempted:attempted,correct:correct,wrong:wrong}}
   function firstUnansweredIndex(){if(!state)return-1;for(var i=0;i<currentQuestions.length;i++){var answer=state.answers&&state.answers[currentQuestions[i].id];if(!answer||!answer.checked)return i}return-1}
   function updateStats(){var st=answerStats();$('statPosition').textContent=(currentIndex+1)+'/'+currentQuestions.length;$('statAttempted').textContent=st.attempted;$('statCorrect').textContent=st.correct;$('statWrong').textContent=st.wrong;$('progressFill').style.width=((currentIndex+1)/Math.max(1,currentQuestions.length)*100)+'%'}
   function renderQuestion(){
     var item=currentQuestions[currentIndex];if(!item)return;
-    var q=item.q||{},ans=currentAnswer(),pending=currentPendingSelection(),ci=correctIndex(item);
+    var q=item.q||{},ans=currentAnswer(),pending=currentPendingSelection(),ci=correctIndexes(item);
     $('subjectTag').textContent=item.poolLabel;
     $('subjectTag').title=item.poolLabel;
     $('sourceTag').textContent=item.source;
@@ -986,6 +1011,7 @@
     var hi=(q.q||{}).hi||'';
     $('questionHi').innerHTML=safeRich(item,hi);
     $('questionHi').style.display=(!hi||sameText(hi,(q.q||{}).en))?'none':'';
+    var exam=$('questionExam');exam.innerHTML=examDetails(q);exam.hidden=!q.exam;
     var visual=$('questionVisual');visual.innerHTML=EFPComputerBank.visualHtml(q);visual.hidden=!q.visual;
     var options=$('options');options.innerHTML='';
     var selectedIndex=ans?Number(ans.selected):pending;
@@ -994,8 +1020,8 @@
       label.className='option';
       // Correct/wrong styling is applied only after the option is chosen.
       if(ans&&ans.checked){
-        if(i===ci)label.classList.add('correct');
-        if(i===Number(ans.selected)&&i!==ci)label.classList.add('wrong');
+        if(ci.includes(i))label.classList.add('correct');
+        if(i===Number(ans.selected)&&!ci.includes(i))label.classList.add('wrong');
       }
       var checked=Number.isInteger(selectedIndex)&&selectedIndex===i?' checked':'';
       var disabled=(historyReviewMode||(ans&&ans.checked))?' disabled':'';
@@ -1005,8 +1031,8 @@
     options.querySelectorAll('input[name="mixedOption"]').forEach(function(input){
       input.addEventListener('change',function(){
         if(!state||historyReviewMode||currentAnswer())return;
-        var si=Number(input.value),correct=correctIndex(item);
-        state.answers[item.id]={selected:si,checked:true,correct:si===correct};
+        var si=Number(input.value),correct=correctIndexes(item);
+        state.answers[item.id]={selected:si,checked:true,correct:correct.includes(si)};
         delete pendingSelections[item.id];
         saveState();
         renderQuestion();
@@ -1018,7 +1044,7 @@
       var good=!!ans.correct;
       $('answerLine').className='answer-line '+(good?'good':'bad');
       $('answerLine').textContent=good?'✅ Correct / सही':'❌ Incorrect / गलत';
-      var correctLetter=ci>=0?String.fromCharCode(65+ci):'—';
+      var correctLetter=ci.map(function(i){return String.fromCharCode(65+i)}).join(' / ')||'—';
       $('correctAnswer').innerHTML='<strong>Correct Answer / सही उत्तर:</strong> '+correctLetter;
       var exp=q.exp||{};
       $('explanation').innerHTML='<strong>Explanation</strong><div>'+safeRich(item,exp.en||'')+'</div>'+(exp.hi&&!sameText(exp.hi,exp.en)?'<div class="exp-hi"><strong>व्याख्या</strong><div>'+safeRich(item,exp.hi)+'</div></div>':'');
@@ -1053,21 +1079,21 @@
     $('reviewScore').textContent=st.correct+'/'+total;$('reviewAttempted').textContent=st.attempted;$('reviewCorrect').textContent=st.correct;$('reviewWrong').textContent=st.wrong;$('reviewUnattempted').textContent=unattempted;$('reviewAccuracy').textContent=accuracy+'%';
     var list=$('reviewList');list.innerHTML='';
     currentQuestions.forEach(function(item,index){
-      var q=item.q||{},raw=(state.answers||{})[item.id],ans=raw&&raw.checked?raw:null,ci=correctIndex(item),selected=ans?Number(ans.selected):-1,opts=displayedOptions(item),exp=q.exp||{};
+      var q=item.q||{},raw=(state.answers||{})[item.id],ans=raw&&raw.checked?raw:null,ci=correctIndexes(item),selected=ans?Number(ans.selected):-1,opts=displayedOptions(item),exp=q.exp||{};
       var card=document.createElement('article');card.className='question-card review-question'+(ans?'':' unattempted');
       var statusClass=!ans?'unattempted':(ans.correct?'correct':'wrong'),statusText=!ans?'○ Unattempted / अनुत्तरित':(ans.correct?'✓ Correct / सही':'✕ Incorrect / गलत');
       var optionsHtml=opts.map(function(opt,i){
-        var cls='option';if(i===ci)cls+=' correct';if(ans&&i===selected&&i!==ci)cls+=' wrong';
+        var cls='option';if(ci.includes(i))cls+=' correct';if(ans&&i===selected&&!ci.includes(i))cls+=' wrong';
         var checked=ans&&i===selected?' checked':'';
         var hi=(!opt.hi||sameText(opt.hi,opt.en))?' style="display:none"':'';
         return '<label class="'+cls+'"><input type="radio" disabled'+checked+'><span class="option-body"><span class="option-letter">'+String.fromCharCode(65+i)+'</span><span><span class="opt-en">'+safeRich(item,opt.en||'')+'</span><span class="opt-hi"'+hi+'>'+safeRich(item,opt.hi||'')+'</span></span></span></label>'
       }).join('');
-      var qHi=(q.q||{}).hi||'',qHiStyle=(!qHi||sameText(qHi,(q.q||{}).en))?' style="display:none"':'',correctLetter=ci>=0?String.fromCharCode(65+ci):'—';
+      var qHi=(q.q||{}).hi||'',qHiStyle=(!qHi||sameText(qHi,(q.q||{}).en))?' style="display:none"':'',correctLetter=ci.map(function(i){return String.fromCharCode(65+i)}).join(' / ')||'—';
       var source=item.source===item.poolLabel?'':'<span class="tag">'+escapeHtml(item.source||'')+'</span>';
       card.innerHTML='<div class="q-meta"><div class="tags"><span class="tag subject">'+escapeHtml(item.poolLabel||'')+'</span>'+source+'<span class="tag'+(item.poolKey==='computer'?' computer-chapter':'')+'">'+escapeHtml(item.chapter||'')+'</span></div><span class="review-state '+statusClass+'">'+statusText+'</span></div>'+
         '<div class="question-number">Question '+(index+1)+' of '+total+(item.sectionEn?' · '+escapeHtml(item.sectionEn):'')+'</div>'+
         '<div class="q-en">'+safeRich(item,(q.q||{}).en||'')+'</div><div class="q-hi"'+qHiStyle+'>'+safeRich(item,qHi)+'</div>'+
-        EFPComputerBank.visualHtml(q)+'<div class="options">'+optionsHtml+'</div>'+
+        (q.exam?'<div class="pyq-exam">'+examDetails(q)+'</div>':'')+EFPComputerBank.visualHtml(q)+'<div class="options">'+optionsHtml+'</div>'+
         '<div class="answer-box show"><div class="answer-line '+statusClass+'">'+statusText+'</div><div class="correct-answer"><strong>Correct Answer / सही उत्तर:</strong> '+correctLetter+'</div><div class="explanation"><strong>Explanation</strong><div>'+safeRich(item,exp.en||'')+'</div>'+(exp.hi&&!sameText(exp.hi,exp.en)?'<div class="exp-hi"><strong>व्याख्या</strong><div>'+safeRich(item,exp.hi)+'</div></div>':'')+'</div></div>';
       list.appendChild(card)
     })

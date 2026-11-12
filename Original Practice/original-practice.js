@@ -1,9 +1,10 @@
 (function(){
 "use strict";
 var PAGE_FILE=decodeURIComponent((location.pathname.split("/").pop()||"").toLowerCase());
-if(PAGE_FILE==="computer_complete_practice")PAGE_FILE+=".html";
+if(PAGE_FILE==="computer_complete_practice"||PAGE_FILE==="computer_pyqs")PAGE_FILE+=".html";
 var CONFIGS={
  "computer_complete_practice.html":{slug:"computer",label:"Computer"},
+ "computer_pyqs.html":{slug:"computer-pyqs",label:"Computer PYQs"},
  "history_complete_practice.html":{slug:"history",label:"History"},
  "polity_complete_practice.html":{slug:"polity",label:"Polity"},
  "science_complete_practice.html":{slug:"science",label:"Science"},
@@ -129,6 +130,9 @@ function saveAppAttempt(){
   ts:Date.now()
  }));localStorage.removeItem(LEGACY_APP_ATTEMPT_KEY)}catch(e){}
 }
+function isCorrectOption(q,selected){
+ return Array.isArray(q.correct)?q.correct.includes(selected):selected===currentAnswerIndex(q);
+}
 function restoreAppAttempt(preserveSection){
  if(state.screen!=="quiz"||!state.quizData)return false;
  try{
@@ -146,12 +150,12 @@ function restoreAppAttempt(preserveSection){
    var q=sec&&sec.questions[Number(pair[2])];
    var order=saved.orders&&saved.orders[answerKey];
    var selected=Number(saved.answers[answerKey]);
-   if(!q||!Array.isArray(order)||order.length!==q.o.length||
+   if(!q||(Array.isArray(q.correct)&&!q.correct.length)||!Array.isArray(order)||order.length!==q.o.length||
       order.some(function(value,i){return !Number.isInteger(value)||value<0||value>=q.o.length||order.indexOf(value)!==i})||
       !Number.isInteger(selected)||selected<0||selected>=q.o.length)return;
    answers[answerKey]={selectedOrigIdx:selected};orders[answerKey]=order.slice();
    score.attempted++;
-   if(selected===currentAnswerIndex(q))score.correct++;else score.wrong++;
+   if(isCorrectOption(q,selected))score.correct++;else score.wrong++;
   });
   state.answerMap=answers;state.shuffleMap=orders;state.score=score;
   if(!preserveSection&&Number.isFinite(Number(saved.section))){
@@ -193,16 +197,11 @@ function restoreAnsweredSection(){
   if(!order)return;
   var btns=document.querySelectorAll("#opts-"+qi+" .option-btn");
   if(!btns.length)return;
-  var correctOrigIdx=currentAnswerIndex(q);
-  var selectedDisplayIdx=order.indexOf(saved.selectedOrigIdx);
-  var correctDisplayIdx=order.indexOf(correctOrigIdx);
-  btns.forEach(function(b){b.classList.add("answered");b.onclick=null});
-  if(selectedDisplayIdx>=0&&btns[selectedDisplayIdx]){
-   btns[selectedDisplayIdx].classList.add(saved.selectedOrigIdx===correctOrigIdx?"correct":"incorrect");
-  }
-  if(saved.selectedOrigIdx!==correctOrigIdx&&correctDisplayIdx>=0&&btns[correctDisplayIdx]){
-   btns[correctDisplayIdx].classList.add("correct");
-  }
+  btns.forEach(function(b,i){
+   b.classList.add("answered");b.onclick=null;
+   if(isCorrectOption(q,order[i]))b.classList.add("correct");
+   else if(order[i]===saved.selectedOrigIdx)b.classList.add("incorrect");
+  });
   var exp=document.getElementById("exp-"+qi);
   if(exp)exp.classList.remove("hidden");
  });
@@ -352,12 +351,12 @@ function efpApplySeoMeta(){
  }catch(e){}
 }
 
-function addTopbar(){var app=document.getElementById("app");if(!app||app.querySelector(".efp-op-topbar"))return;var bar=document.createElement("div");bar.className="efp-op-topbar";bar.innerHTML='<a href="./index.html">Original Practice Home</a><a href="../index.html">ExamFusion Home</a><button type="button" id="efpOpDark" hidden aria-hidden="true" tabindex="-1">Dark Mode: <span>OFF</span></button>';app.insertBefore(bar,app.firstChild);var btn=bar.querySelector("#efpOpDark");function sync(){var on=false;try{on=localStorage.getItem("efp_black_mode")==="on"}catch(e){}btn.querySelector("span").textContent=on?"ON":"OFF"}sync();document.addEventListener("efp-black-mode-changed",sync)}
+function addTopbar(){var app=document.getElementById("app");if(!app||app.querySelector(".efp-op-topbar"))return;var bar=document.createElement("div");bar.className="efp-op-topbar";bar.innerHTML=(CFG.slug==="computer-pyqs"?'<a href="./Computer_Complete_Practice.html">Computer</a>':'')+'<a href="./index.html">Original Practice Home</a><a href="../index.html">ExamFusion Home</a><button type="button" id="efpOpDark" hidden aria-hidden="true" tabindex="-1">Dark Mode: <span>OFF</span></button>';app.insertBefore(bar,app.firstChild);var btn=bar.querySelector("#efpOpDark");function sync(){var on=false;try{on=localStorage.getItem("efp_black_mode")==="on"}catch(e){}btn.querySelector("span").textContent=on?"ON":"OFF"}sync();document.addEventListener("efp-black-mode-changed",sync)}
 var opFullSearchClient=null;
 function getOpFullSearchClient(){
  if(opFullSearchClient)return opFullSearchClient;
  if(typeof efCreateSearchWorker!=="function")return null;
- var specialIndex=CFG.slug==="computer"?{file:"../search-snippets-computer-original-practice.js?v=20261109computersearch1",global:"EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20260912ecology1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261102biologyexp1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
+ var specialIndex=CFG.slug==="computer-pyqs"?{file:"../search-snippets-computer-pyqs.js?v=20261113computerpyqs2",global:"EF_COMPUTER_PYQS_SNIPPET_INDEX"}:CFG.slug==="computer"?{file:"../search-snippets-computer-original-practice.js?v=20261109computersearch1",global:"EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20260912ecology1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261102biologyexp1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
  opFullSearchClient=efCreateSearchWorker({
   workerUrl:new URL("../search-worker.js?v=20261007searchaudit1",document.baseURI).href,
   logicUrl:new URL("../search-logic.js?v=20261007searchaudit1",document.baseURI).href,
@@ -381,13 +380,13 @@ function searchPanel(subjectOnly){
   if(hits.length){var h=document.createElement("div");h.className="efp-op-search-heading";h.textContent="Chapters / अध्याय";results.appendChild(h)}
   hits.forEach(function(r){var b=document.createElement("button");b.type="button";b.className="efp-op-search-result";b.dataset.searchSubject=r.subject;b.dataset.searchChapter=r.chapter;b.__efpSearchLive=true;b.innerHTML="<strong>"+escapeHtml(r.en)+(r.hi?" / "+escapeHtml(r.hi):"")+"</strong><small>"+escapeHtml(r.subject)+"</small>";b.addEventListener("click",function(){var open=function(){state.subject=r.subject;goToQuiz(r.chapter)};if(window.EFP_SEARCH_RETURN)window.EFP_SEARCH_RETURN.openInPage(open);else open()});results.appendChild(b)});
   var loading=document.createElement("div");loading.className="efp-op-search-loading";loading.textContent="Searching questions… / प्रश्न खोजे जा रहे हैं…";results.appendChild(loading);
-  timer=setTimeout(function(){var client=getOpFullSearchClient();if(!client){loading.textContent="Loading full-text search… / पूर्ण खोज लोड हो रही है…";return}client.search(rawQ).then(function(full){if(my!==seq||input.value.trim()!==rawQ)return;loading.remove();full=Array.isArray(full)?full:[];full=full.filter(function(hit){return String(hit.b||"").indexOf("Original Practice / "+CFG.label+" /")===0});var seen={},rows=[];full.forEach(function(hit){var d=decodeOpSearchHit(hit);if(!d.url||seen[d.url])return;seen[d.url]=1;rows.push({hit:hit,d:d})});rows=rows.slice(0,12);if(rows.length){var h=document.createElement("div");h.className="efp-op-search-heading";h.textContent="Question Matches / प्रश्न मिलान";results.appendChild(h)}rows.forEach(function(row){var a=document.createElement("a");a.className="efp-op-search-result efp-op-search-question";a.href=row.d.url;a.innerHTML="<strong>"+escapeHtml(row.hit.t||"Question match")+"</strong><small>"+escapeHtml(row.hit.b||"Original Practice")+"</small><span>"+escapeHtml(opSearchSnippet(row.d.text,rawQ))+"</span>";results.appendChild(a)});if(!hits.length&&!rows.length){results.innerHTML='<div class="efp-op-search-none">No matching chapter or question / कोई मिलान नहीं मिला</div>'}}).catch(function(){if(my===seq){loading.remove();if(!hits.length)results.innerHTML='<div class="efp-op-search-none">Question search could not load. Please retry.</div>';opFullSearchClient=null}})},120)
+  timer=setTimeout(function(){var client=getOpFullSearchClient();if(!client){loading.textContent="Loading full-text search… / पूर्ण खोज लोड हो रही है…";return}client.search(rawQ).then(function(full){if(my!==seq||input.value.trim()!==rawQ)return;loading.remove();full=Array.isArray(full)?full:[];full=full.filter(function(hit){return String(hit.b||"").indexOf(CFG.slug==="computer-pyqs"?"Original Practice / Computer / PYQs /":"Original Practice / "+CFG.label+" /")===0});var seen={},rows=[];full.forEach(function(hit){var d=decodeOpSearchHit(hit);if(!d.url||seen[d.url])return;seen[d.url]=1;rows.push({hit:hit,d:d})});rows=rows.slice(0,12);if(rows.length){var h=document.createElement("div");h.className="efp-op-search-heading";h.textContent="Question Matches / प्रश्न मिलान";results.appendChild(h)}rows.forEach(function(row){var a=document.createElement("a");a.className="efp-op-search-result efp-op-search-question";a.href=row.d.url;a.innerHTML="<strong>"+escapeHtml(row.hit.t||"Question match")+"</strong><small>"+escapeHtml(row.hit.b||"Original Practice")+"</small><span>"+escapeHtml(opSearchSnippet(row.d.text,rawQ))+"</span>";results.appendChild(a)});if(!hits.length&&!rows.length){results.innerHTML='<div class="efp-op-search-none">No matching chapter or question / कोई मिलान नहीं मिला</div>'}}).catch(function(){if(my===seq){loading.remove();if(!hits.length)results.innerHTML='<div class="efp-op-search-none">Question search could not load. Please retry.</div>';opFullSearchClient=null}})},120)
  });
  return box
 }
 function escapeHtml(v){return String(v).replace(/[&<>\"]/g,function(c){return({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]})}
 function addProgress(subject,host){if(!host)return;var total=Object.keys(MASTER[subject]||{}).length,done=countVisited(subject),pct=total?Math.round(done*100/total):0;var wrap=document.createElement("div");wrap.className="efp-op-progress";wrap.innerHTML='<div class="efp-op-progress-head"><span>Chapter progress / अध्याय प्रगति: '+done+' / '+total+'</span><button class="efp-op-progress-reset" type="button">Reset</button></div><div class="efp-op-progress-track"><div class="efp-op-progress-fill" style="width:'+pct+'%"></div></div>';wrap.querySelector("button").addEventListener("click",function(){if(confirm("Reset opened-chapter progress for "+CFG.label+"?")){localStorage.removeItem(PROGRESS_KEY);render()}});host.appendChild(wrap)}
-function enhanceHome(){var root=document.querySelector("#app .max-w-5xl");if(!root)return;var header=root.querySelector(".text-center.mb-10");if(header)header.insertAdjacentElement("afterend",searchPanel(null));var cards=root.querySelectorAll('div[onclick^="goToChapters"]');var subjects=Object.keys(MASTER);cards.forEach(function(card,i){var s=subjects[i];if(!s)return;card.setAttribute("role","button");card.setAttribute("tabindex","0");card.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();goToChapters(s)}});var p=document.createElement("span");p.className="efp-op-card-progress";p.textContent=countVisited(s)+" / "+Object.keys(MASTER[s]).length+" chapters opened";var target=card.querySelector(".p-5")||card;p && target.appendChild(p)});var note=document.createElement("div");note.className="efp-op-original-note";note.textContent="यह अभ्यास सामग्री ExamFusion Prep द्वारा प्रतियोगी परीक्षाओं की तैयारी के लिए स्वतंत्र रूप से तैयार की गई है।";root.appendChild(note)}
+function enhanceHome(){var root=document.querySelector("#app .max-w-5xl");if(!root)return;var header=root.querySelector(".text-center.mb-10");if(header)header.insertAdjacentElement("afterend",searchPanel(null));var cards=root.querySelectorAll('div[onclick^="goToChapters"]');var subjects=Object.keys(MASTER);cards.forEach(function(card,i){var s=subjects[i];if(!s)return;card.setAttribute("role","button");card.setAttribute("tabindex","0");card.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();goToChapters(s)}});var p=document.createElement("span");p.className="efp-op-card-progress";p.textContent=countVisited(s)+" / "+Object.keys(MASTER[s]).length+" chapters opened";var target=card.querySelector(".p-5")||card;p && target.appendChild(p)});if(CFG.slug==="computer-pyqs")return;var note=document.createElement("div");note.className="efp-op-original-note";note.textContent="यह अभ्यास सामग्री ExamFusion Prep द्वारा प्रतियोगी परीक्षाओं की तैयारी के लिए स्वतंत्र रूप से तैयार की गई है।";root.appendChild(note)}
 function enhanceChapters(){var root=document.querySelector("#app .max-w-4xl");if(!root||!state.subject)return;var header=root.querySelector(".mb-6");if(header){var holder=document.createElement("div");header.insertAdjacentElement("afterend",holder);addProgress(state.subject,holder);holder.insertAdjacentElement("afterend",searchPanel(state.subject))}var cards=root.querySelectorAll('div[onclick^="goToQuiz"]'),names=Object.keys(MASTER[state.subject]||{});cards.forEach(function(card,i){var c=names[i];if(!c)return;card.setAttribute("role","button");card.setAttribute("tabindex","0");card.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();goToQuiz(c)}});if(isVisited(state.subject,c))card.classList.add("efp-op-visited")})}
 function toggleBookmark(qi,button){var b=getBookmarks(),k=qKey(qi);if(b[k])delete b[k];else b[k]=true;saveBookmarks(b);track("original_practice_bookmark",{subject:state.subject,chapter:state.chapterName,bookmarked:!!b[k]});applyBookmarkFilter();updateBookmarkBar()}
 function updateBookmarkBar(){var bar=document.querySelector(".efp-op-bookmarkbar");if(!bar)return;var meta=bar.querySelector(".efp-op-bookmark-meta");if(meta)meta.textContent="⭐ "+pageBookmarkCount()+" saved on this subject page";var btn=bar.querySelector(".efp-op-bookmark-filter");if(btn){btn.classList.toggle("active",bookmarkOnly);btn.textContent=bookmarkOnly?"Show all questions":"Bookmarked only"}}
@@ -454,12 +453,13 @@ selectOption=function(qi,displayIdx){
  if(state.answerMap&&state.answerMap[k])return;
  var order=state.shuffleMap[k];
  if(!order||displayIdx<0||displayIdx>=order.length)return;
- var selectedOrigIdx=order[displayIdx];
+ var selectedOrigIdx=order[displayIdx],q=state.quizData[state.currentSection].questions[qi];
+ if(Array.isArray(q.correct)&&!q.correct.length)return;
  baseSelectOption(qi,displayIdx);
  if(!state.answerMap)state.answerMap={};
  state.answerMap[k]={selectedOrigIdx:selectedOrigIdx};
  saveAppAttempt();
- track("original_practice_answer",{practice:CFG.label,subject:state.subject,chapter:state.chapterName,section:state.currentSection+1,question:qi+1,correct:selectedOrigIdx===currentAnswerIndex(state.quizData[state.currentSection].questions[qi])});
+ track("original_practice_answer",{practice:CFG.label,subject:state.subject,chapter:state.chapterName,section:state.currentSection+1,question:qi+1,correct:isCorrectOption(q,selectedOrigIdx)});
 };
 var baseRender=render;render=function(){baseRender();improveHomeExamHeading();enhance();efpApplySeoMeta();if(state.screen==="quiz"&&pendingDeepQuestion!==null){var qi=pendingDeepQuestion;pendingDeepQuestion=null;clearTimeout(deepFocusTimer);deepFocusTimer=setTimeout(function(){var card=document.getElementById("q-"+qi);if(!card)return;if(window.EFP_SEARCH_CONTEXT&&window.EFP_SEARCH_CONTEXT.isDismissed(card))return;card.classList.add("efp-op-deep-focus");if(!(window.EFP_SEARCH_CONTEXT&&window.EFP_SEARCH_CONTEXT.focusTarget&&window.EFP_SEARCH_CONTEXT.focusTarget(card))){try{card.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){card.scrollIntoView()}}setTimeout(function(){card.classList.remove("efp-op-deep-focus")},2200)},80)}};
 var baseSwitchSection=switchSection;switchSection=function(i){pendingDeepQuestion=null;baseSwitchSection(i);syncUrl("quiz",false);saveAppAttempt()};
@@ -488,7 +488,7 @@ window.EFP_HTML_SEARCH_PAGE={
  results:function(query,matches){
   if(state.screen!=="quiz")return [];
   var out=[];Object.keys(MASTER).forEach(function(subject){Object.keys(MASTER[subject]).forEach(function(chapter){MASTER[subject][chapter].forEach(function(section,si){section.questions.forEach(function(q,qi){
-   if(!matches(query,[q.q,q.o,q.a,q.exp]))return;
+   if(!matches(query,[q.q,q.o,q.a,q.exp,q.exam]))return;
    out.push({key:subject+"|"+chapter+"|"+si+"|q-"+qi,id:"q-"+qi,subject:subject,chapter:chapter,section:si,qi:qi,label:chapterDisplayName(chapter)+" · Section "+(si+1)+" · Question "+(qi+1)});
   })})})});return out;
  },

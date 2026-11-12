@@ -25,3 +25,15 @@ SEARCH_INDEX.push(...[{"title":"Andhra Pradesh Geography Notes / आंध्र
 {"title":"13. Zoho, Data Sovereignty & DBMS","hi":"ज़ोहो, डेटा संप्रभुता और DBMS","url":"./Original%20Practice/Computer_Complete_Practice.html?subject=Computer&chapter=13.+Zoho%2C+Data+Sovereignty+%26+DBMS","section":"Original Practice","breadcrumb":"Original Practice / Computer","leaf":true},
 {"title":"14. Artificial Intelligence, AI Tools & IndiaAI","hi":"कृत्रिम बुद्धिमत्ता, AI उपकरण और IndiaAI","url":"./Original%20Practice/Computer_Complete_Practice.html?subject=Computer&chapter=14.+Artificial+Intelligence%2C+AI+Tools+%26+IndiaAI","section":"Original Practice","breadcrumb":"Original Practice / Computer","leaf":true}
 ]);
+
+SEARCH_INDEX.push(
+{"title":"Computer PYQs / पिछले वर्षों के प्रश्न","hi":"कंप्यूटर के पिछले वर्षों के प्रश्न","url":"./Original%20Practice/Computer_PYQs.html","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":false},
+{"title":"1. Introduction of Computer","hi":"कंप्यूटर का परिचय","url":"./Original%20Practice/Computer_PYQs.html?subject=Computer+PYQs&chapter=1.+Introduction+of+Computer","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"2. Development of Computer","hi":"कंप्यूटर का विकास","url":"./Original%20Practice/Computer_PYQs.html?subject=Computer+PYQs&chapter=2.+Development+of+Computer","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"3. Input & Output","hi":"इनपुट और आउटपुट","url":"./Original%20Practice/Computer_PYQs.html?subject=Computer+PYQs&chapter=3.+Input+%26+Output","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"4. Memory","hi":"मेमोरी","url":"./Original%20Practice/Computer_PYQs.html?subject=Computer+PYQs&chapter=4.+Memory","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"5. Software","hi":"सॉफ्टवेयर","url":"./Original%20Practice/Computer_PYQs.html?subject=Computer+PYQs&chapter=5.+Software","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"6. Data Communications","hi":"डेटा संचार","url":"./Original%20Practice/Computer_PYQs.html?subject=Computer+PYQs&chapter=6.+Data+Communications","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"7. Internet & Technology","hi":"इंटरनेट और प्रौद्योगिकी","url":"./Original%20Practice/Computer_PYQs.html?subject=Computer+PYQs&chapter=7.+Internet+%26+Technology","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"8. Microsoft Office","hi":"माइक्रोसॉफ्ट ऑफिस","url":"./Original%20Practice/Computer_PYQs.html?subject=Computer+PYQs&chapter=8.+Microsoft+Office","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true}
+);

@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261112octcacount1";
+const CACHE_VERSION = "efp-pwa-20261113computerpyqs2";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261031bbmobileframe1";
@@ -49,7 +49,7 @@ const APP_SHELL = [
   "/owner-debug.js",
   "/home-nav.js?v=20261027apprecovery1",
   "/app-session.js?v=20261027bbfinish1",
-  "/back-parent-map.js?v=20261112octca1",
+  "/back-parent-map.js?v=20261113computerpyqs2",
   "/back-nav.js?v=20261030caback2",
   "/search-context.js?v=20261007searchaudit1",
   "/search-context.css?v=20261004inlinecenter1",
@@ -72,10 +72,10 @@ const APP_SHELL = [
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/english-highlights.css?v=20261009dark1",
-  "/Original%20Practice/original-practice.js?v=20261109computersearch1",
+  "/Original%20Practice/original-practice.js?v=20261113computerpyqs2",
   "/Original%20Practice/computer-bank.js?v=20261112computerch01",
   "/Original%20Practice/english-practice.js?v=20261007continue1",
-  "/Original%20Practice/original-practice-index.js",
+  "/Original%20Practice/original-practice-index.js?v=20261113computerpyqs2",
   "/Crux-Tricks/index.html",
   "/Crux-Tricks/all-topics.html",
   "/Crux-Tricks/viewer.html",
@@ -455,7 +455,7 @@ async function networkFirst(event) {
         preferCache:
           navigation &&
           !isExplicitReload(request) &&
-          !/^\/Original%20Practice\/(?:Computer_Complete_Practice|Mixed_Practice)(?:\.html)?$/.test(url.pathname),
+          !/^\/Original%20Practice\/(?:Computer_Complete_Practice|Computer_PYQs|Mixed_Practice)(?:\.html)?$/.test(url.pathname),
         revalidate: true,
       },
     );
@@ -786,6 +786,15 @@ self.addEventListener("fetch", (event) => {
 
   if (/^\/_cf-assets\/[a-f0-9]{24}\/part-\d{4}\.bin$/.test(url.pathname)) {
     event.respondWith(immutablePdfPart(event));
+    return;
+  }
+
+  // Mixed Practice fetches the same versioned PYQ page as its question bank.
+  if (/^\/Original%20Practice\/Computer_PYQs(?:\.html)?$/.test(url.pathname)) {
+    const key = new Request(url.origin + "/Original%20Practice/Computer_PYQs.html");
+    event.respondWith(caches.open(CACHE_VERSION).then((cache) =>
+      cachedNetworkFirst(event, navigationRequest(request), cache, { cache: "no-cache" },
+        { key, preferCache: true })));
     return;
   }
 

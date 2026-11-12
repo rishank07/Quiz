@@ -13,3 +13,15 @@ window.EFP_ORIGINAL_PRACTICE_INDEX = [{"title":"ExamFusion Prep Original Practic
 {"title":"12. Computer Abbreviations & Technical Terms","hi":"कंप्यूटर के संक्षिप्त रूप और तकनीकी शब्द","url":"./Computer_Complete_Practice.html?subject=Computer&chapter=12.+Computer+Abbreviations+%26+Technical+Terms","section":"Original Practice","breadcrumb":"Original Practice / Computer","leaf":true},
 {"title":"13. Zoho, Data Sovereignty & DBMS","hi":"ज़ोहो, डेटा संप्रभुता और DBMS","url":"./Computer_Complete_Practice.html?subject=Computer&chapter=13.+Zoho%2C+Data+Sovereignty+%26+DBMS","section":"Original Practice","breadcrumb":"Original Practice / Computer","leaf":true},
 {"title":"14. Artificial Intelligence, AI Tools & IndiaAI","hi":"कृत्रिम बुद्धिमत्ता, AI उपकरण और IndiaAI","url":"./Computer_Complete_Practice.html?subject=Computer&chapter=14.+Artificial+Intelligence%2C+AI+Tools+%26+IndiaAI","section":"Original Practice","breadcrumb":"Original Practice / Computer","leaf":true}];
+
+window.EFP_ORIGINAL_PRACTICE_INDEX.push(
+{"title":"Computer PYQs / पिछले वर्षों के प्रश्न","hi":"कंप्यूटर के पिछले वर्षों के प्रश्न","url":"./Computer_PYQs.html","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":false},
+{"title":"1. Introduction of Computer","hi":"कंप्यूटर का परिचय","url":"./Computer_PYQs.html?subject=Computer+PYQs&chapter=1.+Introduction+of+Computer","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"2. Development of Computer","hi":"कंप्यूटर का विकास","url":"./Computer_PYQs.html?subject=Computer+PYQs&chapter=2.+Development+of+Computer","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"3. Input & Output","hi":"इनपुट और आउटपुट","url":"./Computer_PYQs.html?subject=Computer+PYQs&chapter=3.+Input+%26+Output","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"4. Memory","hi":"मेमोरी","url":"./Computer_PYQs.html?subject=Computer+PYQs&chapter=4.+Memory","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"5. Software","hi":"सॉफ्टवेयर","url":"./Computer_PYQs.html?subject=Computer+PYQs&chapter=5.+Software","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"6. Data Communications","hi":"डेटा संचार","url":"./Computer_PYQs.html?subject=Computer+PYQs&chapter=6.+Data+Communications","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"7. Internet & Technology","hi":"इंटरनेट और प्रौद्योगिकी","url":"./Computer_PYQs.html?subject=Computer+PYQs&chapter=7.+Internet+%26+Technology","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true},
+{"title":"8. Microsoft Office","hi":"माइक्रोसॉफ्ट ऑफिस","url":"./Computer_PYQs.html?subject=Computer+PYQs&chapter=8.+Microsoft+Office","section":"Original Practice","breadcrumb":"Original Practice / Computer / PYQs","leaf":true}
+);
