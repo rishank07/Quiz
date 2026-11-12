@@ -1064,6 +1064,11 @@ function efCreateSearchWorker(options) {
       fallbackRecordsPromise = Promise.reject(new Error("No fallback search index configured"));
     } else {
       fallbackRecordsPromise = efLoadSearchIndexScript(options.indexUrl, options.globalName).then(function(records){
+        if (options.extraIndex) {
+          return efLoadSearchIndexScript(options.extraIndex.url, options.extraIndex.globalName)
+            .then(function (extra) { return records.concat(extra); })
+            .catch(function () { return records; });
+        }
         if(options.globalName!=="EF_ORIGINAL_PRACTICE_SNIPPET_INDEX")return records;
         window.EF_ORIGINAL_PRACTICE_SNIPPET_INDEX=records;
         return efLoadSearchIndexScript(new URL("./search-snippets-polity-original-practice.js?v=20261001polity22-583a40e433b0",options.indexUrl).href,"EF_POLITY_ORIGINAL_PRACTICE_SNIPPET_INDEX").then(function(updates){

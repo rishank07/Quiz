@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261110editorial0910a";
+const CACHE_VERSION = "efp-pwa-20261112octca1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261031bbmobileframe1";
@@ -49,7 +49,7 @@ const APP_SHELL = [
   "/owner-debug.js",
   "/home-nav.js?v=20261027apprecovery1",
   "/app-session.js?v=20261027bbfinish1",
-  "/back-parent-map.js?v=20261030caback2",
+  "/back-parent-map.js?v=20261112octca1",
   "/back-nav.js?v=20261030caback2",
   "/search-context.js?v=20261007searchaudit1",
   "/search-context.css?v=20261004inlinecenter1",
@@ -59,12 +59,12 @@ const APP_SHELL = [
   "/progress.js?v=20261001caback1",
   "/rapid-practice-deeplink.js?v=20261104curated4",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
-  "/search-logic.js?v=20261027homesearch1",
+  "/search-logic.js?v=20261112octca1",
   "/section-search-ui.js?v=20261007searchaudit1",
-  "/search-worker.js?v=20261027homesearch1",
+  "/search-worker.js?v=20261112octca1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261028searchstatus1",
-  "/homepage-fulltext-search.js?v=20261031full1",
+  "/homepage-fulltext-search.js?v=20261112octca1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster.js?v=20261024mathback1",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",

@@ -30,7 +30,7 @@
   <!-- Google Analytics -->
   <!-- ============================= -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1WNRY8ECV"></script>
-  <script src="../search-logic.js?v=20260901a"></script>
+  <script src="../search-logic.js?v=20261112octca1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -827,6 +827,10 @@
                       <i class="fa-solid fa-calendar-day"></i><span class="bilabel"><span class="bilabel-en">September 2026</span><span class="bilabel-hi">सितंबर 2026</span></span>
                       <i class="fa-solid fa-arrow-right"></i>
                     </a>
+                    <a href="./Topic Names/2026/Month Wise/OCTOBER2026.html" onclick="openPage(event)">
+                      <i class="fa-solid fa-calendar-day"></i><span class="bilabel"><span class="bilabel-en">October 2026</span><span class="bilabel-hi">अक्टूबर 2026</span></span>
+                      <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -1037,11 +1041,12 @@
     // =======================================
     const CA_SNIPPET_PREFIX = "./Current%20Affairs/Topic%20Names/";
     let searchRequestSequence = 0;
-    let searchWorkerClient = (typeof efCreateSearchWorker === "function")
+    const searchWorkerClient = (typeof efCreateSearchWorker === "function")
       ? efCreateSearchWorker({
-          workerUrl: new URL("../search-worker.js?v=20260924casespace1", document.baseURI).href,
-          logicUrl: new URL("../search-logic.js?v=20260919ca3", document.baseURI).href,
+          workerUrl: new URL("../search-worker.js?v=20261112octca1", document.baseURI).href,
+          logicUrl: new URL("../search-logic.js?v=20261112octca1", document.baseURI).href,
           indexUrl: new URL("../search-snippets-current-affairs.js?v=20261031ramsar1", document.baseURI).href,
+          extraIndex: {url: new URL("../search-snippets-current-affairs-october2026.js?v=20261112octca1", document.baseURI).href, globalName: "EF_OCTOBER_CA_INDEX"},
           mode: "snippet",
           globalName: "EF_SNIPPET_INDEX",
           sectionPrefix: CA_SNIPPET_PREFIX,
@@ -1054,28 +1059,7 @@
     }
 
     function searchCurrentAffairs(query) {
-      if (searchWorkerClient) {
-        return searchWorkerClient.search(query).catch(function () {
-          searchWorkerClient = null;
-          return searchCurrentAffairs(query);
-        });
-      }
-
-      if (typeof efLoadSearchIndexScript !== "function") return Promise.resolve([]);
-      return efLoadSearchIndexScript(
-        new URL("../search-snippets-current-affairs.js?v=20261031ramsar1", document.baseURI).href,
-        "EF_SNIPPET_INDEX"
-      ).then(function (records) {
-        if (typeof efFallbackSnippetSearchAsync === "function") {
-          return efFallbackSnippetSearchAsync(query, records, {
-            sectionPrefix: CA_SNIPPET_PREFIX,
-            limit: 40
-          });
-        }
-        return (typeof efSnippetSearch === "function")
-          ? efSnippetSearch(query, { sectionPrefix: CA_SNIPPET_PREFIX, limit: 40 })
-          : [];
-      }).catch(function () { return []; });
+      return searchWorkerClient ? searchWorkerClient.search(query).catch(function () { return []; }) : Promise.resolve([]);
     }
 
     function escapeHtml(str) {

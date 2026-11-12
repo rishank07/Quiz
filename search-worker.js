@@ -234,6 +234,13 @@
     // End Polity audit overlay
     records = self[config.globalName];
     if (!Array.isArray(records)) throw new Error("Search index was not available: " + config.globalName);
+    if (config.extraIndex) {
+      try {
+        importScripts(config.extraIndex.url);
+        var extraRecords = self[config.extraIndex.globalName];
+        if (Array.isArray(extraRecords)) records = records.concat(extraRecords);
+      } catch (_) { /* The base index can still be searched offline. */ }
+    }
     loadCruxManifest();
 
     // Keep compatibility for any non-snippet clients that use the shared worker.

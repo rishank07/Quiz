@@ -13,8 +13,8 @@
   var noResults = document.getElementById("noResults");
   if (!box || !menuList) return;
 
-  var WORKER_URL = new URL("search-worker.js?v=20261027homesearch1", document.baseURI).href;
-  var LOGIC_URL = new URL("search-logic.js?v=20261027homesearch1", document.baseURI).href;
+  var WORKER_URL = new URL("search-worker.js?v=20261112octca1", document.baseURI).href;
+  var LOGIC_URL = new URL("search-logic.js?v=20261112octca1", document.baseURI).href;
 
   // Search the large indexes sequentially so a single query never makes
   // several 10–30 MB indexes parse at the same instant. Share the homepage
@@ -75,6 +75,7 @@
       label: "Current Affairs",
       icon: "fa-newspaper",
       indexUrl: "search-snippets-current-affairs.js?v=20261031ramsar1",
+      extraIndex: {url: new URL("search-snippets-current-affairs-october2026.js?v=20261112octca1", document.baseURI).href, globalName: "EF_OCTOBER_CA_INDEX"},
       mode: "snippet",
       globalName: "EF_SNIPPET_INDEX",
       sectionPrefix: "./Current%20Affairs/Topic%20Names/",
@@ -85,6 +86,7 @@
       label: "Current Affairs Rapid Practice",
       icon: "fa-bolt",
       indexUrl: "search-snippets-current-affairs-rapid.js?v=20261031full1",
+      extraIndex: {url: new URL("search-snippets-current-affairs-october2026.js?v=20261112octca1", document.baseURI).href, globalName: "EF_OCTOBER_CA_RAPID_INDEX"},
       mode: "snippet",
       globalName: "EF_SNIPPET_INDEX_RAPID",
       sectionPrefix: "./Current%20Affairs/Topic%20Names/Rapid%20Practice/",
@@ -303,6 +305,7 @@
           globalName: source.globalName,
           limit: source.limit
         };
+        if (source.extraIndex) options.extraIndex = source.extraIndex;
         if (source.sectionPrefix) options.sectionPrefix = source.sectionPrefix;
         if (source.fields) options.fields = source.fields;
         worker.postMessage({ type: "init", options: options });
@@ -334,7 +337,7 @@
       }).catch(function(error){
         if(error&&error.efCancelled||token!==latestToken)return [];
         if(typeof efCreateSearchWorker!=="function")throw error;
-        fallbackClient=efCreateSearchWorker({indexUrl:new URL(source.indexUrl,document.baseURI).href,globalName:source.globalName,mode:source.mode,fields:source.fields,sectionPrefix:source.sectionPrefix,limit:source.limit});
+        fallbackClient=efCreateSearchWorker({indexUrl:new URL(source.indexUrl,document.baseURI).href,globalName:source.globalName,extraIndex:source.extraIndex,mode:source.mode,fields:source.fields,sectionPrefix:source.sectionPrefix,limit:source.limit});
         return fallbackClient.search(query).then(function(rows){
           return token===latestToken?efCachedSearchResults(key,rows):[];
         });
