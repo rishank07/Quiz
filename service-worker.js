@@ -1,8 +1,8 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261113pyqscore1";
+const CACHE_VERSION = "efp-pwa-20261113pyqrefresh1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
-const QUIZ_SCORE_REVISION = "20261113pyqscore1";
+const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
 const OWNER_DEBUG_SCRIPT =
   '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT =
@@ -16,10 +16,13 @@ let ownerDebugState = null;
 const DESKTOP_SEARCH_ENTRY_BOOTSTRAP =
   '<script id="efp-desktop-search-entry-bootstrap">(function(){var ua=String(navigator.userAgent||"");var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);if(mobile)return;if(window.EFP_SEARCH_CONTEXT||document.getElementById("efp-shared-search-context"))return;var s=document.createElement("script");s.id="efp-shared-search-context";s.src="/search-context.js?v=20261007searchaudit1";s.defer=true;document.head.appendChild(s)})();</script>';
 
+const FRESH_ORIGINAL_PRACTICE =
+  /^\/Original%20Practice\/(?:index\.html|(?:Computer_Complete_Practice|Computer_PYQs|Mixed_Practice)(?:\.html)?)?$/;
+
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
-  "/quiz-unattempted.js?v=20261113pyqscore1",
-  "/quiz-unattempted.css?v=20261113pyqscore1",
+  "/quiz-unattempted.js?v=20261113pyqrefresh1",
+  "/quiz-unattempted.css?v=20261113pyqrefresh1",
   "/quiz-continuity.js?v=20261009wake1",
   "/ca-explanations.js?v=20261031full1",
   "/ca-explanations.css?v=20261031full1",
@@ -93,7 +96,14 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(CACHE_VERSION)
-      .then((cache) => cache.addAll(APP_SHELL))
+      .then((cache) => cache.addAll(APP_SHELL.map((asset) => {
+        const url = new URL(asset, self.location.origin);
+        if (FRESH_ORIGINAL_PRACTICE.test(url.pathname) ||
+            /^\/quiz-unattempted\.(?:js|css)$/.test(url.pathname)) {
+          return new Request(url, { cache: "reload" });
+        }
+        return asset;
+      })))
       .then(() => self.skipWaiting()),
   );
 });
@@ -451,11 +461,11 @@ async function networkFirst(event) {
       { cache: "no-cache" },
       {
         key,
-        // The Computer bank revision should update on ordinary navigation.
+        // Original Practice and its Computer quizzes should update on ordinary navigation.
         preferCache:
           navigation &&
           !isExplicitReload(request) &&
-          !/^\/Original%20Practice\/(?:Computer_Complete_Practice|Computer_PYQs|Mixed_Practice)(?:\.html)?$/.test(url.pathname),
+          !FRESH_ORIGINAL_PRACTICE.test(url.pathname),
         revalidate: true,
       },
     );
