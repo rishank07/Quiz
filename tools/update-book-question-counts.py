@@ -12,6 +12,7 @@ The Maths Speed Booster is intentionally excluded from counting.
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import os
 import re
@@ -358,6 +359,25 @@ def ensure_landing_counts(page: Path, section_summaries: dict[str, dict]) -> boo
     return True
 
 
+def rapid_catalog_counts(hub: Path, rapid_root: Path, known_html: set[Path]) -> dict[Path, int]:
+    """Read the deck counts refreshed by update-rapid-practice-count.py."""
+    source = hub.read_text(encoding="utf-8")
+    catalog = re.search(r"\bconst\s+DATA\s*=\s*(\[.*?\]);", source, re.S)
+    if not catalog:
+        raise ValueError(f"Missing Rapid Practice catalog: {hub}")
+
+    counts = {}
+    for row in ast.literal_eval(catalog[1]):
+        page = (hub.parent / unquote(row[3])).resolve()
+        count = row[4]
+        if page not in known_html or not page.is_relative_to(rapid_root):
+            raise ValueError(f"Invalid Rapid Practice catalog page: {row[3]}")
+        if page in counts or type(count) is not int or count <= 0:
+            raise ValueError(f"Duplicate page or invalid Rapid Practice count: {row[3]}")
+        counts[page] = count
+    return counts
+
+
 def build_counts(repo: Path, install_scripts: bool = True) -> tuple[dict, list[Path]]:
     books_root = (repo / "Books").resolve()
     roots: list[tuple[SectionConfig, Path]] = []
@@ -381,7 +401,23 @@ def build_counts(repo: Path, install_scripts: bool = True) -> tuple[dict, list[P
 
     html_paths = sorted(set(html_paths), key=lambda p: p.as_posix().lower())
     known_html = set(html_paths)
-    info_by_path = {p: parse_page(p, config_by_path[p]) for p in html_paths}
+    rapid_hub = (repo / "Current Affairs" / "Topic Names" / "Rapid Practice.html").resolve()
+    rapid_root = rapid_hub.with_suffix("")
+    has_rapid_hub = rapid_hub in known_html
+    info_by_path = {
+        path: parse_page(path, config_by_path[path])
+        for path in html_paths
+        if not has_rapid_hub or (path != rapid_hub and not is_inside(path, rapid_root))
+    }
+    if has_rapid_hub:
+        rapid_counts = rapid_catalog_counts(rapid_hub, rapid_root, known_html)
+        info_by_path.update({
+            path: PageInfo(path, count, count, "Questions", [])
+            for path, count in rapid_counts.items()
+        })
+        # Decks contribute to the section total; the hub only displays their sum.
+        info_by_path[rapid_hub] = PageInfo(rapid_hub, sum(rapid_counts.values()), 0, "Questions", [])
+
 
     # Directory aggregates use aggregate_count, which avoids BlackBook study/quiz
     # double-counting and treats each Mind Map chapter as one map.
@@ -416,15 +452,7 @@ def build_counts(repo: Path, install_scripts: bool = True) -> tuple[dict, list[P
         if info.display_count > 0:
             page_counts[key] = info.display_count
             page_units[key] = info.unit
-            page_kinds[key] = "content"
-            continue
-
-        # Dynamic CA quizzes link to their hubs, but are not hubs themselves.
-        # A new inline quiz in the same folder must not lend its count to every
-        # neighbouring dynamic quiz that has no static question containers.
-        if config.key == "Current Affairs" and repo_key(path, repo).startswith(
-            "Current Affairs/Topic Names/Rapid Practice/"
-        ) and "/Topic Wise/" in repo_key(path, repo):
+            page_kinds[key] = "hub" if path == rapid_hub else "content"
             continue
 
         children = local_html_links(info, known_html)
