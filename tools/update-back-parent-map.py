@@ -14,6 +14,8 @@ from urllib.parse import unquote, urlsplit
 
 SITE_HOSTS = {"examfusionprep.com", "www.examfusionprep.com"}
 OUTPUT_NAME = "back-parent-map.js"
+COMPUTER_PYQS = "Original Practice/Computer_PYQs.html"
+COMPUTER_PRACTICE = "Original Practice/Computer_Complete_Practice.html"
 RAPID_PRACTICE_HUB = "Current Affairs/Topic Names/Rapid Practice.html"
 RAPID_PRACTICE_PREFIX = "Current Affairs/Topic Names/Rapid Practice/"
 # Redirect-only aliases are not real navigation parents. Using one as a Back
@@ -220,6 +222,10 @@ def generate(root: Path) -> tuple[dict[str, str], int]:
             parent_map[make_url_path(target)] = make_url_path(RAPID_PRACTICE_HUB)
             continue
 
+        if target == COMPUTER_PYQS and COMPUTER_PRACTICE in html_files:
+            parent_map[make_url_path(target)] = make_url_path(COMPUTER_PRACTICE)
+            continue
+
         nav_candidates = [
             src for src in incoming.get(target, ())
             if src not in NON_NAV_REDIRECT_STUBS
@@ -246,6 +252,7 @@ def validate(parent_map: dict[str, str]) -> None:
             raise RuntimeError(f"Rapid Practice quiz must return to its hub: {child} -> {parent}")
 
     sample = {
+        make_url_path(COMPUTER_PYQS): make_url_path(COMPUTER_PRACTICE),
         make_url_path(RAPID_PRACTICE_HUB): "/Current Affairs/Topic Names.html",
         "/Books/Ghatnachakra Purvalokan/History/Ancient History/ChapterNames/Stone Age.html":
             "/Books/Ghatnachakra Purvalokan/History/Ancient History/ChapterName.html",

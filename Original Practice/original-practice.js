@@ -339,7 +339,9 @@ function efpApplySeoMeta(){
    desc="Practice "+state.subject+" chapter-wise questions in ExamFusion Prep Original Practice with bilingual explanations, bookmarks and progress tracking.";
   }else{
    title=CFG.label+" Original Practice | ExamFusion Prep";
-   desc="Practice chapter-wise "+CFG.label+" questions in ExamFusion Prep Original Practice for SSC, Railway, UPSC and BPSC.";
+   desc=CFG.slug==="computer"
+    ? "Practice bilingual Computer MCQs and previous-year questions with exam details, explanations and progress tracking."
+    : "Practice chapter-wise "+CFG.label+" questions in ExamFusion Prep Original Practice for SSC, Railway, UPSC and BPSC.";
   }
   document.title=title;
   efpSeoSetMeta('meta[name="description"]',"description",desc);

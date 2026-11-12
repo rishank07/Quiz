@@ -13,16 +13,16 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Computer Original Practice — Bilingual MCQs | ExamFusion Prep">
     <meta name="twitter:description"
-        content="ExamFusion Prep Original Practice Series: 2,076 bilingual Computer practice questions across 14 chapters with explanations, bookmarks and progress.">
+        content="ExamFusion Prep Original Practice Series: 5,319 bilingual Computer questions across 22 chapters, including 3,243 PYQs with exam details.">
     <meta name="twitter:image" content="https://examfusionprep.com/logo.png">
     <meta name="twitter:image:alt" content="ExamFusion Prep logo">
     <meta name="description"
-        content="ExamFusion Prep Original Practice Series: 2,076 bilingual Computer practice questions across 14 chapters with explanations, bookmarks and progress.">
+        content="ExamFusion Prep Original Practice Series: 5,319 bilingual Computer questions across 22 chapters, including 3,243 PYQs with exam details.">
     <meta name="robots" content="index,follow">
     <link rel="canonical" href="https://examfusionprep.com/Original%20Practice/Computer_Complete_Practice.html">
     <meta property="og:title" content="Computer Original Practice — Bilingual MCQs | ExamFusion Prep">
     <meta property="og:description"
-        content="ExamFusion Prep Original Practice Series: 2,076 bilingual Computer practice questions across 14 chapters with explanations, bookmarks and progress.">
+        content="ExamFusion Prep Original Practice Series: 5,319 bilingual Computer questions across 22 chapters, including 3,243 PYQs with exam details.">
     <meta property="og:url" content="https://examfusionprep.com/Original%20Practice/Computer_Complete_Practice.html">
     <script>try { if (localStorage.getItem("efp_black_mode") === "on") { document.documentElement.style.visibility = "hidden"; setTimeout(function () { document.documentElement.style.visibility = "" }, 1500) } } catch (e) { }</script>
     <script defer src="../black-mode.js?v=20260902b"></script>
@@ -134,9 +134,19 @@
             font-size: 18px;
             box-shadow: 0 2px 8px rgba(184, 134, 63, 0.4);
         }
+        .computer-pyq-card {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .computer-pyq-card:focus-visible {
+            outline: 3px solid var(--gold);
+            outline-offset: 3px;
+        }
     </style>
     <script defer src="/home-nav.js?v=20260906"></script>
-    <script defer src="/back-parent-map.js?v=20260906hier1"></script>
+    <script defer src="/back-parent-map.js?v=20261113computercards1"></script>
     <script defer src="/back-nav.js?v=20261007searchaudit1"></script>
     <link rel="stylesheet" href="./question-visual.css?v=20261109computer1">
     <meta name="efp-question-count" content="2076">
@@ -152,9 +162,12 @@
 
     <script>
         let MASTER;
+        const PYQ_QUESTIONS = 3243;
+        const PYQ_CHAPTERS = 8;
+        const COUNT_FORMAT = new Intl.NumberFormat('en-IN');
         const CHAPTER_HI = { Computer: EFPComputerBank.chapterHindi };
         const SUBJECT_META = {
-            Computer: { icon: '💻', desc: 'कंप्यूटर · 14 Chapters', color: 'from-amber-700 to-yellow-600' }
+            Computer: { icon: '💻', desc: 'कंप्यूटर · 14 Chapters' }
         };
 
         let state = {
@@ -183,8 +196,37 @@
             return m ? m[1] : '';
         }
 
+        function subjectCardContent(icon, title, description, questions, progress = '') {
+            return `
+                    <div class="bg-gradient-to-br from-amber-700 to-yellow-600 p-6 text-white">
+                        <div class="text-4xl mb-2" aria-hidden="true">${icon}</div>
+                        <div class="text-xl font-bold">${title}</div>
+                    </div>
+                    <div class="p-5">
+                        <p class="text-sm text-gray-600 mb-3">${description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold" style="color:var(--gold)">${COUNT_FORMAT.format(questions)}</span>
+                            <span class="text-xs text-gray-500">questions</span>
+                        </div>
+                        ${progress}
+                    </div>`;
+        }
+
+        function pyqProgress() {
+            let opened = 0;
+            try {
+                const chapters = JSON.parse(localStorage.getItem('efp_visited_originalpractice_computer-pyqs') || '[]');
+                if (Array.isArray(chapters)) {
+                    opened = Math.min(PYQ_CHAPTERS, new Set(chapters.filter(chapter =>
+                        typeof chapter === 'string' && chapter.startsWith('Computer PYQs||'))).size);
+                }
+            } catch (_) {}
+            return `<span class="efp-op-card-progress">${opened} / ${PYQ_CHAPTERS} chapters opened</span>`;
+        }
+
         function renderHome() {
-            const subjects = Object.keys(MASTER);
+            const computer = SUBJECT_META.Computer;
+            const questions = subjectQCount('Computer');
             return `
     <div class="max-w-5xl mx-auto px-4 pt-10 fade-in">
         <div class="text-center mb-10">
@@ -192,26 +234,16 @@
                 <div class="seal">EF</div>
                 <h1 class="text-3xl md:text-4xl font-bold" style="color:var(--ink)">Computer Complete Practice</h1>
             </div>
-            <p class="text-sm md:text-base" style="color:var(--deep2)">कंप्यूटर पूर्ण अभ्यास — ${Object.values(MASTER).reduce((s, c) => s + Object.values(c).reduce((s2, sec) => s2 + chapterQCount(sec), 0), 0)} Questions</p>
+            <p class="text-sm md:text-base" style="color:var(--deep2)">कंप्यूटर पूर्ण अभ्यास — ${COUNT_FORMAT.format(questions + PYQ_QUESTIONS)} Questions</p>
             <p class="text-xs mt-1 text-gray-500">SSC · Railway · BPSC · BSSC exam preparation — offline practice</p>
         </div>
-        <a href="./Computer_PYQs.html" class="mb-4 inline-block text-sm px-3 py-1.5 rounded-lg bg-white border border-gray-300 hover:bg-gray-50" style="color:var(--deep)">PYQs · पिछले वर्षों के प्रश्न</a>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            ${subjects.map(s => `
-                <div onclick="goToChapters('${s.replace(/'/g, "\\'")}')" class="card-hover cursor-pointer rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-200">
-                    <div class="bg-gradient-to-br ${SUBJECT_META[s].color} p-6 text-white">
-                        <div class="text-4xl mb-2">${SUBJECT_META[s].icon}</div>
-                        <div class="text-xl font-bold">${s}</div>
-                    </div>
-                    <div class="p-5">
-                        <p class="text-sm text-gray-600 mb-3">${SUBJECT_META[s].desc}</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl font-bold" style="color:var(--gold)">${subjectQCount(s)}</span>
-                            <span class="text-xs text-gray-500">questions</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('')}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div onclick="goToChapters('Computer')" class="card-hover cursor-pointer rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-200">
+                ${subjectCardContent(computer.icon, 'Computer', computer.desc, questions)}
+            </div>
+            <a href="./Computer_PYQs.html" class="computer-pyq-card card-hover rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-200">
+                ${subjectCardContent('📝', 'Computer PYQs', 'पिछले वर्षों के प्रश्न · ' + PYQ_CHAPTERS + ' Chapters', PYQ_QUESTIONS, pyqProgress())}
+            </a>
         </div>
         <div class="text-center mt-10 text-xs text-gray-400">examfusionprep.com &middot; works fully offline once loaded</div>
     </div>`;
@@ -222,7 +254,6 @@
             const names = Object.keys(chapters);
             return `
     <div class="max-w-4xl mx-auto px-4 pt-6 fade-in">
-        <a href="./Computer_PYQs.html" class="mb-4 inline-block text-sm px-3 py-1.5 rounded-lg bg-white border border-gray-300 hover:bg-gray-50" style="color:var(--deep)">PYQs · पिछले वर्षों के प्रश्न</a>
         <button onclick="goHome()" class="mb-4 text-sm px-3 py-1.5 rounded-lg bg-white border border-gray-300 hover:bg-gray-50" style="color:var(--deep)">&larr; All Subjects</button>
         <div class="mb-6">
             <h2 class="text-2xl font-bold" style="color:var(--ink)">${state.subject}</h2>
@@ -392,7 +423,7 @@
         EFPComputerBank.load().then(function (master) {
             MASTER = master;
             const runtime = document.createElement('script');
-            runtime.src = './original-practice.js?v=20261113computerpyqs2';
+            runtime.src = './original-practice.js?v=20261113computercards1';
             runtime.onerror = showComputerLoadError;
             document.body.appendChild(runtime);
         }).catch(showComputerLoadError);
