@@ -1035,7 +1035,10 @@
     var current = normalizePath(window.location.pathname);
     // Cloudflare can expose extensionless routes before its URL bootstrap.
     var canonical = /\.[^/]+$/.test(current) ? current : current + ".html";
-    var parent = map[current] || map[canonical];
+    // Older cached maps can still point this nested hub at the section index.
+    var parent = canonical.toLowerCase() === "/original practice/computer_pyqs.html"
+      ? "/Original Practice/Computer_Complete_Practice.html"
+      : map[current] || map[canonical];
 
     // A newly published CA page can arrive before the browser's cached parent
     // map. These two real hubs own the entire existing reading/quiz families;
@@ -1377,6 +1380,20 @@
     return true;
   }
 
+  function useOriginalPracticeParent(event) {
+    if (!isOriginalPracticePage()) return false;
+    if (useLogicalParent(event)) return true;
+
+    consumeBackEvent(event);
+    if (isOriginalPracticeIndex()) {
+      if (window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
+      window.location.replace("/");
+    } else {
+      window.location.replace("/Original%20Practice/index.html");
+    }
+    return true;
+  }
+
   /* Quiz confirmation must choose the visible site's parent, not the previous
      browser entry. After an app resume that entry may be the launch Home, and
      quiz/history guards can add more same-URL entries in front of it. Both the
@@ -1396,16 +1413,7 @@
       if (!navigateCruxViewerToHierarchy()) window.location.replace("/Crux-Tricks/index.html");
       return true;
     }
-    if (isOriginalPracticePage()) {
-      if (isOriginalPracticeIndex()) {
-        if (window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
-        window.location.replace("/");
-      } else {
-        window.location.replace("/Original%20Practice/index.html");
-      }
-      return true;
-    }
-    return useLogicalParent(event);
+    return useOriginalPracticeParent(event) || useLogicalParent(event);
   }
 
   window.EFP_BACK_NAV = { navigateQuizParent: navigateQuizParent };
@@ -1621,18 +1629,7 @@
     }
 
     /* Follow the Practice page's own hierarchy before leaving its section. */
-    if (isOriginalPracticePage()) {
-      if (useOriginalPracticeInternalBack(event)) return;
-      consumeBackEvent(event);
-      try { sessionStorage.removeItem("efp_logical_back_expected_path"); } catch (_) {}
-      if (isOriginalPracticeIndex()) {
-        if (window.EFP_APP_SESSION) window.EFP_APP_SESSION.markHome();
-        window.location.assign("/");
-      } else {
-        window.location.assign("/Original%20Practice/index.html");
-      }
-      return;
-    }
+    if (useOriginalPracticeInternalBack(event) || useOriginalPracticeParent(event)) return;
 
     if (isCruxViewer()) {
       consumeBackEvent(event);
