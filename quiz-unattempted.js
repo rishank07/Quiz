@@ -14,14 +14,14 @@
       link.rel = "stylesheet";
       (document.head || document.documentElement).appendChild(link);
     }
-    var href = "/quiz-unattempted.css?v=20261031bbmobileframe1";
+    var href = "/quiz-unattempted.css?v=20261113pyqscore1";
     if (link.getAttribute("href") !== href) link.setAttribute("href", href);
   }
   ensureScoreStyle();
   if (window.EFP_QUIZ_UNATTEMPTED) return;
   var path;
   try { path = decodeURIComponent(location.pathname); } catch (_) { path = location.pathname; }
-  var original = /^\/Original Practice\/[^/]+_Complete_Practice\.html$/i.test(path);
+  var original = /^\/Original Practice\/(?:[^/]+_Complete_Practice|Computer_PYQs)(?:\.html)?$/i.test(path);
   var mixed = /^\/Original Practice\/Mixed_Practice\.html$/i.test(path);
   var books = /^\/Books\//i.test(path);
   var rapid = /^\/Current Affairs\/Topic Names\/Rapid Practice\/.*\.html$/i.test(path);

@@ -1,8 +1,8 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261113computercards1";
+const CACHE_VERSION = "efp-pwa-20261113pyqscore1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
-const QUIZ_SCORE_REVISION = "20261031bbmobileframe1";
+const QUIZ_SCORE_REVISION = "20261113pyqscore1";
 const OWNER_DEBUG_SCRIPT =
   '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT =
@@ -18,8 +18,8 @@ const DESKTOP_SEARCH_ENTRY_BOOTSTRAP =
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
-  "/quiz-unattempted.js?v=20261031bbmobileframe1",
-  "/quiz-unattempted.css?v=20261031bbmobileframe1",
+  "/quiz-unattempted.js?v=20261113pyqscore1",
+  "/quiz-unattempted.css?v=20261113pyqscore1",
   "/quiz-continuity.js?v=20261009wake1",
   "/ca-explanations.js?v=20261031full1",
   "/ca-explanations.css?v=20261031full1",
