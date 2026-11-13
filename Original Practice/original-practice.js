@@ -15,6 +15,42 @@ var CONFIGS={
 };
 var CFG=CONFIGS[PAGE_FILE]||{slug:"practice",label:"Practice"};
 
+/* Polity Chapter 11 exact-question deduplication, 2026-11-13.
+   Original entries and answer choices are retained for every unique question. */
+var EFP_P11_REMOVED={},EFP_P11_TARGETS={},EFP_P11_DEDUP_ACTIVE=false;
+if(CFG.slug==="polity"&&typeof MASTER!=="undefined"&&MASTER&&MASTER["Indian Polity"]){
+ (function(){
+  var chapters=MASTER["Indian Polity"],key=Object.keys(chapters).filter(function(k){return /^11\\./.test(k)})[0];
+  var sections=key&&chapters[key],oldTotal=0,duplicates=0;
+  if(!Array.isArray(sections)||sections.length!==10)return;
+  sections.forEach(function(s){oldTotal+=s.questions.length});
+  if(oldTotal!==195)return; // Do not double-filter a future clean master.
+  var seen=new Map(),updated=[];
+  sections.forEach(function(section,si){
+   var keep=[];EFP_P11_REMOVED[si]=[];
+   section.questions.forEach(function(q,qi){
+    var norm=String(q&&q.q&&q.q.en||"").trim().toLowerCase()
+      .replace(/\\s+/g," ").replace(/[‘’“”]/g,"'").replace(/[?!.,;:]+$/,"");
+    if(seen.has(norm)){
+     EFP_P11_REMOVED[si].push(qi);
+     EFP_P11_TARGETS[si+"-"+qi]=seen.get(norm);
+     duplicates++;
+    }else{seen.set(norm,si+"-"+keep.length);keep.push(q)}
+   });
+   updated.push(keep);
+  });
+  if(duplicates!==28||updated[8].length!==36||updated[9].length!==32)return;
+  sections.forEach(function(section,si){section.questions=updated[si]});
+  EFP_P11_DEDUP_ACTIVE=true;
+  document.querySelectorAll("meta[content]").forEach(function(meta){
+   var c=meta.getAttribute("content")||"";
+   if(c.indexOf("4,052 bilingual Polity")>=0)meta.setAttribute("content",c.replace("4,052","4,024"));
+  });
+  setTimeout(function(){if(typeof state!=="undefined"&&state.screen==="home"&&typeof render==="function")render()},0);
+ })();
+}
+
+
 // Section titles describe revision content independently of exam-specific branding.
 // Address only these title objects; question banks and progress keys stay intact.
 if(PAGE_FILE==="science_complete_practice.html"){
@@ -137,6 +173,7 @@ function restoreAppAttempt(preserveSection){
  if(state.screen!=="quiz"||!state.quizData)return false;
  try{
   var key=attemptStorageKey(),saved=JSON.parse(localStorage.getItem(key)||"null");
+  saved=efpP11MigrateAttempt(saved);
   if(!saved||saved.path!==location.pathname||saved.subject!==state.subject||
      saved.chapter!==state.chapterName||saved.signature!==attemptSignature()){
    if(saved)try{localStorage.removeItem(key)}catch(_){}
@@ -213,7 +250,57 @@ function saveVisited(v){try{localStorage.setItem(PROGRESS_KEY,JSON.stringify(uni
 function token(subject,chapter){return subject+"||"+chapter}
 function markVisited(subject,chapter){if(!subject||!chapter)return;var v=getVisited(),t=token(subject,chapter);if(v.indexOf(t)<0){v.push(t);saveVisited(v)}}
 function isVisited(subject,chapter){return getVisited().indexOf(token(subject,chapter))>=0}
-function getBookmarks(){var v=safeParse(localStorage.getItem(BOOKMARK_KEY),{});return v&&typeof v==="object"&&!Array.isArray(v)?v:{}}
+
+function efpP11Ready(){
+ return EFP_P11_DEDUP_ACTIVE&&CFG.slug==="polity"&&state.subject==="Indian Polity"&&
+ /^11\\./.test(String(state.chapterName||""))&&Array.isArray(state.quizData)&&
+ state.quizData.length===10&&state.quizData[8].questions.length===36&&state.quizData[9].questions.length===32;
+}
+function efpP11Position(si,qi,allowDuplicate){
+ si=Number(si);qi=Number(qi);
+ if(!Number.isInteger(si)||!Number.isInteger(qi)||si<0||si>=10||qi<0)return null;
+ var removed=EFP_P11_REMOVED[si]||[];
+ if(removed.indexOf(qi)>=0)return allowDuplicate?(EFP_P11_TARGETS[si+"-"+qi]||null):null;
+ return si+"-"+(qi-removed.filter(function(i){return i<qi}).length);
+}
+function efpP11MigrateAttempt(saved){
+ if(!efpP11Ready()||!saved||typeof saved.signature!=="string"||
+    saved.signature===attemptSignature()||
+    saved.signature.indexOf("|58:How does the President")<0||
+    saved.signature.indexOf("|34:PM & Council")<0)return saved;
+ var answers={},orders={};
+ Object.keys(saved.answers||{}).forEach(function(oldKey){
+  var m=/^(\\d+)-(\\d+)$/.exec(oldKey);
+  if(!m)return;
+  var newKey=efpP11Position(m[1],m[2],false);
+  if(newKey!==null&&saved.orders&&Array.isArray(saved.orders[oldKey])){
+   answers[newKey]=saved.answers[oldKey];
+   orders[newKey]=saved.orders[oldKey];
+  }
+ });
+ saved.answers=answers;saved.orders=orders;saved.signature=attemptSignature();
+ try{localStorage.setItem(attemptStorageKey(),JSON.stringify(saved))}catch(_){}
+ return saved;
+}
+function efpP11MigrateBookmarks(v){
+ if(!efpP11Ready())return v;
+ var flag="efp_polity_ch11_bookmark_migration_"+"20261113politydedup1";
+ try{if(localStorage.getItem(flag)==="1")return v}catch(_){}
+ var prefix=location.pathname+"#op|"+CFG.slug+"|"+enc(state.subject)+"|"+enc(state.chapterName)+"|";
+ Object.keys(v).forEach(function(k){
+  if(k.indexOf(prefix)!==0)return;
+  var m=/^(\\d+)\\|(\\d+)$/.exec(k.slice(prefix.length));
+  if(!m)return;
+  var newPos=efpP11Position(m[1],m[2],true);
+  if(newPos===null)return;
+  var newKey=prefix+newPos.replace("-","|");
+  if(newKey!==k){v[newKey]=v[k];delete v[k]}
+ });
+ try{localStorage.setItem(BOOKMARK_KEY,JSON.stringify(v));localStorage.setItem(flag,"1")}catch(_){}
+ return v;
+}
+
+function getBookmarks(){var v=safeParse(localStorage.getItem(BOOKMARK_KEY),{});return v&&typeof v==="object"&&!Array.isArray(v)?efpP11MigrateBookmarks(v):{}}
 function saveBookmarks(v){try{localStorage.setItem(BOOKMARK_KEY,JSON.stringify(v))}catch(e){}}
 function enc(v){return encodeURIComponent(String(v==null?"":v))}
 function qKey(qi){return location.pathname+"#op|"+CFG.slug+"|"+enc(state.subject)+"|"+enc(state.chapterName)+"|"+state.currentSection+"|"+qi}
@@ -360,7 +447,7 @@ function getOpFullSearchClient(){
  if(typeof efCreateSearchWorker!=="function")return null;
  var specialIndex=CFG.slug==="computer-pyqs"?{file:"../search-snippets-computer-pyqs.js?v=20261113computerpyqs2",global:"EF_COMPUTER_PYQS_SNIPPET_INDEX"}:CFG.slug==="computer"?{file:"../search-snippets-computer-original-practice.js?v=20261109computersearch1",global:"EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20260912ecology1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261102biologyexp1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
  opFullSearchClient=efCreateSearchWorker({
-  workerUrl:new URL("../search-worker.js?v=20261007searchaudit1",document.baseURI).href,
+  workerUrl:new URL("../search-worker.js?v=20261113politydedup1",document.baseURI).href,
   logicUrl:new URL("../search-logic.js?v=20261007searchaudit1",document.baseURI).href,
   indexUrl:new URL(specialIndex.file,document.baseURI).href,
   mode:"snippet",

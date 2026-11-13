@@ -526,7 +526,7 @@
   var FILES={history:'History_Complete_Practice.html',polity:'Polity_Complete_Practice.html',science:'Science_Complete_Practice.html',geography:'Geography_Complete_Practice.html',economics:'Economics_Complete_Practice.html',ecology:'Environment_Ecology_Complete_Practice.html',english:'English_Grammar_Complete_Practice.html',staticgk:'Static_GK_Complete_Practice.html','computer-pyqs':'Computer_PYQs.html?v=20261113computerpyqs2'};
   var POOLS={
     history:{key:'history',label:'History',hi:'इतिहास',count:5440,file:'history',groups:['Ancient History','Medieval History','Modern History'],domain:'history',kind:'major',icon:'🏛️'},
-    polity:{key:'polity',label:'Polity',hi:'राजव्यवस्था',count:4052,file:'polity',groups:['Indian Polity'],domain:'polity',kind:'major',icon:'⚖️'},
+    polity:{key:'polity',label:'Polity',hi:'राजव्यवस्था',count:4024,file:'polity',groups:['Indian Polity'],domain:'polity',kind:'major',icon:'⚖️'},
     science:{key:'science',label:'Science',hi:'विज्ञान',count:13549,file:'science',groups:['Physics','Chemistry','Biology'],domain:'science',kind:'major',icon:'🧪'},
     geography:{key:'geography',label:'Geography',hi:'भूगोल',count:15735,file:'geography',groups:['Indian Geography','World Geography'],domain:'geography',kind:'major',icon:'🌍'},
     economics:{key:'economics',label:'Economics',hi:'अर्थशास्त्र',count:2115,file:'economics',groups:['Economics / अर्थशास्त्र'],domain:'economics',kind:'major',icon:'₹'},
@@ -747,7 +747,29 @@
   function surpriseKeys(){var count=3+randomInt(2),domains=shuffle(SURPRISE_DOMAINS.slice()).slice(0,count);return domains.map(function(domain){var variants=SURPRISE_VARIANTS[domain]||[domain];return variants[randomInt(variants.length)]})}
   function updateDistribution(){var keys=checkedKeys(),total=normalizedCount(),box=$('distribution');box.innerHTML='';document.querySelectorAll('.preset').forEach(function(b){b.classList.toggle('active',Number(b.dataset.count)===total)});if(keys.length<2){box.innerHTML='<span class="dist-pill">Select 2 or more subjects</span>';return}var q=quotaPreview(keys,total);keys.forEach(function(k){var s=document.createElement('span');s.className='dist-pill';s.textContent=POOLS[k].label+' '+q[k];box.appendChild(s)})}
   $('questionCount').addEventListener('input',function(){clearStatus();updateDistribution()});$('questionCount').addEventListener('change',function(){$('questionCount').value=normalizedCount();updateDistribution()});document.querySelectorAll('.preset').forEach(function(b){b.onclick=function(){clearStatus();$('questionCount').value=b.dataset.count;updateDistribution()}});
-  async function loadMaster(fileKey){if(fileKey==='computer')return EFPComputerBank.load();if(fileCache[fileKey])return fileCache[fileKey];var filename=FILES[fileKey]+(fileKey==='science'?'?v=20261102biologyexp1':'')+(fileKey==='polity'?'?v=20261001polity22-583a40e433b0':(fileKey==='english'?'?v=20261027englishhighlights1':''));var promise=fetch('./'+filename+(fileKey==='history'?'?v=20261001modern13-15616a4dad83':''),{cache:fileKey==='english'?'no-cache':'force-cache'}).then(function(r){if(!r.ok)throw new Error('Could not load '+filename+' ('+r.status+')');return r.text()}).then(function(html){var doc=new DOMParser().parseFromString(html,'text/html'),node=doc.getElementById('master-data');if(!node)throw new Error('Question data not found in '+filename);return JSON.parse(node.textContent)});fileCache[fileKey]=promise;try{return await promise}catch(err){delete fileCache[fileKey];throw err}}
+
+  function dedupePolityChapter11(bank){
+   var chapters=bank&&bank["Indian Polity"],key=chapters&&Object.keys(chapters).filter(function(k){return /^11\\./.test(k)})[0];
+   var sections=key&&chapters[key],total=0;
+   if(!Array.isArray(sections)||sections.length!==10)return bank;
+   sections.forEach(function(s){total+=s.questions.length});
+   if(total!==195)return bank;
+   var seen=new Set(),updated=[],dups=0;
+   sections.forEach(function(section){
+    var keep=[];
+    section.questions.forEach(function(q){
+     var k=String(q&&q.q&&q.q.en||"").trim().toLowerCase()
+      .replace(/\\s+/g," ").replace(/[‘’“”]/g,"'").replace(/[?!.,;:]+$/,"");
+     if(seen.has(k))dups++;else{seen.add(k);keep.push(q)}
+    });
+    updated.push(keep);
+   });
+   if(dups===28&&updated[8].length===36&&updated[9].length===32){
+    sections.forEach(function(section,i){section.questions=updated[i]});
+   }
+   return bank;
+  }
+  async function loadMaster(fileKey){if(fileKey==='computer')return EFPComputerBank.load();if(fileCache[fileKey])return fileCache[fileKey];var filename=FILES[fileKey]+(fileKey==='science'?'?v=20261102biologyexp1':'')+(fileKey==='polity'?'?v=20261113politydedup1':(fileKey==='english'?'?v=20261027englishhighlights1':''));var promise=fetch('./'+filename+(fileKey==='history'?'?v=20261001modern13-15616a4dad83':''),{cache:fileKey==='english'?'no-cache':'force-cache'}).then(function(r){if(!r.ok)throw new Error('Could not load '+filename+' ('+r.status+')');return r.text()}).then(function(html){var doc=new DOMParser().parseFromString(html,'text/html'),node=doc.getElementById('master-data');if(!node)throw new Error('Question data not found in '+filename);var bank=JSON.parse(node.textContent);return fileKey==='polity'?dedupePolityChapter11(bank):bank});fileCache[fileKey]=promise;try{return await promise}catch(err){delete fileCache[fileKey];throw err}}
   function questionId(fileKey,groupName,chapterIndex,sectionIndex,questionIndex){return fileKey+'|'+encodeURIComponent(groupName)+'|'+chapterIndex+'|'+sectionIndex+'|'+questionIndex}
   function identityText(value){return String(value==null?'':value).replace(/<[^>]*>/g,' ').replace(/&nbsp;/gi,' ').replace(/\s+/g,' ').trim().toLowerCase()}
   function identityHash(value){var first=2166136261,second=5381,text=String(value);for(var i=0;i<text.length;i++){var code=text.charCodeAt(i);first^=code;first=Math.imul(first,16777619);second=Math.imul(second,33)^code}return(first>>>0).toString(36)+'-'+(second>>>0).toString(36)}

@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261113pyqback1";
+const CACHE_VERSION = "efp-pwa-20261113politydedup1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -17,7 +17,7 @@ const DESKTOP_SEARCH_ENTRY_BOOTSTRAP =
   '<script id="efp-desktop-search-entry-bootstrap">(function(){var ua=String(navigator.userAgent||"");var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);if(mobile)return;if(window.EFP_SEARCH_CONTEXT||document.getElementById("efp-shared-search-context"))return;var s=document.createElement("script");s.id="efp-shared-search-context";s.src="/search-context.js?v=20261007searchaudit1";s.defer=true;document.head.appendChild(s)})();</script>';
 
 const FRESH_ORIGINAL_PRACTICE =
-  /^\/Original%20Practice\/(?:index\.html|(?:Computer_Complete_Practice|Computer_PYQs|Mixed_Practice)(?:\.html)?)?$/;
+  /^\/Original%20Practice\/(?:index\.html|(?:Computer_Complete_Practice|Computer_PYQs|Mixed_Practice|Polity_Complete_Practice)(?:\.html)?)?$/;
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
@@ -75,7 +75,7 @@ const APP_SHELL = [
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/english-highlights.css?v=20261009dark1",
-  "/Original%20Practice/original-practice.js?v=20261113computercards1",
+  "/Original%20Practice/original-practice.js?v=20261113politydedup1",
   "/Original%20Practice/computer-bank.js?v=20261112computerch01",
   "/Original%20Practice/english-practice.js?v=20261007continue1",
   "/Original%20Practice/original-practice-index.js?v=20261113computerpyqs2",
