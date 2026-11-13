@@ -43,7 +43,7 @@
     const requestedTopic = D.topics.find(t=>t.id===rawTopic)?.id || (Object.hasOwn(aliases,rawTopic) ? aliases[rawTopic] : '');
     let selected = index.get(item);
     if(chapter && !landmarkIds(chapter).includes(selected?.id)) selected = index.get(chapter.places[0]);
-    const topic = chapter?.topic || (legacyTopic && selected ? selected.topic : requestedTopic) || selected?.topic || (mode==='learn'?'rivers':'all');
+    const topic = chapter?.topic || (legacyTopic && selected ? selected.topic : requestedTopic) || selected?.topic || (mode==='learn'?'districts':'all');
     return {region:'Bihar',topic,mode,chapter:chapter?.id||'',selected:selected?.id||chapter?.places[0]||(topic==='rivers'?'ganga':'')};
   }
   function regionFeatures(state) {
@@ -52,6 +52,9 @@
   }
 
   function renderControls(state,q,session,filteredFeatures) {
+    document.body.toggleAttribute('data-district-overview',state.mode==='learn'
+      ? state.topic==='districts'||state.selected==='br-overview'
+      : session?.answered!==null&&Boolean(q?.featureIds.includes('br-overview')));
     for(const b of $('modeTabs').querySelectorAll('button')) b.tabIndex = b.dataset.mode===state.mode ? 0 : -1;
     const t = getTopic(state.topic), chapter = chapters.get(state.chapter);
     const select=$('biharTopic');
@@ -256,13 +259,17 @@
     if(f.members) {api.boundsView(f.members.map(id=>pointOf(index.get(id))),.38);return;}
     if(f.study?.river) {
       const nearby=(f.related||[]).map(id=>index.get(id)).filter(Boolean).map(pointOf);
-      api.boundsView([pointOf(f),...nearby],.36);
+      api.boundsView([pointOf(f),...nearby,...relatedDistricts(f).map(id=>pointOf(index.get(id)))],.36);
       return;
     }
-    api.boundsView([pointOf(f)],f.path?.length>3500?.65:.38);
+    const anchors=f.district?[pointOf(f),pointOf(index.get(f.district))]:[pointOf(f)];
+    api.boundsView(anchors,f.path?.length>3500?.65:.38);
   }
   function fitFeatures(features,padding=.28) {
-    const anchors=features.filter(f=>!f.statewide).flatMap(f=>f.members?f.members.map(id=>pointOf(index.get(id))):[pointOf(f)]);
+    if(features.some(f=>f.id==='br-overview')){api.setView(defaultView());return;}
+    const anchors=features.filter(f=>!f.statewide).flatMap(f=>[
+      ...(f.members?[]:[pointOf(f)]),...relatedDistricts(f).map(id=>pointOf(index.get(id)))
+    ]);
     if(anchors.length)api.boundsView(anchors,padding);
     else api.setView(defaultView());
   }
@@ -333,6 +340,16 @@
 
   let districtRenderKey='';
   const districtColours=new Map(D.divisions.map((v,i)=>[v.id,[divisionColours[i],darkDivisionColours[i]]]));
+  function relatedDistricts(f) {
+    if(!f)return [];
+    if(f.path)return [f.id];
+    if(f.members)return f.members;
+    return [f.district,...(f.study?.river ? f.related.map(id=>{
+      const place=index.get(id);
+      return place?.path ? id : place?.district;
+    }) : [])].filter(Boolean);
+  }
+
   function renderDistricts(state,selected,q,session,svg) {
     const layer=$('biharDistrictLayer');
     const locate=q?.type==='locate', revealed=!q || session?.answered!==null;
@@ -368,35 +385,126 @@
     }
   }
 
+  const labelCanvas=document.createElement('canvas').getContext('2d');
+  const labelWidths=new Map();
+
+  function nearestLabelBox(x,y,w,h,limits,fits) {
+    const minX=limits.left,maxX=limits.right-w,minY=limits.top,maxY=limits.bottom-h;
+    if(maxX<minX||maxY<minY)return null;
+    const step=3, lastColumn=Math.floor((maxX-minX)/step);
+    const column=Math.max(0,Math.min(lastColumn,Math.round((x-w/2-minX)/step)));
+    let nearest=null,best=Infinity;
+    for(let by=minY;by<=maxY;by+=step){
+      const verticalDistance=(by+h/2-y)**2;
+      if(verticalDistance>best)continue;
+      // Start near the district and stop each direction once it cannot improve the result.
+      for(const direction of [-1,1]){
+        for(let i=column+Number(direction===1);i>=0&&i<=lastColumn;i+=direction){
+          const bx=minX+i*step;
+          const distance=(bx+w/2-x)**2+verticalDistance;
+          if(distance>best)break;
+          if(distance===best&&(by>nearest.y||bx>=nearest.x))continue;
+          const box={x:bx,y:by,w,h};
+          if(!fits(box))continue;
+          nearest=box;
+          best=distance;
+          break;
+        }
+      }
+    }
+    return nearest;
+  }
+
   function renderAreaLabels(state,selected,q,metrics,boxes,svg) {
     if(!state.names || (q&&state.mode!=='learn'&&selected.size===0))return;
     const {unit,width,height,left,top}=metrics;
     const districtMode=state.topic==='districts', divisionMode=state.topic==='divisions';
-    const labelFont=width<580?10:12;
+    const compact=width<580;
+    const allDistricts=selected.has('br-overview')||(state.mode==='learn'&&districtMode);
     const layer=$('stateLabelLayer');
-    const labels=[];
-    if((districtMode||divisionMode)&&state.mode==='learn') {
-      const areas=divisionMode?D.divisions:D.districts;
-      const ranked=[...areas].sort((a,b)=>Number(selected.has(b.id))-Number(selected.has(a.id)));
-      for(const f of ranked)labels.push({x:f.lon,y:-f.lat,text:divisionMode?title(f.shortName,f.shortHi):title(f.name,f.hi),selected:selected.has(f.id),font:labelFont});
-    } else {
-      for(const id of selected){
-        const f=index.get(id);
-        if(!isArea(f))continue;
-        labels.push({x:f.lon,y:-f.lat,text:title(f.shortName||f.name,f.shortHi||f.hi),selected:true,font:labelFont});
+    const family=getComputedStyle(layer).fontFamily;
+    const areas=new Set();
+    const addAreas=features=>{
+      for(const f of features){
+        if(isArea(f))areas.add(f.id);
+        for(const id of relatedDistricts(f))areas.add(id);
       }
+    };
+    const focus=[...selected].map(id=>index.get(id));
+    addAreas(focus);
+    const stop=index.get(route?.stops[route.step].target);
+    if(stop)addAreas([stop]);
+    if(allDistricts)for(const d of D.districts)areas.add(d.id);
+    if(state.mode==='learn'){
+      if(divisionMode)for(const d of D.divisions)areas.add(d.id);
+      const chapter=chapters.get(state.chapter);
+      if(chapter)addAreas(landmarkIds(chapter).map(id=>index.get(id)));
     }
-    for(const [en,hi,lon,lat] of nearbyAreas)labels.push({x:lon,y:-lat,text:title(en,hi),context:true,font:width<580?10:13});
-    for(const label of labels){
-      const x=(label.x-left)/unit,y=(label.y-top)/unit,w=label.text.length*label.font*.56,h=label.font+5;
-      const b={x:x-w/2,y:y-h/2,w,h};
-      if(b.x<6||b.x+w>width-9||b.y<28||b.y+h>height-40)continue;
-      if(boxes.some(o=>b.x<o.x+o.w+2&&b.x+w+2>o.x&&b.y<o.y+o.h+2&&b.y+h+2>o.y))continue;
+    const labels=[...areas].map(id=>{
+      const f=index.get(id);
+      return {id,lon:f.lon,lat:f.lat,text:f.members&&divisionMode&&state.mode==='learn'
+        ? title(f.shortName,f.shortHi) : title(f.name,f.hi),
+        district:Boolean(f.path),selected:selected.has(id),font:compact?10:12};
+    });
+    const pins=(q?.type==='locate' ? q.candidates.map(id=>index.get(id)) : focus.filter(f=>!isArea(f)&&!f.statewide))
+      .map(f=>({x:(f.lon-left)/unit,y:(-f.lat-top)/unit}));
+    if(stop)pins.push({x:(stop.lon-left)/unit,y:(-stop.lat-top)/unit});
+    const pinRadius=q?.type==='locate'?13:8;
+    const limits={left:6,right:width-9,top:32,bottom:height-40};
+    // Keep the names clear of the map controls as well as other labels.
+    const controls=[{x:width-54,y:height-149,w:54,h:89},{x:width-46,y:52,w:46,h:48}];
+    const overlaps=(b,o)=>b.x<o.x+o.w+2&&b.x+b.w+2>o.x&&b.y<o.y+o.h+2&&b.y+b.h+2>o.y;
+    const fits=b=>!controls.some(o=>overlaps(b,o))&&!boxes.some(o=>overlaps(b,o))&&
+      !pins.some(p=>p.x>b.x-pinRadius&&p.x<b.x+b.w+pinRadius&&p.y>b.y-pinRadius&&p.y<b.y+b.h+pinRadius);
+    const pending=[];
+    function draw(label,b){
+      const {id,lon,lat,font,active,context,district,lines,x,y,lineHeight}=label;
+      const selectable=district&&districtMode&&state.mode==='learn';
       boxes.push(b);
-      const t=svg('text',{x:label.x,y:label.y,'font-size':label.font*unit,'stroke-width':2.7*unit,
-        'text-anchor':'middle',class:'bihar-area-label'+(label.selected?' is-selected':'')+(label.context?' context':'')});
-      t.textContent=label.text;layer.append(t);
+      const tx=left+(b.x+b.w/2)*unit;
+      if(x<b.x||x>b.x+b.w||y<b.y||y>b.y+b.h){
+        const endX=Math.max(b.x,Math.min(b.x+b.w,x)),endY=Math.max(b.y,Math.min(b.y+b.h,y));
+        layer.prepend(svg('line',{x1:lon,y1:-lat,x2:left+endX*unit,y2:top+endY*unit,class:'bihar-area-leader'}));
+      }
+      const t=svg('text',{x:tx,'font-size':font*unit,'stroke-width':2.7*unit,'text-anchor':'middle',
+        'dominant-baseline':'central',...(id?{'data-area-id':id}:{}),...(selectable?{'data-marker':id}:{}),
+        class:'bihar-area-label'+(active?' is-selected':'')+(context?' context':'')});
+      for(const [i,line] of lines.entries()){
+        const span=svg('tspan',{x:tx,y:top+(b.y+(i+.5)*lineHeight+1.5)*unit});
+        span.textContent=line;
+        t.append(span);
+      }
+      layer.append(t);
     }
+    function place(label){
+      const {lon,lat,text,district,selected:active,context,font}=label;
+      const x=(lon-left)/unit,y=(-lat-top)/unit;
+      if(x<0||x>width||y<0||y>height)return;
+      const lines=district&&compact ? text.split(' ') : [text];
+      const fontStyle=(active?800:650)+' '+font+'px '+family;
+      const w=Math.ceil(Math.max(...lines.map(line=>{
+        const key=fontStyle+' '+line;
+        if(!labelWidths.has(key)){
+          labelCanvas.font=fontStyle;
+          labelWidths.set(key,labelCanvas.measureText(line).width);
+        }
+        return labelWidths.get(key);
+      })))+4;
+      const lineHeight=font+1,h=lines.length*lineHeight+3;
+      const measured={...label,x,y,w,h,lineHeight,active,lines};
+      const offsets=context?[[0,0]]:[[0,0],[0,-h],[0,h],[-w/2,0],[w/2,0]];
+      const b=offsets.map(([dx,dy])=>({x:x+dx-w/2,y:y+dy-h/2,w,h})).find(b=>
+        b.x>=limits.left&&b.x+w<=limits.right&&b.y>=limits.top&&b.y+h<=limits.bottom&&fits(b));
+      if(b)draw(measured,b);
+      else if(!context)pending.push(measured);
+    }
+    labels.forEach(place);
+    // Use a callout for crowded districts so a fitted map shows every name.
+    for(const label of pending){
+      const b=nearestLabelBox(label.x,label.y,label.w,label.h,limits,fits);
+      if(b)draw(label,b);
+    }
+    for(const [en,hi,lon,lat] of nearbyAreas)place({lon,lat,text:title(en,hi),context:true,font:compact?10:13});
   }
   function renderRiverDirection(r,layer,m,svg) {
     const lines=r.geometry.type==='LineString'?[r.geometry.coordinates]:r.geometry.coordinates;
@@ -420,7 +528,11 @@
   function labelStatus(state,unrevealed,isLocate,shown,total) {
     if(unrevealed)return title(isLocate?'Choose a numbered marker':'Answer labels hidden',isLocate?'संख्या वाला चिह्न चुनें':'उत्तर के नाम छिपे हैं');
     if(!state.names)return title('Map labels hidden','मानचित्र के नाम छिपे हैं');
-    if(state.topic==='districts'||state.topic==='divisions')return title('Bihar district boundaries','बिहार की जिला सीमाएँ');
+    if(state.topic==='districts'&&state.mode==='learn'){
+      const count=$('stateLabelLayer').querySelectorAll('[data-area-id^="br-d-"]').length;
+      return count+' / '+D.districts.length+' · '+title('District names','जिलों के नाम');
+    }
+    if(state.topic==='divisions')return title('Bihar divisions','बिहार के प्रमंडल');
     return title('Bihar atlas','बिहार मानचित्र')+(total>shown&&!isLocate?' · '+title('Zoom for more labels','और नामों के लिए ज़ूम करें'):'');
   }
   function selectFeature(state,f,filteredFeatures) {

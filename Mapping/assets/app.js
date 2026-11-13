@@ -269,7 +269,7 @@
   function makeSvg(tag,attrs={}){const e=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));return e;}
   function ringPath(r){return r.map((p,i)=>(i?'L':'M')+p[0].toFixed(4)+','+(-p[1]).toFixed(4)).join('')+'Z';}
   function geometryPath(g){if(g.type==='Polygon')return g.coordinates.map(ringPath).join('');if(g.type==='MultiPolygon')return g.coordinates.flatMap(p=>p.map(ringPath)).join('');const lines=g.type==='LineString'?[g.coordinates]:g.coordinates;return lines.map(l=>l.map((p,i)=>(i?'L':'M')+p[0].toFixed(4)+','+(-p[1]).toFixed(4)).join('')).join('');}
-  function setView(v){view=v;$('map').setAttribute('viewBox',`${v.x} ${v.y} ${v.w} ${v.h}`);renderMap();}
+  function setView(v){view=v;renderMap();}
   function boundsView(coords,padding=.1){if(BIHAR){const bounds=BIHAR.bounds(coords,padding);if(bounds)setView(bounds);return;}if(!coords.length)return;let xs=coords.map(p=>p[0]),ys=coords.map(p=>-p[1]);let x=Math.min(...xs),y=Math.min(...ys),w=Math.max(...xs)-x,h=Math.max(...ys)-y;w=Math.max(w,3);h=Math.max(h,3);setView({x:x-w*padding,y:y-h*padding,w:w*(1+2*padding),h:h*(1+2*padding)});}
   function setDefaultView(){
     if(BIHAR){view=BIHAR.defaultView();return;}
@@ -281,16 +281,18 @@
     }else view={x:67,y:-38,w:32,h:33};
   }
   function fitQuestion(){const q=activeQ();if(q?.type==='locate')boundsView(q.candidates.map(id=>[F.get(id).lon,F.get(id).lat]),.3);}
-  let baseMapKey='';
+  let baseMapKey='', renderedMapSize=null;
   function mapMetrics(){
     const r=$('map').getBoundingClientRect(),unit=Math.max(view.w/(r.width||900),view.h/(r.height||650));
     return {unit,width:r.width||900,height:r.height||650,left:view.x+view.w/2-(r.width||900)*unit/2,top:view.y+view.h/2-(r.height||650)*unit/2};
   }
+  function updateMapView(){ $('map').setAttribute('viewBox',`${view.x} ${view.y} ${view.w} ${view.h}`); }
   function renderMap(){
-    const svg=$('map');svg.setAttribute('viewBox',`${view.x} ${view.y} ${view.w} ${view.h}`);
+    updateMapView();
     const selected=new Set(activeFeatureIDs()),a=filteredFeatures(),q=activeQ();
     const unrevealed=!!(state.mode!=='learn'&&q&&session.answered===null),indiaOnly=state.region!=='World';
     const {unit,width,height,left,top}=mapMetrics();
+    renderedMapSize={width,height};
     const baseKey=state.region+'|'+state.country+'|'+state.mode+'|'+unrevealed;
     if(baseMapKey!==baseKey){
       baseMapKey=baseKey;
@@ -551,21 +553,65 @@
   $('resetProgressBtn').onclick=resetProgress;
   $('map').addEventListener('click',e=>{if(dragged){dragged=false;return;}if(BIHAR?.handleMapClick(e,state))return;const marker=e.target.closest('[data-marker]');if(marker){const id=marker.dataset.marker,q=activeQ();if(q?.type==='locate'&&state.mode!=='learn'&&session.answered===null)answer(q.candidates.indexOf(id));else if(state.mode==='learn')selectFeature(id);return;}const stateShape=e.target.closest('[data-state-region]');if(stateShape&&state.mode==='learn'){openStateNotes(stateShape.dataset.stateRegion);return;}const country=e.target.closest('[data-country]');if(country)selectCountry(country.dataset.country);});
   $('map').addEventListener('keydown',e=>{const marker=e.target.closest('[data-marker],[data-state-region],[data-bihar-stop]');if(marker&&(e.key==='Enter'||e.key===' ')){e.preventDefault();marker.dispatchEvent(new MouseEvent('click',{bubbles:true}));}});
-  $('map').addEventListener('pointerover',e=>{const m=e.target.closest('[data-marker]');if(!m||state.mode!=='learn')return;const f=F.get(m.dataset.marker);$('mapTooltip').textContent=f.name+' · '+f.hi;$('mapTooltip').hidden=false;});
+  $('map').addEventListener('pointerover',e=>{if(BIHAR&&e.pointerType==='touch')return;const m=e.target.closest('[data-marker]');if(!m||state.mode!=='learn')return;const f=F.get(m.dataset.marker);$('mapTooltip').textContent=f.name+' · '+f.hi;$('mapTooltip').hidden=false;});
   $('map').addEventListener('pointerout',e=>{if(e.target.closest('[data-marker]'))$('mapTooltip').hidden=true;});
   const pointers=new Map();let pinch=null,panFrame=0;
-  $('map').addEventListener('pointerdown',e=>{if(e.button>0)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});dragged=false;if(pointers.size===1)drag={x:e.clientX,y:e.clientY,view:{...view}};if(pointers.size===2){const [a,b]=[...pointers.values()];pinch={distance:Math.hypot(a.x-b.x,a.y-b.y),view:{...view}};drag=null;}});
+  $('map').addEventListener('pointerdown',e=>{
+    if(e.button>0)return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size===1){dragged=false;drag={x:e.clientX,y:e.clientY,view:{...view}};}
+    if(pointers.size===2){
+      const [a,b]=[...pointers.values()];
+      pinch={distance:Math.hypot(a.x-b.x,a.y-b.y),view:{...view}};
+      drag=null;
+    }
+  },{passive:true});
   window.addEventListener('pointermove',e=>{
     if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
     if(pinch&&pointers.size===2){const [a,b]=[...pointers.values()],distance=Math.hypot(a.x-b.x,a.y-b.y);if(distance<5)return;const w=clampZoom(pinch.view.w*pinch.distance/distance),h=pinch.view.h*w/pinch.view.w;view={x:pinch.view.x+(pinch.view.w-w)/2,y:pinch.view.y+(pinch.view.h-h)/2,w,h};dragged=true;}
-    else if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)<=5)return;dragged=true;const r=$('map').getBoundingClientRect(),scale=Math.max(drag.view.w/r.width,drag.view.h/r.height);view={...drag.view,x:drag.view.x-dx*scale,y:drag.view.y-dy*scale};}
-    if(!panFrame)panFrame=requestAnimationFrame(()=>{panFrame=0;renderMap();});
-  });
-  function endPointer(e){if(!pointers.has(e.pointerId))return;pointers.delete(e.pointerId);pinch=null;drag=null;if(pointers.size===1){const p=[...pointers.values()][0];drag={...p,view:{...view}};}if(!pointers.size&&dragged){renderMap();setTimeout(()=>dragged=false,0);}}
+    else if(drag){
+      const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+      if(Math.hypot(dx,dy)<=5)return;
+      if(BIHAR&&!expanded&&e.pointerType==='touch'&&!dragged&&Math.abs(dy)>=Math.abs(dx))return;
+      dragged=true;
+      if(drag.scale===undefined){
+        const r=$('map').getBoundingClientRect();
+        drag.scale=Math.max(drag.view.w/r.width,drag.view.h/r.height);
+      }
+      view={...drag.view,x:drag.view.x-dx*drag.scale,y:drag.view.y-dy*drag.scale};
+    }
+    if(!panFrame)panFrame=requestAnimationFrame(()=>{
+      panFrame=0;
+      // Move the existing SVG during Bihar map gestures and place labels after release.
+      if(BIHAR)updateMapView();else renderMap();
+    });
+  },{passive:true});
+  function endPointer(e){
+    if(!pointers.has(e.pointerId))return;
+    pointers.delete(e.pointerId);pinch=null;drag=null;
+    if(pointers.size===1){const p=[...pointers.values()][0];drag={...p,view:{...view}};}
+    if(!pointers.size&&dragged){finishPan();setTimeout(()=>dragged=false,0);}
+  }
+  function finishPan(){
+    cancelAnimationFrame(panFrame);panFrame=0;
+    renderMap();
+  }
   window.addEventListener('pointerup',endPointer);window.addEventListener('pointercancel',endPointer);
-  window.addEventListener('blur',()=>{pointers.clear();drag=null;pinch=null;});
+  window.addEventListener('blur',()=>{pointers.clear();drag=null;pinch=null;if(BIHAR&&dragged){finishPan();dragged=false;}});
   $('map').addEventListener('wheel',e=>{if(e.ctrlKey){e.preventDefault();zoom(e.deltaY>0?1.1:.9);}},{passive:false});
-  let resizeFrame=0;function resizeMap(){cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(renderMap);}
+  let resizeFrame=0;
+  function resizeMap(){
+    if(resizeFrame)return;
+    resizeFrame=requestAnimationFrame(()=>{
+      resizeFrame=0;
+      // Browser chrome can resize the viewport during scrolling without resizing the map.
+      if(BIHAR&&renderedMapSize){
+        const {width,height}=$('map').getBoundingClientRect();
+        if(width===renderedMapSize.width&&height===renderedMapSize.height)return;
+      }
+      renderMap();
+    });
+  }
   window.addEventListener('resize',resizeMap);
   if('ResizeObserver' in window)new ResizeObserver(resizeMap).observe($('mapWrap'));
   window.addEventListener('popstate',()=>{readHash();if(BIHAR)$('placeSearch').value='';session=null;setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();});
