@@ -260,6 +260,15 @@
 
   let districtRenderKey='';
   const districtColours=new Map(D.divisions.map((v,i)=>[v.id,[divisionColours[i],darkDivisionColours[i]]]));
+  function relatedDistricts(f) {
+    if(!f)return [];
+    if(f.path)return [f.id];
+    return [f.district,...(f.study?.river ? f.related.map(id=>{
+      const place=index.get(id);
+      return place?.path ? id : place?.district;
+    }) : [])].filter(Boolean);
+  }
+
   function renderDistricts(state,selected,q,session,svg) {
     const layer=$('biharDistrictLayer');
     const locate=q?.type==='locate', revealed=!q || session?.answered!==null;
@@ -291,34 +300,82 @@
     }
   }
 
+  const labelCanvas=document.createElement('canvas').getContext('2d');
+  const labelWidths=new Map();
+
   function renderAreaLabels(state,selected,q,metrics,boxes,svg) {
     if(!state.names || (q&&state.mode!=='learn'&&selected.size===0))return;
     const {unit,width,height,left,top}=metrics;
     const districtMode=state.topic==='districts', divisionMode=state.topic==='divisions';
-    const labelFont=width<580?10:12;
+    const compact=width<580;
     const layer=$('stateLabelLayer');
-    const labels=[];
-    if((districtMode||divisionMode)&&state.mode==='learn') {
-      const areas=divisionMode?D.divisions:D.districts;
-      const ranked=[...areas].sort((a,b)=>Number(selected.has(b.id))-Number(selected.has(a.id)));
-      for(const f of ranked)labels.push({x:f.lon,y:-f.lat,text:divisionMode?title(f.shortName,f.shortHi):title(f.name,f.hi),selected:selected.has(f.id),font:labelFont});
-    } else {
-      for(const id of selected){
-        const f=index.get(id);
-        if(!isArea(f))continue;
-        labels.push({x:f.lon,y:-f.lat,text:title(f.shortName||f.name,f.shortHi||f.hi),selected:true,font:labelFont});
+    const family=getComputedStyle(layer).fontFamily;
+    const areas=new Set();
+    const addAreas=features=>{
+      for(const f of features){
+        if(isArea(f))areas.add(f.id);
+        for(const id of relatedDistricts(f))areas.add(id);
       }
+    };
+    const focus=[...selected].map(id=>index.get(id));
+    addAreas(focus);
+    const stop=index.get(route?.stops[route.step].target);
+    if(stop)addAreas([stop]);
+    if(state.mode==='learn'){
+      if(districtMode)for(const d of D.districts)areas.add(d.id);
+      if(divisionMode)for(const d of D.divisions)areas.add(d.id);
+      const chapter=chapters.get(state.chapter);
+      if(chapter)addAreas(landmarkIds(chapter).map(id=>index.get(id)));
     }
-    for(const [en,hi,lon,lat] of nearbyAreas)labels.push({x:lon,y:-lat,text:title(en,hi),context:true,font:width<580?10:13});
-    for(const label of labels){
-      const x=(label.x-left)/unit,y=(label.y-top)/unit,w=label.text.length*label.font*.56,h=label.font+5;
-      const b={x:x-w/2,y:y-h/2,w,h};
-      if(b.x<6||b.x+w>width-9||b.y<28||b.y+h>height-40)continue;
-      if(boxes.some(o=>b.x<o.x+o.w+2&&b.x+w+2>o.x&&b.y<o.y+o.h+2&&b.y+h+2>o.y))continue;
+    const labels=[...areas].map(id=>{
+      const f=index.get(id);
+      return {id,lon:f.lon,lat:f.lat,text:f.members&&divisionMode&&state.mode==='learn'
+        ? title(f.shortName,f.shortHi) : title(f.name,f.hi),
+        district:Boolean(f.path),selected:selected.has(id),font:compact?10:12};
+    });
+    const pins=(q?.type==='locate' ? q.candidates.map(id=>index.get(id)) : focus.filter(f=>!isArea(f)&&!f.statewide))
+      .map(f=>({x:(f.lon-left)/unit,y:(-f.lat-top)/unit}));
+    if(stop)pins.push({x:(stop.lon-left)/unit,y:(-stop.lat-top)/unit});
+    const pinRadius=q?.type==='locate'?13:8;
+    for(const [en,hi,lon,lat] of nearbyAreas)labels.push({lon,lat,text:title(en,hi),context:true,font:compact?10:13});
+    for(const {id,lon,lat,text,district,selected:active,context,font} of labels){
+      const x=(lon-left)/unit,y=(-lat-top)/unit;
+      if(x<0||x>width||y<0||y>height)continue;
+      const lines=district&&compact ? text.split(' ') : [text];
+      const fontStyle=(active?800:650)+' '+font+'px '+family;
+      const w=Math.ceil(Math.max(...lines.map(line=>{
+        const key=fontStyle+' '+line;
+        if(!labelWidths.has(key)){
+          labelCanvas.font=fontStyle;
+          labelWidths.set(key,labelCanvas.measureText(line).width);
+        }
+        return labelWidths.get(key);
+      })))+4;
+      const lineHeight=font+1,h=lines.length*lineHeight+3;
+      const offsets=context ? [[0,0]] : [[0,0],[0,-h],[0,h],[-w/2,0],[w/2,0],
+        [-w/2,-h],[w/2,-h],[-w/2,h],[w/2,h],[0,-2*h],[0,2*h],
+        [-w,0],[w,0],[-w,-h],[w,-h],[-w,h],[w,h],[-w/2,-2*h],[w/2,-2*h],[-w/2,2*h],[w/2,2*h],
+        [0,-3*h],[0,3*h]];
+      const b=offsets.map(([dx,dy])=>({x:x+dx-w/2,y:y+dy-h/2,w,h})).find(b=>
+        b.x>=6&&b.x+w<=width-9&&b.y>=28&&b.y+h<=height-40&&
+        !pins.some(p=>p.x>b.x-pinRadius&&p.x<b.x+w+pinRadius&&p.y>b.y-pinRadius&&p.y<b.y+h+pinRadius)&&
+        !boxes.some(o=>b.x<o.x+o.w+2&&b.x+w+2>o.x&&b.y<o.y+o.h+2&&b.y+h+2>o.y));
+      if(!b)continue;
       boxes.push(b);
-      const t=svg('text',{x:label.x,y:label.y,'font-size':label.font*unit,'stroke-width':2.7*unit,
-        'text-anchor':'middle',class:'bihar-area-label'+(label.selected?' is-selected':'')+(label.context?' context':'')});
-      t.textContent=label.text;layer.append(t);
+      const cx=b.x+w/2,cy=b.y+h/2,tx=left+cx*unit;
+      if(Math.abs(cx-x)>.1||Math.abs(cy-y)>.1){
+        const endX=Math.max(b.x,Math.min(b.x+w,x)),endY=Math.max(b.y,Math.min(b.y+h,y));
+        layer.prepend(svg('line',{x1:lon,y1:-lat,x2:left+endX*unit,y2:top+endY*unit,class:'bihar-area-leader'}));
+      }
+      const t=svg('text',{x:tx,'font-size':font*unit,'stroke-width':2.7*unit,'text-anchor':'middle',
+        'dominant-baseline':'central',...(id?{'data-area-id':id}:{}),
+        class:'bihar-area-label'+(active?' is-selected':'')+(context?' context':'')});
+      for(const [i,line] of lines.entries()){
+        const span=svg('tspan',{x:tx,y:top+(b.y+(i+.5)*lineHeight+1.5)*unit});
+        span.textContent=line;
+        t.append(span);
+      }
+      layer.append(t);
     }
   }
   function renderRiverDirection(r,layer,m,svg) {
@@ -343,7 +400,12 @@
   function labelStatus(state,unrevealed,isLocate,shown,total) {
     if(unrevealed)return title(isLocate?'Choose a numbered marker':'Answer labels hidden',isLocate?'संख्या वाला चिह्न चुनें':'उत्तर के नाम छिपे हैं');
     if(!state.names)return title('Map labels hidden','मानचित्र के नाम छिपे हैं');
-    if(state.topic==='districts'||state.topic==='divisions')return title('Bihar district boundaries','बिहार की जिला सीमाएँ');
+    if(state.topic==='districts'&&state.mode==='learn'){
+      const count=$('stateLabelLayer').querySelectorAll('[data-area-id^="br-d-"]').length;
+      return title('District names','जिलों के नाम')+(count<D.districts.length
+        ? ' · '+title('Zoom for more','और नामों के लिए ज़ूम करें') : '');
+    }
+    if(state.topic==='divisions')return title('Bihar divisions','बिहार के प्रमंडल');
     return title('Bihar atlas','बिहार मानचित्र')+(total>shown&&!isLocate?' · '+title('Zoom for more labels','और नामों के लिए ज़ूम करें'):'');
   }
   function selectFeature(state,f,filteredFeatures) {
