@@ -13,7 +13,9 @@ var CONFIGS={
  "environment_ecology_complete_practice.html":{slug:"ecology",label:"Environment & Ecology"},
  "static_gk_complete_practice.html":{slug:"staticgk",label:"Static GK"}
 };
+if(!/\.html$/.test(PAGE_FILE)&&CONFIGS[PAGE_FILE+".html"])PAGE_FILE+=".html";
 var CFG=CONFIGS[PAGE_FILE]||{slug:"practice",label:"Practice"};
+var bankMigration=window.EFPOriginalBankMigration;
 
 /* Polity Chapter 11 exact-question deduplication, 2026-11-13.
    Original entries and answer choices are retained for every unique question. */
@@ -174,9 +176,13 @@ function restoreAppAttempt(preserveSection){
  try{
   var key=attemptStorageKey(),saved=JSON.parse(localStorage.getItem(key)||"null");
   saved=efpP11MigrateAttempt(saved);
-  if(!saved||saved.path!==location.pathname||saved.subject!==state.subject||
+  if(bankMigration&&saved&&saved.signature!==attemptSignature()){
+   var updated=bankMigration.attempt(CFG.slug,state.subject,state.chapterName,saved,attemptSignature());
+   if(updated){localStorage.setItem(key,JSON.stringify(updated));saved=updated}
+  }
+  if(!saved||(bankMigration&&bankMigration.affects(CFG.slug)?bankMigration.path(String(saved.path||""))!==bankMigration.path(location.pathname):saved.path!==location.pathname)||saved.subject!==state.subject||
      saved.chapter!==state.chapterName||saved.signature!==attemptSignature()){
-   if(saved)try{localStorage.removeItem(key)}catch(_){}
+   if(saved&&!(bankMigration&&bankMigration.affects(CFG.slug)))try{localStorage.removeItem(key)}catch(_){}
    return false;
   }
   var answers={},orders={},score={correct:0,wrong:0,attempted:0};
@@ -306,9 +312,10 @@ function efpP11MigrateBookmarks(v){
 function getBookmarks(){var v=safeParse(localStorage.getItem(BOOKMARK_KEY),{});return v&&typeof v==="object"&&!Array.isArray(v)?efpP11MigrateBookmarks(v):{}}
 function saveBookmarks(v){try{localStorage.setItem(BOOKMARK_KEY,JSON.stringify(v))}catch(e){}}
 function enc(v){return encodeURIComponent(String(v==null?"":v))}
-function qKey(qi){return location.pathname+"#op|"+CFG.slug+"|"+enc(state.subject)+"|"+enc(state.chapterName)+"|"+state.currentSection+"|"+qi}
-function pagePrefix(){return location.pathname+"#op|"+CFG.slug+"|"}
-function pageBookmarkCount(){var b=getBookmarks(),p=pagePrefix(),n=0;Object.keys(b).forEach(function(k){if(b[k]&&k.indexOf(p)===0)n++});return n}
+function qKey(qi){return pagePrefix()+enc(state.subject)+"|"+enc(state.chapterName)+"|"+state.currentSection+"|"+qi+(bankMigration&&bankMigration.affects(CFG.slug)?"|opbanks1":"")}
+function bookmarkPath(){return bankMigration&&bankMigration.affects(CFG.slug)?bankMigration.path(location.pathname):location.pathname}
+function pagePrefix(){return bookmarkPath()+"#op|"+CFG.slug+"|"}
+function pageBookmarkCount(){var b=getBookmarks(),p=pagePrefix(),n=0;Object.keys(b).forEach(function(k){if(b[k]&&k.indexOf(p)===0&&(!bankMigration||!bankMigration.affects(CFG.slug)||/\|opbanks1$/.test(k)))n++});return n}
 function track(name,params){try{if(typeof gtag==="function")gtag("event",name,params||{})}catch(e){}}
 function hiName(subject,chapter){
  try{if(typeof CHAPTER_HI!=="undefined"&&CHAPTER_HI[subject]&&CHAPTER_HI[subject][chapter])return CHAPTER_HI[subject][chapter]}catch(e){}
@@ -448,9 +455,9 @@ var opFullSearchClient=null;
 function getOpFullSearchClient(){
  if(opFullSearchClient)return opFullSearchClient;
  if(typeof efCreateSearchWorker!=="function")return null;
- var specialIndex=CFG.slug==="computer-pyqs"?{file:"../search-snippets-computer-pyqs.js?v=20261113computerpyqs2",global:"EF_COMPUTER_PYQS_SNIPPET_INDEX"}:CFG.slug==="computer"?{file:"../search-snippets-computer-original-practice.js?v=20261109computersearch1",global:"EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20261113ecologyoptions1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261102biologyexp1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
+ var specialIndex=CFG.slug==="computer-pyqs"?{file:"../search-snippets-computer-pyqs.js?v=20261113computerpyqs2",global:"EF_COMPUTER_PYQS_SNIPPET_INDEX"}:CFG.slug==="computer"?{file:"../search-snippets-computer-original-practice.js?v=20261113opbanks1",global:"EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20261113opbanks1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20261113opbanks1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20261113opbanks1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261113opbanks1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
  opFullSearchClient=efCreateSearchWorker({
-  workerUrl:new URL("../search-worker.js?v=20261113politydedup2",document.baseURI).href,
+  workerUrl:new URL("../search-worker.js?v=20261113opbanks1",document.baseURI).href,
   logicUrl:new URL("../search-logic.js?v=20261007searchaudit1",document.baseURI).href,
   indexUrl:new URL(specialIndex.file,document.baseURI).href,
   mode:"snippet",
@@ -460,7 +467,7 @@ function getOpFullSearchClient(){
  });
  return opFullSearchClient;
 }
-function decodeOpSearchHit(hit){var raw=String(hit&&hit.x||""),qi=-1;if(raw){var c=raw.charCodeAt(0);if(c>=0xE000&&c<=0xF8FF){qi=c-0xE000;raw=raw.slice(1).replace(/^\s+/,"")}}var rel=String(hit&&hit.f||"").replace(/^\.\//,"");var url=new URL("../"+rel,location.href).href;if(qi>=0)url+=(url.indexOf("?")<0?"?":"&")+"q="+(qi+1);return{url:url,text:raw,qi:qi}}
+function decodeOpSearchHit(hit){var raw=String(hit&&hit.x||""),qi=-1;if(raw){var c=raw.charCodeAt(0);if(c>=0xE000&&c<=0xF8FF){qi=c-0xE000;raw=raw.slice(1).replace(/^\s+/,"")}else if(c===1){var cut=raw.indexOf("\u0002");if(cut>0)raw=raw.slice(cut+1)}}var rel=String(hit&&hit.f||"").replace(/^\.\//,"");var url=new URL("../"+rel,location.href).href;if(qi>=0&&!new URL(url).searchParams.has("q"))url+=(url.indexOf("?")<0?"?":"&")+"q="+(qi+1);return{url:url,text:raw,qi:qi}}
 function opSearchSnippet(text,q){text=String(text||"");var terms=norm(q).split(" ").filter(Boolean),low=text.toLowerCase(),pos=-1;for(var i=0;i<terms.length;i++){var p=low.indexOf(terms[i]);if(p>=0&&(pos<0||p<pos))pos=p}var start=pos<0?0:Math.max(0,pos-55),end=Math.min(text.length,start+210);return(start>0?"…":"")+text.slice(start,end)+(end<text.length?"…":"")}
 function searchPanel(subjectOnly){
  var box=document.createElement("div");box.className="efp-op-search";box.innerHTML='<div class="efp-op-search-row"><span aria-hidden="true">🔎</span><input type="search" autocomplete="off" placeholder="Search chapter or question / अध्याय या प्रश्न खोजें…" aria-label="Search Original Practice chapters and questions"></div><div class="efp-op-search-results" aria-live="polite"></div>';
@@ -530,7 +537,7 @@ var EFP_STANDALONE_FIRST_PROMPTS={
 function applyStandaloneFirstQuestionPrompt(){
  if(state.screen!=="quiz"||state.currentSection!==0)return;
  var bySubject=EFP_STANDALONE_FIRST_PROMPTS[CFG.slug],prompt=bySubject&&bySubject[state.chapterName];
- if(!prompt)return;
+ if(!prompt||(bankMigration&&bankMigration.affects(CFG.slug)))return;
  var card=document.getElementById("q-0");if(!card)return;
  var paras=card.querySelectorAll(":scope > p");
  if(paras[0])paras[0].textContent="1. "+prompt.en;
@@ -627,5 +634,6 @@ function migrateComputerProgress(){
  }catch(e){}
 }
 migrateComputerProgress();
+if(bankMigration)bankMigration.bookmarks();
 applyDeepLink();restoreAppAttempt(true);syncUrl(state.screen||"home",false);render();
 })();

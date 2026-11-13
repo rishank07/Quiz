@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261113biharback1";
+const CACHE_VERSION = "efp-pwa-20261113opbanks1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -17,7 +17,8 @@ const DESKTOP_SEARCH_ENTRY_BOOTSTRAP =
   '<script id="efp-desktop-search-entry-bootstrap">(function(){var ua=String(navigator.userAgent||"");var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);if(mobile)return;if(window.EFP_SEARCH_CONTEXT||document.getElementById("efp-shared-search-context"))return;var s=document.createElement("script");s.id="efp-shared-search-context";s.src="/search-context.js?v=20261007searchaudit1";s.defer=true;document.head.appendChild(s)})();</script>';
 
 const FRESH_ORIGINAL_PRACTICE =
-  /^\/Original%20Practice\/(?:index\.html|(?:Computer_Complete_Practice|Computer_PYQs|Mixed_Practice|Polity_Complete_Practice|Environment_Ecology_Complete_Practice)(?:\.html)?)?$/;
+  /^\/Original%20Practice\/(?:index\.html|(?:all-chapters|Computer_Complete_Practice|Computer_PYQs|Mixed_Practice|(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice)(?:\.html)?)?$/;
+const REVISED_ORIGINAL_BANK = /^\/Original%20Practice\/(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice(?:\.html)?$/;
 const FRESH_BIHAR_MAP_PAGES = /^\/Bihar%20Special\/Bihar%20(?:Special|GK%20Map)(?:\.html)?$/;
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
@@ -65,7 +66,7 @@ const APP_SHELL = [
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js?v=20261112octca1",
   "/section-search-ui.js?v=20261007searchaudit1",
-  "/search-worker.js?v=20261112computerch01",
+  "/search-worker.js?v=20261113opbanks1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261028searchstatus1",
   "/homepage-fulltext-search.js?v=20261112octca1",
@@ -76,7 +77,7 @@ const APP_SHELL = [
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/english-highlights.css?v=20261009dark1",
-  "/Original%20Practice/original-practice.js?v=20261113politydedup2",
+  "/Original%20Practice/original-practice.js?v=20261113opbanks1",
   "/Original%20Practice/computer-bank.js?v=20261112computerch01",
   "/Original%20Practice/english-practice.js?v=20261007continue1",
   "/Original%20Practice/original-practice-index.js?v=20261113computerpyqs2",
@@ -454,7 +455,10 @@ async function networkFirst(event) {
       request.mode === "navigate" || request.destination === "document";
     // Query parameters select client-side search/quiz state, not different HTML.
     // Keep one raw document so a new search link can reuse an already read topic.
-    const key = navigation ? new Request(url.origin + url.pathname) : request;
+    const bankPath = REVISED_ORIGINAL_BANK.test(url.pathname)
+      ? url.pathname.replace(/(?:\.html)?$/, ".html")
+      : url.pathname;
+    const key = navigation ? new Request(url.origin + bankPath) : request;
     const response = await cachedNetworkFirst(
       event,
       navigationRequest(request),
@@ -786,6 +790,14 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // The chapter page and Mixed Practice share the revised bank and offline copy.
+  if (REVISED_ORIGINAL_BANK.test(url.pathname)) {
+    const key = new Request(url.origin + url.pathname.replace(/(?:\.html)?$/, ".html"));
+    event.respondWith(caches.open(CACHE_VERSION).then((cache) =>
+      cachedNetworkFirst(event, navigationRequest(request), cache, { cache: "no-cache" }, { key, revalidate: true })));
+    return;
+  }
+
   // Rapid Fire reads the English HTML as data, outside document navigation.
   // Revalidate this shared source before returning a cached copy as well.
   if (
@@ -883,6 +895,7 @@ self.addEventListener("fetch", (event) => {
     url.pathname === "/bihar-topic-bookmarks.js" ||
     url.pathname === "/pdf-mobile-rotate.js" ||
     url.pathname === "/Original%20Practice/original-practice.css" ||
+    url.pathname === "/Original%20Practice/bank-migration.js" ||
     url.pathname === "/Original%20Practice/original-practice.js" ||
     url.pathname === "/Original%20Practice/computer-bank.js" ||
     url.pathname === "/Original%20Practice/english-practice.js" ||
