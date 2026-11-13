@@ -94,7 +94,8 @@
     $('featureLegend').innerHTML = '<span><i class="selected-key"></i>'+esc(pairLabel('Selected','चयनित'))+'</span>'+
       (onRivers ? '<span><i class="source-key"></i>'+esc(pairLabel('Source','उद्गम'))+'</span><span><i class="mouth-key"></i>'+
       esc(pairLabel('Confluence / mouth','संगम / मुहाना'))+'</span><span><i class="dashed-key"></i>'+esc(pairLabel('Schematic course','सांकेतिक धारा'))+'</span>' : '')+
-      (state.topic==='divisions' ? '<span>'+esc(pairLabel('One colour per division','हर प्रमंडल का अलग रंग'))+'</span>' : '');
+      (state.topic==='divisions' && (state.mode!=='learn'||activeOverlay==='none')
+        ? '<span>'+esc(pairLabel('One colour per division','हर प्रमंडल का अलग रंग'))+'</span>' : '');
     renderOverlayBar(state);
     renderOverlayLegend(state);
     if(route && (state.mode!=='learn' || state.selected!==route.id)) clearRoute();
@@ -302,10 +303,17 @@
     const show = state.mode === 'learn';
     bar.hidden = !show;
     if(!show) return;
-    bar.innerHTML = '<span class="bihar-overlay-label">' + esc(title('Map Layer:', 'मानचित्र परत:')) + '</span>' +
-      thematicLayers.map(l => '<button type="button" class="bihar-overlay-chip ' + (activeOverlay === l.id ? 'active' : '') +
-        '" data-bihar-overlay="' + l.id + '" aria-pressed="' + (activeOverlay === l.id) + '">' +
-        esc(title(l.en, l.hi)) + '</button>').join('');
+    if(bar.dataset.lang!==String(hindi)){
+      bar.innerHTML = '<span class="bihar-overlay-label">' + esc(title('Map Layer:', 'मानचित्र परत:')) + '</span>' +
+        thematicLayers.map(l => '<button type="button" class="bihar-overlay-chip" data-bihar-overlay="' +
+          l.id + '">' + esc(title(l.en, l.hi)) + '</button>').join('');
+      bar.dataset.lang=String(hindi);
+    }
+    for(const button of bar.querySelectorAll('[data-bihar-overlay]')){
+      const active=button.dataset.biharOverlay===activeOverlay;
+      button.classList.toggle('active',active);
+      button.setAttribute('aria-pressed',active);
+    }
   }
   function renderOverlayLegend(state) {
     const leg = $('biharOverlayLegend');
@@ -324,14 +332,23 @@
   function renderCheatsheet() {
     const tabs = $('biharCheatsheetTabs'), body = $('biharCheatsheetBody');
     $('biharCheatsheetTitle').innerHTML = bilingual('Bihar Special · Quick Facts', 'बिहार स्पेशल · संक्षिप्त तथ्य');
-    tabs.innerHTML = cheatsheet.map(c => '<button type="button" class="' + (activeCsTab === c.id ? 'active' : '') +
-      '" data-bihar-cstabs="' + c.id + '">' + esc(title(c.en, c.hi)) + '</button>').join('');
+    if(tabs.dataset.lang!==String(hindi)){
+      tabs.innerHTML = cheatsheet.map(c => '<button type="button" data-bihar-cstabs="' + c.id + '">' +
+        esc(title(c.en, c.hi)) + '</button>').join('');
+      tabs.dataset.lang=String(hindi);
+    }
+    for(const button of tabs.querySelectorAll('[data-bihar-cstabs]')){
+      const active=button.dataset.biharCstabs===activeCsTab;
+      button.classList.toggle('active',active);
+      button.setAttribute('aria-pressed',active);
+    }
     const current = cheatsheet.find(c => c.id === activeCsTab) || cheatsheet[0];
     body.innerHTML = current.cards.map(card => '<div class="bihar-cs-card"><h4>' + bilingual(card.en, card.hi) +
       '</h4><ul class="bihar-cs-list">' + card.items.map(raw => {
         const [en, hi] = raw.split('~');
         return '<li>' + bilingual(en, hi || en) + '</li>';
       }).join('') + '</ul></div>').join('');
+    body.scrollTop=0;
   }
   function openCheatsheet() {
     renderCheatsheet();
@@ -728,7 +745,7 @@
       if(d.biharAction==='start-route')startRoute();
       if(d.biharAction==='prev-stop')stepTo(route.step-1);
       if(d.biharAction==='next-stop')stepTo(route.step+1);
-      if(d.biharOverlay){activeOverlay=d.biharOverlay;renderOverlayBar(api.state);renderOverlayLegend(api.state);api.renderMap();}
+      if(d.biharOverlay){activeOverlay=d.biharOverlay;api.refresh();}
       if(d.biharCstabs){activeCsTab=d.biharCstabs;renderCheatsheet();}
       if(d.biharAction==='end-route'){clearRoute();api.setDefaultView();api.renderMap();}
     });
