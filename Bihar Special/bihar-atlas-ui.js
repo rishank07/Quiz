@@ -2,7 +2,7 @@
 (() => {
   'use strict';
   const D = window.MAPPING_DATA;
-  const {index, chaptersByPlace, tours, timeline} = window.BiharAtlasData;
+  const {index, chaptersByPlace, tours, timeline, thematicLayers, districtProfiles, cheatsheet} = window.BiharAtlasData;
   const chapters = new Map(D.lessons.map(lesson=>[lesson.id,lesson]));
   const questions = new Map(D.questions.map(q=>[q.id,q]));
   const $ = id => document.getElementById(id);
@@ -17,7 +17,7 @@
     ['Bay of Bengal','बंगाल की खाड़ी',89.82,21.35], ['Madhya Pradesh','मध्य प्रदेश',81.5,23.58]
   ];
   const aliases = {geography:'physical',history:'ancient',water:'nature'};
-  let api, route = null, hindi = false, directoryMode = 'chapters';
+  let api, route = null, hindi = false, directoryMode = 'chapters', activeOverlay = 'none', activeCsTab = 'symbols';
 
   const defaultView = () => ({x:83.10,y:-27.68,w:5.37,h:3.68});
   const isArea = f => f?.path || f?.members;
@@ -92,6 +92,8 @@
       (onRivers ? '<span><i class="source-key"></i>'+esc(pairLabel('Source','उद्गम'))+'</span><span><i class="mouth-key"></i>'+
       esc(pairLabel('Confluence / mouth','संगम / मुहाना'))+'</span><span><i class="dashed-key"></i>'+esc(pairLabel('Schematic course','सांकेतिक धारा'))+'</span>' : '')+
       (state.topic==='divisions' ? '<span>'+esc(pairLabel('One colour per division','हर प्रमंडल का अलग रंग'))+'</span>' : '');
+    renderOverlayBar(state);
+    renderOverlayLegend(state);
     if(route && (state.mode!=='learn' || state.selected!==route.id)) clearRoute();
   }
 
@@ -134,6 +136,19 @@
       '<h2 class="detail-title">'+esc(title(f.name,f.hi))+'</h2><p class="detail-hindi" lang="'+(hindi?'en':'hi')+'">'+esc(title(f.hi,f.name))+'</p>'+
       '<div class="place-meta"><span class="pill">'+esc(pairLabel(f.area,f.areaHi))+'</span><span class="pill gold">'+esc(title(getTopic(f.topic).en,getTopic(f.topic).hi))+'</span></div>'+
       '<div class="fact-block"><p>'+bilingual(f.fact,f.factHi)+'</p></div>'+
+      (f.code && districtProfiles[f.code] ? (() => {
+        const p = districtProfiles[f.code];
+        const snap = (lblEn, lblHi, val, full=false) => val ? '<div class="bihar-snap-cell'+(full?' full':'')+'"><strong>'+esc(title(lblEn,lblHi))+'</strong>'+bilingual(...val.split('|'))+'</div>' : '';
+        return '<section class="bihar-district-snapshot"><div class="bihar-snapshot-head"><span>'+esc(pairLabel('District Snapshot (PDF)','जिला सार (पीडीएफ)'))+'</span></div><div class="bihar-snapshot-grid">'+
+          snap('Bordering','सीमा',p.borderNote)+
+          snap('Rainfall & Soil','वर्षा व मिट्टी',p.rainfall+' cm · '+p.soil+'|'+p.rainfall+' सेमी · '+p.soil)+
+          snap('Rivers','प्रमुख नदियाँ',p.rivers)+
+          snap('Forest & Sanctuary','वन व अभयारण्य',p.forestNote)+
+          snap('Census 2011 / Tag','जनगणना / विशेष',p.censusNote,true)+
+          snap('Minerals, GI & Industry','खनिज, GI व उद्योग',p.resNote,true)+
+          snap('Expressway / Corridor','एक्सप्रेसवे / कॉरिडोर',p.expNote,true)+
+          '</div></section>';
+      })() : '')+
       (membership.length ? '<div class="study-related-list">'+membership.map(featureButton).join('')+'</div>' : '')+
       '<div class="detail-actions">'+(!f.statewide ? '<button type="button" class="quiet" data-action="locate-place">'+
       bilingual('Locate this place','मानचित्र पर पहचानें')+'</button>' : '')+(available ? '<button type="button" class="secondary" data-bihar-practice-place="'+f.id+'">'+
@@ -258,6 +273,64 @@
     fitFeatures(anchors,.35);
   }
 
+  function getOverlayDef(id) {
+    return thematicLayers.find(l => l.id === id) || thematicLayers[0];
+  }
+  function districtOverlayKey(code, overlayId) {
+    const p = districtProfiles[code];
+    if(!p) return '';
+    if(overlayId === 'borders') return p.borders;
+    if(overlayId === 'rainfall') return p.rainfall;
+    if(overlayId === 'soils') return p.soil;
+    if(overlayId === 'forests') return p.forest;
+    if(overlayId === 'floods') return p.flood;
+    if(overlayId === 'census') return p.census;
+    if(overlayId === 'resources') return p.resources;
+    if(overlayId === 'expressways') return p.expressway;
+    return '';
+  }
+  function renderOverlayBar(state) {
+    const bar = $('biharOverlayBar');
+    if(!bar) return;
+    const show = state.mode === 'learn';
+    bar.hidden = !show;
+    if(!show) return;
+    bar.innerHTML = '<span class="bihar-overlay-label">' + esc(title('Map Layer:', 'मानचित्र परत:')) + '</span>' +
+      thematicLayers.map(l => '<button type="button" class="bihar-overlay-chip ' + (activeOverlay === l.id ? 'active' : '') +
+        '" data-bihar-overlay="' + l.id + '" aria-pressed="' + (activeOverlay === l.id) + '">' +
+        esc(title(l.en, l.hi)) + '</button>').join('');
+  }
+  function renderOverlayLegend(state) {
+    const leg = $('biharOverlayLegend');
+    if(!leg) return;
+    const def = getOverlayDef(activeOverlay);
+    if(state.mode !== 'learn' || activeOverlay === 'none' || !def.items.length) {
+      leg.hidden = true;
+      return;
+    }
+    leg.hidden = false;
+    leg.innerHTML = '<span class="bihar-legend-title">' + esc(title(def.en, def.hi)) + ':</span>' +
+      def.items.map(it => '<span class="bihar-legend-item"><i class="bihar-legend-swatch" style="--sw-light:' +
+        it.light + ';--sw-dark:' + it.dark + '"></i>' + esc(title(it.en, it.hi)) + '</span>').join('') +
+      '<span class="bihar-legend-page">' + esc(pairLabel('PDF p. ' + def.page, 'पीडीएफ पृ. ' + def.page)) + '</span>';
+  }
+  function renderCheatsheet() {
+    const tabs = $('biharCheatsheetTabs'), body = $('biharCheatsheetBody');
+    $('biharCheatsheetTitle').innerHTML = bilingual('Bihar Special · Quick Facts', 'बिहार स्पेशल · संक्षिप्त तथ्य');
+    tabs.innerHTML = cheatsheet.map(c => '<button type="button" class="' + (activeCsTab === c.id ? 'active' : '') +
+      '" data-bihar-cstabs="' + c.id + '">' + esc(title(c.en, c.hi)) + '</button>').join('');
+    const current = cheatsheet.find(c => c.id === activeCsTab) || cheatsheet[0];
+    body.innerHTML = current.cards.map(card => '<div class="bihar-cs-card"><h4>' + bilingual(card.en, card.hi) +
+      '</h4><ul class="bihar-cs-list">' + card.items.map(raw => {
+        const [en, hi] = raw.split('~');
+        return '<li>' + bilingual(en, hi || en) + '</li>';
+      }).join('') + '</ul></div>').join('');
+  }
+  function openCheatsheet() {
+    renderCheatsheet();
+    $('biharCheatsheetDialog').showModal();
+  }
+
   let districtRenderKey='';
   const districtColours=new Map(D.divisions.map((v,i)=>[v.id,[divisionColours[i],darkDivisionColours[i]]]));
   function renderDistricts(state,selected,q,session,svg) {
@@ -267,10 +340,12 @@
     const chapter=chapters.get(state.chapter);
     const areaIds=chapter&&state.mode==='learn' ? new Set(landmarkIds(chapter).filter(id=>isArea(index.get(id)))) : new Set();
     const fullState=selected.has('br-overview')&&(state.mode!=='learn'||chapter);
-    const clickable=state.mode==='learn'&&['districts','divisions','all'].includes(state.topic);
+    const hasOverlay=state.mode==='learn'&&activeOverlay!=='none';
+    const overlayDef=hasOverlay?getOverlayDef(activeOverlay):null;
+    const clickable=state.mode==='learn'&&(hasOverlay||['districts','divisions','all'].includes(state.topic));
     const wrong=locate&&revealed?q.candidates[session.answered]:'';
     const containing=new Set([...selected].map(id=>index.get(id)?.district).filter(Boolean));
-    const key=JSON.stringify([state.mode,state.topic,state.chapter,hindi,revealed,isDivision,[...selected],wrong]);
+    const key=JSON.stringify([state.mode,state.topic,state.chapter,activeOverlay,hindi,revealed,isDivision,[...selected],wrong]);
     if(key===districtRenderKey)return;
     districtRenderKey=key;
     layer.replaceChildren();
@@ -281,10 +356,12 @@
       const active=clickable||(state.mode==='learn'&&linked);
       const f=index.get(id);
       const [light,dark]=districtColours.get(d.division);
-      const cls=['bihar-district',isDivision&&'division',chosen&&'is-selected',linked&&'is-linked',
+      const ovKey=hasOverlay?districtOverlayKey(d.code,activeOverlay):'';
+      const ovItem=ovKey&&overlayDef?overlayDef.items.find(it=>it.key===ovKey):null;
+      const cls=['bihar-district',isDivision&&'division',ovItem&&'has-overlay',chosen&&'is-selected',linked&&'is-linked',
         fullState&&'statewide',(wrong===d.id||wrong===d.division)&&'is-wrong',active&&'can-select'].filter(Boolean).join(' ');
-      const attrs={class:cls,d:d.path,'data-district-code':d.code,'data-division':d.division,
-        style:'--division-light:'+light+';--division-dark:'+dark};
+      const styleStr='--division-light:'+light+';--division-dark:'+dark+(ovItem?';--overlay-light:'+ovItem.light+';--overlay-dark:'+ovItem.dark:'');
+      const attrs={class:cls,d:d.path,'data-district-code':d.code,'data-division':d.division,style:styleStr};
       if(active)Object.assign(attrs,{'data-marker':id,role:'button',tabindex:isDivision&&f.members[0]!==d.id?-1:0,
         'aria-label':pairLabel(f.name,f.hi)});
       layer.append(svg('path',attrs));
@@ -488,6 +565,7 @@
     $('biharTopic').onchange=e=>changeTopic(e.target.value);
     $('biharChapters').onclick=()=>openDirectory('chapters');
     $('biharTimeline').onclick=()=>openDirectory('timeline');
+    if($('biharCheatsheet')) $('biharCheatsheet').onclick=openCheatsheet;
     $('biharChapterSearch').oninput=renderDirectory;
     $('language').onclick=()=>{
       track('bihar_map_language',{map_language:hindi?'en':'hi'});
@@ -538,6 +616,8 @@
       if(d.biharAction==='start-route')startRoute();
       if(d.biharAction==='prev-stop')stepTo(route.step-1);
       if(d.biharAction==='next-stop')stepTo(route.step+1);
+      if(d.biharOverlay){activeOverlay=d.biharOverlay;renderOverlayBar(api.state);renderOverlayLegend(api.state);api.renderMap();}
+      if(d.biharCstabs){activeCsTab=d.biharCstabs;renderCheatsheet();}
       if(d.biharAction==='end-route'){clearRoute();api.setDefaultView();api.renderMap();}
     });
   }

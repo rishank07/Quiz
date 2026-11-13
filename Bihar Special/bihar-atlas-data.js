@@ -226,6 +226,27 @@
     gandak: stops(['Himalayan headwaters|हिमालयी स्रोत','The Gandak drainage includes the Kali Gandaki system.|गंडक के अपवाह में काली गंडकी तंत्र है।',[83.8,29.1]],
       ['Valmikinagar|वाल्मीकिनगर','The barrage feeds the Triveni canals.|बैराज त्रिवेणी नहरों को पानी देता है।','valmikinagar'],
       ['Sonpur–Hajipur|सोनपुर–हाजीपुर','The Gandak meets the Ganga.|गंडक गंगा में मिलती है।','sonepur']),
+    ghaghara: stops(['Tibetan–Nepal Himalayas|तिब्बत–नेपाल हिमालय','Originates near Nampa (Nepal); known as Karnali in Nepal and Sarayu in Ayodhya.|नेपाल के नम्पा से उद्गम; नेपाल में कर्णाली व अयोध्या में सरयू कहलाती है।',[81.30,30.50]],
+      ['Saran Entry|सारण प्रवेश','Enters Bihar in Saran district (83 km course in Bihar).|सारण जिले से बिहार में प्रवेश (बिहार में 83 किमी लंबाई)।','br-d-218'],
+      ['Chhapra Confluence|छपरा संगम','Joins the Ganga near Chhapra (Chirand nearby).|छपरा (चिरांद) के पास गंगा में मिलती है।','chirand']),
+    'burhi-gandak': stops(['Chautarwa Chaur|चौतरवा चौर','Originates at Chautarwa Chaur near Someshwar Hills in West Champaran.|पश्चिम चंपारण की सोमेश्वर पहाड़ियों के पास चौतरवा चौर से उद्गम।',[84.29,27.05]],
+      ['Muzaffarpur & Pusa|मुजफ्फरपुर व पूसा','Flows southeast through Champaran, Muzaffarpur and Samastipur (320 km).|चंपारण, मुजफ्फरपुर और समस्तीपुर से बहती है (320 किमी)।','pusa'],
+      ['Khagaria Confluence|खगड़िया संगम','Originates and ends in Bihar, meeting the Ganga in Khagaria.|बिहार में ही उद्गम व खगड़िया में गंगा से संगम।','br-d-202']),
+    bagmati: stops(['Shivapuri Range|शिवपुरी श्रेणी','Originates in the Shivapuri hills near Kathmandu, Nepal (589 km total).|नेपाल के काठमांडू के पास शिवपुरी पहाड़ियों से उद्गम (कुल 589 किमी)।',[85.28,27.78]],
+      ['Sitamarhi–Sheohar|सीतामढ़ी–शिवहर','Enters Bihar via Sitamarhi and Sheohar; linked with Adhwara group.|सीतामढ़ी–शिवहर से बिहार में प्रवेश; अधवारा समूह से जुड़ी।','br-d-221'],
+      ['Badlaghat Confluence|बदलाघाट संगम','Joins the Kosi system near Badlaghat.|बदलाघाट के पास कोसी तंत्र में मिलती है।','kusheshwar']),
+    kamla: stops(['Mahabharat Range|महाभारत श्रेणी','Originates in the Mahabharat Range near Sindhuli, Nepal.|नेपाल के सिंधुली के पास महाभारत श्रेणी से उद्गम।',[85.95,27.25]],
+      ['Jaynagar & Madhubani|जयनगर व मधुबनी','Enters India near Jaynagar and flows across the Mithila plain.|जयनगर के पास प्रवेश कर मधुबनी व मिथिला मैदान में बहती है।','br-d-206'],
+      ['Badlaghat Confluence|बदलाघाट संगम','Joins the Kareh–Bagmati / Kosi drainage near Badlaghat.|बदलाघाट के पास करेह–बागमती / कोसी तंत्र से मिलती है।','kusheshwar']),
+    mahananda: stops(['Darjeeling Hills|दार्जिलिंग पहाड़ियाँ','Originates in Kurseong, Darjeeling Hills (West Bengal).|पश्चिम बंगाल के दार्जिलिंग (कुर्सियांग) से उद्गम।',[88.40,26.95]],
+      ['Kishanganj–Purnia–Katihar|किशनगंज–पूर्णिया–कटिहार','Easternmost river of North Bihar; enters via Kishanganj.|उत्तर बिहार की सबसे पूर्वी नदी; किशनगंज से प्रवेश।','br-d-203'],
+      ['Godagari, Bangladesh|गोदागाड़ी, बांग्लादेश','Last left-bank tributary joining the Ganga/Padma in Bangladesh.|बांग्लादेश के गोदागाड़ी में गंगा/पद्मा से मिलने वाली अंतिम बाईं सहायक नदी।',[88.33,24.47]]),
+    punpun: stops(['Palamu Plateau|पलामू पठार','Originates from the Chotanagpur plateau (Palamu, Jharkhand).|झारखंड के पलामू (छोटानागपुर पठार) से उद्गम।',[84.35,24.45]],
+      ['Aurangabad–Arwal–Patna|औरंगाबाद–अरवल–पटना','Flows northeast across the southern Bihar plain.|दक्षिण बिहार के मैदान से उत्तर-पूर्व की ओर बहती है।','br-d-189'],
+      ['Fatuha Confluence|फतुहा संगम','Joins the Ganga at Fatuha, east of Patna.|पटना के पूर्व फतुहा में गंगा से मिलती है।','fatuha']),
+    falgu: stops(['Chotanagpur Plateau|छोटानागपुर पठार','Main stream Niranjana meets Mohana near Bodh Gaya to form Falgu.|मुख्य धारा निरंजना बोधगया के पास मोहाना से मिलकर फल्गु बनती है।',[85.01,24.71]],
+      ['Gaya & Jehanabad|गया व जहानाबाद','Flows past Gaya (major Pitru Paksha pilgrimage river) and Jehanabad.|गया (पितृपक्ष तीर्थ) और जहानाबाद से होकर बहती है।','bodh-gaya'],
+      ['Punpun Basin|पुनपुन बेसिन','Merges into the Punpun drainage system in the south Bihar plain.|दक्षिण बिहार के मैदान में पुनपुन अपवाह तंत्र में मिलती है।',[85.02,25.41]]),
     kosi: stops(['Sapta Kosi headstreams|सप्तकोसी की स्रोत धाराएँ','Several Himalayan streams feed the Kosi system.|कई हिमालयी धाराएँ कोसी तंत्र को जल देती हैं।',[87.2,27.8]],
       ['Kosi Barrage|कोसी बैराज','The barrage is near Bhimnagar on the India–Nepal border area.|बैराज भारत–नेपाल सीमा क्षेत्र में भीमनगर के पास है।','bhimnagar'],
       ['Kursela|कुरसेला','The Kosi joins the Ganga in the Katihar region.|कटिहार क्षेत्र में कोसी गंगा में मिलती है।','kursela']),
@@ -263,5 +284,170 @@
       {title:'Ramsar Sites Information Service',url:'https://rsis.ramsar.org/'},
       {title:'Geographical Indications Registry',url:'https://search.ipindia.gov.in/GIRPublicSearch/'}
     ]}});
-  window.BiharAtlasData = {index,chaptersByPlace,tours,timeline};
+
+  const thematicLayers = [
+    {id:'none', en:'Default', hi:'सामान्य', page:'3–5', items:[]},
+    {id:'borders', en:'Borders', hi:'सीमाएँ', page:'8–9', items:[
+      {key:'nepal', en:'Nepal Border (7)', hi:'नेपाल सीमा (7)', light:'#b9e2d8', dark:'#2d6b62'},
+      {key:'up', en:'UP Border (8)', hi:'यूपी सीमा (8)', light:'#c9d8f5', dark:'#3b5280'},
+      {key:'jh', en:'Jharkhand Border (8)', hi:'झारखंड सीमा (8)', light:'#f4d3b2', dark:'#7a502d'},
+      {key:'wb', en:'West Bengal (3)', hi:'पश्चिम बंगाल (3)', light:'#e5c6ea', dark:'#664373'},
+      {key:'multi', en:'2-Border Corner', hi:'दोहरी सीमा जिला', light:'#f6df8f', dark:'#7d6624'},
+      {key:'patna-adj', en:'Patna-Adjoining (9)', hi:'पटना से सटे (9)', light:'#d5ebc1', dark:'#3f6336'},
+      {key:'internal', en:'Interior', hi:'आंतरिक जिला', light:'#e2e7e6', dark:'#36484b'}
+    ]},
+    {id:'rainfall', en:'Rainfall', hi:'वर्षा', page:'35', items:[
+      {key:'>160', en:'> 160 cm (Highest)', hi:'> 160 सेमी (सर्वाधिक)', light:'#6eb5df', dark:'#1d5b85'},
+      {key:'140-160', en:'140–160 cm', hi:'140–160 सेमी', light:'#9bd0eb', dark:'#286f94'},
+      {key:'120-140', en:'120–140 cm', hi:'120–140 सेमी', light:'#cbe6f2', dark:'#387185'},
+      {key:'100-120', en:'100–120 cm', hi:'100–120 सेमी', light:'#f5e2a8', dark:'#6e5d2c'},
+      {key:'<100', en:'< 100 cm (Driest)', hi:'< 100 सेमी (न्यूनतम)', light:'#f0b89c', dark:'#784231'}
+    ]},
+    {id:'soils', en:'Soils', hi:'मिट्टी', page:'18–19', items:[
+      {key:'lowland', en:'Mountain / Terai Lowland', hi:'पर्वतीय / तराई', light:'#b7d7a8', dark:'#3b5e36'},
+      {key:'bhangar', en:'Bhangar / Balsundari', hi:'भांगर / बलसुंदरी', light:'#ebd79e', dark:'#6b5a2e'},
+      {key:'khadar', en:'Khadar (Flood Plain)', hi:'खादर (बाढ़ मैदान)', light:'#a9d6e5', dark:'#2b5f73'},
+      {key:'taal', en:'Taal Soil', hi:'ताल मिट्टी', light:'#b9c8ec', dark:'#3b4d78'},
+      {key:'karail', en:'Karail-Kewal (Old Alluvial)', hi:'करैल-केवाल', light:'#d9c4e6', dark:'#59426b'},
+      {key:'red-sandy', en:'Red Sandy Soil', hi:'लाल बलुई मिट्टी', light:'#f1b69e', dark:'#78412f'},
+      {key:'red-yellow', en:'Red Yellow Soil', hi:'लाल-पीली मिट्टी', light:'#f3c78d', dark:'#7a5024'}
+    ]},
+    {id:'forests', en:'Forests', hi:'वन क्षेत्र', page:'32–34', items:[
+      {key:'high', en:'High / Sanctuary Belt', hi:'सर्वाधिक वन / अभयारण्य', light:'#88cfa0', dark:'#28663f'},
+      {key:'moderate', en:'Moderate Cover', hi:'मध्यम वन क्षेत्र', light:'#c4e4c1', dark:'#3c6340'},
+      {key:'low', en:'Low / Minimum Cover', hi:'न्यूनतम वन क्षेत्र', light:'#efe4c4', dark:'#5c5338'}
+    ]},
+    {id:'floods', en:'Floods', hi:'बाढ़ क्षेत्र', page:'15', items:[
+      {key:'high', en:'High Flood-Affected (North)', hi:'अधिक बाढ़ प्रभावित (उत्तर)', light:'#f2a6a2', dark:'#7d363a'},
+      {key:'moderate', en:'Ganga-Bank / Moderate', hi:'गंगा तटीय / मध्यम', light:'#f6d59b', dark:'#755627'},
+      {key:'low', en:'Low / Seasonal (South)', hi:'कम प्रभावित (दक्षिण)', light:'#c6e3d3', dark:'#2f5c4a'}
+    ]},
+    {id:'census', en:'Census 2011', hi:'जनगणना 2011', page:'22–24', items:[
+      {key:'top', en:'Highest Extremes', hi:'शीर्ष जिले (साक्षरता/घनत्व/लिंगानुपात)', light:'#9bd4b5', dark:'#296b4b'},
+      {key:'low', en:'Lowest Extremes', hi:'न्यूनतम जिले', light:'#f2b3b0', dark:'#7d3a3d'},
+      {key:'sc-st', en:'Max / Min SC–ST', hi:'SC/ST प्रमुख जिले', light:'#d6c2ec', dark:'#574073'},
+      {key:'other', en:'Other Districts', hi:'अन्य जिले', light:'#dce4e3', dark:'#35474a'}
+    ]},
+    {id:'resources', en:'Minerals & GI', hi:'खनिज व GI', page:'25–29, 89', items:[
+      {key:'gi', en:'GI Tag Hub', hi:'GI टैग केंद्र', light:'#e7c2ef', dark:'#643e73'},
+      {key:'mineral', en:'Major Mineral Belt', hi:'प्रमुख खनिज क्षेत्र', light:'#f2cc95', dark:'#785223'},
+      {key:'both', en:'Both Mineral & GI / Industry', hi:'खनिज + GI / उद्योग', light:'#9dd7c6', dark:'#2b6959'},
+      {key:'agri', en:'Agri / Handloom Belt', hi:'कृषि / हथकरघा', light:'#dce7e4', dark:'#35494b'}
+    ]},
+    {id:'expressways', en:'Expressways', hi:'एक्सप्रेसवे', page:'79', items:[
+      {key:'vk', en:'Varanasi–Kolkata', hi:'वाराणसी–कोलकाता', light:'#f2be96', dark:'#7a4b25'},
+      {key:'gs', en:'Gorakhpur–Siliguri', hi:'गोरखपुर–सिलीगुड़ी', light:'#a3d4ed', dark:'#285e7a'},
+      {key:'pp', en:'Patna–Purnia', hi:'पटना–पूर्णिया', light:'#b7e1b5', dark:'#336638'},
+      {key:'rh', en:'Raxaul–Haldia', hi:'रक्सौल–हल्दिया', light:'#dfc1ec', dark:'#5e3e70'},
+      {key:'multi', en:'2+ Expressways Junction', hi:'2+ एक्सप्रेसवे जंक्शन', light:'#f6df87', dark:'#786220'},
+      {key:'none', en:'Other Districts', hi:'अन्य जिले', light:'#e2e7e6', dark:'#35474a'}
+    ]}
+  ];
+
+  // Comprehensive district-level profiles grounded in the 91-page PDF
+  const districtProfiles = {
+    211:{borders:'multi',borderNote:'Nepal & Uttar Pradesh|नेपाल व उत्तर प्रदेश',rainfall:'>160',soil:'lowland',forest:'high',forestNote:'Valmiki NP & Tiger Reserve (2nd highest forest)|वाल्मीकि राष्ट्रीय उद्यान व टाइगर रिजर्व',flood:'high',census:'sc-st',censusNote:'Max ST (6.4%) · Largest district by area · Northernmost|सर्वाधिक ST (6.4%) · क्षेत्रफल में सबसे बड़ा · सबसे उत्तरी',resources:'mineral',resNote:'Placer Gold (Valmikinagar), Leather, Handloom|प्लेसर सोना (वाल्मीकिनगर), चमड़ा, हथकरघा',expressway:'gs',expNote:'Gorakhpur–Siliguri Expressway|गोरखपुर–सिलीगुड़ी एक्सप्रेसवे',rivers:'Gandak, Burhi Gandak|गंडक, बूढ़ी गंडक'},
+    213:{borders:'nepal',borderNote:'Nepal|नेपाल',rainfall:'140-160',soil:'bhangar',forest:'moderate',forestNote:'High forest growth vs 2019|2019 की तुलना में उच्च वन वृद्धि',flood:'high',census:'other',censusNote:'2nd Highest Population (2011)|जनसंख्या में दूसरा स्थान (2011)',resources:'mineral',resNote:'Saltpetre, Dhaka & Teur Canals|शोरा, ढाका व तेउर नहर',expressway:'multi',expNote:'Gorakhpur–Siliguri & Raxaul–Haldia|गोरखपुर–सिलीगुड़ी व रक्सौल–हल्दिया',rivers:'Gandak, Burhi Gandak, Bagmati|गंडक, बूढ़ी गंडक, बागमती'},
+    220:{borders:'internal',borderNote:'Internal (Sitamarhi, East Champaran, Muzaffarpur)|आंतरिक जिला',rainfall:'120-140',soil:'bhangar',forest:'low',forestNote:'Least irrigated · Smallest district by area|सबसे कम सिंचित · क्षेत्रफल में सबसे छोटा',flood:'high',census:'top',censusNote:'Highest Density (1880/sq km) · 2nd Lowest Pop|सर्वाधिक जनघनत्व (1880) · दूसरी न्यूनतम जनसंख्या',resources:'agri',resNote:'Agriculture & Handloom|कृषि व हथकरघा',expressway:'multi',expNote:'Gorakhpur–Siliguri & Raxaul–Haldia|गोरखपुर–सिलीगुड़ी व रक्सौल–हल्दिया',rivers:'Bagmati|बागमती'},
+    221:{borders:'nepal',borderNote:'Nepal|नेपाल',rainfall:'140-160',soil:'bhangar',forest:'low',forestNote:'Low forest cover|न्यूनतम वन क्षेत्र',flood:'high',census:'low',censusNote:'2nd Lowest Literacy Rate|न्यूनतम साक्षरता में दूसरा स्थान',resources:'agri',resNote:'Handloom & Agriculture|हथकरघा व कृषि',expressway:'multi',expNote:'Gorakhpur–Siliguri & Raxaul–Haldia|गोरखपुर–सिलीगुड़ी व रक्सौल–हल्दिया',rivers:'Bagmati, Adhwara|बागमती, अधवारा'},
+    208:{borders:'internal',borderNote:'Internal (Tirhut HQ)|आंतरिक (तिरहुत मुख्यालय)',rainfall:'120-140',soil:'bhangar',forest:'low',forestNote:'Low forest cover|कम वन क्षेत्र',flood:'high',census:'other',censusNote:'3rd Highest Population|जनसंख्या में तीसरा स्थान',resources:'gi',resNote:'Shahi Litchi (GI 2018), Railway Wagon, Leather|शाही लीची (GI 2018), रेलवे वैगन, चमड़ा',expressway:'rh',expNote:'Raxaul–Haldia Expressway|रक्सौल–हल्दिया एक्सप्रेसवे',rivers:'Burhi Gandak, Bagmati|बूढ़ी गंडक, बागमती'},
+    224:{borders:'patna-adj',borderNote:'Patna-adjoining (Ganga bank)|पटना से सटा (गंगा तट)',rainfall:'120-140',soil:'khadar',forest:'low',forestNote:'Salim Ali Bird Sanctuary (Baraila)|सलीम अली पक्षी अभयारण्य',flood:'moderate',census:'other',censusNote:'Ancient Vaishali Republic · Hajipur HQ|प्राचीन वैशाली गणराज्य · हाजीपुर मुख्यालय',resources:'agri',resNote:'Medicine factory (Hajipur), Bananas|दवा कारखाना (हाजीपुर), केला',expressway:'pp',expNote:'Patna–Purnia Expressway|पटना–पूर्णिया एक्सप्रेसवे',rivers:'Ganga, Gandak|गंगा, गंडक'},
+    197:{borders:'up',borderNote:'Uttar Pradesh|उत्तर प्रदेश',rainfall:'120-140',soil:'bhangar',forest:'low',forestNote:'Low forest cover|कम वन क्षेत्र',flood:'high',census:'top',censusNote:'Highest Sex Ratio (1021) · SC LS Seat|सर्वाधिक लिंगानुपात (1021) · SC लोकसभा सीट',resources:'agri',resNote:'Sugarcane & Agriculture|गन्ना व कृषि',expressway:'none',expNote:'NH-27 Corridor|NH-27 कॉरिडोर',rivers:'Gandak|गंडक'},
+    222:{borders:'up',borderNote:'Uttar Pradesh|उत्तर प्रदेश',rainfall:'120-140',soil:'bhangar',forest:'low',forestNote:'Low forest cover|कम वन क्षेत्र',flood:'high',census:'top',censusNote:'2nd Highest Sex Ratio · Ziradei (Rajendra Prasad)|दूसरा सर्वाधिक लिंगानुपात · जीरादेई',resources:'agri',resNote:'Yarn spinning, Handloom|सूत कताई, हथकरघा',expressway:'none',expNote:'Regional NH network|क्षेत्रीय राजमार्ग',rivers:'Ghaghara, Gandak|घाघरा, गंडक'},
+    218:{borders:'multi',borderNote:'UP & Patna-adjoining (Ganga bank)|यूपी व पटना से सटा (गंगा तट)',rainfall:'120-140',soil:'khadar',forest:'low',forestNote:'Low forest cover|कम वन क्षेत्र',flood:'high',census:'top',censusNote:'3rd Highest Sex Ratio · Sonepur Fair · Chirand|तीसरा सर्वाधिक लिंगानुपात · सोनपुर मेला · चिरांद',resources:'agri',resNote:'Oldest sugar mill (Marhaura 1904)|सबसे पुरानी चीनी मिल (मढ़ौरा 1904)',expressway:'pp',expNote:'Patna–Purnia Expressway|पटना–पूर्णिया एक्सप्रेसवे',rivers:'Ganga, Ghaghara, Gandak|गंगा, घाघरा, गंडक'},
+    206:{borders:'nepal',borderNote:'Nepal|नेपाल',rainfall:'140-160',soil:'bhangar',forest:'low',forestNote:'High forest growth vs 2019|2019 की तुलना में वन वृद्धि',flood:'high',census:'other',censusNote:'2nd Highest Rural Pop · Saurath Sabha|दूसरी सर्वाधिक ग्रामीण जनसंख्या · सौराठ सभा',resources:'gi',resNote:'Mithila Painting (GI 2007), Fine Cotton, Kamla Canal|मिथिला पेंटिंग (GI 2007), कमला नहर',expressway:'gs',expNote:'Gorakhpur–Siliguri Expressway|गोरखपुर–सिलीगुड़ी एक्सप्रेसवे',rivers:'Kamla–Balan, Kosi|कमला–बलान, कोसी'},
+    195:{borders:'internal',borderNote:'Internal (Darbhanga HQ)|आंतरिक (दरभंगा मुख्यालय)',rainfall:'120-140',soil:'bhangar',forest:'low',forestNote:'Kusheshwar Sthan Bird Sanctuary|कुशेश्वर स्थान पक्षी अभयारण्य',flood:'high',census:'top',censusNote:'3rd Highest Density · DMCH (1946)|तीसरा सर्वाधिक जनघनत्व · DMCH (1946)',resources:'agri',resNote:'Kamla Canal, Makhana, Handloom|कमला नहर, मखाना, हथकरघा',expressway:'pp',expNote:'Patna–Purnia Expressway|पटना–पूर्णिया एक्सप्रेसवे',rivers:'Bagmati, Kamla–Balan|बागमती, कमला–बलान'},
+    217:{borders:'patna-adj',borderNote:'Patna-adjoining (Ganga bank)|पटना से सटा (गंगा तट)',rainfall:'120-140',soil:'bhangar',forest:'low',forestNote:'Low forest cover|कम वन क्षेत्र',flood:'high',census:'top',censusNote:'Highest Rural Population · Pusa Agri Univ|सर्वाधिक ग्रामीण जनसंख्या · पूसा कृषि वि.वि.',resources:'mineral',resNote:'Saltpetre, Jute, Paper factory|शोरा, जूट, कागज उद्योग',expressway:'multi',expNote:'Patna–Purnia & Raxaul–Haldia|पटना–पूर्णिया व रक्सौल–हल्दिया',rivers:'Ganga, Burhi Gandak|गंगा, बूढ़ी गंडक'},
+    223:{borders:'nepal',borderNote:'Nepal|नेपाल',rainfall:'140-160',soil:'bhangar',forest:'low',forestNote:'Kosi Barrage (Bhimnagar) nearby|कोसी बैराज (भीमनगर) क्षेत्र',flood:'high',census:'other',censusNote:'Kosi division northernmost district|कोसी प्रमंडल का उत्तरी जिला',resources:'agri',resNote:'Kosi Project & Canals|कोसी परियोजना व नहरें',expressway:'gs',expNote:'Gorakhpur–Siliguri Expressway|गोरखपुर–सिलीगुड़ी एक्सप्रेसवे',rivers:'Kosi|कोसी'},
+    216:{borders:'internal',borderNote:'Internal (Kosi HQ)|आंतरिक (कोसी मुख्यालय)',rainfall:'120-140',soil:'bhangar',forest:'low',forestNote:'Simri Bakhtiyarpur Lake (Horseshoe)|सिमरी बख्तियारपुर झील',flood:'high',census:'other',censusNote:'Kosi alluvial fan belt|कोसी जलोढ़ पंख क्षेत्र',resources:'agri',resNote:'Makhana & Fisheries|मखाना व मत्स्य पालन',expressway:'pp',expNote:'Patna–Purnia Expressway|पटना–पूर्णिया एक्सप्रेसवे',rivers:'Kosi|कोसी'},
+    205:{borders:'internal',borderNote:'Internal (Kosi division)|आंतरिक (कोसी प्रमंडल)',rainfall:'120-140',soil:'khadar',forest:'low',forestNote:'Low forest cover|कम वन क्षेत्र',flood:'high',census:'other',censusNote:'Kosi plain|कोसी मैदान',resources:'agri',resNote:'Maize & Jute belt|मक्का व जूट क्षेत्र',expressway:'pp',expNote:'Patna–Purnia Expressway|पटना–पूर्णिया एक्सप्रेसवे',rivers:'Kosi|कोसी'},
+    188:{borders:'nepal',borderNote:'Nepal|नेपाल',rainfall:'140-160',soil:'bhangar',forest:'low',forestNote:'Low forest cover|कम वन क्षेत्र',flood:'high',census:'other',censusNote:'Northeastern plain|उत्तर-पूर्वी मैदान',resources:'agri',resNote:'Jute & Maize|जूट व मक्का',expressway:'gs',expNote:'Gorakhpur–Siliguri Expressway|गोरखपुर–सिलीगुड़ी एक्सप्रेसवे',rivers:'Mahananda, Kosi|महानंदा, कोसी'},
+    203:{borders:'multi',borderNote:'Nepal & West Bengal|नेपाल व पश्चिम बंगाल',rainfall:'>160',soil:'lowland',forest:'low',forestNote:'Easternmost district · Max rainfall|सबसे पूर्वी जिला · सर्वाधिक वर्षा',flood:'high',census:'sc-st',censusNote:'Minimum SC (6.7%)|न्यूनतम SC (6.7%)',resources:'agri',resNote:'Tea cultivation, Jute|चाय की खेती, जूट',expressway:'gs',expNote:'Gorakhpur–Siliguri Expressway|गोरखपुर–सिलीगुड़ी एक्सप्रेसवे',rivers:'Mahananda|महानंदा'},
+    214:{borders:'wb',borderNote:'West Bengal|पश्चिम बंगाल',rainfall:'140-160',soil:'bhangar',forest:'low',forestNote:'Low forest cover|कम वन क्षेत्र',flood:'high',census:'low',censusNote:'Lowest Literacy Rate (51.1%)|न्यूनतम साक्षरता दर (51.1%)',resources:'agri',resNote:'Jute & Jute bags, Makhana Board|जूट उद्योग, राष्ट्रीय मखाना बोर्ड',expressway:'pp',expNote:'Patna–Purnia Expressway|पटना–पूर्णिया एक्सप्रेसवे',rivers:'Mahananda, Kosi|महानंदा, कोसी'},
+    201:{borders:'multi',borderNote:'West Bengal & Jharkhand (Ganga bank)|प. बंगाल व झारखंड (गंगा तट)',rainfall:'140-160',soil:'khadar',forest:'low',forestNote:'Gogabeel Lake (1st Community Reserve & Ramsar)|गोगाबील झील (रामसर स्थल)',flood:'high',census:'sc-st',censusNote:'2nd Highest ST · Manihari ST Seat|दूसरा सर्वाधिक ST · मनिहारी ST सीट',resources:'agri',resNote:'Jute industry, Kursela confluence|जूट उद्योग, कुरसेला संगम',expressway:'none',expNote:'Eastern rail & NH hub|पूर्वी रेल व राजमार्ग केंद्र',rivers:'Ganga, Kosi, Mahananda|गंगा, कोसी, महानंदा'},
+    192:{borders:'jh',borderNote:'Jharkhand (Ganga bank)|झारखंड (गंगा तट)',rainfall:'120-140',soil:'khadar',forest:'moderate',forestNote:'Vikramshila Dolphin Sanctuary · Jagatpura Lake|विक्रमशिला डॉल्फिन अभयारण्य · जगतपुरा झील',flood:'moderate',census:'low',censusNote:'2nd Lowest Sex Ratio · 3rd Lowest Rural Pop|दूसरा न्यूनतम लिंगानुपात',resources:'gi',resNote:'Bhagalpuri Silk (GI 2009), Manjusha (2017), Katarni, Zardalu (2018)|भागलपुरी सिल्क, मंजूषा, कतरनी, जर्दालु',expressway:'none',expNote:'Buxar–Bhagalpur Corridor|बक्सर–भागलपुर कॉरिडोर',rivers:'Ganga|गंगा'},
+    190:{borders:'jh',borderNote:'Jharkhand|झारखंड',rainfall:'100-120',soil:'red-yellow',forest:'high',forestNote:'3rd Lowest Density · Mandar Hill Ropeway|मंदार हिल रोपवे · वन क्षेत्र',flood:'low',census:'low',censusNote:'3rd Lowest Density · Katoria ST Seat|तीसरा न्यूनतम घनत्व · कटोरिया ST सीट',resources:'both',resNote:'Ceramic, Lead-Zinc, Tasar Silk, Katarni Rice|सिरेमिक, सीसा-जस्ता, तसर रेशम',expressway:'rh',expNote:'Raxaul–Haldia Expressway|रक्सौल–हल्दिया एक्सप्रेसवे',rivers:'Chanan, Ajay|चांदन, अजय'},
+    212:{borders:'internal',borderNote:'State Capital (Ganga bank, 9 adjoining)|राजधानी (गंगा तट, 9 सटे जिले)',rainfall:'100-120',soil:'taal',forest:'low',forestNote:'Only Metropolitan City · Richest District|एकमात्र महानगर · सबसे अमीर जिला',flood:'moderate',census:'top',censusNote:'Highest Pop & Urbanisation · 2nd Literacy · 2nd Density|सर्वाधिक जनसंख्या व शहरीकरण · दूसरी साक्षरता',resources:'agri',resNote:'PMCH (1925), Golghar, Kumhrar, Patna Sahib|PMCH, गोलघर, कुम्हरार, पटना साहिब',expressway:'pp',expNote:'Patna–Purnia Expressway|पटना–पूर्णिया एक्सप्रेसवे',rivers:'Ganga, Son, Punpun|गंगा, सोन, पुनपुन'},
+    193:{borders:'multi',borderNote:'UP & Patna-adjoining (Ganga bank)|यूपी व पटना से सटा (गंगा तट)',rainfall:'100-120',soil:'karail',forest:'low',forestNote:'Western Son Canal beneficiary|पश्चिमी सोन नहर क्षेत्र',flood:'moderate',census:'top',censusNote:'3rd Highest Literacy · Jagdishpur (1857)|तीसरी सर्वाधिक साक्षरता · जगदीशपुर',resources:'agri',resNote:'Agriculture & Handloom|कृषि व हथकरघा',expressway:'none',expNote:'Arrah–Buxar NH Corridor|आरा–बक्सर राजमार्ग',rivers:'Ganga, Son|गंगा, सोन'},
+    194:{borders:'up',borderNote:'Uttar Pradesh (Ganga bank)|उत्तर प्रदेश (गंगा तट)',rainfall:'100-120',soil:'karail',forest:'low',forestNote:'Gokul Jalashay (Ramsar) · 3rd Lowest Forest|गोकुल जलाशय (रामसर) · तीसरा न्यूनतम वन',flood:'moderate',census:'other',censusNote:'Battle of Buxar (1764) & Chausa (1539)|बक्सर (1764) व चौसा (1539) युद्ध',resources:'agri',resNote:'First Open Jail · Western Son Canal|पहली खुली जेल · पश्चिमी सोन नहर',expressway:'none',expNote:'Buxar–Bhagalpur Corridor|बक्सर–भागलपुर कॉरिडोर',rivers:'Ganga, Karmanasa|गंगा, कर्मनाशा'},
+    200:{borders:'up',borderNote:'Uttar Pradesh (Westernmost)|उत्तर प्रदेश (सबसे पश्चिमी)',rainfall:'100-120',soil:'red-sandy',forest:'high',forestNote:'Max Forest Cover (31.56%) · Kaimur TR (2nd) · Telhar|सर्वाधिक वन (31.56%) · कैमूर टाइगर रिजर्व',flood:'low',census:'low',censusNote:'Lowest Density (488/sq km) · Min Rainfall|न्यूनतम जनघनत्व (488) · न्यूनतम वर्षा',resources:'mineral',resNote:'Vindhyan Sandstone, Woollen Carpet, Banarasi Sari|विंध्यन बलुआ पत्थर, कालीन',expressway:'vk',expNote:'Varanasi–Ranchi–Kolkata (Mohania)|वाराणसी–रांची–कोलकाता (मोहनिया)',rivers:'Karmanasa, Durgavati|कर्मनाशा, दुर्गावती'},
+    215:{borders:'multi',borderNote:'UP & Jharkhand|यूपी व झारखंड',rainfall:'100-120',soil:'red-sandy',forest:'high',forestNote:'Most Irrigated District · Dhuankund & Manjhar Kund|सर्वाधिक सिंचित जिला · धुआँकुंड',flood:'low',census:'top',censusNote:'Highest Literacy Rate (73.4%) · Sher Shah Tomb|सर्वाधिक साक्षरता (73.4%) · शेरशाह मकबरा',resources:'mineral',resNote:'Pyrite (Amjhore), Limestone, Cement (Banjari), Son Canal|पाइराइट, चूना पत्थर, सीमेंट',expressway:'vk',expNote:'Varanasi–Ranchi–Kolkata (Sasaram)|वाराणसी–रांची–कोलकाता (सासाराम)',rivers:'Son|सोन'},
+    209:{borders:'patna-adj',borderNote:'Patna-adjoining|पटना से सटा',rainfall:'100-120',soil:'taal',forest:'moderate',forestNote:'Pant Wildlife Sanctuary · Rajgir Hot Springs|पंत अभयारण्य · राजगीर गर्म जलकुंड',flood:'low',census:'other',censusNote:'Ancient Nalanda & Rajgir · Glass Bridge · Film City|नालंदा व राजगीर · ग्लास ब्रिज',resources:'gi',resNote:'Silao Khaja (GI 2018), Magahi Paan (GI 2018), Silk|सिलाव खाजा व मगही पान (GI 2018)',expressway:'none',expNote:'Rajgir–Bakhtiyarpur Corridor|राजगीर–बख्तियारपुर कॉरिडोर',rivers:'Falgu, Panchane|फल्गु, पंचाने'},
+    189:{borders:'jh',borderNote:'Jharkhand|झारखंड',rainfall:'100-120',soil:'red-yellow',forest:'moderate',forestNote:'Deo Sun Temple · Punpun Barrage (Hamidnagar)|देव सूर्य मंदिर · पुनपुन बैराज',flood:'low',census:'sc-st',censusNote:'3rd Highest SC · Min Rainfall belt|तीसरा सर्वाधिक SC · कम वर्षा क्षेत्र',resources:'agri',resNote:'Eastern Son Canal, Woollen Carpet|पूर्वी सोन नहर, ऊनी कालीन',expressway:'vk',expNote:'Varanasi–Ranchi–Kolkata Expressway|वाराणसी–रांची–कोलकाता एक्सप्रेसवे',rivers:'Son, Punpun|सोन, पुनपुन'},
+    196:{borders:'jh',borderNote:'Jharkhand (Southernmost)|झारखंड (सबसे दक्षिणी)',rainfall:'<100',soil:'karail',forest:'moderate',forestNote:'Hottest place & Min rainfall · Bodh Gaya · Barabar|सबसे गर्म व न्यूनतम वर्षा · बोधगया',flood:'low',census:'sc-st',censusNote:'Max SC (30.39%) · 1922 INC Session|सर्वाधिक SC (30.39%) · 1922 कांग्रेस अधिवेशन',resources:'both',resNote:'Mica, Uranium, Feldspar, Magahi Paan (GI 2018), Tilkut|अभ्रक, यूरेनियम, फेल्सपार, मगही पान',expressway:'vk',expNote:'Varanasi–Ranchi–Kolkata Expressway|वाराणसी–रांची–कोलकाता एक्सप्रेसवे',rivers:'Falgu (Niranjana–Mohana)|फल्गु (निरंजना–मोहाना)'},
+    210:{borders:'jh',borderNote:'Jharkhand|झारखंड',rainfall:'100-120',soil:'red-yellow',forest:'high',forestNote:'Kakolat Waterfall · Forest-rich hills|ककोलत जलप्रपात · वन क्षेत्र',flood:'low',census:'sc-st',censusNote:'2nd Highest SC population|दूसरा सर्वाधिक SC आबादी',resources:'mineral',resNote:'Mica & Asbestos (Highest in Bihar), Tasar Silk|अभ्रक व एस्बेस्टस (सर्वाधिक)',expressway:'none',expNote:'Regional NH network|क्षेत्रीय राजमार्ग',rivers:'Sakri, Khuri|सकरी, खुरी'},
+    199:{borders:'patna-adj',borderNote:'Patna-adjoining|पटना से सटा',rainfall:'<100',soil:'karail',forest:'moderate',forestNote:'1st Rank IDSP Health (2025) · Barabar/Nagarjuni nearby|IDSP में प्रथम · बराबर पहाड़ियाँ',flood:'low',census:'other',censusNote:'Dharnai (First Solar Village)|धरनई (पहला सौर गाँव)',resources:'agri',resNote:'Yamuna & Eastern Son Canals|यमुना व पूर्वी सोन नहर',expressway:'none',expNote:'Patna–Gaya NH Corridor|पटना–गया राजमार्ग',rivers:'Falgu, Punpun|फल्गु, पुनपुन'},
+    611:{borders:'patna-adj',borderNote:'Patna-adjoining (38th District)|पटना से सटा (38वाँ जिला)',rainfall:'<100',soil:'karail',forest:'low',forestNote:'2nd Lowest Forest Cover · 3rd Lowest Pop|दूसरा न्यूनतम वन · तीसरी न्यूनतम जनसंख्या',flood:'low',census:'low',censusNote:'3rd Lowest Pop · Carved from Jehanabad (2001)|तीसरी न्यूनतम जनसंख्या (गठन 2001)',resources:'agri',resNote:'Eastern Son Canal irrigation|पूर्वी सोन नहर सिंचाई',expressway:'none',expNote:'Son basin road link|सोन बेसिन संपर्क मार्ग',rivers:'Son, Punpun|सोन, पुनपुन'},
+    191:{borders:'patna-adj',borderNote:'Patna-adjoining (Ganga bank)|पटना से सटा (गंगा तट)',rainfall:'120-140',soil:'khadar',forest:'low',forestNote:'Kabartal / Kanwar Lake (1st Ramsar Site 2020)|काबरताल / काँवर झील (पहला रामसर 2020)',flood:'moderate',census:'other',censusNote:'Simaria Fair · Chowkidari Tax Movement|सिमरिया मेला · चौकीदारी कर आंदोलन',resources:'mineral',resNote:'Barauni Refinery (1964), Thermal Power (1962), Saltpetre|बरौनी रिफाइनरी, ताप विद्युत, शोरा',expressway:'multi',expNote:'Patna–Purnia & Raxaul–Haldia|पटना–पूर्णिया व रक्सौल–हल्दिया',rivers:'Ganga, Burhi Gandak|गंगा, बूढ़ी गंडक'},
+    202:{borders:'internal',borderNote:'Internal (Ganga bank)|आंतरिक (गंगा तट)',rainfall:'120-140',soil:'khadar',forest:'low',forestNote:'Confluence floodplain|नदी संगम बाढ़ क्षेत्र',flood:'high',census:'sc-st',censusNote:'Minimum ST · 3rd Lowest Sex Ratio|न्यूनतम ST · तीसरा न्यूनतम लिंगानुपात',resources:'agri',resNote:'Maize & Banana hub|मक्का व केला केंद्र',expressway:'none',expNote:'NH-31 Corridor|NH-31 कॉरिडोर',rivers:'Ganga, Burhi Gandak, Kosi, Bagmati|गंगा, बूढ़ी गंडक, कोसी, बागमती'},
+    204:{borders:'patna-adj',borderNote:'Patna-adjoining (Ganga bank)|पटना से सटा (गंगा तट)',rainfall:'100-120',soil:'taal',forest:'low',forestNote:'Kajra 301 MW Solar-Battery Project · Ashok Dham|कजरा सोलर प्रोजेक्ट · अशोक धाम',flood:'moderate',census:'other',censusNote:'Surajgarha Kiul–Ganga confluence|सूरजगढ़ा किऊल–गंगा संगम',resources:'agri',resNote:'Taal pulses & agriculture|ताल दलहन व कृषि',expressway:'rh',expNote:'Raxaul–Haldia Expressway|रक्सौल–हल्दिया एक्सप्रेसवे',rivers:'Ganga, Kiul|गंगा, किऊल'},
+    219:{borders:'internal',borderNote:'Internal (Munger division)|आंतरिक (मुंगेर प्रमंडल)',rainfall:'100-120',soil:'taal',forest:'low',forestNote:'Minimum Forest Cover (0.17%) · Girihinda Hill|न्यूनतम वन क्षेत्र (0.17%) · गिरिहिंडा पहाड़ी',flood:'low',census:'low',censusNote:'Lowest Population (2011) · Least Forest|न्यूनतम जनसंख्या (2011)',resources:'agri',resNote:'Agriculture & Stone quarrying|कृषि व पत्थर उद्योग',expressway:'none',expNote:'Regional highway network|क्षेत्रीय राजमार्ग',rivers:'Harohar|हरोहर'},
+    207:{borders:'internal',borderNote:'Internal (Munger HQ, Ganga bank)|आंतरिक (मुंगेर मुख्यालय, गंगा तट)',rainfall:'100-120',soil:'red-yellow',forest:'high',forestNote:'Bhimbandh Sanctuary · Hot Springs (Sitakund etc.)|भीमबांध अभयारण्य · गर्म जलकुंड',flood:'moderate',census:'low',censusNote:'Lowest Sex Ratio (876) · 2nd Lowest Rural Pop|न्यूनतम लिंगानुपात (876)',resources:'mineral',resNote:'Bauxite, Silica, Gun & Cigarette Factory, Jamalpur Rail|बॉक्साइट, बंदूक-सिगरेट कारखाना, जमालपुर',expressway:'none',expNote:'Ganga Pathway (Marine Drive) Munger–Sabour|गंगा पाथवे (मुंगेर–सबौर)',rivers:'Ganga|गंगा'},
+    198:{borders:'jh',borderNote:'Jharkhand|झारखंड',rainfall:'100-120',soil:'red-yellow',forest:'high',forestNote:'3rd Highest Forest · Nagi–Nakti Ramsar Sites · 2nd Lowest Density|नगी–नकटी रामसर स्थल · तीसरा सर्वाधिक वन',flood:'low',census:'sc-st',censusNote:'3rd Highest ST · 2nd Lowest Density|तीसरा सर्वाधिक ST · दूसरा न्यूनतम घनत्व',resources:'mineral',resNote:'Gold Reserves (Karmatiya), Feldspar|सोना भंडार (करमटिया), फेल्सपार',expressway:'rh',expNote:'Raxaul–Haldia Expressway|रक्सौल–हल्दिया एक्सप्रेसवे',rivers:'Kiul, Ajay|किऊल, अजय'}
+  };
+
+  const cheatsheet = [
+    {id:'symbols', en:'State Symbols & Firsts', hi:'राजकीय प्रतीक व प्रथम', cards:[
+      {en:'State Symbols (PDF p. 4)', hi:'राजकीय प्रतीक (पृ. 4)', items:[
+        'State Song: Mere Bharat Ke Kanth-Haar (Satya Narayan; Music: H.P. Chaurasia & Shivkumar Sharma, March 2012)~राजकीय गीत: मेरे भारत के कंठहार (सत्य नारायण)',
+        'Official Languages: Hindi (1st), Urdu (2nd, 1981); Regional: Bhojpuri, Magahi, Angika, Maithili~राजभाषा: हिंदी, उर्दू (द्वितीय, 1981)',
+        'State Symbol: Bodhi Tree (1930–35) · State Tree: Peepal (Ficus religiosa)~राजकीय चिह्न: बोधि वृक्ष · राजकीय वृक्ष: पीपल',
+        'State Animal: Bull (Bos taurus, before 2013 Bear) · State Bird: Sparrow (20 March Sparrow Day)~पशु: बैल · पक्षी: गौरैया (20 मार्च)',
+        'State Fish: Mangur · Aquatic Animal: Gangetic Dolphin (2009) · Flower: Marigold~मछली: मांगुर · जलीय जीव: डॉल्फिन · फूल: गेंदा'
+      ]},
+      {en:'Polity & Firsts (PDF pp. 7, 36)', hi:'राजव्यवस्था व प्रथम (पृ. 7, 36)', items:[
+        '38 Districts, 9 Divisions, 101 Sub-divisions, 534 Blocks, 19 Municipal Corp~38 जिले, 9 प्रमंडल, 101 अनुमंडल, 534 प्रखंड',
+        'Seats: 40 Lok Sabha (6 SC), 16 Rajya Sabha, 243 Assembly (38 SC, 2 ST), 75 Council~लोकसभा 40, राज्यसभा 16, विधानसभा 243, विधान परिषद 75',
+        '1st CM: Shri Krishna Singh · 1st Woman CM: Rabri Devi · 1st Dalit CM: Bhola Paswan Shastri~प्रथम CM: श्रीकृष्ण सिंह · महिला CM: राबड़ी देवी',
+        '1st Muslim CM: Abdul Ghafoor · 1st Governor: Jairamdas Daulatram · 1st Woman Governor: Ram Dulari Sinha~प्रथम मुस्लिम CM: अब्दुल गफूर · राज्यपाल: जयरामदास दौलतराम',
+        '1st Solar Village: Dharnai (Jehanabad) · 1st Open Jail: Buxar · 1st Film City: Rajgir~पहला सौर गाँव: धरनई · पहली खुली जेल: बक्सर'
+      ]}
+    ]},
+    {id:'geography', en:'Borders, Ganga & Hot Springs', hi:'सीमाएँ, गंगा व जलकुंड', cards:[
+      {en:'Bordering States & Country (PDF p. 9)', hi:'सीमावर्ती राज्य व देश (पृ. 9)', items:[
+        'Nepal (7): W. Champaran, E. Champaran, Sitamarhi, Madhubani, Supaul, Araria, Kishanganj~नेपाल (7): प. चंपारण से किशनगंज',
+        'Uttar Pradesh (8): W. Champaran, Gopalganj, Siwan, Saran, Bhojpur, Buxar, Kaimur, Rohtas~यूपी (8): प. चंपारण से रोहतास',
+        'Jharkhand (8): Rohtas, Aurangabad, Gaya, Nawada, Jamui, Banka, Bhagalpur, Katihar~झारखंड (8): रोहतास से कटिहार',
+        'West Bengal (3): Kishanganj, Purnia, Katihar~पश्चिम बंगाल (3): किशनगंज, पूर्णिया, कटिहार',
+        'Patna Adjoining (9): Arwal, Jehanabad, Nalanda, Lakhisarai, Begusarai, Samastipur, Vaishali, Saran, Bhojpur~पटना से सटे (9)'
+      ]},
+      {en:'12 Districts on Ganga Banks (PDF p. 87)', hi:'गंगा तट पर बसे 12 जिले (पृ. 87)', items:[
+        'West to East: Buxar, Bhojpur, Saran, Patna, Vaishali, Samastipur, Begusarai, Lakhisarai, Munger, Khagaria, Bhagalpur, Katihar~बक्सर, भोजपुर, सारण, पटना, वैशाली, समस्तीपुर, बेगूसराय, लखीसराय, मुंगेर, खगड़िया, भागलपुर, कटिहार',
+        'Ganga length in Bihar: 445 km (Entry: Chausa, Buxar · Exit: Katihar)~बिहार में गंगा की लंबाई: 445 किमी (प्रवेश: चौसा, बक्सर)'
+      ]},
+      {en:'Hot Springs: Rajgir & Munger (PDF p. 14)', hi:'गर्म जलकुंड: राजगीर व मुंगेर (पृ. 14)', items:[
+        'Rajgir (>70°C): Brahma Kund (hottest), Surya Kund, Nanak Kund, Makhdum Kund, Saptadhara~राजगीर (>70°C): ब्रह्मकुंड, सूर्यकुंड, नानक, मखदूम, सप्तधारा',
+        'Munger (>58°C): Sitakund, Rameshwarkund, Laxmankund, Rishikund, Gaumukh Kund~मुंगेर (>58°C): सीताकुंड, रामेश्वर, लक्ष्मण, ऋषिकुंड, गोमुख कुंड'
+      ]}
+    ]},
+    {id:'census', en:'Census 2011 & Forests', hi:'जनगणना 2011 व वन', cards:[
+      {en:'Census 2011 Extremes (PDF pp. 22–24)', hi:'जनगणना 2011 शीर्ष/न्यूनतम (पृ. 22–24)', items:[
+        'Population: 10,40,99,452 (3rd) · Max: Patna · Min: Sheikhpura~जनसंख्या: 10.41 करोड़ (तीसरा) · सर्वाधिक: पटना · न्यूनतम: शेखपुरा',
+        'Density: 1106/sq km (1st in India) · Max: Sheohar (1880) · Min: Kaimur (488)~घनत्व: 1106 · सर्वाधिक: शिवहर (1880) · न्यूनतम: कैमूर (488)',
+        'Literacy: 61.8% (M 71.2%, F 51.5%) · Max: Rohtas (73.4%) · Min: Purnia (51.1%)~साक्षरता: 61.8% · सर्वाधिक: रोहतास (73.4%) · न्यूनतम: पूर्णिया (51.1%)',
+        'Sex Ratio: 918 (Child 935) · Max: Gopalganj (1021) · Min: Munger (876)~लिंगानुपात: 918 · सर्वाधिक: गोपालगंज (1021) · न्यूनतम: मुंगेर (876)',
+        'SC (15.72%): Max Gaya (30.39%), Min Kishanganj (6.7%) · ST (1.3%): Max W. Champaran (6.4%), Min Khagaria~SC: गया/किशनगंज · ST: प. चंपारण/खगड़िया'
+      ]},
+      {en:'Forests & Ramsar Sites (PDF pp. 31–34)', hi:'वन व रामसर स्थल (पृ. 31–34)', items:[
+        'ISFR 2023 Forest Cover: 7,532.45 sq km (8%) · Total Forest+Tree: 9,903 sq km (10.52%)~वन आवरण: 7,532.45 वर्ग किमी (8%)',
+        'Max Forest: Kaimur (31.56%), W. Champaran, Jamui · Min Forest: Sheikhpura (0.17%), Arwal, Buxar~सर्वाधिक: कैमूर · न्यूनतम: शेखपुरा',
+        'Ramsar Sites: Kabartal (Begusarai, 2020), Nagi & Nakti (Jamui, 2024), Gokul Jalashay (Buxar), Udaipur Lake (W. Champaran), Gogabeel (Katihar)~रामसर स्थल: काबरताल, नागी-नकटी, गोकुल, उदयपुर, गोगाबील'
+      ]}
+    ]},
+    {id:'economy', en:'GI Tags, Minerals & Expressways', hi:'GI टैग, खनिज व एक्सप्रेसवे', cards:[
+      {en:'8 GI Tags of Bihar (PDF p. 89)', hi:'बिहार के 8 GI टैग (पृ. 89)', items:[
+        'Mithila Painting (Madhubani, 2007) · Bhagalpuri Silk (Bhagalpur, 2009) · Manjusha Art (Bhagalpur, 2017)~मिथिला पेंटिंग (2007) · भागलपुरी सिल्क (2009) · मंजूषा (2017)',
+        'Katarni Rice (Bhagalpur–Banka, 2018) · Zardalu Mango (Bhagalpur, 2018)~कतरनी चावल (2018) · जर्दालु आम (2018)',
+        'Magahi Paan (Nalanda–Gaya–Munger, 2018) · Shahi Litchi (Muzaffarpur, 2018) · Silao Khaja (Nalanda, 2018)~मगही पान · शाही लीची · सिलाव खाजा (2018)'
+      ]},
+      {en:'4 Major Expressways (PDF p. 79)', hi:'4 प्रमुख एक्सप्रेसवे (पृ. 79)', items:[
+        '1. Varanasi–Ranchi–Kolkata: Mohania (Kaimur), Rohtas, Aurangabad, Gaya~1. वाराणसी–रांची–कोलकाता: कैमूर, रोहतास, औरंगाबाद, गया',
+        '2. Gorakhpur–Siliguri: W. Champaran, E. Champaran, Sheohar, Sitamarhi, Madhubani, Supaul, Araria, Kishanganj~2. गोरखपुर–सिलीगुड़ी: उत्तर बिहार के 8 सीमावर्ती जिले',
+        '3. Patna–Purnia: Patna, Saran, Vaishali, Samastipur, Begusarai, Darbhanga, Saharsa, Madhepura, Purnia~3. पटना–पूर्णिया: 9 जिले',
+        '4. Raxaul–Haldia: Muzaffarpur, Sheohar, E. Champaran, Sitamarhi, Samastipur, Begusarai, Lakhisarai, Jamui, Banka~4. रक्सौल–हल्दिया: 9 जिले'
+      ]}
+    ]}
+  ];
+
+  window.BiharAtlasData = {index,chaptersByPlace,tours,timeline,thematicLayers,districtProfiles,cheatsheet};
 })();

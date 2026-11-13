@@ -187,3 +187,111 @@
 @media (min-width:1001px) {
   .bihar-atlas[data-mode] .mobile-prompt:not([hidden]) { display:none !important; }
 }
+
+
+/* Thematic Choropleth Overlays, District Snapshot & Quick Facts */
+.bihar-overlay-bar {
+  order:3; display:flex; align-items:center; gap:6px; overflow-x:auto; scrollbar-width:thin;
+  padding:8px 18px; border-bottom:1px solid var(--line); background:var(--paper);
+}
+.bihar-overlay-label {
+  font-size:12px; font-weight:700; color:var(--muted); white-space:nowrap; margin-inline-end:4px;
+}
+.bihar-overlay-chip {
+  flex:0 0 auto; display:inline-flex; align-items:center; gap:5px;
+  min-height:32px; padding:4px 10px; border-radius:999px; border:1px solid var(--line);
+  background:transparent; color:var(--ink); font:inherit; font-size:12.5px; font-weight:600;
+  cursor:pointer; white-space:nowrap; transition:background .15s, border-color .15s, transform .12s;
+}
+.bihar-overlay-chip:hover { border-color:var(--selected); }
+.bihar-overlay-chip.active {
+  background:var(--teal-soft); border-color:var(--selected); color:var(--ink); font-weight:750;
+}
+.bihar-overlay-chip small { color:var(--muted); font-weight:500; font-size:.88em; }
+.bihar-overlay-legend {
+  order:7; display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px;
+  margin:0 10px; padding:8px 12px; border:1px solid var(--line); border-top:0;
+  background:var(--paper); font-size:12.5px;
+}
+.bihar-legend-title { font-weight:750; margin-inline-end:4px; }
+.bihar-legend-item { display:inline-flex; align-items:center; gap:5px; }
+.bihar-legend-swatch {
+  width:13px; height:13px; border-radius:3px; border:1px solid rgba(0,0,0,.22); flex:none;
+  background:var(--sw-light);
+}
+[data-theme=dark] .bihar-legend-swatch {
+  background:var(--sw-dark); border-color:rgba(255,255,255,.28);
+}
+.bihar-legend-page { margin-inline-start:auto; color:var(--muted); font-size:11.5px; }
+
+#map .bihar-district.has-overlay { fill:var(--overlay-light); stroke:#577572; }
+[data-theme=dark] #map .bihar-district.has-overlay { fill:var(--overlay-dark); stroke:#8aa8aa; }
+#map .bihar-district.has-overlay.is-selected {
+  stroke:#966626; stroke-width:2.2; filter:brightness(1.06);
+}
+[data-theme=dark] #map .bihar-district.has-overlay.is-selected {
+  stroke:#ffd18b; stroke-width:2.2; filter:brightness(1.15);
+}
+
+.bihar-district-snapshot {
+  margin:12px 0; padding:11px 12px; border:1px solid var(--line); border-radius:9px;
+  background:var(--teal-soft);
+}
+.bihar-snapshot-head {
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  margin:0 0 8px; font-size:13px; font-weight:750;
+}
+.bihar-snapshot-grid {
+  display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:7px 10px;
+}
+.bihar-snap-cell {
+  padding:6px 8px; border-radius:6px; background:var(--paper); border:1px solid var(--line);
+  font-size:12.5px; line-height:1.35;
+}
+.bihar-snap-cell strong {
+  display:block; font-size:11px; text-transform:uppercase; letter-spacing:.03em;
+  color:var(--muted); margin-bottom:2px;
+}
+.bihar-snap-cell.full { grid-column:1 / -1; }
+
+.bihar-cheatsheet-tabs {
+  display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 12px;
+}
+.bihar-cheatsheet-tabs button {
+  min-height:34px; padding:5px 11px; border-radius:999px; border:1px solid var(--line);
+  background:var(--paper); color:var(--ink); font:inherit; font-size:12.5px; font-weight:650; cursor:pointer;
+}
+.bihar-cheatsheet-tabs button.active {
+  background:var(--teal-soft); border-color:var(--selected);
+}
+.bihar-cheatsheet-body {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap:10px;
+  max-height:62vh; overflow:auto; padding-right:2px;
+}
+.bihar-cs-card {
+  padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:var(--paper);
+}
+.bihar-cs-card h4 { margin:0 0 6px; font-size:14px; }
+.bihar-cs-card h4 small { display:block; font-weight:500; color:var(--muted); font-size:.85em; }
+.bihar-cs-list { margin:0; padding-left:16px; font-size:13px; line-height:1.45; }
+.bihar-cs-list li { margin-bottom:4px; }
+.bihar-cs-list small { display:block; color:var(--muted); }
+
+@media (min-width:1001px) {
+  .bihar-overlay-bar { grid-area:3 / 1 / 4 / -1; }
+  .bihar-chapter-bar { grid-area:4 / 1 / 5 / -1; }
+  .bihar-atlas[data-mode] .session-controls { grid-area:5 / 1 / 6 / -1; }
+  .bihar-atlas[data-mode] .map-heading { grid-area:6 / 1 / 7 / -1; }
+  .bihar-atlas[data-mode] .map-wrap { grid-area:7 / 1 / 8 / 2; }
+  .bihar-overlay-legend { grid-area:8 / 1 / 9 / 2; }
+  .bihar-route { grid-area:9 / 1 / 10 / 2; }
+  .bihar-atlas[data-mode] .detail-panel { grid-area:7 / 2 / 12 / 3; max-height:calc(var(--bihar-map-height) + 210px); }
+  .bihar-atlas .search-row { grid-area:10 / 1 / 11 / 2; }
+  .bihar-atlas .place-list { grid-area:11 / 1 / 12 / 2; }
+  .bihar-atlas[data-mode] .map-caption { grid-area:12 / 1 / 13 / -1; }
+}
+@media (max-width:620px) {
+  .bihar-overlay-bar { padding:7px 8px; }
+  .bihar-overlay-legend { margin-inline:5px; padding:7px 9px; }
+  .bihar-snapshot-grid { grid-template-columns:1fr; }
+}
