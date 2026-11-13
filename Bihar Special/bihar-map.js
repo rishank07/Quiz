@@ -47,6 +47,8 @@
   let mode = 'explore';
   let session = null;
   let expanded = false;
+  let closingMap = false;
+  let scrollToNotes = false;
 
   function node(tag, label) {
     const el = document.createElement(tag);
@@ -620,35 +622,55 @@
     expanded = open;
     mapCard.classList.toggle('expanded',open);
     document.body.classList.toggle('atlas-expanded',open);
+    document.documentElement.classList.toggle('atlas-expanded',open);
     expandButton.textContent = open ? '×' : '⛶';
     expandButton.setAttribute('aria-label',open ? tr('Close expanded map','बड़ा मानचित्र बंद करें') : tr('Expand map','मानचित्र बड़ा करें'));
     expandButton.setAttribute('aria-expanded',String(open));
     for (const part of document.querySelectorAll('.atlas-header, .atlas-main > h1, .sources, #study-panel')) part.inert = open;
     requestAnimationFrame(renderMap);
   }
+
+  function closeExpanded() {
+    if (!expanded) return false;
+    if (!closingMap) {
+      closingMap = true;
+      history.back();
+    }
+    return true;
+  }
+
+  // Use the same Back and popstate priority as the India/World atlas.
+  window.EFP_MAPPING_OVERLAY = {
+    back:closeExpanded,
+    pop() {
+      const open = Boolean(history.state?.biharMapExpanded);
+      if (open === expanded) return false;
+      showExpanded(open);
+      if (!open) {
+        closingMap = false;
+        saveSelection();
+        expandButton.focus({preventScroll:true});
+        if (scrollToNotes) {
+          scrollToNotes = false;
+          panel.scrollIntoView({block:'start'});
+        }
+      }
+      return true;
+    }
+  };
+
   expandButton.addEventListener('click',() => {
-    if (expanded) history.back();
-    else {
+    if (!closeExpanded()) {
       history.pushState({...history.state,biharMapExpanded:true},'',location.href);
       showExpanded(true);
     }
   });
-  window.addEventListener('popstate',() => {
-    const open = Boolean(history.state?.biharMapExpanded);
-    if (expanded && !open) {
-      saveSelection();
-      expandButton.focus({preventScroll:true});
-    }
-    if (open !== expanded) showExpanded(open);
-  });
   document.addEventListener('keydown',event => {
-    if (event.key === 'Escape' && expanded) history.back();
+    if (event.key === 'Escape') closeExpanded();
   });
   byId('jump-notes').addEventListener('click',() => {
-    if (expanded) {
-      window.addEventListener('popstate',() => panel.scrollIntoView({block:'start'}),{once:true});
-      history.back();
-    } else panel.scrollIntoView({block:'start'});
+    if (closeExpanded()) scrollToNotes = true;
+    else panel.scrollIntoView({block:'start'});
   });
   window.addEventListener('hashchange',() => {
     const previous = layer;
