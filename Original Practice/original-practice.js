@@ -20,7 +20,7 @@ var CFG=CONFIGS[PAGE_FILE]||{slug:"practice",label:"Practice"};
 var EFP_P11_REMOVED={},EFP_P11_TARGETS={},EFP_P11_DEDUP_ACTIVE=false;
 if(CFG.slug==="polity"&&typeof MASTER!=="undefined"&&MASTER&&MASTER["Indian Polity"]){
  (function(){
-  var chapters=MASTER["Indian Polity"],key=Object.keys(chapters).filter(function(k){return /^11\\./.test(k)})[0];
+  var chapters=MASTER["Indian Polity"],key=Object.keys(chapters).filter(function(k){return /^11\./.test(k)})[0];
   var sections=key&&chapters[key],oldTotal=0,duplicates=0;
   if(!Array.isArray(sections)||sections.length!==10)return;
   sections.forEach(function(s){oldTotal+=s.questions.length});
@@ -30,7 +30,7 @@ if(CFG.slug==="polity"&&typeof MASTER!=="undefined"&&MASTER&&MASTER["Indian Poli
    var keep=[];EFP_P11_REMOVED[si]=[];
    section.questions.forEach(function(q,qi){
     var norm=String(q&&q.q&&q.q.en||"").trim().toLowerCase()
-      .replace(/\\s+/g," ").replace(/[‘’“”]/g,"'").replace(/[?!.,;:]+$/,"");
+      .replace(/\s+/g," ").replace(/[‘’“”]/g,"'").replace(/[?!.,;:]+$/,"");
     if(seen.has(norm)){
      EFP_P11_REMOVED[si].push(qi);
      EFP_P11_TARGETS[si+"-"+qi]=seen.get(norm);
@@ -253,7 +253,7 @@ function isVisited(subject,chapter){return getVisited().indexOf(token(subject,ch
 
 function efpP11Ready(){
  return EFP_P11_DEDUP_ACTIVE&&CFG.slug==="polity"&&state.subject==="Indian Polity"&&
- /^11\\./.test(String(state.chapterName||""))&&Array.isArray(state.quizData)&&
+ /^11\./.test(String(state.chapterName||""))&&Array.isArray(state.quizData)&&
  state.quizData.length===10&&state.quizData[8].questions.length===36&&state.quizData[9].questions.length===32;
 }
 function efpP11Position(si,qi,allowDuplicate){
@@ -270,7 +270,7 @@ function efpP11MigrateAttempt(saved){
     saved.signature.indexOf("|34:PM & Council")<0)return saved;
  var answers={},orders={};
  Object.keys(saved.answers||{}).forEach(function(oldKey){
-  var m=/^(\\d+)-(\\d+)$/.exec(oldKey);
+  var m=/^(\d+)-(\d+)$/.exec(oldKey);
   if(!m)return;
   var newKey=efpP11Position(m[1],m[2],false);
   if(newKey!==null&&saved.orders&&Array.isArray(saved.orders[oldKey])){
@@ -284,18 +284,21 @@ function efpP11MigrateAttempt(saved){
 }
 function efpP11MigrateBookmarks(v){
  if(!efpP11Ready())return v;
- var flag="efp_polity_ch11_bookmark_migration_"+"20261113politydedup1";
+ var flag="efp_polity_ch11_bookmark_migration_20261113politydedup2";
  try{if(localStorage.getItem(flag)==="1")return v}catch(_){}
  var prefix=location.pathname+"#op|"+CFG.slug+"|"+enc(state.subject)+"|"+enc(state.chapterName)+"|";
+ var changed=[],moved={};
  Object.keys(v).forEach(function(k){
   if(k.indexOf(prefix)!==0)return;
-  var m=/^(\\d+)\\|(\\d+)$/.exec(k.slice(prefix.length));
+  var m=/^(\d+)\|(\d+)$/.exec(k.slice(prefix.length));
   if(!m)return;
   var newPos=efpP11Position(m[1],m[2],true);
   if(newPos===null)return;
   var newKey=prefix+newPos.replace("-","|");
-  if(newKey!==k){v[newKey]=v[k];delete v[k]}
+  if(newKey!==k){changed.push(k);moved[newKey]=v[k]}
  });
+ changed.forEach(function(k){delete v[k]});
+ Object.keys(moved).forEach(function(k){v[k]=v[k]||moved[k]});
  try{localStorage.setItem(BOOKMARK_KEY,JSON.stringify(v));localStorage.setItem(flag,"1")}catch(_){}
  return v;
 }
@@ -447,7 +450,7 @@ function getOpFullSearchClient(){
  if(typeof efCreateSearchWorker!=="function")return null;
  var specialIndex=CFG.slug==="computer-pyqs"?{file:"../search-snippets-computer-pyqs.js?v=20261113computerpyqs2",global:"EF_COMPUTER_PYQS_SNIPPET_INDEX"}:CFG.slug==="computer"?{file:"../search-snippets-computer-original-practice.js?v=20261109computersearch1",global:"EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20260908econ1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20260912ecology1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20260915staticgk1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261102biologyexp1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
  opFullSearchClient=efCreateSearchWorker({
-  workerUrl:new URL("../search-worker.js?v=20261113politydedup1",document.baseURI).href,
+  workerUrl:new URL("../search-worker.js?v=20261113politydedup2",document.baseURI).href,
   logicUrl:new URL("../search-logic.js?v=20261007searchaudit1",document.baseURI).href,
   indexUrl:new URL(specialIndex.file,document.baseURI).href,
   mode:"snippet",

@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261113politydedup1";
+const CACHE_VERSION = "efp-pwa-20261113politydedup2";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -75,7 +75,7 @@ const APP_SHELL = [
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/english-highlights.css?v=20261009dark1",
-  "/Original%20Practice/original-practice.js?v=20261113politydedup1",
+  "/Original%20Practice/original-practice.js?v=20261113politydedup2",
   "/Original%20Practice/computer-bank.js?v=20261112computerch01",
   "/Original%20Practice/english-practice.js?v=20261007continue1",
   "/Original%20Practice/original-practice-index.js?v=20261113computerpyqs2",

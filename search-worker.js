@@ -229,7 +229,7 @@
     importScripts(config.indexUrl);
     // Polity audit overlay
     if (config.globalName === "EF_ORIGINAL_PRACTICE_SNIPPET_INDEX") {
-      importScripts(new URL("./search-snippets-polity-original-practice.js?v=20261113politydedup1", config.indexUrl).href);
+      importScripts(new URL("./search-snippets-polity-original-practice.js?v=20261113politydedup2", config.indexUrl).href);
     }
     // End Polity audit overlay
     records = self[config.globalName];
@@ -239,7 +239,7 @@
       var skipP11={"7":[6,9,10],"8":[8],"9":[0,1,3,18,20,23,24,26,27,28,29,30,31,35,36,37,38,39,48,49,50,52],"10":[4,17]};
       records.forEach(function(r){
         if(!r||!r.b||r.b.indexOf("11. Prime Minister & Council of Ministers")<0||!Array.isArray(r.x))return;
-        var m=String(r.f||"").match(/&section=(\\d+)/),number=Number(m&&m[1]);
+        var m=String(r.f||"").match(/&section=(\d+)/),number=Number(m&&m[1]);
         if(!skipP11[number])return;
         var expected={7:13,8:10,9:58,10:34}[number];
         if(r.x.length!==expected)return;
