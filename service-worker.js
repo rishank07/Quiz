@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261113opsearch2";
+const CACHE_VERSION = "efp-pwa-20261113biharpdf2";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -33,6 +33,23 @@ const APP_SHELL = [
   "/offline.html",
   "/Editorial/",
   "/Editorial/links.json",
+  "/Bihar%20Special/Bihar%20GK%20Map.html",
+  "/Bihar%20Special/Bihar%20Special.html",
+  "/Mapping/assets/site-theme.js?v=20261106navtheme1",
+  "/Mapping/assets/map-navigation.js?v=20261106mapnav2",
+  "/Mapping/assets/style.css?v=20261105atlas1",
+  "/Mapping/assets/atlas.css?v=20261107placeorder1",
+  "/Mapping/assets/feature-study.js?v=20261113biharpdf2",
+  "/Mapping/assets/app.js?v=20261113biharpdf2",
+  "/Mind%20Maps/translate.js?v=20261113biharatlas2",
+  "/Bihar%20Special/bihar-map.css?v=20261113biharpdf2",
+  "/Bihar%20Special/bihar-atlas-base.js?v=20261113biharpdf2",
+  "/Bihar%20Special/bihar-map-data.js?v=20261113biharatlas2",
+  "/Bihar%20Special/bihar-map-shapes.js?v=20261113biharatlas2",
+  "/Bihar%20Special/bihar-map-ganga.js?v=20261113biharatlas2",
+  "/Bihar%20Special/bihar-atlas-lessons.js?v=20261113biharpdf2",
+  "/Bihar%20Special/bihar-atlas-data.js?v=20261113biharpdf2",
+  "/Bihar%20Special/bihar-atlas-ui.js?v=20261113biharpdf2",
   "/manifest.webmanifest",
   "/privacy-policy.html",
   "/support.html",
@@ -100,7 +117,7 @@ self.addEventListener("install", (event) => {
       .open(CACHE_VERSION)
       .then((cache) => cache.addAll(APP_SHELL.map((asset) => {
         const url = new URL(asset, self.location.origin);
-        if (FRESH_ORIGINAL_PRACTICE.test(url.pathname) ||
+        if (FRESH_BIHAR_MAP_PAGES.test(url.pathname) || FRESH_ORIGINAL_PRACTICE.test(url.pathname) ||
             /^\/quiz-unattempted\.(?:js|css)$/.test(url.pathname)) {
           return new Request(url, { cache: "reload" });
         }
@@ -455,10 +472,10 @@ async function networkFirst(event) {
       request.mode === "navigate" || request.destination === "document";
     // Query parameters select client-side search/quiz state, not different HTML.
     // Keep one raw document so a new search link can reuse an already read topic.
-    const bankPath = REVISED_ORIGINAL_BANK.test(url.pathname)
+    const canonicalPath = REVISED_ORIGINAL_BANK.test(url.pathname) || FRESH_BIHAR_MAP_PAGES.test(url.pathname)
       ? url.pathname.replace(/(?:\.html)?$/, ".html")
       : url.pathname;
-    const key = navigation ? new Request(url.origin + bankPath) : request;
+    const key = navigation ? new Request(url.origin + canonicalPath) : request;
     const response = await cachedNetworkFirst(
       event,
       navigationRequest(request),
@@ -823,7 +840,8 @@ self.addEventListener("fetch", (event) => {
   }
 
   // Atlas assets refresh on first use and retain the last good offline copy.
-  if (url.pathname.startsWith("/Mapping/assets/")) {
+  if (url.pathname.startsWith("/Mapping/assets/") ||
+      /^\/Bihar%20Special\/bihar-(?:atlas|map)-[^/]+\.(?:js|css)$/.test(url.pathname)) {
     event.respondWith(freshCoreAsset(event));
     return;
   }

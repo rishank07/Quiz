@@ -126,7 +126,7 @@
   // The original river overlays used unprefixed IDs, so these two paths were never selectable.
   for(const r of D.rivers)if(aliases[r.id])r.id=aliases[r.id];
   for(const f of D.features){
-    f.study={kind:kind[f.topic]||['Place','स्थान'],river:rivers[f.id]||null,mountain:f.mountainStudy||mountains[f.id]||null};
+    f.study={kind:kind[f.topic]||['Place','स्थान'],river:f.study?.river||rivers[f.id]||null,mountain:f.mountainStudy||mountains[f.id]||null};
     if(f.study.river)f.study.kind=['River / drainage system','नदी / अपवाह तंत्र'];
   }
   // Only add schematic courses with curated intermediate waypoints; a source and mouth do not define a river's shape.
@@ -138,7 +138,9 @@
   }
   const normal=s=>s.toLocaleLowerCase().normalize('NFKD').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
   const names=new Map(D.features.map(f=>[f.id,normal(f.name)]));
+  const biharFeatures=D.scope==='bihar' ? new Map(D.features.map(f=>[f.id,f])) : null;
   function related(f){
+    if(D.scope==='bihar')return (f.related||[]).map(id=>biharFeatures.get(id)).filter(Boolean);
     const r=f.study?.river,m=f.study?.mountain,text=normal([f.fact,f.area,r?.origin.en,r?.route.en,r?.mouth.en,r?.connections.en,m?.setting.en,m?.connections.en].join(' '));
     return D.features.filter(g=>g.id!==f.id&&g.region===f.region).map(g=>{
       const name=names.get(g.id),short=name.replace(/\b(river|lake|dam|range|hills|mountains|basin|sea)\b/g,'').trim();
@@ -150,13 +152,13 @@
   function contextPoints(f){const r=f.study?.river;return r?[{id:'source',...r.origin,coord:r.start},{id:'mouth',...r.mouth,coord:r.end}]:[];}
   function nearby(f){
     const rad=Math.PI/180,dirs=['N','NE','E','SE','S','SW','W','NW'];
-    return D.features.filter(g=>g.id!==f.id&&g.region===f.region).map(g=>{
+    return D.features.filter(g=>g.id!==f.id&&g.region===f.region&&!g.statewide&&!g.members&&!g.path).map(g=>{
       const a=f.lat*rad,b=g.lat*rad,dy=(g.lat-f.lat)*rad,dx=(g.lon-f.lon)*rad;
       const v=Math.sin(dy/2)**2+Math.cos(a)*Math.cos(b)*Math.sin(dx/2)**2;
       const distance=6371*2*Math.atan2(Math.sqrt(v),Math.sqrt(Math.max(0,1-v)));
       const bearing=(Math.atan2(Math.sin(dx)*Math.cos(b),Math.cos(a)*Math.sin(b)-Math.sin(a)*Math.cos(b)*Math.cos(dx))/rad+360)%360;
       return {feature:g,distance:Math.round(distance),direction:dirs[Math.round(bearing/45)%8]};
-    }).filter(g=>g.distance>3&&g.distance<(f.region==='India'?350:1800)).sort((a,b)=>a.distance-b.distance).slice(0,4);
+    }).filter(g=>g.distance>3&&g.distance<(D.scope==='bihar'?130:f.region==='India'?350:1800)).sort((a,b)=>a.distance-b.distance).slice(0,4);
   }
   function searchText(f){const r=f.study?.river,m=f.study?.mountain;return [f.name,f.hi,f.area,f.areaHi,f.fact,f.factHi,f.placeDetails?.district,f.placeDetails?.milestone,f.ramsar?.rsis,f.ramsar?.designation,f.ramsar?.milestone,...(r?[r.origin.en,r.origin.hi,r.route.en,r.route.hi,r.mouth.en,r.mouth.hi,r.connections.en,r.connections.hi]:[]),...(m?[m.setting.en,m.setting.hi,m.connections.en,m.connections.hi]:[])].join(' ');}
   window.MappingFeatureStudy={rivers,related,nearby,contextPoints,searchText};
