@@ -575,7 +575,7 @@
   readHash();setDefaultView();if(state.mode!=='learn')beginSession(state.mode,null,false,false);else refresh();
   if(history.state?.efpMappingExpanded)applyExpansion(true);
   if('serviceWorker' in navigator && ['http:','https:'].includes(location.protocol)){
-    const worker=BIHAR?'/service-worker.js':'sw.js?v=20261113biharpdf1';
+    const worker=BIHAR?'/service-worker.js':'sw.js?v=20261113biharpdf2';
     navigator.serviceWorker.register(worker,BIHAR?{scope:'/',updateViaCache:'none'}:{scope:'./'}).catch(()=>{});
   }
 })();

@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261113biharpdf1";
+const CACHE_VERSION = "efp-pwa-20261113biharpdf2";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -38,17 +38,17 @@ const APP_SHELL = [
   "/Mapping/assets/map-navigation.js?v=20261106mapnav2",
   "/Mapping/assets/style.css?v=20261105atlas1",
   "/Mapping/assets/atlas.css?v=20261107placeorder1",
-  "/Mapping/assets/feature-study.js?v=20261113biharpdf1",
-  "/Mapping/assets/app.js?v=20261113biharpdf1",
+  "/Mapping/assets/feature-study.js?v=20261113biharpdf2",
+  "/Mapping/assets/app.js?v=20261113biharpdf2",
   "/Mind%20Maps/translate.js?v=20261113biharatlas2",
-  "/Bihar%20Special/bihar-map.css?v=20261113biharpdf1",
-  "/Bihar%20Special/bihar-atlas-base.js?v=20261113biharpdf1",
+  "/Bihar%20Special/bihar-map.css?v=20261113biharpdf2",
+  "/Bihar%20Special/bihar-atlas-base.js?v=20261113biharpdf2",
   "/Bihar%20Special/bihar-map-data.js?v=20261113biharatlas2",
   "/Bihar%20Special/bihar-map-shapes.js?v=20261113biharatlas2",
   "/Bihar%20Special/bihar-map-ganga.js?v=20261113biharatlas2",
-  "/Bihar%20Special/bihar-atlas-lessons.js?v=20261113biharpdf1",
-  "/Bihar%20Special/bihar-atlas-data.js?v=20261113biharpdf1",
-  "/Bihar%20Special/bihar-atlas-ui.js?v=20261113biharpdf1",
+  "/Bihar%20Special/bihar-atlas-lessons.js?v=20261113biharpdf2",
+  "/Bihar%20Special/bihar-atlas-data.js?v=20261113biharpdf2",
+  "/Bihar%20Special/bihar-atlas-ui.js?v=20261113biharpdf2",
   "/manifest.webmanifest",
   "/privacy-policy.html",
   "/support.html",
