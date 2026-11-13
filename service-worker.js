@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261113opbanks1";
+const CACHE_VERSION = "efp-pwa-20261113opsearch2";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -17,7 +17,7 @@ const DESKTOP_SEARCH_ENTRY_BOOTSTRAP =
   '<script id="efp-desktop-search-entry-bootstrap">(function(){var ua=String(navigator.userAgent||"");var mobile=!!(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|iPod|Mobile/i.test(ua);if(mobile)return;if(window.EFP_SEARCH_CONTEXT||document.getElementById("efp-shared-search-context"))return;var s=document.createElement("script");s.id="efp-shared-search-context";s.src="/search-context.js?v=20261007searchaudit1";s.defer=true;document.head.appendChild(s)})();</script>';
 
 const FRESH_ORIGINAL_PRACTICE =
-  /^\/Original%20Practice\/(?:index\.html|(?:all-chapters|Computer_Complete_Practice|Computer_PYQs|Mixed_Practice|(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice)(?:\.html)?)?$/;
+  /^\/Original%20Practice(?:\/(?:index(?:\.html)?|(?:all-chapters|Computer_Complete_Practice|Computer_PYQs|Mixed_Practice|(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice)(?:\.html)?)?)?$/;
 const REVISED_ORIGINAL_BANK = /^\/Original%20Practice\/(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice(?:\.html)?$/;
 const FRESH_BIHAR_MAP_PAGES = /^\/Bihar%20Special\/Bihar%20(?:Special|GK%20Map)(?:\.html)?$/;
 
@@ -64,7 +64,7 @@ const APP_SHELL = [
   "/progress.js?v=20261001caback1",
   "/rapid-practice-deeplink.js?v=20261104curated4",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
-  "/search-logic.js?v=20261112octca1",
+  "/search-logic.js?v=20261113opsearch2",
   "/section-search-ui.js?v=20261007searchaudit1",
   "/search-worker.js?v=20261113opbanks1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",

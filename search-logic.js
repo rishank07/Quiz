@@ -1069,12 +1069,7 @@ function efCreateSearchWorker(options) {
             .then(function (extra) { return records.concat(extra); })
             .catch(function () { return records; });
         }
-        if(options.globalName!=="EF_ORIGINAL_PRACTICE_SNIPPET_INDEX")return records;
-        window.EF_ORIGINAL_PRACTICE_SNIPPET_INDEX=records;
-        return efLoadSearchIndexScript(new URL("./search-snippets-polity-original-practice.js?v=20261001polity22-583a40e433b0",options.indexUrl).href,"EF_POLITY_ORIGINAL_PRACTICE_SNIPPET_INDEX").then(function(updates){
-          var byRoute=Object.create(null);updates.forEach(function(row){byRoute[row.f]=row});
-          return records.map(function(row){return byRoute[row.f]||row});
-        });
+        return records;
       }).catch(function(error){fallbackRecordsPromise=null;throw error});
     }
     return fallbackRecordsPromise;
