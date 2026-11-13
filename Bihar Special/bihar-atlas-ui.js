@@ -313,15 +313,26 @@
 
   function nearestLabelBox(x,y,w,h,limits,fits) {
     const minX=limits.left,maxX=limits.right-w,minY=limits.top,maxY=limits.bottom-h;
+    if(maxX<minX||maxY<minY)return null;
+    const step=3, lastColumn=Math.floor((maxX-minX)/step);
+    const column=Math.max(0,Math.min(lastColumn,Math.round((x-w/2-minX)/step)));
     let nearest=null,best=Infinity;
-    for(let by=minY;by<=maxY;by+=3){
-      for(let bx=minX;bx<=maxX;bx+=3){
-        const distance=(bx+w/2-x)**2+(by+h/2-y)**2;
-        if(distance>=best)continue;
-        const box={x:bx,y:by,w,h};
-        if(!fits(box))continue;
-        nearest=box;
-        best=distance;
+    for(let by=minY;by<=maxY;by+=step){
+      const verticalDistance=(by+h/2-y)**2;
+      if(verticalDistance>best)continue;
+      // Start near the district and stop each direction once it cannot improve the result.
+      for(const direction of [-1,1]){
+        for(let i=column+Number(direction===1);i>=0&&i<=lastColumn;i+=direction){
+          const bx=minX+i*step;
+          const distance=(bx+w/2-x)**2+verticalDistance;
+          if(distance>best)break;
+          if(distance===best&&(by>nearest.y||bx>=nearest.x))continue;
+          const box={x:bx,y:by,w,h};
+          if(!fits(box))continue;
+          nearest=box;
+          best=distance;
+          break;
+        }
       }
     }
     return nearest;
