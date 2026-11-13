@@ -17,6 +17,7 @@
   var COOKIE_NAME = "googtrans";
   var TARGET_LANG = "hi";
   var STYLE_ID = "efp-translate-style";
+  var bilingualContent = document.currentScript && document.currentScript.hasAttribute("data-bilingual-content");
 
   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
@@ -161,6 +162,11 @@
      working, so a page that fails once doesn't stay "used up" and
      silently give up on every later visit. */
   function ensureTranslated() {
+    if (bilingualContent) {
+      // The page already has Hindi content. Google only translates its remaining English text.
+      applyLang(TARGET_LANG);
+      return;
+    }
     var guardKey = "efp_tr_retry_" + location.pathname;
     /* Kick off the combo trigger (fire-and-forget — it may take a
        while to find the combo, or never find it at all on a
@@ -191,10 +197,14 @@
   }
 
   function initWhenBodyReady() {
+    var on = wantsHindi();
+    if (bilingualContent && !on) {
+      notify(false);
+      return;
+    }
     ensureWidgetContainer();
     loadGoogleScript();
     startBannerWatch();
-    var on = wantsHindi();
     if (on) ensureTranslated();
     notify(on);
   }
@@ -222,7 +232,7 @@
     window.location.reload();
   };
 
-  injectStyle();
+  if (!bilingualContent || wantsHindi()) injectStyle();
 
   if (document.body) {
     initWhenBodyReady();
@@ -236,6 +246,11 @@
   window.addEventListener("pageshow", function (e) {
     var on = wantsHindi();
     if (on) {
+      if (bilingualContent && !window.__efpGoogTranslateLoading) {
+        injectStyle();
+        initWhenBodyReady();
+        return;
+      }
       /* bfcache restore (browser back/forward serving the frozen page):
          Google's translate engine does NOT survive the freeze — the
          page comes back in its original language and no amount of
@@ -243,7 +258,7 @@
          thing that works (it's what the user was doing by hand), and
          reloads always bypass bfcache, so this cannot loop. Do it
          immediately — no timers, no guard. */
-      if (e.persisted && !looksTranslated()) {
+      if (!bilingualContent && e.persisted && !looksTranslated()) {
         window.location.reload();
         return;
       }

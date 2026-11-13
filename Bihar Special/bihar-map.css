@@ -1,0 +1,92 @@
+:root {
+  --page:#edf4f3; --surface:#fff; --ink:#17343c; --muted:#435e65; --border:#bfd0ce;
+  --accent:#075a51; --active:#daf1e7; --map:#e2efee; --outline:#4e7271;
+  --district:#cce5d8; --selected:#f7c760; --river:#12628c; --pin:#8c3e28;
+  --division-0:#bde1d7; --division-1:#e6d4ee; --division-2:#f1d5ba; --division-3:#d7e7ac;
+  --division-4:#d5dafa; --division-5:#bde1ec; --division-6:#f2cbd4; --division-7:#ebdb9b; --division-8:#cdd8be;
+  font-family: 'Instrument Sans','Noto Sans Devanagari',system-ui,sans-serif;
+}
+:root[data-theme=dark] {
+  --page:#0c171c; --surface:#14242a; --ink:#ecf8f5; --muted:#b1c9c7; --border:#355058;
+  --accent:#a2f1d7; --active:#21483f; --map:#182b31; --outline:#a1bbb6;
+  --district:#304a47; --selected:#72521c; --river:#77d2ff; --pin:#ac5436;
+  --division-0:#31574d; --division-1:#5f456c; --division-2:#704e38; --division-3:#4d6037;
+  --division-4:#444e71; --division-5:#365e72; --division-6:#6c4456; --division-7:#655730; --division-8:#4e5c44;
+}
+* { box-sizing:border-box; }
+[hidden] { display:none !important; }
+body { margin:0; color:var(--ink); background:var(--page); line-height:1.5; }
+a { color:var(--accent); text-underline-offset:3px; }
+button,select,.atlas-nav a {
+  min-height:44px; border:1px solid var(--border); border-radius:8px; background:var(--surface);
+  color:inherit; font:inherit; padding:6px 10px;
+}
+button { cursor:pointer; }
+button:disabled { opacity:.5; cursor:default; }
+:focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
+.atlas-header { position:sticky; top:0; z-index:3; background:var(--surface); border-bottom:1px solid var(--border); }
+.atlas-nav { display:flex; align-items:center; gap:8px; max-width:1240px; margin:auto; padding:8px clamp(12px,3vw,26px); }
+.atlas-nav a { display:inline-flex; align-items:center; font-weight:650; text-decoration:none; }
+#language { margin-inline-start:auto; padding-inline:15px; font-weight:700; color:var(--accent); background:var(--active); }
+.atlas-main { max-width:1240px; padding:clamp(15px,3vw,30px); margin:auto; }
+h1,h2,h3 { margin:0; line-height:1.22; }
+h1 { font-size:clamp(1.8rem,4vw,3rem); }
+h2 { font-size:clamp(1.12rem,2vw,1.45rem); }
+h3 { font-size:1rem; }
+p { margin:.65em 0 0; }
+.intro { margin-bottom:16px; color:var(--muted); }
+.atlas-grid { display:grid; grid-template-columns:minmax(0,2fr) minmax(270px,1fr); gap:14px; align-items:start; }
+.card { min-width:0; padding:clamp(12px,2vw,20px); border-radius:14px; border:1px solid var(--border); background:var(--surface); }
+.map-heading { display:flex; flex-wrap:wrap; gap:8px 12px; justify-content:space-between; align-items:center; }
+.map-heading select { max-width:100%; }
+.layers { display:flex; flex-wrap:wrap; gap:6px; margin:12px 0; }
+.layers button { font-size:.88rem; font-weight:650; }
+button[aria-pressed=true] { color:var(--accent); border-color:var(--accent); background:var(--active); }
+.map-frame { overflow:hidden; border-radius:10px; border:1px solid var(--border); background:var(--map); }
+#bihar-map { display:block; width:100%; height:auto; aspect-ratio:880/649; touch-action:pan-y; }
+#bihar-map.zoomed { touch-action:none; cursor:grab; }
+#bihar-map.dragging { cursor:grabbing; }
+.map-toolbar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-top:6px; }
+.map-key { flex:1 1 160px; margin:0; color:var(--muted); font-size:.84rem; }
+.map-controls { display:flex; gap:4px; }
+.map-controls button { width:44px; padding:0; font-size:1.1rem; }
+.district { fill:var(--district); stroke:var(--outline); stroke-width:1; stroke-linejoin:round; fill-rule:evenodd; cursor:pointer; }
+.district.division { fill:var(--division-color); }
+.district:hover,.district.selected { fill:var(--selected); }
+.district.selected { stroke:var(--ink); stroke-width:1.8; }
+.map-label { text-anchor:middle; dominant-baseline:central; pointer-events:none; user-select:none; fill:var(--ink); font-size:13px; font-weight:700; paint-order:stroke; stroke:var(--map); stroke-width:2px; }
+.map-label.neighbor { fill:var(--muted); font-size:16px; }
+.map-label.river-label { fill:var(--river); stroke-width:3px; }
+.river-line { fill:none; stroke:var(--river); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; pointer-events:none; }
+.river-line.schematic { stroke-dasharray:5 3; }
+.river-line.selected { stroke-width:4.5; }
+.river-hit { fill:none; stroke:transparent; stroke-width:14; cursor:pointer; }
+.pin { cursor:pointer; }
+.pin circle:first-child { fill:transparent; }
+.pin circle:nth-child(2) { fill:var(--pin); stroke:#fff; stroke-width:1.5; }
+.pin[data-topic=nature] circle:nth-child(2) { fill:#257555; }
+.pin[data-topic=economy] circle:nth-child(2) { fill:#754da0; }
+.pin[data-topic=geography] circle:nth-child(2) { fill:#17618b; }
+.pin:hover circle:nth-child(2),.pin.selected circle:nth-child(2) { stroke:var(--ink); stroke-width:3; }
+.notes { min-height:165px; scroll-margin-top:70px; }
+.notes dl { display:grid; grid-template-columns:max-content 1fr; gap:6px 12px; margin:12px 0 0; }
+.notes dt { color:var(--muted); }
+.notes dd { margin:0; font-weight:700; }
+.notes h3 { margin-top:16px; }
+.notes ul,.sources ul { padding-inline-start:1.25rem; }
+.notes li + li,.sources li + li { margin-top:6px; }
+.notes ul.note-list { display:grid; gap:5px; list-style:none; padding:0; margin:8px 0 0; }
+.note-list li + li { margin-top:0; }
+.note-list button { width:100%; text-align:start; }
+.division-swatch { display:inline-block; width:.8em; height:.8em; margin-inline-end:7px; border:1px solid var(--outline); border-radius:3px; background:var(--division-color); }
+.reading,.sources { margin-top:14px; }
+.reading-links { display:flex; flex-wrap:wrap; gap:6px 18px; list-style:none; padding:0; margin-bottom:0; }
+.reading-links a { display:inline-flex; align-items:center; min-height:36px; }
+.sources summary { cursor:pointer; font-weight:700; }
+@media (max-width:760px) { .atlas-grid { grid-template-columns:minmax(0,1fr); } }
+@media (max-width:560px) {
+  .map-label { font-size:18px; }
+  .map-label.long { font-size:15px; }
+  .map-label.neighbor { font-size:20px; }
+  .pin circle:nth-child(2) { r:10px; }
+}
