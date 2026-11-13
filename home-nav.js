@@ -2,6 +2,8 @@
 (function () {
   "use strict";
 
+  if (document.documentElement?.hasAttribute("data-efp-own-navigation")) return;
+
   var BUTTON_ID = "efp-home-button";
   var STYLE_ID = "efp-home-button-style";
   var BACK_BUTTON_ID = "efp-app-back-button";

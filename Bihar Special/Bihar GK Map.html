@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-efp-own-navigation>
 <head>
   <meta charset="utf-8">
   <script id="efp-analytics-guard">(function () { "use strict"; var key = "efp_work_preview_ga4"; var marked = false; var owner = false; var query = new URLSearchParams(location.search); var choice = query.get("efpWorkPreview"); try { marked = localStorage.getItem(key) === "on"; } catch (_) {} try { marked = marked || sessionStorage.getItem(key) === "on"; } catch (_) {} try { marked = marked || /(?:^|;\s*)efp_work_preview_ga4=on(?:;|$)/.test(document.cookie); } catch (_) {} if (choice === "1" || choice === "0") { marked = choice === "1"; try { if (marked) localStorage.setItem(key, "on"); else localStorage.removeItem(key); } catch (_) {} try { if (marked) sessionStorage.setItem(key, "on"); else sessionStorage.removeItem(key); } catch (_) {} try { document.cookie = key + (marked ? "=on; Path=/; SameSite=Lax" : "=; Path=/; Max-Age=0; SameSite=Lax"); } catch (_) {} } try { owner = localStorage.getItem("efp_owner_debug_ga4") === "on"; } catch (_) {} var live = location.hostname === "examfusionprep.com" || location.hostname === "www.examfusionprep.com"; var preview = !live || marked || navigator.webdriver === true; window.EFP_ANALYTICS_PREVIEW = preview; window.EFP_ANALYTICS_EXCLUDED = preview || owner; if (window.EFP_ANALYTICS_EXCLUDED) window["ga-disable-G-Q1WNRY8ECV"] = true; })();</script>
@@ -24,55 +24,67 @@
     {"@context":"https://schema.org","@graph":[{"@type":"LearningResource","name":"Bihar GK Map","url":"https://examfusionprep.com/Bihar%20Special/Bihar%20GK%20Map.html","inLanguage":["en","hi"],"learningResourceType":"Interactive map","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"ExamFusion Prep","url":"https://examfusionprep.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://examfusionprep.com/"},{"@type":"ListItem","position":2,"name":"Bihar Special","item":"https://examfusionprep.com/Bihar%20Special/Bihar%20Special.html"},{"@type":"ListItem","position":3,"name":"Bihar GK Map","item":"https://examfusionprep.com/Bihar%20Special/Bihar%20GK%20Map.html"}]}]}
   </script>
   <script src="/Mapping/assets/site-theme.js?v=20261106navtheme1"></script>
-  <link rel="stylesheet" href="bihar-map.css?v=20261113biharmap1">
-  <script defer src="/back-parent-map.js?v=20261113biharmap1"></script>
+  <link rel="stylesheet" href="bihar-map.css?v=20261113biharatlas2">
+  <script defer src="/back-parent-map.js?v=20261113biharatlas2"></script>
   <script defer src="/back-nav.js?v=20261007searchaudit1"></script>
-  <script defer src="bihar-map-data.js?v=20261113biharmap1"></script>
-  <script defer src="bihar-map-shapes.js?v=20261113biharmap1"></script>
-  <script defer src="bihar-map-ganga.js?v=20261113biharmap1"></script>
-  <script defer src="bihar-map.js?v=20261113biharmap1"></script>
-  <script defer src="/Mind%20Maps/translate.js?v=20261113biharmap1" data-bilingual-content></script>
-  <script defer src="/home-nav.js?v=20260906nav2"></script>
+  <script defer src="bihar-map-data.js?v=20261113biharatlas2"></script>
+  <script defer src="bihar-map-shapes.js?v=20261113biharatlas2"></script>
+  <script defer src="bihar-map-ganga.js?v=20261113biharatlas2"></script>
+  <script defer src="bihar-map.js?v=20261113biharatlas2"></script>
+  <script defer src="/Mind%20Maps/translate.js?v=20261113biharatlas2" data-bilingual-content></script>
+  <script defer src="/home-nav.js?v=20261113biharatlas2"></script>
 </head>
 <body>
   <header class="atlas-header notranslate" translate="no">
     <nav class="atlas-nav" aria-label="Navigation" data-en-aria="Navigation" data-hi-aria="नेविगेशन">
       <a id="efp-app-back-button" href="Bihar%20Special.html" data-en="← Bihar Special" data-hi="← बिहार विशेष">← Bihar Special</a>
-      <a href="/" data-en="Home" data-hi="होम">Home</a>
+      <a href="/" data-nav="home" data-en="Home" data-hi="होम">Home</a>
       <button type="button" id="language" lang="hi" aria-label="Read in Hindi">हिंदी</button>
     </nav>
   </header>
   <main class="atlas-main">
     <h1 class="notranslate" translate="no" data-en="Bihar GK Map" data-hi="मानचित्र से बिहार सामान्य ज्ञान">Bihar GK Map</h1>
-    <p class="intro notranslate" translate="no" data-en="Explore 38 districts and 9 divisions. Select a district or a map feature to read its exam notes." data-hi="38 जिलों और 9 प्रमंडलों को देखें। परीक्षा के लिए किसी जिले या मानचित्र पर दिखाए गए स्थल की जानकारी पढ़ें।">Explore 38 districts and 9 divisions. Select a district or a map feature to read its exam notes.</p>
     <div class="atlas-grid notranslate" translate="no">
-      <section class="card map-card" aria-labelledby="map-title">
+      <section class="card map-card" id="map-card" aria-labelledby="map-title">
+        <h2 id="map-title" class="visually-hidden" data-en="Explore Bihar" data-hi="बिहार का मानचित्र">Explore Bihar</h2>
+        <div class="mode-bar" role="group" aria-label="Study mode" data-en-aria="Study mode" data-hi-aria="अध्ययन का तरीका">
+          <button type="button" data-mode="explore" aria-pressed="true" data-en="Explore" data-hi="देखें">Explore</button>
+          <button type="button" data-mode="locate" aria-pressed="false" data-en="Locate" data-hi="मानचित्र पर खोजें">Locate</button>
+          <button type="button" data-mode="practice" aria-pressed="false" data-en="Practice" data-hi="अभ्यास">Practice</button>
+        </div>
         <div class="map-heading">
-          <h2 id="map-title" data-en="Explore Bihar" data-hi="बिहार का मानचित्र">Explore Bihar</h2>
-          <select id="district-list" aria-label="Select a district" data-en-aria="Select a district" data-hi-aria="जिला चुनें"></select>
+          <label for="layer-list" data-en="Map layer" data-hi="मानचित्र का विषय">Map layer</label>
+          <select id="layer-list" aria-label="Map layer" data-en-aria="Map layer" data-hi-aria="मानचित्र का विषय">
+            <option value="districts" data-en="Districts" data-hi="जिले">Districts</option>
+            <option value="divisions" data-en="Divisions" data-hi="प्रमंडल">Divisions</option>
+            <option value="rivers" data-en="Rivers" data-hi="नदियाँ">Rivers</option>
+            <option value="geography" data-en="Landforms &amp; irrigation" data-hi="स्थलरूप और सिंचाई">Landforms &amp; irrigation</option>
+            <option value="history" data-en="History &amp; heritage" data-hi="इतिहास और विरासत">History &amp; heritage</option>
+            <option value="nature" data-en="Wildlife &amp; wetlands" data-hi="वन्यजीव और आर्द्रभूमि">Wildlife &amp; wetlands</option>
+            <option value="culture" data-en="Fairs &amp; culture" data-hi="मेले और संस्कृति">Fairs &amp; culture</option>
+            <option value="economy" data-en="Farms &amp; industry" data-hi="कृषि और उद्योग">Farms &amp; industry</option>
+          </select>
         </div>
-        <div id="layers" class="layers" role="group" aria-label="Map topics" data-en-aria="Map topics" data-hi-aria="मानचित्र के विषय">
-          <button type="button" data-layer="districts" aria-pressed="true" data-en="Districts" data-hi="जिले">Districts</button>
-          <button type="button" data-layer="divisions" aria-pressed="false" data-en="Divisions" data-hi="प्रमंडल">Divisions</button>
-          <button type="button" data-layer="rivers" aria-pressed="false" data-en="Rivers" data-hi="नदियाँ">Rivers</button>
-          <button type="button" data-layer="geography" aria-pressed="false" data-en="Landforms &amp; irrigation" data-hi="स्थलरूप और सिंचाई">Landforms &amp; irrigation</button>
-          <button type="button" data-layer="history" aria-pressed="false" data-en="History &amp; heritage" data-hi="इतिहास और विरासत">History &amp; heritage</button>
-          <button type="button" data-layer="nature" aria-pressed="false" data-en="Wildlife &amp; wetlands" data-hi="वन्यजीव और आर्द्रभूमि">Wildlife &amp; wetlands</button>
-          <button type="button" data-layer="culture" aria-pressed="false" data-en="Fairs &amp; culture" data-hi="मेले और संस्कृति">Fairs &amp; culture</button>
-          <button type="button" data-layer="economy" aria-pressed="false" data-en="Farms &amp; industry" data-hi="कृषि और उद्योग">Farms &amp; industry</button>
-        </div>
+        <div id="locate-prompt" class="locate-prompt" aria-live="polite" hidden></div>
         <div class="map-frame"><svg id="bihar-map" viewBox="0 0 880 649" tabindex="0" aria-labelledby="map-title" role="group" xmlns="http://www.w3.org/2000/svg"></svg></div>
         <div class="map-toolbar">
-          <p id="map-key" class="map-key"></p>
+          <p id="map-key" class="map-key" aria-live="polite"></p>
+          <button type="button" id="jump-notes" data-en="Notes ↓" data-hi="नोट्स ↓">Notes ↓</button>
           <div class="map-controls" role="group" aria-label="Map zoom" data-en-aria="Map zoom" data-hi-aria="मानचित्र का आकार">
             <button type="button" id="zoom-in" aria-label="Zoom in" data-en-aria="Zoom in" data-hi-aria="बड़ा करें">+</button>
             <button type="button" id="zoom-out" aria-label="Zoom out" data-en-aria="Zoom out" data-hi-aria="छोटा करें" disabled>−</button>
-            <button type="button" id="reset-map" aria-label="Fit Bihar" data-en-aria="Fit Bihar" data-hi-aria="पूरा बिहार दिखाएँ">⤢</button>
+            <button type="button" id="expand-map" aria-label="Expand map">⛶</button>
+            <button type="button" id="reset-map" aria-label="Fit Bihar" data-en-aria="Fit Bihar" data-hi-aria="पूरा बिहार दिखाएँ">↺</button>
           </div>
         </div>
-        <p id="map-error" hidden data-en="The map could not load. Reload the page or open the Bihar Geography notes below." data-hi="मानचित्र लोड नहीं हुआ। पेज दोबारा खोलें या नीचे बिहार भूगोल के नोट्स पढ़ें।">The map could not load. Reload the page or open the Bihar Geography notes below.</p>
+        <p id="map-error" hidden data-en="The map could not load. Reload the page to try again." data-hi="मानचित्र लोड नहीं हुआ। पेज दोबारा खोलें।">The map could not load. Reload the page to try again.</p>
       </section>
-      <section class="card notes" aria-labelledby="notes-title">
+      <section class="card notes" id="study-panel" aria-labelledby="notes-title">
+        <div id="explore-controls">
+          <label for="place-search" class="visually-hidden" data-en="Search districts, rivers and places" data-hi="जिले, नदियाँ और स्थल खोजें">Search districts, rivers and places</label>
+          <input type="search" id="place-search" placeholder="Search districts, rivers and places">
+          <ul id="search-results" class="note-list" hidden></ul>
+        </div>
         <div id="notes" aria-live="polite" aria-atomic="true">
           <h2 id="notes-title" data-en="Bihar at a glance" data-hi="बिहार एक नज़र में">Bihar at a glance</h2>
           <p data-en="Capital: Patna. The Ganga flows west to east between the northern and southern plains." data-hi="राजधानी पटना है। गंगा उत्तरी और दक्षिणी मैदानों के बीच पश्चिम से पूर्व बहती है।">Capital: Patna. The Ganga flows west to east between the northern and southern plains.</p>
@@ -80,24 +92,7 @@
         <div id="feature-list" hidden></div>
       </section>
     </div>
-    <section class="card reading notranslate" translate="no">
-      <h2 data-en="Bihar Special chapter notes" data-hi="बिहार विशेष के अध्याय">Bihar Special chapter notes</h2>
-      <ul class="reading-links">
-        <li><a href="Topic%20Names/Introducing%20Bihar.html" data-en="State profile &amp; symbols" data-hi="राज्य परिचय और प्रतीक">State profile &amp; symbols</a></li>
-        <li><a href="Topic%20Names/Bihar%20Geography%20.html" data-en="Geography, soils &amp; climate" data-hi="भूगोल, मिट्टी और जलवायु">Geography, soils &amp; climate</a></li>
-        <li><a href="Topic%20Names/ANCIENT%20HISTORY%20OF%20BIHAR.html" data-en="Ancient history" data-hi="प्राचीन इतिहास">Ancient history</a></li>
-        <li><a href="Topic%20Names/MEDIEVAL%20HISTORY%20OF%20BIHAR%20.html" data-en="Medieval history" data-hi="मध्यकालीन इतिहास">Medieval history</a></li>
-        <li><a href="Topic%20Names/Modern%20History%20of%20Bihar.html" data-en="Modern history" data-hi="आधुनिक इतिहास">Modern history</a></li>
-        <li><a href="Topic%20Names/BIHAR%20ART%20AND%20CULTURE.html" data-en="Art, fairs &amp; festivals" data-hi="कला, मेले और त्योहार">Art, fairs &amp; festivals</a></li>
-        <li><a href="Topic%20Names/Bihar%20Historical%20Figures.html" data-en="Historical figures" data-hi="ऐतिहासिक व्यक्तित्व">Historical figures</a></li>
-        <li><a href="Topic%20Names/Bihar%20Women,%20Muslim,%20Scientific%20%26%20Literary%20Figures.html" data-en="Women, scientists &amp; literary figures" data-hi="महिलाएँ, वैज्ञानिक और साहित्यकार">Women, scientists &amp; literary figures</a></li>
-        <li><a href="Topic%20Names/Bihar%20Polity.html" data-en="Polity" data-hi="राजव्यवस्था">Polity</a></li>
-        <li><a href="Topic%20Names/Major%20Changes%20in%20Bihar%20Economy.html" data-en="Economy &amp; development" data-hi="अर्थव्यवस्था और विकास">Economy &amp; development</a></li>
-        <li><a href="Topic%20Names/Current%20Affairs%20for%20BPSC%20Pre%2072.html" data-en="Budget, schemes &amp; current affairs" data-hi="बजट, योजनाएँ और समसामयिकी">Budget, schemes &amp; current affairs</a></li>
-        <li><a href="Topic%20Names/Bihar%20Objective%20GK%20-%2060%20Sets.html" data-en="Bihar GK practice" data-hi="बिहार सामान्य ज्ञान अभ्यास">Bihar GK practice</a></li>
-      </ul>
-    </section>
-    <details class="card sources">
+    <details class="card sources notranslate" translate="no">
       <summary class="notranslate" translate="no" data-en="Sources and map credits" data-hi="स्रोत और मानचित्र का श्रेय">Sources and map credits</summary>
       <ul>
         <li><a href="https://bvm.bihar.gov.in/district/">Government of Bihar district directory</a></li>
@@ -105,14 +100,11 @@
         <li><a href="https://tourism.bihar.gov.in/en/destinations">Bihar Tourism</a></li>
         <li><a href="https://rsis.ramsar.org/">Ramsar Sites Information Service</a></li>
         <li><a href="https://iocl.com/barauni-refinery">IndianOil, Barauni Refinery</a></li>
-        <li><a href="/Mapping/states/bihar/">ExamFusion Bihar Geography Notes</a></li>
         <li>District geometry adapted from <a href="https://github.com/yashveeeeeeer/india-geodata/blob/main/docs/maps/data/districts.topo.json">India Geodata</a> (LGD, Survey of India, Bhuvan and DataMeet). Bihar districts were extracted and projected to SVG. <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a> and <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> apply according to source.</li>
         <li>The Ganga course uses <a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth</a> data. Dashed tributary paths are approximate.</li>
       </ul>
     </details>
   </main>
 
-  <!-- ExamFusion automatic book question counts -->
-  <script src="../Books/book-question-counts-display.js?v=20260821f" defer></script>
 </body>
 </html>

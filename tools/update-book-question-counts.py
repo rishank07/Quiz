@@ -392,6 +392,9 @@ def build_counts(repo: Path, install_scripts: bool = True) -> tuple[dict, list[P
     for config, root in roots:
         for p in root.rglob("*.html"):
             rp = p.resolve()
+            # The standalone atlas has its own study modes, outside chapter counts.
+            if config.mode == "bihar" and rp == root / "Bihar GK Map.html":
+                continue
             # Skip legacy filename copies in every section when the real Unicode twin exists.
             # This prevents stale #U2013/#U2014 copies from inflating totals.
             if is_legacy_duplicate(rp):
