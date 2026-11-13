@@ -111,7 +111,7 @@
     var real = [];
     for (var i = 0; i < all.length; i++) {
       var a = all[i];
-      if (a.classList.contains("disabled")) continue;
+      if (a.classList.contains("disabled") || a.hasAttribute("data-efp-skip-progress")) continue;
       var href = a.getAttribute("href") || "";
       if (href.indexOf("javascript:") === 0) continue;
       real.push(a);

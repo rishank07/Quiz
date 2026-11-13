@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261113ecologyoptions1";
+const CACHE_VERSION = "efp-pwa-20261113biharmap1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -18,6 +18,7 @@ const DESKTOP_SEARCH_ENTRY_BOOTSTRAP =
 
 const FRESH_ORIGINAL_PRACTICE =
   /^\/Original%20Practice\/(?:index\.html|(?:Computer_Complete_Practice|Computer_PYQs|Mixed_Practice|Polity_Complete_Practice|Environment_Ecology_Complete_Practice)(?:\.html)?)?$/;
+const FRESH_BIHAR_MAP_PAGES = /^\/Bihar%20Special\/Bihar%20(?:Special|GK%20Map)(?:\.html)?$/;
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
@@ -461,11 +462,12 @@ async function networkFirst(event) {
       { cache: "no-cache" },
       {
         key,
-        // Original Practice and its Computer quizzes should update on ordinary navigation.
+        // Recently updated study pages should refresh on ordinary navigation.
         preferCache:
           navigation &&
           !isExplicitReload(request) &&
-          !FRESH_ORIGINAL_PRACTICE.test(url.pathname),
+          !FRESH_ORIGINAL_PRACTICE.test(url.pathname) &&
+          !FRESH_BIHAR_MAP_PAGES.test(url.pathname),
         revalidate: true,
       },
     );
