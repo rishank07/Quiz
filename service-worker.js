@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261114biharmerge1";
+const CACHE_VERSION = "efp-pwa-20261114cadrillcompact1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -79,7 +79,7 @@ const APP_SHELL = [
   "/mindmap-deeplink.js?v=20261007searchaudit1",
   "/mindmap-reader.css?v=20261007searchaudit1",
   "/progress.js?v=20261001caback1",
-  "/rapid-practice-deeplink.js?v=20261104curated4",
+  "/rapid-practice-deeplink.js?v=20261114cadrillcompact1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js?v=20261113opsearch2",
   "/section-search-ui.js?v=20261007searchaudit1",
@@ -747,7 +747,7 @@ async function freshCurrentAffairsBookmarkAsset() {
 }
 
 async function freshRapidPracticeAsset() {
-  const currentAsset = "/rapid-practice-deeplink.js?v=20261104curated4";
+  const currentAsset = "/rapid-practice-deeplink.js?v=20261114cadrillcompact1";
   const cache = await caches.open(CACHE_VERSION);
   try {
     const response = await fetch(currentAsset, { cache: "no-store" });
