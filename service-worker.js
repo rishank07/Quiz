@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261114polityrefresh2";
+const CACHE_VERSION = "efp-pwa-20261114computerrefresh1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -19,10 +19,11 @@ const DESKTOP_SEARCH_ENTRY_BOOTSTRAP =
 const FRESH_ORIGINAL_PRACTICE =
   /^\/Original%20Practice(?:\/(?:index(?:\.html)?|(?:all-chapters|Computer_Complete_Practice|Computer_PYQs|Mixed_Practice|(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice)(?:\.html)?)?)?$/;
 const REVISED_ORIGINAL_BANK = /^\/Original%20Practice\/(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice(?:\.html)?$/;
+const COMPUTER_PRACTICE_PAGES = /^\/Original%20Practice\/(?:Computer_Complete_Practice|Mixed_Practice)(?:\.html)?$/;
 const FRESH_BIHAR_MAP_PAGES = /^\/Bihar%20Special\/Bihar%20(?:Special|GK%20Map)(?:\.html)?$/;
 const POLITY_SEARCH_INDEX = "/search-snippets-polity-original-practice.js";
 const POLITY_SEARCH_REVISION = "20261114politylanguage1";
-const FRESH_PRACTICE_SCRIPTS = /^\/(?:search-(?:logic|worker)|Original%20Practice\/original-practice)\.js$/;
+const FRESH_PRACTICE_SCRIPTS = /^\/(?:search-(?:logic|worker)|Original%20Practice\/(?:original-practice|computer-bank))\.js$/;
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
@@ -86,7 +87,7 @@ const APP_SHELL = [
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js?v=20261114politylanguage1",
   "/section-search-ui.js?v=20261007searchaudit1",
-  "/search-worker.js?v=20261114politylanguage1",
+  "/search-worker.js?v=20261114computerrefresh1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261028searchstatus1",
   "/homepage-fulltext-search.js?v=20261112octca1",
@@ -98,7 +99,7 @@ const APP_SHELL = [
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/english-highlights.css?v=20261009dark1",
   "/Original%20Practice/original-practice.js?v=20261114politylanguage1",
-  "/Original%20Practice/computer-bank.js?v=20261114computerch14",
+  "/Original%20Practice/computer-bank.js?v=20261114computerrefresh1",
   "/Original%20Practice/english-practice.js?v=20261007continue1",
   "/Original%20Practice/original-practice-index.js?v=20261113computerpyqs2",
   "/Crux-Tricks/index.html",
@@ -476,7 +477,8 @@ async function networkFirst(event) {
       request.mode === "navigate" || request.destination === "document";
     // Query parameters select client-side search/quiz state, not different HTML.
     // Keep one raw document so a new search link can reuse an already read topic.
-    const canonicalPath = REVISED_ORIGINAL_BANK.test(url.pathname) || FRESH_BIHAR_MAP_PAGES.test(url.pathname)
+    const canonicalPath = REVISED_ORIGINAL_BANK.test(url.pathname) || FRESH_BIHAR_MAP_PAGES.test(url.pathname) ||
+      COMPUTER_PRACTICE_PAGES.test(url.pathname)
       ? url.pathname.replace(/(?:\.html)?$/, ".html")
       : url.pathname;
     const key = navigation ? new Request(url.origin + canonicalPath) : request;
