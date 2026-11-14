@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261114politylanguage1";
+const CACHE_VERSION = "efp-pwa-20261114polityrefresh2";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -20,6 +20,9 @@ const FRESH_ORIGINAL_PRACTICE =
   /^\/Original%20Practice(?:\/(?:index(?:\.html)?|(?:all-chapters|Computer_Complete_Practice|Computer_PYQs|Mixed_Practice|(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice)(?:\.html)?)?)?$/;
 const REVISED_ORIGINAL_BANK = /^\/Original%20Practice\/(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice(?:\.html)?$/;
 const FRESH_BIHAR_MAP_PAGES = /^\/Bihar%20Special\/Bihar%20(?:Special|GK%20Map)(?:\.html)?$/;
+const POLITY_SEARCH_INDEX = "/search-snippets-polity-original-practice.js";
+const POLITY_SEARCH_REVISION = "20261114politylanguage1";
+const FRESH_PRACTICE_SCRIPTS = /^\/(?:search-(?:logic|worker)|Original%20Practice\/original-practice)\.js$/;
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
 const APP_SHELL = [
@@ -83,7 +86,6 @@ const APP_SHELL = [
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js?v=20261114politylanguage1",
   "/section-search-ui.js?v=20261007searchaudit1",
-  "/search-worker.js?v=20261114computerch14",
   "/search-worker.js?v=20261114politylanguage1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261028searchstatus1",
@@ -95,7 +97,6 @@ const APP_SHELL = [
   "/Original%20Practice/all-chapters.html",
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/english-highlights.css?v=20261009dark1",
-  "/Original%20Practice/original-practice.js?v=20261113opbanks1",
   "/Original%20Practice/original-practice.js?v=20261114politylanguage1",
   "/Original%20Practice/computer-bank.js?v=20261114computerch14",
   "/Original%20Practice/english-practice.js?v=20261007continue1",
@@ -120,6 +121,7 @@ self.addEventListener("install", (event) => {
       .then((cache) => cache.addAll(APP_SHELL.map((asset) => {
         const url = new URL(asset, self.location.origin);
         if (FRESH_BIHAR_MAP_PAGES.test(url.pathname) || FRESH_ORIGINAL_PRACTICE.test(url.pathname) ||
+            FRESH_PRACTICE_SCRIPTS.test(url.pathname) ||
             /^\/quiz-unattempted\.(?:js|css)$/.test(url.pathname)) {
           return new Request(url, { cache: "reload" });
         }
@@ -634,8 +636,14 @@ async function storeSearchIndex(cache, key, response, revision) {
   await cache.put(key, new Response(body, { status: 200, headers }));
 }
 async function searchIndexAsset(event) {
-  const request = event.request,
-    url = new URL(request.url);
+  let request = event.request;
+  const url = new URL(request.url);
+  // Older app windows can request pre-update Polity URLs. Share one revision
+  // across them so a stale URL cannot replace the current offline index.
+  if (url.pathname === POLITY_SEARCH_INDEX && url.search !== "?v=" + POLITY_SEARCH_REVISION) {
+    url.search = "?v=" + POLITY_SEARCH_REVISION;
+    request = new Request(url.href, request);
+  }
   const key = new Request(url.origin + url.pathname),
     cache = await caches.open(CACHE_VERSION);
   const cached = await cache.match(key),
