@@ -64,7 +64,7 @@
   <div class="note">यह अभ्यास सामग्री ExamFusion Prep द्वारा प्रतियोगी परीक्षाओं की तैयारी के लिए स्वतंत्र रूप से तैयार की गई है।</div>
 </main>
 <script src="./original-practice-index.js?v=20261113computerpyqs2"></script>
-<script src="../search-logic.js?v=20261113opsearch2"></script>
+<script src="../search-logic.js?v=20261114politylanguage1"></script>
 <script>
 (function(){
   document.addEventListener('click',function(e){
@@ -89,7 +89,7 @@
     {file:"../search-snippets-economics-original-practice.js?v=20261113opbanks1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"},
     {file:"../search-snippets-static-gk-original-practice.js?v=20261113opbanks1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"},
     {file:"../search-snippets-computer-pyqs.js?v=20261113computerpyqs2",global:"EF_COMPUTER_PYQS_SNIPPET_INDEX"},
-    {file:"../search-snippets-original-practice.js?v=20261113opbanks1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"}
+    {file:"../search-snippets-original-practice.js?v=20261113opbanks1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX",replacementIndex:{file:"../search-snippets-polity-original-practice.js?v=20261114politylanguage1",global:"EF_POLITY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}}
   ];
   function norm(x){return typeof efNormalizeSearchText==='function'?efNormalizeSearchText(x):String(x||'').toLowerCase().replace(/[^a-z0-9ऀ-ॿ]+/g,' ').replace(/\s+/g,' ').trim()}
   function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -162,9 +162,10 @@
   function makeClient(source){
     if(typeof efCreateSearchWorker!=='function')return null;
     return efCreateSearchWorker({
-      workerUrl:new URL('../search-worker.js?v=20261113opbanks1',document.baseURI).href,
-      logicUrl:new URL('../search-logic.js?v=20261113opsearch2',document.baseURI).href,
+      workerUrl:new URL('../search-worker.js?v=20261114politylanguage1',document.baseURI).href,
+      logicUrl:new URL('../search-logic.js?v=20261114politylanguage1',document.baseURI).href,
       indexUrl:new URL(source.file,document.baseURI).href,
+      replacementIndex:source.replacementIndex&&{url:new URL(source.replacementIndex.file,document.baseURI).href,globalName:source.replacementIndex.global},
       mode:'snippet',globalName:source.global,sectionPrefix:'./Original%20Practice/',limit:16
     })
   }

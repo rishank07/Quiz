@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261114computerall";
+const CACHE_VERSION = "efp-pwa-20261114politylanguage1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -81,9 +81,10 @@ const APP_SHELL = [
   "/progress.js?v=20261001caback1",
   "/rapid-practice-deeplink.js?v=20261114cadrillcompact1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
-  "/search-logic.js?v=20261113opsearch2",
+  "/search-logic.js?v=20261114politylanguage1",
   "/section-search-ui.js?v=20261007searchaudit1",
-  "/search-worker.js?v=20261114computerall",
+  "/search-worker.js?v=20261114computerch14",
+  "/search-worker.js?v=20261114politylanguage1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261028searchstatus1",
   "/homepage-fulltext-search.js?v=20261112octca1",
@@ -95,7 +96,8 @@ const APP_SHELL = [
   "/Original%20Practice/original-practice.css",
   "/Original%20Practice/english-highlights.css?v=20261009dark1",
   "/Original%20Practice/original-practice.js?v=20261113opbanks1",
-  "/Original%20Practice/computer-bank.js?v=20261114computerall",
+  "/Original%20Practice/original-practice.js?v=20261114politylanguage1",
+  "/Original%20Practice/computer-bank.js?v=20261114computerch14",
   "/Original%20Practice/english-practice.js?v=20261007continue1",
   "/Original%20Practice/original-practice-index.js?v=20261113computerpyqs2",
   "/Crux-Tricks/index.html",

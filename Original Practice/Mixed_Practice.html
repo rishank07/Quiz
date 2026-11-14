@@ -505,7 +505,7 @@
   </div>
 </div>
 
-<script src="./computer-bank.js?v=20261114computerall"></script>
+<script src="./computer-bank.js?v=20261114computerch14"></script>
 <script>
 (function(){
   'use strict';
@@ -755,7 +755,7 @@
     if (fileKey === 'computer') return EFPComputerBank.load();
     if (fileCache[fileKey]) return fileCache[fileKey];
     var changed = updatedBank(fileKey);
-    var filename = FILES[fileKey] + (changed ? '?v=20261113opbanks1' :
+    var filename = FILES[fileKey] + (fileKey === 'polity' ? '?v=20261114politylanguage1' : changed ? '?v=20261113opbanks1' :
       (fileKey === 'english' ? '?v=20261027englishhighlights1' : ''));
     var promise = fetch('./' + filename, { cache: changed || fileKey === 'english' ? 'no-cache' : 'force-cache' })
       .then(function (response) {
@@ -802,7 +802,7 @@
               var isPyq=p.file==='computer-pyqs';
               if(isPyq&&!q.correct.length)return;
               var displayQ=q;
-              var id=p.file==='computer'||isPyq?'qv3|'+p.file+'|'+parseInt(chapter,10)+'|'+q.num:stableQuestionId(p.file,groupName,q);
+              var id=p.file==='computer'||isPyq?'qv3|'+p.file+'|'+parseInt(chapter,10)+'|'+q.num:(q.mixedPracticeId||stableQuestionId(p.file,groupName,q));
               var chapterHi=isPyq?computerPyqChapters[chapter]:p.file==='computer'?EFPComputerBank.chapterHindi[chapter]:'';
               list.push({id:id,legacyId:questionId(p.file,groupName,ci,si,qi),poolKey:key,poolLabel:p.label,source:groupName,chapter:chapterHi?chapter+' / '+chapterHi:chapter,sectionEn:sectionTitle.en||'',sectionHi:sectionTitle.hi||'',q:displayQ});
             })

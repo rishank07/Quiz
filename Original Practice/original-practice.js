@@ -455,10 +455,10 @@ var opFullSearchClient=null;
 function getOpFullSearchClient(){
  if(opFullSearchClient)return opFullSearchClient;
  if(typeof efCreateSearchWorker!=="function")return null;
- var specialIndex=CFG.slug==="computer-pyqs"?{file:"../search-snippets-computer-pyqs.js?v=20261113computerpyqs2",global:"EF_COMPUTER_PYQS_SNIPPET_INDEX"}:CFG.slug==="computer"?{file:"../search-snippets-computer-original-practice.js?v=20261113opbanks1",global:"EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20261113opbanks1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20261113opbanks1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20261113opbanks1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261113opbanks1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
+ var specialIndex=CFG.slug==="computer-pyqs"?{file:"../search-snippets-computer-pyqs.js?v=20261113computerpyqs2",global:"EF_COMPUTER_PYQS_SNIPPET_INDEX"}:CFG.slug==="computer"?{file:"../search-snippets-computer-original-practice.js?v=20261113opbanks1",global:"EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="economics"?{file:"../search-snippets-economics-original-practice.js?v=20261113opbanks1",global:"EF_ECONOMICS_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="ecology"?{file:"../search-snippets-ecology-original-practice.js?v=20261113opbanks1",global:"EF_ECOLOGY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="staticgk"?{file:"../search-snippets-static-gk-original-practice.js?v=20261113opbanks1",global:"EF_STATIC_GK_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:CFG.slug==="polity"?{file:"../search-snippets-polity-original-practice.js?v=20261114politylanguage1",global:"EF_POLITY_ORIGINAL_PRACTICE_SNIPPET_INDEX"}:{file:"../search-snippets-original-practice.js?v=20261113opbanks1",global:"EF_ORIGINAL_PRACTICE_SNIPPET_INDEX"};
  opFullSearchClient=efCreateSearchWorker({
-  workerUrl:new URL("../search-worker.js?v=20261113opbanks1",document.baseURI).href,
-  logicUrl:new URL("../search-logic.js?v=20261007searchaudit1",document.baseURI).href,
+  workerUrl:new URL("../search-worker.js?v=20261114politylanguage1",document.baseURI).href,
+  logicUrl:new URL("../search-logic.js?v=20261114politylanguage1",document.baseURI).href,
   indexUrl:new URL(specialIndex.file,document.baseURI).href,
   mode:"snippet",
   globalName:specialIndex.global,

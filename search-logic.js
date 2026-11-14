@@ -952,6 +952,12 @@ if (efIsSectionSearchPage()) {
   window.addEventListener("pagehide", efCancelSectionSearch);
 }
 
+// Subject updates can replace existing routes without rebuilding the shared index.
+function efReplaceSearchIndexRoutes(records, replacements) {
+  var byFile = new Map(replacements.map(function (row) { return [row.f, row]; }));
+  return records.map(function (row) { return byFile.get(row.f) || row; });
+}
+
 function efCreateSearchWorker(options) {
   options = options || {};
   var managedSection = efIsSectionSearchPage();
@@ -1064,6 +1070,11 @@ function efCreateSearchWorker(options) {
       fallbackRecordsPromise = Promise.reject(new Error("No fallback search index configured"));
     } else {
       fallbackRecordsPromise = efLoadSearchIndexScript(options.indexUrl, options.globalName).then(function(records){
+        if (!options.replacementIndex) return records;
+        return efLoadSearchIndexScript(options.replacementIndex.url, options.replacementIndex.globalName)
+          .then(function (replacements) { return efReplaceSearchIndexRoutes(records, replacements); })
+          .catch(function () { return records; });
+      }).then(function(records){
         if (options.extraIndex) {
           return efLoadSearchIndexScript(options.extraIndex.url, options.extraIndex.globalName)
             .then(function (extra) { return records.concat(extra); })
