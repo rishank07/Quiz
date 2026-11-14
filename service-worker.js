@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261114computerrefresh1";
+const CACHE_VERSION = "efp-pwa-20261115lucentaudit1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -23,6 +23,8 @@ const COMPUTER_PRACTICE_PAGES = /^\/Original%20Practice\/(?:Computer_Complete_Pr
 const FRESH_BIHAR_MAP_PAGES = /^\/Bihar%20Special\/Bihar%20(?:Special|GK%20Map)(?:\.html)?$/;
 const POLITY_SEARCH_INDEX = "/search-snippets-polity-original-practice.js";
 const POLITY_SEARCH_REVISION = "20261114politylanguage1";
+const LUCENT_SEARCH_INDEX = "/search-snippets-lucent.js";
+const LUCENT_SEARCH_REVISION = "20261115lucentaudit1";
 const FRESH_PRACTICE_SCRIPTS = /^\/(?:search-(?:logic|worker)|Original%20Practice\/(?:original-practice|computer-bank))\.js$/;
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
@@ -90,7 +92,7 @@ const APP_SHELL = [
   "/search-worker.js?v=20261114computerrefresh1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261028searchstatus1",
-  "/homepage-fulltext-search.js?v=20261112octca1",
+  "/homepage-fulltext-search.js?v=20261115lucentaudit1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster.js?v=20261024mathback1",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
@@ -640,10 +642,13 @@ async function storeSearchIndex(cache, key, response, revision) {
 async function searchIndexAsset(event) {
   let request = event.request;
   const url = new URL(request.url);
-  // Older app windows can request pre-update Polity URLs. Share one revision
-  // across them so a stale URL cannot replace the current offline index.
-  if (url.pathname === POLITY_SEARCH_INDEX && url.search !== "?v=" + POLITY_SEARCH_REVISION) {
-    url.search = "?v=" + POLITY_SEARCH_REVISION;
+  // Open app windows may request an older query string for these indexes.
+  // Canonicalize it before reading or writing their path-based offline cache.
+  const currentRevision =
+    url.pathname === POLITY_SEARCH_INDEX ? POLITY_SEARCH_REVISION :
+    url.pathname === LUCENT_SEARCH_INDEX ? LUCENT_SEARCH_REVISION : "";
+  if (currentRevision && url.search !== "?v=" + currentRevision) {
+    url.search = "?v=" + currentRevision;
     request = new Request(url.href, request);
   }
   const key = new Request(url.origin + url.pathname),
