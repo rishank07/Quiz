@@ -231,19 +231,14 @@
 
     if (!Array.isArray(records)) throw new Error("Search index was not available: " + config.globalName);
     if (config.globalName === "EF_COMPUTER_ORIGINAL_PRACTICE_SNIPPET_INDEX") {
-      var revisions = [
-        ["search-snippets-computer-chapter-01.js?v=20261112computerch01", "EF_COMPUTER_CHAPTER_01_SNIPPETS"],
-        ["search-snippets-computer-chapter-14.js?v=20261114computerch14", "EF_COMPUTER_CHAPTER_14_SNIPPETS"]
-      ];
-      var revisedByFile = new Map();
-      revisions.forEach(function (entry) {
-        try {
-          importScripts(new URL("./" + entry[0], config.indexUrl).href);
-          var rows = self[entry[1]];
-          if (Array.isArray(rows)) rows.forEach(function (row) { revisedByFile.set(row.f, row); });
-        } catch (_) { /* Keep base results if an overlay is unavailable. */ }
-      });
-      records = records.map(function (row) { return revisedByFile.get(row.f) || row; });
+      try {
+        importScripts(new URL("./search-snippets-computer-audit.js?v=20261114computerall", config.indexUrl).href);
+        var computerRows = self.EF_COMPUTER_AUDITED_SNIPPETS;
+        if (Array.isArray(computerRows)) {
+          var revisedByFile = new Map(computerRows.map(function (row) { return [row.f, row]; }));
+          records = records.map(function (row) { return revisedByFile.get(row.f) || row; });
+        }
+      } catch (_) { /* Keep the base search index available offline. */ }
     }
     if (config.extraIndex) {
       try {
