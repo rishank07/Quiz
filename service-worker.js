@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261115lucentaudit1";
+const CACHE_VERSION = "efp-pwa-20261115lucentaudit2";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -24,7 +24,7 @@ const FRESH_BIHAR_MAP_PAGES = /^\/Bihar%20Special\/Bihar%20(?:Special|GK%20Map)(
 const POLITY_SEARCH_INDEX = "/search-snippets-polity-original-practice.js";
 const POLITY_SEARCH_REVISION = "20261114politylanguage1";
 const LUCENT_SEARCH_INDEX = "/search-snippets-lucent.js";
-const LUCENT_SEARCH_REVISION = "20261115lucentaudit1";
+const LUCENT_SEARCH_REVISION = "20261115lucentaudit2";
 const FRESH_PRACTICE_SCRIPTS = /^\/(?:search-(?:logic|worker)|Original%20Practice\/(?:original-practice|computer-bank))\.js$/;
 
 // Large full-text indexes and PDFs are intentionally runtime-cached only after first use.
@@ -92,7 +92,7 @@ const APP_SHELL = [
   "/search-worker.js?v=20261114computerrefresh1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261028searchstatus1",
-  "/homepage-fulltext-search.js?v=20261115lucentaudit1",
+  "/homepage-fulltext-search.js?v=20261115lucentaudit2",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster.js?v=20261024mathback1",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
