@@ -812,3 +812,47 @@
  createEngine(false);createEngine(true);
 })();
 /* EFP_CA_RELATABLE_OPTIONS_END */
+
+/* EFP_CA_DRILL_COMPACT_20261114
+ * The Explanation Drill is for quick recall, so only that section hides
+ * the explanation panel.  Main MCQs and One-Liners still show explanations.
+ * All explanation data, answers, score/progress and bookmarks are untouched.
+ */
+(function () {
+  "use strict";
+  var path;
+  try { path = decodeURIComponent(location.pathname || ""); }
+  catch (_) { path = location.pathname || ""; }
+  if (path.indexOf("/Current Affairs/Topic Names/Rapid Practice/") !== 0) return;
+
+  var style = document.createElement("style");
+  style.id = "efp-ca-drill-compact-style";
+  style.textContent = "html.efp-ca-explanation-drill #questions .exp{display:none!important}";
+  (document.head || document.documentElement).appendChild(style);
+
+  function install() {
+    var title = document.getElementById("secTitle");
+    if (!title) return;
+    if (title.__efpDrillCompactSync) {
+      title.__efpDrillCompactSync();
+      return;
+    }
+    function sync() {
+      var english = String(title.textContent || "");
+      var hindi = String((document.getElementById("secTitleHi") || {}).textContent || "");
+      var isDrill = /\bExplanation(?:\s+Fact)?\s+Drills?\b/i.test(english) ||
+        /स्पष्टीकरण(?:\s+तथ्य)?\s+अभ्यास/.test(hindi);
+      document.documentElement.classList.toggle("efp-ca-explanation-drill", isDrill);
+    }
+    title.__efpDrillCompactSync = sync;
+    sync();
+    new MutationObserver(sync).observe(title, { childList: true, characterData: true, subtree: true });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", install, { once: true });
+  } else {
+    install();
+  }
+  window.addEventListener("pageshow", install);
+})();
