@@ -505,7 +505,7 @@
   </div>
 </div>
 
-<script src="./computer-bank.js?v=20261112computerch01"></script>
+<script src="./computer-bank.js?v=20261114computerch14"></script>
 <script>
 (function(){
   'use strict';
@@ -992,7 +992,7 @@
     $('questionHi').innerHTML=safeRich(item,hi);
     $('questionHi').style.display=(!hi||sameText(hi,(q.q||{}).en))?'none':'';
     var exam=$('questionExam');exam.innerHTML=examDetails(q);exam.hidden=!q.exam;
-    var visual=$('questionVisual');visual.innerHTML=EFPComputerBank.visualHtml(q);visual.hidden=!q.visual;
+    var visual=$('questionVisual');visual.innerHTML=EFPComputerBank.visualHtml(q);visual.hidden=!visual.innerHTML;
     var options=$('options');options.innerHTML='';
     var selectedIndex=ans?Number(ans.selected):pending;
     displayedOptions(item).forEach(function(opt,i){
@@ -1027,7 +1027,7 @@
       var correctLetter=ci.map(function(i){return String.fromCharCode(65+i)}).join(' / ')||'—';
       $('correctAnswer').innerHTML='<strong>Correct Answer / सही उत्तर:</strong> '+correctLetter;
       var exp=q.exp||{};
-      $('explanation').innerHTML='<strong>Explanation</strong><div>'+safeRich(item,exp.en||'')+'</div>'+(exp.hi&&!sameText(exp.hi,exp.en)?'<div class="exp-hi"><strong>व्याख्या</strong><div>'+safeRich(item,exp.hi)+'</div></div>':'');
+      $('explanation').innerHTML='<strong>Explanation</strong><div>'+safeRich(item,exp.en||'')+'</div>'+(exp.hi&&!sameText(exp.hi,exp.en)?'<div class="exp-hi"><strong>व्याख्या</strong><div>'+safeRich(item,exp.hi)+'</div></div>':'')+(q.visualAfterAnswer?EFPComputerBank.visualHtml(q,true):'');
     }else{
       $('answerLine').textContent='';
       $('correctAnswer').textContent='';
@@ -1074,7 +1074,7 @@
         '<div class="question-number">Question '+(index+1)+' of '+total+(item.sectionEn?' · '+escapeHtml(item.sectionEn):'')+'</div>'+
         '<div class="q-en">'+safeRich(item,(q.q||{}).en||'')+'</div><div class="q-hi"'+qHiStyle+'>'+safeRich(item,qHi)+'</div>'+
         (q.exam?'<div class="pyq-exam">'+examDetails(q)+'</div>':'')+EFPComputerBank.visualHtml(q)+'<div class="options">'+optionsHtml+'</div>'+
-        '<div class="answer-box show"><div class="answer-line '+statusClass+'">'+statusText+'</div><div class="correct-answer"><strong>Correct Answer / सही उत्तर:</strong> '+correctLetter+'</div><div class="explanation"><strong>Explanation</strong><div>'+safeRich(item,exp.en||'')+'</div>'+(exp.hi&&!sameText(exp.hi,exp.en)?'<div class="exp-hi"><strong>व्याख्या</strong><div>'+safeRich(item,exp.hi)+'</div></div>':'')+'</div></div>';
+        '<div class="answer-box show"><div class="answer-line '+statusClass+'">'+statusText+'</div><div class="correct-answer"><strong>Correct Answer / सही उत्तर:</strong> '+correctLetter+'</div><div class="explanation"><strong>Explanation</strong><div>'+safeRich(item,exp.en||'')+'</div>'+(exp.hi&&!sameText(exp.hi,exp.en)?'<div class="exp-hi"><strong>व्याख्या</strong><div>'+safeRich(item,exp.hi)+'</div></div>':'')+(q.visualAfterAnswer?EFPComputerBank.visualHtml(q,true):'')+'</div></div>';
       list.appendChild(card)
     })
   }
