@@ -31,7 +31,50 @@
   <script src="/Mapping/assets/site-theme.js?v=20261106navtheme1"></script>
   <link rel="stylesheet" href="/Mapping/assets/style.css?v=20261105atlas1">
   <link rel="stylesheet" href="/Mapping/assets/atlas.css?v=20261107placeorder1">
-  <link rel="stylesheet" href="bihar-map.css?v=20261115biharscroll2">
+  <link rel="stylesheet" href="bihar-map.css?v=20261115biharappcache1">
+  <script id="bihar-map-cache-update">
+    (() => {
+      if (!window.isSecureContext || !('serviceWorker' in navigator)) return;
+      const worker = navigator.serviceWorker;
+      let stylesheet = document.querySelector('link[href^="bihar-map.css?"]');
+      let controller = worker.controller;
+      let pending;
+
+      worker.addEventListener('controllerchange', () => {
+        const previous = controller;
+        controller = worker.controller;
+        if (!previous || !controller || previous === controller) return;
+
+        // A previous worker can serve old CSS while the new shell installs.
+        // Apply the new stylesheet without interrupting the current map session.
+        pending?.remove();
+        const next = document.createElement('link');
+        pending = next;
+        const url = new URL(stylesheet.href);
+        url.searchParams.set('refresh', Date.now());
+        next.rel = 'stylesheet';
+        next.href = url.href;
+        next.onload = () => {
+          if (pending !== next) return;
+          stylesheet.remove();
+          stylesheet = next;
+          pending = null;
+        };
+        next.onerror = () => {
+          next.remove();
+          if (pending === next) pending = null;
+        };
+        stylesheet.after(next);
+      });
+
+      const checkForUpdate = () => worker.getRegistration()
+        .then(registration => registration?.update()).catch(() => {});
+      checkForUpdate();
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') checkForUpdate();
+      });
+    })();
+  </script>
   <script defer src="/Mapping/assets/map-navigation.js?v=20261106mapnav2"></script>
   <script defer src="/back-parent-map.js?v=20261113biharatlas2"></script>
   <script defer src="/back-nav.js?v=20261007searchaudit1"></script>

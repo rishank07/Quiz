@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261115biharscroll2";
+const CACHE_VERSION = "efp-pwa-20261115biharappcache1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -21,6 +21,7 @@ const FRESH_ORIGINAL_PRACTICE =
 const REVISED_ORIGINAL_BANK = /^\/Original%20Practice\/(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice(?:\.html)?$/;
 const COMPUTER_PRACTICE_PAGES = /^\/Original%20Practice\/(?:Computer_Complete_Practice|Mixed_Practice)(?:\.html)?$/;
 const FRESH_BIHAR_MAP_PAGES = /^\/Bihar%20Special\/Bihar%20(?:Special|GK%20Map)(?:\.html)?$/;
+const BIHAR_MAP_STYLE_PATH = "/Bihar%20Special/bihar-map.css";
 const POLITY_SEARCH_INDEX = "/search-snippets-polity-original-practice.js";
 const POLITY_SEARCH_REVISION = "20261114politylanguage1";
 const LUCENT_SEARCH_INDEX = "/search-snippets-lucent.js";
@@ -48,7 +49,7 @@ const APP_SHELL = [
   "/Mapping/assets/feature-study.js?v=20261113biharpdf2",
   "/Mapping/assets/app.js?v=20261114biharscroll1",
   "/Mind%20Maps/translate.js?v=20261113biharatlas2",
-  "/Bihar%20Special/bihar-map.css?v=20261115biharscroll2",
+  `${BIHAR_MAP_STYLE_PATH}?v=20261115biharappcache1`,
   "/Bihar%20Special/bihar-atlas-base.js?v=20261113biharpdf2",
   "/Bihar%20Special/bihar-map-data.js?v=20261113biharatlas2",
   "/Bihar%20Special/bihar-map-shapes.js?v=20261113biharatlas2",
@@ -123,7 +124,8 @@ self.addEventListener("install", (event) => {
       .open(CACHE_VERSION)
       .then((cache) => cache.addAll(APP_SHELL.map((asset) => {
         const url = new URL(asset, self.location.origin);
-        if (FRESH_BIHAR_MAP_PAGES.test(url.pathname) || FRESH_ORIGINAL_PRACTICE.test(url.pathname) ||
+        if (FRESH_BIHAR_MAP_PAGES.test(url.pathname) || url.pathname === BIHAR_MAP_STYLE_PATH ||
+            FRESH_ORIGINAL_PRACTICE.test(url.pathname) ||
             FRESH_PRACTICE_SCRIPTS.test(url.pathname) ||
             /^\/quiz-unattempted\.(?:js|css)$/.test(url.pathname)) {
           return new Request(url, { cache: "reload" });
@@ -705,7 +707,7 @@ async function freshCoreAsset(event, request = event.request) {
       { cache: "no-cache" },
       {
         exact: true,
-        preferCache: !isExplicitReload(event.request),
+        preferCache: url.pathname !== BIHAR_MAP_STYLE_PATH && !isExplicitReload(event.request),
       },
     );
   } catch (_) {
@@ -857,7 +859,7 @@ self.addEventListener("fetch", (event) => {
   }
 
   // Atlas assets refresh on first use and retain the last good offline copy.
-  if (url.pathname.startsWith("/Mapping/assets/") ||
+  if (url.pathname === BIHAR_MAP_STYLE_PATH || url.pathname.startsWith("/Mapping/assets/") ||
       /^\/Bihar%20Special\/bihar-(?:atlas|map)-[^/]+\.(?:js|css)$/.test(url.pathname)) {
     event.respondWith(freshCoreAsset(event));
     return;
