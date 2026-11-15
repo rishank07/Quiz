@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261115biharappcache1";
+const CACHE_VERSION = "efp-pwa-20261115chapterreturn1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -21,6 +21,7 @@ const FRESH_ORIGINAL_PRACTICE =
 const REVISED_ORIGINAL_BANK = /^\/Original%20Practice\/(?:History|Polity|Science|Geography|Economics|Environment_Ecology|Static_GK)_Complete_Practice(?:\.html)?$/;
 const COMPUTER_PRACTICE_PAGES = /^\/Original%20Practice\/(?:Computer_Complete_Practice|Mixed_Practice)(?:\.html)?$/;
 const FRESH_BIHAR_MAP_PAGES = /^\/Bihar%20Special\/Bihar%20(?:Special|GK%20Map)(?:\.html)?$/;
+const FRESH_CHAPTER_HUBS = /^\/(?:Mind%20Maps\/SubjectName|Current%20Affairs\/Topic%20Names(?:\/Rapid%20Practice)?)(?:\.html)?$/;
 const BIHAR_MAP_STYLE_PATH = "/Bihar%20Special/bihar-map.css";
 const POLITY_SEARCH_INDEX = "/search-snippets-polity-original-practice.js";
 const POLITY_SEARCH_REVISION = "20261114politylanguage1";
@@ -42,6 +43,9 @@ const APP_SHELL = [
   "/Editorial/links.json",
   "/Bihar%20Special/Bihar%20GK%20Map.html",
   "/Bihar%20Special/Bihar%20Special.html",
+  "/Mind%20Maps/SubjectName.html",
+  "/Current%20Affairs/Topic%20Names.html",
+  "/Current%20Affairs/Topic%20Names/Rapid%20Practice.html",
   "/Mapping/assets/site-theme.js?v=20261106navtheme1",
   "/Mapping/assets/map-navigation.js?v=20261106mapnav2",
   "/Mapping/assets/style.css?v=20261105atlas1",
@@ -79,7 +83,7 @@ const APP_SHELL = [
   "/home-nav.js?v=20261027apprecovery1",
   "/app-session.js?v=20261027bbfinish1",
   "/back-parent-map.js?v=20261113computercards1",
-  "/back-nav.js?v=20261113pyqback1",
+  "/back-nav.js?v=20261115chapterreturn1",
   "/search-context.js?v=20261007searchaudit1",
   "/search-context.css?v=20261004inlinecenter1",
   "/search-context-dock-v3.css?v=20261007searchaudit1",
@@ -125,6 +129,7 @@ self.addEventListener("install", (event) => {
       .then((cache) => cache.addAll(APP_SHELL.map((asset) => {
         const url = new URL(asset, self.location.origin);
         if (FRESH_BIHAR_MAP_PAGES.test(url.pathname) || url.pathname === BIHAR_MAP_STYLE_PATH ||
+            FRESH_CHAPTER_HUBS.test(url.pathname) ||
             FRESH_ORIGINAL_PRACTICE.test(url.pathname) ||
             FRESH_PRACTICE_SCRIPTS.test(url.pathname) ||
             /^\/quiz-unattempted\.(?:js|css)$/.test(url.pathname)) {
@@ -481,7 +486,8 @@ async function networkFirst(event) {
       request.mode === "navigate" || request.destination === "document";
     // Query parameters select client-side search/quiz state, not different HTML.
     // Keep one raw document so a new search link can reuse an already read topic.
-    const canonicalPath = REVISED_ORIGINAL_BANK.test(url.pathname) || FRESH_BIHAR_MAP_PAGES.test(url.pathname) ||
+    const chapterHub = FRESH_CHAPTER_HUBS.test(url.pathname);
+    const canonicalPath = REVISED_ORIGINAL_BANK.test(url.pathname) || FRESH_BIHAR_MAP_PAGES.test(url.pathname) || chapterHub ||
       COMPUTER_PRACTICE_PAGES.test(url.pathname)
       ? url.pathname.replace(/(?:\.html)?$/, ".html")
       : url.pathname;
@@ -498,7 +504,8 @@ async function networkFirst(event) {
           navigation &&
           !isExplicitReload(request) &&
           !FRESH_ORIGINAL_PRACTICE.test(url.pathname) &&
-          !FRESH_BIHAR_MAP_PAGES.test(url.pathname),
+          !FRESH_BIHAR_MAP_PAGES.test(url.pathname) &&
+          !chapterHub,
         revalidate: true,
       },
     );

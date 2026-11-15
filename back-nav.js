@@ -461,6 +461,11 @@
   var HOME_SEARCH_GUARD = "efpHomeSearchGuard";
   var APPROVED_LOGICAL_BACK_ATTRIBUTE = "data-efp-approved-logical-back";
   var APP_RESUME_PENDING_KEY = "efp_app_resume_pending_v1";
+  var CHAPTER_RETURN_PARAM = "efChapterReturn";
+  var CHAPTER_VIEW_KEY = "efpChapterListView";
+  var MIND_MAP_HUB = "/mind maps/subjectname";
+  var CURRENT_AFFAIRS_HUB = "/current affairs/topic names";
+  var RAPID_PRACTICE_HUB = CURRENT_AFFAIRS_HUB + "/rapid practice";
   var AUTO_RESUMED_BOUNDARY = false;
   var CRUX_RETURN_DOC_ID = "";
   try {
@@ -473,6 +478,99 @@
     path = path.replace(/\/{2,}/g, "/");
     if (path.length > 1) path = path.replace(/\/$/, "");
     return path || "/";
+  }
+
+  function chapterViewPath(pathname) {
+    return normalizePath(pathname).toLowerCase().replace(/\.html$/, "");
+  }
+
+  function readChapterView(hub) {
+    try { return JSON.parse(sessionStorage.getItem(CHAPTER_VIEW_KEY + hub) || "null"); }
+    catch (_) { return null; }
+  }
+
+  function installChapterListReturn() {
+    var hub = chapterViewPath(location.pathname);
+    var mindMaps = hub === MIND_MAP_HUB;
+    var rapidPractice = hub === RAPID_PRACTICE_HUB;
+    if (!mindMaps && !rapidPractice && hub !== CURRENT_AFFAIRS_HUB) return;
+
+    var panels = mindMaps ? "[data-acc-id]" : ".card[id], .nested[id]";
+    var links = rapidPractice ? "a.quiz-card" :
+      mindMaps ? ".submenu a, .nested-links a, #resumeLink" : "#mainAccordion a";
+
+    function panelId(panel) { return panel.dataset.accId || panel.id; }
+
+    window.addEventListener("click", function (event) {
+      if (event.button > 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      var link = event.target.closest && event.target.closest(links);
+      if (!link || (link.target && link.target !== "_self") || link.hasAttribute("download")) return;
+      var url = new URL(link.href, location.href);
+      var chapter = chapterViewPath(url.pathname);
+      if (url.origin !== location.origin || !/\.html$/i.test(url.pathname) || chapter === hub) return;
+
+      var filter = rapidPractice && document.querySelector("[data-filter].active");
+      var saved = {
+        chapter: chapter,
+        href: link.getAttribute("href"),
+        anchorId: link.id,
+        top: window.scrollY,
+        offset: link.getBoundingClientRect().top,
+        open: Array.from(document.querySelectorAll(panels)).filter(function (panel) {
+          return panel.classList.contains("active");
+        }).map(panelId),
+        filter: filter ? filter.dataset.filter : ""
+      };
+      // Real history entries own their view. The installed-app Back guard can
+      // recreate the hub instead, so keep the same view available in this tab.
+      try { sessionStorage.setItem(CHAPTER_VIEW_KEY + hub, JSON.stringify(saved)); } catch (_) {}
+      try {
+        history.replaceState(Object.assign({}, history.state, { efpChapterListView: saved }), "");
+        history.scrollRestoration = "manual";
+      } catch (_) {}
+    }, true);
+
+    window.addEventListener("pageshow", function (event) {
+      var url = new URL(location.href);
+      var markedReturn = url.searchParams.has(CHAPTER_RETURN_PARAM);
+      var navigation = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+      var saved;
+      var pending = readChapterView(hub);
+      if (markedReturn) {
+        saved = pending;
+        url.searchParams.delete(CHAPTER_RETURN_PARAM);
+        try { history.replaceState(history.state, "", url.href); } catch (_) {}
+      } else if (event.persisted || (navigation && navigation.type === "back_forward")) {
+        saved = history.state && history.state[CHAPTER_VIEW_KEY];
+      } else if (pending && document.referrer) {
+        // A chapter loaded with the previous script may still use the old Back URL.
+        var referrer = new URL(document.referrer);
+        if (referrer.origin === url.origin && chapterViewPath(referrer.pathname) === pending.chapter) saved = pending;
+      }
+      if (!saved) return;
+
+      if (pending && pending.chapter === saved.chapter) {
+        try { sessionStorage.removeItem(CHAPTER_VIEW_KEY + hub); } catch (_) {}
+      }
+      document.documentElement.classList.add("efp-restoring-chapter-list");
+      document.querySelectorAll(panels).forEach(function (panel) {
+        panel.classList.toggle("active", saved.open.indexOf(panelId(panel)) !== -1);
+      });
+      if (saved.filter) {
+        var filter = Array.from(document.querySelectorAll("[data-filter]")).find(function (button) {
+          return button.dataset.filter === saved.filter;
+        });
+        if (filter && !filter.classList.contains("active")) filter.click();
+      }
+      var anchor = Array.from(document.querySelectorAll(links)).find(function (link) {
+        return link.id === saved.anchorId && link.getAttribute("href") === saved.href;
+      });
+      var top = anchor && anchor.offsetHeight ? window.scrollY + anchor.getBoundingClientRect().top - saved.offset : saved.top;
+      window.scrollTo({ top: top, behavior: "instant" });
+      window.requestAnimationFrame(function () {
+        document.documentElement.classList.remove("efp-restoring-chapter-list");
+      });
+    });
   }
 
   function detectAutoResumedBoundary() {
@@ -1019,8 +1117,8 @@
   }
 
   function isMindMapsInnerPage() {
-    var path = normalizePath(window.location.pathname).toLowerCase();
-    return path.indexOf("/mind maps/") === 0 && path !== "/mind maps/subjectname.html";
+    var path = chapterViewPath(window.location.pathname);
+    return path.indexOf("/mind maps/") === 0 && path !== MIND_MAP_HUB;
   }
 
   function logicalParentUrl() {
@@ -1361,6 +1459,14 @@
   function useLogicalParent(event) {
     var parentUrl = logicalParentUrl();
     if (!parentUrl) return false;
+
+    var hub = chapterViewPath(parentUrl.pathname);
+    if (hub === MIND_MAP_HUB || hub === CURRENT_AFFAIRS_HUB || hub === RAPID_PRACTICE_HUB) {
+      var saved = readChapterView(hub);
+      if (saved && saved.chapter === chapterViewPath(location.pathname)) {
+        parentUrl.searchParams.set(CHAPTER_RETURN_PARAM, "1");
+      }
+    }
 
     if (window.EFP_NAV_GUARD) window.EFP_NAV_GUARD.record("hierarchy-back", { destination: parentUrl.pathname });
 
@@ -1726,6 +1832,7 @@
     useLogicalParent(event);
   }, true);
 
+  installChapterListReturn();
   isInstalledAndroidAppContext();
   installOriginalPracticeCopyCleanup();
   installMixedPracticeFeedbackColors();
