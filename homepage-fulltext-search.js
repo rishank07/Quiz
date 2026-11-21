@@ -21,6 +21,16 @@
   // worker slot and release each index as soon as its results arrive.
   var SOURCES = [
     {
+      id: "currentaffairsobituaries",
+      label: "Current Affairs",
+      icon: "fa-newspaper",
+      indexUrl: "search-snippets-current-affairs-obituaries.js?v=20261121obituaries1",
+      mode: "snippet",
+      globalName: "EF_CA_OBITUARIES_INDEX",
+      sectionPrefix: "./Current%20Affairs/Topic%20Names/",
+      limit: 8
+    },
+    {
       id: "pinnacle",
       label: "Pinnacle GS",
       icon: "fa-book-open",
@@ -96,7 +106,7 @@
       id: "currentaffairsrapidextra",
       label: "Current Affairs Rapid Practice",
       icon: "fa-bolt",
-      indexUrl: "search-snippets-current-affairs-rapid-extra.js?v=20261118catopicfix1",
+      indexUrl: "search-snippets-current-affairs-rapid-extra.js?v=20261121obituaries1",
       mode: "snippet",
       globalName: "EF_RAPID_EXTRA_INDEX",
       sectionPrefix: "./Current%20Affairs/Topic%20Names/Rapid%20Practice/",
@@ -116,7 +126,7 @@
 
   // Useful compact sources arrive first on a cold mobile connection. Global
   // relevance scores still determine display order as the books arrive.
-  var sourceOrder = ["mindmaps","currentaffairs","lucent","blackbook","bihar60sets","currentaffairsrapidextra","currentaffairsrapid","pinnacle","ghatna"];
+  var sourceOrder = ["currentaffairsobituaries","mindmaps","currentaffairs","lucent","blackbook","bihar60sets","currentaffairsrapidextra","currentaffairsrapid","pinnacle","ghatna"];
   SOURCES.sort(function(a,b){return sourceOrder.indexOf(a.id)-sourceOrder.indexOf(b.id)});
 
   var clients = {};

@@ -1,5 +1,5 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261118catopicfix1";
+const CACHE_VERSION = "efp-pwa-20261121obituaries1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
@@ -82,7 +82,7 @@ const APP_SHELL = [
   "/owner-debug.js",
   "/home-nav.js?v=20261027apprecovery1",
   "/app-session.js?v=20261027bbfinish1",
-  "/back-parent-map.js?v=20261113computercards1",
+  "/back-parent-map.js?v=20261121obituaries1",
   "/back-nav.js?v=20261115chapterreturn1",
   "/search-context.js?v=20261007searchaudit1",
   "/search-context.css?v=20261004inlinecenter1",
@@ -90,14 +90,14 @@ const APP_SHELL = [
   "/mindmap-deeplink.js?v=20261007searchaudit1",
   "/mindmap-reader.css?v=20261007searchaudit1",
   "/progress.js?v=20261001caback1",
-  "/rapid-practice-deeplink.js?v=20261114cadrillcompact1",
+  "/rapid-practice-deeplink.js?v=20261121obituaries1",
   "/pdf-mobile-rotate.js?v=20260930desktopnav1",
   "/search-logic.js?v=20261114politylanguage1",
   "/section-search-ui.js?v=20261007searchaudit1",
   "/search-worker.js?v=20261114computerrefresh1",
   "/Books/BlackBook/blackbook-tailwind.css?v=20260927systembackquit1",
   "/homepage-search-ui.js?v=20261028searchstatus1",
-  "/homepage-fulltext-search.js?v=20261118catopicfix1",
+  "/homepage-fulltext-search.js?v=20261121obituaries1",
   "/Maths%20Speed%20Booster/math-speed-booster.html",
   "/Maths%20Speed%20Booster/math-speed-booster.js?v=20261024mathback1",
   "/Maths%20Speed%20Booster/math-speed-booster-fit.css",
@@ -773,7 +773,7 @@ async function freshCurrentAffairsBookmarkAsset() {
 }
 
 async function freshRapidPracticeAsset() {
-  const currentAsset = "/rapid-practice-deeplink.js?v=20261114cadrillcompact1";
+  const currentAsset = "/rapid-practice-deeplink.js?v=20261121obituaries1";
   const cache = await caches.open(CACHE_VERSION);
   try {
     const response = await fetch(currentAsset, { cache: "no-store" });

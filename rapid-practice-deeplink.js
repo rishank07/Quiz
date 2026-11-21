@@ -697,7 +697,7 @@
     curated=curated||{};
     var rows=[],pool=[],plans=new Map(),report={questions:0,authored:0,generated:0,repaired:0,alreadyRelated:0,curated:0,unresolved:[]};
     sections.forEach(function(s,si){s.questions.forEach(function(q,qi){
-      var l=label(q),k=kind(q,l),main=/\bmain (?:mcq|current affairs)/i.test(s.title.en);
+      var l=label(q),k=kind(q,l),main=s.authored===true||/\bmain (?:mcq|current affairs)/i.test(s.title.en);
       var r={q:q,id:si+'-'+qi,label:group(l),kind:k,main:main,subject:subject(q,l),tokens:tokens(q.q.en+' '+l),answerTokens:tokens(q.a.en)};
       rows.push(r);report.questions++;
       if(main)report.authored++;

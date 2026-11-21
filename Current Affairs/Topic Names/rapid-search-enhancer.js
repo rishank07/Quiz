@@ -12,7 +12,7 @@
   var LOGIC_SRC = "/search-logic.js?v=20261112octca1";
   var WORKER_SRC = "/search-worker.js?v=20261112octca1";
   var INDEX_SRC = "/search-snippets-current-affairs-rapid.js?v=20261118catopicfix1";
-  var EXTRA_INDEX_SRC = "/search-snippets-current-affairs-rapid-extra.js?v=20261118catopicfix1";
+  var EXTRA_INDEX_SRC = "/search-snippets-current-affairs-rapid-extra.js?v=20261121obituaries1";
   var INDEX_PREFIX = "./Current%20Affairs/Topic%20Names/Rapid%20Practice/";
   var LOCAL_HIDE_STYLE_ID = "efp-ca-rapid-local-search-hide";
   var RESULT_STYLE_ID = "efp-ca-rapid-result-style";
