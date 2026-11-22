@@ -1,12 +1,12 @@
 // Shared search recovery and cache refresh across browsers and device layouts.
-const CACHE_VERSION = "efp-pwa-20261122awards1";
+const CACHE_VERSION = "efp-pwa-20261123readingback1";
 // The static Pages build enables direct extensionless network requests.
 const PAGES_ROUTES = false;
 const QUIZ_SCORE_REVISION = "20261113pyqrefresh1";
 const OWNER_DEBUG_SCRIPT =
   '<script src="/owner-debug.js?v=20261007analyticsguard1"></script>';
 const APP_SESSION_SCRIPT =
-  '<script defer id="efp-app-session-script" src="/app-session.js?v=20261027bbfinish1"></script>';
+  '<script defer id="efp-app-session-script" src="/app-session.js?v=20261123readingback1"></script>';
 const CA_TOP_SCRIPT =
   '<script defer src="/ca-move-top-v3.js?v=20261001navbuttons1"></script>';
 const OWNER_STATE_CACHE = "efp-owner-settings-v1";
@@ -81,7 +81,7 @@ const APP_SHELL = [
   "/bihar-topic-bookmarks.js?v=20260927bihar1",
   "/owner-debug.js",
   "/home-nav.js?v=20261027apprecovery1",
-  "/app-session.js?v=20261027bbfinish1",
+  "/app-session.js?v=20261123readingback1",
   "/back-parent-map.js?v=20261121obituaries1",
   "/back-nav.js?v=20261115chapterreturn1",
   "/search-context.js?v=20261007searchaudit1",

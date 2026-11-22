@@ -119,6 +119,32 @@ async function until(test) {
     console.log('PASS', name, action, 'Current Affairs Back -> Home, no resume loop');
     }
   }
+  const readingFiles = ['SUMMITS2026.html', 'APPOINTMENT2026.html'];
+  for (const [name, surface] of surfaces) {
+    for (const action of ['button', 'system']) {
+      for (const readingFile of readingFiles) {
+        const file = 'Current Affairs/Topic Names/2026/Topic Wise/' + readingFile;
+        const url = '/' + file.split('/').map(encodeURIComponent).join('/');
+        const reading = page(file, url, surface);
+        await settle();
+        const option = reading.w.document.querySelector('.question-card .options li span');
+        assert(option, 'the reading page must have a static answer choice');
+        reading.w.dispatchEvent(new reading.w.Event('scroll'));
+        option.click();
+        const warning = reading.w.EFP_QUIZ_PROGRESS_WARNING;
+        assert(!warning.isArmed(), 'static answer text must leave the warning clean');
+        assert(!warning.isQuizVisible(), 'a reading question card is not a quiz surface');
+        assert(!warning.ownsSystemBack(), 'reading uses the normal Back hierarchy');
+        if (action === 'button') reading.w.document.getElementById('efp-app-back-button').click();
+        else reading.w.history.back();
+        await until(() => reading.w.__navigation || reading.w.document.querySelector('#efp-quiz-exit-modal.show'));
+        assert(!reading.w.document.querySelector('#efp-quiz-exit-modal.show'));
+        assert.equal(decodeURIComponent(new URL(reading.w.__navigation).pathname), '/Current Affairs/Topic Names.html');
+        reading.w.close();
+      }
+      console.log('PASS', name, action, 'Summits and Appointment reading Back -> Current Affairs hub');
+    }
+  }
   const fixtures = [
     ['Current Affairs quiz', 'Current Affairs/Topic Names/Rapid Practice/2025/Month Wise/June_2025_Current_Affairs_Rapid_Practice.html', '.qcard .opt'],
     ['Sports 2026 quiz', 'Current Affairs/Topic Names/Rapid Practice/2026/Topic Wise/Sports_2026_Current_Affairs_Rapid_Practice.html', '.qcard .opt'],

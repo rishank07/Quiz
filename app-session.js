@@ -851,24 +851,49 @@
     }
     clearPersistedWarning();
 
-    var QUIZ_SURFACES = [
-      ".question-box",
-      ".question-card",
-      "#quizView",
-      ".quiz-view",
-      ".quiz-container",
-      ".question-container",
-      ".quiz-item",
-      ".mcq-item",
-      ".question-item",
-      ".q-card",
-      ".qcard",
+    var ANSWER_SELECTORS = [
       ".quiz-option",
-      "#kbArea",
-      "#mcqArea",
+      ".qcard .opt",
       ".option-btn",
-      "[data-correct]"
+      "#options .option",
+      "#options input[name='mixedOption']",
+      ".question-box .options[data-correct] label",
+      ".question-box .options[data-correct] input[type='radio']",
+      ".question-card .options label",
+      ".question-card .options input",
+      ".question-card .options li",
+      ".quiz-item .options label",
+      ".quiz-item .options input",
+      ".quiz-item .options li",
+      ".mcq-item .options label",
+      ".mcq-item .options input",
+      ".mcq-item .options li",
+      ".question-item .options label",
+      ".question-item .options input",
+      ".question-item .options li",
+      ".choice-btn",
+      ".answer-btn",
+      "[data-answer]",
+      "[data-option]",
+      "#kbArea button",
+      "#mcqArea button"
     ].join(",");
+
+    function isQuizAnswerControl(node) {
+      if (!node) return false;
+      // Reading pages also render question cards with lists of answer choices.
+      // Require a control that can select an answer, even if it is now disabled.
+      if (node.tagName === "LABEL") {
+        var input = node.control || node.querySelector("input");
+        if (!input || !input.matches("input[type='radio'],input[type='checkbox']")) return false;
+      } else if (!node.matches("button,input[type='radio'],input[type='checkbox'],[role='button'],[role='radio'],[onclick]")) {
+        return false;
+      }
+      // Chapter/menu controls can share the generic option styles.
+      return (!node.matches(".option-btn,.choice-btn,.answer-btn,[data-answer],[data-option]") ||
+        !!node.closest("[id^='opts-'],.question-box,.question-card,.qcard,.q-card,.quiz-item,.mcq-item,.question-item,#options,#quizView,.quiz-view,.quiz-container,.question-container")) &&
+        isVisible(node);
+    }
 
     function isVisible(node) {
       if (!node || node.hidden) return false;
@@ -881,9 +906,9 @@
 
     function hasVisibleQuizSurface() {
       var nodes;
-      try { nodes = document.querySelectorAll(QUIZ_SURFACES); } catch (_) { return false; }
+      try { nodes = document.querySelectorAll(ANSWER_SELECTORS); } catch (_) { return false; }
       for (var i = 0; i < nodes.length; i += 1) {
-        if (isVisible(nodes[i])) return true;
+        if (isQuizAnswerControl(nodes[i])) return true;
       }
       return false;
     }
@@ -926,41 +951,9 @@
     }
 
     function isAnswerInteraction(target) {
-      if (!target || !target.closest || !hasVisibleQuizSurface()) return false;
-      var direct = target.closest([
-        ".quiz-option",
-        ".qcard .opt",
-        ".option-btn",
-        "#options .option",
-        "#options input[name='mixedOption']",
-        ".question-box .options[data-correct] label",
-        ".question-box .options[data-correct] input[type='radio']",
-        ".question-card .options label",
-        ".question-card .options input",
-        ".question-card .options li",
-        ".quiz-item .options label",
-        ".quiz-item .options input",
-        ".quiz-item .options li",
-        ".mcq-item .options label",
-        ".mcq-item .options input",
-        ".mcq-item .options li",
-        ".question-item .options label",
-        ".question-item .options input",
-        ".question-item .options li",
-        ".choice-btn",
-        ".answer-btn",
-        "[data-answer]",
-        "[data-option]",
-        "#kbArea button",
-        "#mcqArea button"
-      ].join(","));
-      if (!direct || !isVisible(direct) || direct.disabled || direct.closest(".answered") ||
-          (direct.matches && direct.matches(":disabled"))) return false;
-      // Shared button styles may also occur on chapter/menu controls. Only
-      // an answer inside a question belongs to the active attempt.
-      if (direct.matches(".option-btn,.choice-btn,.answer-btn,[data-answer],[data-option]") &&
-          !direct.closest("[id^='opts-'],.question-box,.question-card,.qcard,.q-card,.quiz-item,.mcq-item,.question-item,#options,#quizView,.quiz-view,.quiz-container,.question-container")) return false;
-      return true;
+      var direct = target && target.closest && target.closest(ANSWER_SELECTORS);
+      return isQuizAnswerControl(direct) && !direct.disabled &&
+        !direct.closest(".answered") && !direct.matches(":disabled");
     }
 
     function navigationTarget(target) {
