@@ -182,6 +182,7 @@
           workerUrl: WORKER_SRC,
           logicUrl: LOGIC_SRC,
           indexUrl: EXTRA_INDEX_SRC,
+          extraIndex: {url: new URL("/search-snippets-current-affairs-rename2026.js?v=20261126rename1", document.baseURI).href, globalName: "EF_CA_RENAME_RAPID_INDEX"},
           mode: "snippet",
           globalName: "EF_RAPID_EXTRA_INDEX",
           sectionPrefix: INDEX_PREFIX,
